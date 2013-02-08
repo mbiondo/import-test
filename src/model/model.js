@@ -6,10 +6,59 @@ App.Expediente = Em.Object.extend({
 
 
 App.Citacion = Em.Object.extend({
+	id: '',
+	title: '',
+	start: '',
+	invitados: '',
+	comisiones: '',
+	temas: '',
+	observaciones: '',
+	estado: '',
+	sala: '',
+	
+	serializable : [
+		'id',
+		'title', 
+		'start', 
+		'invitados', 
+		'temas', 
+		'comisiones',
+		'observaciones',
+		'estado',
+		'sala'
+	],
 });
 
 
 App.MenuItem = Em.Object.extend({
 	titulo: '',
 	url: ''
+});
+
+App.CitacionInvitado = Em.Object.extend({
+
+});
+
+App.CitacionTema = Em.Object.extend({
+
+});
+
+App.CitacionSala = Em.Object.extend({
+	id: '',
+	numero: '',
+	puertas: '',
+	internos: '',
+	pisos: '',
+	
+	toString: function () {
+		return "Sala " + String(this.get('numero'));
+	},
+});
+
+App.CitacionEstado = Em.Object.extend({
+
+});
+
+App.Comision = Em.Object.extend({
+	
 });
