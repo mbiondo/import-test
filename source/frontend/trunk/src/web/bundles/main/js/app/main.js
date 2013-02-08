@@ -33,9 +33,14 @@ App.citacionCrearController = App.CitacionCrearController.create();
 
 App.citacionSalasController = App.CitacionSalasController.create({
 	selected: null,
+	content: [],
 });
-App.citacionEstadosController = App.CitacionEstadosController.create();
-App.comisionesController = App.ComisionesController.create();
+App.citacionEstadosController = App.CitacionEstadosController.create({
+	content: [],
+});
+App.comisionesController = App.ComisionesController.create({
+	content: [],
+});
 
 App.apiController = App.ApiController.create({
 	url: 'http://10.0.1.7:8080/sparl/rest',
