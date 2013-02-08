@@ -19,7 +19,16 @@ App.ExpedienteView = Ember.View.extend({
 	classNameBindings: ['content.seleccionada:active'],
 	
 	verExpediente: function () {
-		App.get('router').transitionTo('expedienteConsulta.indexSubRoute', this.get('content'));
+		App.get('router').transitionTo('loading');
+		App.set('expedienteConsultaController.content', App.Citacion.create({id: this.get('content').get('id')}));
+		
+		fn = function() {
+			App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+			App.get('router').transitionTo('expedienteConsulta.indexSubRoute', this.get('content'));
+		};
+
+		App.get('expedienteConsultaController').addObserver('loaded', this, fn);			
+		App.get('expedienteConsultaController').load();		
 	},
 });
 
@@ -31,7 +40,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 	listaExpedientes: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = App.get('expedientesController').get('content').filter(function(expediente) {
-			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.expdip).toLowerCase());
+			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.numexpI).toLowerCase());
 		});
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
@@ -82,3 +91,45 @@ App.MenuItemView = Em.View.extend({
 	tagName: 'li',
 	templateName: 'menuItem',
 });
+
+App.CitacionCrearView = Em.View.extend({
+	templateName: 'citacion-crear',	
+	filterText: '',
+	adding: false,
+	
+	clickComision: function (comision) {
+		this.set('adding', !this.get('adding'));
+		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
+        if (!item) {
+			App.get('citacionCrearController.content.comisiones').pushObject(comision);
+		}
+		else {
+			App.get('citacionCrearController.content.comisiones').removeObject(comision);
+		}
+	},
+	
+	listaComisiones: function () {
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
+			return regex.test((comision.nombre).toLowerCase());
+		});
+		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
+	}.property('citacionCrearController.content.comisiones', 'filterText', 'comisionesController.content', 'adding'),
+});
+
+App.ComisionView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'comision',
+	
+	clickComision: function () {
+		this.get('parentView').get('parentView').clickComision(this.get('content'));
+	}, 
+});
+
+App.ComisionesView = Ember.CollectionView.extend({
+    classNames : ['subNav'],  
+	tagName: 'ul',
+	itemViewClass: App.ComisionView, 
+});
+
+
