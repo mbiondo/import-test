@@ -13,11 +13,10 @@ App.Citacion = Em.Object.extend({
 	comisiones: '',
 	temas: '',
 	observaciones: '',
-	estado: '',
+	estado: {id: 1},
 	sala: '',
 	
 	serializable : [
-		'id',
 		'title', 
 		'start', 
 		'invitados', 

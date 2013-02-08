@@ -1,7 +1,7 @@
 App.Savable = Ember.Mixin.create({
 	save: function () {
 		$.ajax({
-			url:  (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id'))),
+			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id'))),
 			dataType: 'JSON',
 			type: 'PUT',
 			context: this,
@@ -151,7 +151,7 @@ App.RestController = Em.ArrayController.extend({
 });
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/' + moment().format("YYYY"),
+	url: '/exp/proyectos/2012/detalle',
 	type: App.Expediente,
 
 	init : function () {
@@ -170,7 +170,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.CitacionesController = App.RestController.extend({
-	url: '/cit/citaciones/' + moment().format("YYYY/MM/DD"),
+	url: '/cit/citaciones/' + moment().format("DD/MM/YYYY") + '/detalle',
 	type: App.Citacion,
 
 	init : function () {
@@ -228,7 +228,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: '/com/comisiones/D',
+	url: '/com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
 	
@@ -254,7 +254,7 @@ App.ExpedienteController = Ember.Object.extend({
 
 App.ExpedienteConsultaController = Ember.Object.extend({
 	content: null,
-	url: "/exp/expediente/%@",
+	url: "/exp/proyecto/%@",
 	loaded : false,
 	
 	loadCompleted: function(xhr){
@@ -268,7 +268,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url:  (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -299,7 +299,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url:  (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -309,7 +309,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 	},
 	
 	loadSucceeded: function(data) {
-		item = App.Citacion.create();
+		item = App.Citacion.extend(App.Savable).create();
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
@@ -328,7 +328,9 @@ App.CitacionCrearController = Em.Object.extend({
 		
 	create: function () {
 		$.ajax({
-			url: this.get('url'),
+			url: App.get('apiController').get('url') + this.get('url'),
+			contentType: 'text/plain',
+			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'POST',
 			context : {controller: this, model : this.get('content') },

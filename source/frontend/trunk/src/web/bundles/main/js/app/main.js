@@ -11,7 +11,11 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			titulo: 'Citaciones',
 			url: '#/citaciones',
-		})		
+		}),
+		App.MenuItem.create({
+			titulo: 'Crear Sitacion',
+			url: '#/citacion/crear',
+		})			
 	]
 });
 

@@ -40,7 +40,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 	listaExpedientes: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = App.get('expedientesController').get('content').filter(function(expediente) {
-			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.numexpI).toLowerCase());
+			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.expdip).toLowerCase());
 		});
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
@@ -96,6 +96,10 @@ App.CitacionCrearView = Em.View.extend({
 	templateName: 'citacion-crear',	
 	filterText: '',
 	adding: false,
+	
+	guardar: function () {
+		App.get('citacionCrearController').create();
+	},
 	
 	clickComision: function (comision) {
 		this.set('adding', !this.get('adding'));
