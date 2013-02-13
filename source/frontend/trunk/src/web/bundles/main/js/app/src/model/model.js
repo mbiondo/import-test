@@ -6,7 +6,7 @@ App.Expediente = Em.Object.extend({
 
 
 App.Citacion = Em.Object.extend({
-	id: '',
+	id: null,
 	title: '',
 	start: '',
 	invitados: '',
@@ -17,6 +17,7 @@ App.Citacion = Em.Object.extend({
 	sala: '',
 	
 	serializable : [
+		'id',
 		'title', 
 		'start', 
 		'invitados', 
@@ -35,7 +36,12 @@ App.MenuItem = Em.Object.extend({
 });
 
 App.CitacionInvitado = Em.Object.extend({
-
+	id: null,
+    nombre: '',
+    apellido: '',
+    caracter: '',
+    mail: '',
+    orden: '',
 });
 
 App.CitacionTema = Em.Object.extend({

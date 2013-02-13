@@ -96,9 +96,33 @@ App.CitacionCrearView = Em.View.extend({
 	templateName: 'citacion-crear',	
 	filterText: '',
 	adding: false,
+	invitado: App.CitacionInvitado.create(),
+	
+	agregarInvitadoHabilitado: function () {
+		var invitado = this.get('invitado');
+		return invitado.nombre != '' && invitado.apellido != '' && invitado.caracter != '' && invitado.mail != '';
+	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
+	
+	cargarExpedientesHabilitado: function () {
+		return App.get('citacionCrearController.content.comisiones').length > 0;
+	}.property('adding'),
 	
 	guardar: function () {
 		App.get('citacionCrearController').create();
+	},
+	
+	editar: function () {
+		App.get('citacionCrearController').get('content').save();
+	},
+	
+	crearInvitado: function () {
+		var invitado = this.get('invitado');
+		App.get('citacionCrearController.content.invitados').addObject(invitado);
+		this.set('invitado', App.CitacionInvitado.create());
+	},
+	
+	clickInvitado : function (invitado) {
+		App.get('citacionCrearController.content.invitados').removeObject(invitado);
 	},
 	
 	clickComision: function (comision) {
@@ -136,4 +160,17 @@ App.ComisionesView = Ember.CollectionView.extend({
 	itemViewClass: App.ComisionView, 
 });
 
+App.InvitadoView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'invitado',
+	
+	clickInvitado: function () {
+		this.get('parentView').get('parentView').clickInvitado(this.get('content'));
+	}, 
+});
 
+App.InvitadosView = Ember.CollectionView.extend({
+    classNames : ['subNav'],  
+	tagName: 'ul',
+	itemViewClass: App.InvitadoView, 
+});
