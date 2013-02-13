@@ -17,7 +17,6 @@ App.Savable = Ember.Mixin.create({
 	serialize : function () {
 		var o = {};
 		var serializable = this.get('serializable') || []
-
 		var ap = Ember.ArrayProxy.create({ content: Ember.A(serializable) });
 			
 		ap.forEach(function(item){
