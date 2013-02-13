@@ -1,7 +1,9 @@
 App.Savable = Ember.Mixin.create({
 	save: function () {
 		$.ajax({
-			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id'))),
+			url:  (App.get('apiController').get('url') + this.get('restUrl') + '/%@').fmt(encodeURIComponent(this.get('id'))),
+			contentType: 'text/plain',
+			crossDomain: 'true',			
 			dataType: 'JSON',
 			type: 'PUT',
 			context: this,

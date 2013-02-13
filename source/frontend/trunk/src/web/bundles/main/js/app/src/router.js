@@ -114,18 +114,32 @@ App.Router =  Em.Router.extend({
 						return App.get('citacionConsultaController.content');
 					}else{
 						var deferred = $.Deferred(),
+						
 						fn = function() {
-							App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-							
-							var citacion = App.get('citacionConsultaController.content');
+							App.get('citacionConsultaController').removeObserver('loaded', this, fn);						
+							var citacion = App.get('citacionConsultaController.content');				
 							App.set('citacionCrearController.content', citacion);
 							App.set('citacionCrearController.isEdit', true);
 							deferred.resolve(citacion);
 							
 						};
+						
+						fn2 = function () {
+							App.get('comisionesController').removeObserver('loaded', this, fn2);								
+							App.get('citacionConsultaController').addObserver('loaded', this, fn);
+							App.get('citacionConsultaController').load();							
+						}
+						
+						fn3 = function () {
+							App.get('citacionSalasController').removeObserver('loaded', this, fn3);
+							App.get('comisionesController').addObserver('loaded', this, fn2);
+							App.get('comisionesController').load();		
+							
+						}
+						
+						App.get('citacionSalasController').addObserver('loaded', this, fn3);
+						App.get('citacionSalasController').load();						
 
-						App.get('citacionConsultaController').addObserver('loaded', this, fn);
-						App.get('citacionConsultaController').load();
 						return deferred.promise();
 					}
 				},

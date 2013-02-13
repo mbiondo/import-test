@@ -6,6 +6,8 @@ App.Expediente = Em.Object.extend({
 
 
 App.Citacion = Em.Object.extend({
+	restUrl: "/cit/citacion/%@",
+	
 	id: null,
 	title: '',
 	start: '',
