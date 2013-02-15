@@ -120,6 +120,9 @@ App.Router =  Em.Router.extend({
 							var citacion = App.get('citacionConsultaController.content');				
 							App.set('citacionCrearController.content', citacion);
 							App.set('citacionCrearController.isEdit', true);
+							
+							citacion.set('comisiones', mapObjectsInArrays(App.get('comisionesController').get('content'), citacion.get('comisiones')));
+							citacion.set('sala', App.get('citacionSalasController').get('content').findProperty('id', citacion.get('sala').id));
 							deferred.resolve(citacion);
 							
 						};

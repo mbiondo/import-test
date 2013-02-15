@@ -33,7 +33,9 @@ App.citacionConsultaController = App.CitacionConsultaController.create();
 App.expedienteController = App.ExpedienteController.create();
 App.expedienteConsultaController = App.ExpedienteConsultaController.create();
 
-App.citacionCrearController = App.CitacionCrearController.create();
+App.citacionCrearController = App.CitacionCrearController.create({
+	expedientes: null,
+});
 
 App.citacionSalasController = App.CitacionSalasController.create({
 	selected: null,
@@ -45,6 +47,7 @@ App.citacionEstadosController = App.CitacionEstadosController.create({
 App.comisionesController = App.ComisionesController.create({
 	content: [],
 });
+
 
 App.apiController = App.ApiController.create({
 	url: 'http://10.0.1.7:8080/sparl/rest',

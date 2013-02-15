@@ -94,9 +94,33 @@ App.MenuItemView = Em.View.extend({
 
 App.CitacionCrearView = Em.View.extend({
 	templateName: 'citacion-crear',	
-	filterText: '',
+	
+	filterTextComisiones: '',
+	
+	filterTextExpedientes: '',
+	
 	adding: false,
+	
 	invitado: App.CitacionInvitado.create(),
+	
+	tituloNuevoTema: '',
+	
+	temaSeleccionado: '',
+	
+	crearTema: function () {
+		var tema = App.CitacionTema.create({nombre: this.get('tituloNuevoTema'), expedientes: [], userCreate: true});
+		this.set('tituloNuevoTema', '');
+		
+		App.get('citacionCrearController.content.temas').addObject(tema);
+
+		this.set('temaSeleccionado', tema);
+		
+		this.set('adding', !this.get('adding'));
+	},
+	
+	crearTemaHabilitado: function () {
+		return this.get('tituloNuevoTema') != '';
+	}.property('tituloNuevoTema'),
 	
 	agregarInvitadoHabilitado: function () {
 		var invitado = this.get('invitado');
@@ -107,11 +131,34 @@ App.CitacionCrearView = Em.View.extend({
 		return App.get('citacionCrearController.content.comisiones').length > 0;
 	}.property('adding'),
 	
+	cargarExpedientes: function () {
+		App.get('citacionCrearController').cargarExpedientes();
+	},
+	
 	guardar: function () {
+		var temas = App.get('citacionCrearController.content.temas');
+		var temasToRemove = [];
+		
+		temas.forEach(function (tema) {
+			var expedientes = tema.get('expedientes');
+			if (expedientes.length == 0)
+				temasToRemove.addObject(tema);
+		});
+		
+		temas.removeObjects(temasToRemove);
+		
+		console.log(App.get('citacionCrearController.content'));
+		
 		App.get('citacionCrearController').create();
 	},
 	
 	editar: function () {
+		var temas = App.get('citacionCrearController.content.temas');
+		temas.forEach(function (tema) {
+			var expedientes = tema.get('expedientes');
+			if (expedientes.length < 1)
+				temas.removeObject(tema);
+		});	
 		App.get('citacionCrearController').get('content').save();
 	},
 	
@@ -136,13 +183,107 @@ App.CitacionCrearView = Em.View.extend({
 		}
 	},
 	
+	clickExpediente: function (expediente) {
+		var tema = App.CitacionTema.create({nombre: expediente.get('expdip'), userCreate: false, expedientes: []})
+		App.get('citacionCrearController.content.temas').addObject(tema);
+		tema.get('expedientes').addObject(expediente);
+		expediente.get('tema', null);
+		
+		this.set('adding', !this.get('adding'));
+	},	
+	
+	clickBorrar: function (expediente) {
+		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
+		tema.get('expedientes').removeObject(expediente);
+		expediente.set('tema', null);
+		
+		this.set('adding', !this.get('adding'));
+	},
+	
+	
+	clickDesagrupar: function (expediente) {
+		
+		var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
+		temaAnterior.get('expedientes').removeObject(expediente);
+		
+		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+		if (!tema)
+		{
+			tema = App.CitacionTema.create({nombre: expediente.get('expdip'), userCreate: false, expedientes: []})
+			App.get('citacionCrearController.content.temas').addObject(tema);			
+		}
+		
+		tema.get('expedientes').addObject(expediente);
+		
+		expediente.set('tema', null);
+	},
+	
+	agruparExpedientes: function () {
+		var seleccionados = this.get('listaExpedientesSeleccionados').filterProperty('seleccionado', true);
+		seleccionados.forEach(function(expediente){
+			
+			var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
+			
+			if (temaAnterior)
+			{
+				temaAnterior.get('expedientes').removeObject(expediente);
+			}
+			
+			var temaInicial = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+			
+			if (temaInicial)
+			{
+				temaInicial.get('expedientes').removeObject(expediente);
+			}			
+			
+			expediente.set('seleccionado', false);
+			expediente.set('tema', this.get('temaSeleccionado').get('nombre'));
+			
+			this.get('temaSeleccionado.expedientes').addObject(expediente);
+		}, this);
+	},
+	
 	listaComisiones: function () {
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var regex = new RegExp(this.get('filterTextComisiones').toString().toLowerCase());
 		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
 			return regex.test((comision.nombre).toLowerCase());
 		});
 		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
-	}.property('citacionCrearController.content.comisiones', 'filterText', 'comisionesController.content', 'adding'),
+	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
+	
+	listaExpedientes: function () {
+		var regex = new RegExp(this.get('filterTextExpedientes').toString().toLowerCase());
+		
+		var filtered = App.get('citacionCrearController.expedientes').filter(function(expediente) {
+			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.expdip).toLowerCase());
+		});
+		if (this.get('listaExpedientesSeleccionados'))
+			return filtered.removeObjects(this.get('listaExpedientesSeleccionados'));
+		else
+			return filtered;
+		
+	}.property('citacionCrearController.expedientes', 'filterTextExpedientes', 'citacionCrearController.content.temas.@each', 'adding', 'listaExpedientesSeleccionados'),	
+	
+	listaTemas: function () {
+		var temas = App.get('citacionCrearController.content.temas').filterProperty('userCreate', true);
+		return temas;
+	}.property('citacionCrearController.content.temas', 'adding'),
+	
+	listaExpedientesSeleccionados: function () {
+		var expedientesSeleccionados = [];
+		var temas = App.get('citacionCrearController.content.temas');
+		temas.forEach(function (tema) {
+			var expedientes = tema.get('expedientes');
+			expedientes.forEach(function (expediente) {
+				expedientesSeleccionados.addObject(expediente);
+			});
+		});
+		
+		if (expedientesSeleccionados.length > 0)
+			return expedientesSeleccionados;
+		else 
+			return null;
+	}.property('citacionCrearController.content.temas', 'citacionCrearController.content.temas.@each.expedientes', 'adding'),
 });
 
 App.ComisionView = Em.View.extend({
@@ -173,4 +314,40 @@ App.InvitadosView = Ember.CollectionView.extend({
     classNames : ['subNav'],  
 	tagName: 'ul',
 	itemViewClass: App.InvitadoView, 
+});
+
+App.CitacionExpediente = Em.View.extend({
+	tagName: 'li',
+	templateName: 'citacion-expediente',
+	
+	clickExpediente: function () {
+		this.get('parentView').get('parentView').clickExpediente(this.get('content'));
+	}, 
+});
+
+
+App.CitacionExpedientes = Ember.CollectionView.extend({
+    classNames : ['subNav'],  
+	tagName: 'ul',
+	itemViewClass: App.CitacionExpediente, 
+});
+
+
+App.CitacionExpedienteSeleccionado = Em.View.extend({
+	tagName: 'tr',
+	templateName: 'citacion-expediente-seleccionado',
+	
+	clickBorrar: function () {
+		this.get('parentView').get('parentView').clickBorrar(this.get('content'));
+	}, 
+	
+	clickDesagrupar: function () {
+		this.get('parentView').get('parentView').clickDesagrupar(this.get('content'));
+	},
+});
+
+
+App.CitacionExpedientesSeleccionados = Ember.CollectionView.extend({ 
+	tagName: 'tbody',
+	itemViewClass: App.CitacionExpedienteSeleccionado, 
 });

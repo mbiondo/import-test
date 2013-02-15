@@ -1,3 +1,13 @@
+function mapObjectsInArrays(ar1, ar2) {
+	var arr = [];
+	
+	for (var i = 0; i < ar2.length; i++) {
+		arr[i] = ar1.findProperty("id", ar2[i].id);
+	}
+	
+	return arr;
+}
+
 App.Savable = Ember.Mixin.create({
 	save: function () {
 		$.ajax({
@@ -324,8 +334,15 @@ App.MenuController = Em.ArrayController.extend({
 
 App.CitacionCrearController = Em.Object.extend({
 	content: '',
+	expedientes: '',
+	
 	isEdit: false,
+	
 	url: '/cit/citacion',
+	
+	urlExpedientes: '/expedientes-listar',
+	
+	loading: false,
 		
 	create: function () {
 		$.ajax({
@@ -350,6 +367,31 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	saveSucceeded: function (data) {
 
+	},
+	
+	cargarExpedientes: function () {
+		$.ajax({
+			url: App.get('apiController').get('url') + this.get('urlExpedientes'),
+			crossDomain: 'true',
+			dataType: 'JSON',
+			type: 'GET',
+			context: this,
+			success: this.cargarExpedientesSucceeded,
+			beforeSend: function () {
+				this.set('loading', true);
+			}
+		});			
+	},
+
+	cargarExpedientesSucceeded: function (data) {
+		var exp = [];
+		
+		data.forEach(function(i){
+			exp.addObject(App.Expediente.extend(App.Savable).create(i));
+		}, this);
+		
+		this.set('expedientes', exp);
+		this.set('loading', false);
 	},
 });
 
