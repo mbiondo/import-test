@@ -2,6 +2,8 @@ App.Expediente = Em.Object.extend({
 	sortValue: function () {
 		return this.get('fechaPub');
 	}.property('fechaPub'),
+	
+	seleccionado: false,
 });
 
 
@@ -13,11 +15,9 @@ App.Citacion = Em.Object.extend({
 	start: '',
 	invitados: '',
 	comisiones: '',
-	temas: '',
 	observaciones: '',
 	estado: {id: 1},
-	sala: '',
-	
+	sala: '',	
 	serializable : [
 		'id',
 		'title', 
@@ -47,7 +47,12 @@ App.CitacionInvitado = Em.Object.extend({
 });
 
 App.CitacionTema = Em.Object.extend({
-
+	id: '',
+	nombre: '',
+	userCreate: false,
+	toString: function () {
+		return this.get('nombre');
+	},
 });
 
 App.CitacionSala = Em.Object.extend({
