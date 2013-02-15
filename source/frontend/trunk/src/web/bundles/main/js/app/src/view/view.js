@@ -108,7 +108,7 @@ App.CitacionCrearView = Em.View.extend({
 	temaSeleccionado: '',
 	
 	crearTema: function () {
-		var tema = App.CitacionTema.create({nombre: this.get('tituloNuevoTema'), expedientes: [], userCreate: true});
+		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
 		this.set('tituloNuevoTema', '');
 		
 		App.get('citacionCrearController.content.temas').addObject(tema);
@@ -140,8 +140,8 @@ App.CitacionCrearView = Em.View.extend({
 		var temasToRemove = [];
 		
 		temas.forEach(function (tema) {
-			var expedientes = tema.get('expedientes');
-			if (expedientes.length == 0)
+			var proyectos = tema.get('proyectos');
+			if (proyectos.length == 0)
 				temasToRemove.addObject(tema);
 		});
 		
@@ -184,20 +184,20 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	clickExpediente: function (expediente) {
-		var tema = App.CitacionTema.create({nombre: expediente.get('expdip'), userCreate: false, expedientes: []})
+		var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
 		App.get('citacionCrearController.content.temas').addObject(tema);
-		tema.get('expedientes').addObject(expediente);
+		tema.get('proyectos').addObject(expediente);
 		expediente.get('tema', null);
 		
 		this.set('adding', !this.get('adding'));
 	},	
 	
 	clickBorrar: function (expediente) {
-		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));		
+		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));		
 		if (tema)
-			tema.get('expedientes').removeObject(expediente);
+			tema.get('proyectos').removeObject(expediente);
 			
-		var temaInicial = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+		var temaInicial = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (temaInicial)
 			App.get('citacionCrearController.content.temas').removeObject(temaInicial);
 			
@@ -209,17 +209,17 @@ App.CitacionCrearView = Em.View.extend({
 	
 	clickDesagrupar: function (expediente) {
 		
-		var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
-		temaAnterior.get('expedientes').removeObject(expediente);
+		var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));
+		temaAnterior.get('proyectos').removeObject(expediente);
 		
-		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (!tema)
 		{
-			tema = App.CitacionTema.create({nombre: expediente.get('expdip'), userCreate: false, expedientes: []})
+			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
 			App.get('citacionCrearController.content.temas').addObject(tema);			
 		}
 		
-		tema.get('expedientes').addObject(expediente);
+		tema.get('proyectos').addObject(expediente);
 		
 		expediente.set('tema', null);
 	},
@@ -228,24 +228,24 @@ App.CitacionCrearView = Em.View.extend({
 		var seleccionados = this.get('listaExpedientesSeleccionados').filterProperty('seleccionado', true);
 		seleccionados.forEach(function(expediente){
 			
-			var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
+			var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));
 			
 			if (temaAnterior)
 			{
-				temaAnterior.get('expedientes').removeObject(expediente);
+				temaAnterior.get('proyectos').removeObject(expediente);
 			}
 			
-			var temaInicial = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+			var temaInicial = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 			
 			if (temaInicial)
 			{
-				temaInicial.get('expedientes').removeObject(expediente);
+				temaInicial.get('proyectos').removeObject(expediente);
 			}			
 			
 			expediente.set('seleccionado', false);
-			expediente.set('tema', this.get('temaSeleccionado').get('nombre'));
+			expediente.set('tema', this.get('temaSeleccionado').get('descripcion'));
 			
-			this.get('temaSeleccionado.expedientes').addObject(expediente);
+			this.get('temaSeleccionado.proyectos').addObject(expediente);
 		}, this);
 	},
 	
@@ -258,20 +258,29 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
 	
 	listaExpedientes: function () {
-		var regex = new RegExp(this.get('filterTextExpedientes').toString().toLowerCase());
+		var filtered;
+		if (this.get('filterTextExpedientes') != '')
+		{
+			var regex = new RegExp(this.get('filterTextExpedientes').toString().toLowerCase());
+			
+			filtered = App.get('citacionCrearController.expedientes').filter(function(expediente) {
+				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = App.get('citacionCrearController.expedientes');
+		}
 		
-		var filtered = App.get('citacionCrearController.expedientes').filter(function(expediente) {
-			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.expdip).toLowerCase());
-		});
 		if (this.get('listaExpedientesSeleccionados'))
 			return filtered.removeObjects(this.get('listaExpedientesSeleccionados'));
 		else
 			return filtered;
 		
-	}.property('citacionCrearController.expedientes', 'filterTextExpedientes', 'citacionCrearController.content.temas.@each', 'adding', 'listaExpedientesSeleccionados'),	
+	}.property('citacionCrearController.expedientes', 'filterTextExpedientes', 'citacionCrearController.content.temas.@each', 'adding'),	
 	
 	listaTemas: function () {
-		var temas = App.get('citacionCrearController.content.temas').filterProperty('userCreate', true);
+		var temas = App.get('citacionCrearController.content.temas').filterProperty('grupo', true);
 		return temas;
 	}.property('citacionCrearController.content.temas', 'adding'),
 	
@@ -279,8 +288,8 @@ App.CitacionCrearView = Em.View.extend({
 		var expedientesSeleccionados = [];
 		var temas = App.get('citacionCrearController.content.temas');
 		temas.forEach(function (tema) {
-			var expedientes = tema.get('expedientes');
-			expedientes.forEach(function (expediente) {
+			var proyectos = tema.get('proyectos');
+			proyectos.forEach(function (expediente) {
 				expedientesSeleccionados.addObject(expediente);
 			});
 		});
@@ -289,7 +298,7 @@ App.CitacionCrearView = Em.View.extend({
 			return expedientesSeleccionados;
 		else 
 			return null;
-	}.property('citacionCrearController.content.temas', 'citacionCrearController.content.temas.@each.expedientes', 'adding'),
+	}.property('citacionCrearController.content.temas', 'citacionCrearController.content.temas.@each.proyectos', 'adding'),
 });
 
 App.ComisionView = Em.View.extend({
