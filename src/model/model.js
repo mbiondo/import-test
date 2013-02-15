@@ -48,10 +48,10 @@ App.CitacionInvitado = Em.Object.extend({
 
 App.CitacionTema = Em.Object.extend({
 	id: '',
-	nombre: '',
-	userCreate: false,
+	descripcion: '',
+	grupo: false,
 	toString: function () {
-		return this.get('nombre');
+		return this.get('descripcion');
 	},
 });
 
