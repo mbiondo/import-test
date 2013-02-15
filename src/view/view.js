@@ -193,8 +193,14 @@ App.CitacionCrearView = Em.View.extend({
 	},	
 	
 	clickBorrar: function (expediente) {
-		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));
-		tema.get('expedientes').removeObject(expediente);
+		var tema = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('tema'));		
+		if (tema)
+			tema.get('expedientes').removeObject(expediente);
+			
+		var temaInicial = App.get('citacionCrearController.content.temas').findProperty('nombre', expediente.get('expdip'));
+		if (temaInicial)
+			App.get('citacionCrearController.content.temas').removeObject(temaInicial);
+			
 		expediente.set('tema', null);
 		
 		this.set('adding', !this.get('adding'));
