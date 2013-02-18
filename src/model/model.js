@@ -4,6 +4,22 @@ App.Expediente = Em.Object.extend({
 	}.property('fechaPub'),
 	
 	seleccionado: false,
+	
+	firmantesLabel: function() {
+		var firmantes = this.get('firmantes');
+		if (firmantes.length == 1)
+			return firmantes.objectAt(0).nombre;
+		else
+			return firmantes.objectAt(0).nombre + " y " + (firmantes.length - 1 ) + " más"; 
+	}.property('firmantes'),	
+	
+	girosLabel: function () {
+		var giros = this.get('giro');
+		if (giros.length == 1)
+			return giros.objectAt(0).comision;
+		else
+			return giros.objectAt(0).comision + " y " + (giros.length - 1 ) + " más"; 		
+	}.property('giro'),
 });
 
 

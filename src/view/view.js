@@ -326,7 +326,7 @@ App.InvitadoView = Em.View.extend({
 });
 
 App.InvitadosView = Ember.CollectionView.extend({
-    classNames : ['subNav'],  
+    classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.InvitadoView, 
 });
