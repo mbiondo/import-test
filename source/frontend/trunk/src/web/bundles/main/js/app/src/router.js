@@ -123,9 +123,34 @@ App.Router =  Em.Router.extend({
 							
 							citacion.set('comisiones', mapObjectsInArrays(App.get('comisionesController').get('content'), citacion.get('comisiones')));
 							citacion.set('sala', App.get('citacionSalasController').get('content').findProperty('id', citacion.get('sala').id));
-							deferred.resolve(citacion);
+							
+							App.get('citacionCrearController').addObserver('loaded', this, fn1);
+							App.get('citacionCrearController').cargarExpedientes();
 							
 						};
+						
+						fn1 = function () {
+							if (App.get('citacionCrearController').get('loaded'))
+							{
+								App.get('citacionCrearController').removeObserver('loaded', this, fn1);
+								var citacion = App.get('citacionConsultaController.content');
+								var temas = citacion.get('temas');
+								var temas = [];
+								citacion.get('temas').forEach(function (tema) {
+									var t = App.CitacionTema.create(tema);
+									temas.addObject(t);
+								    t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
+									var proyectos = t.get('proyectos');
+									proyectos.forEach(function (proyecto) {
+										proyecto.set('tema', t.get('descripcion'));
+									});									
+								});
+								
+								App.get('citacionConsultaController.content').set('temas', temas);
+								
+								deferred.resolve(citacion);							
+							}
+						}
 						
 						fn2 = function () {
 							App.get('comisionesController').removeObserver('loaded', this, fn2);								
@@ -141,7 +166,7 @@ App.Router =  Em.Router.extend({
 						}
 						
 						App.get('citacionSalasController').addObserver('loaded', this, fn3);
-						App.get('citacionSalasController').load();						
+						App.get('citacionSalasController').load();														
 
 						return deferred.promise();
 					}
