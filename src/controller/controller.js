@@ -2,7 +2,9 @@ function mapObjectsInArrays(ar1, ar2) {
 	var arr = [];
 	
 	for (var i = 0; i < ar2.length; i++) {
-		arr[i] = ar1.findProperty("id", ar2[i].id);
+		var c = ar1.findProperty("id", ar2[i].id);
+		if (c)
+			arr[i] = c;
 	}
 	
 	return arr;
@@ -341,8 +343,10 @@ App.CitacionCrearController = Em.Object.extend({
 	url: '/cit/citacion',
 	
 	urlExpedientes: '/com/%@/proyectos/2012',
+	//urlExpedientes: '/expedientes-listar',
 	
 	loading: false,
+	loaded: false,
 		
 	create: function () {
 		$.ajax({
@@ -377,7 +381,8 @@ App.CitacionCrearController = Em.Object.extend({
 			type: 'GET',
 			context: this,
 			success: this.cargarExpedientesSucceeded,
-			beforeSend: function () {
+			beforeSend: function () {		
+				this.set('loaded', false);
 				this.set('loading', true);
 			}
 		});			
@@ -385,13 +390,12 @@ App.CitacionCrearController = Em.Object.extend({
 
 	cargarExpedientesSucceeded: function (data) {
 		var exp = [];
-		
 		data.forEach(function(i){
 			exp.addObject(App.Expediente.extend(App.Savable).create(i));
 		}, this);
-		
 		this.set('expedientes', exp);
 		this.set('loading', false);
+		this.set('loaded', true);
 	},
 });
 
