@@ -334,11 +334,9 @@ App.MenuController = Em.ArrayController.extend({
 	content: '',
 	
 	seleccionar : function (titulo) {
-	
-		if (this.get('seleccionado'))
-		{
-			this.get('seleccionado').set('seleccionado', false);
-		}
+		this.get('content').forEach(function (menuItem) {
+			menuItem.set('seleccionado', false);
+		});
 		
 		var sel = this.get('content').findProperty('titulo', titulo);
 		
