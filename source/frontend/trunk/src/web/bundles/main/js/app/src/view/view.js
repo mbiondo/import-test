@@ -172,10 +172,11 @@ App.CitacionCrearView = Em.View.extend({
 	editar: function () {
 		var temas = App.get('citacionCrearController.content.temas');
 		temas.forEach(function (tema) {
-			var expedientes = tema.get('expedientes');
-			if (expedientes.length < 1)
-				temas.removeObject(tema);
-		});	
+			var proyectos = tema.get('proyectos');
+			if (proyectos.length == 0)
+				temasToRemove.addObject(tema);
+		});
+		
 		App.get('citacionCrearController').get('content').save();
 	},
 	
@@ -183,10 +184,12 @@ App.CitacionCrearView = Em.View.extend({
 		var invitado = this.get('invitado');
 		App.get('citacionCrearController.content.invitados').addObject(invitado);
 		this.set('invitado', App.CitacionInvitado.create());
+		this.set('adding', !this.get('adding'));
 	},
 	
 	clickInvitado : function (invitado) {
 		App.get('citacionCrearController.content.invitados').removeObject(invitado);
+		this.set('adding', !this.get('adding'));
 	},
 	
 	clickComision: function (comision) {
@@ -319,6 +322,10 @@ App.CitacionCrearView = Em.View.extend({
 		else 
 			return null;
 	}.property('citacionCrearController.content.temas', 'citacionCrearController.content.temas.@each.proyectos', 'adding'),
+	
+	hayInvitados: function () {
+		return App.get('citacionCrearController.content.invitados').length > 0;
+	}.property('citacionCrearController.content.invitados', 'adding'),	
 });
 
 App.ComisionView = Em.View.extend({
@@ -349,6 +356,7 @@ App.InvitadosView = Ember.CollectionView.extend({
     classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.InvitadoView, 
+	
 });
 
 App.CitacionExpediente = Em.View.extend({

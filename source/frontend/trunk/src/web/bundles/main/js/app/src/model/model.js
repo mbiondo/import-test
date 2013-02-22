@@ -6,7 +6,10 @@ App.Expediente = Em.Object.extend({
 	seleccionado: false,
 	
 	firmantesLabel: function() {
-		var firmantes = this.get('firmantes');
+		var firmantes = this.get('firmantes').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+		
 		if (firmantes.length == 1)
 			return firmantes.objectAt(0).nombre;
 		else
@@ -14,7 +17,10 @@ App.Expediente = Em.Object.extend({
 	}.property('firmantes'),	
 	
 	girosLabel: function () {
-		var giros = this.get('giro');
+		var giros = this.get('giro').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+		
 		if (giros.length == 1)
 			return giros.objectAt(0).comision;
 		else
@@ -90,5 +96,4 @@ App.CitacionEstado = Em.Object.extend({
 });
 
 App.Comision = Em.Object.extend({
-	
 });
