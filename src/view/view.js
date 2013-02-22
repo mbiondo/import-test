@@ -70,6 +70,12 @@ App.ApplicationView = Em.View.extend({
 		$("ul.userNav li a.sidebar").click(function() { 
 			$(".secNav").toggleClass('display');
 		});	
+		
+		$(document).bind('click', function(e) {
+			var $clicked = $(e.target);
+			if (! $clicked.parents().hasClass("leftUserDrop"))
+			$(".leftUser").slideUp(200);
+		});		
 	},
 });
 
