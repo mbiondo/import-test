@@ -65,6 +65,12 @@ App.InicioView = Em.View.extend({
 
 App.ApplicationView = Em.View.extend({
 	templateName: 'application',
+	
+	didInsertElement: function () {
+		$("ul.userNav li a.sidebar").click(function() { 
+			$(".secNav").toggleClass('display');
+		});	
+	},
 });
 
 App.ExpedienteConsultaView = Em.View.extend({
