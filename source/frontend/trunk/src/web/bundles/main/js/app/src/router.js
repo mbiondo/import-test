@@ -19,15 +19,27 @@ App.Router =  Em.Router.extend({
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'inicio');
+				
+				App.get('menuController').seleccionar('Inicio');
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Inicio', url: '#/'}
+				]);				
 			},		
 		}),
 		
 		expedientes: Em.Route.extend({
 			route: "/expedientes",
 			connectOutlets: function(router, context) {
-				var appController = router.get('applicationController');
+				var appController = router.get('applicationController');	
 				appController.connectOutlet('main', 'expedientes');
 				appController.cargarExpedientes();
+				
+				App.get('menuController').seleccionar('Expedientes');
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Expedientes', url: '#/expedientes'}
+				]);				
+							
 			},
 		}),
 		
@@ -37,6 +49,11 @@ App.Router =  Em.Router.extend({
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'citaciones');
 				appController.cargarCitaciones();
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Comisiones', url: '#/citaciones'}
+				]);					
+				App.get('menuController').seleccionar('Comisiones');
 			},			
 		}),
 
@@ -71,6 +88,12 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'citacionConsulta');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Comisiones', url: '#/citaciones'},
+						{titulo: App.get('citacionConsultaController.content').get('start'), url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+					]);					
+					App.get('menuController').seleccionar('Comisiones');					
 				},
 			}),	
 			
@@ -98,9 +121,15 @@ App.Router =  Em.Router.extend({
 					return deferred.promise();
 				},
 				
-				connectOutlets: function(router, context) {
+				connectOutlets: function(router, context) {							
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'citacionCrear');
+					
+					App.get('menuController').seleccionar('Comisiones');
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Comisiones', url: '#/citaciones'},
+						{titulo: 'Nueva', url: '#/citacion/crear'},
+					]);					
 					
 				},				
 			}),
@@ -179,6 +208,13 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'citacionCrear');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Comisiones', url: '#/citaciones'},
+						{titulo: App.get('citacionConsultaController.content').get('start'), url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+						{titulo: 'editar', url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/editar'}
+					]);						
+					App.get('menuController').seleccionar('Comisiones');					
 				},
 				
 			}),			
@@ -196,20 +232,18 @@ App.Router =  Em.Router.extend({
 				deserialize: function(router, params) {
 					App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
 					
-					if(App.get('expedienteConsultaController.loaded')){
-						return App.get('expedienteConsultaController.content');
-					}else{
-						var deferred = $.Deferred(),
-						fn = function() {
+					var deferred = $.Deferred(),
+					fn = function() {
+						if (App.get('expedienteConsultaController.loaded')) {
 							var expediente = App.get('expedienteConsultaController.content');
 							deferred.resolve(expediente);
-							App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-						};
-
-						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
-						App.get('expedienteConsultaController').load();
-						return deferred.promise();
-					}
+							App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
+						}
+					};
+					
+					App.get('expedienteConsultaController').addObserver('loaded', this, fn);
+					App.get('expedienteConsultaController').load();				
+					return deferred.promise();
 				},
 
 				serialize: function(router, context) {
@@ -220,6 +254,12 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'expedienteConsulta');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Expedientes', url: '#/expedientes'},
+						{titulo: App.get('expedienteConsultaController.content').get('titulo'), url: '#/expediente/' + App.get('expedienteConsultaController.content').get('id') + '/ver'}
+					]);					
+					App.get('menuController').seleccionar('Expedientes');					
 				},
 			}),
 		}),

@@ -50,7 +50,9 @@ App.Citacion = Em.Object.extend({
 
 App.MenuItem = Em.Object.extend({
 	titulo: '',
-	url: ''
+	url: '',
+	subMenu: '',
+	seleccionado: '',
 });
 
 App.CitacionInvitado = Em.Object.extend({

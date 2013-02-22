@@ -92,6 +92,11 @@ App.MenuItemView = Em.View.extend({
 	templateName: 'menuItem',
 });
 
+App.MenuItemLink = Em.View.extend({
+	tagName: 'a',
+	classNameBindings: ['content.seleccionado:active'],
+});
+
 App.CitacionCrearView = Em.View.extend({
 	templateName: 'citacion-crear',	
 	
@@ -287,6 +292,9 @@ App.CitacionCrearView = Em.View.extend({
 	listaExpedientesSeleccionados: function () {
 		var expedientesSeleccionados = [];
 		var temas = App.get('citacionCrearController.content.temas');
+		if (!temas)
+			return null;
+		
 		temas.forEach(function (tema) {
 			var proyectos = tema.get('proyectos');
 			proyectos.forEach(function (expediente) {
