@@ -184,7 +184,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.CitacionesController = App.RestController.extend({
-	url: '/cit/citaciones/' + moment().format("DD/MM/YYYY") + '/detalle',
+	url: '/cit/citaciones/' + moment().format("YYYY") + '/detalle',
 	type: App.Citacion,
 
 	init : function () {
