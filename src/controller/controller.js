@@ -66,6 +66,7 @@ App.ApiController = Em.Controller.extend({
 });
 App.ApplicationController = Em.Controller.extend({
 	loading : false,
+	tituli: '',
 	
 	init: function () {
 	},
@@ -330,7 +331,32 @@ App.CitacionConsultaController = Ember.Object.extend({
 });
 
 App.MenuController = Em.ArrayController.extend({
+	content: '',
+	
+	seleccionar : function (titulo) {
+	
+		if (this.get('seleccionado'))
+		{
+			this.get('seleccionado').set('seleccionado', false);
+		}
+		
+		var sel = this.get('content').findProperty('titulo', titulo);
+		
+		if (sel)
+		{
+			App.get('tituloController').set('titulo', titulo);
+			this.set('seleccionado', sel);
+			sel.set('seleccionado', true);
+		}
+	},
+});
 
+App.TituloController = Em.Object.extend({
+	titulo: '',
+});
+
+App.BreadCumbController = Em.ArrayController.extend({
+	content: '',
 });
 
 
@@ -398,4 +424,6 @@ App.CitacionCrearController = Em.Object.extend({
 		this.set('loaded', true);
 	},
 });
+
+
 
