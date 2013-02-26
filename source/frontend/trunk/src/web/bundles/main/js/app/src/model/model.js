@@ -51,6 +51,13 @@ App.Citacion = Em.Object.extend({
 		'estado',
 		'sala'
 	],
+	
+	saveSucceeded: function (data) {
+		if (data.responseText)
+		{
+			App.get('router').transitionTo('citaciones');
+		}
+	},	
 });
 
 
