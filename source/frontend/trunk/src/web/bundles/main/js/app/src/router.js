@@ -97,21 +97,19 @@ App.Router =  Em.Router.extend({
 				route: '/:citacion/ver',
 
 				deserialize: function(router, params) {
+					App.set('citacionConsultaController.loaded', false);
 					App.set('citacionConsultaController.content', App.Citacion.create({id: params.citacion}));
-					if(App.get('citacionConsultaController.loaded')){
-						return App.get('citacionConsultaController.content');
-					}else{
-						var deferred = $.Deferred(),
-						fn = function() {
-							var citacion = App.get('citacionConsultaController.content');
-							deferred.resolve(citacion);
-							App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-						};
 
-						App.get('citacionConsultaController').addObserver('loaded', this, fn);
-						App.get('citacionConsultaController').load();
-						return deferred.promise();
-					}
+					var deferred = $.Deferred(),
+					fn = function() {
+						var citacion = App.get('citacionConsultaController.content');
+						deferred.resolve(citacion);
+						App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+					};
+
+					App.get('citacionConsultaController').addObserver('loaded', this, fn);
+					App.get('citacionConsultaController').load();
+					return deferred.promise();
 				},
 
 				serialize: function(router, context) {
