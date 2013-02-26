@@ -143,6 +143,7 @@ App.Router =  Em.Router.extend({
 					};
 					fn2 = function() {
 						App.get('comisionesController').removeObserver('loaded', this, fn2);
+						App.set('citacionConsultaController.isEdit', false);
 						deferred.resolve(null);	
 					}
 
