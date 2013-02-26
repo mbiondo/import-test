@@ -111,25 +111,6 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
     attributeBindings: ['type', 'value'],
 });
 
-JQ.TimePicker = Em.View.extend(JQ.Widget, {
-    uiType: 'timepicker',
-    uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
-    uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
-
-    tagName: 'input',
-    type: "text",
-    attributeBindings: ['type', 'value'],
-});
-
-
-App.TimePicker = JQ.TimePicker.extend({
-  dateFormat: 'yy-mm-dd', //ISO 8601
- 
-  beforeShowDay: function(date) {
-      return [true, ""];
-  }
-});
-
 App.DatePicker = JQ.DatePicker.extend({
   dateFormat: 'yy-mm-dd', //ISO 8601
  
@@ -552,8 +533,8 @@ App.CitacionCrearView = Em.View.extend({
 			spinnerSize: [19, 26, 0], // Image size
 			spinnerIncDecOnly: true, // Only up and down arrows
 			defaultTime: this.get('startHora')
-		});	
-
+		});	 
+		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
 		
 		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
