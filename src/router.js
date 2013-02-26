@@ -208,6 +208,8 @@ App.Router =  Em.Router.extend({
 								
 								App.get('citacionConsultaController.content').set('temas', temas);
 								
+								App.set('citacionConsultaController.isEdit', true);
+								
 								deferred.resolve(citacion);							
 							}
 						}
