@@ -181,6 +181,27 @@ App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
 	
 	didInsertElement: function () {
+	
+		App.get('citacionesController').get('content').forEach(function (citacion) {
+			var color = '';
+			
+			switch (citacion.get('estado').id)
+			{
+				case 1:
+					color = 'yellow';
+				break;
+				case 2:
+					color = "green";
+				break;
+				default:
+					color = 'blue';
+				break;
+			}
+			
+			citacion.set('color', color);
+			
+		});
+		
         $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -374,6 +395,9 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	clickComision: function (comision) {
+		if (App.get('citacionCrearController.isEdit'))
+			return;
+			
 		this.set('adding', !this.get('adding'));
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
@@ -454,6 +478,7 @@ App.CitacionCrearView = Em.View.extend({
 		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
 			return regex.test((comision.nombre).toLowerCase());
 		});
+
 		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
 	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
 	
@@ -473,7 +498,12 @@ App.CitacionCrearView = Em.View.extend({
 		}
 		
 		if (this.get('listaExpedientesSeleccionados'))
-			return filtered.removeObjects(this.get('listaExpedientesSeleccionados'));
+		{
+			this.get('listaExpedientesSeleccionados').forEach(function (expediente) {
+				filtered = filtered.without(expediente)
+			});
+			return filtered;
+		}
 		else
 			return filtered;
 		
@@ -496,7 +526,6 @@ App.CitacionCrearView = Em.View.extend({
 				expedientesSeleccionados.addObject(expediente);
 			});
 		});
-		
 		if (expedientesSeleccionados.length > 0)
 			return expedientesSeleccionados;
 		else 
@@ -510,9 +539,26 @@ App.CitacionCrearView = Em.View.extend({
 	borrarExpedientes: function () {
 		App.set('citacionCrearController.content.temas', []);
 		App.set('citacionCrearController.expedientes', []);
-		console.log(App.get('citacionCrearController.content.comisiones.firstObject'));
+		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		fo = null;
 	},
 	
+	puedeConfirmar: function () {
+		return App.get('citacionCrearController.content.estado.id') == 1 && App.get('citacionCrearController.content.id');
+	}.property('citacionCrearController.content.id', 'citacionCrearController.content', 'citacionCrearController.content.estado'),
+	
+	confirmar: function () {
+		App.get('citacionCrearController').confirmar();
+	},
+	
+	puedeCancelar: function () {
+		return App.get('citacionCrearController.content.estado.id') == 2 && App.get('citacionCrearController.content.id');
+	}.property('citacionCrearController.content.id', 'citacionCrearController.content', 'citacionCrearController.content.estado'),
+		
+	cancelar: function () {
+		App.get('citacionCrearController').cancelar();
+	},
+		
 	didInsertElement: function() {
 		
 		if (App.get('citacionCrearController.content.start') != '')
@@ -537,9 +583,13 @@ App.CitacionCrearView = Em.View.extend({
 		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
 		
+		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		
 		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
 		$('#crear-citacion-form').validationEngine('attach');
+		
+		fo = null;
 	}, 
 });
 

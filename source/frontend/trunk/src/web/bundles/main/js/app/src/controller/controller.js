@@ -343,7 +343,15 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	loading: false,
 	loaded: false,
-		
+	
+	confirmar: function () {
+		console.log('confirmar');
+	},
+	
+	cancelar: function () {
+		console.log('cancelar');
+	},
+	
 	create: function () {
 		$.ajax({
 			url: App.get('apiController').get('url') + this.get('url'),
