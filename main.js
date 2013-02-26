@@ -1,11 +1,13 @@
 App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
+			id: 0,
 			titulo: 'Inicio',
 			url: '#/',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 		}),
 		App.MenuItem.create({
+			id: 1,
 			titulo: 'Expedientes',
 			url: '#/expedientes',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
@@ -17,6 +19,7 @@ App.menuController = App.MenuController.create({
 			]
 		}),
 		App.MenuItem.create({
+			id: 2,
 			titulo: 'Comisiones',
 			url: '#/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
@@ -33,7 +36,6 @@ App.menuController = App.MenuController.create({
 		}),		
 	]
 });
-
 App.tituloController = App.TituloController.create({});
 
 App.breadCumbController = App.BreadCumbController.create({

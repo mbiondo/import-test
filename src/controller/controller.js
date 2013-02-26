@@ -49,13 +49,6 @@ App.Savable = Ember.Mixin.create({
 				this.set(item, json[item]);
 			},this);
 	},
-
-	saveSucceeded: function (data) {
-		if (data.success == true) {
-			if(data.id)
-				this.set('id', data.id);
-		}
-	},
 });
 
 
@@ -66,7 +59,6 @@ App.ApiController = Em.Controller.extend({
 });
 App.ApplicationController = Em.Controller.extend({
 	loading : false,
-	tituli: '',
 	
 	init: function () {
 	},
@@ -88,28 +80,6 @@ App.ApplicationController = Em.Controller.extend({
 	},
 	
 	citacionesControllerLoaded : function () {
-        $('#mycalendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay '
-            },
-            editable: false,
-            events: App.get('citacionesController').get('content').toArray(),
-            eventRender: function(event, element, view) {
-				element.bind('click', function() {		
-					App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
-					App.get('router').transitionTo('loading');
-					fn = function() {
-						App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-						App.get('router').transitionTo('citacionesConsulta.indexSubRoute', App.Citacion.create(event));
-					};
-					
-					App.get('citacionConsultaController').addObserver('loaded', this, fn);			
-					App.get('citacionConsultaController').load();
-				});
-            },            
-        });
 	},	
 	
 	expedientesControllerLoaded : function () {
@@ -333,16 +303,17 @@ App.CitacionConsultaController = Ember.Object.extend({
 App.MenuController = Em.ArrayController.extend({
 	content: '',
 	
-	seleccionar : function (titulo) {
+	seleccionar : function (id) {
 		this.get('content').forEach(function (menuItem) {
 			menuItem.set('seleccionado', false);
 		});
 		
-		var sel = this.get('content').findProperty('titulo', titulo);
+		var sel = this.get('content').findProperty('id', id);
 		
 		if (sel)
 		{
-			App.get('tituloController').set('titulo', titulo);
+			App.get('tituloController').set('titulo', sel.get('titulo'));
+			App.get('tituloController').set('fecha', moment().format('DD MMMM YYYY'));
 			this.set('seleccionado', sel);
 			sel.set('seleccionado', true);
 		}
@@ -351,6 +322,7 @@ App.MenuController = Em.ArrayController.extend({
 
 App.TituloController = Em.Object.extend({
 	titulo: '',
+	fecha: '',
 });
 
 App.BreadCumbController = Em.ArrayController.extend({
@@ -379,22 +351,34 @@ App.CitacionCrearController = Em.Object.extend({
 			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'POST',
-			context : {controller: this, model : this.get('content') },
-			data : this.get('content').getJson(),
-			success: this.createSucceeded,
+			success: this.createCompleted,
+			complete: this.createCompleted,
+			data : this.get('content').getJson()
 		});	
+	},
+	
+	createCompleted: function (data) {
+		//TO-DO Revisar que devuelva OK
+		
+		if (data.responseText)
+		{
+			App.set('citacionesController.loaded', false);
+			App.get('router').transitionTo('loading');
+			
+			fn = function() {
+				App.get('citacionesController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('citaciones');
+			};
+			
+			App.get('citacionesController').addObserver('loaded', this, fn);			
+			App.get('citacionesController').load();
+			
+			$.jGrowl('Citacion creada con Exito!', { life: 5000 });
+		}
 	},
 	
 	save: function () {
 		this.get('content').save();
-	},
-	
-	createSucceeded: function (data) {
-		
-	},
-	
-	saveSucceeded: function (data) {
-
 	},
 	
 	cargarExpedientes: function () {

@@ -20,7 +20,7 @@ App.Router =  Em.Router.extend({
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'inicio');
 				
-				App.get('menuController').seleccionar('Inicio');
+				App.get('menuController').seleccionar(0);
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Inicio', url: '#/'}
 				]);				
@@ -29,12 +29,31 @@ App.Router =  Em.Router.extend({
 		
 		expedientes: Em.Route.extend({
 			route: "/expedientes",
+			
+			deserialize: function(router, params) {
+			
+				if (App.get('expedientesController.loaded'))
+					return null;
+				
+				var deferred = $.Deferred(),
+				
+				fn = function() {
+					App.get('expedientesController').removeObserver('loaded', this, fn);	
+					deferred.resolve(null);					
+				};
+
+				App.get('expedientesController').addObserver('loaded', this, fn);
+				App.get('expedientesController').load();
+				
+				return deferred.promise();
+			},	
+				
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');	
 				appController.connectOutlet('main', 'expedientes');
 				appController.cargarExpedientes();
 				
-				App.get('menuController').seleccionar('Expedientes');
+				App.get('menuController').seleccionar(1);
 				
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Expedientes', url: '#/expedientes'}
@@ -45,15 +64,29 @@ App.Router =  Em.Router.extend({
 		
 		citaciones: Em.Route.extend({
 			route: "/citaciones",
+			
+			deserialize: function(router, params) {
+				var deferred = $.Deferred(),
+				
+				fn = function() {
+					App.get('citacionesController').removeObserver('loaded', this, fn);	
+					deferred.resolve(null);					
+				};
+
+				App.get('citacionesController').addObserver('loaded', this, fn);
+				App.get('citacionesController').load();
+				
+				return deferred.promise();
+			},		
+			
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'citaciones');
-				appController.cargarCitaciones();
 				
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Comisiones', url: '#/citaciones'}
 				]);					
-				App.get('menuController').seleccionar('Comisiones');
+				App.get('menuController').seleccionar(2);
 			},			
 		}),
 
@@ -91,9 +124,9 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Comisiones', url: '#/citaciones'},
-						{titulo: App.get('citacionConsultaController.content').get('start'), url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+						{titulo: App.get('citacionConsultaController.content').get('start')},
 					]);					
-					App.get('menuController').seleccionar('Comisiones');					
+					App.get('menuController').seleccionar(2);					
 				},
 			}),	
 			
@@ -125,10 +158,10 @@ App.Router =  Em.Router.extend({
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'citacionCrear');
 					
-					App.get('menuController').seleccionar('Comisiones');
+					App.get('menuController').seleccionar(2);
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Comisiones', url: '#/citaciones'},
-						{titulo: 'Nueva', url: '#/citacion/crear'},
+						{titulo: 'Nueva'},
 					]);					
 					
 				},				
@@ -212,9 +245,9 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Comisiones', url: '#/citaciones'},
 						{titulo: App.get('citacionConsultaController.content').get('start'), url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
-						{titulo: 'editar', url: '#/citacion/' + App.get('citacionConsultaController.content').get('id') + '/editar'}
+						{titulo: 'editar'}
 					]);						
-					App.get('menuController').seleccionar('Comisiones');					
+					App.get('menuController').seleccionar(2);					
 				},
 				
 			}),			
@@ -257,9 +290,9 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Expedientes', url: '#/expedientes'},
-						{titulo: App.get('expedienteConsultaController.content').get('titulo'), url: '#/expediente/' + App.get('expedienteConsultaController.content').get('id') + '/ver'}
+						{titulo: App.get('expedienteConsultaController.content').get('titulo')}
 					]);					
-					App.get('menuController').seleccionar('Expedientes');					
+					App.get('menuController').seleccionar(1);					
 				},
 			}),
 		}),

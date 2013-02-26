@@ -1,3 +1,143 @@
+JQ = Ember.Namespace.create();
+
+JQ.Widget = Em.Mixin.create({
+
+    didInsertElement: function () {
+        "use strict";
+        var options = this._gatherOptions(), ui;
+
+        this._gatherEvents(options);
+
+        if (typeof jQuery.ui[this.get('uiType')] === 'function') {
+            ui = jQuery.ui[this.get('uiType')](options, this.get('element'));
+        } else {
+            ui = $(this.get('element'))[this.get('uiType')](options);
+        }
+        
+        this.set('ui', ui);
+    },
+
+    willDestroyElement: function () {
+        "use strict";
+        var ui = this.get('ui'), observers, prop;
+
+        if (ui) {
+            observers = this._observers;
+            for (prop in observers) {
+                if (observers.hasOwnProperty(prop)) {
+                    this.removeObserver(prop, observers[prop]);
+                }
+            }
+            //ui._destroy();
+        }
+    },
+
+    _gatherOptions: function () {
+        "use strict";
+        var uiOptions = this.get('uiOptions'), options = {};
+
+        uiOptions.forEach(function (key) {
+            options[key] = this.get(key);
+
+            var observer = function () {
+                var value = this.get(key);
+                this.get('ui')._setOption(key, value);
+            };
+
+            this.addObserver(key, observer);
+
+            this._observers = this._observers || {};
+            this._observers[key] = observer;
+        }, this);
+
+        return options;
+    },
+
+
+    _gatherEvents: function (options) {
+        "use strict";
+        var uiEvents = this.get('uiEvents') || [], self = this;
+
+        uiEvents.forEach(function (event) {
+            var callback = self[event];
+
+            if (callback) {
+                options[event] = function (event, ui) { return callback.call(self, event, ui); };
+            }
+        });
+    }
+});
+
+JQ.Button = Em.View.extend(JQ.Widget, {
+    uiType: 'button',
+    uiOptions: ['disabled', 'text', 'icons', 'label'],
+    uiEvents: ['create'],
+
+    tagName: 'button'
+});
+
+
+JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
+    uiType: 'menu',
+    uiOptions: ['disabled'],
+    uiEvents: ['create', 'focus', 'blur', 'select'],
+
+    tagName: 'ul',
+
+
+    arrayDidChange: function (content, start, removed, added) {
+        "use strict";
+        this._super(content, start, removed, added);
+
+        var ui = this.get('ui');
+        if (ui) {
+
+            Em.run.schedule('render', function () {
+                ui.refresh();
+            });
+        }
+    }
+});
+
+
+
+JQ.DatePicker = Em.View.extend(JQ.Widget, {
+    uiType: 'datepicker',
+    uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
+    uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
+
+    tagName: 'input',
+    type: "text",
+    attributeBindings: ['type', 'value'],
+});
+
+JQ.TimePicker = Em.View.extend(JQ.Widget, {
+    uiType: 'timepicker',
+    uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
+    uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
+
+    tagName: 'input',
+    type: "text",
+    attributeBindings: ['type', 'value'],
+});
+
+
+App.TimePicker = JQ.TimePicker.extend({
+  dateFormat: 'yy-mm-dd', //ISO 8601
+ 
+  beforeShowDay: function(date) {
+      return [true, ""];
+  }
+});
+
+App.DatePicker = JQ.DatePicker.extend({
+  dateFormat: 'yy-mm-dd', //ISO 8601
+ 
+  beforeShowDay: function(date) {
+      return [true, ""];
+  }
+});
+
 App.ListFilterView = Ember.View.extend({
 	filterText: '',
 	maxRecords: 10,
@@ -19,6 +159,7 @@ App.ExpedienteView = Ember.View.extend({
 	classNameBindings: ['content.seleccionada:active'],
 	
 	verExpediente: function () {
+		App.set('expedienteConsultaController.loaded', false);
 		App.get('router').transitionTo('loading');
 		App.set('expedienteConsultaController.content', App.Citacion.create({id: this.get('content').get('id')}));
 		
@@ -57,6 +198,32 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
+	
+	didInsertElement: function () {
+        $('#mycalendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay '
+            },
+            editable: false,
+            events: App.get('citacionesController').get('content').toArray(),
+            eventRender: function(event, element, view) {
+				element.bind('click', function() {		
+					App.set('citacionConsultaController.loaded', false);
+					App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
+					App.get('router').transitionTo('loading');
+					fn = function() {
+						App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+						App.get('router').transitionTo('citacionesConsulta.indexSubRoute', App.Citacion.create(event));
+					};
+					
+					App.get('citacionConsultaController').addObserver('loaded', this, fn);			
+					App.get('citacionConsultaController').load();
+				});
+            },            
+        });	
+	},
 });
 
 App.InicioView = Em.View.extend({
@@ -71,11 +238,17 @@ App.ApplicationView = Em.View.extend({
 			$(".secNav").toggleClass('display');
 		});	
 		
+		//===== User nav dropdown =====//		
+		
+		$('a.leftUserDrop').click(function () {
+			$('.leftUser').slideToggle(200);
+		});
+		
 		$(document).bind('click', function(e) {
 			var $clicked = $(e.target);
 			if (! $clicked.parents().hasClass("leftUserDrop"))
 			$(".leftUser").slideUp(200);
-		});		
+		});
 	},
 });
 
@@ -124,6 +297,10 @@ App.CitacionCrearView = Em.View.extend({
 	
 	temaSeleccionado: '',
 	
+	startFecha: '',
+	
+	startHora: '',
+	
 	crearTema: function () {
 		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
 		this.set('tituloNuevoTema', '');
@@ -141,7 +318,10 @@ App.CitacionCrearView = Em.View.extend({
 	
 	agregarInvitadoHabilitado: function () {
 		var invitado = this.get('invitado');
-		return invitado.nombre != '' && invitado.apellido != '' && invitado.caracter != '' && invitado.mail != '';
+		var empty = !(invitado.nombre != '' && invitado.apellido != '' && invitado.caracter != '' && invitado.mail != '');
+		console.log(empty);
+		
+		return !empty && $("#crear-citacion-form").validationEngine('validate');
 	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
 	
 	cargarExpedientesHabilitado: function () {
@@ -153,6 +333,36 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	guardar: function () {
+	
+		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || this.get('listaExpedientesSeleccionados').length < 1)
+		{
+			return;
+		}
+		
+		var temas = App.get('citacionCrearController.content.temas');
+		var temasToRemove = [];
+		
+		
+		temas.forEach(function (tema) {
+			var proyectos = tema.get('proyectos');
+			if (proyectos.length == 0)
+				temasToRemove.addObject(tema);
+		});
+		
+		temas.removeObjects(temasToRemove);
+		
+		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));
+		
+		App.get('citacionCrearController').create();
+	},
+	
+	editar: function () {
+	
+		if (!$("#crear-citacion-form").validationEngine('validate'))
+		{
+			return;
+		}
+		
 		var temas = App.get('citacionCrearController.content.temas');
 		var temasToRemove = [];
 		
@@ -164,18 +374,7 @@ App.CitacionCrearView = Em.View.extend({
 		
 		temas.removeObjects(temasToRemove);
 		
-		console.log(App.get('citacionCrearController.content'));
-		
-		App.get('citacionCrearController').create();
-	},
-	
-	editar: function () {
-		var temas = App.get('citacionCrearController.content.temas');
-		temas.forEach(function (tema) {
-			var proyectos = tema.get('proyectos');
-			if (proyectos.length == 0)
-				temasToRemove.addObject(tema);
-		});
+		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));	
 		
 		App.get('citacionCrearController').get('content').save();
 	},
@@ -184,6 +383,7 @@ App.CitacionCrearView = Em.View.extend({
 		var invitado = this.get('invitado');
 		App.get('citacionCrearController.content.invitados').addObject(invitado);
 		this.set('invitado', App.CitacionInvitado.create());
+		
 		this.set('adding', !this.get('adding'));
 	},
 	
@@ -231,7 +431,6 @@ App.CitacionCrearView = Em.View.extend({
 		
 		var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));
 		temaAnterior.get('proyectos').removeObject(expediente);
-		
 		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (!tema)
 		{
@@ -325,7 +524,42 @@ App.CitacionCrearView = Em.View.extend({
 	
 	hayInvitados: function () {
 		return App.get('citacionCrearController.content.invitados').length > 0;
-	}.property('citacionCrearController.content.invitados', 'adding'),	
+	}.property('citacionCrearController.content.invitados', 'adding'),
+	
+	borrarExpedientes: function () {
+		App.set('citacionCrearController.content.temas', []);
+		App.set('citacionCrearController.expedientes', []);
+		console.log(App.get('citacionCrearController.content.comisiones.firstObject'));
+	},
+	
+	didInsertElement: function() {
+		
+		if (App.get('citacionCrearController.content.start') != '')
+		{
+			this.set('startFecha', App.get('citacionCrearController.content.start').split(' ')[0]);
+			this.set('startHora', App.get('citacionCrearController.content.start').split(' ')[1]);
+		}
+		else
+		{
+			this.set('startFecha', moment().format("YYYY-MM-DD"));
+			this.set('startHora', moment().format("hh:ss"));
+		}
+		
+		$('.timepicker').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: this.get('startHora')
+		});	
+
+		$('.timepicker').timeEntry('setTime', this.get('startHora'));
+		
+		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
+		
+		$('#crear-citacion-form').validationEngine('attach');
+	}, 
 });
 
 App.ComisionView = Em.View.extend({
@@ -356,7 +590,6 @@ App.InvitadosView = Ember.CollectionView.extend({
     classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.InvitadoView, 
-	
 });
 
 App.CitacionExpediente = Em.View.extend({
