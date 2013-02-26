@@ -131,8 +131,7 @@ App.Router =  Em.Router.extend({
 			crearCitacion: Ember.Route.extend({
 				route: '/crear',
 				deserialize: function(router, params) {
-					var deferred = $.Deferred(),
-					
+					var deferred = $.Deferred(),		
 					fn = function() {
 						App.get('citacionSalasController').removeObserver('loaded', this, fn);
 						var sala = App.get('citacionSalasController.content').objectAt(0);	
@@ -170,69 +169,72 @@ App.Router =  Em.Router.extend({
 				route: '/:citacion/editar',
 				
 				deserialize: function(router, params) {
+				
+					App.set('citacionConsultaController.loaded', false);
+					App.set('citacionCrearController.loaded', false);
+					App.set('comisionesController.loaded', false);
+					App.set('citacionSalasController.loaded', false);
+					
 					App.set('citacionConsultaController.content', App.Citacion.create({id: params.citacion}));
-					if(App.get('citacionConsultaController.loaded')){
-						return App.get('citacionConsultaController.content');
-					}else{
-						var deferred = $.Deferred(),
+					
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+						App.get('citacionConsultaController').removeObserver('loaded', this, fn);						
+						var citacion = App.get('citacionConsultaController.content');				
+						App.set('citacionCrearController.content', citacion);
+						App.set('citacionCrearController.isEdit', true);
 						
-						fn = function() {
-							App.get('citacionConsultaController').removeObserver('loaded', this, fn);						
-							var citacion = App.get('citacionConsultaController.content');				
-							App.set('citacionCrearController.content', citacion);
-							App.set('citacionCrearController.isEdit', true);
-							
-							citacion.set('comisiones', mapObjectsInArrays(App.get('comisionesController').get('content'), citacion.get('comisiones')));
-							citacion.set('sala', App.get('citacionSalasController').get('content').findProperty('id', citacion.get('sala').id));
-							
-							App.get('citacionCrearController').addObserver('loaded', this, fn1);
-							App.get('citacionCrearController').cargarExpedientes();
-							
-						};
+						citacion.set('comisiones', mapObjectsInArrays(App.get('comisionesController').get('content'), citacion.get('comisiones')));
+						citacion.set('sala', App.get('citacionSalasController').get('content').findProperty('id', citacion.get('sala').id));
 						
-						fn1 = function () {
-							if (App.get('citacionCrearController').get('loaded'))
-							{
-								App.get('citacionCrearController').removeObserver('loaded', this, fn1);
-								var citacion = App.get('citacionConsultaController.content');
-								var temas = citacion.get('temas');
-								var temas = [];
-								citacion.get('temas').forEach(function (tema) {
-									var t = App.CitacionTema.create(tema);
-									temas.addObject(t);
-								    t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
-									var proyectos = t.get('proyectos');
-									proyectos.forEach(function (proyecto) {
-										proyecto.set('tema', t.get('descripcion'));
-									});									
-								});
-								
-								App.get('citacionConsultaController.content').set('temas', temas);
-								
-								App.set('citacionConsultaController.isEdit', true);
-								
-								deferred.resolve(citacion);							
-							}
+						App.get('citacionCrearController').addObserver('loaded', this, fn1);
+						App.get('citacionCrearController').cargarExpedientes();
+						
+					};
+					
+					fn1 = function () {
+						if (App.get('citacionCrearController').get('loaded'))
+						{
+							App.get('citacionCrearController').removeObserver('loaded', this, fn1);
+							var citacion = App.get('citacionConsultaController.content');
+							var temas = citacion.get('temas');
+							var temas = [];
+							citacion.get('temas').forEach(function (tema) {
+								var t = App.CitacionTema.create(tema);
+								temas.addObject(t);
+								t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
+								var proyectos = t.get('proyectos');
+								proyectos.forEach(function (proyecto) {
+									proyecto.set('tema', t.get('descripcion'));
+								});									
+							});
+							
+							App.get('citacionConsultaController.content').set('temas', temas);
+							
+							App.set('citacionConsultaController.isEdit', true);
+							
+							deferred.resolve(citacion);							
 						}
-						
-						fn2 = function () {
-							App.get('comisionesController').removeObserver('loaded', this, fn2);								
-							App.get('citacionConsultaController').addObserver('loaded', this, fn);
-							App.get('citacionConsultaController').load();							
-						}
-						
-						fn3 = function () {
-							App.get('citacionSalasController').removeObserver('loaded', this, fn3);
-							App.get('comisionesController').addObserver('loaded', this, fn2);
-							App.get('comisionesController').load();		
-							
-						}
-						
-						App.get('citacionSalasController').addObserver('loaded', this, fn3);
-						App.get('citacionSalasController').load();														
-
-						return deferred.promise();
 					}
+					
+					fn2 = function () {
+						App.get('comisionesController').removeObserver('loaded', this, fn2);								
+						App.get('citacionConsultaController').addObserver('loaded', this, fn);
+						App.get('citacionConsultaController').load();							
+					}
+					
+					fn3 = function () {
+						App.get('citacionSalasController').removeObserver('loaded', this, fn3);
+						App.get('comisionesController').addObserver('loaded', this, fn2);
+						App.get('comisionesController').load();		
+						
+					}
+					
+					App.get('citacionSalasController').addObserver('loaded', this, fn3);
+					App.get('citacionSalasController').load();														
+
+					return deferred.promise();
 				},
 
 				serialize: function(router, context) {
