@@ -184,21 +184,26 @@ App.CitacionesView = App.ListFilterView.extend({
 	
 		App.get('citacionesController').get('content').forEach(function (citacion) {
 			var color = '';
-			
-			switch (citacion.get('estado').id)
+			if (citacion.get('estado'))
 			{
-				case 1:
-					color = 'yellow';
-				break;
-				case 2:
-					color = "green";
-				break;
-				default:
-					color = 'blue';
-				break;
+				switch (citacion.get('estado').id)
+				{
+					case 2:
+						color = "green";
+					break;
+					
+					case 3:
+						color = "red";
+					break;
+					
+					default:
+						color = "";
+					break;
+				}
+				
+				citacion.set('color', color);
+				citacion.set('start', citacion.get('fechaHora'));
 			}
-			
-			citacion.set('color', color);
 			
 		});
 		
@@ -541,6 +546,7 @@ App.CitacionCrearView = Em.View.extend({
 		App.set('citacionCrearController.expedientes', []);
 		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
 		fo = null;
+		App.get('citacionCrearController').cargarExpedientes();
 	},
 	
 	puedeConfirmar: function () {
@@ -587,7 +593,7 @@ App.CitacionCrearView = Em.View.extend({
 		
 		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
-		$('#crear-citacion-form').validationEngine('attach');
+		//$('#crear-citacion-form').validationEngine('attach');
 		
 		fo = null;
 	}, 
