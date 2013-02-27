@@ -333,7 +333,6 @@ App.CitacionCrearView = Em.View.extend({
 	agregarInvitadoHabilitado: function () {
 		var invitado = this.get('invitado');
 		var empty = !(invitado.nombre != '' && invitado.apellido != '' && invitado.caracter != '' && invitado.mail != '');
-		console.log(empty);
 		
 		return !empty && $("#crear-citacion-form").validationEngine('validate');
 	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
@@ -365,34 +364,18 @@ App.CitacionCrearView = Em.View.extend({
 		
 		temas.removeObjects(temasToRemove);
 		
-		App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+		
 		
 		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));
 		
-		App.get('citacionCrearController').create();
-	},
-	
-	editar: function () {
-	
-		if (!$("#crear-citacion-form").validationEngine('validate'))
-		{
-			return;
+		if (this.get('content').get('id')) {
+			App.get('citacionCrearController').save();
 		}
-		
-		var temas = App.get('citacionCrearController.content.temas');
-		var temasToRemove = [];
-		
-		temas.forEach(function (tema) {
-			var proyectos = tema.get('proyectos');
-			if (proyectos.length == 0)
-				temasToRemove.addObject(tema);
-		});
-		
-		temas.removeObjects(temasToRemove);
-		
-		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));	
-		
-		App.get('citacionCrearController').save();
+		else {
+			App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+			App.get('citacionCrearController').create();		
+		}
+
 	},
 	
 	crearInvitado: function () {
@@ -559,8 +542,8 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	puedeEditar: function () {
-		return this.get('content.estado.id') == 1 && this.get('content.id');
-	}.property('content.id', 'content', 'content.estado'),
+		return this.get('content.estado.id') == 1 || !this.get('content.id');
+	}.property('content.id', 'content', 'content.estado'),	
 	
 	puedeConfirmar: function () {
 		return this.get('content.estado.id') == 1 && this.get('content.id');
