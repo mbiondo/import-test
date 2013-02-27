@@ -181,7 +181,7 @@ App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
 	
 	didInsertElement: function () {
-	
+
 		App.get('citacionesController').get('content').forEach(function (citacion) {
 			var color = '';
 			if (citacion.get('estado'))
@@ -202,7 +202,7 @@ App.CitacionesView = App.ListFilterView.extend({
 				}
 				
 				citacion.set('color', color);
-				citacion.set('start', citacion.get('fechaHora'));
+				citacion.set('url', '');
 			}
 			
 		});
@@ -222,7 +222,7 @@ App.CitacionesView = App.ListFilterView.extend({
 					App.get('router').transitionTo('loading');
 					fn = function() {
 						App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-						App.get('router').transitionTo('citacionesConsulta.indexSubRoute', App.Citacion.create(event));
+						App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
 					};
 					
 					App.get('citacionConsultaController').addObserver('loaded', this, fn);			
@@ -240,7 +240,12 @@ App.InicioView = Em.View.extend({
 App.ApplicationView = Em.View.extend({
 	templateName: 'application',
 	
+	mostrar : function () {
+		this.get('testModal').mostrar();
+	},
+
 	didInsertElement: function () {
+	
 		$("ul.userNav li a.sidebar").click(function() { 
 			$(".secNav").toggleClass('display');
 		});	
@@ -308,6 +313,8 @@ App.CitacionCrearView = Em.View.extend({
 	
 	startHora: '',
 	
+	contentBinding: 'App.citacionCrearController.content',
+	
 	crearTema: function () {
 		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
 		this.set('tituloNuevoTema', '');
@@ -358,6 +365,8 @@ App.CitacionCrearView = Em.View.extend({
 		
 		temas.removeObjects(temasToRemove);
 		
+		App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+		
 		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));
 		
 		App.get('citacionCrearController').create();
@@ -383,7 +392,7 @@ App.CitacionCrearView = Em.View.extend({
 		
 		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));	
 		
-		App.get('citacionCrearController').get('content').save();
+		App.get('citacionCrearController').save();
 	},
 	
 	crearInvitado: function () {
@@ -549,17 +558,21 @@ App.CitacionCrearView = Em.View.extend({
 		App.get('citacionCrearController').cargarExpedientes();
 	},
 	
+	puedeEditar: function () {
+		return this.get('content.estado.id') == 1 && this.get('content.id');
+	}.property('content.id', 'content', 'content.estado'),
+	
 	puedeConfirmar: function () {
-		return App.get('citacionCrearController.content.estado.id') == 1 && App.get('citacionCrearController.content.id');
-	}.property('citacionCrearController.content.id', 'citacionCrearController.content', 'citacionCrearController.content.estado'),
+		return this.get('content.estado.id') == 1 && this.get('content.id');
+	}.property('content.id', 'content', 'content.estado'),
 	
 	confirmar: function () {
 		App.get('citacionCrearController').confirmar();
 	},
 	
 	puedeCancelar: function () {
-		return App.get('citacionCrearController.content.estado.id') == 2 && App.get('citacionCrearController.content.id');
-	}.property('citacionCrearController.content.id', 'citacionCrearController.content', 'citacionCrearController.content.estado'),
+		return this.get('content.estado.id') == 2 && this.get('content.id');
+	}.property('content.id', 'content', 'content.estado'),
 		
 	cancelar: function () {
 		App.get('citacionCrearController').cancelar();
@@ -663,4 +676,728 @@ App.CitacionExpedienteSeleccionado = Em.View.extend({
 App.CitacionExpedientesSeleccionados = Ember.CollectionView.extend({ 
 	tagName: 'tbody',
 	itemViewClass: App.CitacionExpedienteSeleccionado, 
+});
+
+
+/* Oradores */
+
+App.JQuerySortableView = Ember.CollectionView.extend({
+	tagName: 'ul',
+	itemViewClass: null, 
+	sortValue : 'orden',
+	sortAscending: true,
+	sortEnabled: true,
+	sortIndex: 0,
+
+	updateSort: function(idArray){
+		var sortArr, ap, view, model, order;
+		ap = Ember.ArrayProxy.create({
+			content: Ember.A(idArray)
+		});
+
+		sortArr = [];
+		ap.forEach(function(item, index){
+			view = Ember.View.views[item];
+			model = view.get('content');
+
+			sortArr.push(view.get('content.id'));
+
+			if(this.get('sortAscending')){
+				order = ap.indexOf(item);
+			}else{
+				order = (idArray.length-1) - ap.indexOf(item);
+			}
+
+			model.set(this.get('sortValue'), this.get('sortIndex') + order);
+		}, this);
+		return sortArr;
+	},
+
+	refreshSort : function () {
+		this.$().sortable('destroy');
+		this.sortable();
+	},
+
+	didInsertElement: function() {
+		this.sortable();
+	},
+
+	sortEnabledChange : function () {
+		this.refreshSort();
+	}.observes('sortEnabled'),
+
+	sortable : function () {
+		if(!this.get('sortEnabled'))
+			return;
+
+		var view = this;
+		view.$().sortable({
+			items: '> li:not(.sort-disabled)',
+			axis: 'y',
+			tolerance: 'pointer',
+			containment: 'parent',
+			start: function(event, ui) {
+				ui.item.previousIndex = ui.item.index();                      
+			},
+			stop: function(event, ui) {
+				view.updateSort(view.$().sortable('toArray'));
+			},
+			helper: function(event, ui) {
+				return $(ui).safeClone();            
+			}
+		})
+	}
+});
+
+App.RadioButton = Ember.View.extend({
+	title: null,
+
+	checked: false,
+
+	group: "radio_button",
+	disabled: false,
+
+	classNames: ['ember-radio-button'],
+	templateName: "radio-button",
+
+	bindingChanged: function(){
+		var input = this.$('input:radio');
+		if(input.attr('option') == Ember.get(this, 'value')){
+			 this.set("checked", true);
+		}
+	}.observes("value"),
+
+	change: function() {
+		Ember.run.once(this, this._updateElementValue);
+	},
+
+	_updateElementValue: function() {
+		var input = this.$('input:radio');
+		Ember.set(this, 'value', input.attr('value'));
+	},
+	
+	didInsertElement: function() {
+		this.bindingChanged();
+	},  
+});
+
+App.ListaView = Ember.View.extend({
+	classNames: 'tab-pane pillow-emboss',
+	classNameBindings: 'content.seleccionada:active',
+	templateName: 'listaView',
+
+	sortIndex: function () {
+		return App.get('listaController.turnosBloqueados').length;
+	}.property('App.listaController.turnosBloqueados'),
+
+	ordenarPorBloqueAsc : function () {
+		App.get('listaController').ordenarPorBloque(true);
+	},
+
+	ordenarPorBloqueDesc : function () {
+		App.get('listaController').ordenarPorBloque(false);
+	},
+
+	modificarTiempos : function () {
+		App.ModificarTiemposView.popup();
+	},
+
+	imprimir : function () {
+		App.get('listaController').imprimir();
+	},
+	
+	imprimirPendientes : function () {
+		App.get('listaController').imprimirPendientes();
+	}
+});
+
+App.ListaTabView = Ember.View.extend({
+	classNameBindings: ['content.seleccionada:active'],
+	tagName: 'li',
+	templateName: 'listaTabView',
+	content : null,
+
+	listaClick: function () {
+		App.get('listaController').set('content', this.get('content'));
+	}
+});
+
+App.ListasView = Ember.CollectionView.extend({
+	itemViewClass: App.ListaView,
+});
+
+App.SesionTurnosView = Em.View.extend({
+	templateName: 'sesion-turnos',
+	
+	mostrarTodosActivado : function () {
+		return (App.get('listaController').get('content') == null)
+	}.property('App.listaController.content'),
+
+	mostrarTodos : function () {
+		return App.get('sesionController').get('content.listas.length') > 1;
+	}.property('App.sesionController.content'),
+
+	mostrarTodosClick : function () {
+		App.get('listaController').set('content', null);
+	},
+	
+	imprimir : function() {
+		var sesion = App.get('sesionController.content').serialize();
+		var tema = App.get('temaController.content').serialize();
+		var listasSerialized = [];
+		var listas = App.get('sesionController.content.listas');
+		listas.forEach(function(item, index){
+			var turnosBloqueados = item.get('turnosBloqueados');
+			var turnosDesBloqueados = item.get('turnosDesbloqueados');
+			var turnosSerialized = [];
+			
+			turnosBloqueados.forEach(function(turno, index){
+				var t = turno.serialize();
+				t['hablando'] = turno.get('hablando');
+				turnosSerialized.push(t);
+			}, item);
+			
+			turnosDesBloqueados.forEach(function(turno, index){
+				var t = turno.serialize();
+				t['hablando'] = turno.get('hablando');
+				turnosSerialized.push(t);
+			}, item);
+			
+			var lista = item.serialize();
+			lista['turnos'] = turnosSerialized;
+			listasSerialized.push(lista);
+		}, this);		
+		
+		sesion['listas'] = listasSerialized;
+		sesion['tema'] = tema;
+		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
+	},
+	
+	imprimirPendientes : function() {
+		var sesion = App.get('sesionController.content').serialize();
+		var tema = App.get('temaController.content').serialize();
+		var listasSerialized = [];
+		var listas = App.get('sesionController.content.listas');
+		listas.forEach(function(item, index){
+			var turnos = item.get('turnosPendientes');
+			var turnosSerialized = [];
+			turnos.forEach(function(turno, index){
+				var t = turno.serialize();
+				t['hablando'] = turno.get('hablando');
+				turnosSerialized.push(t);
+			}, item);
+			var lista = item.serialize();
+			lista['turnos'] = turnosSerialized;
+			listasSerialized.push(lista);
+		}, this);		
+		
+		sesion['listas'] = listasSerialized;
+		sesion['tema'] = tema;
+		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
+	},	
+
+});
+
+
+App.TurnoView = Ember.View.extend({
+	tagName: 'li',
+	templateName: 'turno',
+	classNameBindings: ['sortDisabled'],
+	sortDisabledBinding: 'this.content.sortDisabled',
+
+	remove : function () {
+		App.get('turnosController').deleteObject(this.get('content'));
+	},
+/*
+	actualizarTiempo : function () {
+		this.get('content').set('tiempo', parseInt(1 + Math.random()*50));
+		App.get('turnosController').actualizarHora();
+	//	this.get('content').save();
+	},
+*/
+	startTimer : function () {
+		App.get('turnosController').startTimer(this.get('content'));
+	},
+
+	stopTimer : function () {
+		App.get('turnosController').stopTimer(this.get('content'));
+	},
+	
+	modificar: function () {
+		App.get('crearTurnoController').set('turno', this.get('content'));
+		App.CrearTurnoView.popup();
+	},
+	
+	index : function () {
+		return this.get('contentIndex') + 1;
+	}.property('contentIndex'),
+});
+
+App.TurnoHablandoView = Ember.View.extend({
+	templateName: "turno-hablando",
+
+	stopTimer : function () {
+		App.get('turnosController').stopTimer(this.get('content'));
+	},
+});
+
+App.TemaView = Ember.View.extend({
+	tagName: 'li',
+	templateName: 'tema',
+	classNameBindings: ['content.seleccionado:active'],
+
+	borrar : function () {
+		App.get('temasController').deleteObject(this.get('content'));
+		App.get('temaController').set('borrarTema', false);
+		
+		if(App.get('temasController.content.length') == 0)
+			App.get('router').transitionTo('sesionConsulta.indexSubRoute', App.get('sesionController.content'));
+	}
+});
+
+App.SesionView = Ember.View.extend({
+	tagName: 'li',
+	templateName: 'sesion',
+	classNameBindings: ['content.seleccionada:active'],
+
+	verResumen : function () {
+		App.get('router').get('applicationController').seleccionarSesion(this.get('content'))
+	},
+});
+
+App.ListaVaciaView = Ember.View.extend({
+	tagName: 'div',
+	templateName: 'lista-vacia'
+});
+
+App.TurnosView = App.JQuerySortableView.extend({
+	classNames: ['nav', 'nav-tabs', 'nav-stacked', 'turnos'],
+	itemViewClass: App.TurnoView, 
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+
+		App.get('turnosController').saveSort(sortArr);
+		App.get('turnosController').actualizarHora();
+	},
+});
+
+App.TurnosPorListaView = App.JQuerySortableView.extend({
+	classNames: ['nav', 'nav-tabs', 'nav-stacked', 'turnos'],
+	itemViewClass: App.TurnoView, 
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+
+		App.get('turnosController').saveSort(sortArr);
+		App.get('turnosController').actualizarHora();
+	},
+});
+
+App.TemasView = App.JQuerySortableView.extend({
+	classNames: ['nav'],
+	itemViewClass: App.TemaView,
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+
+		App.get('temasController').saveSort(sortArr);
+		App.get('turnosController').actualizarHora();
+	}
+});
+
+App.SesionesView = App.JQuerySortableView.extend({
+	classNames: ['nav', 'nav-tabs', 'nav-stacked'],
+	itemViewClass: App.SesionView,
+});
+
+App.OradoresIndexView = Em.View.extend({
+	templateName: 'oradores-index',
+		
+	crearSesion: function () {
+		var sesion = App.Sesion.create();
+				App.get('crearSesionController').set('sesion', sesion);
+		App.CrearSesionView.popup();
+	},    
+});
+
+App.SesionConsultaView = Em.View.extend({
+	templateName: 'sesion-consulta',
+	crearTema: function () {
+		var orden = App.get('sesionController.content.temas.length');
+		if (orden == null)
+			orden = 0;
+			
+		var tema = App.Tema.create({
+					sesionId:  App.get('sesionController').get('content').get('id'), 
+					orden: orden,
+				});
+				App.get('crearTemaController').set('tema', tema);
+		App.CrearTemaView.popup();
+	},
+		
+	crearTurno: function () {
+		var lista;
+
+		if(App.get('listaController.content'))
+			lista = App.get('listaController.content');
+		else
+			lista = null;
+			
+		var temaController = App.get('temaController');
+		
+		var turno = App.Turno.create({
+				temaId:  App.get('temaController').get('content').get('id'),
+				listaId: lista == null ? null : lista.get('id'),
+				tiempo: 5,
+				orden: 0,
+				oradores: []
+			});
+			
+			
+		App.get('crearTurnoController').set('turno', turno);
+		App.CrearTurnoView.popup();
+	},
+
+	borrarTema: function () {
+		var temaController = App.get('temaController');
+		temaController.set('borrarTema', !temaController.get('borrarTema'));
+	},
+
+	startTimer : function () {
+		App.get('sesionesController').startTimer(App.get('sesionController.content'));
+	},
+
+	stopTimer : function () {
+		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
+	},
+});
+
+App.OradorView = Em.View.extend({
+	tagName: 'li',
+	classNames: ['usuario-miniatura'],
+	templateName: 'orador',
+});
+
+App.TurnoOradorView = Ember.CollectionView.extend({
+    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+	tagName: 'ul',
+	itemViewClass: App.OradorView, 
+}),
+
+App.ModalView = Bootstrap.ModalPane.extend({
+	showBackdrop: true,
+});
+
+App.DiputadoView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'diputado',
+		agregarDiputado: function () {
+				this.get('parentView').get('parentView').agregarOrador(this.get('content'));
+		},    
+});
+
+App.DiputadosView = Ember.CollectionView.extend({
+    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+	tagName: 'ul',
+	itemViewClass: App.DiputadoView, 
+});
+
+App.ErrorMensajeView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'error-mensaje',
+});
+
+App.ErroresMensajesView = Ember.CollectionView.extend({
+    classNames : ['nav'],  
+	tagName: 'ul',
+	itemViewClass: App.ErrorMensajeView, 
+});
+
+
+
+App.DiputadoSeleccionadoView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'diputado-seleccionado',
+		borrarDiputado: function () {
+				this.get('parentView').get('parentView').borrarOrador(this.get('content'));
+		},        
+});
+
+App.DiputadosSeleccionadosView = Ember.CollectionView.extend({
+    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+	tagName: 'ul',
+	itemViewClass: App.DiputadoSeleccionadoView, 
+})
+
+App.CrearTurnoView = App.ModalView.extend({
+	classNames: ['modal', 'modal-form'],
+	templateName: 'crear-turno',
+	turnoBinding: 'App.crearTurnoController.turno',
+	filterText: '',
+	selectedFilterText: '',
+		
+	tags: [
+			{id: "Dictamen de Mayoria", titulo: "Dictamen de Mayoria"},
+			{id: "Dictamen de Minoria", titulo: "Dictamen de Minoria"},
+			{id: "Observaciones", titulo: "Observaciones"}
+	],
+	
+	esDictamen : function () {
+			return this.get('turno').get('listaId') == 1;
+	}.property('turno.listaId'),
+		
+	listaDiputados: function () {
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = App.get('diputadosController').get('arrangedContent').filter(function(user) {
+			return regex.test((user.nombre + " " + user.apellido).toLowerCase()) || regex.test((user.apellido + " " + user.nombre).toLowerCase());
+		});
+		return filtered;
+	}.property('filterText', 'App.diputadosController.content'),
+	
+	oradores : function () {
+		if(!this.get('turno'))
+			return null;
+
+		var ap, oradores = this.get('turno').get('oradores');
+
+		ap = Ember.ArrayProxy.create({
+			content: Ember.A(oradores)
+		});
+
+		return ap.get('content');
+	}.property('turno', 'turno.oradores', 'turno.oradores.length'),
+	
+	agregarOrador: function (user) {
+        var turnoUser = {
+          orden: this.get('oradores').get('length'),
+          user: {
+            id: user.get('id'),
+            nombre: user.get('nombre'),
+            apellido: user.get('apellido'),
+            avatar: user.get('avatar'),
+			bloque: user.get('bloque')
+          }
+        };
+        var item = this.get('oradores').findProperty("user.id", user.get('id'));
+        if (!item) {
+          this.get('oradores').pushObject(turnoUser);
+          return true;
+        }
+        return false;
+	},
+		
+		
+	borrarOrador: function (turnoUser) {
+			this.get('oradores').removeObject(turnoUser);
+	},
+
+	errorMensajes: function () {
+		var mensajes = [];
+		var turno = App.get('crearTurnoController').get('turno');
+		if (turno.tiempo < 1) 
+			mensajes.push({titulo: "Debes seleccionar un tiempo mayor a 0"});
+		if (turno.orden < 0) 
+			mensajes.push({titulo: "Debes seleccionar un tiempo orden a 0."});
+		if (turno.listaId == null) 
+			mensajes.push({titulo: "Debes seleccionar una lista."});
+		if (turno.oradores == null || turno.oradores.length == 0) 
+			mensajes.push({titulo: "Debes seleccionar uno o mas oradores."});
+		if (this.get('esDictamen') && turno.tag == null)
+			mensajes.push({titulo: "Debes seleccionar el tipo de dictamen."});
+		return mensajes;
+	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
+	
+	esInvalido: function () {
+		var turno = App.get('crearTurnoController').get('turno');
+		if (turno.tiempo < 1 || turno.orden < 0 || turno.listaId == null || turno.oradores == null || turno.oradores.length == 0 || (this.get('esDictamen') && turno.tag == null)) 
+			return true;
+		else
+			return false;
+	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
+	
+	callback: function(opts, event) {
+      if (opts.primary) {
+		  if (this.get('esInvalido')) 
+			return false;
+		  var turno = App.get('crearTurnoController').get('turno');
+		  if (turno.get('id')) {
+			turno.save();
+			App.get('turnosController').actualizarHora();
+		  } else {
+			turno.set('tema', App.get('temaController.content'));
+			App.get('turnosController').createObject(turno, true);
+		  }
+      } else if (opts.secondary) {
+        //alert('cancel')
+      } else {
+        //alert('close')
+      }
+      event.preventDefault();
+  },
+});
+
+App.CrearTemaView = App.ModalView.extend({
+	templateName: 'crear-tema',
+		temaBinding: 'App.crearTemaController.tema',
+		
+	errorMensajes: function () {
+		var mensajes = [];
+		var tema = App.get('crearTemaController').get('tema');	
+		if (tema.titulo == null || tema.titulo == "") 
+			mensajes.push({titulo: "Debes escribir un titulo."});
+		return mensajes;
+	}.property('tema.titulo'),
+	
+	esInvalido: function () {
+		var tema = App.get('crearTemaController').get('tema');	
+		if (tema.titulo == null || tema.titulo == "") 
+			return true;
+		else
+			return false;
+	}.property('tema.titulo'),
+	
+	callback: function(opts, event) {
+			if (opts.primary) {
+				if (this.get('esInvalido')) 
+					return false;			
+				var tema = App.get('crearTemaController').get('tema');
+				if (tema.get('id')) {
+					 tema.save();
+				} else {
+					 App.get('temasController').createObject(tema, true);
+				}
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+	},    
+
+});
+
+App.CrearSesionView = App.ModalView.extend({
+	templateName: 'crear-sesion',
+	sesionBinding: 'App.crearSesionController.sesion',
+	errorMensajes: function () {
+		var mensajes = [];
+		var sesion = App.get('crearSesionController').get('sesion');
+		if (sesion.titulo == null || sesion.titulo == "") 
+			mensajes.push({titulo:"Debes escribir un titulo."});
+		if (sesion.sesion == null || sesion.sesion == "")  
+			mensajes.push({titulo:"Debes escribir un numero de sesion."});
+		if (sesion.reunion == null || sesion.reunion == "") 
+			mensajes.push({titulo:"Debes escribir un numero de reunion."});
+		if (sesion.periodoOrdinario == null || sesion.periodoOrdinario == "") 
+			mensajes.push({titulo:"Debes escribir un periodo Ordinario."});
+		if (sesion.tipo == null) 
+			mensajes.push({titulo:"Debes seleccionar un tipo de Sesion."});
+		return mensajes;
+	}.property('sesion.titulo', 'sesion.reunion', 'sesion.periodoOrdinario', 'sesion.sesion', 'sesion.tipo'),
+	
+	esInvalido: function () {
+		var sesion = App.get('crearSesionController').get('sesion');
+		if (sesion.titulo == null || sesion.sesion == null || sesion.titulo == "" || sesion.reunion == null || sesion.sesion == "" ||  sesion.periodoOrdinario == null || sesion.periodoOrdinario == "" || sesion.tipo == null) 
+			return true;
+		else
+			return false;
+	}.property('sesion.titulo', 'sesion.reunion', 'sesion.periodoOrdinario', 'sesion.sesion', 'sesion.tipo'),
+	
+	callback: function(opts, event) {
+			if (opts.primary) {
+				if (this.get('esInvalido')) 
+					return false;			
+				var sesion = App.get('crearSesionController').get('sesion');
+		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
+				var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
+				var minutos = horaSesion.minutes();
+				var horas = horaSesion.hours();
+				var segundos = horaSesion.seconds();
+				
+				var fechaSesion = moment.unix(this.get('sesion.fecha'));
+				
+				fechaSesion.minutes(minutos);
+				fechaSesion.hours(horas);
+				fechaSesion.seconds(segundos);
+				sesion.set('fecha', fechaSesion.unix());
+				
+				if (sesion.get('id')) {
+					sesion.save();
+					var turnosController = App.get('turnosController');
+					turnosController.actualizarHora();
+				} else {
+					 App.get('sesionesController').createObject(sesion, true);
+				}
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+		},    
+		
+		didInsertElement: function() {
+			self = this;
+			this.get('sesion').set('fecha', moment().unix());
+
+			$('.datepicker').datepicker("setValue", moment().format("DD-MM-YYYY")).on('changeDate', function(ev){
+				self.get('sesion').set('fecha', moment(ev.date).unix());
+			});
+
+			$('.dropdown-timepicker').timepicker({
+				defaultTime: 'current',
+				minuteStep: 15,
+				disableFocus: true,
+				template: 'dropdown'
+			});
+		},    
+});
+
+App.ModificarTiemposView = App.ModalView.extend({
+	templateName: 'modificar-tiempos',
+	tiempo : 5,
+	invalido : false,
+
+	callback: function(opts, event) {
+			if (opts.primary) {
+				if(this.get('invalido')){
+					event.preventDefault();
+					return false;
+				}
+
+				App.get('listaController').modificarTiempos(Math.abs(this.get('tiempo')));
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+	},
+
+	tiempoChange : function (){
+		var n = this.get('tiempo');
+		this.set('invalido', !(!isNaN(parseFloat(n)) && isFinite(n)));
+
+	}.observes('tiempo')
+});
+
+App.SesionResumenView = Em.View.extend({
+	templateName: 'sesion-resumen',
+
+	verSesion : function(){
+		var tema = null;
+		
+		if(App.get('temasController.content')){
+			tema = App.get('temasController.content').objectAt(0);
+		}
+		
+		if(tema){
+			App.get('router').transitionTo('sesionConsulta.tema', tema);
+		}else{
+			var sesion = App.get('sesionController.content');
+			App.get('router').transitionTo('sesionConsulta.indexSubRoute', sesion);
+		}
+		
+	}
 });

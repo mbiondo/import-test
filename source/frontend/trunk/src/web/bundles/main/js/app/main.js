@@ -1,23 +1,7 @@
-jQuery(function($){
-	$.datepicker.regional['es'] = {
-		closeText: 'Cerrar',
-		prevText: '&#x3C;Ant',
-		nextText: 'Sig&#x3E;',
-		currentText: 'Hoy',
-		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-		monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
-		'Jul','Ago','Sep','Oct','Nov','Dic'],
-		dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-		dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-		weekHeader: 'Sm',
-		dateFormat: 'dd/mm/yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['es']);
+App.apiController = App.ApiController.create({
+	url: 'http://10.0.1.7:8080/sparl/rest',
+	key: '',
+	secret: '',
 });
 
 
@@ -44,21 +28,65 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 2,
 			titulo: 'Comisiones',
-			url: '#/citaciones',
+			url: '#/comisiones/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Agenda de Comisiones',
-					url: '#/citaciones',
+					url: '#/comisiones/citaciones',
 				}),
 				App.MenuItem.create({
 					titulo: 'Crear Citacion',
-					url: '#/citacion/crear',
+					url: '#/comisiones/citaciones/citacion/crear',
 				}),				
+			]			
+		}),		
+		App.MenuItem.create({
+			id: 3,
+			titulo: 'Recinto',
+			url: '#/recinto/oradores',
+			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Oradores',
+					url: '#/recinto/oradores',
+				}),
 			]			
 		}),		
 	]
 });
+App.listaController = App.ListaController.create({
+	content: [],
+});
+
+App.sesionesController = App.SesionesController.create({
+	content: [],
+});
+
+App.sesionController = App.SesionController.create();
+
+App.turnosController = App.TurnosController.create({
+	content: [],
+});
+
+App.temasController = App.TemasController.create({
+	content: [],
+});
+
+App.diputadosController = App.DiputadosController.create({
+	content: [],
+});
+
+App.temaController = App.TemaController.create();
+
+App.crearTurnoController = App.CrearTurnoController.create();
+App.crearTemaController = App.CrearTemaController.create();
+App.crearSesionController = App.CrearSesionController.create();
+
+App.ioController = App.IoController.create();
+
+App.ioController.connect();
+
 App.tituloController = App.TituloController.create({});
 
 App.breadCumbController = App.BreadCumbController.create({
@@ -92,12 +120,6 @@ App.citacionEstadosController = App.CitacionEstadosController.create({
 });
 App.comisionesController = App.ComisionesController.create({
 	content: [],
-});
-
-App.apiController = App.ApiController.create({
-	url: 'http://10.0.1.7:8080/sparl/rest',
-	key: '',
-	secret: '',
 });
 
 
