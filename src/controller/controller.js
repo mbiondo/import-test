@@ -743,7 +743,7 @@ App.CitacionCrearController = Em.Object.extend({
 			
 			fn = function() {
 				App.get('citacionesController').removeObserver('loaded', this, fn);
-				App.get('router').transitionTo('citaciones');
+				App.get('router').transitionTo('comisiones.citaciones.index');
 			};
 			
 			App.get('citacionesController').addObserver('loaded', this, fn);			
@@ -763,7 +763,7 @@ App.CitacionCrearController = Em.Object.extend({
 				
 				fn = function() {
 					App.get('citacionesController').removeObserver('loaded', this, fn);
-					App.get('router').transitionTo('citaciones');
+					App.get('router').transitionTo('comisiones.citaciones.index');
 				};
 				
 				App.get('citacionesController').addObserver('loaded', this, fn);			
