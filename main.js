@@ -2,10 +2,7 @@ App.apiController = App.ApiController.create({
 	url: 'http://10.0.1.7:8080/sparl/rest',
 	key: '',
 	secret: '',
-});
-
-
-App.menuController = App.MenuController.create({
+});App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
 			id: 0,
@@ -20,8 +17,14 @@ App.menuController = App.MenuController.create({
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Buscar Expedientes',
+					titulo: 'Expedientes',
 					url: '#/expedientes',
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Buscador de expedientes',
+							url: '#/expedientes',
+						}),
+					],
 				}),
 			]
 		}),
@@ -32,12 +35,28 @@ App.menuController = App.MenuController.create({
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Agenda de Comisiones',
+					titulo: 'Citaciones',
 					url: '#/comisiones/citaciones',
-				}),
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Agenda de Comisiones',
+							url: '#/comisiones/citaciones',
+						}),
+						App.MenuItem.create({
+							titulo: 'Crear Citacion',
+							url: '#/comisiones/citaciones/citacion/crear',
+						}),					
+					]
+				}),	
 				App.MenuItem.create({
-					titulo: 'Crear Citacion',
-					url: '#/comisiones/citaciones/citacion/crear',
+					titulo: 'Reuniones',
+					url: '',
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Reuniones sin parte',
+							url: '',
+						}),				
+					]
 				}),				
 			]			
 		}),		
@@ -48,13 +67,20 @@ App.menuController = App.MenuController.create({
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Oradores',
+					titulo: 'Recinto',
 					url: '#/recinto/oradores',
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Oradores',
+							url: '#/recinto/oradores',
+						}),					
+					],
 				}),
 			]			
 		}),		
 	]
 });
+
 App.listaController = App.ListaController.create({
 	content: [],
 });
