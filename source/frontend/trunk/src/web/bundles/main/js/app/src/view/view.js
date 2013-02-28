@@ -1273,6 +1273,9 @@ App.CrearTemaView = App.ModalView.extend({
 App.CrearSesionView = App.ModalView.extend({
 	templateName: 'crear-sesion',
 	sesionBinding: 'App.crearSesionController.sesion',
+	fecha: '',
+	hora: '',
+	
 	errorMensajes: function () {
 		var mensajes = [];
 		var sesion = App.get('crearSesionController').get('sesion');
@@ -1303,16 +1306,14 @@ App.CrearSesionView = App.ModalView.extend({
 					return false;			
 				var sesion = App.get('crearSesionController').get('sesion');
 		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
-				var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
-				var minutos = horaSesion.minutes();
-				var horas = horaSesion.hours();
-				var segundos = horaSesion.seconds();
+				// var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
+				// var minutos = horaSesion.minutes();
+				// var horas = horaSesion.hours();
+				// var segundos = horaSesion.seconds();
 				
-				var fechaSesion = moment.unix(this.get('sesion.fecha'));
+				// var fechaSesion = moment.unix(this.get('sesion.fecha'));
 				
-				fechaSesion.minutes(minutos);
-				fechaSesion.hours(horas);
-				fechaSesion.seconds(segundos);
+				var fechaSesion = moment(this.get('fecha') + ' ' + this.get('hora') + '+0000', "YYYY-MM-DD HH:mm z");
 				sesion.set('fecha', fechaSesion.unix());
 				
 				if (sesion.get('id')) {
@@ -1332,18 +1333,20 @@ App.CrearSesionView = App.ModalView.extend({
 		
 		didInsertElement: function() {
 			self = this;
-			this.get('sesion').set('fecha', moment().unix());
-
-			$('.datepicker').datepicker("setValue", moment().format("DD-MM-YYYY")).on('changeDate', function(ev){
-				self.get('sesion').set('fecha', moment(ev.date).unix());
-			});
-
-			$('.dropdown-timepicker').timepicker({
-				defaultTime: 'current',
-				minuteStep: 15,
-				disableFocus: true,
-				template: 'dropdown'
-			});
+			
+			this.set('fecha', moment().format("YYYY-MM-DD"));
+			this.set('hora', moment().format("hh:ss"));
+		
+			$('.timepicker').timeEntry({
+				show24Hours: true, // 24 hours format
+				showSeconds: false, // Show seconds?
+				spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+				spinnerSize: [19, 26, 0], // Image size
+				spinnerIncDecOnly: true, // Only up and down arrows
+				defaultTime: this.get('hora')
+			});	 
+			
+			$('.timepicker').timeEntry('setTime', this.get('hora'));
 		},    
 });
 
