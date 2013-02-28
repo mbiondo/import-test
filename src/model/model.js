@@ -128,7 +128,9 @@ App.Sesion = Em.Object.extend({
 	notificationType : 'Sesion',
 	sesionSeleccionadaBinding: 'App.sesionController.content',
 	elapsedTimeBinding : 'timer.elapsedTime',
-
+	
+	useApi: false,
+	
 	sortValue: function () {
 		return this.get('fecha').toString();
 	}.property('fecha'),
@@ -214,6 +216,7 @@ App.Tema = Em.Object.extend({
   id: null,
   sesionId: null,
   titulo: null,
+  useApi: false,
   
   imprimirURL: function () {
 	return ('/listas-imprimir/%@').fmt(encodeURIComponent(this.get('id')));
@@ -241,7 +244,8 @@ App.Lista = Em.Object.extend({
 	listaSeleccionadaBinding: 'App.listaController.content',
 	id: null,
 	titulo: null,
-    
+    useApi: false,
+	
 	seleccionada : function (){
 		return (this == this.get('listaSeleccionada'));
 	}.property('listaSeleccionada'),
@@ -332,7 +336,8 @@ App.Turno = Em.Object.extend({
 	notificationType : 'Turno',
 	elapsedTimeBinding : 'timer.elapsedTime',
 	turnoHablandoBinding : 'App.turnosController.turnoHablando',
-
+	useApi: false,
+	
 	serializable : [
 		'id',
 		'listaId',

@@ -3,8 +3,11 @@ App.Savable = Ember.Mixin.create({
 	
 	save: function () {
 		this.set('saveSuccess', '');
+		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
 		$.ajax({
-			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id'))),
+			url:  url,
 			dataType: 'JSON',
 			type: 'PUT',
 			context: this,
@@ -346,6 +349,7 @@ App.RestController = Em.ArrayController.extend({
 	sortUrl: '',
 	type: null,
 	loaded : false,
+	useAPi: true,
 
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -371,7 +375,10 @@ App.RestController = Em.ArrayController.extend({
 
 	load: function() {
 		this.set('loaded', false);
-		var url = App.get('apiController').get('url') + this.get('url');
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+			
 		if ( url ) {
 			$.ajax({
 				url: url,
@@ -400,8 +407,11 @@ App.RestController = Em.ArrayController.extend({
 		}
 
 		if(save){
+			var url = this.get('url');
+			if (this.get('useApi'))
+				url = App.get('apiController').get('url') + url;		
 			$.ajax({
-				url: this.get('url'),
+				url: url,
 				dataType: 'JSON',
 				type: 'POST',
 				context : {controller: this, model : item },
@@ -414,8 +424,11 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	deleteObject: function (object) {
+		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(object.get('id')));
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;	
 		$.ajax({
-			url: (this.get('url') + '/%@').fmt(encodeURIComponent(object.get('id'))),
+			url: url,
 			dataType: 'JSON',
 			type: 'DELETE',
 			context : {controller: this, model : object },
@@ -438,8 +451,11 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	saveSort : function(ids) {
+		var url = this.get('sortUrl');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;	
 		$.ajax({
-			url: this.get('sortUrl'),
+			url: url,
 			dataType: 'JSON',
 			type: 'POST',
 			context : this,
@@ -457,7 +473,8 @@ App.RestController = Em.ArrayController.extend({
 App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos/2012/detalle',
 	type: App.Expediente,
-
+	useApi: true,
+	
 	init : function () {
 		this._super();
 	},
@@ -855,7 +872,7 @@ App.CitacionCrearController = Em.Object.extend({
 App.DiputadosController  = App.RestController.extend({
 	url: '/lista-diputados',
 	type: App.User,
-
+	useAPi: false,
 	filtro : true,
 
 	init : function(){
@@ -891,6 +908,7 @@ App.DiputadosController  = App.RestController.extend({
 
 App.SesionesController  = App.RestController.extend({
 	notificationType: "Sesion",
+	useAPi: false,
 	url: '/sesiones',
 	type: App.Sesion,
 	sortProperties: ['sortValue'],
@@ -1035,6 +1053,7 @@ App.TurnosController = App.RestController.extend({
 	type : App.Turno,
 	sortProperties: ['sortValue'],
 	timer : null,
+	useAPi: false,
 
 	turnoHablandoBinding : null,
 
@@ -1316,7 +1335,7 @@ App.TemasController = App.RestController.extend({
 	type: App.Tema,
 	sortUrl: '/temas/ordenar',
 	sortProperties: ['orden'],
-	
+	useAPi: false,
 	parse : function (data) {
 		return data.temas;
 	},
