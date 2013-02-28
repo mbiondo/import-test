@@ -101,6 +101,7 @@ App.IoController = Em.Object.extend({
 
 	recieveMessage: function () {
 		self = this;
+				
 		this.get('socket').on('message', function (data) {
 			var type = data.type,
 					action = data.action,
@@ -111,6 +112,22 @@ App.IoController = Em.Object.extend({
 					self.modificar(type, options);
 					break;
 				case self.get('CREADO'):
+					
+					var havePermission = window.webkitNotifications.checkPermission();
+					if (havePermission == 0) {
+						// 0 is PERMISSION_ALLOWED
+						var notification = window.webkitNotifications.createNotification(
+						  'http://i.stack.imgur.com/dmHl0.png',
+						  type + ' creado!',
+						  'se ha creado un nuevo ' + type
+						);
+
+						notification.onclick = function () {
+						  window.open("http://stackoverflow.com/a/13328397/1269037");
+						  notification.close();
+						}
+						notification.show();
+					}				
 					self.crear(type, options);
 					break;
 				case self.get('BORRADO'):
@@ -264,6 +281,14 @@ App.ApiController = Em.Controller.extend({
 	url: '',
 	key: '',
 	secret: '',
+});
+
+App.NotificationController = Em.Controller.extend({
+	estado: '',
+	
+	habilitado: function () {
+		return this.get('estado') == 0;
+	}.property('estado'),
 });
 
 App.ApplicationController = Em.Controller.extend({
@@ -735,6 +760,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	create: function () {
+
 		$.ajax({
 			url: App.get('apiController').get('url') + this.get('url'),
 			contentType: 'text/plain',

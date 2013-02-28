@@ -247,8 +247,15 @@ App.InicioView = Em.View.extend({
 	templateName: 'inicio',   
 });
 
+
 App.ApplicationView = Em.View.extend({
 	templateName: 'application',
+	
+	
+	activarNotificaciones: function () {
+		window.webkitNotifications.requestPermission();
+		App.get('notificationController').set('estado', 0);
+	},
 	
 	mostrar : function () {
 		this.get('testModal').mostrar();
@@ -324,6 +331,16 @@ App.CitacionCrearView = Em.View.extend({
 	startHora: '',
 	
 	contentBinding: 'App.citacionCrearController.content',
+	
+	seleccionados: false,
+	
+	seleccionarTodos: function () {
+		var _self = this;
+		this.set('seleccionados', !this.get('seleccionados'));
+		this.get('listaExpedientesSeleccionados').forEach(function (expediente) {
+			expediente.set('seleccionado', _self.get('seleccionados'));
+		});
+	},
 	
 	crearTema: function () {
 		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
