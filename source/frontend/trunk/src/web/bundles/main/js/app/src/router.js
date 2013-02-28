@@ -52,10 +52,10 @@ App.Router =  Em.Router.extend({
 			},	
 				
 			connectOutlets: function(router, context) {
+			
 				var appController = router.get('applicationController');	
 				appController.connectOutlet('main', 'expedientes');
-				appController.cargarExpedientes();
-				
+
 				App.get('menuController').seleccionar(1);
 				
 				App.get('breadCumbController').set('content', [
