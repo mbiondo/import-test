@@ -693,7 +693,7 @@ App.MenuController = Em.ArrayController.extend({
 		if (sel)
 		{
 			App.get('tituloController').set('titulo', sel.get('titulo'));
-			App.get('tituloController').set('fecha', moment().format('DD MMMM YYYY'));
+			App.get('tituloController').set('fecha', moment().format('LL'));
 			this.set('seleccionado', sel);
 			sel.set('seleccionado', true);
 		}
