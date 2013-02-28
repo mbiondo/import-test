@@ -509,6 +509,7 @@ App.CitacionesController = App.RestController.extend({
 	url: '/cit/citaciones/%@/detalle',
 	type: App.Citacion,
 	anio: '',
+	useApi: true,
 	
 	init : function () {
 		this._super();
@@ -555,7 +556,8 @@ App.CitacionesController = App.RestController.extend({
 App.CitacionEstadosController = App.RestController.extend({
 	url: '/citEst/estados',
 	type: App.CitacionEstado,
-
+	useApi: true,
+	
 	init : function () {
 		this._super();
 	},
@@ -589,6 +591,7 @@ App.CitacionSalasController = App.RestController.extend({
 	url: '/sal/salas',
 	type: App.CitacionSala,
 	selected: '',
+	useApi: true,
 	
 	init : function () {
 		this._super();
@@ -624,6 +627,7 @@ App.ComisionesController = App.RestController.extend({
 	url: '/com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
+	useApi: true,
 	
 	init : function () {
 		this._super();
@@ -662,6 +666,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 	content: null,
 	url: "/exp/proyecto/%@",
 	loaded : false,
+	useApi: true,
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -695,6 +700,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 	content: null,
 	url: "/cit/citacion/%@",
 	loaded : false,
+	useApi: true,
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
