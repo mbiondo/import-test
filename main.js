@@ -2,7 +2,9 @@ App.apiController = App.ApiController.create({
 	url: 'http://10.0.1.7:8080/sparl/rest',
 	key: '',
 	secret: '',
-});App.menuController = App.MenuController.create({
+});
+
+App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
 			id: 0,
@@ -79,6 +81,10 @@ App.apiController = App.ApiController.create({
 			]			
 		}),		
 	]
+});
+
+App.notificationController = App.NotificationController.create({
+	estado: window.webkitNotifications.checkPermission(),
 });
 
 App.listaController = App.ListaController.create({
