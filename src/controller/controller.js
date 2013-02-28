@@ -424,7 +424,6 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	sortSucceeded : function(data) {
-		//console.log('sortSucceeded');
 		App.get('ioController').sendMessage(this.get('notificationType'), "ordenado", JSON.stringify(data.orden));
 	}
 });
@@ -465,9 +464,10 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.CitacionesController = App.RestController.extend({
-	url: '/cit/citaciones/' + moment().format("YYYY") + '/detalle',
+	url: '/cit/citaciones/%@/detalle',
 	type: App.Citacion,
-
+	anio: '',
+	
 	init : function () {
 		this._super();
 	},
@@ -475,6 +475,20 @@ App.CitacionesController = App.RestController.extend({
 	loadSucceeded: function(data){
 		this._super(data);
 	},
+	
+	load: function() {
+		var url = (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('anio')));
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},	
 	
 	createObject: function (data, save) {
 		save = save || false;

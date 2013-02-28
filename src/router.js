@@ -77,19 +77,19 @@ App.Router =  Em.Router.extend({
 				route: "/citaciones",
 				index: Ember.Route.extend({
 					route: "/",
-					deserialize: function(router, params) {
-						var deferred = $.Deferred(),
+					// deserialize: function(router, params) {
+						// var deferred = $.Deferred(),
 						
-						fn = function() {
-							App.get('citacionesController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);					
-						};
+						// fn = function() {
+							// App.get('citacionesController').removeObserver('loaded', this, fn);	
+							// deferred.resolve(null);					
+						// };
 
-						App.get('citacionesController').addObserver('loaded', this, fn);
-						App.get('citacionesController').load();
+						// App.get('citacionesController').addObserver('loaded', this, fn);
+						// App.get('citacionesController').load();
 						
-						return deferred.promise();
-					},		
+						// return deferred.promise();
+					// },		
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');

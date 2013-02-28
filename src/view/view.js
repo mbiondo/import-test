@@ -182,31 +182,7 @@ App.CitacionesView = App.ListFilterView.extend({
 	
 	didInsertElement: function () {
 
-		App.get('citacionesController').get('content').forEach(function (citacion) {
-			var color = '';
-			if (citacion.get('estado'))
-			{
-				switch (citacion.get('estado').id)
-				{
-					case 2:
-						color = "green";
-					break;
-					
-					case 3:
-						color = "red";
-					break;
-					
-					default:
-						color = "";
-					break;
-				}
-				
-				citacion.set('color', color);
-				citacion.set('url', '');
-			}
-			
-		});
-		
+	
         $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -214,7 +190,41 @@ App.CitacionesView = App.ListFilterView.extend({
                 right: 'month,agendaWeek,agendaDay '
             },
             editable: false,
-            events: App.get('citacionesController').get('content').toArray(),
+			events: function(start, end, callback) {
+				
+				var fn = function() {
+				
+					App.get('citacionesController').removeObserver('loaded', this, fn);
+					App.get('citacionesController').get('content').forEach(function (citacion) {
+						var color = '';
+						if (citacion.get('estado'))
+						{
+							switch (citacion.get('estado').id)
+							{
+								case 2:
+									color = "green";
+								break;
+								case 3:
+									color = "red";
+								break;						
+								default:
+									color = "";
+								break;
+							}					
+							citacion.set('color', color);
+							citacion.set('url', '');
+						}	
+					});
+					
+					callback(App.get('citacionesController').get('content'));
+				}
+				
+				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
+				App.get('citacionesController').set('loaded', false);
+				App.get('citacionesController').addObserver('loaded', this, fn);
+				App.get('citacionesController').load();				
+			},
+			
             eventRender: function(event, element, view) {
 				element.bind('click', function() {		
 					App.set('citacionConsultaController.loaded', false);
