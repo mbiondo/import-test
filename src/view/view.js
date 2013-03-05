@@ -981,7 +981,7 @@ App.ListaVaciaView = Ember.View.extend({
 });
 
 App.TurnosView = App.JQuerySortableView.extend({
-	classNames: ['nav', 'nav-tabs', 'nav-stacked', 'turnos'],
+	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
 
 	updateSort : function (idArray){
@@ -993,7 +993,7 @@ App.TurnosView = App.JQuerySortableView.extend({
 });
 
 App.TurnosPorListaView = App.JQuerySortableView.extend({
-	classNames: ['nav', 'nav-tabs', 'nav-stacked', 'turnos'],
+	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
 
 	updateSort : function (idArray){
@@ -1005,7 +1005,7 @@ App.TurnosPorListaView = App.JQuerySortableView.extend({
 });
 
 App.TemasView = App.JQuerySortableView.extend({
-	classNames: ['nav'],
+	classNames: [],
 	itemViewClass: App.TemaView,
 
 	updateSort : function (idArray){
@@ -1017,7 +1017,7 @@ App.TemasView = App.JQuerySortableView.extend({
 });
 
 App.SesionesView = App.JQuerySortableView.extend({
-	classNames: ['nav', 'nav-tabs', 'nav-stacked'],
+	classNames: [],
 	itemViewClass: App.SesionView,
 });
 
@@ -1090,7 +1090,7 @@ App.OradorView = Em.View.extend({
 });
 
 App.TurnoOradorView = Ember.CollectionView.extend({
-    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+    classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.OradorView, 
 }),
@@ -1108,7 +1108,7 @@ App.DiputadoView = Em.View.extend({
 });
 
 App.DiputadosView = Ember.CollectionView.extend({
-    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+    classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.DiputadoView, 
 });
@@ -1135,7 +1135,7 @@ App.DiputadoSeleccionadoView = Em.View.extend({
 });
 
 App.DiputadosSeleccionadosView = Ember.CollectionView.extend({
-    classNames : ['nav', 'nav-tabs', 'nav-stacked'],  
+    classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.DiputadoSeleccionadoView, 
 })

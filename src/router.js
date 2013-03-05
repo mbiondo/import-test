@@ -378,7 +378,7 @@ App.Router =  Em.Router.extend({
 							App.get('temasController').set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
 							App.get('temasController').load();
 							
-							appController.cargarSesiones(true);
+							//appController.cargarSesiones(true);
 							
 							var sesion = App.get('sesionController.content');
 							App.get('breadCumbController').set('content', [
@@ -455,7 +455,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'sesionConsulta');
 							appController.connectOutlet('sesion', 'sesionTurnos');
 
-							appController.cargarSesiones(true);
+							//appController.cargarSesiones(true);
 							
 							var sesion = App.get('sesionController.content');
 							var tema = App.get('temaController.content');
