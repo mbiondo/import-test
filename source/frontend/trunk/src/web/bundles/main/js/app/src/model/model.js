@@ -108,6 +108,22 @@ App.Comision = Em.Object.extend({
 });
 
 
+App.Reunion = Em.Object.extend({
+	id: '',
+	nota: '',
+	comisiones: '',
+	citacion: '',
+	fecha: '',
+	
+	serializable : [
+		'id',
+		'nota', 
+		'citacion', 
+		'comisiones', 
+		'fecha', 
+	],	
+});
+
 /* Oradores */
 
 // User
