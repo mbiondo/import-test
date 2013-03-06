@@ -306,12 +306,12 @@ App.NotificationController = Em.Controller.extend({
 		var havePermission = this.get('estado');
 		if (havePermission == 0) {
 			var notification = window.webkitNotifications.createNotification(
-			  'http://i.stack.imgur.com/dmHl0.png',
+			  notificacion.icono,
 			  notificacion.titulo,
 			  notificacion.mensaje
 			);
 			notification.onclick = function () {
-			  window.open(notificacion.url);
+			  window.location = notificacion.url;
 			  notification.close();
 			}
 			notification.show();
@@ -935,6 +935,7 @@ App.CitacionCrearController = Em.Object.extend({
 				emailList: emailList,
 				objeto: this.get('content'),
 				url: "#/comisiones/citaciones/citacion/" + this.get('content.id') + "/ver",
+				icono: "http://files.softicons.com/download/web-icons/large-calendar-icons-by-aha-soft/png/256x256/calendar.png"
 			}
 			
 			var email = notificacion;
