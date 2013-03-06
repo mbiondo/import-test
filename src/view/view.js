@@ -68,6 +68,10 @@ JQ.Widget = Em.Mixin.create({
     }
 });
 
+App.ModalView = Bootstrap.ModalPane.extend({
+	showBackdrop: true,
+});
+
 JQ.Button = Em.View.extend(JQ.Widget, {
     uiType: 'button',
     uiOptions: ['disabled', 'text', 'icons', 'label'],
@@ -577,7 +581,7 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('content.id', 'content', 'content.estado'),
 	
 	confirmar: function () {
-		App.get('citacionCrearController').confirmar();
+		App.ComfirmarCitacionView.popup();
 	},
 	
 	puedeCancelar: function () {
@@ -585,9 +589,17 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('content.id', 'content', 'content.estado'),
 		
 	cancelar: function () {
-		App.get('citacionCrearController').cancelar();
+		App.CancelarCitacionView.popup();
 	},
+	
+	puedeCrearReunion: function () {
+		return this.get('content.reunion.id') == undefined && this.get('content.estado.id') == 2;
+	}.property('content.reunion.id', 'content.id', 'content.reunion', 'content', 'content.estado'),
 		
+	crearReunion: function () {
+		App.CrearReunionView.popup();		
+	},	
+
 	didInsertElement: function() {
 		
 		if (App.get('citacionCrearController.content.start') != '')
@@ -619,6 +631,80 @@ App.CitacionCrearView = Em.View.extend({
 		//$('#crear-citacion-form').validationEngine('attach');
 		
 		fo = null;
+	}, 
+});
+
+App.ComfirmarCitacionView = App.ModalView.extend({
+	templateName: 'citacion-confirmar',
+	
+	callback: function(opts, event) {
+			if (opts.primary) {
+				App.get('citacionCrearController').confirmar();
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+	}, 
+});
+
+
+App.CancelarCitacionView = App.ModalView.extend({
+	templateName: 'citacion-cancelar',
+	
+	callback: function(opts, event) {
+			if (opts.primary) {
+				App.get('citacionCrearController').cancelar();
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+	}, 
+});
+
+App.CrearReunionView = App.ModalView.extend({
+	templateName: 'reunion-crear',
+
+	startFecha: '',
+	startHora: '',
+	nota:'',
+ 	
+	citacionBinding: 'App.citacionCrearController.content',
+
+	callback: function(opts, event) {
+		if (opts.primary) {
+			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
+				nota: this.get('nota'),
+				fecha: this.get('startFecha') + ' ' +this.get('startHora'),
+				comisiones: this.get('citacion.comisiones'),
+				citacion: App.Citacion.create({id: this.get('citacion.id') })
+			}));
+		} else if (opts.secondary) {
+			//alert('cancel')
+		} else {
+			//alert('close')
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function() {
+	
+		this.set('startFecha', moment().format("YYYY-MM-DD"));
+		this.set('startHora', moment().format("hh:ss"));
+		
+		$('.timepicker').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: this.get('startHora')
+		});	 
+		
+		$('.timepicker').timeEntry('setTime', this.get('startHora'));
 	}, 
 });
 
@@ -687,6 +773,65 @@ App.CitacionExpedientesSeleccionados = Ember.CollectionView.extend({
 	tagName: 'tbody',
 	itemViewClass: App.CitacionExpedienteSeleccionado, 
 });
+
+
+/* Reuniones */
+App.ReunionConsultaView = Em.View.extend({
+	templateName: 'reunionConsulta',
+	
+	crearParte: function () {
+		//To-DO Crear Parte Action
+		console.log('crear Parte');
+	},
+});
+
+App.ReunionView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'reunion',
+	
+	verReunion: function () {
+		App.set('reunionConsultaController.loaded', false);
+		App.get('router').transitionTo('loading');
+		App.set('reunionConsultaController.content', App.Reunion.create({id: this.get('content').get('id')}));
+		
+		fn = function() {
+			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));
+		};
+
+		App.get('reunionConsultaController').addObserver('loaded', this, fn);			
+		App.get('reunionConsultaController').load();		
+	},
+	
+	crearParte: function () {
+		//To-DO Crear Parte Action
+		console.log('crear Parte');
+	},
+});
+
+App.ReunionesSinParteView = App.ListFilterView.extend({
+	templateName: 'reuniones-sin-parte',
+	itemViewClass: App.ReunionView,
+	
+	lista: function () {
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = App.get('reunionesSinParteController').get('content').filter(function(reunion) {
+			return regex.test((reunion.fecha).toLowerCase()) || regex.test((reunion.nota).toLowerCase());
+		});
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+		return filtered.splice(0, this.get('totalRecords'));
+	}.property('filterText', 'App.reunionesSinParteController.content', 'totalRecords'),
+	
+	mostrarMasEnabled: false,
+});
+
 
 
 /* Oradores */
@@ -1094,10 +1239,6 @@ App.TurnoOradorView = Ember.CollectionView.extend({
 	tagName: 'ul',
 	itemViewClass: App.OradorView, 
 }),
-
-App.ModalView = Bootstrap.ModalPane.extend({
-	showBackdrop: true,
-});
 
 App.DiputadoView = Em.View.extend({
 	tagName: 'li',

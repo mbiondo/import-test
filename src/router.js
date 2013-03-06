@@ -73,6 +73,76 @@ App.Router =  Em.Router.extend({
 				
 			}),
 			
+			reuniones: Em.Route.extend({
+				route: "/reuniones",
+				index: Ember.Route.extend({
+					route: "/",
+					
+					deserialize: function(router, params) {
+						 var deferred = $.Deferred(),
+						
+						 fn = function() {
+							 App.get('reunionesSinParteController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('reunionesSinParteController').addObserver('loaded', this, fn);
+						 App.get('reunionesSinParteController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'reunionesSinParte');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+						]);					
+						App.get('menuController').seleccionar(2);							
+					},						
+				}),
+				
+				reunionesConsulta: Ember.Route.extend({
+					route: '/reunion',
+					
+					verReunion: Ember.Route.extend({
+						route: '/:reunion/ver',
+
+						deserialize: function(router, params) {
+							App.set('reunionConsultaController.loaded', false);
+							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
+
+							var deferred = $.Deferred(),
+							fn = function() {
+								var reunion = App.get('reunionConsultaController.content');
+								deferred.resolve(reunion);
+								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+							};
+
+							App.get('reunionConsultaController').addObserver('loaded', this, fn);
+							App.get('reunionConsultaController').load();
+							return deferred.promise();
+						},
+
+						serialize: function(router, context) {
+							return {reunion: context.get('id')};			
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'reunionConsulta');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+								{titulo: App.get('reunionConsultaController.content').get('nota')},
+							]);					
+							App.get('menuController').seleccionar(2);					
+						},
+					}),	
+				}),
+			}),
+			
 			citaciones: Em.Route.extend({
 				route: "/citaciones",
 				index: Ember.Route.extend({

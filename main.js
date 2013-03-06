@@ -56,7 +56,7 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Reuniones sin parte',
-							url: '',
+							url: '#/comisiones/reuniones',
 						}),				
 					]
 				}),				
@@ -154,6 +154,11 @@ App.comisionesController = App.ComisionesController.create({
 	content: [],
 });
 
+App.reunionesSinParteController = App.ReunionesSinParteController.create({
+	content: [],
+});
+
+App.reunionConsultaController = App.ReunionConsultaController.create();
 
 
 //App.initialize();

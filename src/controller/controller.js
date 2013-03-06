@@ -2,12 +2,17 @@ App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
 	
 	save: function () {
+	
 		this.set('saveSuccess', '');
 		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
-		if (this.get('useApi'))
+		
+		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + url;
+		}
+			
 		$.ajax({
 			url:  url,
+			contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'PUT',
 			context: this,
@@ -84,12 +89,23 @@ App.IoController = Em.Object.extend({
 			self.set('connected', true);
 		//	console.log('CONECTADO');
 			self.recieveMessage();
+			self.recieveNotification();
 		});
 
 		this.get('socket').on('disconnect', function (data) {
     	self.set('connected', false);
 		});
 	},	
+	
+	sendNotification: function (notificacion) {
+		this.get('socket').json.emit('notification', notificacion);
+	},
+	
+	sendEmail: function (email) {
+		if (this.get('connected')) {
+			this.get('socket').json.emit('email', email);
+		}
+	},
 	
 	sendMessage: function (type, action, options) {
 		if (this.get('connected')) {
@@ -102,6 +118,15 @@ App.IoController = Em.Object.extend({
 		} 
 	},
 
+	recieveNotification: function () {
+		self = this;
+		if (this.get('connected')) {		
+			this.get('socket').on('notification', function (notificacion) {
+				App.get('notificationController').enviarNotificacion(notificacion);
+			});
+		}
+	},
+	
 	recieveMessage: function () {
 		self = this;
 				
@@ -114,23 +139,7 @@ App.IoController = Em.Object.extend({
 				case self.get('MODIFICADO'):
 					self.modificar(type, options);
 					break;
-				case self.get('CREADO'):
-					
-					var havePermission = window.webkitNotifications.checkPermission();
-					if (havePermission == 0) {
-						// 0 is PERMISSION_ALLOWED
-						var notification = window.webkitNotifications.createNotification(
-						  'http://i.stack.imgur.com/dmHl0.png',
-						  type + ' creado!',
-						  'se ha creado un nuevo ' + type
-						);
-
-						notification.onclick = function () {
-						  window.open("http://stackoverflow.com/a/13328397/1269037");
-						  notification.close();
-						}
-						notification.show();
-					}				
+				case self.get('CREADO'):			
 					self.crear(type, options);
 					break;
 				case self.get('BORRADO'):
@@ -292,6 +301,22 @@ App.NotificationController = Em.Controller.extend({
 	habilitado: function () {
 		return this.get('estado') == 0;
 	}.property('estado'),
+	
+	enviarNotificacion: function (notificacion) {
+		var havePermission = this.get('estado');
+		if (havePermission == 0) {
+			var notification = window.webkitNotifications.createNotification(
+			  'http://i.stack.imgur.com/dmHl0.png',
+			  notificacion.titulo,
+			  notificacion.mensaje
+			);
+			notification.onclick = function () {
+			  window.open(notificacion.url);
+			  notification.close();
+			}
+			notification.show();
+		}			
+	},
 });
 
 App.ApplicationController = Em.Controller.extend({
@@ -412,6 +437,7 @@ App.RestController = Em.ArrayController.extend({
 				url = App.get('apiController').get('url') + url;		
 			$.ajax({
 				url: url,
+				contentType: 'text/plain',
 				dataType: 'JSON',
 				type: 'POST',
 				context : {controller: this, model : item },
@@ -696,11 +722,70 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 	},	
 });
 
+
+App.ReunionesSinParteController = App.RestController.extend({
+	url: '/comReun/reuniones',
+	type: App.Reunion,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.Reunion.create(data);
+		item.setProperties(data);
+		
+		this.addObject(item);	
+	},	
+});
+
+App.ReunionConsultaController = Ember.Object.extend({
+	content: null,
+	url: "comReun/reunion/%@",
+	loaded : false,
+	useApi: true,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	
+	loadSucceeded: function(data) {
+		item = App.Reunion.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+});
+
 App.CitacionConsultaController = Ember.Object.extend({
 	content: null,
 	url: "/cit/citacion/%@",
 	loaded : false,
 	useApi: true,
+	
+	editURL: function () {
+		return "#/comisiones/citaciones/citacion/" + this.get('content.id') + "/editar";
+	}.property('content'),
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -757,7 +842,6 @@ App.BreadCumbController = Em.ArrayController.extend({
 	content: '',
 });
 
-
 App.CitacionCrearController = Em.Object.extend({
 	content: '',
 	expedientes: '',
@@ -772,16 +856,126 @@ App.CitacionCrearController = Em.Object.extend({
 	loading: false,
 	loaded: false,
 	
+	crearReunion: function (reunion) {
+	
+		$.ajax({
+			url: "/comReun/reunion",
+			contentType: 'text/plain',
+			crossDomain: 'true',
+			dataType: 'JSON',
+			type: 'POST',
+			context: this,
+			complete: this.crearReunionCompleted,
+			data : reunion.getJson()
+		});			
+		
+	},
+	
+	crearReunionCompleted: function (data) {
+		//TO-DO Revisar que devuelva OK
+		
+		if (data.responseText)
+		{
+			var obj = JSON.parse(data.responseText);
+			
+			App.set('reunionConsultaController.loaded', false);
+			App.set('reunionConsultaController.content', App.Citacion.create(obj));
+
+			fn = function() {
+				var reunion = App.get('reunionConsultaController.content');
+				App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);
+			};
+
+			App.get('reunionConsultaController').addObserver('loaded', this, fn);
+			App.get('reunionConsultaController').load();
+			
+			$.jGrowl('Reunion creada con Exito!', { life: 5000 });
+		}
+	},	
+	
 	confirmar: function () {
-		$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+
+		$.ajax({
+			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
+			contentType: 'text/plain',
+			crossDomain: 'true',
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			success: this.confirmarSuccess,
+			complete: this.confirmarCompleted,
+			data : this.get('content').getJson()
+		});			
+		
+	},
+	
+	confirmarSuccess: function (data) {
 		this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
+		$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+	},
+	
+	confirmarCompleted: function (xhr) {
+		if(xhr.status != 200) {
+			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
+			$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+
+			var emailList = [];
+			var comisionCabecera = this.get('content.comisiones.firstObject');
+			
+			comisionCabecera.integrantes.forEach(function(integrante) {
+				emailList.addObject(integrante.diputado.datosPersonales.email + ".dip@hcdn.gov.ar");
+			});
+			
+			emailList = ['mbiondo@omcmedios.com.ar', 'maximilianobiondo@hotmail.com', 'guchito_rnr@hotmail.com'];
+			
+			var notificacion = {
+				titulo: 'Citacion Convocada',
+				mensaje: 'Se ha convocado a una citacion para ' + this.get('content.start'),
+				emailList: emailList,
+				objeto: this.get('content'),
+				url: "#/comisiones/citaciones/citacion/" + this.get('content.id') + "/ver",
+			}
+			
+			var email = notificacion;
+			email.url = "http://186.23.238.68/" + email.url;
+			
+			App.get('ioController').sendNotification(notificacion);
+			App.get('ioController').sendEmail(email);
+		
+		} else {
+			$.jGrowl('Ocurrio un error al intentar confirmar la citacion!', { life: 5000 });
+		}
 	},
 	
 	cancelar: function () {
-		$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });
-		this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
+		$.ajax({
+			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
+			contentType: 'text/plain',
+			crossDomain: 'true',
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			success: this.cancelarSuccess,
+			complete: this.cancelarCompleted,
+			data : this.get('content').getJson()
+		});			
 	},
 	
+	cancelarSuccess: function (data) {
+		this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
+		$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });
+	},
+
+	cancelarCompleted: function (xhr) {
+		if(xhr.status == 200) {
+			this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
+			$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });		
+		} else {
+			$.jGrowl('Ocurrio un error al intentar cancelar la citacion!', { life: 5000 });
+		}
+	},
+
 	create: function () {
 
 		$.ajax({
@@ -801,16 +995,20 @@ App.CitacionCrearController = Em.Object.extend({
 		
 		if (data.responseText)
 		{
-			App.set('citacionesController.loaded', false);
-			App.get('router').transitionTo('loading');
+
+			var obj = JSON.parse(data.responseText);
 			
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', App.Citacion.create(obj));
+
 			fn = function() {
-				App.get('citacionesController').removeObserver('loaded', this, fn);
-				App.get('router').transitionTo('comisiones.citaciones.index');
+				var citacion = App.get('citacionConsultaController.content');
+				App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', citacion);
 			};
-			
-			App.get('citacionesController').addObserver('loaded', this, fn);			
-			App.get('citacionesController').load();
+
+			App.get('citacionConsultaController').addObserver('loaded', this, fn);
+			App.get('citacionConsultaController').load();
 			
 			$.jGrowl('Citacion creada con Exito!', { life: 5000 });
 		}
@@ -821,17 +1019,7 @@ App.CitacionCrearController = Em.Object.extend({
 			this.get('content').removeObserver('saveSuccess', this, fn);
 			if (this.get('content.saveSuccess') == true)
 			{
-				App.set('citacionesController.loaded', false);
-				App.get('router').transitionTo('loading');
-				
-				fn = function() {
-					App.get('citacionesController').removeObserver('loaded', this, fn);
-					App.get('router').transitionTo('comisiones.citaciones.index');
-				};
-				
-				App.get('citacionesController').addObserver('loaded', this, fn);			
-				App.get('citacionesController').load();
-				
+				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
 				$.jGrowl('Citacion editada con Exito!', { life: 5000 });				
 			}
 			else
@@ -839,7 +1027,6 @@ App.CitacionCrearController = Em.Object.extend({
 				$.jGrowl('Ocurrio un error al intentar guardar los cambios en la citacion!', { life: 5000 });
 			}
 		}
-		
 		this.get('content').save();
 		this.get('content').addObserver('saveSuccess', this, fn);
 	},
