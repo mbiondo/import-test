@@ -916,18 +916,20 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	confirmarCompleted: function (xhr) {
-		if(xhr.status != 200) {
+		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
 			$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
 
 			var emailList = [];
 			var comisionCabecera = this.get('content.comisiones.firstObject');
 			
-			comisionCabecera.integrantes.forEach(function(integrante) {
-				emailList.addObject(integrante.diputado.datosPersonales.email + ".dip@hcdn.gov.ar");
+			this.get('content.comisiones').forEach(function (comision) {
+				comision.integrantes.forEach(function(integrante) {
+					emailList.addObject(integrante.diputado.datosPersonales.email + ".dip@hcdn.gov.ar");			
+				});
 			});
 			
-			emailList = ['mbiondo@omcmedios.com.ar', 'maximilianobiondo@hotmail.com', 'guchito_rnr@hotmail.com'];
+			emailList = ['mbiondo@omcmedios.com.ar', 'diego.rossi@goblab.org'];
 			
 			var notificacion = {
 				titulo: 'Citacion Convocada',
@@ -939,7 +941,7 @@ App.CitacionCrearController = Em.Object.extend({
 			}
 			
 			var email = notificacion;
-			email.url = "http://186.23.238.68/" + email.url;
+			email.url = "http://10.0.1.7/" + email.url;
 			
 			App.get('ioController').sendNotification(notificacion);
 			App.get('ioController').sendEmail(email);
