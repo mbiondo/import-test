@@ -93,7 +93,7 @@ App.IoController = Em.Object.extend({
 		});
 
 		this.get('socket').on('disconnect', function (data) {
-    	self.set('connected', false);
+			self.set('connected', false);
 		});
 	},	
 	
@@ -941,7 +941,7 @@ App.CitacionCrearController = Em.Object.extend({
 			}
 			
 			var email = notificacion;
-			email.url = "http://10.0.1.7/" + email.url;
+			email.url = document.location.origin + '/' + email.url;
 			
 			App.get('ioController').sendNotification(notificacion);
 			App.get('ioController').sendEmail(email);
