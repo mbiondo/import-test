@@ -39,6 +39,7 @@ App.Citacion = Em.Object.extend({
 	observaciones: '',
 	sala: '',	
 	allDay: false,
+	useApi: true,
 	
 	serializable : [
 		'id',
