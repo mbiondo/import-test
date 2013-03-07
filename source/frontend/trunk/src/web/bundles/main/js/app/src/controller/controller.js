@@ -924,7 +924,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	confirmarCompleted: function (xhr) {
-		if(xhr.status == 200) {
+		if(xhr.status != 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
 			$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
 
