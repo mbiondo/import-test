@@ -732,7 +732,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 
 
 App.ReunionesSinParteController = App.RestController.extend({
-	url: '/comReun/reuniones',
+	url: '/com/reun/sp',
 	type: App.Reunion,
 	useApi: true,
 	
@@ -755,7 +755,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 
 App.ReunionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "comReun/reunion/%@",
+	url: "com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -905,7 +905,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmar: function () {
 
 		$.ajax({
-			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
+			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -961,7 +961,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cancelar: function () {
 		$.ajax({
-			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
+			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
