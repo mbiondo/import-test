@@ -84,7 +84,7 @@ App.menuController = App.MenuController.create({
 });
 
 App.notificationController = App.NotificationController.create({
-	estado: window.webkitNotifications.checkPermission(),
+	estado: '',
 });
 
 App.listaController = App.ListaController.create({

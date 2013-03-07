@@ -299,12 +299,13 @@ App.NotificationController = Em.Controller.extend({
 	estado: '',
 	
 	habilitado: function () {
-		return this.get('estado') == 0;
+		return this.get('estado') == 0 || !window.webkitNotifications;
 	}.property('estado'),
 	
 	enviarNotificacion: function (notificacion) {
 		var havePermission = this.get('estado');
-		if (havePermission == 0) {
+		
+		if (havePermission == 0 && window.webkitNotifications) {
 			var notification = window.webkitNotifications.createNotification(
 			  notificacion.icono,
 			  notificacion.titulo,
@@ -315,7 +316,11 @@ App.NotificationController = Em.Controller.extend({
 			  notification.close();
 			}
 			notification.show();
-		}			
+		}
+		else
+		{
+			$.jGrowl('<a href="' + notificacion.url + '" >' + notificacion.mensaje + '</a>', {header: notificacion.titulo , life: 5000 });
+		}
 	},
 });
 
@@ -327,6 +332,9 @@ App.ApplicationController = Em.Controller.extend({
 	
 	init: function () {
 		//this.connect();
+		if (window.webkitNotifications){
+			App.get('notificationController').set('estado', window.webkitNotifications.checkPermission());
+		}
 	},
 
 	cargarSesiones : function () {
@@ -916,7 +924,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	confirmarCompleted: function (xhr) {
-		if(xhr.status == 200) {
+		if(xhr.status != 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
 			$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
 

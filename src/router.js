@@ -189,7 +189,7 @@ App.Router =  Em.Router.extend({
 							};
 							fn2 = function() {
 								App.get('comisionesController').removeObserver('loaded', this, fn2);
-								App.set('citacionConsultaController.isEdit', false);
+								App.set('citacionCrearController.isEdit', false);
 								deferred.resolve(null);	
 							}
 
@@ -203,10 +203,12 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'citacionCrear');
 							
+							App.set('citacionCrearController.isEdit', false);
+							
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Nueva'},
+								{titulo: 'Nueva Citacion'},
 							]);					
 							
 						},				
@@ -296,7 +298,7 @@ App.Router =  Em.Router.extend({
 									
 									App.get('citacionConsultaController.content').set('temas', temas);
 									
-									App.set('citacionConsultaController.isEdit', true);
+									App.set('citacionCrearController.isEdit', true);
 									
 									deferred.resolve(citacion);							
 								}
@@ -378,7 +380,7 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Expedientes', url: '#/expedientes'},
-						{titulo: App.get('expedienteConsultaController.content').get('titulo')}
+						{titulo: App.get('expedienteConsultaController.content').get('expdip')}
 					]);					
 					App.get('menuController').seleccionar(1);					
 				},
