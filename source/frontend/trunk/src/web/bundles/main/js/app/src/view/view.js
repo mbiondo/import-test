@@ -257,8 +257,10 @@ App.ApplicationView = Em.View.extend({
 	
 	
 	activarNotificaciones: function () {
-		window.webkitNotifications.requestPermission();
-		App.get('notificationController').set('estado', 0);
+		if (window.webkitNotifications) {
+			window.webkitNotifications.requestPermission();
+			App.get('notificationController').set('estado', 0);
+		}
 	},
 	
 	mostrar : function () {
@@ -423,7 +425,7 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	clickComision: function (comision) {
-		if (App.get('citacionCrearController.isEdit'))
+		if (App.get('citacionCrearController.isEdit') == true)
 			return;
 			
 		this.set('adding', !this.get('adding'));
@@ -568,8 +570,12 @@ App.CitacionCrearView = Em.View.extend({
 		App.set('citacionCrearController.content.temas', []);
 		App.set('citacionCrearController.expedientes', []);
 		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		if (fo)
+		{
+			App.get('citacionCrearController').cargarExpedientes();
+		}
 		fo = null;
-		App.get('citacionCrearController').cargarExpedientes();
+		
 	},
 	
 	puedeEditar: function () {
@@ -652,6 +658,8 @@ App.ComfirmarCitacionView = App.ModalView.extend({
 
 App.CancelarCitacionView = App.ModalView.extend({
 	templateName: 'citacion-cancelar',
+	motivoSeleccionado: '',
+	motivos: ['Motivo 1', 'Motivo 2', 'Motivo 3'],
 	
 	callback: function(opts, event) {
 			if (opts.primary) {
