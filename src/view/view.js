@@ -937,7 +937,7 @@ App.RadioButton = Ember.View.extend({
 });
 
 App.ListaView = Ember.View.extend({
-	classNames: 'tab-pane pillow-emboss',
+	classNames: 'pillow-emboss',
 	classNameBindings: 'content.seleccionada:active',
 	templateName: 'listaView',
 
@@ -967,7 +967,7 @@ App.ListaView = Ember.View.extend({
 });
 
 App.ListaTabView = Ember.View.extend({
-	classNameBindings: ['content.seleccionada:active'],
+	classNameBindings: ['content.seleccionada:activeTab'],
 	tagName: 'li',
 	templateName: 'listaTabView',
 	content : null,
