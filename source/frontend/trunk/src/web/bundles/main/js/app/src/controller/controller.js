@@ -755,7 +755,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 
 App.ReunionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "com/reun/reunion/%@",
+	url: "/com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
 	
