@@ -600,7 +600,7 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	puedeCancelar: function () {
-		return this.get('content.estado.id') == 2 && this.get('content.id');
+		return this.get('content.estado.id') != 3 && this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),
 		
 	cancelar: function () {
