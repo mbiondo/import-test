@@ -9,7 +9,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 0,
 			titulo: 'Inicio',
-			url: '#/',
+			url: '#',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 		}),
 		App.MenuItem.create({

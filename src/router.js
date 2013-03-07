@@ -3,6 +3,26 @@ App.Router =  Em.Router.extend({
 	location: 'hash',
 	verSesion: Em.Router.transitionTo('recinto.oradores.sesionConsulta.indexSubRoute'),
 	mostrarTurnos: Em.Router.transitionTo('recinto.oradores.sesionConsulta.tema'),
+		
+	route: function(path) {
+	  this._super(path);
+	  
+	  //Aca agregar logica si tiene o no permisos... 
+	  /*
+	  * if (!hasPermission(user, path)) {
+	  *    this.transitionTo("page403");
+	  * }
+	  *
+	  */
+	  
+	  if (this.get("currentState").absoluteRoute)
+	  {
+		  var actualPath = this.get("currentState").absoluteRoute(this);
+		  if (path !== actualPath) {
+			this.transitionTo("page404");
+		  }
+	   }
+	},	
 	
 	root: Em.Route.extend({
 		// STATES
@@ -17,6 +37,33 @@ App.Router =  Em.Router.extend({
 			},
 		}),
 		//
+		page404: Em.Route.extend({
+			route: '/404',
+			
+			connectOutlets: function(router, context) {
+				var appController = router.get('applicationController');
+				appController.connectOutlet('main', 'page404');
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Pagina no encontrada', url: '#'}
+				]);				
+			},			
+		}),
+		
+		page403: Em.Route.extend({
+			route: '/403',
+				
+			connectOutlets: function(router, context) {
+			
+				var appController = router.get('applicationController');
+				appController.connectOutlet('main', 'page403');
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'No Dispone de los Permisos Necesarios para Acceder', url: '#'}
+				]);				
+			},			
+		}),		
+		
 		index: Em.Route.extend({
 			route: "/",
 			connectOutlets: function(router, context) {
@@ -25,7 +72,7 @@ App.Router =  Em.Router.extend({
 				
 				App.get('menuController').seleccionar(0);
 				App.get('breadCumbController').set('content', [
-					{titulo: 'Inicio', url: '#/'}
+					{titulo: 'Inicio', url: '#'}
 				]);				
 			},		
 		}),

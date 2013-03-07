@@ -123,6 +123,15 @@ App.DatePicker = JQ.DatePicker.extend({
   }
 });
 
+App.Page404View = Ember.View.extend({
+	templateName: 'page-404',
+	
+});
+
+App.Page403View = Ember.View.extend({
+	templateName: 'page-403',
+});
+
 App.ListFilterView = Ember.View.extend({
 	filterText: '',
 	maxRecords: 10,
