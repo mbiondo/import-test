@@ -1,3 +1,24 @@
+var p = '';
+var rolesRequiered = [];
+
+function checkPath (menuItem){
+	if (menuItem.get('subMenu'))
+		menuItem.get('subMenu').forEach(checkPath);
+	
+	if (menuItem.get('url') == p)
+		rolesRequiered = menuItem.get('roles');
+}
+
+function getRolesByPath(path) {
+	p = '#' + path;
+	
+	var menu = App.get('menuController.content');
+	
+	menu.forEach(checkPath);
+	
+	return rolesRequiered;
+}
+
 App.Router =  Em.Router.extend({
 	enableLogging: true,
 	location: 'hash',
@@ -8,12 +29,9 @@ App.Router =  Em.Router.extend({
 	  this._super(path);
 	  
 	  //Aca agregar logica si tiene o no permisos... 
-	  /*
-	  * if (!hasPermission(user, path)) {
-	  *    this.transitionTo("page403");
-	  * }
-	  *
-	  */
+	  var userRoles = App.roles;
+	  var roles = getRolesByPath(path);
+	  var _self = this;
 	  
 	  if (this.get("currentState").absoluteRoute)
 	  {
@@ -22,6 +40,14 @@ App.Router =  Em.Router.extend({
 			this.transitionTo("page404");
 		  }
 	   }
+	   
+	  roles.forEach(function (rolRequiered) {
+		 if (!userRoles.contains(rolRequiered)){
+			_self.transitionTo("page403");
+		 }
+			 
+	  });
+	 
 	},	
 	
 	root: Em.Route.extend({
@@ -116,8 +142,30 @@ App.Router =  Em.Router.extend({
 			route: "/comisiones",
 			
 			index: Ember.Route.extend({
-				route: "/",
+				route: "/",	
+			}),
+			
+			partes: Em.Route.extend({
+				route: "/partes",
 				
+				parteConsulta: Em.Route.extend({
+					route: '/crear/parte',
+					
+					crearParte: Ember.Route.extend({
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'crearParte');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+								{titulo: App.get('reunionConsultaController.content').get('nota')},
+								{titulo: 'Crear Parte' }
+							]);
+							
+							App.get('menuController').seleccionar(2);					
+						},						
+					}),				
+				}),		
 			}),
 			
 			reuniones: Em.Route.extend({
@@ -145,14 +193,44 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+							{titulo: 'Sin Parte'},
 						]);					
 						App.get('menuController').seleccionar(2);							
 					},						
 				}),
 				
+				reunionesConparte: Ember.Route.extend({
+					route: "/con/parte",
+					
+					deserialize: function(router, params) {
+						 var deferred = $.Deferred(),
+						
+						 fn = function() {
+							 App.get('reunionesConParteController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('reunionesConParteController').addObserver('loaded', this, fn);
+						 App.get('reunionesConParteController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'reunionesConParte');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+							{titulo: 'Con Parte'},
+						]);					
+						App.get('menuController').seleccionar(2);							
+					},						
+				}),				
+				
 				reunionesConsulta: Ember.Route.extend({
 					route: '/reunion',
-					
+						
 					verReunion: Ember.Route.extend({
 						route: '/:reunion/ver',
 
@@ -160,13 +238,29 @@ App.Router =  Em.Router.extend({
 							App.set('reunionConsultaController.loaded', false);
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
 
-							var deferred = $.Deferred(),
+							var deferred = $.Deferred();
+							
+							fn2 = function () {
+								var reunion = App.get('reunionConsultaController.content');
+								var citacion = App.get('citacionConsultaController.content');
+								var temas = [];
+								citacion.get('temas').forEach(function (tema) {
+									temas.addObject(App.CitacionTema.create(tema));
+								});
+								citacion.set('temas', temas);
+								
+								deferred.resolve(reunion);								
+							}
+							
 							fn = function() {
 								var reunion = App.get('reunionConsultaController.content');
-								deferred.resolve(reunion);
+								App.set('citacionConsultaController.loaded', false);
+								App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+								App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+								App.get('citacionConsultaController').load();
 								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-							};
-
+							}							
+							
 							App.get('reunionConsultaController').addObserver('loaded', this, fn);
 							App.get('reunionConsultaController').load();
 							return deferred.promise();
@@ -179,6 +273,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'reunionConsulta');
+							
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},

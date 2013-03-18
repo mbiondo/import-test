@@ -39,7 +39,6 @@ App.Citacion = Em.Object.extend({
 	observaciones: '',
 	sala: '',	
 	allDay: false,
-	useApi: true,
 	
 	serializable : [
 		'id',
@@ -68,6 +67,7 @@ App.MenuItem = Em.Object.extend({
 	subMenu: '',
 	seleccionado: '',
 	habilitado: '',
+	roles: [],
 	esLink: true,
 });
 
@@ -84,8 +84,17 @@ App.CitacionTema = Em.Object.extend({
 	id: '',
 	descripcion: '',
 	grupo: false,
+	estadoParte: '',
 	toString: function () {
 		return this.get('descripcion');
+	},
+});
+
+App.ParteEstado = Em.Object.extend({
+	id: '',
+	tipo: '',
+	toString: function () {
+		return this.get('tipo');
 	},
 });
 
@@ -110,6 +119,7 @@ App.Comision = Em.Object.extend({
 
 
 App.Reunion = Em.Object.extend({
+	url: 'com/reun/reunion',
 	id: '',
 	nota: '',
 	comisiones: '',
@@ -124,6 +134,7 @@ App.Reunion = Em.Object.extend({
 		'fecha', 
 	],	
 });
+
 
 /* Oradores */
 

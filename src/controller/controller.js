@@ -15,6 +15,7 @@ App.Savable = Ember.Mixin.create({
 			contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'PUT',
+			crossDomain: 'true',
 			context: this,
 			data : this.getJson(),
 			success: this.saveSucceeded,
@@ -731,6 +732,36 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 });
 
 
+App.ParteConsultaController = Ember.Object.extend({
+	content: '',
+});
+
+App.ParteCrearController = Ember.Object.extend({
+	content: '',
+});
+
+App.PartesController = App.RestController.extend({
+	url: '/parte/partes',
+	type: App.Parte,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.Parte.create(data);
+		item.setProperties(data);
+		
+		this.addObject(item);	
+	},		
+});
+
 App.ReunionesSinParteController = App.RestController.extend({
 	url: '/com/reun/sp',
 	type: App.Reunion,
@@ -753,9 +784,33 @@ App.ReunionesSinParteController = App.RestController.extend({
 	},	
 });
 
+App.ReunionesConParteController = App.RestController.extend({
+	url: '/com/reun/cp/' + moment().format('DD/MM/YYYY'),
+	type: App.Reunion,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.Reunion.create(data);
+		item.setProperties(data);
+		
+		this.addObject(item);	
+	},	
+});
+
+
+
 App.ReunionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "/com/reun/reunion/%@",
+	url: "com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -778,7 +833,7 @@ App.ReunionConsultaController = Ember.Object.extend({
 	},
 	
 	loadSucceeded: function(data) {
-		item = App.Reunion.create();
+		item = App.Reunion.extend(App.Savable).create();
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
@@ -801,6 +856,13 @@ App.CitacionConsultaController = Ember.Object.extend({
 		this.set('loaded', true);
 	},
 	
+	loadReuionCompleted: function(xhr){
+		if(xhr.status == 204) {
+			
+		}
+		this.set('loaded', true);
+	},
+	
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
@@ -817,8 +879,26 @@ App.CitacionConsultaController = Ember.Object.extend({
 		item = App.Citacion.extend(App.Savable).create();
 		item.setProperties(data);
 		this.set('content', item);
+		
+		$.ajax({
+			url:  (App.get('apiController').get('url') + 'com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadReunionSucceded,
+			complete: this.loadReuionCompleted
+		});		
+	},
+	
+	
+	
+	loadReunionSucceded: function (data) {
+		reunion = App.Reunion.extend(App.Savable).create(data);
+		reunion.setProperties(data);
+		this.set('content.reunion', reunion);
 		this.set('loaded', true);
 	},
+	
 });
 
 App.MenuController = Em.ArrayController.extend({
@@ -849,6 +929,13 @@ App.TituloController = Em.Object.extend({
 App.BreadCumbController = Em.ArrayController.extend({
 	content: '',
 });
+
+
+App.CrearParteController = Em.Object.extend({
+	content: '',
+	
+});
+
 
 App.CitacionCrearController = Em.Object.extend({
 	content: '',
@@ -905,7 +992,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmar: function () {
 
 		$.ajax({
-			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
+			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -937,7 +1024,7 @@ App.CitacionCrearController = Em.Object.extend({
 				});
 			});
 			
-			emailList = ['mbiondo@omcmedios.com.ar', 'diego.rossi@goblab.org'];
+			emailList = ['mbiondo@omcmedios.com.ar'];
 			
 			var notificacion = {
 				titulo: 'Citacion Convocada',
@@ -961,7 +1048,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cancelar: function () {
 		$.ajax({
-			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
+			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -1090,7 +1177,7 @@ App.DiputadosController  = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.User.extend(App.Savable).create(data);
+		var item = App.User.extend(App.Savable).create(data);
 		item.setProperties(data);
 		item.set('url', this.get('url'));
 

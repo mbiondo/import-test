@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.0.1.7:8080/sparl/rest',
+	url: 'http://10.0.1.7:8080',
 	key: '',
 	secret: '',
 });
@@ -8,21 +8,26 @@ App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
 			id: 0,
+			roles: ['ROLE_USER'],
 			titulo: 'Inicio',
 			url: '#',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 		}),
 		App.MenuItem.create({
 			id: 1,
+			roles: ['ROLE_USER'],
 			titulo: 'Expedientes',
 			url: '#/expedientes',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
+			
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Expedientes',
 					url: '#/expedientes',
+					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
+							roles: ['ROLE_USER'],
 							titulo: 'Buscador de expedientes',
 							url: '#/expedientes',
 						}),
@@ -35,17 +40,21 @@ App.menuController = App.MenuController.create({
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Citaciones',
 					url: '#/comisiones/citaciones',
+					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
+							roles: ['ROLE_USER'],
 							titulo: 'Agenda de Comisiones',
 							url: '#/comisiones/citaciones',
 						}),
 						App.MenuItem.create({
 							titulo: 'Crear Citacion',
+							roles: ['ROLE_USER', 'ROLE_ADMIN'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -53,12 +62,62 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Reuniones',
 					url: '',
+					roles: ['ROLE_USER', 'ROLE_ADMIN'],
 					subMenu: [
 						App.MenuItem.create({
+							roles: ['ROLE_USER', 'ROLE_ADMIN'],
 							titulo: 'Reuniones sin parte',
 							url: '#/comisiones/reuniones',
-						}),				
+						}),		
+						App.MenuItem.create({
+							roles: ['ROLE_USER', 'ROLE_ADMIN'],
+							titulo: 'Reuniones Con parte',
+							url: '#/comisiones/reuniones/con/parte',
+						}),							
 					]
+				}),				
+			]			
+		}),	
+		App.MenuItem.create({
+			id: 4,
+			titulo: 'Secretaria Parlamentaria',
+			url: '#/secretaria/parlamentaria',
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Ordenes del dia',
+					url: '',
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Dictamenes sin OD',
+							url: '#/secretaria/parlamentaria/OD/Dictamenes',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						}),	
+						App.MenuItem.create({
+							titulo: 'Listado de OD',
+							url: '#/secretaria/parlamentaria/OD/listado',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						}),							
+					],
+				}),
+				App.MenuItem.create({
+					titulo: 'Labor',
+					url: '',
+					roles: ['ROLE_USER'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Planes de labor',
+							url: '#/secretaria/parlamentaria/labor/listado',
+							roles: ['ROLE_USER'],
+						}),	
+						App.MenuItem.create({
+							titulo: 'Crear Plan de labor',
+							url: '#/secretaria/parlamentaria/labor/crear',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						}),							
+					],
 				}),				
 			]			
 		}),		
@@ -67,14 +126,17 @@ App.menuController = App.MenuController.create({
 			titulo: 'Recinto',
 			url: '#/recinto/oradores',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Recinto',
 					url: '#/recinto/oradores',
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Oradores',
 							url: '#/recinto/oradores',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 						}),					
 					],
 				}),
@@ -159,6 +221,12 @@ App.reunionesSinParteController = App.ReunionesSinParteController.create({
 });
 
 App.reunionConsultaController = App.ReunionConsultaController.create();
+
+App.reunionesConParteController = App.ReunionesConParteController.create({
+	content: [],
+});
+
+App.crearParteController = App.CrearParteController.create();
 
 
 //App.initialize();
