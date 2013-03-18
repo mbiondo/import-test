@@ -36,3 +36,17 @@ Handlebars.registerHelper("formatoFecha", function(fecha, format, options) {
 	
   return moment(fecha, format).format('LLLL');
 });
+
+Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var userRoles = getPath(context, userRoles, options.fn);
+  
+  var tienePermisos = true;
+  this.roles.forEach(function (rolRequiered) {
+	 if (!userRoles.contains(rolRequiered))
+		tienePermisos = false;
+  });
+  
+  if (tienePermisos)
+	return options.fn(this);
+});

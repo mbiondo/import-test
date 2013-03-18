@@ -793,14 +793,7 @@ App.CitacionExpedientesSeleccionados = Ember.CollectionView.extend({
 
 
 /* Reuniones */
-App.ReunionConsultaView = Em.View.extend({
-	templateName: 'reunionConsulta',
-	
-	crearParte: function () {
-		//To-DO Crear Parte Action
-		console.log('crear Parte');
-	},
-});
+
 
 App.ReunionView = Ember.View.extend({
 	tagName: 'tr',
@@ -811,19 +804,68 @@ App.ReunionView = Ember.View.extend({
 		App.set('reunionConsultaController.loaded', false);
 		App.get('router').transitionTo('loading');
 		App.set('reunionConsultaController.content', App.Reunion.create({id: this.get('content').get('id')}));
+
+		var deferred = $.Deferred();
+		
+		fn2 = function () {
+		
+			var reunion = App.get('reunionConsultaController.content');
+			var citacion = App.get('citacionConsultaController.content');
+			var temas = [];
+			citacion.get('temas').forEach(function (tema) {
+				temas.addObject(App.CitacionTema.create(tema));
+			});
+			citacion.set('temas', temas);
+			
+			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));							
+		}
 		
 		fn = function() {
+			var reunion = App.get('reunionConsultaController.content');
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+			App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+			App.get('citacionConsultaController').load();
 			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));
-		};
-
-		App.get('reunionConsultaController').addObserver('loaded', this, fn);			
-		App.get('reunionConsultaController').load();		
+		}							
+		
+		App.get('reunionConsultaController').addObserver('loaded', this, fn);
+		App.get('reunionConsultaController').load();	
 	},
 	
 	crearParte: function () {
-		//To-DO Crear Parte Action
-		console.log('crear Parte');
+		
+		App.set('reunionConsultaController.loaded', false);
+		App.get('router').transitionTo('loading');
+		App.set('reunionConsultaController.content', App.Reunion.create({id: this.get('content').get('id')}));
+
+		var deferred = $.Deferred();
+		
+		fn2 = function () {
+		
+			var reunion = App.get('reunionConsultaController.content');
+			var citacion = App.get('citacionConsultaController.content');
+			var temas = [];
+			citacion.get('temas').forEach(function (tema) {
+				temas.addObject(App.CitacionTema.create(tema));
+			});
+			citacion.set('temas', temas);
+			
+			App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');							
+		}
+		
+		fn = function() {
+			var reunion = App.get('reunionConsultaController.content');
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+			App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+			App.get('citacionConsultaController').load();
+			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+		}							
+		
+		App.get('reunionConsultaController').addObserver('loaded', this, fn);
+		App.get('reunionConsultaController').load();			
+		
 	},
 });
 
@@ -849,6 +891,96 @@ App.ReunionesSinParteView = App.ListFilterView.extend({
 	mostrarMasEnabled: false,
 });
 
+App.ReunionesConParteView = App.ListFilterView.extend({
+	templateName: 'reuniones-con-parte',
+	itemViewClass: App.ParteView,
+	
+	lista: function () {
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = App.get('reunionesConParteController').get('content').filter(function(reunion) {
+			return regex.test((reunion.fecha).toLowerCase());
+		});
+		
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+		return filtered.splice(0, this.get('totalRecords'));
+	}.property('filterText', 'App.reunionesConParteController.content', 'totalRecords'),
+	
+	mostrarMasEnabled: false,
+});
+
+App.ReunionConsultaView = Em.View.extend({
+	templateName: 'reunionConsulta',
+	
+	crearParte: function () {
+
+		App.set('reunionConsultaController.content.parte', []);
+		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
+	},
+	
+	editarParte: function () {
+		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');	
+	},
+});
+
+App.CrearParteView = Ember.View.extend({
+	templateName: 'crear-parte',
+	
+	listaTemas: function () {
+		return App.get('citacionConsultaController.content.temas');
+	}.property('citacionConsultaController.content.temas'),
+	
+	guardarParte: function () {
+		var parte = [];
+		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
+			if (tema.get('parteEstado').id) {
+				var parteItem = tema.get('parteEstado');
+				parteItem.proyectos = [];
+				parteItem.orden = parte.length;
+				parte.addObject(parteItem);
+
+				tema.get('proyectos').forEach(function (proyecto){
+					parteItem.proyectos.addObject(proyecto);
+				});	
+			}
+		});
+		App.set('reunionConsultaController.content.parte', parte);
+		
+		fn = function () {
+			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
+			if (App.get('reunionConsultaController.content.saveSuccess') == true)
+			{
+				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
+				$.jGrowl('Parte creado con Exito!', { life: 5000 });				
+			}
+			else
+			{
+				$.jGrowl('No se pudo crear el parte!', { life: 5000 });
+			}
+		}
+		App.get('reunionConsultaController.content').save();
+		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
+		
+		
+	},
+});
+
+App.EstadoParteView = Ember.View.extend({
+	templateName: 'parte-estado',
+	estado: 'Seleccione una accion',
+	listaEstados: [
+		'Seleccione una accion',
+		App.ParteEstado.create({id: 1, tipo: 'Iniciacion'}),
+		App.ParteEstado.create({id: 2, tipo: 'En Estudio'}),
+		App.ParteEstado.create({id: 3, tipo: 'PreDictamen'}),
+		App.ParteEstado.create({id: 4, tipo: 'Dictamen'}),
+	],
+});
 
 
 /* Oradores */
