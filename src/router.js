@@ -29,7 +29,7 @@ App.Router =  Em.Router.extend({
 	  this._super(path);
 	  
 	  //Aca agregar logica si tiene o no permisos... 
-	  var userRoles = App.roles;
+	  var userRoles = $.map(App.roles, function (value, key) { return value; });
 	  var roles = getRolesByPath(path);
 	  var _self = this;
 	  

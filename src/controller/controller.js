@@ -810,7 +810,7 @@ App.ReunionesConParteController = App.RestController.extend({
 
 App.ReunionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "com/reun/reunion/%@",
+	url: "/com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -878,10 +878,11 @@ App.CitacionConsultaController = Ember.Object.extend({
 	loadSucceeded: function(data) {
 		item = App.Citacion.extend(App.Savable).create();
 		item.setProperties(data);
+		item.set('useApi', true);
 		this.set('content', item);
 		
 		$.ajax({
-			url:  (App.get('apiController').get('url') + 'com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			url:  (App.get('apiController').get('url') + '/com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -893,10 +894,12 @@ App.CitacionConsultaController = Ember.Object.extend({
 	
 	
 	loadReunionSucceded: function (data) {
-		reunion = App.Reunion.extend(App.Savable).create(data);
-		reunion.setProperties(data);
-		this.set('content.reunion', reunion);
-		this.set('loaded', true);
+		if (data) {
+			var reunion = App.Reunion.extend(App.Savable).create(data);
+			reunion.setProperties(data);
+			this.set('content.reunion', reunion);
+			this.set('loaded', true);		
+		}
 	},
 	
 });
@@ -954,7 +957,7 @@ App.CitacionCrearController = Em.Object.extend({
 	crearReunion: function (reunion) {
 	
 		$.ajax({
-			url: "/comReun/reunion",
+			url: App.get('apiController').get('url') + "/com/reun/reunion",
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -992,7 +995,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmar: function () {
 
 		$.ajax({
-			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
+			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -1048,7 +1051,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cancelar: function () {
 		$.ajax({
-			url: "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
+			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
