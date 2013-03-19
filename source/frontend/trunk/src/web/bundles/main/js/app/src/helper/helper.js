@@ -40,7 +40,7 @@ Handlebars.registerHelper("formatoFecha", function(fecha, format, options) {
 Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var userRoles = getPath(context, userRoles, options.fn);
-  
+  userRoles = $.map(userRoles, function (value, key) { return value; });
   var tienePermisos = true;
   this.roles.forEach(function (rolRequiered) {
 	 if (!userRoles.contains(rolRequiered))
