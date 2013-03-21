@@ -116,7 +116,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 });
 
 App.DatePicker = JQ.DatePicker.extend({
-  dateFormat: 'yy-mm-dd', //ISO 8601
+  dateFormat: 'dd/mm/yy', //ISO 8601
  
   beforeShowDay: function(date) {
       return [true, ""];
@@ -265,7 +265,7 @@ App.ApplicationView = Em.View.extend({
 	templateName: 'application',
 	
 	
-	activarNotificaciones: function () {
+	activarNotificaciones: function (){
 		if (window.webkitNotifications) {
 			window.webkitNotifications.requestPermission();
 			App.get('notificationController').set('estado', 0);
@@ -374,7 +374,7 @@ App.CitacionCrearView = Em.View.extend({
 	
 	agregarInvitadoHabilitado: function () {
 		var invitado = this.get('invitado');
-		var empty = !(invitado.nombre != '' && invitado.apellido != '' && invitado.caracter != '' && invitado.mail != '');
+		var empty = !(invitado.nombre != '' && invitado.apellido != '');
 		
 		return !empty && $("#crear-citacion-form").validationEngine('validate');
 	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
@@ -408,7 +408,7 @@ App.CitacionCrearView = Em.View.extend({
 		
 		
 		
-		App.get('citacionCrearController.content').set('start', this.get('startFecha') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));
+		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('hh:mm'));
 		
 		if (this.get('content').get('id')) {
 			App.get('citacionCrearController').save();
@@ -616,15 +616,20 @@ App.CitacionCrearView = Em.View.extend({
 	},	
 
 	didInsertElement: function() {
-		
+		/*
+			Se presenta esta condicion en caso de que:
+				*La citación ya exista
+				*Si se está modificando los datos de una citación existente
+		*/
+
 		if (App.get('citacionCrearController.content.start') != '')
 		{
-			this.set('startFecha', App.get('citacionCrearController.content.start').split(' ')[0]);
+			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
 			this.set('startHora', App.get('citacionCrearController.content.start').split(' ')[1]);
 		}
 		else
-		{
-			this.set('startFecha', moment().format("YYYY-MM-DD"));
+		{			
+			this.set('startFecha', moment().format("DD/MM/YYYY"));
 			this.set('startHora', moment().format("hh:ss"));
 		}
 		
@@ -634,7 +639,8 @@ App.CitacionCrearView = Em.View.extend({
 			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
 			spinnerSize: [19, 26, 0], // Image size
 			spinnerIncDecOnly: true, // Only up and down arrows
-			defaultTime: this.get('startHora')
+			defaultTime: this.get('startHora'),
+			timeSteps: [1, 15, 1],
 		});	 
 		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
@@ -707,9 +713,8 @@ App.CrearReunionView = App.ModalView.extend({
 		event.preventDefault();
 	}, 
 	
-	didInsertElement: function() {
-	
-		this.set('startFecha', moment().format("YYYY-MM-DD"));
+	didInsertElement: function() {	
+		this.set('startFecha', moment().format("DD/MM/YYYY"));
 		this.set('startHora', moment().format("hh:ss"));
 		
 		$('.timepicker').timeEntry({
@@ -1601,7 +1606,7 @@ App.CrearSesionView = App.ModalView.extend({
 	
 	esInvalido: function () {
 		var sesion = App.get('crearSesionController').get('sesion');
-		if (sesion.titulo == null || sesion.sesion == null || sesion.titulo == "" || sesion.reunion == null || sesion.sesion == "" ||  sesion.periodoOrdinario == null || sesion.periodoOrdinario == "" || sesion.tipo == null) 
+		if(sesion.titulo == null || sesion.sesion == null || sesion.titulo == "" || sesion.reunion == null || sesion.sesion == "" ||  sesion.periodoOrdinario == null || sesion.periodoOrdinario == "" || sesion.tipo == null) 
 			return true;
 		else
 			return false;
@@ -1641,7 +1646,7 @@ App.CrearSesionView = App.ModalView.extend({
 		didInsertElement: function() {
 			self = this;
 			
-			this.set('fecha', moment().format("YYYY-MM-DD"));
+			this.set('fecha', moment().format("DD-MM-YYYY"));
 			this.set('hora', moment().format("hh:ss"));
 		
 			$('.timepicker').timeEntry({
@@ -1650,7 +1655,8 @@ App.CrearSesionView = App.ModalView.extend({
 				spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
 				spinnerSize: [19, 26, 0], // Image size
 				spinnerIncDecOnly: true, // Only up and down arrows
-				defaultTime: this.get('hora')
+				defaultTime: this.get('hora'),
+				timeSteps: [1, 15, 1],
 			});	 
 			
 			$('.timepicker').timeEntry('setTime', this.get('hora'));
