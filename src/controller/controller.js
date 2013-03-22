@@ -23,6 +23,7 @@ App.Savable = Ember.Mixin.create({
 		});
 	},
 
+
 	getJson: function() {
 		return JSON.stringify(this.serialize());
 	},
@@ -49,7 +50,6 @@ App.Savable = Ember.Mixin.create({
 			this.set(item, json[item]);
 		},this);
 	},
-
 	saveSucceeded: function (data) {
 		if (data.success == true) {
 			this.set('saveSuccess', true);
@@ -969,6 +969,8 @@ App.CitacionCrearController = Em.Object.extend({
 		
 	},
 	
+
+
 	crearReunionCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK
 		
@@ -1022,9 +1024,11 @@ App.CitacionCrearController = Em.Object.extend({
 			var comisionCabecera = this.get('content.comisiones.firstObject');
 			
 			this.get('content.comisiones').forEach(function (comision) {
-				comision.integrantes.forEach(function(integrante) {
-					emailList.addObject(integrante.diputado.datosPersonales.email + ".dip@hcdn.gov.ar");			
-				});
+				if (comision.integrantes) {				
+					comision.integrantes.forEach(function(integrante) {
+						emailList.addObject(integrante.diputado.datosPersonales.email + ".dip@hcdn.gov.ar");			
+					});
+				}
 			});
 			
 			emailList = ['mbiondo@omcmedios.com.ar'];
@@ -1078,6 +1082,10 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 
 	create: function () {
+		console.log('Desactivando los botones..');
+
+		$('.buttonSave').attr('disabled', 'disabled');
+		$('.buttonSave').val('Guardando...');
 
 		$.ajax({
 			url: App.get('apiController').get('url') + this.get('url'),
@@ -1094,11 +1102,15 @@ App.CitacionCrearController = Em.Object.extend({
 	createCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK
 		
+		console.log('Crear completado sig msg..');
 		if (data.responseText)
 		{
-
 			var obj = JSON.parse(data.responseText);
-			
+			console.log('Activando los botones..');
+
+			$('.buttonSave').removeAttr('disabled');
+			$('.buttonSave').val('Guardar');
+
 			App.set('citacionConsultaController.loaded', false);
 			App.set('citacionConsultaController.content', App.Citacion.create(obj));
 
@@ -1112,19 +1124,29 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').load();
 			
 			$.jGrowl('Citacion creada con Exito!', { life: 5000 });
+
 		}
 	},
 	
 	save: function () {
 		fn = function () {
+			console.log('Desactivando los botones..');
+			$('.buttonSave').attr('disabled', 'disabled');
+			$('.buttonSave').val('Guardando...');
+
 			this.get('content').removeObserver('saveSuccess', this, fn);
 			if (this.get('content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
-				$.jGrowl('Citacion editada con Exito!', { life: 5000 });				
-			}
+				$.jGrowl('Citacion editada con Exito!', { life: 5000 });								
+			}			
 			else
 			{
+				console.log('Activando los botones..');
+				$('.buttonSave').removeAttr('disabled');
+				$('.buttonSave').val('Guardar');
+
+				console.log('Citacion editada con Exito');
 				$.jGrowl('Ocurrio un error al intentar guardar los cambios en la citacion!', { life: 5000 });
 			}
 		}
