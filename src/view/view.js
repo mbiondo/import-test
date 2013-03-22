@@ -349,6 +349,8 @@ App.CitacionCrearView = Em.View.extend({
 	
 	seleccionados: false,
 	
+//	showErrors: false,
+
 	seleccionarTodos: function () {
 		var _self = this;
 		this.set('seleccionados', !this.get('seleccionados'));
@@ -388,7 +390,8 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	guardar: function () {
-	
+		console.log('Guardando los datos....');
+
 		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || this.get('listaExpedientesSeleccionados').length < 1)
 		{
 			return;
@@ -1587,10 +1590,12 @@ App.CrearSesionView = App.ModalView.extend({
 	sesionBinding: 'App.crearSesionController.sesion',
 	fecha: '',
 	hora: '',
-	
+	showErrors:false,
+
 	errorMensajes: function () {
 		var mensajes = [];
 		var sesion = App.get('crearSesionController').get('sesion');
+
 		if (sesion.titulo == null || sesion.titulo == "") 
 			mensajes.push({titulo:"Debes escribir un titulo."});
 		if (sesion.sesion == null || sesion.sesion == "")  
@@ -1613,7 +1618,11 @@ App.CrearSesionView = App.ModalView.extend({
 	}.property('sesion.titulo', 'sesion.reunion', 'sesion.periodoOrdinario', 'sesion.sesion', 'sesion.tipo'),
 	
 	callback: function(opts, event) {
+
 			if (opts.primary) {
+				this.set('showErrors', true);
+				console.log('Mostrando errores...');
+
 				if (this.get('esInvalido')) 
 					return false;			
 				var sesion = App.get('crearSesionController').get('sesion');
