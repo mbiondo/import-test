@@ -7,7 +7,7 @@ App.Savable = Ember.Mixin.create({
 		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
 		
 		if (this.get('useApi')) {
-			url = App.get('apiController').get('url') + url;
+			url = App.get('apiController').get('url') + this.get('url');
 		}
 			
 		$.ajax({
@@ -698,6 +698,7 @@ App.ExpedienteController = Ember.Object.extend({
 });
 
 App.ExpedienteConsultaController = Ember.Object.extend({
+	fecha: null,
 	content: null,
 	url: "/exp/proyecto/%@",
 	loaded : false,
@@ -707,7 +708,6 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		if(xhr.status == 400 || xhr.status == 420) {
 		}
 		this.set('loaded', true);
-
 		
 	},
 	
@@ -728,6 +728,9 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
+		// Cambio el formato de content.pubFecha 
+		this.set('fecha', moment(item.pubFecha, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+		console.log(item);
 	},	
 });
 
