@@ -71,7 +71,7 @@ App.menuController = App.MenuController.create({
 						}),		
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_ADMIN'],
-							titulo: 'Reuniones Con parte',
+							titulo: 'Reuniones con parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
 					]
