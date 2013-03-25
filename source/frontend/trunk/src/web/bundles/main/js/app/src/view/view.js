@@ -175,7 +175,8 @@ App.ExpedientesView = App.ListFilterView.extend({
 	listaExpedientes: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = App.get('expedientesController').get('content').filter(function(expediente) {
-			return regex.test((expediente.tipo).toLowerCase()) || regex.test((expediente.titulo).toLowerCase()) || regex.test((expediente.expdip).toLowerCase());
+			//console.log(expediente.get('firmantesLabel'));
+			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
