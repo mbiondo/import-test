@@ -151,6 +151,7 @@ App.ExpedienteView = Ember.View.extend({
 	classNames: ['gradeX'],
 	templateName: 'expediente',
 	classNameBindings: ['content.seleccionada:active'],
+
 	
 	verExpediente: function () {
 		App.set('expedienteConsultaController.loaded', false);
@@ -170,12 +171,44 @@ App.ExpedienteView = Ember.View.extend({
 App.ExpedientesView = App.ListFilterView.extend({
 	templateName: 'expedientes',
 	itemViewClass: App.ExpedienteView,
-	
-	
+	sorting: false,
+
+	sortAscending: Em.Object.create({ expdip: true, tipo: true, titulo: true, iniciado: true, firmantesLabel: true, girosLabel: true }),
+		
+	ordenarID: function(event) {
+		this.ordenarPorCampo('expdip');
+	},
+
+	ordenarTipo: function(event) {
+		this.ordenarPorCampo('tipo');
+	},
+
+	ordenarTitulo: function(event) {
+		this.ordenarPorCampo('titulo');
+	},
+
+	ordenarFirmantes: function(event){
+		this.ordenarPorCampo('firmantesLabel');
+	},
+
+	ordenarIniciado: function(event){
+		this.ordenarPorCampo('iniciado');
+	},
+
+	ordenarGiros: function(event) {
+		this.ordenarPorCampo('girosLabel');
+	},
+
+	ordenarPorCampo: function (campo) {
+		App.get('expedientesController').set('sortProperties', [campo]);
+		App.get('expedientesController').set('sortAscending', this.get('sortAscending').get(campo));
+		this.get('sortAscending').set(campo, !this.get('sortAscending').get(campo));
+
+	},
+
 	listaExpedientes: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		var filtered = App.get('expedientesController').get('content').filter(function(expediente) {
-			//console.log(expediente.get('firmantesLabel'));
+		var filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
 		var max = this.get('totalRecords');
@@ -186,7 +219,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'App.expedientesController.content', 'totalRecords'),
+	}.property('filterText', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
 	
 	mostrarMasEnabled: true,
 });
@@ -379,7 +412,7 @@ App.CitacionCrearView = Em.View.extend({
 		var invitado = this.get('invitado');
 		var empty = !(invitado.nombre != '' && invitado.apellido != '');
 		
-		return !empty && $("#crear-citacion-form").validationEngine('validate');
+		return !empty && $("#formInvitados").validationEngine('validate');
 	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
 	
 	cargarExpedientesHabilitado: function () {
@@ -750,7 +783,7 @@ App.ComisionesView = Ember.CollectionView.extend({
 });
 
 App.InvitadoView = Em.View.extend({
-	tagName: 'tr',
+	tagName: 'li',
 	templateName: 'invitado',
 	
 	clickInvitado: function () {
@@ -760,7 +793,7 @@ App.InvitadoView = Em.View.extend({
 
 App.InvitadosView = Ember.CollectionView.extend({
     classNames : [],  
-	tagName: 'tbody',
+	tagName: 'ul',
 	itemViewClass: App.InvitadoView, 
 });
 
