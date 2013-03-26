@@ -12,10 +12,10 @@ App.Savable = Ember.Mixin.create({
 			
 		$.ajax({
 			url:  url,
-			contentType: 'text/plain',
+			//contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'PUT',
-			crossDomain: 'true',
+			//crossDomain: 'true',
 			context: this,
 			data : this.getJson(),
 			success: this.saveSucceeded,

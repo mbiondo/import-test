@@ -1,7 +1,5 @@
 App.Expediente = Em.Object.extend({
-	sortValue: function () {
-		return this.get('fechaPub');
-	}.property('fechaPub'),
+	sortValue: '',
 	
 	seleccionado: false,
 	
@@ -17,6 +15,7 @@ App.Expediente = Em.Object.extend({
 	}.property('firmantes'),	
 	
 	girosLabel: function () {
+		var field = "orden";
 		var giros = this.get('giro').sort(function (a, b) {
 			return a.orden - b.orden;
 		});
