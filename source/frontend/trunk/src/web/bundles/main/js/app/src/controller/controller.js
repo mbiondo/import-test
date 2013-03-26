@@ -509,7 +509,9 @@ App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos/2012/detalle',
 	type: App.Expediente,
 	useApi: true,
-	
+	sortProperties: ['fechaPub'],
+	sortAscending: true,
+
 	init : function () {
 		this._super();
 	},
@@ -698,17 +700,14 @@ App.ExpedienteController = Ember.Object.extend({
 });
 
 App.ExpedienteConsultaController = Ember.Object.extend({
-	fecha: null,
 	content: null,
 	url: "/exp/proyecto/%@",
 	loaded : false,
 	useApi: true,
 	
 	loadCompleted: function(xhr){
-		if(xhr.status == 400 || xhr.status == 420) {
-		}
-		this.set('loaded', true);
-		
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
 	},
 	
 	load: function () {
@@ -728,8 +727,6 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
-		// Cambio el formato de content.pubFecha 
-		this.set('fecha', moment(item.pubFecha, 'YYYY-MM-DD').format('DD-MM-YYYY'));
 		console.log(item);
 	},	
 });
