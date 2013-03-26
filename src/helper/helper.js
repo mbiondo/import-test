@@ -37,6 +37,13 @@ Handlebars.registerHelper("formatoFecha", function(fecha, format, options) {
   return moment(fecha, format).format('LLLL');
 });
 
+Handlebars.registerHelper("formatoFechaSinHora", function(fecha, format, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var fecha = getPath(context, fecha, options.fn);
+  
+  return moment(fecha, format).format('LL');
+});
+
 Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var userRoles = getPath(context, userRoles, options.fn);
