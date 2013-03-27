@@ -432,7 +432,9 @@ App.Router =  Em.Router.extend({
 										t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
 										var proyectos = t.get('proyectos');
 										proyectos.forEach(function (proyecto) {
-											proyecto.set('tema', t.get('descripcion'));
+											if (t.get('grupo')) {
+												proyecto.set('tema', t.get('descripcion'));
+											}
 										});									
 									});
 									
