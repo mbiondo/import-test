@@ -442,7 +442,7 @@ App.CitacionCrearView = Em.View.extend({
 		});
 		
 		temas.removeObjects(temasToRemove);
-		
+		console.log(this.get('startFecha'));
 		
 		
 		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:MM'));
@@ -659,15 +659,15 @@ App.CitacionCrearView = Em.View.extend({
 				*Si se está modificando los datos de una citación existente
 		*/
 
-		if (App.get('citacionCrearController.content.start') != '')
+		if (App.get('citacionCrearController.content.id'))
 		{
 			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
 			this.set('startHora', App.get('citacionCrearController.content.start').split(' ')[1]);
 		}
 		else
 		{			
-			this.set('startFecha', moment().format("DD/MM/YYYY"));
-			this.set('startHora', moment().format("hh:ss"));
+			//this.set('startFecha', moment().format("DD/MM/YYYY"));
+			this.set('startHora', moment().format("HH:SS"));
 		}
 		
 		$('.timepicker').timeEntry({
