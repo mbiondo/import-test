@@ -783,7 +783,7 @@ App.ComisionesView = Ember.CollectionView.extend({
 });
 
 App.InvitadoView = Em.View.extend({
-	tagName: 'li',
+	tagName: 'tr',
 	templateName: 'invitado',
 	
 	clickInvitado: function () {
@@ -793,7 +793,7 @@ App.InvitadoView = Em.View.extend({
 
 App.InvitadosView = Ember.CollectionView.extend({
     classNames : [],  
-	tagName: 'ul',
+	tagName: 'tbody',
 	itemViewClass: App.InvitadoView, 
 });
 
