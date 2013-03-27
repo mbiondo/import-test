@@ -1,4 +1,11 @@
-﻿$.fn.extend({
+﻿ //===== Tooltips arreglar =====//
+ /*
+$('.tipN').tipsy({gravity: 'n',fade: true, html:true});
+$('.tipS').tipsy({gravity: 's',fade: true, html:true});
+$('.tipW').tipsy({gravity: 'w',fade: true, html:true});
+$('.tipE').tipsy({gravity: 'e',fade: true, html:true}); 
+*/
+$.fn.extend({
 	safeClone: function() {
 		var clone;
 		clone = $(this).clone();
