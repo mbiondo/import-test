@@ -8,19 +8,34 @@ App.Savable = Ember.Mixin.create({
 		
 		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + this.get('url');
+			$.ajax({
+				url:  url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'PUT',
+				//crossDomain: 'true',
+				context: this,
+				data : this.getJson(),
+				success: this.saveSucceeded,
+				complete: this.saveCompleted,
+			});			
+		}
+		else 
+		{
+			$.ajax({
+				url:  url,
+				//contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'PUT',
+				//crossDomain: 'true',
+				context: this,
+				data : this.getJson(),
+				success: this.saveSucceeded,
+				complete: this.saveCompleted,
+			});			
 		}
 			
-		$.ajax({
-			url:  url,
-			//contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'PUT',
-			//crossDomain: 'true',
-			context: this,
-			data : this.getJson(),
-			success: this.saveSucceeded,
-			complete: this.saveCompleted,
-		});
+
 	},
 
 
@@ -50,6 +65,7 @@ App.Savable = Ember.Mixin.create({
 			this.set(item, json[item]);
 		},this);
 	},
+	
 	saveSucceeded: function (data) {
 		if (data.success == true) {
 			this.set('saveSuccess', true);
@@ -57,13 +73,18 @@ App.Savable = Ember.Mixin.create({
 			{
 				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson());
 			}
-		}
+		}		
 	},
 	
 	saveCompleted: function(xhr){
-		if(xhr.status == 400 || xhr.status == 420) {
+		
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('saveSuccess', true);
+		} 
+		else
+		{
+			this.set('saveSuccess', false);
 		}
-		this.set('saveSuccess', false);
 	},	
 });
 
@@ -1011,8 +1032,8 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	confirmarSuccess: function (data) {
-		this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
-		$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+		//this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
+		//$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
 	},
 	
 	confirmarCompleted: function (xhr) {
@@ -1068,8 +1089,8 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	cancelarSuccess: function (data) {
-		this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
-		$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });
+		//this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
+		//$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });
 	},
 
 	cancelarCompleted: function (xhr) {

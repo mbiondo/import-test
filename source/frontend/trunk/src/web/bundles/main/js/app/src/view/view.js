@@ -737,8 +737,9 @@ App.CrearReunionView = App.ModalView.extend({
 	callback: function(opts, event) {
 		if (opts.primary) {
 			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
+				id: null,
 				nota: this.get('nota'),
-				fecha: this.get('startFecha') + ' ' +this.get('startHora'),
+				fecha: moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' +this.get('startHora'),
 				comisiones: this.get('citacion.comisiones'),
 				citacion: App.Citacion.create({id: this.get('citacion.id') })
 			}));
