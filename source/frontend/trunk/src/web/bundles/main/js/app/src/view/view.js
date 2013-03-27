@@ -206,7 +206,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 	},
 
-	listaExpedientes: function () {
+	listaExpedientes: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
