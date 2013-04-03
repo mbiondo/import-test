@@ -164,8 +164,8 @@ App.LoginView = Ember.View.extend({
 		console.log("asdasdasd");
 		var _self = this;
 
-		var url = App.get('apiController.url') + '/user/login';
-		var posting = $.post( url, { cuil: this.get('cuil'), password: this.get('password') });
+		var url = App.get('apiController.url') + '/usr/autenticate';
+		var posting = $.post( url, { this.get('cuil'), this.get('password') });
 
 		posting.done(function( data ) {
 			if (data == "true")
