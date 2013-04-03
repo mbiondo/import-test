@@ -286,14 +286,18 @@ if (user) {
 
 var exp = localStorage.getObject('expedientes');
 if (!exp) {
-	console.log('CARGANDO');
-	jQuery.getJSON("/exp/proyectos/2012/detalle", function(data) {
-   
-	    localStorage.setObject('expedientes', data);
+	$.ajax({
+		url:  App.get('apiController.url') + "/exp/proyectos/2012/detalle",
+		dataType: 'JSON',
+		type: 'GET',
 
-	    $('#loadingScreen').remove();
+		success: function (data) {
+		    localStorage.setObject('expedientes', data);
 
-	  	App.advanceReadiness();
+		    $('#loadingScreen').remove();
+
+		  	App.advanceReadiness();				
+		}
 	});
 } else {
 	 $('#loadingScreen').remove();
