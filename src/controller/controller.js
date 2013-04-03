@@ -315,13 +315,14 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 		
-		var urlUserData = App.get('apiController.url') + '/usr/userdata/' + cuil;
+		var urlUserData = App.get('apiController.url') + '/usr/userdata';
 		var _self = this;
 
 		$.ajax({
 			url:  urlUserData,
 			dataType: 'JSON',
-			type: 'GET',
+			type: 'POST',
+			data: cuil,
 
 			success: function (data) {
 				var tmpUser = App.Usuario.create(data);

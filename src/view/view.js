@@ -165,7 +165,7 @@ App.LoginView = Ember.View.extend({
 		var _self = this;
 
 		var url = App.get('apiController.url') + '/usr/autenticate';
-		var posting = $.post( url, { this.get('cuil'), this.get('password') });
+		var posting = $.post( url, this.get('cuil') + "," + this.get('password'));
 
 		posting.done(function( data ) {
 			if (data == "true")
@@ -175,6 +175,7 @@ App.LoginView = Ember.View.extend({
 			else
 			{
 				//Mostrar error de login
+				alert('Login Incorrecto');
 			}
 		});	
 	}
