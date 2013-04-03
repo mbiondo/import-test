@@ -28,8 +28,14 @@ App.Router =  Em.Router.extend({
 	route: function(path) {
 	  this._super(path);
 	  
+	  if (!App.get('userController.user'))
+	  {
+	  		this.transitionTo("index");
+	  		return;
+	  }
+
 	  //Aca agregar logica si tiene o no permisos... 
-	  var userRoles = $.map(App.roles, function (value, key) { return value; });
+	  var userRoles = App.get('userController.roles');
 	  var roles = getRolesByPath(path);
 	  var _self = this;
 	  
@@ -101,6 +107,91 @@ App.Router =  Em.Router.extend({
 					{titulo: 'Inicio', url: '#'}
 				]);				
 			},		
+		}),
+
+		admin: Em.Route.extend({
+			route: '/admin',
+
+			index: Ember.Route.extend({
+							
+			}),	
+
+			roles: Ember.Route.extend({
+				route: "/roles",
+				
+				deserialize: function(router, params) {
+					 App.usuariosController = App.UsuariosController.create();
+					 App.funcionesController = App.FuncionesController.create();
+					 App.estructurasController = App.EstructurasController.create();
+					 App.rolesController = App.RolesController.create();
+
+					 var deferred = $.Deferred(),
+					
+					 fn = function() {
+					 	 if (App.get('usuariosController.loaded') && App.get('funcionesController.loaded') && App.get('estructurasController.loaded') && App.get('rolesController.loaded')) {
+							deferred.resolve(null);
+					 	 }					
+					 };
+
+					 App.get('usuariosController').addObserver('loaded', this, fn);
+					 App.get('funcionesController').addObserver('loaded', this, fn);
+					 App.get('estructurasController').addObserver('loaded', this, fn);
+					 App.get('rolesController').addObserver('loaded', this, fn);
+
+					 App.get('usuariosController').load();
+					 App.get('funcionesController').load();
+					 App.get('estructurasController').load();
+					 App.get('rolesController').load();
+					
+					 return deferred.promise();
+				},
+				
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('main', 'rolesAdmin');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Administrar Roles', url: '#/admin/roles'},
+					]);					
+					App.get('menuController').seleccionar(5);							
+				},									
+			}),	
+
+			comisiones: Ember.Route.extend({
+				route: "/comisiones",
+				
+				deserialize: function(router, params) {
+					 App.usuariosController = App.UsuariosController.create();
+
+					 var deferred = $.Deferred(),
+					
+					 fn = function() {
+					 	 if (App.get('usuariosController.loaded') && App.get('comisionesController.loaded')) {
+							deferred.resolve(null);
+					 	 }					
+					 };
+
+					 App.get('usuariosController').addObserver('loaded', this, fn);
+					 App.get('comisionesController').addObserver('loaded', this, fn);
+
+					 App.get('usuariosController').load();
+					 App.get('comisionesController').load();
+
+					
+					 return deferred.promise();
+				},
+				
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('main', 'comisionesAdmin');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Administrar Roles', url: '#/admin/roles'},
+					]);					
+					App.get('menuController').seleccionar(5);							
+				},									
+			}),	
+
 		}),
 		
 		expedientes: Em.Route.extend({

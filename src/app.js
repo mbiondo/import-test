@@ -111,8 +111,9 @@ Bootstrap.ModalPane.reopenClass({
 });
 
 App = Ember.Application.create({
+	rootElement: '#application',
+
 	ready: function () {
 		this._super();
-		App.initialize();
 	}
 });
