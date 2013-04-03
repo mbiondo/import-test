@@ -310,12 +310,66 @@ App.IoController = Em.Object.extend({
 	},	
 });
 
+App.UserController = Em.Controller.extend({
+	user : undefined,
+
+	login: function (cuil) {
+		
+		var urlUserData = App.get('apiController.url') + '/user/data/' + cuil;
+		var _self = this;
+
+		$.ajax({
+			url:  urlUserData,
+			dataType: 'JSON',
+			type: 'GET',
+
+			success: function (data) {
+				var tmpUser = App.Usuario.create(data);
+
+				var url = '/user/access';
+				var posting = $.post( url, { cuil: tmpUser.get('cuil'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
+
+				posting.done(function( data ) {
+					data = JSON.parse(data);
+
+					var userRoles = [];
+					var roles = data.roles;
+					roles.forEach(function (rol){
+						userRoles.addObject(App.Rol.create(rol));
+					});
+
+					var userComisiones = [];
+					var comisiones = data.comisiones;
+					comisiones.forEach(function (comision){
+						userComisiones.addObject(App.Comision.create(comision));
+					});
+
+					tmpUser.set('roles', userRoles);
+					tmpUser.set('comisiones', userComisiones);
+					_self.set('user', tmpUser);
+
+					localStorage.setObject('user', JSON.stringify(tmpUser));
+
+				});
+			},
+		});			
+	},
+
+	roles: function () {
+		return $.map(this.get('user.roles'), function (value, key) { return value.get('nombre'); })
+	}.property('user'),
+
+	isLogin: function () {
+		return this.get('user') != undefined;
+	}.property('user'),
+});
 
 App.ApiController = Em.Controller.extend({
 	url: '',
 	key: '',
 	secret: '',
 });
+
 
 App.NotificationController = Em.Controller.extend({
 	estado: '',
@@ -508,8 +562,11 @@ App.RestController = Em.ArrayController.extend({
 
 	saveSort : function(ids) {
 		var url = this.get('sortUrl');
-		if (this.get('useApi'))
+
+		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + url;	
+		}
+			
 		$.ajax({
 			url: url,
 			dataType: 'JSON',
@@ -525,6 +582,138 @@ App.RestController = Em.ArrayController.extend({
 	}
 });
 
+App.UsuariosController = App.RestController.extend({
+	url: '/user/users',
+	type: App.Usuario,
+	useApi: false,
+	sortProperties: ['nivel'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Usuario.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},	
+});
+
+App.EstructurasController = App.RestController.extend({
+	url: '/user/estructuras',
+	type: App.Estructura,
+	useApi: false,
+	sortProperties: ['nombre'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Estructura.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},	
+});
+
+App.FuncionesController = App.RestController.extend({
+	url: '/user/funciones',
+	type: App.Funcion,
+	useApi: false,
+	sortProperties: ['nombre'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Funcion.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},	
+});
+
+App.RolesController = App.RestController.extend({
+	url: '/user/roles',
+	type: App.Rol,
+	useApi: false,
+	sortProperties: ['nivel'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Rol.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: '/user/rol',
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},	
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		this.set('content', [App.Rol.create({id: -1, nombre: 'Seleccione un Rol'})]);
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+		
+		this.set('loaded', true);
+	},	
+});
+
 
 App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos/2012/detalle',
@@ -537,6 +726,10 @@ App.ExpedientesController = App.RestController.extend({
 		this._super();
 	},
 
+	load: function() {
+		 this.loadSucceeded(localStorage.getObject('expedientes'));
+	},
+	
 	loadSucceeded: function(data){
 		this._super(data);
 	},

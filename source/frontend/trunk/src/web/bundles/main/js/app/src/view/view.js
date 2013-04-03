@@ -120,32 +120,235 @@ App.DatePicker = JQ.DatePicker.extend({
  
   beforeShowDay: function(date) {
       return [true, ""];
-  }
+  },
+  
+  onSelect: function (date) {
+	this.set('value', date)
+  },
 });
 
+App.ContentView = Ember.View.extend({
+	templateName: 'content',
+
+	logout: function () {
+		App.get('userController').set('user', null);
+		localStorage.setObject('user', null);
+	},
+
+	didInsertElement: function () {
+	
+		$("ul.userNav li a.sidebar").click(function() { 
+			$(".secNav").toggleClass('display');
+		});	
+		
+		//===== User nav dropdown =====//		
+		
+		$('a.leftUserDrop').click(function () {
+			$('.leftUser').slideToggle(200);
+		});
+		
+		$(document).bind('click', function(e) {
+			var $clicked = $(e.target);
+			if (! $clicked.parents().hasClass("leftUserDrop"))
+			$(".leftUser").slideUp(200);
+		});
+	},	
+});
+
+App.LoginView = Ember.View.extend({
+	templateName: 'login',
+	cuil: '',
+	password: '',
+
+	login: function () {
+		console.log("asdasdasd");
+		var _self = this;
+
+		var url = App.get('apiController.url') + '/user/login';
+		var posting = $.post( url, { cuil: this.get('cuil'), password: this.get('password') });
+
+		posting.done(function( data ) {
+			if (data == "true")
+			{
+				App.get('userController').login(_self.get('cuil'));				
+			}
+			else
+			{
+				//Mostrar error de login
+			}
+		});	
+	}
+});
+
+App.SimpleListItemView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'simple-list-item',
+});
+
+App.ListFilterView = Ember.View.extend({
+	templateName: 'simple-list',
+	filterText: '',
+	maxRecords: 10,
+	records: [10, 25, 50, 100],
+	itemViewClass: App.SimpleListItemView,
+	columnas: ['ID', 'Label'],
+	
+	mostrarMas: function () {
+		this.set('totalRecords', this.get('totalRecords') + this.get('maxRecords'));
+	},
+	
+	lista: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = this.get('content').filter(function(item){
+			return regex.test(item.get('label').toLowerCase());
+		});
+
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+		return filtered.splice(0, this.get('totalRecords'));
+	}.property('filterText', 'content', 'totalRecords'),
+
+	totalRecords: 10,
+});
+
+//ADMIN
+
+App.RolesAdminView = Ember.View.extend({
+	templateName: 'roles-admin',
+	rolNombre: '',
+	rolNivel: '',
+
+	crearRol: function () {
+		App.get('rolesController').createObject({nombre: this.get('rolNombre'), nivel: this.get('rolNivel')}, true);
+	},
+
+	crearRolHabilitado: function () {
+		return this.get('rolNombre') != '' && this.get('rolNivel') != '';
+	}.property('rolNombre', 'rolNivel'),
+
+});
+
+App.ComisionesAdminView = Ember.View.extend({
+	templateName: 'comisiones-admin',
+
+});
+
+
+App.ItemRoleableView = Em.View.extend({
+	content: '',
+	templateName: 'item-roleable',
+	tagName: 'tr',
+	change: false,
+	rolSeleccionadoBinding: "App.rolesController.content.firstObject",
+
+	agregarRolHabilitado: function () {
+		return this.get('rolSeleccionado.id') != -1;
+	}.property('rolSeleccionado'),
+
+	borrarRol: function (rol) {
+		this.set('change', true);
+		this.get('content.roles').removeObject(rol);
+	},
+
+	agregarRol: function () {
+		this.set('change', true);
+		this.get('content.roles').addObject(this.get('rolSeleccionado'));
+		this.set('rolSeleccionado', App.get('rolesController.content.firstObject'));
+	},
+
+	guardarHabilitado: function () {
+		return this.get('change');
+	}.property('content','change'),
+
+	guardar: function () {
+		this.set('change', false);
+		this.get('content').save();
+	},
+});
+
+App.ItemRoleableRolView = Em.View.extend({
+	templateName: 'item-roleable-rol',
+	tagName: 'span',
+	classNames: ['tag'],
+
+	borrar: function () {
+		this.get('parentView').borrarRol(this.get('content'));
+	}	
+});
+
+App.RoleabeListView = App.ListFilterView.extend({ 
+	itemViewClass: App.ItemRoleableView, 	
+	columnas: ['ID', 'Label','Roles', 'Acciones'],
+});
+
+App.ItemComisionableView = Em.View.extend({
+	content: '',
+	templateName: 'item-comisionable',
+	tagName: 'tr',
+	change: false,
+	comisionSeleccionadaBinding: "App.comisionesController.content.firstObject",
+
+	agregarComisionHabilitado: function () {
+		return this.get('comisionSeleccionada.id') != -1;
+	}.property('comisionSeleccionada'),
+
+	borrarComision: function (rol) {
+		this.set('change', true);
+		this.get('content.comisiones').removeObject(rol);
+	},
+
+	agregarComision: function () {
+		this.set('change', true);
+		this.get('content.comisiones').addObject(this.get('comisionSeleccionada'));
+		this.set('comisionSeleccionada', App.get('comisionesController.content.firstObject'));
+	},
+
+	guardarHabilitado: function () {
+		return this.get('change');
+	}.property('content','change'),
+
+	guardar: function () {
+		this.set('change', false);
+		this.get('content').save();
+	},
+});
+
+App.ItemComisionableComisionView = Em.View.extend({
+	templateName: 'item-comisionable-comision',
+	tagName: 'span',
+	classNames: ['tag'],
+
+	borrar: function () {
+		this.get('parentView').borrarComision(this.get('content'));
+	}	
+});
+
+App.ComisionableListView = App.ListFilterView.extend({ 
+	itemViewClass: App.ItemComisionableView, 	
+	columnas: ['ID', 'Label','Comisiones', 'Acciones'],
+});
+
+
+
+
+
+//ERRORES
 App.Page404View = Ember.View.extend({
 	templateName: 'page-404',
-	
 });
 
 App.Page403View = Ember.View.extend({
 	templateName: 'page-403',
 });
 
-App.ListFilterView = Ember.View.extend({
-	filterText: '',
-	maxRecords: 10,
-	records: [10, 25, 50, 100],
-	
-	mostrarMas: function () {
-		this.set('totalRecords', this.get('totalRecords') + this.get('maxRecords'));
-	},
-	
-	
 
-	totalRecords: 10,
-});
 
+//Expedientes
 App.ExpedienteView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
@@ -309,25 +512,6 @@ App.ApplicationView = Em.View.extend({
 	mostrar : function () {
 		this.get('testModal').mostrar();
 	},
-
-	didInsertElement: function () {
-	
-		$("ul.userNav li a.sidebar").click(function() { 
-			$(".secNav").toggleClass('display');
-		});	
-		
-		//===== User nav dropdown =====//		
-		
-		$('a.leftUserDrop').click(function () {
-			$('.leftUser').slideToggle(200);
-		});
-		
-		$(document).bind('click', function(e) {
-			var $clicked = $(e.target);
-			if (! $clicked.parents().hasClass("leftUserDrop"))
-			$(".leftUser").slideUp(200);
-		});
-	},
 });
 
 App.ExpedienteConsultaView = Em.View.extend({
@@ -442,6 +626,7 @@ App.CitacionCrearView = Em.View.extend({
 		});
 		
 		temas.removeObjects(temasToRemove);
+		
 		console.log(this.get('startFecha'));
 		
 		
@@ -666,7 +851,7 @@ App.CitacionCrearView = Em.View.extend({
 		}
 		else
 		{			
-			//this.set('startFecha', moment().format("DD/MM/YYYY"));
+			this.set('startFecha', moment().format("DD/MM/YYYY"));
 			this.set('startHora', moment().format("HH:SS"));
 		}
 		
@@ -825,6 +1010,10 @@ App.CitacionExpedienteSeleccionado = Em.View.extend({
 	
 	clickDesagrupar: function () {
 		this.get('parentView').get('parentView').clickDesagrupar(this.get('content'));
+	},
+	
+	didInsertElement: function () {
+		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
 	},
 });
 

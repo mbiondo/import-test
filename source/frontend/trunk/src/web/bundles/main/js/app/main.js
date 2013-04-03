@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.0.1.7:8080/sparl/rest',
+	url: 'http://10.0.1.7:8080/sparl/rest/',
 	key: '',
 	secret: '',
 });
@@ -141,7 +141,34 @@ App.menuController = App.MenuController.create({
 					],
 				}),
 			]			
-		}),		
+		}),	
+
+		App.MenuItem.create({
+			id: 5,
+			titulo: 'Administrar Accessos',
+			url: '#/admin/roles',
+			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			roles: ['ROLE_USER'],
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Administrar',
+					url: '#/admin/roles',
+					roles: ['ROLE_USER'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Acceso de usuarios',
+							url: '#/admin/roles',
+							roles: ['ROLE_USER'],
+						}),		
+						App.MenuItem.create({
+							titulo: 'Comisiones por usuarios',
+							url: '#/admin/comisiones',
+							roles: ['ROLE_USER'],
+						}),										
+					],
+				}),
+			]			
+		}),				
 	]
 });
 
@@ -228,5 +255,48 @@ App.reunionesConParteController = App.ReunionesConParteController.create({
 
 App.crearParteController = App.CrearParteController.create();
 
+App.userController = App.UserController.create();
 
 //App.initialize();
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+    return JSON.parse(this.getItem(key));
+}
+
+App.deferReadiness();
+
+var user = localStorage.getObject('user');
+
+if (user) {
+	var usuario = App.Usuario.create(JSON.parse(user));
+
+	var roles = [];
+	usuario.get('roles').forEach(function (rol) {
+		roles.addObject(App.Rol.create(rol));
+	});
+
+	usuario.set('roles', roles);
+
+	App.userController.set('user', usuario);
+	console.log(App.userController.get('user'));
+}
+
+var exp = localStorage.getObject('expedientes');
+if (!exp) {
+	console.log('CARGANDO');
+	jQuery.getJSON("/exp/proyectos/2012/detalle", function(data) {
+   
+	    localStorage.setObject('expedientes', data);
+
+	    $('#loadingScreen').remove();
+
+	  	App.advanceReadiness();
+	});
+} else {
+	 $('#loadingScreen').remove();
+	 App.advanceReadiness();
+}
+

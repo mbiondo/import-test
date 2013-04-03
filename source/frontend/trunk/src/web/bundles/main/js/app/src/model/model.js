@@ -1,3 +1,77 @@
+App.Usuario = Em.Object.extend({
+	url: '/user',
+	nombre: '',
+	apellido: '',
+	cuil: '',
+	roles: '',
+	estructura: '',
+	funcion: '',
+	comisiones: '',
+
+	serializable: [
+		"cuil",
+		"roles",
+		"comisiones"
+	],
+
+	label: function () {
+		return this.get('cuil');
+	}.property('cuil'),
+
+});
+
+App.Estructura = Em.Object.extend({
+	url: '/user/estructura',
+	id: '',
+	nombre: '',
+	roles: '',
+
+	serializable: [
+		"id",
+		"nombre",
+		"roles"
+	],
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),
+
+});
+
+App.Funcion = Em.Object.extend({
+	url: '/user/funcion',
+	id: '',
+	nombre: '',
+	roles: '',
+	
+	serializable: [
+		"id",
+		"nombre",
+		"roles"
+	],
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),	
+});
+
+App.Rol = Em.Object.extend({
+	url: '/user/rol',
+	id: '',
+	nombre: '',
+	nivel: '',
+
+	serializable: [
+		"id",
+		"nombre",
+		"nivel"
+	],
+
+	toString: function () {
+		return this.get('nombre');
+	},
+});
+
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	
@@ -114,6 +188,9 @@ App.CitacionEstado = Em.Object.extend({
 });
 
 App.Comision = Em.Object.extend({
+	toString: function () {
+		return this.get('nombre');
+	},	
 });
 
 
