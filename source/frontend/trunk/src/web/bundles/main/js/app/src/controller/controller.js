@@ -315,7 +315,7 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 		
-		var urlUserData = App.get('apiController.url') + '/user/data/' + cuil;
+		var urlUserData = App.get('apiController.url') + '/usr/userdata/' + cuil;
 		var _self = this;
 
 		$.ajax({
