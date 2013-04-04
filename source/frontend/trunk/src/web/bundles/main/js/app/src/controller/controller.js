@@ -320,7 +320,7 @@ App.UserController = Em.Controller.extend({
 
 		$.ajax({
 			url:  urlUserData,
-			dataType: 'JSON',
+			contentType: 'text/plain',
 			type: 'POST',
 			data: cuil,
 
