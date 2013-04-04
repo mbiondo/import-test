@@ -148,22 +148,22 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: [],
+			roles: ['ROLE_SITE_ADMIN'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
 					url: '#/admin/roles',
-					roles: [],
+					roles: ['ROLE_SITE_ADMIN'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Acceso de usuarios',
 							url: '#/admin/roles',
-							roles: [],
+							roles: ['ROLE_SITE_ADMIN'],
 						}),		
 						App.MenuItem.create({
 							titulo: 'Comisiones por usuarios',
 							url: '#/admin/comisiones',
-							roles: [],
+							roles: ['ROLE_SITE_ADMIN'],
 						}),										
 					],
 				}),
@@ -274,9 +274,12 @@ if (user) {
 	var usuario = App.Usuario.create(JSON.parse(user));
 
 	var roles = [];
-	usuario.get('roles').forEach(function (rol) {
-		roles.addObject(App.Rol.create(rol));
-	});
+	
+	if (usuario.get('roles')) {
+		usuario.get('roles').forEach(function (rol) {
+			roles.addObject(App.Rol.create(rol));
+		});
+	}
 
 	usuario.set('roles', roles);
 
@@ -284,10 +287,10 @@ if (user) {
 	console.log(App.userController.get('user'));
 }
 
-var exp = localStorage.getObject('expedientes');
+var exp = localStorage.getObject('expedientess');
 if (!exp) {
 	$.ajax({
-		url:  App.get('apiController.url') + "/exp/proyectos/2012/resumen",
+		url:  App.get('apiController.url') + "/exp/proyectos/2013/detalle",
 		dataType: 'JSON',
 		type: 'GET',
 
