@@ -189,13 +189,13 @@ App.SimpleListItemView = Ember.View.extend({
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterText: '',
-	maxRecords: 10,
+	step: 10,
 	records: [10, 25, 50, 100],
 	itemViewClass: App.SimpleListItemView,
 	columnas: ['ID', 'Label'],
 	
 	mostrarMas: function () {
-		this.set('totalRecords', this.get('totalRecords') + this.get('maxRecords'));
+		this.set('totalRecords', this.get('totalRecords') + this.get('step'));
 	},
 	
 	lista: function (){
@@ -212,7 +212,7 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords'),
+	}.property('filterText', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
 });
@@ -226,10 +226,12 @@ App.RolesAdminView = Ember.View.extend({
 
 	crearRol: function () {
 		App.get('rolesController').createObject({nombre: this.get('rolNombre'), nivel: this.get('rolNivel')}, true);
+		this.set('rolNombre', '');
+		this.set('rolNivel', '');
 	},
 
 	crearRolHabilitado: function () {
-		return this.get('rolNombre') != '' && this.get('rolNivel') != '';
+		return this.get('rolNombre') != '' && this.get('rolNivel') > 0 && this.get('rolNivel') < 6;
 	}.property('rolNombre', 'rolNivel'),
 
 });

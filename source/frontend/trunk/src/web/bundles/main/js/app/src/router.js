@@ -167,6 +167,7 @@ App.Router =  Em.Router.extend({
 					
 					 fn = function() {
 					 	 if (App.get('usuariosController.loaded') && App.get('comisionesController.loaded')) {
+					 	 	App.get('comisionesController.content').insertAt(0, App.Comision.create({id: -1, nombre: 'Seleccione una Comision'}));
 							deferred.resolve(null);
 					 	 }					
 					 };
