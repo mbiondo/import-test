@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.0.1.7:8080/sparl/rest',
+	url: 'http://10.185.204.12:8080/sparl/rest',
 	key: '',
 	secret: '',
 });

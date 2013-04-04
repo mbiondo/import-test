@@ -174,7 +174,7 @@ App.LoginView = Ember.View.extend({
 			data : this.get('cuil') + "," + this.get('password'),
 			success: function( data ) 
 			{
-				if (data == true)
+				if (data == true || data == "true")
 				{
 					App.get('userController').login(_self.get('cuil'));				
 				}
