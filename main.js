@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.0.1.7:8080/sparl/rest/',
+	url: 'http://10.0.1.7:8080/sparl/rest',
 	key: '',
 	secret: '',
 });
@@ -148,22 +148,22 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER'],
+			roles: [],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
 					url: '#/admin/roles',
-					roles: ['ROLE_USER'],
+					roles: [],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Acceso de usuarios',
 							url: '#/admin/roles',
-							roles: ['ROLE_USER'],
+							roles: [],
 						}),		
 						App.MenuItem.create({
 							titulo: 'Comisiones por usuarios',
 							url: '#/admin/comisiones',
-							roles: ['ROLE_USER'],
+							roles: [],
 						}),										
 					],
 				}),
@@ -287,7 +287,7 @@ if (user) {
 var exp = localStorage.getObject('expedientes');
 if (!exp) {
 	$.ajax({
-		url:  App.get('apiController.url') + "/exp/proyectos/2012/detalle",
+		url:  App.get('apiController.url') + "/exp/proyectos/2012/resumen",
 		dataType: 'JSON',
 		type: 'GET',
 
