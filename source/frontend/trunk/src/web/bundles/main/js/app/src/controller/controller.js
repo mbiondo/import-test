@@ -323,6 +323,7 @@ App.UserController = Em.Controller.extend({
 			contentType: 'text/plain',
 			type: 'POST',
 			data: cuil,
+			dataType: 'JSON',
 
 			success: function (data) {
 				var tmpUser = App.Usuario.create(data);
