@@ -165,19 +165,28 @@ App.LoginView = Ember.View.extend({
 		var _self = this;
 
 		var url = App.get('apiController.url') + '/usr/autenticate';
-		var posting = $.post( url, this.get('cuil') + "," + this.get('password'));
-
-		posting.done(function( data ) {
-			if (data == "true")
+		$.ajax({
+			url:  url,
+			contentType: 'text/plain',
+			type: 'POST',
+			//crossDomain: 'true',
+			context: this,
+			data : this.get('cuil') + "," + this.get('password'),
+			success: function( data ) 
 			{
-				App.get('userController').login(_self.get('cuil'));				
-			}
-			else
-			{
-				//Mostrar error de login
-				alert('Login Incorrecto');
-			}
-		});	
+				if (data == true)
+				{
+					App.get('userController').login(_self.get('cuil'));				
+				}
+				else
+				{
+					//Mostrar error de login
+					alert('Login Incorrecto');
+				}
+			},
+			complete: this.saveCompleted,
+		});			
+		
 	}
 });
 
@@ -401,15 +410,17 @@ App.ExpedientesView = App.ListFilterView.extend({
 		this.ordenarPorCampo('iniciado');
 	},
 
-	ordenarGiros: function(event) {
+	ordenarGiros: function(event){
 		this.ordenarPorCampo('girosLabel');
 	},
-
-	ordenarPorCampo: function (campo) {
+	setSorting: function(){
+		console.log('click en el header...');
+	},
+	ordenarPorCampo: function (campo){		
 		App.get('expedientesController').set('sortProperties', [campo]);
 		App.get('expedientesController').set('sortAscending', this.get('sortAscending').get(campo));
 		this.get('sortAscending').set(campo, !this.get('sortAscending').get(campo));
-
+		console.log(this.get('sortAscending'));
 	},
 
 	listaExpedientes: function (){
