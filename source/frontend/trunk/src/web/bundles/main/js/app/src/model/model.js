@@ -4,7 +4,7 @@ App.Usuario = Em.Object.extend({
 	apellido: '',
 	cuil: '',
 	roles: '',
-	estructura: '',
+	estructuraReal: '',
 	funcion: '',
 	comisiones: '',
 
@@ -17,6 +17,10 @@ App.Usuario = Em.Object.extend({
 	label: function () {
 		return this.get('cuil');
 	}.property('cuil'),
+	
+	estructura: function () {
+		return this.get('estructuraReal');
+	}.property('estructuraReal'),
 
 });
 
