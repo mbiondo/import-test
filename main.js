@@ -1,5 +1,6 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:8080/sparl/rest',
+	//url: 'http://10.185.204.12:8080/sparl/rest',
+	url: '',
 	key: '',
 	secret: '',
 });
@@ -54,7 +55,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							titulo: 'Crear Citacion',
-							roles: ['ROLE_USER', 'ROLE_ADMIN'],
+							roles: ['ROLE_USER'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -62,15 +63,15 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Reuniones',
 					url: '',
-					roles: ['ROLE_USER', 'ROLE_ADMIN'],
+					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_ADMIN'],
+							roles: ['ROLE_USER'],
 							titulo: 'Reuniones sin parte',
 							url: '#/comisiones/reuniones',
 						}),		
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_ADMIN'],
+							roles: ['ROLE_USER'],
 							titulo: 'Reuniones con parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
