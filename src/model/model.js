@@ -253,7 +253,7 @@ App.Comision = Em.Object.extend({
 
 
 App.Reunion = Em.Object.extend({
-	url: 'com/reun/reunion',
+	url: '/com/reun/reunion',
 	id: '',
 	nota: '',
 	comisiones: '',
