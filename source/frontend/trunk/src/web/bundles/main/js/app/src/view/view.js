@@ -386,7 +386,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 	itemViewClass: App.ExpedienteView,
 	sorting: false,
 
-	sortAscending: Em.Object.create({ expdip: true, tipo: true, titulo: true, iniciado: true, firmantesLabel: true, girosLabel: true }),
+	//sortAscending: Em.Object.create({ expdip: true, tipo: true, titulo: true, iniciado: true, firmantesLabel: true, girosLabel: true }),
 		
 	ordenarAscID: function(event) {
 		this.ordenarPorCampo('expdip', true);
@@ -432,13 +432,10 @@ App.ExpedientesView = App.ListFilterView.extend({
 	setSorting: function(){
 		console.log('click en el header...');
 	},
+	
 	ordenarPorCampo: function (campo, order){		
 		App.get('expedientesController').set('sortProperties', [campo]);
-		App.get('expedientesController').set('sortAscending', this.get('sortAscending').get(campo));
-//		this.get('sortAscending').set(campo, !this.get('sortAscending').get(campo));
-
-		this.get('sortAscending').set(campo, order);
-		console.log(order+' - '+ this.get('sortAscending'));
+		App.get('expedientesController').set('sortAscending', order);
 	},
 
 	listaExpedientes: function (){

@@ -1,6 +1,6 @@
 App.apiController = App.ApiController.create({
-	//url: 'http://10.185.204.12:8080/sparl/rest',
-	url: '',
+	url: 'http://10.185.204.13:8080/sparl/rest',
+	//url: '',
 	key: '',
 	secret: '',
 });
@@ -288,7 +288,8 @@ if (user) {
 	console.log(App.userController.get('user'));
 }
 
-var exp = localStorage.getObject('expedientess');
+//var exp = localStorage.getObject('expedientes');
+var exp = null;
 if (!exp) {
 	$.ajax({
 		url:  App.get('apiController.url') + "/exp/proyectos/2013/detalle",

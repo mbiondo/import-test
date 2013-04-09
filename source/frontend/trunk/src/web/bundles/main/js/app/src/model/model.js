@@ -259,7 +259,7 @@ App.Reunion = Em.Object.extend({
 	comisiones: '',
 	citacion: '',
 	fecha: '',
-	parte: '',
+	parte: null,
 	useApi: true,
 	serializable : [
 		'id',
