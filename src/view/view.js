@@ -1200,18 +1200,30 @@ App.CrearParteView = Ember.View.extend({
 	
 	guardarParte: function () {
 		var parte = [];
+
 		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
 			if (tema.get('parteEstado').id) {
-				var parteItem = tema.get('parteEstado');
-				parteItem.proyectos = [];
-				parteItem.orden = parte.length;
-				parte.addObject(parteItem);
+				var parteItem;
 
-				tema.get('proyectos').forEach(function (proyecto){
-					parteItem.proyectos.addObject(proyecto);
-				});	
+				if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
+					parteItem = tema.get('dictamen');
+					parteItem.set('id_reunion', App.get('reunionConsultaController.content.id'));
+					parteItem.set('tipo', tema.get('parteEstado.tipo'));
+				} else {
+					parteItem = tema.get('parteEstado');
+					parteItem.proyectos = [];
+					parteItem.orden = parte.length;
+					
+
+					tema.get('proyectos').forEach(function (proyecto){
+						parteItem.proyectos.addObject(proyecto);
+					});	
+				}
+				parte.addObject(parteItem);
+				console.log(parteItem);
 			}
 		});
+
 		App.set('reunionConsultaController.content.parte', parte);
 		
 		fn = function () {
@@ -1236,6 +1248,18 @@ App.CrearParteView = Ember.View.extend({
 App.EstadoParteView = Ember.View.extend({
 	templateName: 'parte-estado',
 	estado: 'Seleccione una accion',
+
+	esDictamen: function () {
+		if (!this.get('tema.parteEstado'))
+			return false;
+		else
+			if (this.get('tema.parteEstado').id)
+				return this.get('tema.parteEstado').get('id') == 4;
+			else
+				return false;
+
+	}.property('tema.parteEstado'),
+
 	listaEstados: [
 		'Seleccione una accion',
 		App.ParteEstado.create({id: 1, tipo: 'Iniciacion'}),
@@ -1245,6 +1269,131 @@ App.EstadoParteView = Ember.View.extend({
 	],
 });
 
+
+App.DictamenCrearView = Ember.View.extend({
+	templateName: 'reunion-crear-parte-dictamen',
+	filterExpedientes: '',
+	adding: false,
+
+	agregarTexto: function () {
+		var texto = App.DictamenTexto.create({firmantes: []});
+		this.get('content.textos').addObject(texto);
+	},
+
+	clickExpediente: function (expediente) {
+		var item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
+        if (!item) {
+			this.get('content.proyectosVistos').pushObject(expediente);
+		}
+		else {
+			this.get('content.proyectosVistos').removeObject(expediente);
+		}
+		this.set('adding', !this.get('adding'));
+	},
+
+	listaExpedientes: function () {
+		var filtered;
+		if (this.get('filterExpedientes') != '')
+		{
+			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
+			
+			filtered = App.get('expedientesController.content').filter(function(expediente) {
+				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = App.get('expedientesController.content');
+		}
+		
+		if (this.get('content.proyectosVistos'))
+		{
+			this.get('content.proyectosVistos').forEach(function (expediente) {
+				filtered = filtered.without(expediente)
+			});
+			return filtered;
+		}
+		else
+			return filtered;
+	}.property('content', 'content.proyectosVistos', 'adding', 'filterExpedientes'),
+
+	didInsertElement: function () {
+		this.set('tema.dictamen', App.Dictamen.create({proyectos: this.get('tema.proyectos'), proyectosVistos: [], textos: []}));
+		this.set('content', this.get('tema.dictamen'));
+	},
+});
+
+App.DictamenTextoCrearView = Ember.View.extend({
+	templateName: 'reunion-crear-parte-dictamen-texto',
+	filterFirmantes: '',
+	adding: false,
+
+	clickFirmante: function (firmante) {
+		var item = this.get('content.firmantes').findProperty("id", firmante.get('id'));
+        if (!item) {
+        	firmante.set('seleccionado', true);
+			this.get('content.firmantes').pushObject(firmante);
+		}
+		else {
+			firmante.set('seleccionado', false);
+			this.get('content.firmantes').removeObject(firmante);
+		}
+		this.set('adding', !this.get('adding'));		
+	},
+
+	listaFirmantes: function () {
+		var filtered;
+		if (this.get('filterFirmantes') != '')
+		{
+			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
+			
+			filtered = App.get('firmantesController.content').filter(function(firmante) {
+				return regex.test((firmante.id));
+			});
+		}
+		else
+		{
+			filtered = App.get('firmantesController.content');
+		}
+
+		if (this.get('content.firmantes'))
+		{
+			this.get('content.firmantes').forEach(function (firmante) {
+				filtered = filtered.without(firmante)
+			});
+			return filtered;
+		}
+		else
+			return filtered;
+	}.property('filterFirmantes', 'content.firmantes', 'adding'),
+});
+
+
+App.FirmanteView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'dictamen-firmante-item',
+
+
+	clickItem: function () {
+		this.get('parentView').get('parentView').clickFirmante(this.get('content'));
+	}	
+});
+
+App.FirmantesView = Em.CollectionView.extend({
+	classNames : ['subNav'], 
+	tagName: 'ul',
+	itemViewClass: App.FirmanteView,
+});
+
+
+App.ExpedienteItemListView = Em.View.extend({
+	templateName: 'expediente-item-list',
+	tagName: 'li',
+
+	clickItem: function () {
+		this.get('parentView').get('parentView').clickExpediente(this.get('content'));
+	}
+});
 
 /* Oradores */
 

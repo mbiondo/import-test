@@ -327,21 +327,27 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
+							App.caracterDespachoController = App.CaracterDespachoController.create();
+							App.firmantesController = App.FirmantesController.create();
+
 							App.set('reunionConsultaController.loaded', false);
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
 
 							var deferred = $.Deferred();
 							
 							fn2 = function () {
-								var reunion = App.get('reunionConsultaController.content');
-								var citacion = App.get('citacionConsultaController.content');
-								var temas = [];
-								citacion.get('temas').forEach(function (tema) {
-									temas.addObject(App.CitacionTema.create(tema));
-								});
-								citacion.set('temas', temas);
-								
-								deferred.resolve(reunion);								
+								if (App.get('caracterDespachoController.loaded') && App.get('firmantesController.loaded') && App.get('citacionConsultaController.loaded')) {
+									var reunion = App.get('reunionConsultaController.content');
+									var citacion = App.get('citacionConsultaController.content');
+									var temas = [];
+									citacion.get('temas').forEach(function (tema) {
+										temas.addObject(App.CitacionTema.create(tema));
+									});
+									citacion.set('temas', temas);
+									
+									deferred.resolve(reunion);											
+								}
+				
 							}
 							
 							fn = function() {
@@ -354,7 +360,12 @@ App.Router =  Em.Router.extend({
 							}							
 							
 							App.get('reunionConsultaController').addObserver('loaded', this, fn);
+							App.get('caracterDespachoController').addObserver('loaded', this, fn2);
+							App.get('firmantesController').addObserver('loaded', this, fn2);
 							App.get('reunionConsultaController').load();
+							App.get('caracterDespachoController').load();
+							App.get('firmantesController').load();
+							App.get('expedientesController').load();
 							return deferred.promise();
 						},
 

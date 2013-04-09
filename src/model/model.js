@@ -167,6 +167,60 @@ App.CitacionTema = Em.Object.extend({
 	},
 });
 
+App.Dictamen = Em.Object.extend({
+	proyectosVistos: '',
+	proyectos: '',
+	sumario: '',
+	id_reunion: '',
+	copete: '',
+	tipo: 'Dictamen',
+	art114: false,
+    art204: false,
+    unanimidad: false,
+    caracterDespacho: '',
+    observaciones: '',
+    textos: '',
+});
+
+
+App.DictamenTexto = Em.Object.extend({
+	firmantes: '',
+    url: '',
+    unificados: false,
+    modificado: false,
+    sumario: '',
+    pr: '',
+    rechazo: false,
+    pl: '',
+    pd: '',
+    copete: '',
+   	texto: '',
+});
+
+
+App.FirmanteTextoDictamen = Em.Object.extend({  
+    id: {
+        id_firmante: ''
+    },
+    disidencia: false,
+    diputado: '',
+});
+
+
+App.CaracterDespacho = Em.Object.extend({
+	tipo: 'CaracterDictamen',
+	id: 5,
+	descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+	itemParte: 4,
+	resumen: "con modif. D. de Mayoría y D. de Minoría",
+	tipoDict: "OD",
+	toString: function () {
+		return this.get('descripcion');
+	},
+	
+});
+
+
 App.ParteEstado = Em.Object.extend({
 	id: '',
 	tipo: '',
@@ -205,13 +259,15 @@ App.Reunion = Em.Object.extend({
 	comisiones: '',
 	citacion: '',
 	fecha: '',
-	
+	parte: '',
+	useApi: true,
 	serializable : [
 		'id',
 		'nota', 
 		'citacion', 
 		'comisiones', 
 		'fecha', 
+		'parte',
 	],	
 });
 
