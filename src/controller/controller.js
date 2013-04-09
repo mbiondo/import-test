@@ -13,7 +13,7 @@ App.Savable = Ember.Mixin.create({
 				contentType: 'text/plain',
 				dataType: 'JSON',
 				type: 'PUT',
-				//crossDomain: 'true',
+				crossDomain: 'true',
 				context: this,
 				data : this.getJson(),
 				success: this.saveSucceeded,
@@ -24,10 +24,8 @@ App.Savable = Ember.Mixin.create({
 		{
 			$.ajax({
 				url:  url,
-				//contentType: 'text/plain',
 				dataType: 'JSON',
 				type: 'PUT',
-				//crossDomain: 'true',
 				context: this,
 				data : this.getJson(),
 				success: this.saveSucceeded,
@@ -55,7 +53,7 @@ App.Savable = Ember.Mixin.create({
 
 		return o;
 	},
-
+	
 	setJson : function (json) {
 		var serializable = this.get('serializable') || []
 
@@ -885,7 +883,7 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	url: '/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+	url: '/dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	
@@ -1415,6 +1413,7 @@ App.CitacionCrearController = Em.Object.extend({
 		$('.buttonSave').attr('disabled', 'disabled');
 		$('.buttonSave').val('Guardando...');
 
+		
 		$.ajax({
 			url: App.get('apiController').get('url') + this.get('url'),
 			contentType: 'text/plain',
