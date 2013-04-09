@@ -15,10 +15,8 @@ Handlebars.registerHelper("linkCitacion", function(id, options) {
 });
 
 Handlebars.registerHelper("linkReunion", function(id, options) {
-  console.log(id);
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
-   console.log(id);
   return "#/comisiones/reuniones/reunion/" + id + "/ver";
 });
 

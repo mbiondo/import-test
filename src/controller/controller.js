@@ -1302,7 +1302,7 @@ App.CitacionCrearController = Em.Object.extend({
 		
 		if (data.responseText)
 		{
-			var obj = JSON.parse(data.responseText);
+			var obj = data.responseText;
 			
 			App.set('reunionConsultaController.loaded', false);
 			App.set('reunionConsultaController.content', App.Citacion.create(obj));
