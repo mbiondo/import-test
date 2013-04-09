@@ -950,7 +950,7 @@ App.CrearReunionView = App.ModalView.extend({
  	
 	citacionBinding: 'App.citacionCrearController.content',
 
-	callback: function(opts, event) {
+	callback: function(opts, event){
 		if (opts.primary) {
 			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
 				id: null,
@@ -968,8 +968,8 @@ App.CrearReunionView = App.ModalView.extend({
 	}, 
 	
 	didInsertElement: function() {	
-		this.set('startFecha', moment().format("DD/MM/YYYY"));
-		this.set('startHora', moment().format("hh:ss"));
+		this.set('startFecha', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD').format('DD/MM/YYYY'));
+		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD hh:ss').format('hh:ss'));
 		
 		$('.timepicker').timeEntry({
 			show24Hours: true, // 24 hours format
@@ -977,6 +977,7 @@ App.CrearReunionView = App.ModalView.extend({
 			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
 			spinnerSize: [19, 26, 0], // Image size
 			spinnerIncDecOnly: true, // Only up and down arrows
+			timeSteps: [1, 15, 1],
 			defaultTime: this.get('startHora')
 		});	 
 		
