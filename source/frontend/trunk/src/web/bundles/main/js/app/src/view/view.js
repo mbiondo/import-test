@@ -525,7 +525,17 @@ App.CitacionesView = App.ListFilterView.extend({
 });
 
 App.InicioView = Em.View.extend({
-	templateName: 'inicio',   
+	templateName: 'inicio',
+	didInsertElement: function(){
+		//===== Accordion =====//		
+		$('div.menu_body:eq(0)').show();
+		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
+		
+		$(".acc .whead").click(function() {	
+			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().css({color:"#404040"});
+		});
+	}
 });
 
 
