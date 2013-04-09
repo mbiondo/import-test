@@ -161,7 +161,6 @@ App.LoginView = Ember.View.extend({
 	password: '',
 
 	login: function () {
-		console.log("asdasdasd");
 		var _self = this;
 
 		var url = App.get('apiController.url') + '/usr/autenticate';
@@ -185,8 +184,7 @@ App.LoginView = Ember.View.extend({
 				}
 			},
 			complete: this.saveCompleted,
-		});			
-		
+		});					
 	}
 });
 
@@ -390,37 +388,57 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 	sortAscending: Em.Object.create({ expdip: true, tipo: true, titulo: true, iniciado: true, firmantesLabel: true, girosLabel: true }),
 		
-	ordenarID: function(event) {
-		this.ordenarPorCampo('expdip');
+	ordenarAscID: function(event) {
+		this.ordenarPorCampo('expdip', true);
+	},
+	ordenarDescID: function(event) {
+		this.ordenarPorCampo('expdip', false);
 	},
 
-	ordenarTipo: function(event) {
-		this.ordenarPorCampo('tipo');
+	ordenarAscTipo: function(event) {
+		this.ordenarPorCampo('tipo', true);
+	},
+	ordenarDescTipo: function(event) {
+		this.ordenarPorCampo('tipo', false);
 	},
 
-	ordenarTitulo: function(event) {
-		this.ordenarPorCampo('titulo');
+	ordenarAscTitulo: function(event) {
+		this.ordenarPorCampo('titulo', true);
+	},
+	ordenarDescTitulo: function(event) {
+		this.ordenarPorCampo('titulo', false);
 	},
 
-	ordenarFirmantes: function(event){
-		this.ordenarPorCampo('firmantesLabel');
+	ordenarAscFirmantes: function(event){
+		this.ordenarPorCampo('firmantesLabel', true);
+	},
+	ordenarDescFirmantes: function(event){
+		this.ordenarPorCampo('firmantesLabel', false);
 	},
 
-	ordenarIniciado: function(event){
-		this.ordenarPorCampo('iniciado');
+	ordenarAscIniciado: function(event){
+		this.ordenarPorCampo('iniciado', true);
+	},
+	ordenarDescIniciado: function(event){
+		this.ordenarPorCampo('iniciado', false);
 	},
 
-	ordenarGiros: function(event){
-		this.ordenarPorCampo('girosLabel');
+	ordenarAscGiros: function(event){
+		this.ordenarPorCampo('girosLabel', true);
+	},
+	ordenarDescGiros: function(event){
+		this.ordenarPorCampo('girosLabel', false);
 	},
 	setSorting: function(){
 		console.log('click en el header...');
 	},
-	ordenarPorCampo: function (campo){		
+	ordenarPorCampo: function (campo, order){		
 		App.get('expedientesController').set('sortProperties', [campo]);
 		App.get('expedientesController').set('sortAscending', this.get('sortAscending').get(campo));
-		this.get('sortAscending').set(campo, !this.get('sortAscending').get(campo));
-		console.log(this.get('sortAscending'));
+//		this.get('sortAscending').set(campo, !this.get('sortAscending').get(campo));
+
+		this.get('sortAscending').set(campo, order);
+		console.log(order+' - '+ this.get('sortAscending'));
 	},
 
 	listaExpedientes: function (){
@@ -478,8 +496,7 @@ App.CitacionesView = App.ListFilterView.extend({
 							citacion.set('color', color);
 							citacion.set('url', '');
 						}	
-					});
-					
+					});					
 					callback(App.get('citacionesController').get('content'));
 				}
 				
