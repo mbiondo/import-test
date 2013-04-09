@@ -806,6 +806,118 @@ App.CitacionesController = App.RestController.extend({
 	},	
 });
 
+App.CaracterDespachoController = App.RestController.extend({
+	url: '//',
+	type: App.CaracterDespacho,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	load: function() {
+		this.set('content', []);
+		for (var i = 0; i < 10; i++) {
+			item = App.CaracterDespacho.create();
+			this.addObject(item);
+		};
+		this.set('loaded', true);
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.CaracterDespacho.create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}			
+	},	
+});
+
+App.ParteEstadosController = App.RestController.extend({
+	url: '/par/secciones',
+	type: App.ParteEstado,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.ParteEstado.create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}			
+	},	
+});
+
+App.FirmantesController = App.RestController.extend({
+	url: '/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+	type: App.FirmanteTextoDictamen,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.FirmanteTextoDictamen.create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}			
+	},	
+});
+
 App.CitacionEstadosController = App.RestController.extend({
 	url: '/citEst/estados',
 	type: App.CitacionEstado,
