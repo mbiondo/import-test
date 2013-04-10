@@ -76,9 +76,28 @@ App.menuController = App.MenuController.create({
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
 					]
-				}),				
+				}),	
+
+				App.MenuItem.create({
+					titulo: 'Ordenes del dia',
+					url: '#/comisiones/OD/dictamenes',
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Dictamenes sin OD',
+							url: '#/comisiones/OD/dictamenes',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						}),	
+						App.MenuItem.create({
+							titulo: 'Listado de OD',
+							url: '#/comisiones/OD/listado',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						}),							
+					],
+				}),							
 			]			
 		}),	
+
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Secretaria Parlamentaria',
@@ -86,23 +105,6 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
-				App.MenuItem.create({
-					titulo: 'Ordenes del dia',
-					url: '',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
-					subMenu: [
-						App.MenuItem.create({
-							titulo: 'Dictamenes sin OD',
-							url: '#/secretaria/parlamentaria/OD/Dictamenes',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
-						}),	
-						App.MenuItem.create({
-							titulo: 'Listado de OD',
-							url: '#/secretaria/parlamentaria/OD/listado',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
-						}),							
-					],
-				}),
 				App.MenuItem.create({
 					titulo: 'Labor',
 					url: '',
@@ -149,22 +151,22 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_SITE_ADMIN'],
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
 					url: '#/admin/roles',
-					roles: ['ROLE_SITE_ADMIN'],
+					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Acceso de usuarios',
 							url: '#/admin/roles',
-							roles: ['ROLE_SITE_ADMIN'],
+							roles: ['ROLE_USER'],
 						}),		
 						App.MenuItem.create({
 							titulo: 'Comisiones por usuarios',
 							url: '#/admin/comisiones',
-							roles: ['ROLE_SITE_ADMIN'],
+							roles: ['ROLE_USER'],
 						}),										
 					],
 				}),
