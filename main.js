@@ -1,6 +1,6 @@
 App.apiController = App.ApiController.create({
 	url: 'http://10.185.204.13:8080/sparl/rest',
-	//url: '',
+	//url: '',	
 	key: '',
 	secret: '',
 });
@@ -120,7 +120,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 4,
-			titulo: 'Labor Parlamentario',
+			titulo: 'Labor Parlamentaria',
 			url: '#/secretaria/parlamentaria',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
