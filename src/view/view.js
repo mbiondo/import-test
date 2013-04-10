@@ -763,15 +763,18 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	clickComision: function (comision) {
+		console.log('click comision');
 		if (App.get('citacionCrearController.isEdit') == true)
 			return;
 			
 		this.set('adding', !this.get('adding'));
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
+        	console.log('Agregando Comision');
 			App.get('citacionCrearController.content.comisiones').pushObject(comision);
 		}
 		else {
+        	console.log('Removiendo Comision');
 			App.get('citacionCrearController.content.comisiones').removeObject(comision);
 		}
 	},
@@ -1238,7 +1241,7 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 	lista: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = App.get('reunionesConParteController').get('content').filter(function(reunion) {
-			return regex.test((reunion.fecha).toLowerCase());
+			return regex.test((reunion.fecha).toLowerCase()) || regex.test((reunion.nota).toLowerCase());
 		});
 		
 		var max = this.get('totalRecords');
