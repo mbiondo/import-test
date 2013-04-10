@@ -898,8 +898,7 @@ App.FirmantesController = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.FirmanteTextoDictamen.create(data);
-		item.setProperties(data);
+		item = App.FirmanteTextoDictamen.create({diputado: data, id: {id_firmante: data.id}});
 		
 		if(save){
 			$.ajax({
