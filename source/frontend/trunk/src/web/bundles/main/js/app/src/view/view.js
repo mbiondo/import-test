@@ -763,18 +763,19 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	clickComision: function (comision) {
+		//App.get('citacionCrearController').cargarExpedientes();
+		
 		console.log('click comision');
-		if (App.get('citacionCrearController.isEdit') == true)
-			return;
-			
+		if (App.get('citacionCrearController.isEdit') == true) return;
+
 		this.set('adding', !this.get('adding'));
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
-        	console.log('Agregando Comision');
+        	//console.log('Agregando Comision');
 			App.get('citacionCrearController.content.comisiones').pushObject(comision);
 		}
 		else {
-        	console.log('Removiendo Comision');
+        	//console.log('Removiendo Comision');
 			App.get('citacionCrearController.content.comisiones').removeObject(comision);
 		}
 	},
@@ -908,15 +909,24 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('citacionCrearController.content.invitados', 'adding'),
 	
 	borrarExpedientes: function () {
+
 		App.set('citacionCrearController.content.temas', []);
 		App.set('citacionCrearController.expedientes', []);
+
 		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
 		if (fo)
 		{
+			App.get('citacionCrearController').addObserver('loaded', this, this.cargarExpedientesSuccess);
 			App.get('citacionCrearController').cargarExpedientes();
 		}
+
 		fo = null;
 		
+	},
+
+	cargarExpedientesSuccess: function () {
+		console.log('amsdasdasd');
+		this.set('adding', !this.get('adding'));
 	},
 	
 	puedeEditar: function () {
