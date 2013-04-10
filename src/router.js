@@ -259,6 +259,141 @@ App.Router =  Em.Router.extend({
 					}),				
 				}),		
 			}),
+
+			ordenesDelDia: Em.Route.extend({
+				route: "/OD",
+
+				listadoDictamenes: Ember.Route.extend({
+					route: "/dictamenes",
+					
+					deserialize: function(router, params) {
+						 if (!App.get('dictamenesController'))
+						 	App.dictamenesController = App.DictamenesController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('dictamenesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('dictamenesController').addObserver('loaded', this, fn);
+						 App.get('dictamenesController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'OrdenesDelDiaDictamenesList');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'OD', url: '#/comisiones/OD/dictamenes'},
+							{titulo: 'Dictamenes sin OD'},
+						]);					
+						App.get('menuController').seleccionar(2);					
+					},						
+				}),	
+
+				listadoOD: Ember.Route.extend({
+					route: "/listado",
+					
+					deserialize: function(router, params) {
+						 if (!App.get('ordenesDelDiaController'))
+						 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('ordenesDelDiaController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
+						 App.get('ordenesDelDiaController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'OrdenesDelDiaList');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'OD', url: '#/comisiones/OD/listado'},
+							{titulo: 'Listado de OD'},
+						]);			
+
+						App.get('menuController').seleccionar(2);					
+					},						
+				}),	
+
+				ordenDelDia: Em.Route.extend({ 
+					route: '/orden-del-dia',
+
+					crear: Ember.Route.extend({
+						route: '/crear',
+
+						deserialize: function(router, params) {
+							 if (!App.get('dictamenController'))
+							 	App.dictamenController = App.DictamenController.create();
+
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								 App.get('dictamenController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							 };
+
+							 App.get('dictamenController').addObserver('loaded', this, fn);
+							 App.get('dictamenController').load();
+							
+							 return deferred.promise();
+						},			
+
+						connectOutlets: function(router, context) {							
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'crearOD');
+							
+							App.get('menuController').seleccionar(2);
+							App.get('breadCumbController').set('content', [
+								{titulo: 'OD', url: '#/comisiones/OD/listado'},
+								{titulo: 'Nueva Orden Del Dia'},
+							]);					
+							
+						},				
+					}),		
+					
+					ver: Ember.Route.extend({
+						route: '/:orden/ver',
+
+						deserialize: function(router, params) {
+							 if (!App.get('ordenDelDiaController'))
+							 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
+
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								 App.get('ordenDelDiaController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							 };
+
+							 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
+							 App.get('ordenDelDiaController').load();
+							
+							 return deferred.promise();
+						},	
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'ordenDelDiaDetalle');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'OD', url: '#/comisiones/OD/listado'},
+								{titulo: 'Ordel Del Dia Nro 58'},
+							]);				
+
+							App.get('menuController').seleccionar(2);					
+						},
+					}),						
+				}),
+			}),
 			
 			reuniones: Em.Route.extend({
 				route: "/reuniones",

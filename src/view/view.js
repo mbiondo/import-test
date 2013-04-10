@@ -224,6 +224,75 @@ App.ListFilterView = Ember.View.extend({
 	totalRecords: 10,
 });
 
+//OD
+
+App.DictamenMiniView = Ember.View.extend({
+	templateName: 'dictamen-mini',
+});
+
+App.CrearODView = Ember.View.extend({
+	templateName: 'crear-orden-del-dia',
+});
+
+App.OrdenDelDiaDetalleView = Ember.View.extend({
+	templateName: 'orden-del-dia-detalle',
+});
+
+App.OrdenesDelDiaListView = Ember.View.extend({
+	templateName: 'orden-del-dia-listado',
+});
+
+App.OrdenesDelDiaDictamenesListView = Ember.View.extend({
+	templateName: 'orden-del-dia-dictamenes',
+});
+
+
+App.DictamenView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'orden-del-dia-dictamen-item',
+
+	crearOD: function () {
+
+		 if (!App.get('dictamenController'))
+		 	App.dictamenController = App.DictamenController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
+		 };
+
+		 App.get('dictamenController').addObserver('loaded', this, fn);
+		 App.get('dictamenController').load();
+	},
+});
+
+App.DictamenesListView = App.ListFilterView.extend({ 
+	itemViewClass: App.DictamenView, 	
+	columnas: ['Fecha', 'Sumario', 'Crear OD'],
+});
+
+App.OrdenDelDiaView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'orden-del-dia-od-item',
+
+	verOD: function () {
+
+		 if (!App.get('ordenDelDiaController'))
+		 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ver', this.get('content'));
+		 };
+
+		 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
+		 App.get('ordenDelDiaController').load();
+	},
+});
+
+App.OrdenDelDiaListView = App.ListFilterView.extend({ 
+	itemViewClass: App.OrdenDelDiaView, 	
+	columnas: ['Numero', 'Fecha', 'Sumario', 'Ver'],
+});
+
 //ADMIN
 
 App.RolesAdminView = Ember.View.extend({
@@ -1185,6 +1254,8 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 	mostrarMasEnabled: false,
 });
 
+
+
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
 	
@@ -1228,7 +1299,6 @@ App.CrearParteView = Ember.View.extend({
 					});	
 				}
 				parte.addObject(parteItem);
-				console.log(parteItem);
 			}
 		});
 
@@ -1236,7 +1306,7 @@ App.CrearParteView = Ember.View.extend({
 		
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
-			if (App.get('reunionConsultaController.content.saveSuccess') == true)
+			if (App.get('reunionConsultaController.content.saveSuccess') != true)
 			{
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 				$.jGrowl('Parte creado con Exito!', { life: 5000 });				

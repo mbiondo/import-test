@@ -1025,6 +1025,70 @@ App.ExpedienteController = Ember.Object.extend({
 	content: null,
 });
 
+App.OrdenDelDiaController = Ember.Object.extend({
+	content: null,
+	url: "/od/orden/del/dia",
+	loaded : false,
+	useApi: false,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url:  App.get('apiController').get('url') + this.get('url'),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	
+	loadSucceeded: function(data) {
+		item = App.OrdeDelDia.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+});
+
+App.DictamenController = Ember.Object.extend({
+	content: null,
+	url: "/dic/dictamen",
+	loaded : false,
+	useApi: false,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url:  App.get('apiController').get('url') + this.get('url'),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	
+	loadSucceeded: function(data) {
+		item = App.Dictamen.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+});
+
 App.ExpedienteConsultaController = Ember.Object.extend({
 	content: null,
 	url: "/exp/proyecto/%@",
@@ -1055,6 +1119,49 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		this.set('loaded', true);
 		console.log(item);
 	},	
+});
+
+
+App.DictamenesController = App.RestController.extend({
+	url: '/dic/dictamenes',
+	type: App.Dictamen,
+	useApi: false,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.Dictamen.create(data);
+		item.setProperties(data);
+		this.addObject(item);	
+	},		
+});
+
+App.OrdenesDelDiaController = App.RestController.extend({
+	url: '/od/listar',
+	type: App.OrdeDelDia,
+	useApi: false,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.OrdeDelDia.create(data);
+		item.setProperties(data);
+		this.addObject(item);	
+	},		
 });
 
 

@@ -167,6 +167,25 @@ App.CitacionTema = Em.Object.extend({
 	},
 });
 
+App.OrdeDelDia = Em.Object.extend({
+	id: '',
+	dictamen: '',
+	sumario: '',
+	fecha: '',
+	useApi: false,
+
+	serializable : [
+		'id',
+		'dictamen', 
+		'sumario', 
+		'fecha', 
+	],	
+	
+    label: function () {
+    	return this.get('sumario');
+    }.property('sumario'),
+});
+
 App.Dictamen = Em.Object.extend({
 	proyectosVistos: '',
 	proyectos: '',
@@ -180,6 +199,12 @@ App.Dictamen = Em.Object.extend({
     caracterDespacho: '',
     observaciones: '',
     textos: '',
+
+    columneable: ['Fecha', 'Sumario'],
+
+    label: function () {
+    	return this.get('sumario');
+    }.property('sumario'),
 });
 
 
