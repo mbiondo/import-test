@@ -32,6 +32,26 @@ App.menuController = App.MenuController.create({
 							titulo: 'Buscador de expedientes',
 							url: '#/expedientes',
 						}),
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Vigentes',
+							url: '#/expedientes',
+						}),
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Con dictamen',
+							url: '#/expedientes',
+						}),								
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Con orden del día',
+							url: '#/expedientes',
+						}),									
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Archivados',
+							url: '#/expedientes',
+						}),													
 					],
 				}),
 			]
