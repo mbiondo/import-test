@@ -1040,7 +1040,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url:  App.get('apiController').get('url') + this.get('url'),
+			url: this.get('url'),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -1072,7 +1072,7 @@ App.DictamenController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url:  App.get('apiController').get('url') + this.get('url'),
+			url: this.get('url'),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
