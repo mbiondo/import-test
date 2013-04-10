@@ -120,7 +120,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 4,
-			titulo: 'Secretaria Parlamentaria',
+			titulo: 'Labor Parlamentario',
 			url: '#/secretaria/parlamentaria',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
