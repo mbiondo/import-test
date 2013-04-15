@@ -257,6 +257,7 @@ App.SimpleListItemView = Ember.View.extend({
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterText: '',
+	filterGiros: '',
 	step: 10,
 	records: [10, 25, 50, 100],
 	itemViewClass: App.SimpleListItemView,
@@ -280,7 +281,7 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'filterGiros', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
 });
@@ -703,9 +704,15 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 	listaExpedientes: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		var filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
+		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
+
+		var regexGiros = new RegExp(this.get('filterGiros').toString().toLowerCase());
+		filtered = filtered.filter(function(expediente){
+			return regexGiros.test((expediente.get('girosLabel')).toLowerCase());
+		});
+
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
@@ -714,7 +721,8 @@ App.ExpedientesView = App.ListFilterView.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
+	}.property('filterText', 'filterGiros', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
+
 	
 	mostrarMasEnabled: true,
 });
@@ -1030,13 +1038,13 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	listaComisiones: function () {
-		var regex = new RegExp(this.get('filterTextComisiones').toString().toLowerCase());
+		var regex = new RegExp(this.get('filterComisiones').toString().toLowerCase());
 		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
 			return regex.test((comision.nombre).toLowerCase());
 		});
 
 		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
-	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
+	}.property('citacionCrearController.content.comisiones', 'filterComisiones', 'comisionesController.content', 'adding'),
 	
 	listaExpedientes: function () {
 		var filtered;
