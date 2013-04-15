@@ -138,7 +138,7 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							titulo: 'Crear Plan de labor',
 							url: '#/secretaria/parlamentaria/labor/crear',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIR'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
 					],
 				}),				
@@ -302,7 +302,7 @@ if (user) {
 	if (usuario.get('roles')) {
 		usuario.get('roles').forEach(function (rol) {
 			roles.addObject(App.Rol.create(rol));
-			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA")
+			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA_EDIT")
 				App.puedeEditar = true;
 		});
 	}
