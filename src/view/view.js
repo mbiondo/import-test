@@ -258,6 +258,7 @@ App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterText: '',
 	filterGiros: '',
+	filterTextComisiones: '',
 	step: 10,
 	records: [10, 25, 50, 100],
 	itemViewClass: App.SimpleListItemView,
@@ -281,7 +282,7 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterGiros', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'filterGiros', 'filterTextComisiones', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
 });
@@ -1038,13 +1039,13 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	listaComisiones: function () {
-		var regex = new RegExp(this.get('filterComisiones').toString().toLowerCase());
+		var regex = new RegExp(this.get('filterTextComisiones').toString().toLowerCase());
 		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
 			return regex.test((comision.nombre).toLowerCase());
 		});
 
 		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
-	}.property('citacionCrearController.content.comisiones', 'filterComisiones', 'comisionesController.content', 'adding'),
+	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
 	
 	listaExpedientes: function () {
 		var filtered;
