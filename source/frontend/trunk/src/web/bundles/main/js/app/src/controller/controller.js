@@ -1977,7 +1977,8 @@ App.TurnosController = App.RestController.extend({
 
 	loadSucceeded: function(data){
 		this._super(data);
-
+		
+		this.set('content', []);
 		var turnoHablando = this.get('turnoHablando');
 
 		if(turnoHablando){
