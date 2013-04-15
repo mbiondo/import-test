@@ -411,30 +411,10 @@ App.ODMiniView = Ember.View.extend({
 		return App.Dictamen.create(this.get('content.dictamen'));
 	}.property('content'),
 
-	didInsertElement: function () {
-		$('div.menu_body:eq(0)').show();
-		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
-		
-		$(".acc .whead").click(function() {	
-			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
-			$(this).siblings().css({color:"#404040"});
-		});
-	}
-
 });
 
 App.ExpedienteMiniView = Ember.View.extend({
-	templateName: 'expediente-mini',
-
-	didInsertElement: function () {
-		$('div.menu_body:eq(0)').show();
-		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
-		
-		$(".acc .whead").click(function() {	
-			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
-			$(this).siblings().css({color:"#404040"});
-		});		
-	}	
+	templateName: 'expediente-mini',	
 });
 
 //OD
@@ -442,15 +422,6 @@ App.ExpedienteMiniView = Ember.View.extend({
 App.DictamenMiniView = Ember.View.extend({
 	templateName: 'dictamen-mini',
 	
-	didInsertElement: function () {
-		$('div.menu_body:eq(0)').show();
-		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
-		
-		$(".acc .whead").click(function() {	
-			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
-			$(this).siblings().css({color:"#404040"});
-		});		
-	}	
 });
 
 App.CrearODView = Ember.View.extend({
