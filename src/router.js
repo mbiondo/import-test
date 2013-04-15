@@ -900,7 +900,8 @@ App.Router =  Em.Router.extend({
 						else
 							appController.connectOutlet('main', 'OradoresDiputadoIndex');
 
-
+						appController.connectOutlet('menu', 'SubMenu');
+						
 						App.get('temaController').set('content', null);
 						appController.cargarSesiones(true);
 						App.get('breadCumbController').set('content', [
