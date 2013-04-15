@@ -33,22 +33,22 @@ App.menuController = App.MenuController.create({
 							url: '#/expedientes',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Vigentes',
 							url: '#/expedientes',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Con dictamen',
 							url: '#/expedientes',
 						}),								
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Con orden del día',
 							url: '#/expedientes',
 						}),									
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Archivados',
 							url: '#/expedientes',
 						}),													
@@ -61,7 +61,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Citaciones',
@@ -83,15 +83,15 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Reuniones',
 					url: '',
-					roles: ['ROLE_USER'],
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 					subMenu: [
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Reuniones sin parte',
 							url: '#/comisiones/reuniones',
 						}),		
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Reuniones con parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
@@ -121,8 +121,8 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/secretaria/parlamentaria',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			url: '#/plan/de/labor/listado',
+			roles: ['ROLE_USER'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
@@ -132,13 +132,13 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Planes de labor',
-							url: '#/secretaria/parlamentaria/labor/listado',
+							url: '#/plan/de/labor/listado',
 							roles: ['ROLE_USER'],
 						}),	
 						App.MenuItem.create({
 							titulo: 'Crear Plan de labor',
 							url: '#/secretaria/parlamentaria/labor/crear',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIR'],
 						}),							
 					],
 				}),				
@@ -149,17 +149,17 @@ App.menuController = App.MenuController.create({
 			titulo: 'Recinto',
 			url: '#/recinto/oradores',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Recinto',
 					url: '#/recinto/oradores',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Oradores',
 							url: '#/recinto/oradores',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER'],
 						}),					
 					],
 				}),
@@ -291,6 +291,7 @@ Storage.prototype.getObject = function(key) {
 
 App.deferReadiness();
 
+App.puedeEditar = false;
 var user = localStorage.getObject('user');
 
 if (user) {
@@ -301,17 +302,20 @@ if (user) {
 	if (usuario.get('roles')) {
 		usuario.get('roles').forEach(function (rol) {
 			roles.addObject(App.Rol.create(rol));
+			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA")
+				App.puedeEditar = true;
 		});
 	}
 
 	usuario.set('roles', roles);
 
 	App.userController.set('user', usuario);
-	console.log(App.userController.get('user'));
 }
 
-//var exp = localStorage.getObject('expedientes');
-var exp = null;
+var exp = localStorage.getObject('expedientes');
+
+
+//var exp = null;
 if (!exp) {
 	$.ajax({
 		url:  App.get('apiController.url') + "/exp/proyectos/2013/detalle",

@@ -582,6 +582,101 @@ App.RestController = Em.ArrayController.extend({
 	}
 });
 
+App.PlanDeLaborController = Ember.Object.extend({
+	content: null,
+	url: "/plan-de-labor/1",
+	loaded : false,
+	useApi: false,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url: this.get('url'),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	
+	loadSucceeded: function(data) {
+		item = App.PlanDeLabor.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+
+	plActual: function () {
+		var tema = App.get('temaController.content');
+		var obj = null;
+		if (tema && App.get('planDeLaborController.content')) {
+			switch (tema.get('plTipo')) {
+				case "o": 
+					obj = App.OrdeDelDia.create(App.get('planDeLaborController.content.ods').findProperty('id', tema.get('plId')));
+					break;
+				case "d":
+					obj = App.Dictamen.create(App.get('planDeLaborController.content.dictamenes').findProperty('id', tema.get('plId')));
+					break;
+				case "e":
+					obj = App.Expediente.create(App.get('planDeLaborController.content.proyectos').findProperty('id', tema.get('plId')));
+					break;
+			}
+		}
+		return obj;
+	}.property('App.temaController.content', 'App.planDeLaborController.content'),
+
+	plEsOD: function () {
+		var tema = App.get('temaController.content');
+		return tema.get('plTipo') == 'o';
+ 	}.property('App.temaController.content', 'App.planDeLaborController.content'),
+
+	plEsDictamen: function () {
+		var tema = App.get('temaController.content');
+		return tema.get('plTipo') == 'd';
+ 	}.property('App.temaController.content', 'App.planDeLaborController.content'),
+
+
+	plEsProyecto: function () {
+		var tema = App.get('temaController.content');
+		return tema.get('plTipo') == 'e';
+ 	}.property('App.temaController.content', 'App.planDeLaborController.content'),	
+});
+
+App.PlanDeLaborListadoController = App.RestController.extend({
+	url: '/plan-de-labor/listado',
+	useApi: false,
+	loaded: false,
+	type: App.PlanDeLabor,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.PlanDeLabor.create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},		
+});
+
+
 App.UsuariosController = App.RestController.extend({
 	url: '/user/users',
 	type: App.Usuario,
@@ -1805,6 +1900,35 @@ App.TurnosController = App.RestController.extend({
 	useAPi: false,
 
 	turnoHablandoBinding : null,
+
+	misTurnos: function () {
+		var misTurnos = this.get('arrangedContent').filter(function (turno) {
+			var tengoOrador =  false;
+
+			turno.get('oradores').forEach(function(orador){
+				if (orador.user.apellido.toLowerCase() == App.get('userController.user.apellido').toLowerCase() && orador.user.nombre.toLowerCase() == App.get('userController.user.nombre').toLowerCase()) {
+					tengoOrador = true;
+				}
+					
+			});
+
+			if (tengoOrador)
+				return true;
+			else
+				return false;
+		});
+		return misTurnos;
+	}.property('arrangedContent', 'length'),
+
+	proximoTurno: function () {
+
+		var turnosDesBloqueados = this.get('arrangedContent').filter(function (turno) {
+			return !turno.get('bloqueado');
+		});
+
+		return turnosDesBloqueados.objectAt(0);
+
+	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora').cacheable(),
 
 	init : function () {
 		this._super();

@@ -19,6 +19,16 @@ function getRolesByPath(path) {
 	return rolesRequiered;
 }
 
+function hasRole(role) {
+	var userRoles = App.get('userController.roles');
+	var _self = this;
+
+	if (userRoles.contains(role)){
+		return true;
+	}
+	return false;	 
+}
+
 App.Router =  Em.Router.extend({
 	enableLogging: true,
 	location: 'hash',
@@ -75,6 +85,7 @@ App.Router =  Em.Router.extend({
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'page404');
+				appController.connectOutlet('menu', 'subMenu');
 				
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Pagina no encontrada', url: '#'}
@@ -89,6 +100,7 @@ App.Router =  Em.Router.extend({
 			
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'page403');
+				appController.connectOutlet('menu', 'subMenu');
 				
 				App.get('breadCumbController').set('content', [
 					{titulo: 'No Dispone de los Permisos Necesarios para Acceder', url: '#'}
@@ -101,12 +113,94 @@ App.Router =  Em.Router.extend({
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'inicio');
+				appController.connectOutlet('menu', 'subMenu');
 				
 				App.get('menuController').seleccionar(0);
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Inicio', url: '#'}
 				]);				
 			},		
+		}),
+
+		planDeLabor: Em.Route.extend({
+			route: '/plan/de/labor',
+
+			index: Ember.Route.extend({
+				route: '/listado',
+
+				deserialize: function(router, params) {
+					if (!App.get('planDeLaborListadoController'))
+						App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+					
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+						if (App.get('planDeLaborListadoController.loaded')) {
+							App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);	
+						}
+					};
+
+					App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+					App.get('planDeLaborListadoController').load();
+					
+					return deferred.promise();
+				},	
+
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('main', 'PlanDeLaborListado');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
+						{titulo: 'Listado', url: '#/plan/de/labor/listado'}
+					]);				
+
+					App.get('menuController').seleccionar(4);							
+				},					
+			}),
+
+			planDeLabor: Em.Route.extend({ 
+				route: '/plan/de/labor',
+
+				ver: Ember.Route.extend({
+					route: '/:plan/ver',
+
+					deserialize: function(router, params) {
+						 if (!App.get('planDeLaborController'))
+						 	App.planDeLaborController = App.PlanDeLaborController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('planDeLaborController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('planDeLaborController').addObserver('loaded', this, fn);
+						 App.get('planDeLaborController').load();
+						
+						 return deferred.promise();
+					},	
+
+					serialize: function(router, context) {
+						return {plan: 1};			
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'PlanDeLabor');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
+							{titulo: App.get('planDeLaborController.content.sumario'), url: '#/plan/de/labor/plan/de/labor/1/ver'}
+						]);				
+
+						App.get('menuController').seleccionar(4);						
+					},
+				}),						
+			}),
 		}),
 
 		admin: Em.Route.extend({
@@ -149,6 +243,7 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'rolesAdmin');
+					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
@@ -185,6 +280,7 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'comisionesAdmin');
+					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
@@ -220,6 +316,7 @@ App.Router =  Em.Router.extend({
 			
 				var appController = router.get('applicationController');	
 				appController.connectOutlet('main', 'expedientes');
+				appController.connectOutlet('menu', 'subMenu');
 
 				App.get('menuController').seleccionar(1);
 				
@@ -247,6 +344,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'crearParte');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
@@ -285,6 +383,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'OrdenesDelDiaDictamenesList');
+						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'OD', url: '#/comisiones/OD/dictamenes'},
@@ -316,6 +415,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'OrdenesDelDiaList');
+						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'OD', url: '#/comisiones/OD/listado'},
@@ -351,6 +451,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {							
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'crearOD');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
@@ -375,7 +476,7 @@ App.Router =  Em.Router.extend({
 							 };
 
 							 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
-							 App.get('ordenDelDiaController').load();
+							 App.get('OrdenDelDiaController').load();
 							
 							 return deferred.promise();
 						},	
@@ -383,6 +484,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'ordenDelDiaDetalle');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'OD', url: '#/comisiones/OD/listado'},
@@ -417,6 +519,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'reunionesSinParte');
+						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
@@ -446,6 +549,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'reunionesConParte');
+						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
@@ -511,6 +615,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'reunionConsulta');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							
 							App.get('breadCumbController').set('content', [
@@ -544,6 +649,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'citaciones');
+						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'}
@@ -582,6 +688,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {							
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'citacionCrear');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.set('citacionCrearController.isEdit', false);
 							
@@ -620,6 +727,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'citacionConsulta');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'},
@@ -712,6 +820,7 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'citacionCrear');
+							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'},
@@ -759,6 +868,7 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'expedienteConsulta');
+					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Expedientes', url: '#/expedientes'},
@@ -784,7 +894,12 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'OradoresIndex');
+
+						if (!hasRole('ROLE_DIPUTADO'))
+							appController.connectOutlet('main', 'OradoresIndex');
+						else
+							appController.connectOutlet('main', 'OradoresDiputadoIndex');
+
 
 						App.get('temaController').set('content', null);
 						appController.cargarSesiones(true);
@@ -803,20 +918,25 @@ App.Router =  Em.Router.extend({
 						route: '/:sesion/ver',
 
 						deserialize: function(router, params) {
-							if(App.get('sesionesController.loaded')){
-								return App.get('sesionesController.content').findProperty('id', parseInt(params.sesion));
-							}else{
-								var deferred = $.Deferred(),
-								fn = function() {
+
+							if (!App.get('planDeLaborController'))
+								App.planDeLaborController = App.PlanDeLaborController.create();
+
+							var deferred = $.Deferred(),
+							fn = function() {
+								if (App.get('sesionesController.loaded') && App.get('planDeLaborController.loaded')) {
 									var sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									deferred.resolve(sesion);
 									App.get('sesionesController').removeObserver('loaded', this, fn);
-								};
+								}
+							};
 
-								App.get('sesionesController').addObserver('loaded', this, fn);
-								App.get('sesionesController').load();
-								return deferred.promise();
-							}
+							App.get('sesionesController').addObserver('loaded', this, fn);
+							App.get('sesionesController').load();
+
+							App.get('planDeLaborController').addObserver('loaded', this, fn);
+							App.get('planDeLaborController').load();
+							return deferred.promise();
 						},
 
 						serialize: function(router, context) {
@@ -825,8 +945,25 @@ App.Router =  Em.Router.extend({
 						},
 
 						connectOutlets: function(router, context) {
+
+
+							if (!App.get('planDeLaborController')) {
+								App.planDeLaborController = App.PlanDeLaborController.create();
+								App.get('planDeLaborController').load();
+							}
+														
 							var appController = router.get('applicationController');
-							appController.connectOutlet('main', 'sesionConsulta');
+							
+							if (!hasRole('ROLE_DIPUTADO')) {
+								appController.connectOutlet('menu', 'subMenu');
+								appController.connectOutlet('main', 'sesionConsulta');
+							}
+							else {
+								appController.connectOutlet('menu', 'subMenuOradores');
+								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
+							}
+							
+							
 
 							App.get('sesionController').set('content', context);
 							App.get('temasController').set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
@@ -847,27 +984,22 @@ App.Router =  Em.Router.extend({
 						route: "/:sesion/tema/:tema",
 
 						deserialize: function(router, params) {
-							var usePromise = false;
+							if (!App.get('planDeLaborController'))
+								App.planDeLaborController = App.PlanDeLaborController.create();
 
-							if((App.get('sesionController.content.id') == params.sesion || App.get('sesionesController.loaded')) && App.get('temasController.loaded')){
-								return App.get('temasController.content').findProperty('id', parseInt(params.tema))
-							}else{
-								usePromise = true;
-							}
+							deferred = $.Deferred();
 
-							if(usePromise){
-								deferred = $.Deferred();
+							var tema, sesion,
+							fnTema = function() {
+								tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
+								if(tema){
+									deferred.resolve(tema);
+								}
+								App.get('temasController').removeObserver('loaded', this, fnTema);
+							},
 
-								var tema, sesion,
-								fnTema = function() {
-									tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
-									if(tema){
-										deferred.resolve(tema);
-									}
-									App.get('temasController').removeObserver('loaded', this, fnTema);
-								},
-
-								fnSesion = function() {
+							fnSesion = function() {
+								if (App.get('planDeLaborController.loaded') && App.get('sesionesController.loaded')) {
 									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionController').set('content', sesion);
 									
@@ -877,13 +1009,16 @@ App.Router =  Em.Router.extend({
 
 									App.get('sesionesController').removeObserver('loaded', this, fnSesion);
 								}
-
-								App.get('sesionesController').addObserver('loaded', this, fnSesion);
-								
-								App.get('sesionesController').load();
-
-								return deferred.promise();
 							}
+
+							App.get('planDeLaborController').addObserver('loaded', this, fnSesion);
+							App.get('planDeLaborController').load();
+
+							App.get('sesionesController').addObserver('loaded', this, fnSesion);
+							
+							App.get('sesionesController').load();
+
+							return deferred.promise();
 						},
 
 						serialize: function(router, context) {
@@ -896,6 +1031,12 @@ App.Router =  Em.Router.extend({
 						},
 
 						connectOutlets: function(router, context) {
+
+							if (!App.get('planDeLaborController')) {
+								App.planDeLaborController = App.PlanDeLaborController.create();
+								App.get('planDeLaborController').load();
+							}
+
 							App.get('sesionController').set('content', App.get('sesionesController.content').findProperty('id', parseInt(context.get('sesionId'))));
 
 							if(App.get('temaController.content.sesionId') != context.get('sesionId')){
@@ -906,8 +1047,17 @@ App.Router =  Em.Router.extend({
 							App.get('temaController').set('content', context);
 
 							var appController = router.get('applicationController');
-							appController.connectOutlet('main', 'sesionConsulta');
-							appController.connectOutlet('sesion', 'sesionTurnos');
+							
+							if (!hasRole('ROLE_DIPUTADO')) {
+								appController.connectOutlet('menu', 'subMenu');
+								appController.connectOutlet('main', 'sesionConsulta');
+								appController.connectOutlet('sesion', 'sesionTurnos');
+							}
+							else {
+								appController.connectOutlet('menu', 'subMenuOradores');
+								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
+							}							
+
 
 							//appController.cargarSesiones(true);
 							
