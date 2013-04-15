@@ -127,6 +127,67 @@ App.DatePicker = JQ.DatePicker.extend({
   },
 });
 
+App.SubMenuView = Ember.View.extend({
+	templateName: "sub-menu",
+
+	
+});
+
+
+
+App.SubMenuOradoresView = Ember.View.extend({
+	templateName: "sub-menu-oradores",
+
+	crearTema: function () {
+		var orden = App.get('sesionController.content.temas.length');
+		if (orden == null)
+			orden = 0;
+			
+		var tema = App.Tema.create({
+					sesionId:  App.get('sesionController').get('content').get('id'), 
+					orden: orden,
+				});
+				App.get('crearTemaController').set('tema', tema);
+		App.CrearTemaView.popup();
+	},
+		
+	crearTurno: function () {
+		var lista;
+
+		if(App.get('listaController.content'))
+			lista = App.get('listaController.content');
+		else
+			lista = null;
+			
+		var temaController = App.get('temaController');
+		
+		var turno = App.Turno.create({
+				temaId:  App.get('temaController').get('content').get('id'),
+				listaId: lista == null ? null : lista.get('id'),
+				tiempo: 5,
+				orden: 0,
+				oradores: []
+			});
+			
+			
+		App.get('crearTurnoController').set('turno', turno);
+		App.CrearTurnoView.popup();
+	},
+
+	borrarTema: function () {
+		var temaController = App.get('temaController');
+		temaController.set('borrarTema', !temaController.get('borrarTema'));
+	},
+
+	startTimer : function () {
+		App.get('sesionesController').startTimer(App.get('sesionController.content'));
+	},
+
+	stopTimer : function () {
+		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
+	},		
+});
+
 App.ContentView = Ember.View.extend({
 	templateName: 'content',
 
@@ -196,7 +257,6 @@ App.SimpleListItemView = Ember.View.extend({
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterText: '',
-	filterGiros:'',
 	step: 10,
 	records: [10, 25, 50, 100],
 	itemViewClass: App.SimpleListItemView,
@@ -220,9 +280,149 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterGiros', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
+});
+
+
+
+//DIPUTADOS ORADORES VIEW
+
+App.OradoresDiputadoIndexView = Ember.View.extend({
+	templateName: 'oradores-diputados-index',
+});
+
+App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
+	templateName: 'oradores-diputados-sesion-consulta',
+
+	didInsertElement: function(){
+		//===== Accordion =====//		
+		$('div.menu_body:eq(0)').show();
+		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
+		
+		$(".acc .whead").click(function() {	
+			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().css({color:"#404040"});
+		});
+	},
+});
+
+
+
+//PLAN DE LABOR
+
+
+
+App.PlanDeLaborItemView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'plan-de-labor-item',
+
+	verPlanDeLabor: function () {
+		App.get('router').transitionTo('planDeLabor.planDeLabor.ver');
+	},
+});
+
+App.PlanDeLaborListView = App.ListFilterView.extend({ 
+	itemViewClass: App.PlanDeLaborItemView, 	
+	columnas: ['Fecha', 'titulo', 'Ver'],
+});
+
+
+App.PlanDeLaborView = Ember.View.extend({
+	templateName: 'plan-de-labor-detalle',
+	contentBinding: "App.planDeLaborController.content",
+
+	crearSesion: function () {
+
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366019587, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
+
+		var temas = [];
+		var orden = 0;
+
+		this.get('content.ods').forEach(function (od){
+			temas.addObject(
+				App.Tema.create({
+					titulo: "OD Nro " + od.numero,
+					orden: orden,
+					plId: od.id,
+					plTipo: 'o',
+				})
+			);
+			orden = orden + 1;
+		});
+
+		this.get('content.dictamenes').forEach(function (dictamen){
+			var tema = App.Tema.create();
+			tema.setProperties({
+					titulo: "Dictamen: " + dictamen.sumario,
+					orden: orden,
+					plId: dictamen.id,
+					plTipo: 'd',
+			});
+			temas.addObject(tema);
+			orden = orden + 1;
+		});
+
+		this.get('content.proyectos').forEach(function (expediente){
+			temas.addObject(
+				App.Tema.create({
+					titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+					orden: orden,
+					plId: expediente.id,
+					plTipo: 'e',
+				})
+			);
+			orden = orden + 1;
+		});				
+
+		sesion.set('temas', temas);
+
+		var url = "/crearSesion/planDeLabor";
+
+		$.ajax({
+			url: url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'POST',
+			context : {model : sesion },
+			data : sesion.getJson(),
+			success: this.createSucceeded,
+		});
+	},
+
+	createSucceeded: function (data) {
+		if (data.success == true) {
+			this.model.set('id', data.id);
+			App.get('router').transitionTo('recinto.oradores.sesionConsulta.indexSubRoute', this.model);
+		}		
+	}
+
+});
+
+App.PlanDeLaborListadoView = Ember.View.extend({
+	templateName: 'plan-de-labor-listado',
+});
+
+App.ODMiniView = Ember.View.extend({
+	templateName: 'od-mini',
+
+	dictamen: function () {
+		return App.Dictamen.create(this.get('content.dictamen'));
+	}.property('content'),
+
+	didInsertElement: function () {
+		
+	}
+
+});
+
+App.ExpedienteMiniView = Ember.View.extend({
+	templateName: 'expediente-mini',
+
+	didInsertElement: function () {
+		
+	}	
 });
 
 //OD
@@ -510,15 +710,9 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 	listaExpedientes: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
+		var filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
-
-		var regexGiros = new RegExp(this.get('filterGiros').toString().toLowerCase());
-		filtered = filtered.filter(function(expediente){
-			return regexGiros.test((expediente.get('girosLabel')).toLowerCase());
-		});
-
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
@@ -526,12 +720,8 @@ App.ExpedientesView = App.ListFilterView.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
-
 		return filtered.splice(0, this.get('totalRecords'));
-
-//		return filtered_giros.splice(0, this.get('totalRecords'));
-
-	}.property('filterText', 'filterGiros', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
+	}.property('filterText', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
 	
 	mostrarMasEnabled: true,
 });
@@ -603,16 +793,6 @@ App.CitacionesView = App.ListFilterView.extend({
 
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
-	didInsertElement: function(){
-		//===== Accordion =====//		
-		$('div.menu_body:eq(0)').show();
-		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
-		
-		$(".acc .whead").click(function() {	
-			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
-			$(this).siblings().css({color:"#404040"});
-		});
-	}
 });
 
 

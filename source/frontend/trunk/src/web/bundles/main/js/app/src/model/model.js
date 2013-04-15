@@ -167,6 +167,19 @@ App.CitacionTema = Em.Object.extend({
 	},
 });
 
+App.PlanDeLabor = Em.Object.extend({
+	id: '',
+	ods: '',
+	dictamenes: '',
+	proyectos: '',
+	sumario: '',
+	fecha: '',
+	
+	label: function () {
+		return this.get('sumario');
+	}.property('sumario'),
+});
+
 App.OrdeDelDia = Em.Object.extend({
 	id: '',
 	dictamen: '',
@@ -319,7 +332,8 @@ App.Sesion = Em.Object.extend({
 	elapsedTimeBinding : 'timer.elapsedTime',
 	
 	useApi: false,
-	
+	planDeLabor: '',
+
 	sortValue: function () {
 		return this.get('fecha').toString();
 	}.property('fecha'),
@@ -393,7 +407,8 @@ App.Sesion = Em.Object.extend({
     'tipo',
     'periodoOrdinario',
     'sesion',
-    'reunion'
+    'reunion',
+    'temas',
 	],
 });
 
@@ -402,10 +417,12 @@ App.Sesion = Em.Object.extend({
 App.Tema = Em.Object.extend({
 	notificationType : 'Tema',
 	temaSeleccionadoBinding: 'App.temaController.content',
-  id: null,
-  sesionId: null,
-  titulo: null,
-  useApi: false,
+ 	id: null,
+ 	sesionId: null,
+  	titulo: null,
+  	useApi: false,
+  	plId: '',
+  	plTipo: '',
   
   imprimirURL: function () {
 	return ('/listas-imprimir/%@').fmt(encodeURIComponent(this.get('id')));
@@ -551,6 +568,7 @@ App.Turno = Em.Object.extend({
 	sortDisabled : false,
 	tag: null,
 	horaEstimada : false,
+	horaFin: null,
 
 	sortValue: function () {
 		var bloqueado, orden, tema =  this.get('tema');
@@ -574,6 +592,12 @@ App.Turno = Em.Object.extend({
 		return orden;
 
 	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin'),
+
+	cuantoFalta: function () {
+		var b = moment();
+		var a = moment.unix(this.get('hora'));
+		return a.from(b);
+	}.property('hora', 'App.sesionController.content.sTiempoTranscurrido'),
 
 	sHora: function () {
 		if(!this.get('hora'))
