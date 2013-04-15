@@ -13,6 +13,39 @@ App.menuController = App.MenuController.create({
 			titulo: 'Inicio',
 			url: '#',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
+
+				subMenu: [
+					App.MenuItem.create({
+						roles: ['ROLE_USER'],
+						titulo: 'Movimientos de Expedientes',
+						url: '#/',
+					}),
+					App.MenuItem.create({
+						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						titulo: 'Agenda Comisiones',
+						url: '#/',
+					}),
+					App.MenuItem.create({
+						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						titulo: 'Dictámenes',
+						url: '#/',
+					}),								
+					App.MenuItem.create({
+						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						titulo: 'OD',
+						url: '#/',
+					}),									
+					App.MenuItem.create({
+						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						titulo: 'Publicaciones',
+						url: '#/',
+					}),													
+					App.MenuItem.create({
+						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						titulo: 'Sesiones',
+						url: '#/',
+					}),													
+				],
 		}),
 		App.MenuItem.create({
 			id: 1,
