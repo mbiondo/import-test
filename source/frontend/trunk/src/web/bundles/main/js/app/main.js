@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.13:8080/sparl/rest',
+	url: 'http://10.185.204.12:8080/sparl/rest',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -155,7 +155,7 @@ App.menuController = App.MenuController.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
 			url: '#/plan/de/labor/listado',
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
@@ -204,7 +204,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER', 'ROLE_SITE_ADMIN'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
