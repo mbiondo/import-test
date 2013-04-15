@@ -308,7 +308,10 @@ App.Router =  Em.Router.extend({
 
 				App.get('expedientesController').addObserver('loaded', this, fn);
 				App.get('expedientesController').load();
-				
+
+				App.get('comisionesController').load();
+				App.get('comisionesController').addObserver('loaded', this, fn);
+								
 				return deferred.promise();
 			},	
 				
