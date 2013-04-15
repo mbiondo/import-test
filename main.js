@@ -21,27 +21,27 @@ App.menuController = App.MenuController.create({
 						url: '#/',
 					}),
 					App.MenuItem.create({
-						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						roles: ['ROLE_USER'],
 						titulo: 'Agenda Comisiones',
 						url: '#/',
 					}),
 					App.MenuItem.create({
-						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						roles: ['ROLE_USER'],
 						titulo: 'Dictámenes',
 						url: '#/',
 					}),								
 					App.MenuItem.create({
-						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						roles: ['ROLE_USER'],
 						titulo: 'OD',
 						url: '#/',
 					}),									
 					App.MenuItem.create({
-						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						roles: ['ROLE_USER'],
 						titulo: 'Publicaciones',
 						url: '#/',
 					}),													
 					App.MenuItem.create({
-						roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+						roles: ['ROLE_USER'],
 						titulo: 'Sesiones',
 						url: '#/',
 					}),													
