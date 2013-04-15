@@ -341,10 +341,12 @@ if (user) {
 	}
 
 	usuario.set('roles', roles);
-
+	
+	//ONLY TESTING
 	usuario.set('nombre', 'MARA');
 	usuario.set('apellido', 'BRAWER');
-	//ONLY TESTING
+	usuario.set('estructuraReal', 'DIP FIORE VIÑUALES MARIA CRISTINA DEL VALLE');
+	
 	App.userController.set('user', usuario);
 }
 
