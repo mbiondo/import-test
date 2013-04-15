@@ -309,6 +309,9 @@ if (user) {
 
 	usuario.set('roles', roles);
 
+	usuario.set('nombre', 'MARA');
+	usuario.set('apellido', 'BRAWER');
+	//ONLY TESTING
 	App.userController.set('user', usuario);
 }
 
