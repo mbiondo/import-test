@@ -1906,10 +1906,10 @@ App.TurnosController = App.RestController.extend({
 			var tengoOrador =  false;
 
 			turno.get('oradores').forEach(function(orador){
-				if (orador.user.apellido.toLowerCase() == App.get('userController.user.apellido').toLowerCase() && orador.user.nombre.toLowerCase() == App.get('userController.user.nombre').toLowerCase()) {
+				var dipStr = "Dip " + orador.user.apellido + " " + orador.user.nombre;
+				if (dipStr.toLowerCase() == App.get('userController.user.estructuraReal').toLowerCase()) {
 					tengoOrador = true;
 				}
-					
 			});
 
 			if (tengoOrador)
