@@ -1089,7 +1089,9 @@ App.ComisionesController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
-
+	load: function() {
+		 this.loadSucceeded(localStorage.getObject('comisiones'));
+	},
 	loadSucceeded: function(data){
 		this._super(data);
 	},
