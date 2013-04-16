@@ -337,7 +337,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366032637, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366128217, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
 
 		var temas = [];
 		var orden = 0;
@@ -829,6 +829,10 @@ App.ApplicationView = Em.View.extend({
 
 App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
+	
+	clickTextoCompleto: function(e){
+        console.log(this.getPath('App.expedienteConsultaController.content.url'));
+    }
 });
 
 App.CitacionConsultaView = Em.View.extend({
