@@ -351,9 +351,9 @@ if (user) {
 	usuario.set('roles', roles);
 	
 	//ONLY TESTING
-	//usuario.set('nombre', 'MARA');
-	//usuario.set('apellido', 'BRAWER');
-	//usuario.set('estructuraReal', 'DIP FIORE VIÑUALES MARIA CRISTINA DEL VALLE');
+	usuario.set('nombre', 'MARA');
+	usuario.set('apellido', 'BRAWER');
+	usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
 	
 	App.userController.set('user', usuario);
 }
