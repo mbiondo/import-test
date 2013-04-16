@@ -221,6 +221,11 @@ App.LoginView = Ember.View.extend({
 	cuil: '',
 	password: '',
 
+	falseLogin: function () {
+		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
+		App.userController.set('user', usuario);
+	},
+	
 	login: function () {
 		var _self = this;
 
