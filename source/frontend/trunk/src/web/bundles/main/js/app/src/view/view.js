@@ -732,15 +732,28 @@ App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
 	
 	didInsertElement: function () {
-
-	
-        $('#mycalendar').fullCalendar({
+	       $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay '
             },
             editable: false,
+					   timeFormat: {
+					    agenda: 'h(:mm)t{ - h(:mm)t}',
+					    '': 'h(:mm)t{-h(:mm)t }'
+					   },
+					   monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
+					   monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+					   dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+					   dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+					   buttonText: {
+					    today: 'Hoy',
+					    month: 'Mes',
+					    week: 'Semana',
+					    day: 'Día'
+					   },
+					   allDayText: 'Todo el día',
 			events: function(start, end, callback) {
 				
 				var fn = function() {
