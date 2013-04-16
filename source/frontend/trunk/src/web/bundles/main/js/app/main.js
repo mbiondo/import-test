@@ -101,7 +101,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Citaciones',
@@ -115,7 +115,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							titulo: 'Crear Citacion',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -332,6 +332,7 @@ Storage.prototype.getObject = function(key) {
 App.deferReadiness();
 
 App.puedeEditar = false;
+
 var user = localStorage.getObject('user');
 
 if (user) {
@@ -350,9 +351,9 @@ if (user) {
 	usuario.set('roles', roles);
 	
 	//ONLY TESTING
-	usuario.set('nombre', 'MARA');
-	usuario.set('apellido', 'BRAWER');
-	usuario.set('estructuraReal', 'DIP FIORE VIÑUALES MARIA CRISTINA DEL VALLE');
+	//usuario.set('nombre', 'MARA');
+	//usuario.set('apellido', 'BRAWER');
+	//usuario.set('estructuraReal', 'DIP FIORE VIÑUALES MARIA CRISTINA DEL VALLE');
 	
 	App.userController.set('user', usuario);
 }

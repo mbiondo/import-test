@@ -21,7 +21,6 @@ App.Usuario = Em.Object.extend({
 	estructura: function () {
 		return this.get('estructuraReal');
 	}.property('estructuraReal'),
-
 });
 
 App.Estructura = Em.Object.extend({
