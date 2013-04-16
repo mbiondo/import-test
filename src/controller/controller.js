@@ -362,6 +362,10 @@ App.UserController = Em.Controller.extend({
 	isLogin: function () {
 		return this.get('user') != undefined;
 	}.property('user'),
+	
+	esDiputado: function () {
+		return this.get('roles').contains('ROLE_DIPUTADO');
+	}.property('roles'),
 });
 
 App.ApiController = Em.Controller.extend({
