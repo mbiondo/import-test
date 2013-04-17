@@ -194,6 +194,7 @@ App.ContentView = Ember.View.extend({
 	logout: function () {
 		App.get('userController').set('user', null);
 		localStorage.setObject('user', null);
+		document.location.href = 'http://localhost/';
 	},
 
 	didInsertElement: function () {
