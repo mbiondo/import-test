@@ -995,11 +995,13 @@ App.Router =  Em.Router.extend({
 
 							var tema, sesion,
 							fnTema = function() {
-								tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
-								if(tema){
-									deferred.resolve(tema);
+								if (App.get('temasController.loaded') && App.get('turnosController.loaded')) {
+									tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
+									if(tema){
+										deferred.resolve(tema);
+									}
+									App.get('temasController').removeObserver('loaded', this, fnTema);
 								}
-								App.get('temasController').removeObserver('loaded', this, fnTema);
 							},
 
 							fnSesion = function() {
@@ -1010,6 +1012,10 @@ App.Router =  Em.Router.extend({
 									App.get('temasController').set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(params.sesion)));
 									App.get('temasController').addObserver('loaded', this, fnTema);
 									App.get('temasController').load();
+
+									App.get('turnosController').set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
+									App.get('turnosController').addObserver('loaded', this, fnTema);
+									App.get('turnosController').load();									
 
 									App.get('sesionesController').removeObserver('loaded', this, fnSesion);
 								}

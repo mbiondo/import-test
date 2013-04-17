@@ -1788,8 +1788,10 @@ App.SesionesController  = App.RestController.extend({
 	},
 
 	startTimer : function (sesion) {
-		if(this.get('sesionActual'))
+		
+		/*if(this.get('sesionActual'))
 			this.stopTimer(this.get('sesionActual'))
+		*/
 
 		timer = this.get('timer');
 
