@@ -815,21 +815,21 @@ App.RolesController = App.RestController.extend({
 
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/2012/detalle',
+	url: '/exp/proyectos/2012',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
+	loaded2012: false,
 
 	init : function () {
 		this._super();
 	},
 
 	load2012: function () {
-		App.get('expedientesController').set('content', []);
 		App.get('expedientesController').set('loaded', false);
-
+		App.get('expedientesController').set('loaded2012', true);
 
 		var url =  this.get('url');
 		if (this.get('useApi'))
@@ -848,7 +848,8 @@ App.ExpedientesController = App.RestController.extend({
 	},
 
 	load: function() {
-		 this.loadSucceeded(localStorage.getObject('expedientes'));
+		App.get('expedientesController').set('content', []);
+		this.loadSucceeded(localStorage.getObject('expedientes'));
 	},
 	
 
@@ -860,7 +861,6 @@ App.ExpedientesController = App.RestController.extend({
 			return;
 		}
 
-		App.get('expedientesController').set('content', []);
 		items.forEach(function(i){
 			this.createObject(i);
 		}, this);
