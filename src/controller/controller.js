@@ -820,19 +820,54 @@ App.ExpedientesController = App.RestController.extend({
 	useApi: true,
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
+	loaded: false,
 
 	init : function () {
 		this._super();
+	},
+
+	load2012: function () {
+		App.get('expedientesController').set('content', []);
+		App.get('expedientesController').set('loaded', false);
+
+
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+			
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+
+		}
 	},
 
 	load: function() {
 		 this.loadSucceeded(localStorage.getObject('expedientes'));
 	},
 	
+
 	loadSucceeded: function(data){
-		this._super(data);
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			App.get('expedientesController').set('loaded', true);
+			return;
+		}
+
+		App.get('expedientesController').set('content', []);
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+		
+		App.get('expedientesController').set('loaded', true);
 	},
-	
+
 	createObject: function (data, save) {
 	
 		save = save || false;
@@ -850,7 +885,7 @@ App.ExpedientesController = App.RestController.extend({
 				success: this.createSucceeded,
 			});
 		}else{
-			this.addObject(item);
+			App.get('expedientesController').addObject(item);
 		}
 	},	
 });
