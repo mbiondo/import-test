@@ -1792,6 +1792,9 @@ App.SesionesController  = App.RestController.extend({
 		/*if(this.get('sesionActual'))
 			this.stopTimer(this.get('sesionActual'))
 		*/
+		this.get('timer').stop();
+		this.set('sesionActual', null);
+		sesion.set('timer', null);		
 
 		timer = this.get('timer');
 
@@ -1936,7 +1939,7 @@ App.TurnosController = App.RestController.extend({
 
 		return turnosDesBloqueados.objectAt(0);
 
-	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora').cacheable(),
+	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora', 'arrangedContent.@each.orden').cacheable(),
 
 	init : function () {
 		this._super();
