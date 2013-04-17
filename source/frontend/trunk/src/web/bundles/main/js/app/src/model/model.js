@@ -185,6 +185,7 @@ App.OrdeDelDia = Em.Object.extend({
 	sumario: '',
 	fecha: '',
 	useApi: false,
+	texto: '',
 
 	serializable : [
 		'id',
@@ -196,6 +197,10 @@ App.OrdeDelDia = Em.Object.extend({
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),
+
+    textoCompleto: function () {
+    	return this.get('texto').htmlSafe();
+    }.property('texto'),
 });
 
 App.Dictamen = Em.Object.extend({

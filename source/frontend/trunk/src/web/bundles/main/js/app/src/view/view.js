@@ -224,6 +224,7 @@ App.LoginView = Ember.View.extend({
 	falseLogin: function () {
 		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
 		App.userController.set('user', usuario);
+		localStorage.setObject('user', JSON.stringify(usuario));
 	},
 	
 	login: function () {
@@ -342,46 +343,52 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366128217, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366209000, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
 
 		var temas = [];
 		var orden = 0;
-
-		this.get('content.ods').forEach(function (od){
-			temas.addObject(
-				App.Tema.create({
-					titulo: "OD Nro " + od.numero,
-					orden: orden,
-					plId: od.id,
-					plTipo: 'o',
-				})
-			);
-			orden = orden + 1;
-		});
-
-		this.get('content.dictamenes').forEach(function (dictamen){
-			var tema = App.Tema.create();
-			tema.setProperties({
-					titulo: "Dictamen: " + dictamen.sumario,
-					orden: orden,
-					plId: dictamen.id,
-					plTipo: 'd',
+		
+		if (this.get('content.ods')) {
+			this.get('content.ods').forEach(function (od){
+				temas.addObject(
+					App.Tema.create({
+						titulo: "OD Nro " + od.numero,
+						orden: orden,
+						plId: od.id,
+						plTipo: 'o',
+					})
+				);
+				orden = orden + 1;
 			});
-			temas.addObject(tema);
-			orden = orden + 1;
-		});
+		}
 
-		this.get('content.proyectos').forEach(function (expediente){
-			temas.addObject(
-				App.Tema.create({
-					titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
-					orden: orden,
-					plId: expediente.id,
-					plTipo: 'e',
-				})
-			);
-			orden = orden + 1;
-		});				
+		if (this.get('content.dictamenes')) {
+			this.get('content.dictamenes').forEach(function (dictamen){
+				var tema = App.Tema.create();
+				tema.setProperties({
+						titulo: "Dictamen: " + dictamen.sumario,
+						orden: orden,
+						plId: dictamen.id,
+						plTipo: 'd',
+				});
+				temas.addObject(tema);
+				orden = orden + 1;
+			});
+		}
+
+		if (this.get('content.proyectos')) {
+			this.get('content.proyectos').forEach(function (expediente){
+				temas.addObject(
+					App.Tema.create({
+						titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+						orden: orden,
+						plId: expediente.id,
+						plTipo: 'e',
+					})
+				);
+				orden = orden + 1;
+			});				
+		}
 
 		sesion.set('temas', temas);
 
@@ -415,8 +422,16 @@ App.ODMiniView = Ember.View.extend({
 	templateName: 'od-mini',
 
 	dictamen: function () {
-		return App.Dictamen.create(this.get('content.dictamen'));
+		if (this.get('content.dictamen'))
+			return App.Dictamen.create(this.get('content.dictamen'));
+		else
+			return null;
 	}.property('content'),
+
+
+	didInsertElement: function () {
+		//$('#htmlText').text(this.get('content.texto'));
+	},
 
 });
 

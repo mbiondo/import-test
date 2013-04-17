@@ -211,7 +211,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER', 'ROLE_SITE_ADMIN'],
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
@@ -351,9 +351,9 @@ if (user) {
 	usuario.set('roles', roles);
 	
 	//ONLY TESTING
-	//usuario.set('nombre', 'MARA');
-	//usuario.set('apellido', 'BRAWER');
-	//usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
+	usuario.set('nombre', 'MARA');
+	usuario.set('apellido', 'BRAWER');
+	usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
 	
 	App.userController.set('user', usuario);
 }
