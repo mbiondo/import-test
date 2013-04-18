@@ -17,38 +17,38 @@ App.menuController = App.MenuController.create({
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Filtrar Novedades Por',
-					url: '#/expedientes',
+					url: '#',
 					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Movimientos de Expedientes',
-							url: '#/',
+							url: '#',
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Agenda Comisiones',
-							url: '#/',
+							url: '#',
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Dictámenes',
-							url: '#/',
+							url: '#',
 						}),								
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'OD',
-							url: '#/',
+							url: '#',
 						}),									
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Publicaciones',
-							url: '#/',
+							url: '#',
 						}),													
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Sesiones',
-							url: '#/',
+							url: '#',
 						}),														
 					],
 				}),
