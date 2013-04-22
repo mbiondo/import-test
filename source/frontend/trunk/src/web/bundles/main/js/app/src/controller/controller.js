@@ -891,7 +891,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.CitacionesController = App.RestController.extend({
-	url: '/cit/citaciones/%@/detalle',
+	url: '/cit/citaciones/%@',
 	type: App.Citacion,
 	anio: '',
 	useApi: true,
