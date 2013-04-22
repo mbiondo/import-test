@@ -184,6 +184,7 @@ App.menuController = App.MenuController.create({
 				}),				
 			]			
 		}),		
+		
 		App.MenuItem.create({
 			id: 3,
 			titulo: 'Recinto',
@@ -204,14 +205,14 @@ App.menuController = App.MenuController.create({
 					],
 				}),
 			]			
-		}),	
+		}),
 
 		App.MenuItem.create({
 			id: 5,
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Administrar',
@@ -221,12 +222,12 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							titulo: 'Acceso de usuarios',
 							url: '#/admin/roles',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),		
 						App.MenuItem.create({
 							titulo: 'Comisiones por usuarios',
 							url: '#/admin/comisiones',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),										
 					],
 				}),
