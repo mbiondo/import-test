@@ -382,7 +382,7 @@ var exp = localStorage.getObject('expedientes');
 //var exp = null;
 if (!exp) {
 	$.ajax({
-		url:  App.get('apiController.url') + "/exp/proyectos/2013/detalle",
+		url:  App.get('apiController.url') + "/exp/proyectos/2013",
 		dataType: 'JSON',
 		type: 'GET',
 
