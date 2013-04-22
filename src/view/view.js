@@ -225,6 +225,7 @@ App.LoginView = Ember.View.extend({
 		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
 		App.userController.set('user', usuario);
 		localStorage.setObject('user', JSON.stringify(usuario));
+		App.get('router').transitionTo('index');
 	},
 	
 	login: function () {
@@ -242,7 +243,7 @@ App.LoginView = Ember.View.extend({
 			{
 				if (data == true || data == "true")
 				{
-					App.get('userController').login(_self.get('cuil'));				
+					App.get('userController').login(_self.get('cuil'));		
 				}
 				else
 				{
@@ -263,7 +264,6 @@ App.SimpleListItemView = Ember.View.extend({
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterText: '',
-	filterGiros: '',
 	filterTextComisiones: '',
 	step: 10,
 	records: [10, 25, 50, 100],
@@ -288,7 +288,7 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterGiros', 'filterTextComisiones', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'filterTextComisiones', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
 });
@@ -666,12 +666,31 @@ App.ExpedienteView = Ember.View.extend({
 	},
 });
 
+App.ChosenMultipleSelect = Em.Select.extend({
+    multiple: true,
+    attributeBindings: [ 'multiple' ],
+    placeholder: '',
+
+    didInsertElement: function(){
+        this._super();
+        this.$().data("placeholder", this.get('placeholder')).chosen();
+    },
+ 
+    selectionChanged: function() {
+        this.$().trigger('liszt:updated');
+    }.observes('selection')
+});
+
 App.ExpedientesView = App.ListFilterView.extend({
 	templateName: 'expedientes',
 	itemViewClass: App.ExpedienteView,
 	sorting: false,
-
-	//sortAscending: Em.Object.create({ expdip: true, tipo: true, titulo: true, iniciado: true, firmantesLabel: true, girosLabel: true }),
+	filterFirmantes: '',
+	startFecha: '',
+	endFecha: '',
+	filterComisiones: [],
+	filterTipos: [],
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
 		
 	ordenarAscID: function(event) {
 		this.ordenarPorCampo('expdip', true);
@@ -724,15 +743,54 @@ App.ExpedientesView = App.ListFilterView.extend({
 	},
 
 	listaExpedientes: function (){
+		localStorage.setObject('tipos', App.get('comisionesController.content'));
+
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
 
-		var regexGiros = new RegExp(this.get('filterGiros').toString().toLowerCase());
-		filtered = filtered.filter(function(expediente){
-			return regexGiros.test((expediente.get('girosLabel')).toLowerCase());
+		var regexFirmantes = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
+		filtered = filtered.filter(function(firmante){
+			return regexFirmantes.test((firmante.get('firmantesLabel')).toLowerCase());
 		});
+
+		var comisiones = $.map(this.get('filterComisiones'), function (value, key) { return value.get('nombre'); })
+		filtered = filtered.filter(function(expediente){
+			var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; })
+			var result = true;
+			comisiones.forEach(function(comision) {
+				if (!giros.contains(comision))
+					result = false;
+			});
+			return result;
+		});
+	
+		var getFilterTipos = $.map(this.get('filterTipos'), function (value, key){
+			console.log(value);
+			return value;
+		})
+		
+		filtered = filtered.filter(function(expediente){
+			var result = true;
+			getFilterTipos.forEach(function(tipo) {
+				if (expediente.tipo != tipo) result = false;
+			});
+			return result;
+		});
+
+		if (this.get('startFecha') && this.get('endFecha')){
+			_self = this;
+			filtered = filtered.filter(function(expediente){
+				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
+				console.log(expFecha);
+				var fechaD = moment(_self.get('startFecha'), 'DD/MM/YYYY');
+				var fechaH = moment(_self.get('endFecha'), 'DD/MM/YYYY');	
+				var range = moment().range(fechaD, fechaH);
+
+				return range.contains(expFecha); // false
+			});
+		}
 
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
@@ -742,7 +800,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterGiros', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
 
 	
 	mostrarMasEnabled: true,
@@ -897,6 +955,7 @@ App.CitacionCrearView = Em.View.extend({
 	temaSeleccionado: '',
 	
 	startFecha: '',
+	endFecha: '',
 	
 	startHora: '',
 	
@@ -1306,8 +1365,7 @@ App.CrearReunionView = App.ModalView.extend({
 
 App.ComisionView = Em.View.extend({
 	tagName: 'li',
-	templateName: 'comision',
-	
+	templateName: 'comision',	
 	clickComision: function () {
 		this.get('parentView').get('parentView').clickComision(this.get('content'));
 	}, 
