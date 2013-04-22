@@ -349,7 +349,7 @@ App.UserController = Em.Controller.extend({
 					_self.set('user', tmpUser);
 
 					localStorage.setObject('user', JSON.stringify(tmpUser));
-
+					App.get('router').transitionTo('index');
 				});
 			},
 		});			
