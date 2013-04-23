@@ -691,7 +691,10 @@ App.ExpedientesView = App.ListFilterView.extend({
 	filterComisiones: [],
 	filterTipos: [],
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
-		
+	
+	expedientesAdvancedSearch: function(){
+		this.$("#expedientesAdvancedSearch").slideToggle();
+	},
 	ordenarAscID: function(event) {
 		this.ordenarPorCampo('expdip', true);
 	},
