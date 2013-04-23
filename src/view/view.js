@@ -676,7 +676,7 @@ App.ChosenMultipleSelect = Em.Select.extend({
 
     didInsertElement: function(){
         this._super();
-        this.$().data("placeholder", this.get('placeholder')).chosen();
+        //this.$().data("placeholder", this.get('placeholder')).chosen();
     },
  
     selectionChanged: function() {
@@ -696,7 +696,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
 	
 	didInsertElement: function(){
-		$("#expedientesAdvancedSearch").fadeOut(0);
+		//$("#expedientesAdvancedSearch").hide();
 	},
 	expedientesAdvancedSearch: function(){
 		this.$("#expedientesAdvancedSearch").slideToggle();
@@ -776,17 +776,20 @@ App.ExpedientesView = App.ListFilterView.extend({
 		});
 	
 		var getFilterTipos = $.map(this.get('filterTipos'), function (value, key){
-			console.log(value);
 			return value;
 		})
 		
-		filtered = filtered.filter(function(expediente){
-			var result = true;
-			getFilterTipos.forEach(function(tipo) {
-				if (expediente.tipo != tipo) result = false;
+		if (getFilterTipos.length > 0) {
+			filtered = filtered.filter(function(expediente){
+				//var result = true;
+				return getFilterTipos.contains(expediente.tipo);
+				/*getFilterTipos.forEach(function(tipo) {
+					//if (expediente.tipo != tipo) result = false;
+					
+				});*/
+				//return result;
 			});
-			return result;
-		});
+		}
 
 		if (this.get('startFecha') && this.get('endFecha')){
 			_self = this;
@@ -1015,7 +1018,7 @@ App.CitacionCrearView = Em.View.extend({
 	guardar: function () {
 		console.log('Guardando los datos....');
 
-		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || this.get('listaExpedientesSeleccionados').length < 1)
+		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado'))
 		{
 			return;
 		}
