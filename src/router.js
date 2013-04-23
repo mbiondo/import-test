@@ -957,11 +957,13 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 
-
+							var sesion = App.get('sesionesController.content').findProperty('id', parseInt(context.get('id')))
 							if (!App.get('planDeLaborController')) {
 								App.planDeLaborController = App.PlanDeLaborController.create();
-								App.get('planDeLaborController').load();
 							}
+							
+							App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+							App.get('planDeLaborController').load();							
 														
 							var appController = router.get('applicationController');
 							
@@ -1032,7 +1034,6 @@ App.Router =  Em.Router.extend({
 									
 									App.get('sesionesController').removeObserver('loaded', this, fnSesion);
 									
-									
 								}
 							}
 
@@ -1055,10 +1056,14 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 
+							var sesion = App.get('sesionController.content');
+							
 							if (!App.get('planDeLaborController')) {
 								App.planDeLaborController = App.PlanDeLaborController.create();
-								App.get('planDeLaborController').load();
 							}
+							App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+							App.get('planDeLaborController').load();
+							
 
 							App.get('sesionController').set('content', App.get('sesionesController.content').findProperty('id', parseInt(context.get('sesionId'))));
 
@@ -1084,7 +1089,7 @@ App.Router =  Em.Router.extend({
 
 							//appController.cargarSesiones(true);
 							
-							var sesion = App.get('sesionController.content');
+							
 							var tema = App.get('temaController.content');
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
