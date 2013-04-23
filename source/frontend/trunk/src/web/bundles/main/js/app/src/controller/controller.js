@@ -359,7 +359,10 @@ App.UserController = Em.Controller.extend({
 	},
 
 	roles: function () {
-		return $.map(this.get('user.roles'), function (value, key) { return value.get('nombre'); })
+		if (this.get('user'))
+			return $.map(this.get('user.roles'), function (value, key) { return value.get('nombre'); })
+		else
+			return null;
 	}.property('user'),
 
 	isLogin: function () {
@@ -367,7 +370,10 @@ App.UserController = Em.Controller.extend({
 	}.property('user'),
 	
 	esDiputado: function () {
-		return this.get('roles').contains('ROLE_DIPUTADO');
+		if (this.get('roles'))
+			return this.get('roles').contains('ROLE_DIPUTADO');
+		else
+			return false;
 	}.property('roles'),
 });
 
@@ -626,13 +632,16 @@ App.PlanDeLaborController = Ember.Object.extend({
 		if (tema && App.get('planDeLaborController.content')) {
 			switch (tema.get('plTipo')) {
 				case "o": 
-					obj = App.OrdeDelDia.create(App.get('planDeLaborController.content.ods').findProperty('id', tema.get('plId')));
+					if (App.get('planDeLaborController.content.ods')) 
+						obj = App.OrdeDelDia.create(App.get('planDeLaborController.content.ods').findProperty('id', tema.get('plId')));
 					break;
 				case "d":
-					obj = App.Dictamen.create(App.get('planDeLaborController.content.dictamenes').findProperty('id', tema.get('plId')));
+					if (App.get('planDeLaborController.content.dictamenes')) 
+						obj = App.Dictamen.create(App.get('planDeLaborController.content.dictamenes').findProperty('id', tema.get('plId')));
 					break;
 				case "e":
-					obj = App.Expediente.create(App.get('planDeLaborController.content.proyectos').findProperty('id', tema.get('plId')));
+					if (App.get('planDeLaborController.content.proyectos')) 
+						obj = App.Expediente.create(App.get('planDeLaborController.content.proyectos').findProperty('id', tema.get('plId')));
 					break;
 			}
 		}
@@ -898,6 +907,8 @@ App.CitacionesController = App.RestController.extend({
 	type: App.Citacion,
 	anio: '',
 	useApi: true,
+	sortProperties: ['nombre'],
+	sortAscending: true,
 	
 	init : function () {
 		this._super();

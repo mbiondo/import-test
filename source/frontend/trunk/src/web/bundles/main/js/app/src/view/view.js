@@ -193,8 +193,10 @@ App.ContentView = Ember.View.extend({
 
 	logout: function () {
 		App.get('router').transitionTo('loading');
-		App.get('userController').set('user', null);
+		
 		localStorage.setObject('user', null);
+		App.get('userController').set('user', null);
+		
 		App.get('router').transitionTo('index');
 	},
 
@@ -346,7 +348,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 17/04/2013", fecha: 1366209900, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1366812030, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:3, reunion:3, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -1149,12 +1151,12 @@ App.CitacionCrearView = Em.View.extend({
 	
 	listaComisiones: function () {
 		var regex = new RegExp(this.get('filterTextComisiones').toString().toLowerCase());
-		var filtered = App.get('comisionesController').get('content').filter(function(comision) {
+		var filtered = App.get('comisionesController').get('arrangedContent').filter(function(comision) {
 			return regex.test((comision.nombre).toLowerCase());
 		});
 
 		return filtered.removeObjects(App.get('citacionCrearController.content.comisiones'));		
-	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.content', 'adding'),
+	}.property('citacionCrearController.content.comisiones', 'filterTextComisiones', 'comisionesController.arrangedContent', 'adding'),
 	
 	listaExpedientes: function () {
 		var filtered;
