@@ -349,7 +349,10 @@ App.UserController = Em.Controller.extend({
 					_self.set('user', tmpUser);
 
 					localStorage.setObject('user', JSON.stringify(tmpUser));
+					
+					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
+					
 				});
 			},
 		});			
@@ -588,7 +591,7 @@ App.RestController = Em.ArrayController.extend({
 
 App.PlanDeLaborController = Ember.Object.extend({
 	content: null,
-	url: "/plan-de-labor/1",
+	url: "/plan-de-labor/%@",
 	loaded : false,
 	useApi: false,
 	
@@ -601,7 +604,7 @@ App.PlanDeLaborController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url: this.get('url'),
+			url: this.get('url').fmt(encodeURIComponent(this.get('content.id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,

@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:8080/sparl/rest',
+	url: 'http://10.185.204.13:8080/sparl/rest',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -352,9 +352,9 @@ if (user) {
 	usuario.set('roles', roles);
 	
 	//ONLY TESTING
-	usuario.set('nombre', 'MARA');
-	usuario.set('apellido', 'BRAWER');
-	usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
+	//usuario.set('nombre', 'MARA');
+	//usuario.set('apellido', 'BRAWER');
+	//usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
 	
 	App.userController.set('user', usuario);
 }
