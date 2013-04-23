@@ -418,6 +418,7 @@ App.Sesion = Em.Object.extend({
     'sesion',
     'reunion',
     'temas',
+	'idPl',
 	],
 });
 

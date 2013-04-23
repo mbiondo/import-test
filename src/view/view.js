@@ -192,8 +192,10 @@ App.ContentView = Ember.View.extend({
 	templateName: 'content',
 
 	logout: function () {
+		App.get('router').transitionTo('loading');
 		App.get('userController').set('user', null);
 		localStorage.setObject('user', null);
+		App.get('router').transitionTo('index');
 	},
 
 	didInsertElement: function () {
@@ -225,6 +227,7 @@ App.LoginView = Ember.View.extend({
 		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
 		App.userController.set('user', usuario);
 		localStorage.setObject('user', JSON.stringify(usuario));
+		App.get('router').transitionTo('loading');
 		App.get('router').transitionTo('index');
 	},
 	
@@ -327,7 +330,7 @@ App.PlanDeLaborItemView = Ember.View.extend({
 	templateName: 'plan-de-labor-item',
 
 	verPlanDeLabor: function () {
-		App.get('router').transitionTo('planDeLabor.planDeLabor.ver');
+		App.get('router').transitionTo('planDeLabor.planDeLabor.ver', this.get('content'));
 	},
 });
 
@@ -343,7 +346,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Titulo de la sesion", fecha: 1366209000, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 17/04/2013", fecha: 1366209900, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:13, reunion:13, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;

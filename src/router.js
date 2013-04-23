@@ -170,7 +170,8 @@ App.Router =  Em.Router.extend({
 					deserialize: function(router, params) {
 						 if (!App.get('planDeLaborController'))
 						 	App.planDeLaborController = App.PlanDeLaborController.create();
-
+						
+						 App.get('planDeLaborController').set('content', App.PlanDeLabor.create({id: params.plan}));
 						 var deferred = $.Deferred(),
 						 fn = function() {
 							 App.get('planDeLaborController').removeObserver('loaded', this, fn);	
@@ -184,7 +185,7 @@ App.Router =  Em.Router.extend({
 					},	
 
 					serialize: function(router, context) {
-						return {plan: 1};			
+						return {plan: context.get('id')};
 					},
 
 					connectOutlets: function(router, context) {
@@ -194,7 +195,7 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-							{titulo: App.get('planDeLaborController.content.sumario'), url: '#/plan/de/labor/plan/de/labor/1/ver'}
+							{titulo: App.get('planDeLaborController.content.sumario')}
 						]);				
 
 						App.get('menuController').seleccionar(4);						
@@ -925,21 +926,27 @@ App.Router =  Em.Router.extend({
 
 							if (!App.get('planDeLaborController'))
 								App.planDeLaborController = App.PlanDeLaborController.create();
-
+							
+							var sesion;
 							var deferred = $.Deferred(),
 							fn = function() {
-								if (App.get('sesionesController.loaded') && App.get('planDeLaborController.loaded')) {
-									var sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
-									deferred.resolve(sesion);
+								if (App.get('sesionesController.loaded')) {
+									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionesController').removeObserver('loaded', this, fn);
+									App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+									App.get('planDeLaborController').addObserver('loaded', this, fnTema);
+									App.get('planDeLaborController').load();									
 								}
 							};
+							var fn2 = function () {
+								if (App.get('planDeLaborController.loaded')) {
+									deferred.resolve(sesion);
+								}
+							}
 
 							App.get('sesionesController').addObserver('loaded', this, fn);
 							App.get('sesionesController').load();
 
-							App.get('planDeLaborController').addObserver('loaded', this, fn);
-							App.get('planDeLaborController').load();
 							return deferred.promise();
 						},
 
@@ -990,12 +997,14 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 							if (!App.get('planDeLaborController'))
 								App.planDeLaborController = App.PlanDeLaborController.create();
+								
+							
 
 							deferred = $.Deferred();
 
 							var tema, sesion,
 							fnTema = function() {
-								if (App.get('temasController.loaded') && App.get('turnosController.loaded')) {
+								if (App.get('temasController.loaded') && App.get('turnosController.loaded') && App.get('planDeLaborController.loaded')) {
 									tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
 									if(tema){
 										deferred.resolve(tema);
@@ -1005,7 +1014,7 @@ App.Router =  Em.Router.extend({
 							},
 
 							fnSesion = function() {
-								if (App.get('planDeLaborController.loaded') && App.get('sesionesController.loaded')) {
+								if (App.get('sesionesController.loaded')) {
 									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionController').set('content', sesion);
 									
@@ -1015,14 +1024,18 @@ App.Router =  Em.Router.extend({
 
 									App.get('turnosController').set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
 									App.get('turnosController').addObserver('loaded', this, fnTema);
-									App.get('turnosController').load();									
-
+									App.get('turnosController').load();		
+									
+									App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+									App.get('planDeLaborController').addObserver('loaded', this, fnTema);
+									App.get('planDeLaborController').load();
+									
 									App.get('sesionesController').removeObserver('loaded', this, fnSesion);
+									
+									
 								}
 							}
 
-							App.get('planDeLaborController').addObserver('loaded', this, fnSesion);
-							App.get('planDeLaborController').load();
 
 							App.get('sesionesController').addObserver('loaded', this, fnSesion);
 							
