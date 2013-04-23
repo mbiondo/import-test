@@ -1519,7 +1519,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	url: '/cit/citacion',
 	
-	urlExpedientes: '/com/%@/proyectos/2012',
+	urlExpedientes: '/com/%@/proyectos/',
 	//urlExpedientes: '/expedientes-listar',
 	
 	loading: false,
@@ -1728,7 +1728,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cargarExpedientes: function () {
 		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))),
+			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + '2013',
 			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'GET',
