@@ -694,9 +694,16 @@ App.ExpedientesView = App.ListFilterView.extend({
 	filterComisiones: [],
 	filterTipos: [],
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
+
+	isExpanded: false,
+
+	toogleSearch: function() {
+		this.set('isExpanded', !this.get('isExpanded'));
+		console.log(this.get('isExpanded'));
+	},
 	
 	didInsertElement: function(){
-		//$("#expedientesAdvancedSearch").hide();
+		$("#expedientesAdvancedSearch").hide();
 	},
 	expedientesAdvancedSearch: function(){
 		this.$("#expedientesAdvancedSearch").slideToggle();
