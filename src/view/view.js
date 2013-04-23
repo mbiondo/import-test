@@ -1032,7 +1032,7 @@ App.CitacionCrearView = Em.View.extend({
 		console.log(this.get('startFecha'));
 		
 		
-		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:MM'));
+		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
 		
 		if (this.get('content').get('id')) {
 			App.get('citacionCrearController').save();
