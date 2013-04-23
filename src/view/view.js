@@ -695,6 +695,9 @@ App.ExpedientesView = App.ListFilterView.extend({
 	filterTipos: [],
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
 	
+	didInsertElement: function(){
+		$("#expedientesAdvancedSearch").fadeOut(0);
+	},
 	expedientesAdvancedSearch: function(){
 		this.$("#expedientesAdvancedSearch").slideToggle();
 	},
