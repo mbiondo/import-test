@@ -693,7 +693,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 	endFecha: '',
 	filterComisiones: [],
 	filterTipos: [],
-	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
 	
 	didInsertElement: function(){
 		//$("#expedientesAdvancedSearch").hide();
@@ -781,13 +781,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 		
 		if (getFilterTipos.length > 0) {
 			filtered = filtered.filter(function(expediente){
-				//var result = true;
-				return getFilterTipos.contains(expediente.tipo);
-				/*getFilterTipos.forEach(function(tipo) {
-					//if (expediente.tipo != tipo) result = false;
-					
-				});*/
-				//return result;
+				return getFilterTipos.contains(expediente.get('tipolabel'));
 			});
 		}
 
