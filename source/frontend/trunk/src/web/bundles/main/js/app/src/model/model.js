@@ -79,8 +79,7 @@ App.Expediente = Em.Object.extend({
 	sortValue: '',
 	
 	seleccionado: false,
-	
-	
+
 	tipolabel: function () {
 		var regex = new RegExp('MENSAJE');
 		if (regex.test(this.get('tipo'))) {
@@ -89,7 +88,7 @@ App.Expediente = Em.Object.extend({
 			return this.get('tipo');
 		}
 	}.property('tipo'),
-	
+
 	firmantesLabel: function() {
 		var firmantes = this.get('firmantes').sort(function (a, b) {
 			return a.orden - b.orden;
@@ -137,6 +136,7 @@ App.Citacion = Em.Object.extend({
 	observaciones: '',
 	sala: '',	
 	allDay: false,
+	fecha:'',
 	
 	serializable : [
 		'id',
@@ -150,12 +150,23 @@ App.Citacion = Em.Object.extend({
 		'sala'
 	],
 	
+	titulo: function () {
+		title = this.get('title');
+//		return title;
+//		return title.substr(0, 3);
+	}.property('title'),
+
 	saveSucceeded: function (data) {
 		if (data.responseText)
 		{
 			App.get('router').transitionTo('citaciones');
 		}
 	},	
+
+	label: function () {
+		return this.get('title');
+	}.property('title'),
+
 });
 
 
@@ -219,11 +230,9 @@ App.OrdeDelDia = Em.Object.extend({
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),
-	
 	sumarioHTML: function () {
 		return this.get('sumario').htmlSafe();
 	}.property('sumario'),
-	
     textoCompleto: function () {
     	return this.get('texto').htmlSafe();
     }.property('texto'),
@@ -439,7 +448,6 @@ App.Sesion = Em.Object.extend({
     'sesion',
     'reunion',
     'temas',
-	'idPl',
 	],
 });
 
