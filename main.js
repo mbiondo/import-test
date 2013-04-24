@@ -73,22 +73,22 @@ App.menuController = App.MenuController.create({
 							url: '#/expedientes',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Vigentes',
 							url: '#/expedientes',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Con dictamen',
 							url: '#/expedientes',
 						}),								
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Con orden del día',
 							url: '#/expedientes',
 						}),									
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Archivados',
 							url: '#/expedientes',
 						}),													
@@ -115,7 +115,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							titulo: 'Crear Citacion',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -123,15 +123,15 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Reuniones',
 					url: '',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Reuniones sin parte',
 							url: '#/comisiones/reuniones',
 						}),		
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Reuniones con parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
@@ -141,17 +141,17 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Ordenes del dia',
 					url: '#/comisiones/OD/dictamenes',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Dictamenes sin OD',
 							url: '#/comisiones/OD/dictamenes',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
 						App.MenuItem.create({
 							titulo: 'Listado de OD',
 							url: '#/comisiones/OD/listado',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
 					],
 				}),							
@@ -162,7 +162,7 @@ App.menuController = App.MenuController.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
 			url: '#/plan/de/labor/listado',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
