@@ -219,7 +219,11 @@ App.OrdeDelDia = Em.Object.extend({
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),
-
+	
+	sumarioHTML: function () {
+		return this.get('sumario').htmlSafe();
+	}.property('sumario'),
+	
     textoCompleto: function () {
     	return this.get('texto').htmlSafe();
     }.property('texto'),
