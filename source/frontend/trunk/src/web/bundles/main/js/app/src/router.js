@@ -987,7 +987,7 @@ App.Router =  Em.Router.extend({
 							var sesion = App.get('sesionController.content');
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
-								{titulo: 'sesion ' + sesion.get('sesion') +' / Reunion: ' + sesion.get('reunion')}
+								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
 							]);					
 							App.get('menuController').seleccionar(3);					
 						},
@@ -1093,7 +1093,7 @@ App.Router =  Em.Router.extend({
 							var tema = App.get('temaController.content');
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
-								{titulo: 'sesion ' + sesion.get('sesion') +' / Reunion: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
+								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
 								{titulo: tema.get('titulo')}
 							]);					
 							App.get('menuController').seleccionar(3);					
