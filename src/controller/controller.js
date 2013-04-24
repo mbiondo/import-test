@@ -834,7 +834,7 @@ App.ExpedientesController = App.RestController.extend({
 	sortAscending: true,
 	loaded: false,
 	loaded2012: false,
-
+	
 	init : function () {
 		this._super();
 	},
@@ -936,7 +936,8 @@ App.CitacionesController = App.RestController.extend({
 		save = save || false;
 		item = App.Citacion.extend(App.Savable).create(data);
 		item.setProperties(data);
-		
+		item.set('fecha', data.start);
+
 		if(save){
 			$.ajax({
 				url: this.get('url'),
@@ -1524,8 +1525,7 @@ App.CrearParteController = Em.Object.extend({
 
 App.CitacionCrearController = Em.Object.extend({
 	content: '',
-	expedientes: '',
-	
+	expedientes: '',	
 	isEdit: false,
 	
 	url: '/cit/citacion',
