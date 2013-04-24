@@ -379,8 +379,8 @@ if(!com){
 }
 
 
-var exp = localStorage.getObject('expedientes');
-//var exp = null;
+//var exp = localStorage.getObject('expedientes');
+var exp = null;
 if (!exp) {
 	$.ajax({
 		url:  App.get('apiController.url') + "/exp/proyectos/2013",

@@ -934,7 +934,7 @@ App.Router =  Em.Router.extend({
 									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionesController').removeObserver('loaded', this, fn);
 									App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
-									App.get('planDeLaborController').addObserver('loaded', this, fnTema);
+									App.get('planDeLaborController').addObserver('loaded', this, fn2);
 									App.get('planDeLaborController').load();									
 								}
 							};
