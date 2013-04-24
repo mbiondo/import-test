@@ -321,6 +321,22 @@ App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
 	},
 });
 
+//Citaciones List
+
+App.CalendarItemListView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'citacion-item',
+
+	verPlanDeLabor: function () {
+		App.get('router').transitionTo('planDeLabor.planDeLabor.ver', this.get('content'));
+	},
+});
+
+App.CalendarListView = App.ListFilterView.extend({ 
+	itemViewClass: App.CalendarItemListView, 	
+	columnas: ['Fecha', 'Titulo', 'Sala', 'Observaciones', 'Estado'],
+});
+
 
 
 //PLAN DE LABOR
@@ -823,8 +839,58 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
-	
+	comisionesCalendar: true,
+
+	comisionesCalendarMostrar: function(){
+		this.set('comisionesCalendar', true);
+	},
+	comisionesCalendarOcultar: function(){
+		this.set('comisionesCalendar', false);
+	},
+
 	didInsertElement: function () {
+	},
+});
+
+App.InicioView = Em.View.extend({
+	templateName: 'inicio',
+});
+
+
+App.ApplicationView = Em.View.extend({
+	templateName: 'application',
+	
+	
+	activarNotificaciones: function (){
+		if (window.webkitNotifications) {
+			window.webkitNotifications.requestPermission();
+			App.get('notificationController').set('estado', 0);
+		}
+	},
+	
+	mostrar : function () {
+		this.get('testModal').mostrar();
+	},
+});
+
+App.ExpedienteConsultaView = Em.View.extend({
+	templateName: 'expedienteConsulta',
+	
+	clickTextoCompleto: function(e){
+        console.log(this.getPath('App.expedienteConsultaController.content.url'));
+    }
+});
+
+App.CitacionConsultaView = Em.View.extend({
+	templateName: 'citacionConsulta',
+});
+
+App.CalendarTool = Em.View.extend({
+    tagName: 'div',
+    attributeBindings: ['id', 'events', 'owner'],
+    classNamesBindings: ['class'],
+
+    didInsertElement: function(){
 	       $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -832,21 +898,21 @@ App.CitacionesView = App.ListFilterView.extend({
                 right: 'month,agendaWeek,agendaDay '
             },
             editable: false,
-					   timeFormat: {
-					    agenda: 'h(:mm)t{ - h(:mm)t}',
-					    '': 'h(:mm)t{-h(:mm)t }'
-					   },
-					   monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
-					   monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-					   dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-					   dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-					   buttonText: {
-					    today: 'Hoy',
-					    month: 'Mes',
-					    week: 'Semana',
-					    day: 'Día'
-					   },
-					   allDayText: 'Todo el día',
+		   timeFormat: {
+		    agenda: 'h(:mm)t{ - h(:mm)t}',
+		    '': 'h(:mm)t{-h(:mm)t }'
+		   },
+		   monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
+		   monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+		   dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+		   dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+		   buttonText: {
+		    today: 'Hoy',
+		    month: 'Mes',
+		    week: 'Semana',
+		    day: 'Día'
+		   },
+		   allDayText: 'Todo el día',
 			events: function(start, end, callback) {
 				
 				var fn = function() {
@@ -896,46 +962,7 @@ App.CitacionesView = App.ListFilterView.extend({
 				});
             },            
         });	
-	},
-});
-
-App.InicioView = Em.View.extend({
-	templateName: 'inicio',
-});
-
-
-App.ApplicationView = Em.View.extend({
-	templateName: 'application',
-	
-	
-	activarNotificaciones: function (){
-		if (window.webkitNotifications) {
-			window.webkitNotifications.requestPermission();
-			App.get('notificationController').set('estado', 0);
-		}
-	},
-	
-	mostrar : function () {
-		this.get('testModal').mostrar();
-	},
-});
-
-App.ExpedienteConsultaView = Em.View.extend({
-	templateName: 'expedienteConsulta',
-	
-	clickTextoCompleto: function(e){
-        console.log(this.getPath('App.expedienteConsultaController.content.url'));
     }
-});
-
-App.CitacionConsultaView = Em.View.extend({
-	templateName: 'citacionConsulta',
-});
-
-App.CalendarTool = Em.View.extend({
-    tagName: 'div',
-    attributeBindings: ['id', 'events', 'owner'],
-    classNamesBindings: ['class'],
 });
 
 App.MenuView = Em.View.extend({
