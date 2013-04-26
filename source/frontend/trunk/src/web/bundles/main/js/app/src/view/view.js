@@ -789,24 +789,24 @@ App.ExpedientesView = App.ListFilterView.extend({
 			return regexFirmantes.test((firmante.get('firmantesLabel')).toLowerCase());
 		});
 
-		var comisiones = $.map(this.get('filterComisiones'), function (value, key) { return value.get('nombre'); })
-		filtered = filtered.filter(function(expediente){
-			var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; })
-			var result = true;
-			comisiones.forEach(function(comision) {
-				if (!giros.contains(comision))
-					result = false;
-			});
-			return result;
-		});
-	
-		var getFilterTipos = $.map(this.get('filterTipos'), function (value, key){
-			return value;
-		})
-		
-		if (getFilterTipos.length > 0) {
-			filtered = filtered.filter(function(expediente){
-				return getFilterTipos.contains(expediente.get('tipolabel'));
+		if(this.get('filterComisiones')){
+			var comision = this.get('filterComisiones').get('nombre');
+
+			filtered 	= filtered.filter(function(expediente){
+			   var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; });
+			   if (!giros.contains(comision))
+			           return false;
+			   else
+			        return true;
+			});        
+		}
+
+
+		if(this.get('filterTipos')){
+			var tipo  = this.get('filterTipos');
+			filtered  = filtered.filter(function(expediente){
+				if(expediente.tipo == tipo)
+					return true;
 			});
 		}
 
