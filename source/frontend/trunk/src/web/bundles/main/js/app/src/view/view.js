@@ -1376,7 +1376,7 @@ App.CrearReunionView = App.ModalView.extend({
 				id: null,
 				nota: this.get('nota'),
 				fecha: moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' +this.get('startHora'),
-				comisiones: this.get('citacion.comisiones'),
+				comisiones: $.map(this.get('citacion.comisiones'), function (value, key) {  return {comision: {id: value.id}}; }),
 				citacion: App.Citacion.create({id: this.get('citacion.id') })
 			}));
 		} else if (opts.secondary) {
