@@ -1673,6 +1673,7 @@ App.CrearParteView = Ember.View.extend({
 		}
 		App.get('reunionConsultaController.content').save();
 		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
+		console.log(App.get('reunionConsultaController.content'));
 		
 		
 	},
