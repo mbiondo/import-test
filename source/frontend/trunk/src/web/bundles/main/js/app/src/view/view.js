@@ -1644,12 +1644,13 @@ App.CrearParteView = Ember.View.extend({
 					parteItem.set('tipo', tema.get('parteEstado.tipo'));
 				} else {
 					parteItem = tema.get('parteEstado');
+					parteItem.id = null;
 					parteItem.proyectos = [];
 					parteItem.orden = parte.length;
-					
-
+					var orden = 0;
 					tema.get('proyectos').forEach(function (proyecto){
-						parteItem.proyectos.addObject(proyecto);
+						parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.get('id')}});
+						orden++;
 					});	
 				}
 				parte.addObject(parteItem);
