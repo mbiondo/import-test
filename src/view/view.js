@@ -1385,7 +1385,9 @@ App.CrearReunionView = App.ModalView.extend({
 				id: null,
 				nota: this.get('nota'),
 				fecha: moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' +this.get('startHora'),
-				comisiones: $.map(this.get('citacion.comisiones'), function (value, key) {  return {orden: key, nombre: value.nombre, comision: {id: value.id}}; }),
+				comisiones: $.map(this.get('citacion.comisiones'), function (value, key) {  
+					return {orden: key, nombre: value.nombre, comision: {id: value.id}}; 
+				}),
 				citacion: App.Citacion.create({id: this.get('citacion.id') })
 			}));
 		} else if (opts.secondary) {
@@ -1692,10 +1694,10 @@ App.EstadoParteView = Ember.View.extend({
 
 	listaEstados: [
 		'Seleccione una accion',
-		App.ParteEstado.create({id: 1, tipo: 'Iniciacion'}),
-		App.ParteEstado.create({id: 2, tipo: 'En Estudio'}),
-		App.ParteEstado.create({id: 3, tipo: 'PreDictamen'}),
-		App.ParteEstado.create({id: 4, tipo: 'Dictamen'}),
+		App.ParteEstado.create({id: 1, tipo: 'Iniciacion', itemParte: 1}),
+		App.ParteEstado.create({id: 2, tipo: 'En Estudio', itemParte: 2}),
+		App.ParteEstado.create({id: 3, tipo: 'PreDictamen', itemParte: 3}),
+		App.ParteEstado.create({id: 4, tipo: 'Dictamen', itemParte: 4}),
 	],
 });
 
