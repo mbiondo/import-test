@@ -1738,7 +1738,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cargarExpedientes: function () {
 		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + '2013',
+			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + moment().format('YYYY'),
 			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'GET',
