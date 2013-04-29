@@ -968,14 +968,14 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							
 							if (!hasRole('ROLE_DIPUTADO')) {
-								appController.connectOutlet('menu', 'subMenu');
+								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 							}
 							else {
-								appController.connectOutlet('menu', 'subMenuOradores');
 								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
 							}
 							
+							appController.connectOutlet('menu', 'subMenuOradores');
 							
 
 							App.get('sesionController').set('content', context);
@@ -1077,15 +1077,15 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							
 							if (!hasRole('ROLE_DIPUTADO')) {
-								appController.connectOutlet('menu', 'subMenu');
+								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 								appController.connectOutlet('sesion', 'sesionTurnos');
 							}
 							else {
-								appController.connectOutlet('menu', 'subMenuOradores');
+								
 								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
 							}							
-
+							appController.connectOutlet('menu', 'subMenuOradores');
 
 							//appController.cargarSesiones(true);
 							
