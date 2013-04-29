@@ -776,6 +776,13 @@ App.ExpedientesView = App.ListFilterView.extend({
 		App.get('expedientesController').set('sortAscending', order);
 	},
 
+	deseleccionarComision: function () {
+		this.set('filterComisiones', null);
+	},
+	deseleccionarTipos: function () {
+		this.set('filterTipos', null);
+	},
+
 	listaExpedientes: function (){
 		localStorage.setObject('tipos', App.get('comisionesController.content'));
 
@@ -812,6 +819,7 @@ App.ExpedientesView = App.ListFilterView.extend({
 
 		if (this.get('startFecha') && this.get('endFecha')){
 			_self = this;
+
 			filtered = filtered.filter(function(expediente){
 				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
 				console.log(expFecha);
@@ -883,6 +891,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 App.CitacionConsultaView = Em.View.extend({
 	templateName: 'citacionConsulta',
+	probando:'suspendida'
 });
 
 App.CalendarTool = Em.View.extend({
