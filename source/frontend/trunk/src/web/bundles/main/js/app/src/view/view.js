@@ -1389,7 +1389,7 @@ App.CrearReunionView = App.ModalView.extend({
 	
 	didInsertElement: function() {	
 		this.set('startFecha', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD').format('DD/MM/YYYY'));
-		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD hh:ss').format('hh:ss'));
+		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD HH:ss').format('HH:ss'));
 		
 		$('.timepicker').timeEntry({
 			show24Hours: true, // 24 hours format
