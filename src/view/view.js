@@ -1192,7 +1192,7 @@ App.CitacionCrearView = Em.View.extend({
 			var regex = new RegExp(this.get('filterTextExpedientes').toString().toLowerCase());
 			
 			filtered = App.get('citacionCrearController.expedientes').filter(function(expediente) {
-				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
+				return regex.test((expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
 			});
 		}
 		else
