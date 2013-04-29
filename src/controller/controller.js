@@ -907,8 +907,8 @@ App.CitacionesController = App.RestController.extend({
 	type: App.Citacion,
 	anio: '',
 	useApi: true,
-	sortProperties: ['nombre'],
-	sortAscending: true,
+	sortProperties: ['start'],
+	sortAscending: false,
 	
 	init : function () {
 		this._super();
@@ -1138,6 +1138,8 @@ App.ComisionesController = App.RestController.extend({
 	url: '/com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
+	sortProperties: ['nombre'],
+	sortAscending: true,	
 	useApi: true,
 	
 	init : function () {
