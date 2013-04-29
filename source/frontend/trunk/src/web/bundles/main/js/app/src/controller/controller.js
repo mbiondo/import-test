@@ -1144,12 +1144,9 @@ App.ComisionesController = App.RestController.extend({
 		this._super();
 	},
 	load: function() {
-		 this.loadSucceeded(localStorage.getObject('comisiones'));
+		this.set('loaded', false);
+		this.loadSucceeded(localStorage.getObject('comisiones'));
 	},
-	loadSucceeded: function(data){
-		this._super(data);
-	},
-	
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Comision.create(data);
