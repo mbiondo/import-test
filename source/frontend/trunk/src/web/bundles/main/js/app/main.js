@@ -232,7 +232,35 @@ App.menuController = App.MenuController.create({
 					],
 				}),
 			]			
-		}),				
+		}),
+                
+		App.MenuItem.create({
+			id: 6,
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+			titulo: 'Expedientes Archivados',
+			url: '#/expedientesArchivados',
+			icono: 'bundles/main/images/icons/mainnav/forms.png',
+			
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Expedientes Archivados',
+					url: '#/expedientesArchivados',
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+					subMenu: [
+						App.MenuItem.create({
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							titulo: 'Archivados',
+							url: '#/expedientesArchivados',
+						}),
+						App.MenuItem.create({
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							titulo: 'Vigentes',
+							url: '#/expedientesArchivados',
+						}),
+					],
+				}),
+			]
+		})                
 	]
 });
 
@@ -280,6 +308,10 @@ App.breadCumbController = App.BreadCumbController.create({
 
 App.expedientesController = App.ExpedientesController.create({
 	content: [],
+});
+
+App.expedientesArchivadosController = App.ExpedientesArchivadosController.create({
+	content: []
 });
 
 App.citacionesController = App.CitacionesController.create({

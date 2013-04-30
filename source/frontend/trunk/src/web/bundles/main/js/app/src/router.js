@@ -330,7 +330,46 @@ App.Router =  Em.Router.extend({
 							
 			},
 		}),
-		
+
+		expedientesArchivados: Em.Route.extend({
+			route: "/expedientesArchivados",
+			
+			deserialize: function(router, params) {
+			
+				if (App.get('expedientesArchivadosController.loaded'))
+					return null;
+				
+				var deferred = $.Deferred(),
+				
+				fn = function() {
+					App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
+					deferred.resolve(null);					
+				};
+
+				App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
+				App.get('expedientesArchivadosController').load();
+
+				App.get('comisionesController').load();
+				App.get('comisionesController').addObserver('loaded', this, fn);
+								
+				return deferred.promise();
+			},	
+				
+			connectOutlets: function(router, context) {
+			
+				var appController = router.get('applicationController');	
+				appController.connectOutlet('main', 'expedientesArchivados');
+				appController.connectOutlet('menu', 'subMenu');
+
+				App.get('menuController').seleccionar(6);
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Expedientes Archivados', url: '#/expedientesArchivados'}
+				]);				
+							
+			},
+		}), 
+        
 		comisiones: Em.Route.extend({
 			route: "/comisiones",
 			

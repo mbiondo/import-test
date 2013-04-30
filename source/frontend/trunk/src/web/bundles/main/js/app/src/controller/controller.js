@@ -902,6 +902,82 @@ App.ExpedientesController = App.RestController.extend({
 	},	
 });
 
+App.ExpedientesArchivadosController = App.RestController.extend({
+        url: '/exp/proyectos/2012',
+	type: App.Expediente,
+	useApi: true,
+	sortProperties: ['fechaPub'],
+	sortAscending: true,
+	loaded: false,
+	loaded2012: false,
+
+	init : function () {
+		this._super();              
+	},
+
+	load2012: function () {
+		App.get('expedientesArchivadosController').set('loaded', false);
+		App.get('expedientesArchivadosController').set('loaded2012', true);
+
+                var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+			
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+
+		}
+	},
+
+	
+	load: function() {
+                var url = '/exp/proyectos/2013';
+		this.set('loaded', false);
+		//var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+			
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Expediente.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			App.get('expedientesArchivadosController').addObject(item);
+		}
+	},	
+});
+
 App.CitacionesController = App.RestController.extend({
 	url: '/cit/citaciones/%@',
 	type: App.Citacion,
