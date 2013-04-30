@@ -1805,6 +1805,7 @@ App.CrearParteView = Ember.View.extend({
 		});
 
 		App.set('reunionConsultaController.content.parte', parte);
+		console.log(App.get('reunionConsultaController.content'));
 		
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
@@ -1820,7 +1821,7 @@ App.CrearParteView = Ember.View.extend({
 		}
 		App.get('reunionConsultaController.content').save();
 		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
-		console.log(App.get('reunionConsultaController.content'));
+		
 		
 		
 	},
