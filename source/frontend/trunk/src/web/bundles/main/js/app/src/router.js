@@ -659,11 +659,10 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'reunionConsulta');
 							appController.connectOutlet('menu', 'subMenu');
-							
-							
+
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
-								{titulo: App.get('reunionConsultaController.content').get('nota')},
+								{titulo: 'Reunion '+ moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
