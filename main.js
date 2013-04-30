@@ -139,7 +139,7 @@ App.menuController = App.MenuController.create({
 				}),	
 
 				App.MenuItem.create({
-					titulo: 'Ordenes del dia',
+					titulo: 'Ordenes del día',
 					url: '#/comisiones/OD/dictamenes',
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
@@ -355,11 +355,11 @@ App.userController = App.UserController.create();
 
 //App.initialize();
 Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
+	this.setItem(key, JSON.stringify(value));
 }
 
 Storage.prototype.getObject = function(key) {
-    return JSON.parse(this.getItem(key));
+	return JSON.parse(this.getItem(key));
 }
 
 App.deferReadiness();
@@ -401,11 +401,11 @@ if(!com){
 		type: 'GET',
 
 		success: function (data) {
-		    localStorage.setObject('comisiones', data);
+			localStorage.setObject('comisiones', data);
 
-		    $('#loadingScreen').remove();
+			$('#loadingScreen').remove();
 
-		  	App.advanceReadiness();				
+			App.advanceReadiness();				
 		}
 	});
 }
@@ -420,11 +420,11 @@ if (!exp) {
 		type: 'GET',
 
 		success: function (data) {
-		    localStorage.setObject('expedientes', data);
+			localStorage.setObject('expedientes', data);
 
-		    $('#loadingScreen').remove();
+			$('#loadingScreen').remove();
 
-		  	App.advanceReadiness();				
+			App.advanceReadiness();				
 		}
 	});
 } else {
