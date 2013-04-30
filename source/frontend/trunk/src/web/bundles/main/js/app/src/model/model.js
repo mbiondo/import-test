@@ -356,7 +356,14 @@ App.Reunion = Em.Object.extend({
 	}.property('nota'),
 
 	comisionesLabel: function () {
-		return "LALALALA";
+		var comisiones = this.comisiones;
+
+		if(comisiones.length > 0) {
+			if (comisiones.length ==1)
+				return comisiones.objectAt(0).nombre;
+			else
+				return comisiones.objectAt(0).nombre + " y otras (" + (comisiones.length - 1 ) + ")"; 		
+		}
 	}.property('comisiones'),
 });
 
