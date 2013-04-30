@@ -323,6 +323,7 @@ App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
 
 //Citaciones List
 
+
 App.CalendarItemListView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'citacion-item',
@@ -336,7 +337,6 @@ App.CalendarListView = App.ListFilterView.extend({
 	itemViewClass: App.CalendarItemListView, 	
 	columnas: ['Fecha', 'Titulo', 'Sala', 'Observaciones', 'Estado'],
 });
-
 
 
 //PLAN DE LABOR
@@ -1735,49 +1735,24 @@ App.ReunionView = Ember.View.extend({
 	},
 });
 
-App.ReunionesSinParteView = App.ListFilterView.extend({
-	templateName: 'reuniones-sin-parte',
+
+App.ReunionesSinParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
-	
-	lista: function () {
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		var filtered = App.get('reunionesSinParteController').get('content').filter(function(reunion) {
-			return regex.test((reunion.fecha).toLowerCase()) || regex.test((reunion.nota).toLowerCase());
-		});
-		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
-			max = filtered.length;
-			this.set('mostrarMasEnabled', false);
-		} else {
-			this.set('mostrarMasEnabled', true);
-		}
-		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'App.reunionesSinParteController.content', 'totalRecords'),
-	
-	mostrarMasEnabled: false,
+	columnas: ['Fecha', 'Nota', 'Comisiones'],
+});
+
+App.ReunionesSinParteView = Em.View.extend({
+	templateName: 'reuniones-sin-parte',
+
+});
+
+App.ReunionesConParteListView = App.ListFilterView.extend({
+	itemViewClass: App.ReunionView,
+	columnas: ['Fecha', 'Nota', 'Comisiones'],
 });
 
 App.ReunionesConParteView = App.ListFilterView.extend({
 	templateName: 'reuniones-con-parte',
-	itemViewClass: App.ParteView,
-	
-	lista: function () {
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		var filtered = App.get('reunionesConParteController').get('content').filter(function(reunion) {
-			return regex.test((reunion.fecha).toLowerCase()) || regex.test((reunion.nota).toLowerCase());
-		});
-		
-		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
-			max = filtered.length;
-			this.set('mostrarMasEnabled', false);
-		} else {
-			this.set('mostrarMasEnabled', true);
-		}
-		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'App.reunionesConParteController.content', 'totalRecords'),
-	
-	mostrarMasEnabled: false,
 });
 
 
