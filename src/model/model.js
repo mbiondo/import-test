@@ -89,6 +89,10 @@ App.Expediente = Em.Object.extend({
 		}
 	}.property('tipo'),
 
+	label: function () {
+                    return this.get('titulo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
+	}.property('titulo'),
+                
 	firmantesLabel: function() {
 		var firmantes = this.get('firmantes').sort(function (a, b) {
 			return a.orden - b.orden;

@@ -293,7 +293,7 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterTextComisiones', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
 });
@@ -844,6 +844,178 @@ App.ExpedientesView = App.ListFilterView.extend({
 	
 	mostrarMasEnabled: true,
 });
+
+
+App.ExpedienteArchivadoItemListView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'expedienteArchivado',
+});
+
+App.ExpedienteArchivadoListView = App.ListFilterView.extend({ 
+	itemViewClass: App.ExpedienteArchivadoItemListView, 	
+	columnas: ['N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros'],
+});
+
+
+App.ExpedienteArchivadoView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'expediente',
+	classNameBindings: ['content.seleccionada:active'],
+
+	
+	verExpediente: function () {
+		App.set('expedienteConsultaController.loaded', false);
+		App.get('router').transitionTo('loading');
+		App.set('expedienteConsultaController.content', App.Citacion.create({id: this.get('content').get('id')}));
+		
+		fn = function() {
+			App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+			App.get('router').transitionTo('expedienteConsulta.indexSubRoute', this.get('content'));
+		};
+
+		App.get('expedienteConsultaController').addObserver('loaded', this, fn);			
+		App.get('expedienteConsultaController').load();		
+	},
+});
+
+
+App.ExpedientesArchivadosView = App.ListFilterView.extend({
+	templateName: 'expedientesArchivados',
+	itemViewClass: App.ExpedienteArchivadoView,
+	sorting: false,
+	filterFirmantes: '',
+	startFecha: '',
+	endFecha: '',
+	filterComisiones: [],
+	filterTipos: [],
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
+	isExpanded: false,
+
+	didInsertElement: function(){
+		$("#expedientesAdvancedSearch").hide();
+	},
+	toogleSearch: function() {
+		this.set('isExpanded', !this.get('isExpanded'));
+		console.log(this.get('isExpanded'));
+	},	                
+	expedientesAdvancedSearch: function(){
+		this.$("#expedientesAdvancedSearch").slideToggle();
+	},                
+	ordenarAscID: function(event) {
+		this.ordenarPorCampo('expdip', true);
+	},
+	ordenarDescID: function(event) {
+		this.ordenarPorCampo('expdip', false);
+	},
+
+	ordenarAscTipo: function(event) {
+		this.ordenarPorCampo('tipo', true);
+	},
+	ordenarDescTipo: function(event) {
+		this.ordenarPorCampo('tipo', false);
+	},
+
+	ordenarAscTitulo: function(event) {
+		this.ordenarPorCampo('titulo', true);
+	},
+	ordenarDescTitulo: function(event) {
+		this.ordenarPorCampo('titulo', false);
+	},
+
+	ordenarAscFirmantes: function(event){
+		this.ordenarPorCampo('firmantesLabel', true);
+	},
+	ordenarDescFirmantes: function(event){
+		this.ordenarPorCampo('firmantesLabel', false);
+	},
+
+	ordenarAscIniciado: function(event){
+		this.ordenarPorCampo('iniciado', true);
+	},
+	ordenarDescIniciado: function(event){
+		this.ordenarPorCampo('iniciado', false);
+	},
+
+	ordenarAscGiros: function(event){
+		this.ordenarPorCampo('girosLabel', true);
+	},
+	ordenarDescGiros: function(event){
+		this.ordenarPorCampo('girosLabel', false);
+	},
+	setSorting: function(){
+		console.log('click en el header...');
+	},
+	
+	ordenarPorCampo: function (campo, order){		
+		App.get('expedientesArchivadosController').set('sortProperties', [campo]);
+		App.get('expedientesArchivadosController').set('sortAscending', order);
+	},
+
+	listaExpedientesArchivados: function (){
+		localStorage.setObject('tipos', App.get('comisionesController.content'));
+
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		filtered = App.get('expedientesArchivadosController').get('arrangedContent').filter(function(expediente){
+			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
+		});
+
+		var regexFirmantes = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
+		filtered = filtered.filter(function(firmante){
+			return regexFirmantes.test((firmante.get('firmantesLabel')).toLowerCase());
+		});
+
+		var comisiones = $.map(this.get('filterComisiones'), function (value, key) { return value.get('nombre'); })
+		filtered = filtered.filter(function(expediente){
+			var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; })
+			var result = true;
+			comisiones.forEach(function(comision) {
+				if (!giros.contains(comision))
+					result = false;
+			});
+			return result;
+		});
+	
+		var getFilterTipos = $.map(this.get('filterTipos'), function (value, key){
+			console.log(value);
+			return value;
+		})
+		
+		filtered = filtered.filter(function(expediente){
+			var result = true;
+			getFilterTipos.forEach(function(tipo) {
+				if (expediente.tipo != tipo) result = false;
+			});
+			return result;
+		});
+
+		if (this.get('startFecha') && this.get('endFecha')){
+			_self = this;
+			filtered = filtered.filter(function(expediente){
+				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
+				console.log(expFecha);
+				var fechaD = moment(_self.get('startFecha'), 'DD/MM/YYYY');
+				var fechaH = moment(_self.get('endFecha'), 'DD/MM/YYYY');	
+				var range = moment().range(fechaD, fechaH);
+
+				return range.contains(expFecha); // false
+			});
+		}
+
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+		return filtered.splice(0, this.get('totalRecords'));
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesArchivadosController.content.@each', 'totalRecords', 'sorting'),
+
+	
+	mostrarMasEnabled: true,
+});
+
 
 App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
