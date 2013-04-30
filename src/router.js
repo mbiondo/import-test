@@ -566,7 +566,7 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
-							{titulo: 'Sin Parte'},
+							{titulo: 'sin Parte'},
 						]);					
 						App.get('menuController').seleccionar(2);							
 					},						
@@ -596,7 +596,7 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
-							{titulo: 'Con Parte'},
+							{titulo: 'con Parte'},
 						]);					
 						App.get('menuController').seleccionar(2);							
 					},						
@@ -694,7 +694,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'}
+							{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'}
 						]);					
 						App.get('menuController').seleccionar(2);
 					},					
