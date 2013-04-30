@@ -543,7 +543,7 @@ App.Router =  Em.Router.extend({
 			reuniones: Em.Route.extend({
 				route: "/reuniones",
 				index: Ember.Route.extend({
-					route: "/",
+					route: "/sin/parte",
 					
 					deserialize: function(router, params) {
 						 var deferred = $.Deferred(),
