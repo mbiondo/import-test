@@ -853,7 +853,7 @@ App.ExpedienteArchivadoItemListView = Ember.View.extend({
 
 App.ExpedienteArchivadoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ExpedienteArchivadoItemListView, 	
-	columnas: ['N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros'],
+	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros'],
 });
 
 
