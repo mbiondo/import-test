@@ -127,12 +127,12 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Reuniones sin parte',
+							titulo: 'Reuniones sin Parte',
 							url: '#/comisiones/reuniones/sin/parte',
 						}),		
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Reuniones con parte',
+							titulo: 'Reuniones con Parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
 					]
