@@ -1630,13 +1630,12 @@ App.CitacionCrearController = Em.Object.extend({
 
 	crearReunionCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK
-		
 		if (data.responseText)
 		{
 			var obj = data.responseText;
 			
 			App.set('reunionConsultaController.loaded', false);
-			App.set('reunionConsultaController.content', App.Citacion.create(obj));
+			App.set('reunionConsultaController.content', App.Citacion.create({id: data.responseText.id}));
 
 			fn = function() {
 				var reunion = App.get('reunionConsultaController.content');
