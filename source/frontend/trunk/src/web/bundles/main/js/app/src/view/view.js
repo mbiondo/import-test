@@ -112,7 +112,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
     tagName: 'input',
     type: "text",
-    attributeBindings: ['type', 'value'],
+    attributeBindings: ['type', 'value', 'placeholder'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
