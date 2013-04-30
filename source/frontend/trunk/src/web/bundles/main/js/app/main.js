@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:8080/sparl/rest',
+	url: 'http://10.185.204.13:8080/sparl/rest',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -128,7 +128,7 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Reuniones sin parte',
-							url: '#/comisiones/reuniones',
+							url: '#/comisiones/reuniones/sin/parte',
 						}),		
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],

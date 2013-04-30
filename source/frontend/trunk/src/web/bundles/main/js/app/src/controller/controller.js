@@ -1634,7 +1634,7 @@ App.CitacionCrearController = Em.Object.extend({
 		{
 			var obj = JSON.parse(data.responseText);
 			App.set('reunionConsultaController.loaded', false);
-			App.set('reunionConsultaController.content', App.Citacion.create(obj));
+			App.set('reunionConsultaController.content', App.Reunion.create(obj));
 
 			fn = function() {
 				var reunion = App.get('reunionConsultaController.content');
