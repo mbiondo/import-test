@@ -1632,10 +1632,9 @@ App.CitacionCrearController = Em.Object.extend({
 		//TO-DO Revisar que devuelva OK
 		if (data.responseText)
 		{
-			var obj = data.responseText;
-			
+			var obj = JSON.parse(data.responseText);
 			App.set('reunionConsultaController.loaded', false);
-			App.set('reunionConsultaController.content', App.Citacion.create({id: data.responseText.id}));
+			App.set('reunionConsultaController.content', App.Citacion.create(obj));
 
 			fn = function() {
 				var reunion = App.get('reunionConsultaController.content');
