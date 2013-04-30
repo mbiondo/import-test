@@ -699,7 +699,7 @@ App.Router =  Em.Router.extend({
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Nueva Citacion'},
+								{titulo: 'Crear Citacion'},
 							]);					
 							
 						},				
