@@ -298,6 +298,13 @@ App.ListFilterView = Ember.View.extend({
 	totalRecords: 10,
 });
 
+App.ListFilterWithSortView = App.ListFilterView.extend({
+	ordenarPorCampo: function (campo, asc){		
+		App.get('expedientesController').set('sortProperties', [campo]);
+		App.get('expedientesController').set('sortAscending', asc);
+	},	
+});
+
 
 
 //DIPUTADOS ORADORES VIEW
@@ -1716,7 +1723,7 @@ App.ReunionConsultaView = Em.View.extend({
 App.CrearParteView = Ember.View.extend({
 	templateName: 'crear-parte',
 	expedientes: [],
-	
+
 	listaTemas: function () {
 		return App.get('citacionConsultaController.content.temas');
 	}.property('citacionConsultaController.content.temas'),
@@ -1773,6 +1780,7 @@ App.CrearParteView = Ember.View.extend({
 
 		App.get('reunionConsultaController.content.comisiones').forEach(function (comision) {
 			comision.comision = Em.Object.create({id: comision.id});
+			comision.id = null;
 			comisiones.addObject(comision);
 		});
 
