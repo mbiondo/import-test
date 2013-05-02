@@ -787,8 +787,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Agenda de comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Crear Citación'},
+								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
+								{titulo: 'Citación Crear', url: '#/comisiones/citaciones/citacion/crear'},
 							]);					
 							
 						},				
@@ -825,7 +825,7 @@ App.Router =  Em.Router.extend({
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: 'Citación '+ moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
@@ -918,8 +918,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
-								{titulo: 'Editar Citación'}
+								{titulo: 'Citación '+ moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+								{titulo: 'Editar'}
 							]);						
 							App.get('menuController').seleccionar(2);					
 						},
