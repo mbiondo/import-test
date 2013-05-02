@@ -1665,74 +1665,6 @@ App.ReunionView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
 	templateName: 'reunion',
-	
-	verReunion: function () {
-		App.set('reunionConsultaController.loaded', false);
-		App.get('router').transitionTo('loading');
-		App.set('reunionConsultaController.content', App.Reunion.create({id: this.get('content').get('id')}));
-
-		var deferred = $.Deferred();
-		
-		fn2 = function () {
-		
-			var reunion = App.get('reunionConsultaController.content');
-			var citacion = App.get('citacionConsultaController.content');
-			var temas = [];
-			citacion.get('temas').forEach(function (tema) {
-				temas.addObject(App.CitacionTema.create(tema));
-			});
-			citacion.set('temas', temas);
-			
-			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));							
-		}
-		
-		fn = function() {
-			var reunion = App.get('reunionConsultaController.content');
-			App.set('citacionConsultaController.loaded', false);
-			App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
-			App.get('citacionConsultaController').addObserver('loaded', this, fn2);
-			App.get('citacionConsultaController').load();
-			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-		}							
-		
-		App.get('reunionConsultaController').addObserver('loaded', this, fn);
-		App.get('reunionConsultaController').load();	
-	},
-	
-	crearParte: function () {
-		
-		App.set('reunionConsultaController.loaded', false);
-		App.get('router').transitionTo('loading');
-		App.set('reunionConsultaController.content', App.Reunion.create({id: this.get('content').get('id')}));
-
-		var deferred = $.Deferred();
-		
-		fn2 = function () {
-		
-			var reunion = App.get('reunionConsultaController.content');
-			var citacion = App.get('citacionConsultaController.content');
-			var temas = [];
-			citacion.get('temas').forEach(function (tema) {
-				temas.addObject(App.CitacionTema.create(tema));
-			});
-			citacion.set('temas', temas);
-			
-			App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');							
-		}
-		
-		fn = function() {
-			var reunion = App.get('reunionConsultaController.content');
-			App.set('citacionConsultaController.loaded', false);
-			App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
-			App.get('citacionConsultaController').addObserver('loaded', this, fn2);
-			App.get('citacionConsultaController').load();
-			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-		}							
-		
-		App.get('reunionConsultaController').addObserver('loaded', this, fn);
-		App.get('reunionConsultaController').load();			
-		
-	},
 });
 
 
@@ -1788,10 +1720,29 @@ App.CrearParteView = Ember.View.extend({
 				if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
 					parteItem = tema.get('dictamen');
 					parteItem.set('id_reunion', App.get('reunionConsultaController.content.id'));
-					parteItem.set('tipo', tema.get('parteEstado.tipo'));
+					parteItem.set('itemParte', tema.get('parteEstado.descripcion'));
+					var proyectos = [];
+					var proyectosVistos = [];
+
+					var orden = 0;
+					parteItem.proyectos.forEach(function (proyecto){
+						proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+						orden++;
+					});
+
+					var orden = 0;
+					parteItem.proyectosVistos.forEach(function (proyecto){
+						proyectosVistos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+						orden++;
+					});					
+
+					parteItem.proyectos = proyectos;
+					parteItem.proyectosVistos = proyectosVistos;
+
 				} else {
-					parteItem = tema.get('parteEstado');
+					parteItem = Em.Object.create(tema.get('parteEstado'));
 					parteItem.id = null;
+					parteItem.itemParte = parteItem.descripcion;
 					parteItem.proyectos = [];
 					parteItem.orden = parte.length;
 					var orden = 0;
@@ -1842,13 +1793,15 @@ App.EstadoParteView = Ember.View.extend({
 
 	}.property('tema.parteEstado'),
 
-	listaEstados: [
-		'Seleccione una accion',
-		App.ParteEstado.create({id: 1, tipo: 'Iniciacion', itemParte: 1}),
-		App.ParteEstado.create({id: 2, tipo: 'En Estudio', itemParte: 2}),
-		App.ParteEstado.create({id: 3, tipo: 'PreDictamen', itemParte: 3}),
-		App.ParteEstado.create({id: 4, tipo: 'Dictamen', itemParte: 4}),
-	],
+	listaEstados: function () {
+		var arr = ['Seleccione una accion'];
+		if (App.get('eventosParteController.content')) {
+			App.get('eventosParteController.content').forEach(function(eventoParte) {
+				arr.addObject(eventoParte);
+			});
+		}
+		return arr;
+	}.property('App.eventosParteController.content')
 });
 
 

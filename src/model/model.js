@@ -302,11 +302,11 @@ App.CaracterDespacho = Em.Object.extend({
 });
 
 
-App.ParteEstado = Em.Object.extend({
+App.EventoParte = Em.Object.extend({
 	id: '',
 	tipo: '',
 	toString: function () {
-		return this.get('tipo');
+		return this.get('descripcion');
 	},
 });
 
