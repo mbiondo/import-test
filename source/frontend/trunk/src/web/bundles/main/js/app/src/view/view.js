@@ -1083,6 +1083,7 @@ App.CalendarTool = Em.View.extend({
                 agenda: 'H:mm',
                 '': 'H:mm'
             },
+            axisFormat: 'H:mm',
             monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
             monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
             dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
