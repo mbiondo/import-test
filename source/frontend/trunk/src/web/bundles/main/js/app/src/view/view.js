@@ -1715,6 +1715,7 @@ App.ReunionConsultaView = Em.View.extend({
 
 App.CrearParteView = Ember.View.extend({
 	templateName: 'crear-parte',
+	expedientes: [],
 	
 	listaTemas: function () {
 		return App.get('citacionConsultaController.content.temas');
@@ -1772,7 +1773,7 @@ App.CrearParteView = Ember.View.extend({
 
 		App.get('reunionConsultaController.content.comisiones').forEach(function (comision) {
 			comision.comision = Em.Object.create({id: comision.id});
-			comsiones.addObject(comision);
+			comisiones.addObject(comision);
 		});
 
 		App.set('reunionConsultaController.content.parte', parte);
@@ -1791,11 +1792,10 @@ App.CrearParteView = Ember.View.extend({
 				$.jGrowl('No se pudo crear el parte!', { life: 5000 });
 			}
 		}
+
 		App.get('reunionConsultaController.content').save();
 		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
-		
-		
-		
+
 	},
 });
 
