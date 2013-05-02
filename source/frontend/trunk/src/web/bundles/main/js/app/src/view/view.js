@@ -1720,7 +1720,8 @@ App.CrearParteView = Ember.View.extend({
 				if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
 					parteItem = tema.get('dictamen');
 					parteItem.set('id_reunion', App.get('reunionConsultaController.content.id'));
-					parteItem.set('itemParte', tema.get('parteEstado.descripcion'));
+					parteItem.set('itemParte', tema.get('parteEstado.id'));
+					parteItem.set('tipo', tema.get('parteEstado.descripcion'));
 					var proyectos = [];
 					var proyectosVistos = [];
 
@@ -1742,7 +1743,8 @@ App.CrearParteView = Ember.View.extend({
 				} else {
 					parteItem = Em.Object.create(tema.get('parteEstado'));
 					parteItem.id = null;
-					parteItem.itemParte = parteItem.descripcion;
+					parteItem.set('itemParte', tema.get('parteEstado.id'));
+					parteItem.set('tipo', tema.get('parteEstado.descripcion'));
 					parteItem.proyectos = [];
 					parteItem.orden = parte.length;
 					var orden = 0;
