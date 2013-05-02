@@ -669,7 +669,6 @@ App.ExpedienteView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
 	templateName: 'expediente',
-	classNameBindings: ['content.seleccionada:active'],
 
 	
 	verExpediente: function () {
