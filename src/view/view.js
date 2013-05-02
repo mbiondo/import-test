@@ -1072,75 +1072,75 @@ App.CalendarTool = Em.View.extend({
     classNamesBindings: ['class'],
 
     didInsertElement: function(){
-	       $('#mycalendar').fullCalendar({
+        $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay '
             },
             editable: false,
-		   timeFormat: {
-		    agenda: 'h(:mm)t{ - h(:mm)t}',
-		    '': 'h(:mm)t{-h(:mm)t }'
-		   },
-		   monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
-		   monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-		   dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-		   dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-		   buttonText: {
-		    today: 'Hoy',
-		    month: 'Mes',
-		    week: 'Semana',
-		    day: 'Día'
-		   },
-		   allDayText: 'Todo el día',
-			events: function(start, end, callback) {
+            timeFormat: {
+                agenda: 'H:mm',
+                '': 'H:mm'
+            },
+            monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
+            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+            buttonText: {
+             today: 'Hoy',
+             month: 'Mes',
+             week: 'Semana',
+             day: 'Día'
+            },
+            allDayText: 'Todo el día',
+            events: function(start, end, callback) {
 				
-				var fn = function() {
-				
-					App.get('citacionesController').removeObserver('loaded', this, fn);
-					App.get('citacionesController').get('content').forEach(function (citacion) {
-						var color = '';
-						if (citacion.get('estado'))
-						{
-							switch (citacion.get('estado').id)
-							{
-								case 2:
-									color = "green";
-								break;
-								case 3:
-									color = "red";
-								break;						
-								default:
-									color = "";
-								break;
-							}					
-							citacion.set('color', color);
-							citacion.set('url', '');
-						}	
-					});					
-					callback(App.get('citacionesController').get('content'));
-				}
-				
-				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
-				App.get('citacionesController').set('loaded', false);
-				App.get('citacionesController').addObserver('loaded', this, fn);
-				App.get('citacionesController').load();				
-			},
+                var fn = function() {
+
+                        App.get('citacionesController').removeObserver('loaded', this, fn);
+                        App.get('citacionesController').get('content').forEach(function (citacion) {
+                                var color = '';
+                                if (citacion.get('estado'))
+                                {
+                                        switch (citacion.get('estado').id)
+                                        {
+                                                case 2:
+                                                        color = "green";
+                                                break;
+                                                case 3:
+                                                        color = "red";
+                                                break;						
+                                                default:
+                                                        color = "";
+                                                break;
+                                        }					
+                                        citacion.set('color', color);
+                                        citacion.set('url', '');
+                                }	
+                        });					
+                        callback(App.get('citacionesController').get('content'));
+                }
+
+                App.get('citacionesController').set('anio', moment(start).format('YYYY'));
+                App.get('citacionesController').set('loaded', false);
+                App.get('citacionesController').addObserver('loaded', this, fn);
+                App.get('citacionesController').load();				
+            },
 			
             eventRender: function(event, element, view) {
-				element.bind('click', function() {		
-					App.set('citacionConsultaController.loaded', false);
-					App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
-					App.get('router').transitionTo('loading');
-					fn = function() {
-						App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-						App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
-					};
-					
-					App.get('citacionConsultaController').addObserver('loaded', this, fn);			
-					App.get('citacionConsultaController').load();
-				});
+                element.bind('click', function() {		
+                        App.set('citacionConsultaController.loaded', false);
+                        App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
+                        App.get('router').transitionTo('loading');
+                        fn = function() {
+                                App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+                                App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
+                        };
+
+                        App.get('citacionConsultaController').addObserver('loaded', this, fn);			
+                        App.get('citacionConsultaController').load();
+                });
             },            
         });	
     }
