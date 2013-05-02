@@ -295,40 +295,87 @@ App.Router =  Em.Router.extend({
 		expedientes: Em.Route.extend({
 			route: "/expedientes",
 			
-			deserialize: function(router, params) {
-			
-				if (App.get('expedientesController.loaded'))
-					return null;
+			index: Em.Route.extend({
+				route: '/',
+				deserialize: function(router, params) {
 				
-				var deferred = $.Deferred(),
+					if (App.get('expedientesController.loaded'))
+						return null;
+					
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+						App.get('expedientesController').removeObserver('loaded', this, fn);	
+						deferred.resolve(null);					
+					};
+
+					App.get('expedientesController').addObserver('loaded', this, fn);
+					App.get('expedientesController').load();
+
+					App.get('comisionesController').load();
+					App.get('comisionesController').addObserver('loaded', this, fn);
+									
+					return deferred.promise();
+				},	
+					
+				connectOutlets: function(router, context) {
 				
-				fn = function() {
-					App.get('expedientesController').removeObserver('loaded', this, fn);	
-					deferred.resolve(null);					
-				};
+					var appController = router.get('applicationController');	
+					appController.connectOutlet('main', 'expedientes');
+					appController.connectOutlet('menu', 'subMenu');
 
-				App.get('expedientesController').addObserver('loaded', this, fn);
-				App.get('expedientesController').load();
-
-				App.get('comisionesController').load();
-				App.get('comisionesController').addObserver('loaded', this, fn);
+					App.get('menuController').seleccionar(1);
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Expedientes', url: '#/expedientes'}
+					]);				
 								
-				return deferred.promise();
-			},	
-				
-			connectOutlets: function(router, context) {
-			
-				var appController = router.get('applicationController');	
-				appController.connectOutlet('main', 'expedientes');
-				appController.connectOutlet('menu', 'subMenu');
+				},
+			}),
 
-				App.get('menuController').seleccionar(1);
-				
-				App.get('breadCumbController').set('content', [
-					{titulo: 'Expedientes', url: '#/expedientes'}
-				]);				
-							
-			},
+
+			expedienteConsulta: Ember.Route.extend({
+
+				route: '/expediente',
+
+				indexSubRoute: Ember.Route.extend({
+					route: '/:expediente/ver',
+
+					deserialize: function(router, params) {
+						App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
+						
+						var deferred = $.Deferred(),
+						fn = function() {
+							if (App.get('expedienteConsultaController.loaded')) {
+								var expediente = App.get('expedienteConsultaController.content');
+								deferred.resolve(expediente);
+								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
+							}
+						};
+						
+						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
+						App.get('expedienteConsultaController').load();				
+						return deferred.promise();
+					},
+
+					serialize: function(router, context) {
+						var expedienteId = context.get('id');
+						return {expediente: expedienteId}
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'expedienteConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Expedientes', url: '#/expedientes'},
+							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
+						]);					
+						App.get('menuController').seleccionar(1);					
+					},
+				}),
+			}),			
 		}),
 
 		expedientesArchivados: Em.Route.extend({
@@ -883,48 +930,7 @@ App.Router =  Em.Router.extend({
 		}),
 		
 		
-		expedienteConsulta: Ember.Route.extend({
-
-			route: '/expedientes/expediente',
-
-			indexSubRoute: Ember.Route.extend({
-				route: '/:expediente/ver',
-
-				deserialize: function(router, params) {
-					App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
-					
-					var deferred = $.Deferred(),
-					fn = function() {
-						if (App.get('expedienteConsultaController.loaded')) {
-							var expediente = App.get('expedienteConsultaController.content');
-							deferred.resolve(expediente);
-							App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
-						}
-					};
-					
-					App.get('expedienteConsultaController').addObserver('loaded', this, fn);
-					App.get('expedienteConsultaController').load();				
-					return deferred.promise();
-				},
-
-				serialize: function(router, context) {
-					var expedienteId = context.get('id');
-					return {expediente: expedienteId}
-				},
-
-				connectOutlets: function(router, context) {
-					var appController = router.get('applicationController');
-					appController.connectOutlet('main', 'expedienteConsulta');
-					appController.connectOutlet('menu', 'subMenu');
-					
-					App.get('breadCumbController').set('content', [
-						{titulo: 'Expedientes', url: '#/expedientes'},
-						{titulo: App.get('expedienteConsultaController.content').get('expdip')}
-					]);					
-					App.get('menuController').seleccionar(1);					
-				},
-			}),
-		}),
+		
 		
 		recinto: Em.Route.extend({
 			route: "/recinto",
