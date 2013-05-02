@@ -298,11 +298,45 @@ App.ListFilterView = Ember.View.extend({
 	totalRecords: 10,
 });
 
-App.ListFilterWithSortView = App.ListFilterView.extend({
+
+App.ListHeaderItemView = Em.View.extend({
+	tagName: 'tr',
+	templateName: 'list-header-item',
+});
+
+App.ListHeaderWithSortItemView = App.ListHeaderItemView.extend({
+	templateName: 'list-header-item-with-sort',
+
+	sortAsc: function (campo) {
+		this.get('parentView').ordenarPorCampo(campo, true);
+	},
+
+	sortDesc: function (campo) {
+		this.get('parentView').ordenarPorCampo(campo, false);
+	},
+
+});
+
+App.ListHeaderView = Em.CollectionView.extend({
+	tagName: 'tr',
+	controller: null,
+	itemViewClass: App.ListHeaderItemView,
+});
+
+App.ListHeaderWithSortView = App.ListHeaderView.extend({
+	templateName: 'list-header-item-with-sort',
+	itemViewClass: App.ListHeaderWithSortItemView,
+
 	ordenarPorCampo: function (campo, asc){		
-		App.get('expedientesController').set('sortProperties', [campo]);
-		App.get('expedientesController').set('sortAscending', asc);
+		this.get('controller').set('sortProperties', [campo]);
+		this.get('controller').set('sortAscending', asc);
 	},	
+});
+
+
+App.ListFilterWithSortView = App.ListFilterView.extend({
+	templateName: 'sortable-list',
+	headerViewClass : App.ListHeaderWithSortView,
 });
 
 
@@ -1776,16 +1810,16 @@ App.CrearParteView = Ember.View.extend({
 		});
 
 		
-		var comisiones = [];
+/*		var comisiones = [];
 
 		App.get('reunionConsultaController.content.comisiones').forEach(function (comision) {
 			comision.comision = Em.Object.create({id: comision.id});
 			comision.id = null;
 			comisiones.addObject(comision);
 		});
-
+*/
 		App.set('reunionConsultaController.content.parte', parte);
-		App.set('reunionConsultaController.content.comisiones', comisiones);
+		//App.set('reunionConsultaController.content.comisiones', comisiones);
 
 		
 		fn = function () {
