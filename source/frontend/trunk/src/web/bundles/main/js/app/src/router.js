@@ -609,8 +609,10 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
+
 							App.caracterDespachoController = App.CaracterDespachoController.create();
 							App.firmantesController = App.FirmantesController.create();
+							App.eventosParteController = App.EventosParteController.create();
 
 							App.set('reunionConsultaController.loaded', false);
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
@@ -618,7 +620,7 @@ App.Router =  Em.Router.extend({
 							var deferred = $.Deferred();
 							
 							fn2 = function () {
-								if (App.get('caracterDespachoController.loaded') && App.get('firmantesController.loaded') && App.get('citacionConsultaController.loaded')) {
+								if (App.get('caracterDespachoController.loaded') && App.get('firmantesController.loaded') && App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
 									var reunion = App.get('reunionConsultaController.content');
 									var citacion = App.get('citacionConsultaController.content');
 									var temas = [];
@@ -644,8 +646,10 @@ App.Router =  Em.Router.extend({
 							App.get('reunionConsultaController').addObserver('loaded', this, fn);
 							App.get('caracterDespachoController').addObserver('loaded', this, fn2);
 							App.get('firmantesController').addObserver('loaded', this, fn2);
+							App.get('eventosParteController').addObserver('loaded', this, fn2);
 							App.get('reunionConsultaController').load();
 							App.get('caracterDespachoController').load();
+							App.get('eventosParteController').load();
 							App.get('firmantesController').load();
 							App.get('expedientesController').load();
 							return deferred.promise();

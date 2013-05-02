@@ -1420,6 +1420,19 @@ App.PartesController = App.RestController.extend({
 	},		
 });
 
+App.EventosParteController = App.RestController.extend({
+	url: '/par/secciones',
+	type: App.EventoParte,
+	useApi: true,
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.EventoParte.create(data);
+		item.setProperties(data);
+		this.addObject(item);	
+	},			
+});
+
 App.ReunionesSinParteController = App.RestController.extend({
 	url: '/com/reun/sp',
 	type: App.Reunion,
