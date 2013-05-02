@@ -1093,6 +1093,16 @@ App.CalendarTool = Em.View.extend({
              week: 'Semana',
              day: 'Día'
             },
+            titleFormat: {
+                month: 'MMMM yyyy',
+                week: "dd MMM[ yyyy]{ '&#8212;' dd MMM yyyy}",
+                day: 'd MMM yyyy'
+            },
+            columnFormat: {
+                month: 'ddd',
+                week: "ddd dd/MM",
+                day: 'dddd dd/MM'
+            },
             allDayText: 'Todo el día',
             events: function(start, end, callback) {
 				
