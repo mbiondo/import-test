@@ -114,7 +114,7 @@ App.menuController = App.MenuController.create({
 							url: '#/comisiones/citaciones',
 						}),
 						App.MenuItem.create({
-							titulo: 'Crear Citacion',
+							titulo: 'Crear Citación',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
@@ -144,7 +144,7 @@ App.menuController = App.MenuController.create({
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Dictamenes sin OD',
+							titulo: 'Dictámenes sin OD',
 							url: '#/comisiones/OD/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
