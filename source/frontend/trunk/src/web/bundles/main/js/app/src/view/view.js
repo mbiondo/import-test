@@ -1767,8 +1767,17 @@ App.CrearParteView = Ember.View.extend({
 			}
 		});
 
+		
+		var comisiones = [];
+
+		App.get('reunionConsultaController.content.comisiones').forEach(function (comision) {
+			comision.comision = Em.Object.create({id: comision.id});
+			comsiones.addObject(comision);
+		});
+
 		App.set('reunionConsultaController.content.parte', parte);
-		console.log(App.get('reunionConsultaController.content'));
+		App.set('reunionConsultaController.content.comisiones', comisiones);
+
 		
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
