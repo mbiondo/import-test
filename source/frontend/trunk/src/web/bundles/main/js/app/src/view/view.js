@@ -749,24 +749,18 @@ App.ExpedienteView = Ember.View.extend({
 });
 
 App.ExpedientesListView = App.ListFilterWithSortView.extend({
+	templateName: 'expedientes-sortable-list',
 	itemViewClass: App.ExpedienteView,
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'N°', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
+		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
 		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
-		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'})
 	],	
-});
 
-
-
-App.ExpedientesView = App.ListFilterView.extend({
-	templateName: 'expedientes',
-	itemViewClass: App.ExpedienteView,
-	sorting: false,
 	filterFirmantes: '',
 	startFecha: '',
 	endFecha: '',
@@ -784,67 +778,20 @@ App.ExpedientesView = App.ListFilterView.extend({
 	didInsertElement: function(){
 		$("#expedientesAdvancedSearch").hide();
 	},
+
 	expedientesAdvancedSearch: function(){
 		this.$("#expedientesAdvancedSearch").slideToggle();
-	},
-	ordenarAscID: function(event) {
-		this.ordenarPorCampo('expdip', true);
-	},
-	ordenarDescID: function(event) {
-		this.ordenarPorCampo('expdip', false);
-	},
-
-	ordenarAscTipo: function(event) {
-		this.ordenarPorCampo('tipo', true);
-	},
-	ordenarDescTipo: function(event) {
-		this.ordenarPorCampo('tipo', false);
-	},
-
-	ordenarAscTitulo: function(event) {
-		this.ordenarPorCampo('titulo', true);
-	},
-	ordenarDescTitulo: function(event) {
-		this.ordenarPorCampo('titulo', false);
-	},
-
-	ordenarAscFirmantes: function(event){
-		this.ordenarPorCampo('firmantesLabel', true);
-	},
-	ordenarDescFirmantes: function(event){
-		this.ordenarPorCampo('firmantesLabel', false);
-	},
-
-	ordenarAscIniciado: function(event){
-		this.ordenarPorCampo('iniciado', true);
-	},
-	ordenarDescIniciado: function(event){
-		this.ordenarPorCampo('iniciado', false);
-	},
-
-	ordenarAscGiros: function(event){
-		this.ordenarPorCampo('girosLabel', true);
-	},
-	ordenarDescGiros: function(event){
-		this.ordenarPorCampo('girosLabel', false);
-	},
-	setSorting: function(){
-		console.log('click en el header...');
-	},
-	
-	ordenarPorCampo: function (campo, order){		
-		App.get('expedientesController').set('sortProperties', [campo]);
-		App.get('expedientesController').set('sortAscending', order);
 	},
 
 	deseleccionarComision: function () {
 		this.set('filterComisiones', null);
 	},
+
 	deseleccionarTipos: function () {
 		this.set('filterTipos', null);
 	},
 
-	listaExpedientes: function (){
+	lista: function (){
 		localStorage.setObject('tipos', App.get('comisionesController.content'));
 
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
@@ -900,10 +847,13 @@ App.ExpedientesView = App.ListFilterView.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.splice(0, this.get('totalRecords'));
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),	
+});
 
-	
-	mostrarMasEnabled: true,
+
+
+App.ExpedientesView = Em.View.extend({
+	templateName: 'expedientes',
 });
 
 
