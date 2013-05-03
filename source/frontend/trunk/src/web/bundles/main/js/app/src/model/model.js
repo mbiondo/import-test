@@ -1,3 +1,8 @@
+App.SortableColumn = Em.Object.extend({
+	titulo: '',
+	campo: '',
+});
+
 App.Usuario = Em.Object.extend({
 	url: '/user',
 	nombre: '',
@@ -128,6 +133,7 @@ App.Expediente = Em.Object.extend({
 			return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")"; 		
 	}.property('giro'),
 });
+
 
 
 App.Citacion = Em.Object.extend({

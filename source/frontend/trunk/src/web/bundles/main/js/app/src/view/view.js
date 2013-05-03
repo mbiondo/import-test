@@ -80,6 +80,20 @@ JQ.Button = Em.View.extend(JQ.Widget, {
     tagName: 'button'
 });
 
+JQ.ChosenMultipleSelect = Em.Select.extend({
+    multiple: true,
+    attributeBindings: [ 'multiple' ],
+    placeholder: '',
+
+    didInsertElement: function(){
+        this._super();
+        //this.$().data("placeholder", this.get('placeholder')).chosen();
+    },
+ 
+    selectionChanged: function() {
+        this.$().trigger('liszt:updated');
+    }.observes('selection')
+});
 
 JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
     uiType: 'menu',
@@ -261,6 +275,38 @@ App.LoginView = Ember.View.extend({
 	}
 });
 
+App.ListHeaderItemView = Em.View.extend({
+	templateName: 'list-header-item',
+});
+
+App.ListHeaderWithSortItemView = App.ListHeaderItemView.extend({
+	templateName: 'list-header-item-with-sort',
+
+	sortAsc: function () {
+		this.get('parentView').ordenarPorCampo(this.get('content').get('campo'), true);
+	},
+
+	sortDesc: function () {
+		this.get('parentView').ordenarPorCampo(this.get('content').get('campo'), false);
+	},
+
+});
+
+App.ListHeaderView = Em.CollectionView.extend({
+	itemViewClass: App.ListHeaderItemView,
+});
+
+App.ListHeaderWithSortView = App.ListHeaderView.extend({
+	templateName: 'list-header-item-with-sort',
+	itemViewClass: App.ListHeaderWithSortItemView,
+	sortablController: null,
+
+	ordenarPorCampo: function (campo, asc){
+		this.get('sortablController').set('sortProperties', [campo]);
+		this.get('sortablController').set('sortAscending', asc);
+	},	
+});
+
 App.SimpleListItemView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'simple-list-item',
@@ -273,6 +319,7 @@ App.ListFilterView = Ember.View.extend({
 	step: 10,
 	records: [10, 25, 50, 100],
 	itemViewClass: App.SimpleListItemView,
+	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
 	
 	mostrarMas: function () {
@@ -299,45 +346,19 @@ App.ListFilterView = Ember.View.extend({
 });
 
 
-App.ListHeaderItemView = Em.View.extend({
-	tagName: 'tr',
-	templateName: 'list-header-item',
-});
-
-App.ListHeaderWithSortItemView = App.ListHeaderItemView.extend({
-	templateName: 'list-header-item-with-sort',
-
-	sortAsc: function (campo) {
-		this.get('parentView').ordenarPorCampo(campo, true);
-	},
-
-	sortDesc: function (campo) {
-		this.get('parentView').ordenarPorCampo(campo, false);
-	},
-
-});
-
-App.ListHeaderView = Em.CollectionView.extend({
-	tagName: 'tr',
-	controller: null,
-	itemViewClass: App.ListHeaderItemView,
-});
-
-App.ListHeaderWithSortView = App.ListHeaderView.extend({
-	templateName: 'list-header-item-with-sort',
-	itemViewClass: App.ListHeaderWithSortItemView,
-
-	ordenarPorCampo: function (campo, asc){		
-		this.get('controller').set('sortProperties', [campo]);
-		this.get('controller').set('sortAscending', asc);
-	},	
-});
-
 
 App.ListFilterWithSortView = App.ListFilterView.extend({
 	templateName: 'sortable-list',
 	headerViewClass : App.ListHeaderWithSortView,
+	sortablController: null,
+	columnas: [
+		App.SortableColumn.create({nombre: 'ID', campo: 'id'}), 
+		App.SortableColumn.create({nombre: 'Label', campo: 'label'})
+	],
 });
+
+
+
 
 
 
@@ -727,20 +748,20 @@ App.ExpedienteView = Ember.View.extend({
 	},
 });
 
-App.ChosenMultipleSelect = Em.Select.extend({
-    multiple: true,
-    attributeBindings: [ 'multiple' ],
-    placeholder: '',
+App.ExpedientesListView = App.ListFilterWithSortView.extend({
+	itemViewClass: App.ExpedienteView,
 
-    didInsertElement: function(){
-        this._super();
-        //this.$().data("placeholder", this.get('placeholder')).chosen();
-    },
- 
-    selectionChanged: function() {
-        this.$().trigger('liszt:updated');
-    }.observes('selection')
+	columnas: [
+		App.SortableColumn.create({nombre: 'N°', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
+		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
+		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
+		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'})
+	],	
 });
+
+
 
 App.ExpedientesView = App.ListFilterView.extend({
 	templateName: 'expedientes',
