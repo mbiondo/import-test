@@ -1125,22 +1125,23 @@ App.CalendarTool = Em.View.extend({
                                 var color = '';
                                 if (citacion.get('estado'))
                                 {
-                                        switch (citacion.get('estado').id)
-                                        {
-                                                case 2:
-                                                        color = "green";
-                                                break;
-                                                case 3:
-                                                        color = "red";
-                                                break;						
-                                                default:
-                                                        color = "";
-                                                break;
-                                        }					
-                                        citacion.set('color', color);
-                                        citacion.set('url', '');
+                                    switch (citacion.get('estado').id)
+                                    {
+                                            case 2:
+                                                    color = "green";
+                                            break;
+                                            case 3:
+                                                    color = "red";
+                                            break;						
+                                            default:
+                                                    color = "";
+                                            break;
+                                    }					
+                                    citacion.set('color', color);
+                                   
                                 }	
-                        });					
+                                citacion.set('url', '');
+                        });			
                         callback(App.get('citacionesController').get('content'));
                 }
 
@@ -1745,16 +1746,17 @@ App.CrearParteView = Ember.View.extend({
 					parteItem.set('id_reunion', App.get('reunionConsultaController.content.id'));
 					parteItem.set('itemParte', tema.get('parteEstado.id'));
 					parteItem.set('tipo', tema.get('parteEstado.tipo'));
+					parteItem.orden = parte.length;
 					var proyectos = [];
 					var proyectosVistos = [];
 
-					var orden = 0;
+					var orden = 1;
 					parteItem.proyectos.forEach(function (proyecto){
 						proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 						orden++;
 					});
 
-					var orden = 0;
+					var orden = 1;
 					parteItem.proyectosVistos.forEach(function (proyecto){
 						proyectosVistos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 						orden++;
@@ -1762,6 +1764,14 @@ App.CrearParteView = Ember.View.extend({
 
 					parteItem.proyectos = proyectos;
 					parteItem.proyectosVistos = proyectosVistos;
+					parteItem.caracterDespacho = App.CaracterDespacho.create({
+						tipo: 'CaracterDictamen',
+						id: 5,
+						descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+						itemParte: 4,
+						resumen: "con modif. D. de Mayoría y D. de Minoría",
+						tipoDict: "OD",						
+					});
 
 				} else {
 					parteItem = Em.Object.create(tema.get('parteEstado'));

@@ -270,20 +270,6 @@ App.Dictamen = Em.Object.extend({
 });
 
 
-App.DictamenTexto = Em.Object.extend({
-	firmantes: '',
-    url: '',
-    unificados: false,
-    modificado: false,
-    sumario: '',
-    pr: '',
-    rechazo: false,
-    pl: '',
-    pd: '',
-    copete: '',
-   	texto: '',
-});
-
 
 App.FirmanteTextoDictamen = Em.Object.extend({  
     id: {
@@ -305,6 +291,20 @@ App.CaracterDespacho = Em.Object.extend({
 		return this.get('descripcion');
 	},
 	
+});
+
+App.DictamenTexto = Em.Object.extend({
+	firmantes: '',
+    url: '',
+    unificados: false,
+    modificado: false,
+    sumario: '',
+    pr: '',
+    rechazo: false,
+    pl: '',
+    pd: '',
+    copete: '',
+   	texto: '',
 });
 
 
@@ -362,6 +362,7 @@ App.Reunion = Em.Object.extend({
 	}.property('nota'),
 
 	comisionesLabel: function () {
+	console.log('blablalala');
 		var comisiones = this.comisiones;
 
 		if(comisiones.length > 0) {
