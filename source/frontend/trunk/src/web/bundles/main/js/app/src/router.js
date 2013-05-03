@@ -438,7 +438,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
-								{titulo: App.get('reunionConsultaController.content').get('nota')},
+								{titulo: 'Reunión'},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
 								{titulo: 'Crear Parte' }
 							]);
 							
@@ -713,7 +714,8 @@ App.Router =  Em.Router.extend({
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
-								{titulo: 'Reunión '+ moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: 'Reunión'},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
@@ -788,7 +790,8 @@ App.Router =  Em.Router.extend({
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Citación Crear', url: '#/comisiones/citaciones/citacion/crear'},
+								{titulo: 'Citación'},
+								{titulo: 'Crear', url: '#/comisiones/citaciones/citacion/crear'}
 							]);					
 							
 						},				
@@ -825,7 +828,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Citación '+ moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: 'Citación'},
+								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
@@ -918,7 +922,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-								{titulo: 'Citación '+ moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+								{titulo: 'Citación'},
+								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
 								{titulo: 'Editar'}
 							]);						
 							App.get('menuController').seleccionar(2);					
