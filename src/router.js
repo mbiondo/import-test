@@ -439,7 +439,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 								{titulo: 'Reunión'},
-								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
 								{titulo: 'Crear Parte' }
 							]);
 							
@@ -715,7 +715,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
 								{titulo: 'Reunión'},
-								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
@@ -829,7 +829,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
-								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL')},
+								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LLL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
@@ -923,7 +923,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
-								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
+								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LLL'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
 								{titulo: 'Editar'}
 							]);						
 							App.get('menuController').seleccionar(2);					
