@@ -1554,6 +1554,7 @@ App.CancelarCitacionView = App.ModalView.extend({
 	motivos: ['Motivo 1', 'Motivo 2', 'Motivo 3'],
 	
 	callback: function(opts, event) {
+
 			if (opts.primary) {
 				App.get('citacionCrearController').cancelar();
 			} else if (opts.secondary) {
@@ -1594,6 +1595,7 @@ App.CrearReunionView = App.ModalView.extend({
 	}, 
 	
 	didInsertElement: function() {	
+		this._super();
 		this.set('startFecha', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD').format('DD/MM/YYYY'));
 		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD HH:ss').format('HH:ss'));
 		
