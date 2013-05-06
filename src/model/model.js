@@ -358,7 +358,7 @@ App.Reunion = Em.Object.extend({
 	],	
 
 	label: function () {
-		return this.get('nota');
+		return this.get('nota') + this.get('fecha') + this.get('comisionesLabel');
 	}.property('nota'),
 
 	comisionesLabel: function () {
@@ -372,6 +372,7 @@ App.Reunion = Em.Object.extend({
 				return comisiones.objectAt(0).nombre + " y otras (" + (comisiones.length - 1 ) + ")"; 		
 		}
 	}.property('comisiones'),
+
 });
 
 
