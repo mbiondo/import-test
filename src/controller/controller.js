@@ -67,7 +67,6 @@ App.Savable = Ember.Mixin.create({
 	saveSucceeded: function (data) {
 		if (this.get('useApi') && data.id) {
 			this.set('saveSuccess', true);
-			return;
 		}
 
 		if (data.success == true) {
@@ -80,7 +79,6 @@ App.Savable = Ember.Mixin.create({
 	},
 	
 	saveCompleted: function(xhr){
-		
 		if (this.get('useApi') && xhr.status == 200) {
 			this.set('saveSuccess', true);
 		} 

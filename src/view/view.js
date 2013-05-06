@@ -1811,7 +1811,7 @@ App.CrearParteView = Ember.View.extend({
 		
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
-			if (App.get('reunionConsultaController.content.saveSuccess') != true)
+			if (App.get('reunionConsultaController.content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 				$.jGrowl('Parte creado con Exito!', { life: 5000 });				
