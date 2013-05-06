@@ -1661,7 +1661,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('reunionConsultaController').addObserver('loaded', this, fn);
 			App.get('reunionConsultaController').load();
 			
-			$.jGrowl('Reunion creada con Exito!', { life: 5000 });
+			$.jGrowl('Reunión creada con éxito!', { life: 5000 });
 		}
 	},	
 	
@@ -1689,7 +1689,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
-			$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+			$.jGrowl('Se ha cambiado el estado de la citación a Convocada!', { life: 5000 });
 
 			var emailList = [];
 			var comisionCabecera = this.get('content.comisiones.firstObject');
@@ -1720,7 +1720,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('ioController').sendEmail(email);
 		
 		} else {
-			$.jGrowl('Ocurrio un error al intentar confirmar la citacion!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar confirmar la citación!', { life: 5000 });
 		}
 	},
 	
@@ -1746,9 +1746,9 @@ App.CitacionCrearController = Em.Object.extend({
 	cancelarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
-			$.jGrowl('Se ha cambiado el estado de la sitacion a suspendida!', { life: 5000 });		
+			$.jGrowl('Se ha cambiado el estado de la citación a suspendida!', { life: 5000 });		
 		} else {
-			$.jGrowl('Ocurrio un error al intentar cancelar la citacion!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar cancelar la citación!', { life: 5000 });
 		}
 	},
 
@@ -1795,7 +1795,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();
 			
-			$.jGrowl('Citacion creada con Exito!', { life: 5000 });
+			$.jGrowl('Citación creada con éxito!', { life: 5000 });
 
 		}
 	},
@@ -1810,7 +1810,7 @@ App.CitacionCrearController = Em.Object.extend({
 			if (this.get('content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
-				$.jGrowl('Citacion editada con Exito!', { life: 5000 });								
+				$.jGrowl('Citación editada con éxito!', { life: 5000 });								
 			}			
 			else
 			{
@@ -1819,7 +1819,7 @@ App.CitacionCrearController = Em.Object.extend({
 				$('.buttonSave').val('Guardar');
 
 				console.log('Citacion editada con Exito');
-				$.jGrowl('Ocurrio un error al intentar guardar los cambios en la citacion!', { life: 5000 });
+				$.jGrowl('Ocurrió un error al intentar guardar los cambios en la citación!', { life: 5000 });
 			}
 		}
 		this.get('content').save();
