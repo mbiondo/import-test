@@ -160,12 +160,6 @@ App.Citacion = Em.Object.extend({
 		'sala'
 	],
 	
-	titulo: function () {
-		title = this.get('title');
-//		return title;
-//		return title.substr(0, 3);
-	}.property('title'),
-
 	saveSucceeded: function (data) {
 		if (data.responseText)
 		{
