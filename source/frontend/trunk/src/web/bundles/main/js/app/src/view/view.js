@@ -1141,6 +1141,10 @@ App.CalendarTool = Em.View.extend({
                                    
                                 }	
                                 citacion.set('url', '');
+
+                                if (citacion.get('title').length > 75) {
+                                	citacion.set('title', citacion.get('title').substr(0, 75) + "...");
+                                }
                         });			
                         callback(App.get('citacionesController').get('content'));
                 }
