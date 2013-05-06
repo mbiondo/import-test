@@ -1796,25 +1796,14 @@ App.CrearParteView = Ember.View.extend({
 			}
 		});
 
-		
-/*		var comisiones = [];
-
-		App.get('reunionConsultaController.content.comisiones').forEach(function (comision) {
-			comision.comision = Em.Object.create({id: comision.id});
-			comision.id = null;
-			comisiones.addObject(comision);
-		});
-*/
 		App.set('reunionConsultaController.content.parte', parte);
-		//App.set('reunionConsultaController.content.comisiones', comisiones);
 
-		
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
 			if (App.get('reunionConsultaController.content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-				$.jGrowl('Parte creado con Exito!', { life: 5000 });				
+				$.jGrowl('Parte creado con éxito!', { life: 5000 });				
 			}
 			else
 			{
