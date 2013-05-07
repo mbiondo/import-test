@@ -1459,7 +1459,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 });
 
 App.ReunionesConParteController = App.RestController.extend({
-	url: '/com/reun/cp/' + moment().format('DD/MM/YYYY'),
+	url: '/com/reun/cp/' /* + moment().format('DD/MM/YYYY')*/,
 	type: App.Reunion,
 	useApi: true,
 	
