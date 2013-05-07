@@ -1697,6 +1697,11 @@ App.ReunionView = Ember.View.extend({
 });
 
 
+App.SinReunionesListView = App.ListFilterView.extend({	
+	itemViewClass: App.ReunionView,
+	columnas: [],
+});
+
 App.ReunionesSinParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
 	columnas: ['Fecha', 'Nota', 'Comisión'],
@@ -1704,7 +1709,6 @@ App.ReunionesSinParteListView = App.ListFilterView.extend({
 
 App.ReunionesSinParteView = Em.View.extend({
 	templateName: 'reuniones-sin-parte',
-
 });
 
 App.ReunionesConParteListView = App.ListFilterView.extend({
