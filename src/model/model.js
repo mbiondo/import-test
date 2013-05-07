@@ -168,7 +168,7 @@ App.Citacion = Em.Object.extend({
 	},	
 
 	label: function () {
-		return this.get('title');
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('title') + this.get('sala.numero') + this.get('observaciones') + this.get('estado.descripcion');
 	}.property('title'),
 
 });
