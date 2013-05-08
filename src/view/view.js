@@ -1750,30 +1750,22 @@ App.CrearParteView = Ember.View.extend({
 		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
 			if (tema.get('parteEstado').id) {
 				var parteItem;
+				parteItem = Em.Object.create(tema.get('parteEstado'));
+				parteItem.id = null;
+				parteItem.set('itemParte', tema.get('parteEstado.id'));
+				parteItem.set('tipo', tema.get('parteEstado.tipo'));
+				parteItem.proyectos = [];
+				filtered = parte.filter(function (parteItem) {
+					return parteItem.itemParte == tema.get('parteEstado.id');
+				});
+				parteItem.orden = filtered.length + 1;
+				var orden = 0;
+				tema.get('proyectos').forEach(function (proyecto){
+					parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+					orden++;
+				});					
 
 				if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
-					parteItem = tema.get('dictamen');
-					parteItem.set('id_reunion', App.get('reunionConsultaController.content.id'));
-					parteItem.set('itemParte', tema.get('parteEstado.id'));
-					parteItem.set('tipo', tema.get('parteEstado.tipo'));
-					parteItem.orden = parte.length;
-					var proyectos = [];
-					var proyectosVistos = [];
-
-					var orden = 1;
-					parteItem.proyectos.forEach(function (proyecto){
-						proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
-						orden++;
-					});
-
-					var orden = 1;
-					parteItem.proyectosVistos.forEach(function (proyecto){
-						proyectosVistos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
-						orden++;
-					});					
-
-					parteItem.proyectos = proyectos;
-					parteItem.proyectosVistos = proyectosVistos;
 					parteItem.caracterDespacho = App.CaracterDespacho.create({
 						tipo: 'CaracterDictamen',
 						id: 5,
@@ -1782,25 +1774,13 @@ App.CrearParteView = Ember.View.extend({
 						resumen: "con modif. D. de Mayoría y D. de Minoría",
 						tipoDict: "OD",						
 					});
-
-				} else {
-					parteItem = Em.Object.create(tema.get('parteEstado'));
-					parteItem.id = null;
-					parteItem.set('itemParte', tema.get('parteEstado.id'));
-					parteItem.set('tipo', tema.get('parteEstado.tipo'));
-					parteItem.proyectos = [];
-					parteItem.orden = parte.length;
-					var orden = 0;
-					tema.get('proyectos').forEach(function (proyecto){
-						parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
-						orden++;
-					});	
-				}
+				} 
 				parte.addObject(parteItem);
 			}
 		});
 
 		App.set('reunionConsultaController.content.parte', parte);
+		console.log(parte);
 
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
@@ -1819,25 +1799,49 @@ App.CrearParteView = Ember.View.extend({
 		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
 
 	},
+
+	didInsertElement: function () {
+		var parte = App.get('reunionConsultaController.content.parte');
+		if (parte)
+		{
+			parte.forEach(function (parteItem) {
+				var tema;
+				if (parteItem.proyectos)
+				{
+					App.get('citacionConsultaController.content.temas').forEach(function(t){
+						var esTema = false
+
+						if (parteItem.proyectos.length > 0) {
+							esTema = true;
+							parteItem.proyectos.forEach(function (e){
+								if (!t.proyectos.findProperty('id', e.proyecto.id)) {
+									esTema = false;
+								}
+							});
+						}
+
+
+						if (esTema)
+						{
+							tema = t;
+						}
+					});
+				}
+				if (tema)
+				{
+					tema.set('parteEstado', App.get('eventosParteController.content').findProperty('id', parteItem.itemParte));	
+				}
+			});
+		}
+	},
 });
 
 App.EstadoParteView = Ember.View.extend({
 	templateName: 'parte-estado',
 	estado: 'Seleccione una accion',
 
-	esDictamen: function () {
-		if (!this.get('tema.parteEstado'))
-			return false;
-		else
-			if (this.get('tema.parteEstado').id)
-				return this.get('tema.parteEstado').get('id') == 4;
-			else
-				return false;
-
-	}.property('tema.parteEstado'),
-
 	listaEstados: function () {
-		var arr = ['Seleccione una accion'];
+		var arr = ['Seleccione tratamiento'];
 		if (App.get('eventosParteController.content')) {
 			App.get('eventosParteController.content').forEach(function(eventoParte) {
 				arr.addObject(eventoParte);
