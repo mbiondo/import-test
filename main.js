@@ -79,7 +79,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Con dictámen',
+							titulo: 'Con dictamen',
 							url: '#/expedientes',
 						}),								
 						App.MenuItem.create({
@@ -144,7 +144,7 @@ App.menuController = App.MenuController.create({
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Dictámenes sin OD',
+							titulo: 'Dictamenes sin OD',
 							url: '#/comisiones/OD/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
