@@ -352,7 +352,7 @@ App.Reunion = Em.Object.extend({
 	],	
 
 	label: function () {
-		return this.get('nota') + this.get('fecha') + this.get('comisionesLabel');
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('nota') + this.get('comisionesLabel');
 	}.property('nota'),
 
 	comisionesLabel: function () {
