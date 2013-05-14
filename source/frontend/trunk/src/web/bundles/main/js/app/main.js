@@ -139,6 +139,19 @@ App.menuController = App.MenuController.create({
 				}),	
 
 				App.MenuItem.create({
+					titulo: 'Dictamenes',
+					url: '#/comisiones/dictamenes/pendientes',
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Dictamenes pendientes',
+							url: '#/comisiones/dictamenes/pendientes',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+						}),						
+					],
+				}),	
+
+				App.MenuItem.create({
 					titulo: 'Ordenes del día',
 					url: '#/comisiones/OD/dictamenes',
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
