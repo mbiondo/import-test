@@ -423,6 +423,48 @@ App.Router =  Em.Router.extend({
 			index: Ember.Route.extend({
 				route: "/",	
 			}),
+
+			dictamenes: Em.Route.extend({
+				route: "/dictamenes",
+				index: Ember.Route.extend({
+					route: "/",	
+				}),
+
+				pendientes: Em.Route.extend({
+					route: "/pendientes",
+
+					deserialize: function(router, params) {
+						 if (!App.get('dictamenesPendientesController'))
+						 	App.dictamenesPendientesController = App.DictamenesPendientesController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('dictamenesPendientesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
+						 App.get('dictamenesPendientesController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'dictamenesPendientes');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+							{titulo: 'Pendientes'},
+						]);					
+
+						App.get('menuController').seleccionar(2);					
+					},						
+				}),
+
+			}),
 			
 			partes: Em.Route.extend({
 				route: "/partes",
@@ -953,7 +995,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 
-						if (!hasRole('ROLE_DIPUTADO'))
+						if (hasRole('ROLE_LABOR_PARLAMENTARIA'))
 							appController.connectOutlet('main', 'OradoresIndex');
 						else
 							appController.connectOutlet('main', 'OradoresDiputadoIndex');
@@ -1021,7 +1063,7 @@ App.Router =  Em.Router.extend({
 														
 							var appController = router.get('applicationController');
 							
-							if (!hasRole('ROLE_DIPUTADO')) {
+							if (hasRole('ROLE_LABOR_PARLAMENTARIA')){
 								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 							}
@@ -1130,7 +1172,7 @@ App.Router =  Em.Router.extend({
 
 							var appController = router.get('applicationController');
 							
-							if (!hasRole('ROLE_DIPUTADO')) {
+							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 								appController.connectOutlet('sesion', 'sesionTurnos');

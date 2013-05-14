@@ -696,6 +696,37 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 });
 
 
+//Dictamenes
+
+App.DictamenesPendientesController = App.RestController.extend({
+	url: '/dic/dictamenes',
+	type: App.Dictamen,
+	useApi: false,
+	sortProperties: ['fecha'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Dictamen.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},	
+});
+
 App.UsuariosController = App.RestController.extend({
 	url: '/user/users',
 	type: App.Usuario,

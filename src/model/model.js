@@ -256,8 +256,6 @@ App.Dictamen = Em.Object.extend({
     observaciones: '',
     textos: '',
 
-    columneable: ['Fecha', 'Sumario'],
-
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),

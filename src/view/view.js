@@ -1720,7 +1720,32 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 	templateName: 'reuniones-con-parte',
 });
 
+App.DictamenesPendientesView = Em.View.extend({
+	templateName: 'dictamenes-pendientes',
+});
 
+App.DictamenView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'orden-del-dia-dictamen-item',
+
+	crearOD: function () {
+
+		 if (!App.get('dictamenController'))
+		 	App.dictamenController = App.DictamenController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
+		 };
+
+		 App.get('dictamenController').addObserver('loaded', this, fn);
+		 App.get('dictamenController').load();
+	},
+});
+
+App.DictamenesPendientesListView = App.ListFilterView.extend({ 
+	itemViewClass: App.DictamenView, 	
+	columnas: ['Fecha', 'Sumario', 'Cargar Dictamen'],
+});
 
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
@@ -1755,10 +1780,12 @@ App.CrearParteView = Ember.View.extend({
 				parteItem.set('itemParte', tema.get('parteEstado.id'));
 				parteItem.set('tipo', tema.get('parteEstado.tipo'));
 				parteItem.proyectos = [];
+
 				filtered = parte.filter(function (parteItem) {
 					return parteItem.itemParte == tema.get('parteEstado.id');
 				});
 				parteItem.orden = filtered.length + 1;
+
 				var orden = 0;
 				tema.get('proyectos').forEach(function (proyecto){
 					parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
