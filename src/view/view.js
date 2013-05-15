@@ -1062,6 +1062,7 @@ App.ApplicationView = Em.View.extend({
 	mostrar : function () {
 		this.get('testModal').mostrar();
 	},
+
 });
 
 App.ExpedienteConsultaView = Em.View.extend({
@@ -1929,6 +1930,8 @@ App.DictamenCrearView = Ember.View.extend({
 	didInsertElement: function () {
 		this.set('tema.dictamen', App.Dictamen.create({proyectos: this.get('tema.proyectos'), proyectosVistos: [], textos: []}));
 		this.set('content', this.get('tema.dictamen'));
+		//===== Form elements styling =====//
+		$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 	},
 });
 
@@ -1975,6 +1978,12 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		else
 			return filtered;
 	}.property('filterFirmantes', 'content.firmantes', 'adding'),
+
+	didInsertElement: function () {
+		//===== Form elements styling =====//
+		$("input:file").uniform();
+		//$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+	},
 });
 
 
