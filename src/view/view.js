@@ -2705,9 +2705,11 @@ App.CrearSesionView = App.ModalView.extend({
 				this.set('showErrors', true);
 
 				this.$('form').parsley('validate');
-				if (!this.$('form').parsley('isValid')) 
-					return false;	
-				
+				if (!this.$('form').parsley('isValid')){
+					console.log('validando..');
+					return false;
+				}
+
 				console.log('pepe');		
 				var sesion = App.get('crearSesionController').get('sesion');
 		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
@@ -2738,8 +2740,7 @@ App.CrearSesionView = App.ModalView.extend({
 		
 		didInsertElement: function() {
 			self = this;
-			$( '#form' ).parsley();
-			
+
 			this.set('fecha', moment().format("DD-MM-YYYY"));
 			this.set('hora', moment().format("hh:ss"));
 		
