@@ -757,6 +757,11 @@ App.ExpedienteView = Ember.View.extend({
 	},
 });
 
+App.SinExpedientesListView = App.ListFilterWithSortView.extend({	
+	itemViewClass: App.ExpedienteView,
+	columnas: [],
+});
+
 App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	templateName: 'expedientes-sortable-list',
 	itemViewClass: App.ExpedienteView,
@@ -1917,6 +1922,7 @@ App.EstadoParteView = Ember.View.extend({
 App.DictamenCrearView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen',
 	filterExpedientes: '',
+	filterProyectosVistos: '',
 	adding: false,
 
 	agregarTexto: function () {
@@ -1937,6 +1943,7 @@ App.DictamenCrearView = Ember.View.extend({
 
 	listaExpedientes: function () {
 		var filtered;
+
 		if (this.get('filterExpedientes') != '')
 		{
 			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
@@ -1959,7 +1966,24 @@ App.DictamenCrearView = Ember.View.extend({
 		}
 		else
 			return filtered;
-	}.property('content', 'content.proyectosVistos', 'adding', 'filterExpedientes'),
+	}.property('content', 'content.proyectosVistos', 'adding', 'filterExpedientes', 'proyectos'),
+
+	listaProyectosVistos: function () {
+			var filtered = [];
+			if (this.get('filterProyectosVistos') != '')
+			{
+				var filtered = [];
+				var regex = new RegExp(this.get('filterProyectosVistos').toString().toLowerCase());
+				
+				filtered = this.get('content.proyectosVistos').filter(function(expediente) {
+					 return regex.test(expediente.titulo.toLowerCase());
+				});
+				return filtered;
+			} else {
+				return this.get('content.proyectosVistos');
+			}
+			
+	}.property('content.proyectosVistos.@each', 'filterProyectosVistos'),
 
 	didInsertElement: function () {
 		this.set('tema', App.Tema.create());
