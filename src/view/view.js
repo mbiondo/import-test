@@ -122,6 +122,10 @@ Ember.TextField.reopen({
     attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 });
 
+Ember.TextArea.reopen({
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+});
+
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
     uiType: 'datepicker',
     uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
@@ -1274,11 +1278,15 @@ App.CitacionCrearView = Em.View.extend({
 	guardar: function () {
 		console.log('Guardando los datos....');
 
-		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado'))
+
+		this.$('form').parsley('validate');
+
+		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid'))
 		{
+			console.log('validando..');
 			return;
 		}
-		
+
 		var temas = App.get('citacionCrearController.content.temas');
 		var temasToRemove = [];
 		
