@@ -426,9 +426,6 @@ App.Router =  Em.Router.extend({
 
 			dictamenes: Em.Route.extend({
 				route: "/dictamenes",
-				index: Ember.Route.extend({
-					route: "/",	
-				}),
 
 				pendientes: Em.Route.extend({
 					route: "/pendientes",
@@ -463,6 +460,51 @@ App.Router =  Em.Router.extend({
 						App.get('menuController').seleccionar(2);					
 					},						
 				}),
+
+				crear: Ember.Route.extend({
+					route: '/crear/dictamen/:dictamen',
+
+					deserialize: function(router, params) {
+
+						App.caracterDespachoController = App.CaracterDespachoController.create();
+						App.firmantesController = App.FirmantesController.create();
+						App.eventosParteController = App.EventosParteController.create();
+
+						var deferred = $.Deferred();
+						
+						fn = function () {
+							if (App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
+								deferred.resolve(null);											
+							}
+			
+						}					
+						App.get('firmantesController').addObserver('loaded', this, fn);
+						App.get('expedientesController').addObserver('loaded', this, fn);
+						App.get('firmantesController').load();
+						App.get('expedientesController').load();
+
+						return deferred.promise();
+					},
+
+					serialize: function(router, context) {
+							return {dictamen: context.get('id')};			
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'crearDictamen');
+						appController.connectOutlet('menu', 'subMenu');
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+							{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
+							{titulo: 'Cargar Dictamen' }
+						]);							
+
+						
+						App.get('menuController').seleccionar(2);					
+					},						
+				}),			
 
 			}),
 			

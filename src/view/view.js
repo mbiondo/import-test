@@ -526,7 +526,16 @@ App.ExpedienteMiniView = Ember.View.extend({
 
 App.DictamenMiniView = Ember.View.extend({
 	templateName: 'dictamen-mini',
-	
+	didInsertElement: function(){
+		//===== Accordion =====//		
+		$('div.menu_body:eq(0)').show();
+		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
+		
+		$(".acc .whead").click(function() {	
+			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
+			$(this).siblings().css({color:"#404040"});
+		});
+	},	
 });
 
 App.CrearODView = Ember.View.extend({
@@ -1721,8 +1730,33 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 	templateName: 'reuniones-con-parte',
 });
 
+
+App.CrearDictamenView = Em.View.extend({
+	templateName: 'crear-dictamen',
+
+});
+
 App.DictamenesPendientesView = Em.View.extend({
 	templateName: 'dictamenes-pendientes',
+});
+
+
+App.DictamenPendienteView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'orden-del-dia-dictamen-item-pendiente',
+
+	crearDictamen: function () {
+
+		 if (!App.get('dictamenController'))
+		 	App.dictamenController = App.DictamenController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.dictamenes.crear', this.get('content'));				
+		 };
+
+		 App.get('dictamenController').addObserver('loaded', this, fn);
+		 App.get('dictamenController').load();
+	},	
 });
 
 App.DictamenView = Ember.View.extend({
@@ -1744,7 +1778,7 @@ App.DictamenView = Ember.View.extend({
 });
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
-	itemViewClass: App.DictamenView, 	
+	itemViewClass: App.DictamenPendienteView, 	
 	columnas: ['Fecha', 'Sumario', 'Cargar Dictamen'],
 });
 
@@ -1928,10 +1962,11 @@ App.DictamenCrearView = Ember.View.extend({
 	}.property('content', 'content.proyectosVistos', 'adding', 'filterExpedientes'),
 
 	didInsertElement: function () {
+		this.set('tema', App.Tema.create());
 		this.set('tema.dictamen', App.Dictamen.create({proyectos: this.get('tema.proyectos'), proyectosVistos: [], textos: []}));
 		this.set('content', this.get('tema.dictamen'));
 		//===== Form elements styling =====//
-		$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 	},
 });
 
@@ -1980,9 +2015,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	}.property('filterFirmantes', 'content.firmantes', 'adding'),
 
 	didInsertElement: function () {
-		//===== Form elements styling =====//
-		$("input:file").uniform();
-		//$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 	},
 });
 
