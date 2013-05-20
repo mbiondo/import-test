@@ -699,7 +699,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes',
+	url: '/dic/dictamenes/pendientes',
 	type: App.Dictamen,
 	useApi: false,
 	sortProperties: ['fecha'],
@@ -709,8 +709,8 @@ App.DictamenesPendientesController = App.RestController.extend({
 	
 		save = save || false;
 		
-		item = App.Dictamen.extend(App.Savable).create(data);
-		item.setProperties(data);
+		item = App.Dictamen.extend(App.Savable).create(data.evento);
+		item.setProperties(data.evento);
 		
 		if(save){
 			$.ajax({
@@ -1396,14 +1396,14 @@ App.DictamenesController = App.RestController.extend({
 	
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.Dictamen.create(data);
-		item.setProperties(data);
+		item = App.Dictamen.create(data.evento);
+		item.setProperties(data.evento);
 		this.addObject(item);	
 	},		
 });
 
 App.OrdenesDelDiaController = App.RestController.extend({
-	url: '/od/listar',
+	url: '/dic/ods/vigentes/130',
 	type: App.OrdeDelDia,
 	useApi: false,
 	

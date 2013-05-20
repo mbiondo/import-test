@@ -259,6 +259,10 @@ App.Dictamen = Em.Object.extend({
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),
+
+    fecha: function () {
+    	return this.get('fechaImpresion');
+    }.property('fechaImpresion'),
 });
 
 
