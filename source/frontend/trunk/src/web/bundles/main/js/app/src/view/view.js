@@ -118,6 +118,9 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 });
 
 
+Ember.TextField.reopen({
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+});
 
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
     uiType: 'datepicker',
@@ -2700,10 +2703,12 @@ App.CrearSesionView = App.ModalView.extend({
 
 			if (opts.primary) {
 				this.set('showErrors', true);
-				console.log('Mostrando errores...');
 
-				if (this.get('esInvalido')) 
-					return false;			
+				this.$('form').parsley('validate');
+				if (!this.$('form').parsley('isValid')) 
+					return false;	
+				
+				console.log('pepe');		
 				var sesion = App.get('crearSesionController').get('sesion');
 		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
 				// var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
@@ -2733,6 +2738,7 @@ App.CrearSesionView = App.ModalView.extend({
 		
 		didInsertElement: function() {
 			self = this;
+			$( '#form' ).parsley();
 			
 			this.set('fecha', moment().format("DD-MM-YYYY"));
 			this.set('hora', moment().format("hh:ss"));
