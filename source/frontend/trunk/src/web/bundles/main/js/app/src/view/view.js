@@ -1760,19 +1760,6 @@ App.DictamenesPendientesView = Em.View.extend({
 App.DictamenPendienteView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'orden-del-dia-dictamen-item-pendiente',
-
-	crearDictamen: function () {
-
-		 if (!App.get('dictamenController'))
-		 	App.dictamenController = App.DictamenController.create();
-
-		 fn = function() {
-			App.get('router').transitionTo('comisiones.dictamenes.crear', this.get('content'));				
-		 };
-
-		 App.get('dictamenController').addObserver('loaded', this, fn);
-		 App.get('dictamenController').load();
-	},	
 });
 
 App.DictamenView = Ember.View.extend({
@@ -1977,7 +1964,7 @@ App.DictamenCrearView = Ember.View.extend({
 		}
 		else
 			return filtered;
-	}.property('content', 'content.proyectosVistos', 'adding', 'filterExpedientes', 'proyectos'),
+	}.property('content', 'content.proyectosVistos',  'filterExpedientes', 'proyectos'),
 
 	listaProyectosVistos: function () {
 			var filtered = [];
@@ -1997,9 +1984,7 @@ App.DictamenCrearView = Ember.View.extend({
 	}.property('content.proyectosVistos.@each', 'filterProyectosVistos'),
 
 	didInsertElement: function () {
-		this.set('tema', App.Tema.create());
-		this.set('tema.dictamen', App.Dictamen.create({proyectos: this.get('tema.proyectos'), proyectosVistos: [], textos: []}));
-		this.set('content', this.get('tema.dictamen'));
+		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 	},
@@ -2513,6 +2498,11 @@ App.ErroresMensajesView = Ember.CollectionView.extend({
 });
 
 
+App.FormValidate = Ember.View.extend({
+	tagName: 'form',
+    attributeBindings: ['data-validate'],
+});
+
 
 App.DiputadoSeleccionadoView = Em.View.extend({
 	tagName: 'li',
@@ -2681,6 +2671,8 @@ App.CrearSesionView = App.ModalView.extend({
 	fecha: '',
 	hora: '',
 	showErrors:false,
+
+	attributeBindings: ['required'],
 
 	errorMensajes: function () {
 		var mensajes = [];
