@@ -699,9 +699,9 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes/pendientes',
+	url: '/dic/dictamenes/pendientes/01/01/2012/01/06/2013',
 	type: App.Dictamen,
-	useApi: false,
+	useApi: true,
 	sortProperties: ['fecha'],
 	sortAscending: false,
 
@@ -711,19 +711,8 @@ App.DictamenesPendientesController = App.RestController.extend({
 		
 		item = App.Dictamen.extend(App.Savable).create(data.evento);
 		item.setProperties(data.evento);
-		
-		if(save){
-			$.ajax({
-				url: this.get('url'),
-				dataType: 'JSON',
-				type: 'POST',
-				context : {controller: this, model : item },
-				data : item.getJson(),
-				success: this.createSucceeded,
-			});
-		}else{
+		if (item.get('textos').length == 0)
 			this.addObject(item);
-		}
 	},	
 });
 
@@ -1318,7 +1307,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 
 App.DictamenController = Ember.Object.extend({
 	content: null,
-	url: "/dic/dictamen",
+	url: "/dic/dictamen/%@",
 	loaded : false,
 	useApi: false,
 	
@@ -1331,7 +1320,7 @@ App.DictamenController = Ember.Object.extend({
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
-			url: this.get('url'),
+			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content.id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -1382,9 +1371,9 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 
 
 App.DictamenesController = App.RestController.extend({
-	url: '/dic/dictamenes',
+	url: '/dic/dictamenes/vista/01/01/2012/01/06/2013/resumen',
 	type: App.Dictamen,
-	useApi: false,
+	useApi: true,
 	
 	init : function () {
 		this._super();
@@ -1398,7 +1387,9 @@ App.DictamenesController = App.RestController.extend({
 		save = save || false;
 		item = App.Dictamen.create(data.evento);
 		item.setProperties(data.evento);
-		this.addObject(item);	
+
+		if (item.get('textos').length >= 1)
+			this.addObject(item);	
 	},		
 });
 
@@ -1859,7 +1850,8 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	cargarExpedientes: function () {
 		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + moment().format('YYYY'),
+//			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + moment().format('YYYY'),
+			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + '2012',
 			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'GET',
