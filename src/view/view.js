@@ -1,3 +1,4 @@
+
 JQ = Ember.Namespace.create();
 
 JQ.Widget = Em.Mixin.create({
@@ -1830,7 +1831,7 @@ App.CrearParteView = Ember.View.extend({
 					orden++;
 				});					
 
-				if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
+				/*if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
 					parteItem.caracterDespacho = App.CaracterDespacho.create({
 						tipo: 'CaracterDictamen',
 						id: 5,
@@ -1839,13 +1840,13 @@ App.CrearParteView = Ember.View.extend({
 						resumen: "con modif. D. de Mayoría y D. de Minoría",
 						tipoDict: "OD",						
 					});
-				} 
+				}*/
+
 				parte.addObject(parteItem);
 			}
 		});
 
 		App.set('reunionConsultaController.content.parte', parte);
-		console.log(parte);
 
 		fn = function () {
 			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
@@ -1958,35 +1959,74 @@ App.DictamenCrearView = Ember.View.extend({
 		if (this.get('content.proyectosVistos'))
 		{
 			this.get('content.proyectosVistos').forEach(function (expediente) {
-				filtered = filtered.without(expediente)
+				filtered = filtered.without(expediente);
 			});
 			return filtered;
 		}
 		else
 			return filtered;
-	}.property('content', 'content.proyectosVistos',  'filterExpedientes', 'proyectos'),
+	}.property('content', 'content.proyectosVistos.@each',  'filterExpedientes'),
 
 	listaProyectosVistos: function () {
+		var filtered = [];
+		if (this.get('filterProyectosVistos') != '')
+		{
 			var filtered = [];
-			if (this.get('filterProyectosVistos') != '')
-			{
-				var filtered = [];
-				var regex = new RegExp(this.get('filterProyectosVistos').toString().toLowerCase());
-				
-				filtered = this.get('content.proyectosVistos').filter(function(expediente) {
-					 return regex.test(expediente.titulo.toLowerCase());
-				});
-				return filtered;
-			} else {
-				return this.get('content.proyectosVistos');
-			}
+			var regex = new RegExp(this.get('filterProyectosVistos').toString().toLowerCase());
 			
+			filtered = this.get('content.proyectosVistos').filter(function(expediente) {
+				 return regex.test(expediente.titulo.toLowerCase());
+			});
+			return filtered;
+		} else {
+			return this.get('content.proyectosVistos');
+		}
 	}.property('content.proyectosVistos.@each', 'filterProyectosVistos'),
 
 	didInsertElement: function () {
 		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		$(".whead").live('click', function(){
+			$(this).next().slideToggle(1200);
+		});
+	},
+
+	guardar: function () {
+		var dictamen = this.get('content');
+		var pv = [];
+		var orden = 0;
+		dictamen.get('proyectosVistos').forEach(function (proyecto){
+			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+			orden++;
+		});
+
+		dictamen.caracterDespacho = App.CaracterDespacho.create({
+			tipo: 'CaracterDictamen',
+			id: 5,
+			descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+			itemParte: 4,
+			resumen: "con modif. D. de Mayoría y D. de Minoría",
+			tipoDict: "OD",						
+		});
+
+		dictamen.proyectosVistos = pv;	
+
+		var url = App.get('apiController.url') + "/par/evento";
+
+		console.log(dictamen);
+
+		$.ajax({
+			url:  url,
+			contentType: 'text/plain',
+			type: 'POST',
+			context: this,
+			data : JSON.stringify(dictamen),
+			success: function( data ) 
+			{
+				console.log(data);
+			}
+		});			
 	},
 });
 
@@ -1996,7 +2036,8 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	adding: false,
 
 	clickFirmante: function (firmante) {
-		var item = this.get('content.firmantes').findProperty("id", firmante.get('id'));
+		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
+		console.log(item);
         if (!item) {
         	firmante.set('seleccionado', true);
 			this.get('content.firmantes').pushObject(firmante);
@@ -2034,8 +2075,14 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			return filtered;
 	}.property('filterFirmantes', 'content.firmantes', 'adding'),
 
-	didInsertElement: function () {
+	willInsertElement: function(){
+		$(".widget-dictamen-texto > .wbody").slideUp(900);
+	},
+	
+	didInsertElement: function (){
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		this.$(".wbody").slideUp(000);
+		this.$(".wbody").slideDown(900);
 	},
 });
 
