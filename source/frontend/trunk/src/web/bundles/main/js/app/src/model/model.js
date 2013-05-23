@@ -257,6 +257,8 @@ App.Dictamen = Em.Object.extend({
     textos: '',
 
     label: function () {
+    	if (this.get('sumario') == null)
+    		return "";
     	return this.get('sumario');
     }.property('sumario'),
 
@@ -268,10 +270,7 @@ App.Dictamen = Em.Object.extend({
 
 
 App.FirmanteTextoDictamen = Em.Object.extend({  
-    id: {
-        id_firmante: ''
-    },
-    disidencia: false,
+    disidencia: 2,
     diputado: '',
 });
 

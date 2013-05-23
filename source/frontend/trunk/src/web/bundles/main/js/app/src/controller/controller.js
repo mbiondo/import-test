@@ -699,7 +699,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes/pendientes/01/01/2012/01/06/2013',
+	url: '/dic/dictamenes/pendientes/01/01/2013/01/06/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fecha'],
@@ -1146,7 +1146,7 @@ App.FirmantesController = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.FirmanteTextoDictamen.create({diputado: data, id: {id_firmante: data.id}});
+		item = App.FirmanteTextoDictamen.create({diputado: data});
 		
 		if(save){
 			$.ajax({
