@@ -139,6 +139,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
 App.DatePicker = JQ.DatePicker.extend({
   dateFormat: 'dd/mm/yy', //ISO 8601
+   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
  
   beforeShowDay: function(date) {
       return [true, ""];
@@ -2193,6 +2194,7 @@ App.RadioButton = Ember.View.extend({
 
 	classNames: ['ember-radio-button'],
 	templateName: "radio-button",
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 
 	bindingChanged: function(){
 		var input = this.$('input:radio');
@@ -2718,25 +2720,18 @@ App.CrearSesionView = App.ModalView.extend({
 	fecha: '',
 	hora: '',
 	showErrors:false,
+	buttonRadioCheck: false,
 
 	attributeBindings: ['required'],
 
-	errorMensajes: function () {
+	errorMensajes: function (){
 		var mensajes = [];
 		var sesion = App.get('crearSesionController').get('sesion');
 
-		if (sesion.titulo == null || sesion.titulo == "") 
-			mensajes.push({titulo:"Debes escribir un titulo."});
-		if (sesion.sesion == null || sesion.sesion == "")  
-			mensajes.push({titulo:"Debes escribir un numero de sesion."});
-		if (sesion.reunion == null || sesion.reunion == "") 
-			mensajes.push({titulo:"Debes escribir un numero de reunion."});
-		if (sesion.periodoOrdinario == null || sesion.periodoOrdinario == "") 
-			mensajes.push({titulo:"Debes escribir un periodo Ordinario."});
 		if (sesion.tipo == null) 
 			mensajes.push({titulo:"Debes seleccionar un tipo de Sesion."});
 		return mensajes;
-	}.property('sesion.titulo', 'sesion.reunion', 'sesion.periodoOrdinario', 'sesion.sesion', 'sesion.tipo'),
+	}.property('sesion.tipo'),
 	
 	esInvalido: function () {
 		var sesion = App.get('crearSesionController').get('sesion');
