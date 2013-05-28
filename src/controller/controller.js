@@ -2863,3 +2863,121 @@ App.Timer = Em.Object.extend({
 
 
 
+/*Graph*/
+
+
+
+App.EstadisticasController = Ember.Object.extend({
+	
+	content: null,
+	temaId: -1,
+	sesionId: 78,
+	loaded: false,
+
+	load: function () {
+		if (this.get('sesion')) {
+			this.set('loaded', false);
+			_self = this;
+			var url = '/estadistica/' + this.get('sesion.id');
+			if (this.get('tema.id')) {
+				url = url + "/" + this.get('tema').get('id');	
+			}
+			$.ajax({
+				url: url,
+				success: _self.parseContent,
+				context: _self
+			});
+		} else {
+			this.set('loaded', true);
+		}
+	}.observes('sesion', 'tema'),
+
+	unsetTema: function () {
+		this.set('tema', this.get('temas').firstObject);
+	}.observes('sesion.id'),
+	
+	parseContent: function (payload) {
+	  var data = JSON.parse(payload);
+	  if (data.success == true)
+	  {
+	  	this.set('content', data.estadisticaSesion);
+	  }		
+	  this.set('loaded', true);
+	},
+
+	estadisticaSesion: function() { 
+		this.get('content'); 
+	}.property('content.@each'),
+
+	estadisticaBloques: function() { 
+	  	var data = [];
+	  	if (this.get('content.estadisticasBloque')) {
+
+			this.get('content.estadisticasBloque').forEach(function (bloque) {
+				data.push([bloque.titulo + " " + bloque.diputadosAsignados, bloque.diputadosAsignados])
+			}); 
+	  	}
+		return data;
+	}.property('content.@each'),
+
+	estadisticaBloquesForTable: function () {
+		var data= [];
+		_self = this;
+	  	if (this.get('content.estadisticasBloque')) {
+			this.get('content.estadisticasBloque').forEach(function (bloque) {
+				var b = Ember.Object.create(bloque);
+				b.set('label', b.get('titulo'));
+				b.set('tiempo', parseInt(b.get('tiempoAsignado')) / 60);
+				b.set('tiempoP', parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100);
+				b.set('diputadosP', b.get('diputadosAsignados') / b.get('totalDiputados') * 100);
+				data.pushObject(b);
+			});
+	  		
+	  	}
+
+
+		return data;
+
+	}.property('content.@each'),
+	
+	estadisticaInterBloques: function() { 
+	  	var data = [];
+	  	if (this.get('content.estadisticasInterBloque')) {
+			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
+				data.push([bloque.titulo + " " + bloque.diputadosAsignados, bloque.diputadosAsignados])
+			}); 
+	  	}
+
+		return data;
+	}.property('content.@each'),
+	
+	estadisticaInterBloquesForTable: function () {
+		var data= [];
+		_self = this;
+
+	  	if (this.get('content.estadisticasInterBloque')) {
+	  		
+			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
+				var b = Ember.Object.create(bloque);
+				b.set('label', b.get('titulo'));
+				b.set('tiempo', parseInt(b.get('tiempoAsignado')) / 60);
+				b.set('tiempoP', parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100);
+				b.set('diputadosP', b.get('diputadosAsignados') / b.get('totalDiputados') * 100);
+				data.pushObject(b);
+			});
+	  	}
+
+		return data;
+	}.property('content.@each'),
+
+	temas: function() { 
+		var data = [App.EstadisticaTema.create({titulo: 'Todos los temas', id: -1})];
+
+	  	if (this.get('content.sesion')) {
+			this.get('content.sesion.temas').forEach(function(tema) {
+				data.pushObject(App.EstadisticaTema.create(tema));
+			}); 
+	  	}
+		return data;
+	}.property('content.@each'),
+});

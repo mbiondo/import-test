@@ -273,7 +273,30 @@ App.menuController = App.MenuController.create({
 					],
 				}),
 			]
-		})                
+		}),
+
+		App.MenuItem.create({
+			id: 7,
+			roles: ['ROLE_USER'],
+			titulo: 'Estadisticas',
+			url: '#/estadisticas/oradores',
+			icono: 'bundles/main/images/icons/mainnav/forms.png',
+			
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Estadisticas',
+					url: '#/estadisticas/oradores',
+					roles: ['ROLE_USER'],
+					subMenu: [
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Oradores',
+							url: '#/estadisticas/oradores',
+						}),
+					],
+				}),
+			]
+		})
 	]
 });
 
