@@ -2920,6 +2920,18 @@ App.EstadisticasController = Ember.Object.extend({
 		return data;
 	}.property('content.@each'),
 
+	estadisticaBloquesPorOradores: function() { 
+	  	var data = [];
+	  	if (this.get('content.estadisticasBloque')) {
+
+			this.get('content.estadisticasBloque').forEach(function (bloque) {
+				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60) + "'", bloque.tiempoAsignado])
+			}); 
+	  	}
+		return data;
+	}.property('content.@each'),	
+
+
 	estadisticaBloquesForTable: function () {
 		var data= [];
 		_self = this;
@@ -2950,6 +2962,17 @@ App.EstadisticasController = Ember.Object.extend({
 
 		return data;
 	}.property('content.@each'),
+
+	estadisticaInterBloquesPorOradores: function() { 
+	  	var data = [];
+	  	if (this.get('content.estadisticasInterBloque')) {
+
+			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
+				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60) + "'", bloque.tiempoAsignado])
+			}); 
+	  	}
+		return data;
+	}.property('content.@each'),	
 	
 	estadisticaInterBloquesForTable: function () {
 		var data= [];
