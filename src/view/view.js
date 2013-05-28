@@ -2892,13 +2892,22 @@ App.PieGraphView = Ember.View.extend({
 	}.observes('content.@each'),
 
 	didInsertElement: function () {
- 		
+ 		this.redrawChart();
 	}
 });
 
 
 App.EstadisticasView = Ember.View.extend({
 	templateName: 'estadisticas-oradores',
+	isBloque: true,
+	
+	isBloqueTrue: function () {
+		this.set('isBloque', true);
+	},
+
+	isBloqueFalse: function () {
+		this.set('isBloque', false);
+	}	
 });
 
 App.EstadisticaTableItemView = Ember.View.extend({
