@@ -2893,7 +2893,7 @@ App.EstadisticasController = Ember.Object.extend({
 	}.observes('sesion', 'tema'),
 
 	unsetTema: function () {
-		this.set('tema', this.get('temas').firstObject);
+		this.set('tema', this.get('temas').objectAt(0));
 	}.observes('sesion.id'),
 	
 	parseContent: function (payload) {

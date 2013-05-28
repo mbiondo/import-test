@@ -2752,7 +2752,7 @@ App.CrearSesionView = App.ModalView.extend({
 					return false;
 				}
 
-				console.log('pepe');		
+
 				var sesion = App.get('crearSesionController').get('sesion');
 		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
 				// var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
