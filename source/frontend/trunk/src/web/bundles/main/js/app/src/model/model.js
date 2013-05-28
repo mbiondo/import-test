@@ -395,6 +395,10 @@ App.Sesion = Em.Object.extend({
 	useApi: false,
 	planDeLabor: '',
 
+	toString: function () {
+		return "Sesion: " + this.get('sesion') + " Reunion: " + this.get('reunion') + " Periodo: " + this.get('periodoOrdinario');
+	},
+
 	sortValue: function () {
 		return this.get('fecha').toString();
 	}.property('fecha'),
@@ -760,4 +764,13 @@ App.Turno = Em.Object.extend({
 
 		return sTiempo;
 	}.property('tiempo')
+});
+
+
+/* Estadisticas */
+
+App.EstadisticaTema = Ember.Object.extend({
+	toString: function () {
+		return this.get('titulo');
+	}
 });

@@ -122,6 +122,50 @@ App.Router =  Em.Router.extend({
 			},		
 		}),
 
+		estadisticas: Em.Route.extend({
+			route: '/estadisticas',
+			index: Ember.Route.extend({
+				route: '/oradores',
+
+				deserialize: function(router, params) {
+					if (!App.get('estadisticasController'))
+						App.estadisticasController = App.EstadisticasController.create({content: []});
+					
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+						if (App.get('estadisticasController.loaded') && App.get('sesionesController.loaded')) {
+							App.get('estadisticasController').removeObserver('loaded', this, fn);	
+							App.get('estadisticasController').set('sesiones', sesionesController.get('content'));
+							deferred.resolve(null);	
+						}
+					};
+
+					var sesionesController = App.get('sesionesController');
+					sesionesController.addObserver('loaded', this, fn);
+					sesionesController.load();							
+
+					App.get('estadisticasController').addObserver('loaded', this, fn);
+					App.get('estadisticasController').load();
+					
+					return deferred.promise();
+				},	
+
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('main', 'estadisticas');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Estadisticas', url: '#/estadisticas'},
+						{titulo: 'Oradores', url: '#/estadisticas/oradores'}
+					]);				
+
+					App.get('menuController').seleccionar(7);							
+				},				
+			})
+		}),
+
 		planDeLabor: Em.Route.extend({
 			route: '/plan/de/labor',
 
@@ -297,6 +341,7 @@ App.Router =  Em.Router.extend({
 			
 			index: Em.Route.extend({
 				route: '/',
+
 				deserialize: function(router, params) {
 				
 					if (App.get('expedientesController.loaded'))
@@ -316,6 +361,8 @@ App.Router =  Em.Router.extend({
 					App.get('comisionesController').addObserver('loaded', this, fn);
 									
 					return deferred.promise();
+
+					return null;
 				},	
 					
 				connectOutlets: function(router, context) {
@@ -461,66 +508,49 @@ App.Router =  Em.Router.extend({
 					},						
 				}),
 
-				dictamen: Ember.Route.extend({
-					route: '/dictamen',
+				crear: Ember.Route.extend({
+					route: '/crear/dictamen/:dictamen',
 
-					cargar: Ember.Route.extend({
-						route: '/:dictamen/cargar',
-						deserialize: function(router, params) {
+					deserialize: function(router, params) {
 
-							if (!App.get('dictamenController'))
-								App.dictamenController = App.DictamenController.create();
+						App.caracterDespachoController = App.CaracterDespachoController.create();
+						App.firmantesController = App.FirmantesController.create();
+						App.eventosParteController = App.EventosParteController.create();
 
-							if (!App.get('dictamenesPendientesController'))
-						 		App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
+						var deferred = $.Deferred();
+						
+						fn = function () {
+							if (App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
+								deferred.resolve(null);											
+							}
+			
+						}					
+						App.get('firmantesController').addObserver('loaded', this, fn);
+						App.get('expedientesController').addObserver('loaded', this, fn);
+						App.get('firmantesController').load();
+						App.get('expedientesController').load();
 
-							//App.dictamenController.set('content', App.Dictamen.create({id: params.dictamen}))
+						return deferred.promise();
+					},
 
-							App.caracterDespachoController = App.CaracterDespachoController.create();
-							App.firmantesController = App.FirmantesController.create();
-							App.eventosParteController = App.EventosParteController.create();
+					serialize: function(router, context) {
+							return {dictamen: context.get('id')};			
+					},
 
-							var deferred = $.Deferred();
-							
-							fn = function () {
-								if (App.get('dictamenesPendientesController.loaded') && App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
-									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));
-									App.set('dictamenController.content', dictamen);
-									deferred.resolve(dictamen);									
-								}
-							}	
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'crearDictamen');
+						appController.connectOutlet('menu', 'subMenu');
 
-	 						App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
-							App.get('firmantesController').addObserver('loaded', this, fn);
-							App.get('expedientesController').addObserver('loaded', this, fn);
-							App.get('dictamenesPendientesController').load();
-							App.get('firmantesController').load();
-							App.get('expedientesController').load();
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+							{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
+							{titulo: 'Cargar Dictamen' }
+						]);							
 
-							return deferred.promise();
-						},
-
-						serialize: function(router, context) {
-							console.log(context);
-							return {dictamen: context.get('id')};		
-						},
-
-						connectOutlets: function(router, context) {
-							var appController = router.get('applicationController');
-							appController.connectOutlet('main', 'crearDictamen');
-							appController.connectOutlet('menu', 'subMenu');
-
-							App.get('breadCumbController').set('content', [
-								{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
-								{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
-								{titulo: 'Cargar Dictamen' }
-							]);							
-
-							
-							App.get('menuController').seleccionar(2);					
-						},						
-
-					}),
+						
+						App.get('menuController').seleccionar(2);					
+					},						
 				}),			
 
 			}),

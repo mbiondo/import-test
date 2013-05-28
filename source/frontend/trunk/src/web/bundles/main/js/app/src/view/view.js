@@ -2847,3 +2847,73 @@ App.SesionResumenView = Em.View.extend({
 		
 	}
 });
+
+/* Estadisticas */
+
+
+App.PieGraphView = Ember.View.extend({
+	attributeBindings: ['title', 'name', 'content'],
+	type: 'pie',
+
+	redrawChart: function () {
+		this.$().highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: this.get('title')
+            },
+            tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+            	percentageDecimals: 1
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type:  this.get('type'),
+                name: this.get('name'),
+                data: this.get('content')
+            }]
+       });		
+	}.observes('content.@each'),
+
+	didInsertElement: function () {
+ 		
+	}
+});
+
+
+App.EstadisticasView = Ember.View.extend({
+	templateName: 'estadisticas-oradores',
+});
+
+App.EstadisticaTableItemView = Ember.View.extend({
+	templateName: 'estadistica-table-item'
+});
+
+App.EstadisticaTableView = App.ListFilterView.extend({
+
+	columnas: [	"Nombre del bloque",
+				"Total de diputados del bloque",
+				"Oradores",
+				"Tiempo Asignado (En minutos)",
+				"% tiempo usado",
+				"% oradores respecto al bloque"
+	],
+
+	itemViewClass: App.EstadisticaTableItemView,
+});
