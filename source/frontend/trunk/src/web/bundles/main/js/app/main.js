@@ -267,8 +267,8 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Vigentes',
-							url: '#/expedientesArchivados',
+							titulo: 'Env&iacute;os a archivo',
+							url: '#/enviosArchivo',
 						}),
 					],
 				}),
@@ -349,6 +349,15 @@ App.expedientesController = App.ExpedientesController.create({
 App.expedientesArchivadosController = App.ExpedientesArchivadosController.create({
 	content: []
 });
+
+App.envioArchivoController = App.EnvioArchivoController.create({
+	content: []
+});
+
+App.envioArchivoConsultaController = App.EnvioArchivoConsultaController.create({
+	content: []
+});
+
 
 App.citacionesController = App.CitacionesController.create({
 	content: [],
@@ -449,7 +458,7 @@ if(!com){
 
 //var exp = localStorage.getObject('expedientes');
 var exp = null;
-if (!exp) {
+if (exp) {
 	$.ajax({
 		url:  App.get('apiController.url') + "/exp/proyectos/2013",
 		dataType: 'JSON',

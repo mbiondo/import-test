@@ -7,6 +7,20 @@ Handlebars.registerHelper("linkExpediente", function(id, options) {
   return "#/expedientes/expediente/" + id + "/ver";
 });
 
+Handlebars.registerHelper("linkEnvio", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/enviosArchivo/envio/ver/" + id;
+});
+
+Handlebars.registerHelper("linkConfirmarEnvio", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/enviosArchivo/envio/confirmar/" + id;
+});
+
 Handlebars.registerHelper("linkCitacion", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);

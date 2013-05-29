@@ -428,42 +428,123 @@ App.Router =  Em.Router.extend({
 
 		expedientesArchivados: Em.Route.extend({
 			route: "/expedientesArchivados",
-			
-			deserialize: function(router, params) {
-			
-				if (App.get('expedientesArchivadosController.loaded'))
-					return null;
-				
-				var deferred = $.Deferred(),
-				
-				fn = function() {
-					App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
-					deferred.resolve(null);					
-				};
+                        
+                        deserialize: function(router, params) {
 
-				App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
-				App.get('expedientesArchivadosController').load();
+                            if (App.get('expedientesArchivadosController.loaded'))
+                                    return null;
 
-				App.get('comisionesController').load();
-				App.get('comisionesController').addObserver('loaded', this, fn);
-								
-				return deferred.promise();
-			},	
-				
-			connectOutlets: function(router, context) {
-			
-				var appController = router.get('applicationController');	
-				appController.connectOutlet('main', 'expedientesArchivados');
-				appController.connectOutlet('menu', 'subMenu');
+                            var deferred = $.Deferred(),
 
-				App.get('menuController').seleccionar(6);
-				
-				App.get('breadCumbController').set('content', [
-					{titulo: 'Expedientes Archivados', url: '#/expedientesArchivados'}
-				]);				
-							
-			},
+                            fn = function() {
+                                    App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
+                                    deferred.resolve(null);					
+                            };
+
+                            App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
+                            App.get('expedientesArchivadosController').load();
+
+                            return deferred.promise();
+                        },	
+
+
+                    connectOutlets: function(router, context) {
+
+                            var appController = router.get('applicationController');	
+                            appController.connectOutlet('main', 'expedientesArchivados');
+                            appController.connectOutlet('menu', 'subMenu');
+
+                            App.get('menuController').seleccionar(6);
+
+                            App.get('breadCumbController').set('content', [
+                                    {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados'}
+                            ]);				
+                    },
 		}), 
+        
+		enviosArchivo: Em.Route.extend({
+			route: "/enviosArchivo",
+                        
+			index: Em.Route.extend({
+				route: '/',	
+                                        
+                                deserialize: function(router, params) {
+
+                                        if (App.get('envioArchivoController.loaded'))
+                                                return null;
+
+                                        var deferred = $.Deferred(),
+
+                                        fn = function() {
+                                                App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+                                                deferred.resolve(null);					
+                                        };
+
+                                        App.get('envioArchivoController').addObserver('loaded', this, fn);
+                                        App.get('envioArchivoController').load();
+
+                                        return deferred.promise();
+                                },	
+
+                                connectOutlets: function(router, context) {
+
+                                        var appController = router.get('applicationController');	
+                                        appController.connectOutlet('main', 'enviosArchivados');
+                                        appController.connectOutlet('menu', 'subMenu');
+
+                                        App.get('menuController').seleccionar(6);
+
+                                        App.get('breadCumbController').set('content', [
+                                                {titulo: 'Env&iacute;os a Archivo', url: '#/enviosArchivo'}
+                                        ]);				
+
+                                },
+                        }),
+                
+			envioConsulta: Ember.Route.extend({
+
+				route: '/envio',
+
+				indexSubRoute: Ember.Route.extend({
+					route: '/ver/:envio',
+
+					deserialize: function(router, params) {
+						App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
+						
+						var deferred = $.Deferred(),
+						fn = function() {
+							if (App.get('envioArchivoConsultaController.loaded')) {
+								var envio = App.get('envioArchivoConsultaController.content');
+								deferred.resolve(envio);
+                                                                App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);							
+							}
+						};
+						
+						App.get('envioArchivoConsultaController').addObserver('loaded', this, fn);
+						App.get('envioArchivoConsultaController').load();				
+						return deferred.promise();
+					},
+
+					serialize: function(router, context) {
+						var envioId = context.get('id');
+						return {envio: envioId}
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'expedientesEnvioConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Env&iacute;os a Archivo', url: '#/enviosArchivo'},
+							{titulo: 'Env&iacute;o ' + App.get('envioArchivoConsultaController.content').get('id'), url: '#/enviosArchivo/envio/ver/'+App.get('envioArchivoConsultaController.content').get('id')}
+						]);
+						App.get('menuController').seleccionar(6);					
+					},
+				}),
+			}),	                                
+		}), 
+        
         
 		comisiones: Em.Route.extend({
 			route: "/comisiones",
@@ -849,7 +930,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Reunión'},
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
 							]);					
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);
 						},
 					}),	
 				}),
