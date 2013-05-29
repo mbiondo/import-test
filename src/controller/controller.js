@@ -2359,11 +2359,11 @@ App.TurnosController = App.RestController.extend({
 	}.property('horaInicio', 'horaFin'),
 
 	sHoraInicio: function () {
-		return moment.unix(this.get('horaInicio')).format('HH:mm [hs]');
+		return moment.unix(this.get('horaInicio')).format('HH:mm[h]');
 	}.property('horaInicio'),
 
 	sHoraFin: function () {
-		return moment.unix(this.get('horaFin')).format('HH:mm [hs]');
+		return moment.unix(this.get('horaFin')).format('HH:mm[h]');
 	}.property('horaFin'),
 
 	sDuracionTotal: function () {
