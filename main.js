@@ -277,7 +277,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 7,
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_LABOR_PARLAMENTARIA'],
 			titulo: 'Estadisticas',
 			url: '#/estadisticas/oradores',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
@@ -286,10 +286,10 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Estadisticas',
 					url: '#/estadisticas/oradores',
-					roles: ['ROLE_USER'],
+					roles: ['ROLE_LABOR_PARLAMENTARIA'],
 					subMenu: [
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_LABOR_PARLAMENTARIA'],
 							titulo: 'Oradores',
 							url: '#/estadisticas/oradores',
 						}),
