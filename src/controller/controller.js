@@ -850,7 +850,7 @@ App.RolesController = App.RestController.extend({
 
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/2012',
+	url: '/exp/proyectos/2013',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -882,15 +882,9 @@ App.ExpedientesController = App.RestController.extend({
 		}
 	},
 
-	load: function() {
-		App.get('expedientesController').set('content', []);
-		this.loadSucceeded(localStorage.getObject('expedientes'));
-	},
-	
-
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);		
-		
+
 		if(!data || !items){
 			App.get('expedientesController').set('loaded', true);
 			return;
@@ -932,51 +926,6 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
-	loaded2012: false,
-
-	init : function () {
-		this._super();              
-	},
-
-	load2012: function () {
-		App.get('expedientesArchivadosController').set('loaded', false);
-		App.get('expedientesArchivadosController').set('loaded2012', true);
-
-                var url =  this.get('url');
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
-			
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'JSON',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted
-			});
-
-		}
-	},
-
-	
-	load: function() {
-                var url = '/exp/proyectos/2013';
-		this.set('loaded', false);
-		//var url =  this.get('url');
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
-			
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'JSON',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted,
-			});
-
-		}
-	},
 
 
 	createObject: function (data, save) {
@@ -986,20 +935,64 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 		item = App.Expediente.extend(App.Savable).create(data);
 		item.setProperties(data);
 		
-		if(save){
-			$.ajax({
-				url: this.get('url'),
-				dataType: 'JSON',
-				type: 'POST',
-				context : {controller: this, model : item },
-				data : item.getJson(),
-				success: this.createSucceeded,
-			});
-		}else{
-			App.get('expedientesArchivadosController').addObject(item);
-		}
+		App.get('expedientesArchivadosController').addObject(item);
+
 	},	
 });
+
+
+// Envios a archivo
+App.EnvioArchivoController = App.RestController.extend({
+        url: '/com/env/envios',
+	type: App.Envio,
+	useApi: true,
+	sortProperties: ['fechaPub'],
+	sortAscending: true,
+
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Envio.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		App.get('envioArchivoController').addObject(item);
+	},	
+});
+
+App.EnvioArchivoConsultaController = Ember.Object.extend({
+        content: '',
+        url: '/com/env/envio/%@',
+	loaded : false,
+	useApi: true,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+                
+        loadSucceeded: function(data) {
+		item = App.Envio.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},
+
+});
+
 
 App.CitacionesController = App.RestController.extend({
 	url: '/cit/citaciones/%@',

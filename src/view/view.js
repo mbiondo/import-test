@@ -888,166 +888,156 @@ App.ExpedienteArchivadoItemListView = Ember.View.extend({
 
 App.ExpedienteArchivadoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ExpedienteArchivadoItemListView, 	
-	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros'],
+	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros']
+    
+     
 });
 
 
-App.ExpedienteArchivadoView = Ember.View.extend({
-	tagName: 'tr',
-	classNames: ['gradeX'],
-	templateName: 'expediente',
-	classNameBindings: ['content.seleccionada:active'],
 
-	
-	verExpediente: function () {
-		App.set('expedienteConsultaController.loaded', false);
-		App.get('router').transitionTo('loading');
-		App.set('expedienteConsultaController.content', App.Citacion.create({id: this.get('content').get('id')}));
-		
-		fn = function() {
-			App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-			App.get('router').transitionTo('expedienteConsulta.indexSubRoute', this.get('content'));
-		};
-
-		App.get('expedienteConsultaController').addObserver('loaded', this, fn);			
-		App.get('expedienteConsultaController').load();		
-	},
-});
-
-
-App.ExpedientesArchivadosView = App.ListFilterView.extend({
+App.ExpedientesArchivadosView = Ember.View.extend({
 	templateName: 'expedientesArchivados',
-	itemViewClass: App.ExpedienteArchivadoView,
-	sorting: false,
-	filterFirmantes: '',
 	startFecha: '',
 	endFecha: '',
-	filterComisiones: [],
-	filterTipos: [],
-	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION'],
-	isExpanded: false,
+        archivadoFecha: '',
 
+        archivarExpedientes: function (){
+            var seleccionados = App.get('expedientesArchivadosController').get('arrangedContent').filterProperty('seleccionado', true);
+
+            var fecha = this.get('archivadoFecha');
+            var user = localStorage.getObject('user');
+            var usuario = App.Usuario.create(JSON.parse(user));
+            
+            var listaEnvioArchivo = App.ListaEnvioArchivo.create();
+            
+            listaEnvioArchivo.set('fecha', moment(fecha, 'DD/MM/YYYY').format("YYYY-MM-DD  HH:mm"));
+            listaEnvioArchivo.set('autor', usuario.get('nombre') + " " + usuario.get('apellido') );
+            listaEnvioArchivo.set('expedientes', seleccionados);
+            
+            var listaJSON = JSON.stringify(listaEnvioArchivo);
+            
+            //console.log(listaJSON);
+
+            var url = "/com/env/envio";
+            
+            $.ajax({
+                    url: App.get('apiController').get('url') + url,
+                    contentType: 'text/plain',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data : listaJSON,
+                    success: this.createSucceeded,
+            });
+	},
+
+	createSucceeded: function (data) {
+            
+            if (data.id) {
+                fn = function() {
+                    App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('enviosArchivo.index');					
+                };
+
+                App.get('envioArchivoController').addObserver('loaded', this, fn);
+                App.get('envioArchivoController').load();
+               
+            } else 
+            {
+                $.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
+            }
+	},
+        
+        
+	mostrarMasEnabled: true,
+});
+
+
+// Listado de envios:
+
+App.EnvioArchivoItemListView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'envioArchivado',
+});
+
+App.EnvioArchivoListView = App.ListFilterView.extend({ 
+	itemViewClass: App.EnvioArchivoItemListView, 	
+	columnas: ['Ver Env&iacute;o', 'Fecha Archivado', 'Autor', 'Estado'],
+});
+
+App.EnviosArchivadosView = App.ListFilterView.extend({
+	templateName: 'enviosArchivados',
+	sorting: false,
+	startFecha: '',
+	endFecha: '',
+        archivadoFecha: '',
+
+                
+	mostrarMasEnabled: true,
+});
+
+
+//Detalle de envios
+
+
+App.ExpedientesEnvioConsultaView = Ember.View.extend({
+	templateName: 'expedientesEnvioConsulta',
+	filterFirmantes: '',
+        archivadoFecha: '',
+        
+  	isExpanded: false,
+        isPendiente: false,
+
+	toggleBotonConfirmar: function() {
+            this.set('isExpanded', !this.get('isExpanded'));
+            this.$("#confirmarBotonDiv").slideToggle();
+            console.log(this.get('isExpanded'));
+	},
+	
 	didInsertElement: function(){
-		$("#expedientesAdvancedSearch").hide();
-	},
-	toogleSearch: function() {
-		this.set('isExpanded', !this.get('isExpanded'));
-		console.log(this.get('isExpanded'));
-	},	                
-	expedientesAdvancedSearch: function(){
-		this.$("#expedientesAdvancedSearch").slideToggle();
-	},                
-	ordenarAscID: function(event) {
-		this.ordenarPorCampo('expdip', true);
-	},
-	ordenarDescID: function(event) {
-		this.ordenarPorCampo('expdip', false);
+            $("#confirmarBotonDiv").hide();
+            this.set('content', App.get('envioArchivoConsultaController.content'));
+            if (App.get('envioArchivoConsultaController.content.estado')=="Pendiente") {
+                this.set('isPendiente', true);
+            }
 	},
 
-	ordenarAscTipo: function(event) {
-		this.ordenarPorCampo('tipo', true);
-	},
-	ordenarDescTipo: function(event) {
-		this.ordenarPorCampo('tipo', false);
-	},
+	confirmarToggle: function(){
+		this.$("#confirmarBotonDiv").slideToggle();
+	}, 
+        
+        
+        confirmarEnvio: function(){
+    
+            var idConfirmar = JSON.stringify(this.get('content.id'));
+            
+            var url = "/com/env/envio/confirmar";
+            
+            $.ajax({
+                    url: App.get('apiController').get('url') + url,
+                    contentType: 'text/plain',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data : idConfirmar,
+                    success: this.createSucceeded,
+            });        
+        },
+                
 
-	ordenarAscTitulo: function(event) {
-		this.ordenarPorCampo('titulo', true);
-	},
-	ordenarDescTitulo: function(event) {
-		this.ordenarPorCampo('titulo', false);
-	},
+	createSucceeded: function (data) {
+            
+            if (data.id) {
+                fn = function() {
+                    App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('enviosArchivo.index');					
+                };
 
-	ordenarAscFirmantes: function(event){
-		this.ordenarPorCampo('firmantesLabel', true);
-	},
-	ordenarDescFirmantes: function(event){
-		this.ordenarPorCampo('firmantesLabel', false);
-	},
-
-	ordenarAscIniciado: function(event){
-		this.ordenarPorCampo('iniciado', true);
-	},
-	ordenarDescIniciado: function(event){
-		this.ordenarPorCampo('iniciado', false);
-	},
-
-	ordenarAscGiros: function(event){
-		this.ordenarPorCampo('girosLabel', true);
-	},
-	ordenarDescGiros: function(event){
-		this.ordenarPorCampo('girosLabel', false);
-	},
-	setSorting: function(){
-		console.log('click en el header...');
-	},
-	
-	ordenarPorCampo: function (campo, order){		
-		App.get('expedientesArchivadosController').set('sortProperties', [campo]);
-		App.get('expedientesArchivadosController').set('sortAscending', order);
-	},
-
-	listaExpedientesArchivados: function (){
-		localStorage.setObject('tipos', App.get('comisionesController.content'));
-
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		filtered = App.get('expedientesArchivadosController').get('arrangedContent').filter(function(expediente){
-			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
-		});
-
-		var regexFirmantes = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-		filtered = filtered.filter(function(firmante){
-			return regexFirmantes.test((firmante.get('firmantesLabel')).toLowerCase());
-		});
-
-		var comisiones = $.map(this.get('filterComisiones'), function (value, key) { return value.get('nombre'); })
-		filtered = filtered.filter(function(expediente){
-			var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; })
-			var result = true;
-			comisiones.forEach(function(comision) {
-				if (!giros.contains(comision))
-					result = false;
-			});
-			return result;
-		});
-	
-		var getFilterTipos = $.map(this.get('filterTipos'), function (value, key){
-			console.log(value);
-			return value;
-		})
-		
-		filtered = filtered.filter(function(expediente){
-			var result = true;
-			getFilterTipos.forEach(function(tipo) {
-				if (expediente.tipo != tipo) result = false;
-			});
-			return result;
-		});
-
-		if (this.get('startFecha') && this.get('endFecha')){
-			_self = this;
-			filtered = filtered.filter(function(expediente){
-				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
-				console.log(expFecha);
-				var fechaD = moment(_self.get('startFecha'), 'DD/MM/YYYY');
-				var fechaH = moment(_self.get('endFecha'), 'DD/MM/YYYY');	
-				var range = moment().range(fechaD, fechaH);
-
-				return range.contains(expFecha); // false
-			});
-		}
-
-		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
-			max = filtered.length;
-			this.set('mostrarMasEnabled', false);
-		} else {
-			this.set('mostrarMasEnabled', true);
-		}
-		return filtered.splice(0, this.get('totalRecords'));
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesArchivadosController.content.@each', 'totalRecords', 'sorting'),
-
-	
+                App.get('envioArchivoController').addObserver('loaded', this, fn);
+                App.get('envioArchivoController').load();
+            } else 
+            {
+                $.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000 });
+            }
+	}, 
 	mostrarMasEnabled: true,
 });
 

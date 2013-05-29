@@ -135,6 +135,19 @@ App.Expediente = Em.Object.extend({
 });
 
 
+App.Envio = Em.Object.extend({
+        id: '',
+        
+	sortValue: '',
+	
+	seleccionado: false,
+
+	label: function () {
+                    return this.get('fecha') + this.get('autor');
+	}.property('autor'),
+
+});
+
 
 App.Citacion = Em.Object.extend({
 	url: "/cit/citacion",
@@ -765,6 +778,12 @@ App.Turno = Em.Object.extend({
 
 		return sTiempo;
 	}.property('tiempo')
+});
+
+App.ListaEnvioArchivo = Em.Object.extend({
+	expedientes: '',
+	fecha: '',
+        autor: ''
 });
 
 
