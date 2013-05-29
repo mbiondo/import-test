@@ -435,11 +435,12 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1366812030, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:3, reunion:3, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1369836030, tipo: "SesionOrdinariaEspecial", periodoOrdinario:23, sesion:4, reunion:4, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
-		
+		sesion.set('plId', this.get('content.id'));
+
 		if (this.get('content.ods')) {
 			this.get('content.ods').forEach(function (od){
 				temas.addObject(
