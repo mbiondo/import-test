@@ -1924,7 +1924,7 @@ App.SesionesController  = App.RestController.extend({
 	type: App.Sesion,
 	sortProperties: ['sortValue'],
 	sortAscending: false,
-	tipoSesiones: [{titulo: "Sesion Ordinaria De Tablas", id: "SesionOrdinariaDeTablas"}, {titulo: "Sesion Informativa", id: "SesionInformativa"}, {titulo: "Sesion Ordinaria Especial", id: "SesionOrdinariaEspecial"}],
+	tipoSesiones: [{titulo: "Sesión Ordinaria De Tablas", id: "SesionOrdinariaDeTablas"}, {titulo: "Sesión Informativa", id: "SesionInformativa"}, {titulo: "Sesión Ordinaria Especial", id: "SesionOrdinariaEspecial"}],
 	timer : null,
 	sesionActual : null,
 
