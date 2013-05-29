@@ -142,6 +142,7 @@ App.Router =  Em.Router.extend({
 					};
 
 					var sesionesController = App.get('sesionesController');
+					sesionesController.set('loaded', false);
 					sesionesController.addObserver('loaded', this, fn);
 					sesionesController.load();							
 
