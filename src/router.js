@@ -1085,7 +1085,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 
-						if (!hasRole('ROLE_DIPUTADO'))
+						if (hasRole('ROLE_LABOR_PARLAMENTARIA'))
 							appController.connectOutlet('main', 'OradoresIndex');
 						else
 							appController.connectOutlet('main', 'OradoresDiputadoIndex');
@@ -1153,7 +1153,7 @@ App.Router =  Em.Router.extend({
 														
 							var appController = router.get('applicationController');
 							
-							if (!hasRole('ROLE_DIPUTADO')){
+							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 							}
@@ -1262,7 +1262,7 @@ App.Router =  Em.Router.extend({
 
 							var appController = router.get('applicationController');
 							
-							if (!hasRole('ROLE_DIPUTADO')) {
+							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
 								appController.connectOutlet('main', 'sesionConsulta');
 								appController.connectOutlet('sesion', 'sesionTurnos');

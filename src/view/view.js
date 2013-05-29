@@ -1992,7 +1992,8 @@ App.DictamenCrearView = Ember.View.extend({
 			$(this).next().slideToggle(1200);
 		});
 	},
-
+	callback: function(){
+	},
 	guardar: function () {
 		var dictamen = this.get('content');
 		var pv = [];
@@ -2016,6 +2017,14 @@ App.DictamenCrearView = Ember.View.extend({
 		var url = App.get('apiController.url') + "/par/evento";
 
 		console.log(dictamen);
+
+/*
+		this.$('form').parsley('validate');
+		if (!this.$('form').parsley('isValid')){
+			console.log('validando..');
+			return false;
+		}		
+*/
 
 		$.ajax({
 			url:  url,
