@@ -699,7 +699,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes/pendientes/01/01/2013/01/06/2013',
+	url: '/dic/dictamenes/pendientes/01/01/2012/01/06/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fecha'],
@@ -1277,7 +1277,6 @@ App.OrdenDelDiaController = Ember.Object.extend({
 		}
 		this.set('loaded', true);
 	},
-	
 	load: function () {
 		this.set('loaded', false);
 		$.ajax({
@@ -1288,8 +1287,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 			success: this.loadSucceeded,
 			complete: this.loadCompleted
 		});
-	},
-	
+	},	
 	loadSucceeded: function(data) {
 		item = App.OrdeDelDia.create();
 		item.setProperties(data);
@@ -1394,7 +1392,6 @@ App.OrdenesDelDiaController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
-
 	loadSucceeded: function(data){
 		this._super(data);
 	},
@@ -2907,7 +2904,9 @@ App.EstadisticasController = Ember.Object.extend({
 	  	if (this.get('content.estadisticasBloque')) {
 
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
-				data.push([bloque.titulo + " " + bloque.diputadosAsignados, bloque.diputadosAsignados])
+				numDiputados = 'Orador';				
+				if(bloque.diputadosAsignados>1){ numDiputados = 'Oradores'; }
+				data.push([bloque.titulo + " (" + bloque.diputadosAsignados+" "+numDiputados+")", bloque.diputadosAsignados])
 			}); 
 	  	}
 		return data;
@@ -2918,7 +2917,7 @@ App.EstadisticasController = Ember.Object.extend({
 	  	if (this.get('content.estadisticasBloque')) {
 
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
-				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60) + "'", bloque.tiempoAsignado])
+				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60).toFixed(2) + "'", (bloque.tiempoAsignado).toFixed(2)])
 			}); 
 	  	}
 		return data;
@@ -2932,9 +2931,9 @@ App.EstadisticasController = Ember.Object.extend({
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
 				var b = Ember.Object.create(bloque);
 				b.set('label', b.get('titulo'));
-				b.set('tiempo', parseInt(b.get('tiempoAsignado')) / 60);
-				b.set('tiempoP', parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100);
-				b.set('diputadosP', b.get('diputadosAsignados') / b.get('totalDiputados') * 100);
+				b.set('tiempo', moment.duration(b.get('tiempoAsignado')*1000).humanize());
+				b.set('tiempoP', (parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100).toFixed(2));
+				b.set('diputadosP', (b.get('diputadosAsignados') / b.get('totalDiputados') * 100).toFixed(2));
 				data.pushObject(b);
 			});
 	  		
@@ -2947,7 +2946,7 @@ App.EstadisticasController = Ember.Object.extend({
 	
 	estadisticaInterBloques: function() { 
 	  	var data = [];
-	  	if (this.get('content.estadisticasInterBloque')) {
+	  	if (this.get('content.estadisticasInterBloque')){
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				data.push([bloque.titulo + " " + bloque.diputadosAsignados, bloque.diputadosAsignados])
 			}); 
@@ -2961,7 +2960,7 @@ App.EstadisticasController = Ember.Object.extend({
 	  	if (this.get('content.estadisticasInterBloque')) {
 
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
-				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60) + "'", bloque.tiempoAsignado])
+				data.push([bloque.titulo + " (Tiempo Asignado: " + moment.duration(bloque.tiempoAsignado*1000).humanize()+")", (bloque.tiempoAsignado)]);
 			}); 
 	  	}
 		return data;
@@ -2976,9 +2975,9 @@ App.EstadisticasController = Ember.Object.extend({
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				var b = Ember.Object.create(bloque);
 				b.set('label', b.get('titulo'));
-				b.set('tiempo', parseInt(b.get('tiempoAsignado')) / 60);
-				b.set('tiempoP', parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100);
-				b.set('diputadosP', b.get('diputadosAsignados') / b.get('totalDiputados') * 100);
+				b.set('tiempo', (parseInt(b.get('tiempoAsignado')) / 60).toFixed(2));
+				b.set('tiempoP', (parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100).toFixed(2));
+				b.set('diputadosP', (b.get('diputadosAsignados') / b.get('totalDiputados') * 100).toFixed(2));
 				data.pushObject(b);
 			});
 	  	}
