@@ -592,19 +592,19 @@ App.OrdenDelDiaView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'orden-del-dia-od-item',
 
-	verOD: function () {
-
+	verOD: function(){
 		 if (!App.get('ordenDelDiaController'))
 		 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
 
 		 fn = function() {
-			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ver', this.get('content'));
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ordenConsulta.verOrden', this.get('content'));
 		 };
 
 		 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
 		 App.get('ordenDelDiaController').load();
 	},
 });
+
 
 App.OrdenDelDiaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.OrdenDelDiaView, 	
@@ -1171,7 +1171,7 @@ App.CalendarTool = Em.View.extend({
             },
 			
             eventRender: function(event, element, view) {
-                element.bind('click', function() {		
+                element.bind('click', function() {
                         App.set('citacionConsultaController.loaded', false);
                         App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
                         App.get('router').transitionTo('loading');
@@ -2866,8 +2866,8 @@ App.PieGraphView = Ember.View.extend({
                 text: this.get('title')
             },
             tooltip: {
-        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
-            	percentageDecimals: 1
+            	pointFormat: '',
+	    		//pointFormat: "Value: {point.percentage:.2f}%" , 
             },
             plotOptions: {
                 pie: {
@@ -2878,7 +2878,7 @@ App.PieGraphView = Ember.View.extend({
                         color: '#000000',
                         connectorColor: '#000000',
                         formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                            return '<b>'+ this.point.name +'</b>';
                         }
                     }
                 }
@@ -2917,11 +2917,11 @@ App.EstadisticaTableItemView = Ember.View.extend({
 App.EstadisticaTableView = App.ListFilterView.extend({
 
 	columnas: [	"Nombre del bloque",
-				"Total de diputados del bloque",
+				"Total de Diputados del Bloque",
 				"Oradores",
-				"Tiempo Asignado (En minutos)",
-				"% tiempo usado",
-				"% oradores respecto al bloque"
+				"Tiempo Asignado (Minutos)",
+				"Tiempo Utilizado",
+				"Oradores respecto al Bloque"
 	],
 
 	itemViewClass: App.EstadisticaTableItemView,
