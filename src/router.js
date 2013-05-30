@@ -781,38 +781,42 @@ App.Router =  Em.Router.extend({
 						},				
 					}),		
 					
-					ver: Ember.Route.extend({
-						route: '/:orden/ver',
+					ordenConsulta: Ember.Route.extend({
+					route: '/orden',
+						verOrden: Ember.Route.extend({
+							route: '/:orden/ver',
 
-						deserialize: function(router, params) {
-							 if (!App.get('ordenDelDiaController'))
-							 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
+							deserialize: function(router, params) {
+								 if (!App.get('ordenDelDiaController'))
+								 App.set('ordenDelDiaController.content', App.OrdenDelDiaController.create({id: params.id}));
 
-							 var deferred = $.Deferred(),
-							 fn = function() {
-								 App.get('ordenDelDiaController').removeObserver('loaded', this, fn);	
-								deferred.resolve(null);					
-							 };
+								 var deferred = $.Deferred(),
+								 fn = function() {
+									 App.get('ordenDelDiaController').removeObserver('loaded', this, fn);	
+									deferred.resolve(null);					
+								 };
 
-							 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
-							 App.get('OrdenDelDiaController').load();
-							
-							 return deferred.promise();
-						},	
+								 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
+								 App.get('OrdenDelDiaController').load();
+								
+								 return deferred.promise();
+							},	
 
-						connectOutlets: function(router, context) {
-							var appController = router.get('applicationController');
-							appController.connectOutlet('main', 'ordenDelDiaDetalle');
-							appController.connectOutlet('menu', 'subMenu');
-							
-							App.get('breadCumbController').set('content', [
-								{titulo: 'OD', url: '#/comisiones/OD/listado'},
-								{titulo: 'Orden Del Día Nro 58'},
-							]);				
+							connectOutlets: function(router, context) {
+								var appController = router.get('applicationController');
+								appController.connectOutlet('main', 'ordenDelDiaDetalle');
+								appController.connectOutlet('menu', 'subMenu');
+								
+								App.get('breadCumbController').set('content', [
+									{titulo: 'OD', url: '#/comisiones/OD/listado'},
+									{titulo: 'Orden Del Día Nro'+ App.get('ordenDelDiaController.content').get('numero')},
+									{titulo: moment(App.get('ordenDelDiaController.content').get('fecha'), 'DD/MM/YYYY').format('LL')},
+								]);				
 
-							App.get('menuController').seleccionar(2);					
-						},
-					}),						
+								App.get('menuController').seleccionar(2);					
+							},
+						}),	
+					}),							
 				}),
 			}),
 			
