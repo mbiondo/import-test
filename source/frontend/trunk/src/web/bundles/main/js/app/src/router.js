@@ -590,49 +590,64 @@ App.Router =  Em.Router.extend({
 					},						
 				}),
 
-				crear: Ember.Route.extend({
-					route: '/crear/dictamen/:dictamen',
+				dictamen: Ember.Route.extend({
+					route: '/dictamen',
 
-					deserialize: function(router, params) {
+					cargar: Ember.Route.extend({
+						route: '/:dictamen/cargar',
+						deserialize: function(router, params) {
 
-						App.caracterDespachoController = App.CaracterDespachoController.create();
-						App.firmantesController = App.FirmantesController.create();
-						App.eventosParteController = App.EventosParteController.create();
+							if (!App.get('dictamenController'))
+								App.dictamenController = App.DictamenController.create();
 
-						var deferred = $.Deferred();
-						
-						fn = function () {
-							if (App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
-								deferred.resolve(null);											
-							}
-			
-						}					
-						App.get('firmantesController').addObserver('loaded', this, fn);
-						App.get('expedientesController').addObserver('loaded', this, fn);
-						App.get('firmantesController').load();
-						App.get('expedientesController').load();
+							if (!App.get('dictamenesPendientesController'))
+						 		App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
 
-						return deferred.promise();
-					},
+							//App.dictamenController.set('content', App.Dictamen.create({id: params.dictamen}))
 
-					serialize: function(router, context) {
-							return {dictamen: context.get('id')};			
-					},
+							App.caracterDespachoController = App.CaracterDespachoController.create();
+							App.firmantesController = App.FirmantesController.create();
+							App.eventosParteController = App.EventosParteController.create();
 
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'crearDictamen');
-						appController.connectOutlet('menu', 'subMenu');
+							var deferred = $.Deferred();
+							
+							fn = function () {
+								if (App.get('dictamenesPendientesController.loaded') && App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
+									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));
+									App.set('dictamenController.content', dictamen);
+									deferred.resolve(dictamen);									
+								}
+							}	
 
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
-							{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
-							{titulo: 'Cargar Dictamen' }
-						]);							
+	 						App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
+							App.get('firmantesController').addObserver('loaded', this, fn);
+							App.get('expedientesController').addObserver('loaded', this, fn);
+							App.get('dictamenesPendientesController').load();
+							App.get('firmantesController').load();
+							App.get('expedientesController').load();
 
-						
-						App.get('menuController').seleccionar(2);					
-					},						
+							return deferred.promise();
+						},
+
+						serialize: function(router, context) {
+							return {dictamen: context.get('id')};		
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'crearDictamen');
+							appController.connectOutlet('menu', 'subMenu');
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+								{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
+								{titulo: 'Cargar Dictamen' }
+							]);							
+							
+							App.get('menuController').seleccionar(2);					
+						},						
+
+					}),
 				}),			
 
 			}),
