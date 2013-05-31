@@ -937,7 +937,9 @@ App.ExpedientesArchivadosView = Ember.View.extend({
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
                     App.get('router').transitionTo('enviosArchivo.index');					
                 };
-
+                
+                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
+                
                 App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
                
@@ -1030,7 +1032,9 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
                     App.get('router').transitionTo('enviosArchivo.index');					
                 };
-
+                
+                $.jGrowl('Se ha confirmado el env&iacute;o satisfactoriamente!', { life: 5000 });
+                
                 App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
             } else 
