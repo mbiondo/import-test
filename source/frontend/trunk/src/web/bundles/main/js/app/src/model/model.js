@@ -231,19 +231,19 @@ App.PlanDeLabor = Em.Object.extend({
 
 App.OrdeDelDia = Em.Object.extend({
 	id: '',
-	dictamen: '',
 	sumario: '',
-	fecha: '',
-	useApi: false,
+	dict_id_orig: '',
+	fechaImpresion: '',
+	useApi: true,
 	texto: '',
 
 	serializable : [
 		'id',
-		'dictamen', 
+		'dict_id_orig', 
 		'sumario', 
-		'fecha', 
+		'fechaImpresion', 
 	],	
-	
+
     label: function () {
     	return this.get('sumario');
     }.property('sumario'),
@@ -347,6 +347,7 @@ App.Comision = Em.Object.extend({
 });
 
 
+
 App.Reunion = Em.Object.extend({
 	url: '/com/reun/reunion',
 	id: '',
@@ -436,9 +437,9 @@ App.Sesion = Em.Object.extend({
 
 	sHora: function () {
 		if(this.get('horaInicio'))
-			return moment.unix(this.get('horaInicio')).format('HH:mm [hs]');
+			return moment.unix(this.get('horaInicio')).format('HH:mm[h]');
 			
-		return moment.unix(this.get('fecha')).format('HH:mm [hs]');
+		return moment.unix(this.get('fecha')).format('HH:mm[h]');
 	}.property('fecha', 'horaInicio'),
 
 	tiempoTranscurrido : function () {
