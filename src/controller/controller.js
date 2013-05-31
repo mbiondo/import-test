@@ -1268,9 +1268,10 @@ App.ExpedienteController = Ember.Object.extend({
 
 App.OrdenDelDiaController = Ember.Object.extend({
 	content: null,
-	url: "/od/orden/del/dia",
+	url: "/od/%@",
+//	url: "/od/orden/del/dia",
 	loaded : false,
-	useApi: false,
+	useApi: true,
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -1387,7 +1388,7 @@ App.DictamenesController = App.RestController.extend({
 App.OrdenesDelDiaController = App.RestController.extend({
 	url: '/dic/ods/vigentes/130',
 	type: App.OrdeDelDia,
-	useApi: false,
+	useApi: true,
 	
 	init : function () {
 		this._super();
