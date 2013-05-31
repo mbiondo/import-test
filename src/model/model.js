@@ -143,7 +143,7 @@ App.Envio = Em.Object.extend({
 	seleccionado: false,
 
 	label: function () {
-                    return this.get('fecha') + this.get('autor');
+                    return this.get('fecha') + this.get('autor') + this.get('estado');
 	}.property('autor'),
 
 });
