@@ -330,7 +330,7 @@ App.UserController = Em.Controller.extend({
 				var tmpUser = App.Usuario.create(data);
 
 				var url = '/user/access';
-				var posting = $.post( url, { cuil: tmpUser.get('cuil'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
+				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
 
 				posting.done(function( data ) {
 					data = JSON.parse(data);
@@ -920,12 +920,18 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.ExpedientesArchivadosController = App.RestController.extend({
-        url: '/exp/proyectos/2012',
+    url: '/exp/proyectos/2012',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
+
+	loadByAnio: function (anio) {
+		this.set('content', []);
+		this.set('url', '/exp/proyectos/' + anio);
+		this.load();
+	},
 
 
 	createObject: function (data, save) {
