@@ -899,9 +899,15 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 	templateName: 'expedientesArchivados',
 	startFecha: '',
 	endFecha: '',
-        archivadoFecha: '',
+    archivadoFecha: '',
+    anio:2013,
+    anios: [2013, 2012, 2011, 2010, 2009],
 
-        archivarExpedientes: function (){
+    cambiarAnio: function () {
+    	App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
+    }.observes('anio'),
+
+    archivarExpedientes: function (){
             var seleccionados = App.get('expedientesArchivadosController').get('arrangedContent').filterProperty('seleccionado', true);
 
             var fecha = this.get('archivadoFecha');
