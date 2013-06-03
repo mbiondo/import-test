@@ -900,8 +900,8 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 	startFecha: '',
 	endFecha: '',
     archivadoFecha: '',
-    anio:2013,
-    anios: [2013, 2012, 2011, 2010, 2009],
+    anio:2012,
+    anios: [2012, 2011, 2010, 2009],
 
     cambiarAnio: function () {
     	App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
