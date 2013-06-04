@@ -1237,6 +1237,7 @@ App.CitacionCrearView = Em.View.extend({
 	contentBinding: 'App.citacionCrearController.content',
 	
 	seleccionados: false,
+	estadoBorrador: false,
 	
 //	showErrors: false,
 
@@ -1532,6 +1533,9 @@ App.CitacionCrearView = Em.View.extend({
 				*Si se está modificando los datos de una citación existente
 		*/
 
+		if(App.get('citacionConsultaController.content.estado.descripcion')=='borrador'){
+			this.set('estadoBorrador', true);
+		}
 		if (App.get('citacionCrearController.content.id'))
 		{
 			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
