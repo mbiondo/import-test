@@ -435,7 +435,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1369836030, tipo: "SesionOrdinariaEspecial", periodoOrdinario:23, sesion:4, reunion:4, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 05/06/2013", fecha: 1370442600, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:5, reunion:6, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -1237,7 +1237,7 @@ App.CitacionCrearView = Em.View.extend({
 	contentBinding: 'App.citacionCrearController.content',
 	
 	seleccionados: false,
-	estadoBorrador: false,
+	estadoBorrador: true,
 	
 //	showErrors: false,
 
@@ -1533,8 +1533,8 @@ App.CitacionCrearView = Em.View.extend({
 				*Si se está modificando los datos de una citación existente
 		*/
 
-		if(App.get('citacionConsultaController.content.estado.descripcion')=='borrador'){
-			this.set('estadoBorrador', true);
+		if(App.get('citacionConsultaController.content.estado.descripcion')!='borrador'){
+			this.set('estadoBorrador', false);
 		}
 		if (App.get('citacionCrearController.content.id'))
 		{
