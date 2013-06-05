@@ -1103,7 +1103,14 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 App.CitacionConsultaView = Em.View.extend({
 	templateName: 'citacionConsulta',
-	probando:'suspendida'
+	probando:'suspendida',
+	citacionSuspendida: false,
+
+	didInsertElement: function(){
+		if(App.citacionConsultaController.content.estado.descripcion == 'suspendida'){
+			this.set('citacionSuspendida', true);
+		}		
+	}
 });
 
 App.CalendarTool = Em.View.extend({
