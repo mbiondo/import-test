@@ -20,8 +20,14 @@ App.Usuario = Em.Object.extend({
 	],
 
 	label: function () {
-		return this.get('cuil');
-	}.property('cuil'),
+		var str = "<p>" + this.get('nombre') + " " +this.get('apellido') + "</p><small>" + this.get('cuil') + "</small>"; 
+		return str;
+	}.property('cuil', 'nombre', 'apellido'),
+
+	labelSafe: function () {
+		console.log('pepe');
+		return this.get('label').htmlSafe();
+	}.property('label'),
 	
 	estructura: function () {
 		return this.get('estructuraReal');

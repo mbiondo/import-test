@@ -435,7 +435,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 05/06/2013", fecha: 1370442600, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:5, reunion:6, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 05/06/2013", fecha: 1370446860, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:5, reunion:6, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -443,9 +443,10 @@ App.PlanDeLaborView = Ember.View.extend({
 
 		if (this.get('content.ods')) {
 			this.get('content.ods').forEach(function (od){
+				var titulo = od.titulo ? od.titulo : "OD Nro " + od.numero;
 				temas.addObject(
 					App.Tema.create({
-						titulo: "OD Nro " + od.numero,
+						titulo: titulo,
 						orden: orden,
 						plId: od.id,
 						plTipo: 'o',
@@ -473,7 +474,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			this.get('content.proyectos').forEach(function (expediente){
 				temas.addObject(
 					App.Tema.create({
-						titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+						titulo: "Expediente " + expediente.expdip,
 						orden: orden,
 						plId: expediente.id,
 						plTipo: 'e',
@@ -530,6 +531,10 @@ App.ODMiniView = Ember.View.extend({
 
 App.ExpedienteMiniView = Ember.View.extend({
 	templateName: 'expediente-mini',	
+
+	texto: function () {
+		return this.get('content.texto').htmlSafe();
+	}.property('content.texto'),
 });
 
 //OD
@@ -1014,22 +1019,22 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	}, 
         
         
-        confirmarEnvio: function(){
-    
-            var idConfirmar = JSON.stringify(this.get('content.id'));
+    confirmarEnvio: function(){
+
+        var idConfirmar = JSON.stringify(this.get('content.id'));
+        
+        var url = "/com/env/envio/confirmar";
+        
+        $.ajax({
+                url: App.get('apiController').get('url') + url,
+                contentType: 'text/plain',
+                dataType: 'JSON',
+                type: 'POST',
+                data : idConfirmar,
+                success: this.createSucceeded,
+        });        
+    },
             
-            var url = "/com/env/envio/confirmar";
-            
-            $.ajax({
-                    url: App.get('apiController').get('url') + url,
-                    contentType: 'text/plain',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data : idConfirmar,
-                    success: this.createSucceeded,
-            });        
-        },
-                
 
 	createSucceeded: function (data) {
             
@@ -1997,8 +2002,7 @@ App.DictamenCrearView = Ember.View.extend({
 			$(this).next().slideToggle(1200);
 		});
 	},
-	callback: function(){
-	},
+
 	guardar: function () {
 		var dictamen = this.get('content');
 		var pv = [];
@@ -2020,8 +2024,6 @@ App.DictamenCrearView = Ember.View.extend({
 		dictamen.proyectosVistos = pv;	
 
 		var url = App.get('apiController.url') + "/par/evento";
-
-		console.log(dictamen);
 
 /*
 		this.$('form').parsley('validate');
