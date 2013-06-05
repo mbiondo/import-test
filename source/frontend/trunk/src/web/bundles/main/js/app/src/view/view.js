@@ -1109,10 +1109,27 @@ App.CitacionConsultaView = Em.View.extend({
 	citacionSuspendida: false,
 
 	didInsertElement: function(){
+		console.log('content.estado.id: '+ this.get('content.estado.id'));
+		console.log('content.id: '+ this.get('content.id'));
 		if(App.citacionConsultaController.content.estado.descripcion == 'suspendida'){
 			this.set('citacionSuspendida', true);
 		}		
-	}
+	},
+	puedeConfirmar: function () {
+		return App.get('citacionConsultaController.content.estado.id') == 1 && App.get('citacionConsultaController.content.id');
+	},
+	
+	confirmar: function () {
+		App.ComfirmarCitacionView.popup();
+	},
+	
+	puedeCancelar: function () {
+		return App.get('citacionConsultaController.content.estado.id') != 3 && App.get('citacionConsultaController.content.id');
+	},
+		
+	cancelar: function () {
+		App.CancelarCitacionView.popup();
+	},
 });
 
 App.CalendarTool = Em.View.extend({
@@ -1597,6 +1614,11 @@ App.ComfirmarCitacionView = App.ModalView.extend({
 			}
 			event.preventDefault();
 	}, 
+	
+	didInsertElement: function () {
+		if (!App.get('citacionCrearController.content'))
+			App.set('citacionCrearController.content', App.get('citacionConsultaController.content'));
+	}	
 });
 
 
@@ -1616,6 +1638,11 @@ App.CancelarCitacionView = App.ModalView.extend({
 			}
 			event.preventDefault();
 	}, 
+
+	didInsertElement: function () {
+		if (!App.get('citacionCrearController.content'))
+			App.set('citacionCrearController.content', App.get('citacionConsultaController.content'));
+	}
 });
 
 App.CrearReunionView = App.ModalView.extend({
