@@ -1731,7 +1731,18 @@ App.CitacionCrearController = Em.Object.extend({
 			
 			App.get('ioController').sendNotification(notificacion);
 			App.get('ioController').sendEmail(email);
-		
+
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', App.Citacion.create(this.get('content')));
+
+			fn = function() {
+				var citacion = App.get('citacionConsultaController.content');
+				App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', citacion);
+			};
+
+			App.get('citacionConsultaController').addObserver('loaded', this, fn);
+			App.get('citacionConsultaController').load();	
 		} else {
 			$.jGrowl('Ocurrió un error al intentar confirmar la citación!', { life: 5000 });
 		}
