@@ -331,7 +331,6 @@ App.UserController = Em.Controller.extend({
 
 				var url = '/user/access';
 				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
-
 				posting.done(function( data ) {
 					data = JSON.parse(data);
 
@@ -670,6 +669,7 @@ App.PlanDeLaborController = Ember.Object.extend({
 
 App.PlanDeLaborListadoController = App.RestController.extend({
 	url: '/plan-de-labor/listado',
+//	url: '/pdl/all'
 	useApi: false,
 	loaded: false,
 	type: App.PlanDeLabor,
@@ -926,12 +926,6 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
-
-	loadByAnio: function (anio) {
-		this.set('content', []);
-		this.set('url', '/exp/proyectos/' + anio);
-		this.load();
-	},
 
 
 	createObject: function (data, save) {
@@ -1744,6 +1738,8 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	cancelar: function () {
+		console.log('Cancelando');
+
 		$.ajax({
 			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
 			contentType: 'text/plain',
@@ -1755,6 +1751,7 @@ App.CitacionCrearController = Em.Object.extend({
 			complete: this.cancelarCompleted,
 			data : this.get('content').getJson()
 		});			
+
 	},
 	
 	cancelarSuccess: function (data) {
@@ -1765,7 +1762,18 @@ App.CitacionCrearController = Em.Object.extend({
 	cancelarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
-			$.jGrowl('Se ha cambiado el estado de la citación a suspendida!', { life: 5000 });		
+			$.jGrowl('Se ha cambiado el estado de la citación a suspendida!', { life: 5000 });	
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', App.Citacion.create(this.get('content')));
+
+			fn = function() {
+				var citacion = App.get('citacionConsultaController.content');
+				App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', citacion);
+			};
+
+			App.get('citacionConsultaController').addObserver('loaded', this, fn);
+			App.get('citacionConsultaController').load();				
 		} else {
 			$.jGrowl('Ocurrió un error al intentar cancelar la citación!', { life: 5000 });
 		}
@@ -2155,7 +2163,7 @@ App.TurnosController = App.RestController.extend({
 			this.removeObject(turno);
 			this.insertAt(index, turnoHablando);
 		}else{
-			var turno = this.find(function (item) {
+			var turno = this.find(function (item){
 				if(item.get('horaInicio') != null && item.get('horaFin') == null)
 					return true;
 				
