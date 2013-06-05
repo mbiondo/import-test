@@ -127,6 +127,10 @@ Ember.TextArea.reopen({
     attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 });
 
+Ember.Checkbox.reopen({
+    attributeBindings: ['data-group', 'name'],
+});
+
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
     uiType: 'datepicker',
     uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
@@ -435,7 +439,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 05/06/2013", fecha: 1370446860, tipo: "SesionOrdinariaDeTablas", periodoOrdinario:23, sesion:5, reunion:6, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1369836030, tipo: "SesionOrdinariaEspecial", periodoOrdinario:23, sesion:4, reunion:4, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -474,7 +478,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			this.get('content.proyectos').forEach(function (expediente){
 				temas.addObject(
 					App.Tema.create({
-						titulo: "Expediente " + expediente.expdip,
+						titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
 						orden: orden,
 						plId: expediente.id,
 						plTipo: 'e',
@@ -531,11 +535,9 @@ App.ODMiniView = Ember.View.extend({
 
 App.ExpedienteMiniView = Ember.View.extend({
 	templateName: 'expediente-mini',	
-
 	texto: function () {
 		return this.get('content.texto').htmlSafe();
-	}.property('content.texto'),
-});
+	}.property('content.texto'),});
 
 //OD
 
@@ -948,10 +950,9 @@ App.ExpedientesArchivadosView = Ember.View.extend({
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
                     App.get('router').transitionTo('enviosArchivo.index');					
                 };
-                
-                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
-                
-                App.get('envioArchivoController').addObserver('loaded', this, fn);
+
+                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });                App.get('envioArchivoController').addObserver('loaded', this, fn);
+				 App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
                
             } else 
@@ -1019,22 +1020,22 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	}, 
         
         
-    confirmarEnvio: function(){
-
-        var idConfirmar = JSON.stringify(this.get('content.id'));
-        
-        var url = "/com/env/envio/confirmar";
-        
-        $.ajax({
-                url: App.get('apiController').get('url') + url,
-                contentType: 'text/plain',
-                dataType: 'JSON',
-                type: 'POST',
-                data : idConfirmar,
-                success: this.createSucceeded,
-        });        
-    },
+        confirmarEnvio: function(){
+    
+            var idConfirmar = JSON.stringify(this.get('content.id'));
             
+            var url = "/com/env/envio/confirmar";
+            
+            $.ajax({
+                    url: App.get('apiController').get('url') + url,
+                    contentType: 'text/plain',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data : idConfirmar,
+                    success: this.createSucceeded,
+            });        
+        },
+                
 
 	createSucceeded: function (data) {
             
@@ -1043,9 +1044,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
                     App.get('router').transitionTo('enviosArchivo.index');					
                 };
-                
-                $.jGrowl('Se ha confirmado el env&iacute;o satisfactoriamente!', { life: 5000 });
-                
+
                 App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
             } else 
@@ -1218,6 +1217,7 @@ App.MenuItemLink = Em.View.extend({
 	tagName: 'a',
 	classNameBindings: ['content.seleccionado:active'],
 });
+
 
 App.CitacionCrearView = Em.View.extend({
 	templateName: 'citacion-crear',	
@@ -1516,6 +1516,7 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	puedeCancelar: function () {
+//		console.log('cancelada');
 		return this.get('content.estado.id') != 3 && this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),
 		
@@ -1538,7 +1539,7 @@ App.CitacionCrearView = Em.View.extend({
 				*Si se está modificando los datos de una citación existente
 		*/
 
-		if(App.get('citacionConsultaController.content.estado.descripcion')!='borrador'){
+		if(App.get('citacionConsultaController.content.estado.descripcion') != 'borrador'){
 			this.set('estadoBorrador', false);
 		}
 		if (App.get('citacionCrearController.content.id'))
@@ -1784,7 +1785,7 @@ App.DictamenView = Ember.View.extend({
 		 	App.dictamenController = App.DictamenController.create();
 
 		 fn = function() {
-			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ordenConsulta.crearOrden');				
 		 };
 
 		 App.get('dictamenController').addObserver('loaded', this, fn);
@@ -1794,7 +1795,7 @@ App.DictamenView = Ember.View.extend({
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	
-	columnas: ['Fecha', 'Sumario', 'Cargar Dictamen'],
+	columnas: ['Sumario', 'Cargar Dictamen'],
 });
 
 App.ReunionConsultaView = Em.View.extend({
@@ -2002,11 +2003,17 @@ App.DictamenCrearView = Ember.View.extend({
 			$(this).next().slideToggle(1200);
 		});
 	},
-
 	guardar: function () {
 		var dictamen = this.get('content');
 		var pv = [];
 		var orden = 0;
+
+		this.$('form').parsley('validate');
+		if (!this.$('form').parsley('isValid')){
+			console.log('validando..');
+			return false;
+		}
+		
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 			orden++;
@@ -2018,20 +2025,12 @@ App.DictamenCrearView = Ember.View.extend({
 			descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
 			itemParte: 4,
 			resumen: "con modif. D. de Mayoría y D. de Minoría",
-			tipoDict: "OD",						
+			tipoDict: "OD",
 		});
 
 		dictamen.proyectosVistos = pv;	
 
 		var url = App.get('apiController.url') + "/par/evento";
-
-/*
-		this.$('form').parsley('validate');
-		if (!this.$('form').parsley('isValid')){
-			console.log('validando..');
-			return false;
-		}		
-*/
 
 		$.ajax({
 			url:  url,
@@ -2041,9 +2040,10 @@ App.DictamenCrearView = Ember.View.extend({
 			data : JSON.stringify(dictamen),
 			success: function( data ) 
 			{
-				console.log(data);
+//				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
 			}
-		});			
+		});		
+
 	},
 });
 
