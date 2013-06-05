@@ -1255,7 +1255,10 @@ App.Router =  Em.Router.extend({
 							
 							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
-								appController.connectOutlet('main', 'sesionConsulta');
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+									appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+							 	else
+									appController.connectOutlet('main', 'sesionConsulta');
 							}
 							else {
 								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
@@ -1364,7 +1367,11 @@ App.Router =  Em.Router.extend({
 							
 							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
-								appController.connectOutlet('main', 'sesionConsulta');
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+									appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+							 	else
+									appController.connectOutlet('main', 'sesionConsulta');
+
 								appController.connectOutlet('sesion', 'sesionTurnos');
 							}
 							else {

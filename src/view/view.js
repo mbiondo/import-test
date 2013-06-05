@@ -396,6 +396,8 @@ App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
 	},
 });
 
+
+
 //Citaciones List
 
 
@@ -2869,6 +2871,123 @@ App.SesionResumenView = Em.View.extend({
 		}
 		
 	}
+});
+
+
+//Editor Oradores
+
+App.OradoresEditorSesionConsultaView = Ember.View.extend({
+	templateName: 'oradores-editor-sesion-consulta',
+
+});
+
+
+App.CrearTurnoInlineView = Em.View.extend({
+	templateName: 'crear-orador-inline',
+	turnoBinding: 'App.crearTurnoController.turno',
+	filterText: '',
+	selectedFilterText: '',
+		
+	tags: [
+			{id: "Dictamen de Mayoria", titulo: "Dictamen de Mayoria"},
+			{id: "Dictamen de Minoria", titulo: "Dictamen de Minoria"},
+			{id: "Observaciones", titulo: "Observaciones"}
+	],
+	
+	esDictamen : function () {
+		if (this.get('turno'))
+			return this.get('turno').get('listaId') == 1;
+		return false;
+	}.property('turno.listaId'),
+		
+	listaDiputados: function () {
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered = App.get('diputadosController').get('arrangedContent').filter(function(user) {
+			return regex.test((user.nombre + " " + user.apellido).toLowerCase()) || regex.test((user.apellido + " " + user.nombre).toLowerCase());
+		});
+		return filtered;
+	}.property('filterText', 'App.diputadosController.content'),
+	
+	oradores : function () {
+		if(!this.get('turno'))
+			return null;
+
+		var ap, oradores = this.get('turno').get('oradores');
+
+		ap = Ember.ArrayProxy.create({
+			content: Ember.A(oradores)
+		});
+
+		return ap.get('content');
+	}.property('turno', 'turno.oradores', 'turno.oradores.length'),
+	
+	agregarOrador: function (user) {
+        var turnoUser = {
+          orden: this.get('oradores').get('length'),
+          user: {
+            id: user.get('id'),
+            nombre: user.get('nombre'),
+            apellido: user.get('apellido'),
+            avatar: user.get('avatar'),
+			bloque: user.get('bloque')
+          }
+        };
+        var item = this.get('oradores').findProperty("user.id", user.get('id'));
+        if (!item) {
+          this.get('oradores').pushObject(turnoUser);
+          return true;
+        }
+        return false;
+	},
+		
+		
+	borrarOrador: function (turnoUser) {
+			this.get('oradores').removeObject(turnoUser);
+	},
+	
+	esInvalido: function () {
+		var turno = App.get('crearTurnoController').get('turno');
+		if (turno.tiempo < 1 || turno.orden < 0 || turno.listaId == null || turno.oradores == null || turno.oradores.length == 0 || (this.get('esDictamen') && turno.tag == null)) 
+			return true;
+		else
+			return false;
+	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
+	
+	guardar: function(opts, event) {     
+	  if (this.get('esInvalido')) 
+		return false;
+
+	  var turno = App.get('crearTurnoController').get('turno');
+	  if (turno.get('id')) {
+		turno.save();
+		App.get('turnosController').actualizarHora();
+	  } else {
+	  	turno.set('orden', App.get('turnosController.content.length'));
+		turno.set('tema', App.get('temaController.content'));
+		App.get('turnosController').createObject(turno, true);
+	  }
+  	},
+
+  	refreshTurno: function () {
+		if(App.get('listaController.content'))
+			lista = App.get('listaController.content');
+		else
+			lista = null;
+			
+		var temaController = App.get('temaController');
+		
+		var turno = App.Turno.create({
+				temaId:  App.get('temaController').get('content').get('id'),
+				listaId: lista == null ? null : lista.get('id'),
+				tiempo: 5,
+				oradores: []
+		});
+		App.get('crearTurnoController').set('turno', turno);  		
+  	}.observes('temaController.content', 'listaController.content'),
+
+  	willInsertElement: function () {
+  		this.refreshTurno();
+  	},
 });
 
 /* Estadisticas */
