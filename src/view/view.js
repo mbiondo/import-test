@@ -1105,31 +1105,27 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 App.CitacionConsultaView = Em.View.extend({
 	templateName: 'citacionConsulta',
-	probando:'suspendida',
-	citacionSuspendida: false,
+	puedeConfirmar: false,
+	puedeCancelar: false,
+	puedeCrearReunion: false,
+	puedeEditar: false,
 
 	didInsertElement: function(){
-		console.log('content.estado.id: '+ this.get('content.estado.id'));
-		console.log('content.id: '+ this.get('content.id'));
-		if(App.citacionConsultaController.content.estado.descripcion == 'suspendida'){
-			this.set('citacionSuspendida', true);
-		}		
+		if(App.citacionConsultaController.content.estado.id == 2)	this.set('puedeCrearReunion', true);
+		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeConfirmar', true);
+		if(App.citacionConsultaController.content.reunion && App.citacionConsultaController.content.estado.id == 3) 	this.set('puedeCancelar', true);	
 	},
-	puedeConfirmar: function () {
-		return App.get('citacionConsultaController.content.estado.id') == 1 && App.get('citacionConsultaController.content.id');
-	},
-	
+
 	confirmar: function () {
 		App.ComfirmarCitacionView.popup();
-	},
-	
-	puedeCancelar: function () {
-		return App.get('citacionConsultaController.content.estado.id') != 3 && App.get('citacionConsultaController.content.id');
 	},
 		
 	cancelar: function () {
 		App.CancelarCitacionView.popup();
 	},
+	crearReunion: function () {
+		App.CrearReunionView.popup();		
+	},	
 });
 
 App.CalendarTool = Em.View.extend({
@@ -1268,7 +1264,7 @@ App.CitacionCrearView = Em.View.extend({
 	contentBinding: 'App.citacionCrearController.content',
 	
 	seleccionados: false,
-	estadoBorrador: true,
+	estadoBorrador: false,
 	
 //	showErrors: false,
 
@@ -1565,8 +1561,8 @@ App.CitacionCrearView = Em.View.extend({
 				*Si se está modificando los datos de una citación existente
 		*/
 
-		if(App.get('citacionConsultaController.content.estado.descripcion') != 'borrador'){
-			this.set('estadoBorrador', false);
+		if(App.get('citacionConsultaController.content.estado.descripcion') == 'borrador'){
+			this.set('estadoBorrador', true);
 		}
 		if (App.get('citacionCrearController.content.id'))
 		{
@@ -1673,7 +1669,7 @@ App.CrearReunionView = App.ModalView.extend({
 		event.preventDefault();
 	}, 
 	
-	didInsertElement: function() {	
+	didInsertElement: function(){	
 		this._super();
 		this.set('startFecha', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD').format('DD/MM/YYYY'));
 		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD HH:ss').format('HH:ss'));
@@ -1689,6 +1685,10 @@ App.CrearReunionView = App.ModalView.extend({
 		});	 
 		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
+
+		if (!App.get('citacionCrearController.content'))
+			App.set('citacionCrearController.content', App.get('citacionConsultaController.content'));
+
 	}, 
 });
 
