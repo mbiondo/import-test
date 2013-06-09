@@ -1061,7 +1061,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
-								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:ss').format('LLL')},
+								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:mm').format('LLL')},
 							]);					
 							App.get('menuController').seleccionar(2);					
 						},
