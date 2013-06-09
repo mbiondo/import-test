@@ -1113,7 +1113,7 @@ App.CitacionConsultaView = Em.View.extend({
 	didInsertElement: function(){
 		if(App.citacionConsultaController.content.estado.id == 2)	this.set('puedeCrearReunion', true);
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeConfirmar', true);
-		if(App.citacionConsultaController.content.reunion && App.citacionConsultaController.content.estado.id == 3) 	this.set('puedeCancelar', true);	
+		if(App.citacionConsultaController.content.estado.id == 2) 	this.set('puedeCancelar', true);	
 	},
 
 	confirmar: function () {
@@ -1265,6 +1265,7 @@ App.CitacionCrearView = Em.View.extend({
 	
 	seleccionados: false,
 	estadoBorrador: false,
+	citacionCrear: false,
 	
 //	showErrors: false,
 
@@ -1563,6 +1564,9 @@ App.CitacionCrearView = Em.View.extend({
 
 		if(App.get('citacionConsultaController.content.estado.descripcion') == 'borrador'){
 			this.set('estadoBorrador', true);
+		}
+		if(App.breadCumbController.content[2].titulo == 'Crear'){
+			this.set('citacionCrear', true);
 		}
 		if (App.get('citacionCrearController.content.id'))
 		{
@@ -2389,7 +2393,7 @@ App.SesionTurnosView = Em.View.extend({
 
 App.TurnoView = Ember.View.extend({
 	tagName: 'li',
-	templateName: 'turno',
+	templateName: 'turnito',
 	classNameBindings: ['sortDisabled'],
 	sortDisabledBinding: 'this.content.sortDisabled',
 
