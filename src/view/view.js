@@ -120,7 +120,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type'],
 });
 
 Ember.TextArea.reopen({
@@ -1113,7 +1113,8 @@ App.CitacionConsultaView = Em.View.extend({
 	didInsertElement: function(){
 		if(App.citacionConsultaController.content.estado.id == 2)	this.set('puedeCrearReunion', true);
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeConfirmar', true);
-		if(App.citacionConsultaController.content.estado.id == 2) 	this.set('puedeCancelar', true);	
+		if(App.citacionConsultaController.content.estado.id != 3) 	this.set('puedeCancelar', true);	
+		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
 	},
 
 	confirmar: function () {
@@ -1348,6 +1349,15 @@ App.CitacionCrearView = Em.View.extend({
 	
 	crearInvitado: function () {
 		var invitado = this.get('invitado');
+
+		/*
+		this.$('#formInvitados').parsley('validate');
+		if (!this.$('#formInvitados').parsley('isValid')){
+			return false;
+		}
+		*/
+		// no esta validando bien
+
 		App.get('citacionCrearController.content.invitados').addObject(invitado);
 		this.set('invitado', App.CitacionInvitado.create());
 		
