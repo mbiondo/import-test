@@ -897,7 +897,7 @@ App.ExpedienteArchivadoItemListView = Ember.View.extend({
 
 App.ExpedienteArchivadoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ExpedienteArchivadoItemListView, 	
-	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio', 'Firmantes', 'Giros']
+	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio']
     
      
 });
@@ -2104,7 +2104,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 	formId: function () {
 		return "form" + this.get('contentIndex');
-	}.observes('contentIndex')
+	}.observes('contentIndex'),
 
 	fileChange: function () {
 		console.log(content.url);

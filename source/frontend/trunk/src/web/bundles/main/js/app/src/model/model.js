@@ -86,6 +86,17 @@ App.Rol = Em.Object.extend({
 	},
 });
 
+App.ExpedienteBase = Em.Object.extend({
+	sortValue: '',
+	
+	seleccionado: false,
+	
+	label: function () {
+                    return this.get('titulo') + this.get('expdip');
+	}.property('titulo'),
+});
+
+
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	
