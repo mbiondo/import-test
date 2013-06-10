@@ -2102,6 +2102,24 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	filterFirmantes: '',
 	adding: false,
 
+	formId: function () {
+		return "form" + this.get('contentIndex');
+	}.observes('contentIndex')
+
+	fileChange: function () {
+		console.log(content.url);
+		$.ajax({
+      		type: 'post',
+       		url: url,
+       		data: $("#" + this.get('formId')).serialize(),
+       		beforeSend: function(){},
+       		success: function(data)
+       		{
+       			console.log(data);
+       		}
+     	});
+	}.observes('content.url'),
+
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		console.log(item);
