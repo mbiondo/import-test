@@ -850,7 +850,7 @@ App.RolesController = App.RestController.extend({
 
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/2013',
+	url: '/exp/proyectos/',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -921,18 +921,19 @@ App.ExpedientesController = App.RestController.extend({
 
 App.ExpedientesArchivadosController = App.RestController.extend({
     url: '/exp/proyectos/2012',
-	type: App.Expediente,
+	type: App.ExpedienteBase,
 	useApi: true,
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
 
 
+
 	createObject: function (data, save) {
 	
 		save = save || false;
 		
-		item = App.Expediente.extend(App.Savable).create(data);
+		item = App.ExpedienteBase.extend(App.Savable).create(data);
 		item.setProperties(data);
 		
 		App.get('expedientesArchivadosController').addObject(item);
@@ -946,8 +947,8 @@ App.EnvioArchivoController = App.RestController.extend({
         url: '/com/env/envios',
 	type: App.Envio,
 	useApi: true,
-	sortProperties: ['fechaPub'],
-	sortAscending: true,
+	sortProperties: ['fechaUltimaModificacion'],
+	sortAscending: false,
 
 
 	createObject: function (data, save) {
