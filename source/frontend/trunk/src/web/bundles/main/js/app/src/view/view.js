@@ -1113,15 +1113,12 @@ App.UploaderView = Em.View.extend({
 
 	didInsertElement: function () {
 		this.$("input:file").uniform();
+		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
     }
 });
 
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
-	test: '',
-	saraza: function () {
-		console.log(this.get('test'));
-	}.observes('test'),
 });
 
 
@@ -2149,24 +2146,6 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	filterFirmantes: '',
 	adding: false,
 
-	formId: function () {
-		return "form" + this.get('contentIndex');
-	}.observes('contentIndex'),
-
-	fileChange: function () {
-		console.log(content.url);
-		$.ajax({
-      		type: 'post',
-       		url: url,
-       		data: $("#" + this.get('formId')).serialize(),
-       		beforeSend: function(){},
-       		success: function(data)
-       		{
-       			console.log(data);
-       		}
-     	});
-	}.observes('content.url'),
-
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		console.log(item);
@@ -2212,7 +2191,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	},
 	
 	didInsertElement: function (){
-		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		this.$("select, .check, .check :checkbox, input:radio").uniform();
 		this.$(".wbody").slideUp(000);
 		this.$(".wbody").slideDown(900);
 	},
