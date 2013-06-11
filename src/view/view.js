@@ -1619,9 +1619,6 @@ App.CitacionCrearView = Em.View.extend({
 		if(App.get('citacionConsultaController.content.estado.descripcion') == 'borrador'){
 			this.set('estadoBorrador', true);
 		}
-		if(App.breadCumbController.content[2].titulo == 'Crear'){
-			this.set('citacionCrear', true);
-		}
 		if (App.get('citacionCrearController.content.id'))
 		{
 			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
@@ -2145,7 +2142,6 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen-texto',
 	filterFirmantes: '',
 	adding: false,
-
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		console.log(item);
@@ -2194,6 +2190,8 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		this.$("select, .check, .check :checkbox, input:radio").uniform();
 		this.$(".wbody").slideUp(000);
 		this.$(".wbody").slideDown(900);
+		this.set('formId', "form" + Math.floor((Math.random()*1000000)+1));
+
 	},
 });
 
@@ -2941,6 +2939,10 @@ App.ModificarTiemposView = App.ModalView.extend({
 App.SesionResumenView = Em.View.extend({
 	templateName: 'sesion-resumen',
 
+	didInsertElement: function(){
+		// 1370428860
+		console.log(App.get('sesionController.content'));
+	},
 	verSesion : function(){
 		var tema = null;
 		
