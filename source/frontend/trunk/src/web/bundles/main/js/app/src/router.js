@@ -788,19 +788,26 @@ App.Router =  Em.Router.extend({
 
 							deserialize: function(router, params) {
 								 if (!App.get('ordenDelDiaController'))
-								 App.set('ordenDelDiaController.content', App.OrdenDelDiaController.create({id: params.id}));
+								 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
+								 App.set('ordenDelDiaController.loaded', false);
+								 App.set('ordenDelDiaController.content', App.OrdenDelDiaController.create({id: params.orden}));
 
 								 var deferred = $.Deferred(),
 								 fn = function() {
-									 App.get('ordenDelDiaController').removeObserver('loaded', this, fn);	
-									deferred.resolve(null);					
+									App.get('ordenDelDiaController').removeObserver('loaded', this, fn);
+									var od = App.get('ordenDelDiaController.content');
+									deferred.resolve(od);				
 								 };
 
 								 App.get('ordenDelDiaController').addObserver('loaded', this, fn);
-								 App.get('OrdenDelDiaController').load();
+								 App.get('ordenDelDiaController').load();
 								
 								 return deferred.promise();
 							},	
+
+							serialize: function (router, context) {
+								return {orden: context.get('id')};
+							},
 
 							connectOutlets: function(router, context) {
 								var appController = router.get('applicationController');
@@ -810,7 +817,7 @@ App.Router =  Em.Router.extend({
 								App.get('breadCumbController').set('content', [
 									{titulo: 'OD', url: '#/comisiones/OD/listado'},
 									{titulo: 'Orden Del Día Nro'+ App.get('ordenDelDiaController.content').get('numero')},
-									{titulo: moment(App.get('ordenDelDiaController.content').get('fecha'), 'DD/MM/YYYY').format('LL')},
+									{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 								]);				
 
 								App.get('menuController').seleccionar(2);					

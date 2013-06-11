@@ -1075,13 +1075,15 @@ App.CitacionesView = App.ListFilterView.extend({
 
 App.UploaderView = Em.View.extend({
 	templateName: 'uploader',
-	attributeBindings: ['file', 'folder'],
+	attributeBindings: ['file', 'folder', 'formId'],
 	url: '',
 	percent: 0,
+	formId: 'uploader',
 
 	fileChange: function () {
 		_self = this;
-        var formData = new FormData(this.$('form')[0]);
+		console.log(this.$('#' + this.get('formId'))[0]);
+        var formData = new FormData(this.$('#' + this.get('formId'))[0]);
         $.ajax({
             url: 'upload.php',  //server script to process data
             type: 'POST',
@@ -1100,7 +1102,9 @@ App.UploaderView = Em.View.extend({
                 }
                 return myXhr;
             },
-       		beforeSend: function(){},
+       		beforeSend: function(){
+
+       		},
        		success: function(payload)
        		{
        			data = JSON.parse(payload);

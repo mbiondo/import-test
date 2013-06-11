@@ -1269,7 +1269,7 @@ App.ExpedienteController = Ember.Object.extend({
 
 App.OrdenDelDiaController = Ember.Object.extend({
 	content: null,
-	url: "/od/%@",
+	url: "/dic/dictamen/%@",
 //	url: "/od/orden/del/dia",
 	loaded : false,
 	useApi: true,
@@ -1279,10 +1279,13 @@ App.OrdenDelDiaController = Ember.Object.extend({
 		}
 		this.set('loaded', true);
 	},
+
 	load: function () {
+		_self = this;
 		this.set('loaded', false);
+		console.log(this.get('content'));
 		$.ajax({
-			url: this.get('url'),
+			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -1290,6 +1293,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 			complete: this.loadCompleted
 		});
 	},	
+
 	loadSucceeded: function(data) {
 		item = App.OrdeDelDia.create();
 		item.setProperties(data);
