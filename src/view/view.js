@@ -120,7 +120,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type'],
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name'],
 });
 
 Ember.TextArea.reopen({
@@ -1073,8 +1073,55 @@ App.CitacionesView = App.ListFilterView.extend({
 	},
 });
 
+App.UploaderView = Em.View.extend({
+	templateName: 'uploader',
+	attributeBindings: ['file', 'folder'],
+	url: '',
+	percent: 0,
+
+	fileChange: function () {
+		_self = this;
+        var formData = new FormData(this.$('form')[0]);
+        $.ajax({
+            url: 'upload.php',  //server script to process data
+            type: 'POST',
+       		data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,      
+ 	        xhr: function() {  // custom xhr
+	            myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // if upload property exists
+                    myXhr.upload.addEventListener('progress', function(a) { 
+                    	_self.set('percent', Math.round(a.loaded / a.totalSize * 100));
+                    	_self.$('#progress').attr('original-title', _self.get('percent') + "%");
+                    	_self.$('#progress').attr('style', "width: " + _self.get('percent') + "%;");
+                    }, false); // progressbar
+                }
+                return myXhr;
+            },
+       		beforeSend: function(){},
+       		success: function(payload)
+       		{
+       			data = JSON.parse(payload);
+       			if (data.result == "ok") {
+       				_self.set('file', data.file);
+       			} 
+       		}
+        });
+	}.observes('url'),	
+
+	didInsertElement: function () {
+		this.$("input:file").uniform();
+    }
+});
+
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
+	test: '',
+	saraza: function () {
+		console.log(this.get('test'));
+	}.observes('test'),
 });
 
 
