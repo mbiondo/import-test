@@ -993,11 +993,12 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 							var deferred = $.Deferred(),		
 							fn = function() {
+								App.get('citacionConsultaController').set('content', '');		
 								App.get('citacionSalasController').removeObserver('loaded', this, fn);
-								var sala = App.get('citacionSalasController.content').objectAt(0);	
+								var sala = App.get('citacionSalasController.content').objectAt(0);
 								App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: []}));
 								App.get('comisionesController').addObserver('loaded', this, fn2);
-								App.get('comisionesController').load();						
+								App.get('comisionesController').load();				
 								
 							};
 							fn2 = function() {
@@ -1192,7 +1193,8 @@ App.Router =  Em.Router.extend({
 
 						appController.connectOutlet('menu', 'SubMenu');
 						
-						App.get('temaController').set('content', null);
+						App.get('temaController').set('content', null);						
+						console.log(App.get('sesionController.content'));
 						appController.cargarSesiones(true);
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Oradores', url: '#/recinto/oradores'},	
