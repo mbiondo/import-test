@@ -388,7 +388,6 @@ App.Reunion = Em.Object.extend({
 	}.property('nota'),
 
 	comisionesLabel: function () {
-	console.log('blablalala');
 		var comisiones = this.comisiones;
 
 		if(comisiones.length > 0) {
@@ -452,10 +451,14 @@ App.Sesion = Em.Object.extend({
 		return moment.unix(this.get('fecha')).format('LLLL');
 	}.property('fecha', 'horaInicio'),
 
+	sFechaDiaMesAnio: function () {
+		return moment.unix(this.get('fecha')).format('LL');
+	}.property('fecha'),
+
 	sHora: function () {
 		if(this.get('horaInicio'))
 			return moment.unix(this.get('horaInicio')).format('HH:mm[h]');
-			
+	
 		return moment.unix(this.get('fecha')).format('HH:mm[h]');
 	}.property('fecha', 'horaInicio'),
 
