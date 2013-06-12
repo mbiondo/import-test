@@ -905,7 +905,7 @@ App.Router =  Em.Router.extend({
 							var deferred = $.Deferred();
 							
 							fn2 = function () {
-								if (App.get('caracterDespachoController.loaded') && App.get('firmantesController.loaded') && App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
+								if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
 									var reunion = App.get('reunionConsultaController.content');
 									var citacion = App.get('citacionConsultaController.content');
 									var temas = [];
