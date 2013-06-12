@@ -1073,6 +1073,7 @@ App.CitacionesView = App.ListFilterView.extend({
 	},
 });
 
+
 App.UploaderView = Em.View.extend({
 	templateName: 'uploader',
 	attributeBindings: ['file', 'folder', 'formId'],
@@ -1082,7 +1083,6 @@ App.UploaderView = Em.View.extend({
 
 	fileChange: function () {
 		_self = this;
-		console.log(this.$('#' + this.get('formId'))[0]);
         var formData = new FormData(this.$('#' + this.get('formId'))[0]);
         $.ajax({
             url: 'upload.php',  //server script to process data
@@ -1119,6 +1119,36 @@ App.UploaderView = Em.View.extend({
 		this.$("input:file").uniform();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
     }
+});
+
+App.UploaderModalView = App.ModalView.extend({
+	templateName: 'uploader-popup',
+
+	callback: function(opts, event) {
+			if (opts.primary) {
+				
+			} else if (opts.secondary) {
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+	},
+});
+
+App.AttachFileView = Em.View.extend({
+	templateName: 'attach-file',
+	attributeBindings: ['file', 'folder'],
+
+	showUploader: function () {
+		if (!App.get('uploaderController'))
+			App.uploaderController = App.UploaderController.create();
+
+		App.uploaderController.set('content', this.get('file'));
+		App.uploaderController.set('folder', this.get('folder'));
+
+		App.UploaderModalView.popup();
+	},
 });
 
 App.InicioView = Em.View.extend({

@@ -597,6 +597,12 @@ App.RestController = Em.ArrayController.extend({
 	}
 });
 
+
+App.UploaderController = Ember.Object.extend({
+	content: null,
+	folder: '',
+});
+
 App.PlanDeLaborController = Ember.Object.extend({
 	content: null,
 	url: "/plan-de-labor/%@",
