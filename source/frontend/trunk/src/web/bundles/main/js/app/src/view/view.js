@@ -1126,7 +1126,7 @@ App.UploaderModalView = App.ModalView.extend({
 
 	callback: function(opts, event) {
 			if (opts.primary) {
-				
+
 			} else if (opts.secondary) {
 				//alert('cancel')
 			} else {
@@ -3087,6 +3087,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 		turno.set('tema', App.get('temaController.content'));
 		App.get('turnosController').createObject(turno, true);
 	  }
+	  this.refreshTurno();
   	},
 
   	refreshTurno: function () {
