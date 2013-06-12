@@ -897,6 +897,7 @@ App.Router =  Em.Router.extend({
 
 						deserialize: function(router, params) {
 
+							App.eventosParteController = App.EventosParteController.create();
 
 							App.set('reunionConsultaController.loaded', false);
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
