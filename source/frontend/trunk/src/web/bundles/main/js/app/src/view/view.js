@@ -1076,10 +1076,10 @@ App.CitacionesView = App.ListFilterView.extend({
 
 App.UploaderView = Em.View.extend({
 	templateName: 'uploader',
-	attributeBindings: ['file', 'folder', 'formId'],
+	attributeBindings: ['file', 'folder'],
 	url: '',
 	percent: 0,
-	formId: 'uploader',
+	formId: 'upload',
 
 	fileChange: function () {
 		_self = this;
@@ -2176,6 +2176,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen-texto',
 	filterFirmantes: '',
 	adding: false,
+
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		console.log(item);
@@ -2224,8 +2225,6 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		this.$("select, .check, .check :checkbox, input:radio").uniform();
 		this.$(".wbody").slideUp(000);
 		this.$(".wbody").slideDown(900);
-		this.set('formId', "form" + Math.floor((Math.random()*1000000)+1));
-
 	},
 });
 

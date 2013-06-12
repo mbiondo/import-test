@@ -705,7 +705,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes/pendientes/01/01/2012/01/06/2013',
+	url: '/dic/dictamenes/pendientes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fecha'],
@@ -856,7 +856,7 @@ App.RolesController = App.RestController.extend({
 
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/',
+	url: '/exp/proyectos/2013',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1374,7 +1374,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 
 
 App.DictamenesController = App.RestController.extend({
-	url: '/dic/dictamenes/vista/01/01/2012/01/06/2013/resumen',
+	url: '/dic/dictamenes/01/01/2012/01/12/2012',
 	type: App.Dictamen,
 	useApi: true,
 	
@@ -1384,6 +1384,11 @@ App.DictamenesController = App.RestController.extend({
 
 	loadSucceeded: function(data){
 		this._super(data);
+	},
+
+	load: function() {
+		console.log('load!');
+		this._super();
 	},
 	
 	createObject: function (data, save) {

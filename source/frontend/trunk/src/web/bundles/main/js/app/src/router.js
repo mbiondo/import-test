@@ -684,19 +684,19 @@ App.Router =  Em.Router.extend({
 					route: "/dictamenes",
 					
 					deserialize: function(router, params) {
-						 if (!App.get('dictamenesController'))
-						 	App.dictamenesController = App.DictamenesController.create();
+						if (!App.get('dictamenesController'))
+							App.dictamenesController = App.DictamenesController.create();
 
-						 var deferred = $.Deferred(),
-						 fn = function() {
+						var deferred = $.Deferred(),
+						fn = function() {
 							 App.get('dictamenesController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);					
-						 };
+						};
 
-						 App.get('dictamenesController').addObserver('loaded', this, fn);
-						 App.get('dictamenesController').load();
-						
-						 return deferred.promise();
+						App.get('dictamenesController').addObserver('loaded', this, fn);
+						App.get('dictamenesController').load();
+
+						return deferred.promise();
 					},
 					
 					connectOutlets: function(router, context) {
@@ -897,9 +897,6 @@ App.Router =  Em.Router.extend({
 
 						deserialize: function(router, params) {
 
-							App.caracterDespachoController = App.CaracterDespachoController.create();
-							App.firmantesController = App.FirmantesController.create();
-							App.eventosParteController = App.EventosParteController.create();
 
 							App.set('reunionConsultaController.loaded', false);
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
@@ -931,14 +928,9 @@ App.Router =  Em.Router.extend({
 							}							
 							
 							App.get('reunionConsultaController').addObserver('loaded', this, fn);
-							App.get('caracterDespachoController').addObserver('loaded', this, fn2);
-							App.get('firmantesController').addObserver('loaded', this, fn2);
 							App.get('eventosParteController').addObserver('loaded', this, fn2);
 							App.get('reunionConsultaController').load();
-							App.get('caracterDespachoController').load();
 							App.get('eventosParteController').load();
-							App.get('firmantesController').load();
-							App.get('expedientesController').load();
 							return deferred.promise();
 						},
 
