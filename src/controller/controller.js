@@ -2990,7 +2990,8 @@ App.EstadisticasController = Ember.Object.extend({
 	  	var data = [];
 	  	if (this.get('content.estadisticasInterBloque')){
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
-				data.push([bloque.titulo + " " + bloque.diputadosAsignados, bloque.diputadosAsignados])
+				if(bloque.diputadosAsignados>1){ numDiputados = 'Oradores'; }
+				data.push([bloque.titulo + " (" + bloque.diputadosAsignados+" "+numDiputados+")", bloque.diputadosAsignados])
 			}); 
 	  	}
 
@@ -3017,7 +3018,7 @@ App.EstadisticasController = Ember.Object.extend({
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				var b = Ember.Object.create(bloque);
 				b.set('label', b.get('titulo'));
-				b.set('tiempo', (parseInt(b.get('tiempoAsignado')) / 60).toFixed(2));
+				b.set('tiempo', moment.duration(bloque.tiempoAsignado*1000).humanize());
 				b.set('tiempoP', (parseInt(b.get('tiempoAsignado')) / _self.get('content.tiempoTotalOradores') * 100).toFixed(2));
 				b.set('diputadosP', (b.get('diputadosAsignados') / b.get('totalDiputados') * 100).toFixed(2));
 				data.pushObject(b);
