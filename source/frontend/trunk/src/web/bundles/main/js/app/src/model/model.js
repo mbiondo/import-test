@@ -262,7 +262,7 @@ App.OrdeDelDia = Em.Object.extend({
 	],	
 
     label: function () {
-    	return this.get('sumario');
+		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numero');
     }.property('sumario'),
 	sumarioHTML: function () {
 		return this.get('sumario').htmlSafe();
