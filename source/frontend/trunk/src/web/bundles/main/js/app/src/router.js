@@ -947,7 +947,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
 								{titulo: 'Reunión'},
-								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL')},
 							]);					
 							App.get('menuController').seleccionar(2);
 						},
@@ -999,7 +999,7 @@ App.Router =  Em.Router.extend({
 								App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: []}));
 								App.get('comisionesController').addObserver('loaded', this, fn2);
 								App.get('comisionesController').load();				
-								
+
 							};
 							fn2 = function() {
 								App.get('comisionesController').removeObserver('loaded', this, fn2);
@@ -1194,8 +1194,9 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'SubMenu');
 						
 						App.get('temaController').set('content', null);						
-						console.log(App.get('sesionController.content'));
 						appController.cargarSesiones(true);
+
+
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Oradores', url: '#/recinto/oradores'},	
 						]);					
