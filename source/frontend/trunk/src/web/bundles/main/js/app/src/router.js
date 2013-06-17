@@ -898,8 +898,11 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 
 							App.eventosParteController = App.EventosParteController.create();
+							App.reunionConsultaController = App.ReunionConsultaController.create();
 
 							App.set('reunionConsultaController.loaded', false);
+							App.set('eventosParteController.loaded', false);
+
 							App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
 
 							var deferred = $.Deferred();
@@ -914,24 +917,24 @@ App.Router =  Em.Router.extend({
 									});
 									citacion.set('temas', temas);
 									
-									deferred.resolve(reunion);											
+									deferred.resolve(reunion);										
 								}
 				
 							}
 							
 							fn = function() {
+								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 								var reunion = App.get('reunionConsultaController.content');
 								App.set('citacionConsultaController.loaded', false);
 								App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
 								App.get('citacionConsultaController').addObserver('loaded', this, fn2);
 								App.get('citacionConsultaController').load();
-								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+								App.get('eventosParteController').addObserver('loaded', this, fn2);
+								App.get('eventosParteController').load();
 							}							
 							
 							App.get('reunionConsultaController').addObserver('loaded', this, fn);
-							App.get('eventosParteController').addObserver('loaded', this, fn2);
 							App.get('reunionConsultaController').load();
-							App.get('eventosParteController').load();
 							return deferred.promise();
 						},
 
