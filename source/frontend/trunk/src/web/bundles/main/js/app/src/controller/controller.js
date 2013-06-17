@@ -856,7 +856,7 @@ App.RolesController = App.RestController.extend({
 
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos/2013',
+	url: '/exp/proyectos',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['fechaPub'],
