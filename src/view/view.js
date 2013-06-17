@@ -562,6 +562,7 @@ App.DictamenMiniView = Ember.View.extend({
 
 App.CrearODView = Ember.View.extend({
 	templateName: 'crear-orden-del-dia',
+	url: '',
 });
 
 App.OrdenDelDiaDetalleView = Ember.View.extend({
@@ -1118,10 +1119,6 @@ App.UploaderView = Em.View.extend({
         });
 	}.observes('url'),
 
-	fileSeted: function () {
-		App.set('uploaderController.content', this.get('file'));
-	}.observes('file'),
-
 	didInsertElement: function () {
 		this.$("input:file").uniform();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
@@ -1154,14 +1151,18 @@ App.AttachFileView = Em.View.extend({
 		App.uploaderController.set('content', this.get('content'));
 		App.uploaderController.set('folder', this.get('folder'));
 
-		App.get('uploaderController').addObserver('content', this.attachFile);
+		App.get('uploaderController').addObserver('content', this, this.attachFile);
 
 		App.UploaderModalView.popup();
 	},
 
 	attachFile: function () {
-		console.log(this.get('content'));
-	}
+		this.set('content', App.get('uploaderController.content'));
+	},
+
+	fileWithOutFolder: function () {
+		return this.get('content').replace(this.get('folder'), '');
+	}.property('content', 'folder'),
 });
 
 App.InicioView = Em.View.extend({
