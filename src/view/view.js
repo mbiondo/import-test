@@ -252,6 +252,9 @@ App.LoginView = Ember.View.extend({
 	cuil: '',
 	password: '',
 
+	insertNewLine: function(){
+		console.log('test');
+	},
 	falseLogin: function () {
 		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
 		App.userController.set('user', usuario);
@@ -1113,7 +1116,11 @@ App.UploaderView = Em.View.extend({
        			} 
        		}
         });
-	}.observes('url'),	
+	}.observes('url'),
+
+	fileSeted: function () {
+		App.set('uploaderController.content', this.get('file'));
+	}.observes('file'),
 
 	didInsertElement: function () {
 		this.$("input:file").uniform();
@@ -1138,17 +1145,23 @@ App.UploaderModalView = App.ModalView.extend({
 
 App.AttachFileView = Em.View.extend({
 	templateName: 'attach-file',
-	attributeBindings: ['file', 'folder'],
+	attributeBindings: ['folder'],
 
 	showUploader: function () {
 		if (!App.get('uploaderController'))
 			App.uploaderController = App.UploaderController.create();
 
-		App.uploaderController.set('content', this.get('file'));
+		App.uploaderController.set('content', this.get('content'));
 		App.uploaderController.set('folder', this.get('folder'));
+
+		App.get('uploaderController').addObserver('content', this.attachFile);
 
 		App.UploaderModalView.popup();
 	},
+
+	attachFile: function () {
+		console.log(this.get('content'));
+	}
 });
 
 App.InicioView = Em.View.extend({
@@ -2118,7 +2131,7 @@ App.DictamenCrearView = Ember.View.extend({
 		} else {
 			return this.get('content.proyectosVistos');
 		}
-	}.property('content.proyectosVistos.@each', 'filterProyectosVistos'),
+	}.property('content.proyectosVistos.@each', 'filterProyectosVistos', 'adding'),
 
 	didInsertElement: function () {
 		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
@@ -2133,12 +2146,12 @@ App.DictamenCrearView = Ember.View.extend({
 		var pv = [];
 		var orden = 0;
 
-		this.$('form').parsley('validate');
+/*		this.$('form').parsley('validate');
 		if (!this.$('form').parsley('isValid')){
 			console.log('validando..');
 			return false;
 		}
-		
+*/		
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 			orden++;
@@ -2157,6 +2170,8 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var url = App.get('apiController.url') + "/par/evento";
 
+		console.log(dictamen);
+/*
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -2168,7 +2183,7 @@ App.DictamenCrearView = Ember.View.extend({
 //				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
 			}
 		});		
-
+*/
 	},
 });
 
