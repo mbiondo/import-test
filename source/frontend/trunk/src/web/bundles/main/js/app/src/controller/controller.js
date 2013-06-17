@@ -1310,7 +1310,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 
 App.DictamenController = Ember.Object.extend({
 	content: null,
-	url: "/dic/dictamen/%@",
+	url: "/par/evento/%@",
 	loaded : false,
 	useApi: false,
 	
@@ -1335,6 +1335,7 @@ App.DictamenController = Ember.Object.extend({
 	loadSucceeded: function(data) {
 		item = App.Dictamen.create();
 		item.setProperties(data);
+		console.log(item);
 		this.set('content', item);
 		this.set('loaded', true);
 	},	
@@ -1374,7 +1375,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 
 
 App.DictamenesController = App.RestController.extend({
-	url: '/dic/dictamenes/01/01/2012/01/12/2012',
+	url: '/dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
 	

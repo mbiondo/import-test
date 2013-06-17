@@ -749,16 +749,18 @@ App.Router =  Em.Router.extend({
 					route: '/orden-del-dia',
 
 					crear: Ember.Route.extend({
-						route: '/crear',
+						route: '/:id/crear',
 
 						deserialize: function(router, params) {
-							 if (!App.get('dictamenController'))
-							 	App.dictamenController = App.DictamenController.create();
+
+							 console.log(params.id);
+  						 	 App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.id})});
 
 							 var deferred = $.Deferred(),
 							 fn = function() {
-								 App.get('dictamenController').removeObserver('loaded', this, fn);	
-								deferred.resolve(null);					
+								App.get('dictamenController').removeObserver('loaded', this, fn);	
+								var dictamen = App.get('dictamenController.content');
+								deferred.resolve(dictamen);					
 							 };
 
 							 App.get('dictamenController').addObserver('loaded', this, fn);
@@ -766,6 +768,10 @@ App.Router =  Em.Router.extend({
 							
 							 return deferred.promise();
 						},			
+
+						serialize: function (router, params) {
+							return {id: params.get('id')};
+						},
 
 						connectOutlets: function(router, context) {							
 							var appController = router.get('applicationController');
@@ -782,7 +788,7 @@ App.Router =  Em.Router.extend({
 					}),		
 					
 					ordenConsulta: Ember.Route.extend({
-					route: '/orden',
+						route: '/orden',
 						verOrden: Ember.Route.extend({
 							route: '/:orden/ver',
 
