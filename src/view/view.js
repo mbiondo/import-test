@@ -120,7 +120,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name'],
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-type'],
 });
 
 Ember.TextArea.reopen({
@@ -247,38 +247,55 @@ App.ContentView = Ember.View.extend({
 	},	
 });
 
+/*
+App.LoginInput = Ember.TextField.reopen({
+	usuario: null,
+
+	insertNewline: function(){
+		// this.set('usuario', App.Usuario.create({'cuil':'393939393', 'password':'pepe123'}));
+
+		localStorage.setItem(this.name, this.value);
+
+//		if(localStorage._username.length>1 && localStorage._password.length>1){
+			if(!$('#login').parsley('validate')) return false;
+//		}
+		App.get('userController').loginCheck(localStorage._username, localStorage._password);
+	},
+	focusOut: function(){
+		localStorage.setItem(this.name, this.value);
+	}
+});
+*/
+
 App.LoginView = Ember.View.extend({
 	templateName: 'login',
 	cuil: '',
 	password: '',
 
-	insertNewLine: function(){
-		console.log('test');
-	},
-	falseLogin: function () {
+	falseLogin: function (){
 		var usuario = App.Usuario.create({nombre: "testing", apellido: "testing", funcion: "DIPUTADO NACIONAL", cuil: "20306531817", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 2, nivel: 4, nombre: "ROLE_DIPUTADO"})]});
 		App.userController.set('user', usuario);
 		localStorage.setObject('user', JSON.stringify(usuario));
 		App.get('router').transitionTo('loading');
 		App.get('router').transitionTo('index');
-	},
-	
+	},	
 	login: function () {
 		var _self = this;
-
 		var url = App.get('apiController.url') + '/usr/autenticate';
+
+		if(!$('#login').parsley('validate')) return false;
+
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
 			type: 'POST',
-			//crossDomain: 'true',
 			context: this,
 			data : this.get('cuil') + "," + this.get('password'),
 			success: function( data ) 
 			{
 				if (data == true || data == "true")
 				{
-					App.get('userController').login(_self.get('cuil'));		
+					App.get('userController').login(_self.get('cuil'));
 				}
 				else
 				{
@@ -3198,7 +3215,7 @@ App.EstadisticaTableView = App.ListFilterView.extend({
 	columnas: [	"Nombre del bloque",
 				"Total de Diputados del Bloque",
 				"Oradores",
-				"Tiempo Asignado (Minutos)",
+				"Tiempo Asignado",
 				"Tiempo Utilizado",
 				"Oradores respecto al Bloque"
 	],
