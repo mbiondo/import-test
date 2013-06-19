@@ -313,9 +313,32 @@ App.IoController = Em.Object.extend({
 
 App.UserController = Em.Controller.extend({
 	user : undefined,
+	loginError: false,
+
+	loginCheck: function(cuil, password){
+		var url = App.get('apiController.url') + '/usr/autenticate';
+		$.ajax({
+			url:  url,
+			contentType: 'text/plain',
+			type: 'POST',
+			context: this,
+			data : cuil + "," + password,
+			success: function( data ) 
+			{
+				if (data == true || data == "true")
+				{
+					this.login(cuil);
+				}
+				else
+				{
+					this.set('loginError', true);
+				}
+			},
+		});			
+	},
 
 	login: function (cuil) {
-		
+
 		var urlUserData = App.get('apiController.url') + '/usr/userdata';
 		var _self = this;
 
@@ -331,7 +354,7 @@ App.UserController = Em.Controller.extend({
 
 				var url = '/user/access';
 				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
-				posting.done(function( data ) {
+				posting.done(function( data ){
 					data = JSON.parse(data);
 
 					var userRoles = [];
