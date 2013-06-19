@@ -246,6 +246,8 @@ App.PlanDeLabor = Em.Object.extend({
 	}.property('sumario'),
 });
 
+App.OrdenDelDia = Em.Object.extend({});
+
 App.OrdeDelDia = Em.Object.extend({
 	id: '',
 	sumario: '',
