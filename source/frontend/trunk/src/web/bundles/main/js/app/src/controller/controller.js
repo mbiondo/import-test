@@ -294,6 +294,7 @@ App.IoController = Em.Object.extend({
 				break;
 
 			case 'Tema' :
+				console.log('pepe');
 				var turno, ap;
 				ap = Ember.ArrayProxy.create({
 					content: Ember.A(options)
@@ -616,6 +617,9 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	sortSucceeded : function(data) {
+		console.log(data);
+		console.log(this.get('notificationType'));
+		console.log(JSON.stringify(data.orden));
 		App.get('ioController').sendMessage(this.get('notificationType'), "ordenado", JSON.stringify(data.orden));
 	}
 });
@@ -745,6 +749,10 @@ App.DictamenesPendientesController = App.RestController.extend({
 	},	
 });
 
+//OD
+
+
+//UserLogin
 App.UsuariosController = App.RestController.extend({
 	url: '/user/users',
 	type: App.Usuario,
@@ -1420,7 +1428,7 @@ App.DictamenesController = App.RestController.extend({
 		item = App.Dictamen.create(data.evento);
 		item.setProperties(data.evento);
 
-		if (item.get('textos').length >= 1)
+		if (data.dictamen == null && item.get('textos').length >= 1)
 			this.addObject(item);	
 	},		
 });
@@ -1995,12 +2003,13 @@ App.SesionesController  = App.RestController.extend({
 		var sesion = this.find(function (item) {
 			if(item.get('horaInicio') != null && item.get('horaFin') == null)
 				return true;
-			
 			return false;
 		}, this);
 
 		if(sesion)
+		{
 			this.startTimer(sesion);
+		}
 		
 	},
 
@@ -2009,9 +2018,12 @@ App.SesionesController  = App.RestController.extend({
 		/*if(this.get('sesionActual'))
 			this.stopTimer(this.get('sesionActual'))
 		*/
-		this.get('timer').stop();
-		this.set('sesionActual', null);
-		sesion.set('timer', null);		
+
+		if (this.get('timer')) {
+			this.get('timer').stop();
+			this.set('sesionActual', null);
+			sesion.set('timer', null);		
+		}
 
 		timer = this.get('timer');
 
@@ -2023,6 +2035,8 @@ App.SesionesController  = App.RestController.extend({
 		else
 			timer.start();
 
+		console.log(timer);
+
 		if(!sesion.get('horaInicio')){
 			sesion.set('horaInicio', Math.round(timer.get('startTime')/1000));
 			sesion.save();
@@ -2031,6 +2045,8 @@ App.SesionesController  = App.RestController.extend({
 		sesion.set('timer', timer);
 
 		this.set('sesionActual', sesion);
+
+		console.log(sesion);
 	},
 
 	stopTimer : function (sesion) {

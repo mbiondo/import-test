@@ -550,6 +550,84 @@ App.DictamenMiniView = Ember.View.extend({
 App.CrearODView = Ember.View.extend({
 	templateName: 'crear-orden-del-dia',
 	url: '',
+	anio: '',
+	numero: '',
+	fecha: '',
+	copete: '',
+
+	crear: function () {
+		var d = App.get('dictamenController.content');
+		var p = d.get('proyectos');
+		var pList = [];
+
+		p.forEach(function (e) {
+			pList.push({id: e.id.id_proy});
+		});
+		
+		d.set('proyectos', pList);
+		d.set('subclass', 'OD');
+		d.set('camara', 'Diputados');
+		d.set('dict_id_orig', 0);
+		d.set('anioParl', null);
+		d.set('nroGiro', 1);
+		d.set('id_proy_cab', d.get('proyectos')[0].id);
+		d.set('tipo', null);
+		d.set('anio', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY'));
+		d.set('numero', this.get('numero'));
+		d.set('publicacion', null);
+		d.set('fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
+		d.set('copete', this.get('copete'));
+		d.set('parte', null);
+
+
+
+		delete d.art108;
+		delete d.art114;
+		delete d.art204;
+		delete d.caracter;
+		delete d.caracterDespacho;
+		delete d.itemParte;
+		delete d.unanimidad;
+
+		var dictamen = App.OrdenDelDia.create({dictamen: d});
+
+		dictamen.set('id', {id_parte: d.get('id')});
+		dictamen.set('estado', 1);
+		dictamen.set('fecha_estado', null);
+		dictamen.set('fecha_113', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
+
+		delete d.id;
+
+	    var dJson = JSON.stringify(dictamen);
+
+	   	var url = "/dic/od";
+
+        $.ajax({
+            url: App.get('apiController').get('url') + url,
+            contentType: 'text/plain',
+            dataType: 'JSON',
+            type: 'POST',
+            data : dJson,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+        });		
+	},
+
+	loadCompleted: function () { 
+		 if (!App.get('ordenesDelDiaController'))
+		 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.ordenesDelDia.listadoOD');				
+		 };
+
+		 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
+		 App.get('ordenesDelDiaController').load();		
+	},
+
+	loadSucceeded: function () {
+		
+	}
 });
 
 App.OrdenDelDiaDetalleView = Ember.View.extend({
@@ -1132,8 +1210,7 @@ App.AttachFileView = Em.View.extend({
 	attributeBindings: ['folder'],
 
 	showUploader: function () {
-		if (!App.get('uploaderController'))
-			App.uploaderController = App.UploaderController.create();
+		App.uploaderController = App.UploaderController.create();
 
 		App.uploaderController.set('content', this.get('content'));
 		App.uploaderController.set('folder', this.get('folder'));
@@ -1144,6 +1221,7 @@ App.AttachFileView = Em.View.extend({
 	},
 
 	attachFile: function () {
+		App.get('uploaderController').removeObserver('content', this, this.attachFile);
 		this.set('content', App.get('uploaderController.content'));
 	},
 
