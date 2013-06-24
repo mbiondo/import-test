@@ -957,7 +957,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.ExpedientesArchivadosController = App.RestController.extend({
-    url: '/exp/proyectos/2012',
+    url: '/exp/proyectos',
 	type: App.ExpedienteBase,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1915,7 +1915,7 @@ App.CitacionCrearController = Em.Object.extend({
 	cargarExpedientes: function () {
 		$.ajax({
 //			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + moment().format('YYYY'),
-			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + '2012',
+			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))),
 			crossDomain: 'true',
 			dataType: 'JSON',
 			type: 'GET',
