@@ -2781,16 +2781,20 @@ App.FormValidate = Ember.View.extend({
 
 
 App.DiputadoSeleccionadoView = Em.View.extend({
-	tagName: 'li',
+	tagName: 'span',
+	classNames: ['tag'],
 	templateName: 'diputado-seleccionado',
 		borrarDiputado: function () {
 				this.get('parentView').get('parentView').borrarOrador(this.get('content'));
-		},        
+		},
+		click: function () {
+				this.get('parentView').get('parentView').borrarOrador(this.get('content'));
+		}, 		
 });
 
 App.DiputadosSeleccionadosView = Ember.CollectionView.extend({
-    classNames : [],  
-	tagName: 'ul',
+	tagName: 'div',
+    classNames : ['grid12','headerDiputadosSelected'],  
 	itemViewClass: App.DiputadoSeleccionadoView, 
 })
 
