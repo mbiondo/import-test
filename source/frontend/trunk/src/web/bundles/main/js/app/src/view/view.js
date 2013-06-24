@@ -249,8 +249,8 @@ App.ContentView = Ember.View.extend({
 
 
 App.LoginInput = Ember.TextField.extend({
-
 	insertNewline: function(){
+		if(!$('#login').parsley('validate')) return false;
 		this.set('loginError', App.get('userController').loginCheck($('#user_username').val(), $('#user_password').val()));
 	},
 });
@@ -261,6 +261,9 @@ App.LoginView = Ember.View.extend({
 	cuil: '',
 	password: '',
 
+	didInsertElement: function(){
+		this.$('#user_username'	).focus();
+	},
 	loginError: function(){
 		return App.get('userController.loginError');
 	}.property('App.userController.loginError'),
@@ -1823,7 +1826,7 @@ App.CrearReunionView = App.ModalView.extend({
 			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
 				id: null,
 				nota: this.get('nota'),
-				fecha: moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + ' ' +this.get('startHora'),
+				fecha: moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') +' '+ this.get('startHora'),
 				comisiones: $.map(this.get('citacion.comisiones'), function (value, key) {  
 					return {orden: key, nombre: value.nombre, comision: {id: value.id}}; 
 				}),
