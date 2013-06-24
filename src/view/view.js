@@ -251,7 +251,6 @@ App.ContentView = Ember.View.extend({
 App.LoginInput = Ember.TextField.extend({
 	insertNewline: function(){
 		if(!$('#login').parsley('validate')) return false;
-		this.set('loginError', App.get('userController').loginCheck($('#user_username').val(), $('#user_password').val()));
 	},
 });
 
@@ -1823,6 +1822,9 @@ App.CrearReunionView = App.ModalView.extend({
 
 	callback: function(opts, event){
 		if (opts.primary) {
+			console.log("startFecha: "+ this.get('startFecha'));
+			console.log("startHora: "+ this.get('startHora'));
+
 			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
 				id: null,
 				nota: this.get('nota'),
