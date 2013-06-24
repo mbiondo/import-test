@@ -822,7 +822,7 @@ App.Router =  Em.Router.extend({
 								
 								App.get('breadCumbController').set('content', [
 									{titulo: 'OD', url: '#/comisiones/OD/listado'},
-									{titulo: 'Orden Del Día Nro'+ App.get('ordenDelDiaController.content').get('numero')},
+									{titulo: 'Orden Del Día Nro '+ App.get('ordenDelDiaController.content').get('numero')},
 									{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 								]);				
 
