@@ -3068,10 +3068,6 @@ App.ModificarTiemposView = App.ModalView.extend({
 App.SesionResumenView = Em.View.extend({
 	templateName: 'sesion-resumen',
 
-	didInsertElement: function(){
-		// 1370428860
-		console.log(App.get('sesionController.content'));
-	},
 	verSesion : function(){
 		var tema = null;
 		
