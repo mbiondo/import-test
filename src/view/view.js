@@ -1332,7 +1332,7 @@ App.CalendarTool = Em.View.extend({
                 var fn = function() {
 
                         App.get('citacionesController').removeObserver('loaded', this, fn);
-                        App.get('citacionesController').get('content').forEach(function (citacion) {
+                        App.get('citacionesController').get('citaciones').forEach(function (citacion) {
                                 var color = '';
                                 if (citacion.get('estado'))
                                 {
@@ -1357,7 +1357,7 @@ App.CalendarTool = Em.View.extend({
                                 	citacion.set('title', citacion.get('title').substr(0, 75) + "...");
                                 }
                         });			
-                        callback(App.get('citacionesController').get('content'));
+                        callback(App.get('citacionesController').get('citaciones'));
                 }
 
                 App.get('citacionesController').set('anio', moment(start).format('YYYY'));
@@ -1764,6 +1764,12 @@ App.CitacionCrearView = Em.View.extend({
 		//$('#crear-citacion-form').validationEngine('attach');
 		
 		fo = null;
+		var cu = App.get('userController.user.comisiones')[0];
+		if (cu) {
+			var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
+			console.log(c);
+			App.get('citacionCrearController.content.comisiones').pushObject(c);
+		}
 	}, 
 });
 
