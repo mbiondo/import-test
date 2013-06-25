@@ -1080,7 +1080,30 @@ App.CitacionesController = App.RestController.extend({
 		}else{
 			this.addObject(item);
 		}		
-	},	
+	},
+
+	citaciones: function () {
+		var roles = App.get('userController.roles');
+
+		if (roles.contains('ROLE_DIRECCION_COMISIONES'))
+			return this.get('content');
+
+		var comsiones = App.get('userController.user.comisiones');
+		var citaciones = [];
+
+		this.get('arrangedContent').forEach(function (citacion) {
+			comsiones.forEach(function (comision) {
+				citacion.get('comisiones').forEach(function (c) {
+					if (c.id == comision.id) {
+						citaciones.pushObject(citacion);
+						return true;
+					}
+					return false;
+				});
+			});
+		});
+		return citaciones;
+	}.property('content'),
 });
 
 App.CaracterDespachoController = App.RestController.extend({
@@ -1275,10 +1298,12 @@ App.ComisionesController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
-	load: function() {
-		this.set('loaded', false);
-		this.loadSucceeded(localStorage.getObject('comisiones'));
-	},
+
+	//load: function() {
+		//this.set('loaded', false);
+		//this.loadSucceeded(localStorage.getObject('comisiones'));
+	//},
+
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Comision.create(data);

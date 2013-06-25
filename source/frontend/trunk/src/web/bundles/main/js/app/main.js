@@ -115,7 +115,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							titulo: 'Crear Citación',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -123,15 +123,15 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Reuniones',
 					url: '',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 							titulo: 'Reuniones sin Parte',
 							url: '#/comisiones/reuniones/sin/parte',
 						}),		
 						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 							titulo: 'Reuniones con Parte',
 							url: '#/comisiones/reuniones/con/parte',
 						}),							
@@ -141,12 +141,12 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Dictamenes',
 					url: '#/comisiones/dictamenes/pendientes',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Dictamenes pendientes',
 							url: '#/comisiones/dictamenes/pendientes',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),						
 					],
 				}),	
@@ -154,17 +154,17 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Ordenes del día',
 					url: '#/comisiones/OD/dictamenes',
-					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
 							titulo: 'Dictamenes sin OD',
 							url: '#/comisiones/OD/dictamenes',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),	
 						App.MenuItem.create({
 							titulo: 'Listado de OD',
 							url: '#/comisiones/OD/listado',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),							
 					],
 				}),							
@@ -436,7 +436,10 @@ if (user) {
 	App.userController.set('user', usuario);
 }
 
+$('#loadingScreen').remove();
+App.advanceReadiness();
 
+/*
 var com = localStorage.getObject('comisiones');
 
 if(!com){
@@ -454,9 +457,9 @@ if(!com){
 		}
 	});
 }
+*/
 
-
-//var exp = localStorage.getObject('expedientes');
+/*//var exp = localStorage.getObject('expedientes');
 var exp = null;
 if (exp) {
 	$.ajax({
@@ -475,5 +478,5 @@ if (exp) {
 } else {
 	 $('#loadingScreen').remove();
 	 App.advanceReadiness();
-}
+}*/
 
