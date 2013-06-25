@@ -448,7 +448,7 @@ App.Sesion = Em.Object.extend({
 
 	sFechaLarga: function () {
 		if(this.get('horaInicio'))
-			return moment.unix(this.get('horaInicio')).format('LLLL');
+			return moment.unix(this.get('fecha')).format('LLLL');
 			
 		return moment.unix(this.get('fecha')).format('LLLL');
 	}.property('fecha', 'horaInicio'),

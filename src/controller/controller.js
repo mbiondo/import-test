@@ -2085,7 +2085,6 @@ App.SesionesController  = App.RestController.extend({
 	},
 
 	parse : function (data) {
-		console.log(data);
 		var sesiones = data.sesiones;
 		return this.setListas(sesiones);
 	},
