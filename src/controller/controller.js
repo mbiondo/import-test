@@ -965,6 +965,11 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 	loaded: false,
 
 
+	loadByAnio: function (anio) {
+		this.set('content', []);
+		this.set('url', '/exp/proyectos/' + anio);
+		this.load();
+	},
 
 	createObject: function (data, save) {
 	
@@ -1714,7 +1719,6 @@ App.CitacionCrearController = Em.Object.extend({
 	loaded: false,
 	
 	crearReunion: function (reunion) {
-	
 		$.ajax({
 			url: App.get('apiController').get('url') + "/com/reun/reunion",
 			contentType: 'text/plain',
@@ -1724,8 +1728,7 @@ App.CitacionCrearController = Em.Object.extend({
 			context: this,
 			complete: this.crearReunionCompleted,
 			data : reunion.getJson()
-		});			
-		
+		});		
 	},
 	
 
