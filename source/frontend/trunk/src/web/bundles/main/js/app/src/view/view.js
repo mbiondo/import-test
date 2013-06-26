@@ -120,7 +120,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-type'],
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp'],
 });
 
 Ember.TextArea.reopen({
@@ -1468,16 +1468,9 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	guardar: function () {
-		console.log('Guardando los datos....');
+		this.$('#crear-citacion-form').parsley('validate');
 
-
-		this.$('form').parsley('validate');
-
-		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid'))
-		{
-			console.log('validando..');
-			return;
-		}
+		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
 
 		var temas = App.get('citacionCrearController.content.temas');
 		var temasToRemove = [];
@@ -1509,13 +1502,7 @@ App.CitacionCrearView = Em.View.extend({
 	crearInvitado: function () {
 		var invitado = this.get('invitado');
 
-		/*
-		this.$('#formInvitados').parsley('validate');
-		if (!this.$('#formInvitados').parsley('isValid')){
-			return false;
-		}
-		*/
-		// no esta validando bien
+		if(!$('#formInvitados').parsley('validate')) return false;
 
 		App.get('citacionCrearController.content.invitados').addObject(invitado);
 		this.set('invitado', App.CitacionInvitado.create());
@@ -2229,6 +2216,7 @@ App.DictamenCrearView = Ember.View.extend({
 			return false;
 		}
 */		
+
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 			orden++;
