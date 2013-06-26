@@ -1002,12 +1002,14 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 							var deferred = $.Deferred(),		
 							fn = function() {
-								App.get('citacionConsultaController').set('content', '');		
 								App.get('citacionSalasController').removeObserver('loaded', this, fn);
 								var sala = App.get('citacionSalasController.content').objectAt(0);
 								App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: []}));
 								App.get('comisionesController').addObserver('loaded', this, fn2);
 								App.get('comisionesController').load();				
+
+								App.get('citacionConsultaController').set('content', null);
+								App.get('citacionCrearController').set('expedientes', null);
 
 							};
 							fn2 = function() {
@@ -1028,7 +1030,6 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 							
 							App.set('citacionCrearController.isEdit', false);
-							
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
@@ -1067,6 +1068,8 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'citacionConsulta');
 							appController.connectOutlet('menu', 'subMenu');
+
+							App.get('citacionCrearController').set('content', null);
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
