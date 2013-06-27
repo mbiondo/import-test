@@ -656,9 +656,10 @@ App.Router =  Em.Router.extend({
 				route: "/partes",
 				
 				parteConsulta: Em.Route.extend({
-					route: '/crear/parte',
-					
+					route: '/parte',
+
 					crearParte: Ember.Route.extend({
+						route: '/crear',
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'crearParte');
@@ -674,7 +675,27 @@ App.Router =  Em.Router.extend({
 							App.get('menuController').seleccionar(2);					
 						},						
 					}),				
-				}),		
+					editarParte: Ember.Route.extend({
+						route: '/editar',
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'crearParte');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+								{titulo: 'Reunión'},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
+								{titulo: 'Editar Parte' }
+							]);
+							
+							App.get('menuController').seleccionar(2);		
+							App.set('reunionConsultaController.isEdit', true);			
+						},						
+					}),		
+				}),	
+
+
 			}),
 
 			ordenesDelDia: Em.Route.extend({
