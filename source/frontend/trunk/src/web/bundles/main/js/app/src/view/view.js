@@ -1270,7 +1270,11 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeEditar: false,
 
 	didInsertElement: function(){
-		if(App.citacionConsultaController.content.estado.id == 2)	this.set('puedeCrearReunion', true);
+		if((App.citacionConsultaController.content.estado.id == 2) 
+			&& (!App.citacionConsultaController.content.reunion) 
+			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
+			this.set('puedeCrearReunion', true);
+
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeConfirmar', true);
 		if(App.citacionConsultaController.content.estado.id != 3) 	this.set('puedeCancelar', true);	
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
