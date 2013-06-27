@@ -1997,7 +1997,7 @@ App.DictamenView = Ember.View.extend({
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	
-	columnas: ['Sumario', 'Cargar Dictamen'],
+	columnas: ['Fecha Reunion','Proyectos', 'Cargar Dictamen'],
 });
 
 App.ReunionConsultaView = Em.View.extend({

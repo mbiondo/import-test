@@ -744,6 +744,7 @@ App.DictamenesPendientesController = App.RestController.extend({
 		
 		item = App.Dictamen.extend(App.Savable).create(data.evento);
 		item.setProperties(data.evento);
+		item.set('fechaReunion', data.reunion.fecha);
 		if (item.get('textos').length == 0)
 			this.addObject(item);
 	},	
@@ -1457,7 +1458,8 @@ App.DictamenesController = App.RestController.extend({
 		save = save || false;
 		item = App.Dictamen.create(data.evento);
 		item.setProperties(data.evento);
-
+		item.set('fechaReunion', data.reunion.fecha);
+		
 		if (data.dictamen == null && item.get('textos').length >= 1)
 			this.addObject(item);	
 	},		
