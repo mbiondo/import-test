@@ -136,7 +136,7 @@ App.Router =  Em.Router.extend({
 					fn = function() {
 						if (App.get('estadisticasController.loaded') && App.get('sesionesController.loaded')) {
 							App.get('estadisticasController').removeObserver('loaded', this, fn);	
-							App.get('estadisticasController').set('sesiones', sesionesController.get('content'));
+							App.get('estadisticasController').set('sesiones', sesionesController.get('arrangedContent'));
 							deferred.resolve(null);	
 						}
 					};
