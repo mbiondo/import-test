@@ -433,7 +433,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1369836030, tipo: "SesionOrdinariaEspecial", periodoOrdinario:23, sesion:4, reunion:4, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion 24/04/2013", fecha: 1372359653, tipo: "SesionOrdinariaEspecial", periodoOrdinario:23, sesion:4, reunion:4, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -2008,13 +2008,12 @@ App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
 	
 	crearParte: function () {
-
 		App.set('reunionConsultaController.content.parte', []);
 		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
 	},
 	
 	editarParte: function () {
-		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');	
+		App.get('router').transitionTo('comisiones.partes.parteConsulta.editarParte');	
 	},
 });
 
@@ -2048,7 +2047,6 @@ App.CrearParteView = Ember.View.extend({
 					parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 					orden++;
 				});					
-
 				/*if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
 					parteItem.caracterDespacho = App.CaracterDespacho.create({
 						tipo: 'CaracterDictamen',
@@ -2059,7 +2057,6 @@ App.CrearParteView = Ember.View.extend({
 						tipoDict: "OD",						
 					});
 				}*/
-
 				parte.addObject(parteItem);
 			}
 		});
@@ -2071,7 +2068,13 @@ App.CrearParteView = Ember.View.extend({
 			if (App.get('reunionConsultaController.content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-				$.jGrowl('Parte creado con éxito!', { life: 5000 });				
+
+				if(App.get('reunionConsultaController.isEdit')){
+					$.jGrowl('Parte editado con éxito!', { life: 5000 });
+				}else{
+					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
+				}
+
 			}
 			else
 			{
