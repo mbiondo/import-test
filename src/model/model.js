@@ -297,6 +297,14 @@ App.Dictamen = Em.Object.extend({
     fecha: function () {
     	return this.get('fechaImpresion');
     }.property('fechaImpresion'),
+
+   	proyectosLabel: function () {
+   		var st = "";
+   		this.get('proyectos').forEach(function (proyecto) {
+   			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
+   		})
+   		return st.htmlSafe();
+   	}.property('proyectos'),    
 });
 
 
