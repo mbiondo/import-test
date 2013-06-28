@@ -92,7 +92,7 @@ App.ExpedienteBase = Em.Object.extend({
 	seleccionado: false,
 	
 	label: function () {
-                    return this.get('titulo') + this.get('expdip');
+        return this.get('titulo') + this.get('tipo')+ this.get('expdip') +  this.get('iniciado');
 	}.property('titulo'),
 });
 
@@ -814,7 +814,7 @@ App.Turno = Em.Object.extend({
 App.ListaEnvioArchivo = Em.Object.extend({
 	expedientes: '',
 	fecha: '',
-        autor: ''
+    autor: ''
 });
 
 
