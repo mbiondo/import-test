@@ -1456,11 +1456,11 @@ App.CitacionCrearView = Em.View.extend({
 		return this.get('tituloNuevoTema') != '';
 	}.property('tituloNuevoTema'),
 	
-	agregarInvitadoHabilitado: function () {
+	agregarInvitadoHabilitado: function () {		
 		var invitado = this.get('invitado');
 		var empty = !(invitado.nombre != '' && invitado.apellido != '');
 		
-		return !empty && $("#formInvitados").validationEngine('validate');
+		return !empty && $("#formInvitados").validationEngine('validate');		
 	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
 	
 	cargarExpedientesHabilitado: function () {
@@ -1472,6 +1472,7 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	guardar: function () {
+		
 		this.$('#crear-citacion-form').parsley('validate');
 
 		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
@@ -1501,6 +1502,9 @@ App.CitacionCrearView = Em.View.extend({
 			App.get('citacionCrearController').create();		
 		}
 
+		
+		
+		
 	},
 	
 	crearInvitado: function () {
@@ -1716,6 +1720,12 @@ App.CitacionCrearView = Em.View.extend({
 	},	
 
 	didInsertElement: function() {
+		
+		if (this.get("invitado")) {					
+			this.set('invitado',App.CitacionInvitado.create());
+		}
+
+		
 		/*
 			Se presenta esta condicion en caso de que:
 				*La citación ya exista
