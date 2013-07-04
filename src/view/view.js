@@ -876,7 +876,6 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 
 	toogleSearch: function() {
 		this.set('isExpanded', !this.get('isExpanded'));
-		console.log(this.get('isExpanded'));
 	},
 	
 	didInsertElement: function(){
@@ -934,7 +933,6 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 
 			filtered = filtered.filter(function(expediente){
 				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
-				console.log(expFecha);
 				var fechaD = moment(_self.get('startFecha'), 'DD/MM/YYYY');
 				var fechaH = moment(_self.get('endFecha'), 'DD/MM/YYYY');	
 				var range = moment().range(fechaD, fechaH);
@@ -1002,8 +1000,6 @@ App.ExpedientesArchivadosView = Ember.View.extend({
             
             var listaJSON = JSON.stringify(listaEnvioArchivo);
             
-            //console.log(listaJSON);
-
             var url = "/com/env/envio";
             
             $.ajax({
@@ -1077,7 +1073,6 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	toggleBotonConfirmar: function() {
             this.set('isExpanded', !this.get('isExpanded'));
             this.$("#confirmarBotonDiv").slideToggle();
-            console.log(this.get('isExpanded'));
 	},
 	
 	didInsertElement: function(){
@@ -1258,7 +1253,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
 	
 	clickTextoCompleto: function(e){
-        console.log(this.getPath('App.expedienteConsultaController.content.url'));
+//        console.log(this.getPath('App.expedienteConsultaController.content.url'));
     }
 });
 
@@ -1488,10 +1483,7 @@ App.CitacionCrearView = Em.View.extend({
 		});
 		
 		temas.removeObjects(temasToRemove);
-		
-		console.log(this.get('startFecha'));
-		
-		
+				
 		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
 		
 		if (this.get('content').get('id')) {
@@ -1526,17 +1518,16 @@ App.CitacionCrearView = Em.View.extend({
 	clickComision: function (comision) {
 		//App.get('citacionCrearController').cargarExpedientes();
 		
-		console.log('click comision');
 		if (App.get('citacionCrearController.isEdit') == true) return;
 
 		this.set('adding', !this.get('adding'));
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
-        	//console.log('Agregando Comision');
+        	console.log('Agregando Comision');
 			App.get('citacionCrearController.content.comisiones').pushObject(comision);
 		}
 		else {
-        	//console.log('Removiendo Comision');
+        	console.log('Removiendo Comision');
 			App.get('citacionCrearController.content.comisiones').removeObject(comision);
 		}
 	},
@@ -1686,7 +1677,6 @@ App.CitacionCrearView = Em.View.extend({
 	},
 
 	cargarExpedientesSuccess: function () {
-		console.log('amsdasdasd');
 		this.set('adding', !this.get('adding'));
 	},
 	
@@ -1703,7 +1693,6 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	puedeCancelar: function () {
-//		console.log('cancelada');
 		return this.get('content.estado.id') != 3 && this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),
 		
@@ -1768,7 +1757,6 @@ App.CitacionCrearView = Em.View.extend({
 		var cu = App.get('userController.user.comisiones')[0];
 		if (cu) {
 			var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
-			console.log(c);
 			App.get('citacionCrearController.content.comisiones').pushObject(c);
 		}
 	}, 
@@ -1829,9 +1817,6 @@ App.CrearReunionView = App.ModalView.extend({
 
 	callback: function(opts, event){
 		if (opts.primary) {
-			console.log("startFecha: "+ this.get('startFecha'));
-			console.log("startHora: "+ this.get('startHora'));
-
 			App.get('citacionCrearController').crearReunion(App.Reunion.extend(App.Savable).create({
 				id: null,
 				nota: this.get('nota'),
@@ -2227,13 +2212,6 @@ App.DictamenCrearView = Ember.View.extend({
 		var pv = [];
 		var orden = 0;
 
-/*		this.$('form').parsley('validate');
-		if (!this.$('form').parsley('isValid')){
-			console.log('validando..');
-			return false;
-		}
-*/		
-
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 			orden++;
@@ -2252,20 +2230,6 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var url = App.get('apiController.url') + "/par/evento";
 
-		console.log(dictamen);
-/*
-		$.ajax({
-			url:  url,
-			contentType: 'text/plain',
-			type: 'POST',
-			context: this,
-			data : JSON.stringify(dictamen),
-			success: function( data ) 
-			{
-//				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
-			}
-		});		
-*/
 	},
 });
 
@@ -2276,7 +2240,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
-		console.log(item);
+
         if (!item) {
         	firmante.set('seleccionado', true);
 			this.get('content.firmantes').pushObject(firmante);
