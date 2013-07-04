@@ -138,7 +138,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
     tagName: 'input',
     type: "text",
-    attributeBindings: ['type', 'value', 'placeholder'],
+    attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
@@ -2230,7 +2230,19 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var url = App.get('apiController.url') + "/par/evento";
 
-	},
+/*
+		$.ajax({
+			url:  url,
+			contentType: 'text/plain',
+			type: 'POST',
+			context: this,
+			data : JSON.stringify(dictamen),
+			success: function( data ) 
+			{
+//				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+			}
+		});		
+*/	},
 });
 
 App.DictamenTextoCrearView = Ember.View.extend({
