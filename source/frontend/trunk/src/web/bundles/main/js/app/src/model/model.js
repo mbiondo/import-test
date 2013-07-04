@@ -7,7 +7,10 @@ App.Usuario = Em.Object.extend({
 	url: '/user',
 	nombre: '',
 	apellido: '',
+	
 	cuil: '',
+	password: '',
+
 	roles: '',
 	estructuraReal: '',
 	funcion: '',
@@ -25,7 +28,6 @@ App.Usuario = Em.Object.extend({
 	}.property('cuil', 'nombre', 'apellido'),
 
 	labelSafe: function () {
-		console.log('pepe');
 		return this.get('label').htmlSafe();
 	}.property('label'),
 	
@@ -112,7 +114,7 @@ App.Expediente = Em.Object.extend({
 	}.property('tipo'),
 
 	label: function () {
-                    return this.get('titulo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
+        return this.get('titulo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
 	}.property('titulo'),
                 
 	firmantesLabel: function() {
@@ -160,7 +162,7 @@ App.Envio = Em.Object.extend({
 	seleccionado: false,
 
 	label: function () {
-                    return this.get('fecha') + this.get('autor') + this.get('estado');
+    	return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('autor') + this.get('estado');
 	}.property('autor'),
 
 });
