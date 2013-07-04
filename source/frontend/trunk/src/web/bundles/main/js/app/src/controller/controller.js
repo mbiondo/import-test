@@ -110,7 +110,6 @@ App.IoController = Em.Object.extend({
 		
 		this.get('socket').on('connect', function (data) {
 			self.set('connected', true);
-		//	console.log('CONECTADO');
 			self.recieveMessage();
 			self.recieveNotification();
 		});
@@ -294,7 +293,6 @@ App.IoController = Em.Object.extend({
 				break;
 
 			case 'Tema' :
-				console.log('pepe');
 				var turno, ap;
 				ap = Ember.ArrayProxy.create({
 					content: Ember.A(options)
@@ -617,9 +615,6 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	sortSucceeded : function(data) {
-		console.log(data);
-		console.log(this.get('notificationType'));
-		console.log(JSON.stringify(data.orden));
 		App.get('ioController').sendMessage(this.get('notificationType'), "ordenado", JSON.stringify(data.orden));
 	}
 });
@@ -1351,7 +1346,6 @@ App.OrdenDelDiaController = Ember.Object.extend({
 	load: function () {
 		_self = this;
 		this.set('loaded', false);
-		console.log(this.get('content'));
 		$.ajax({
 			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
@@ -1397,7 +1391,6 @@ App.DictamenController = Ember.Object.extend({
 	loadSucceeded: function(data) {
 		item = App.Dictamen.create();
 		item.setProperties(data);
-		console.log(item);
 		this.set('content', item);
 		this.set('loaded', true);
 	},	
@@ -1431,7 +1424,6 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
-		console.log(item);
 	},	
 });
 
@@ -1450,7 +1442,6 @@ App.DictamenesController = App.RestController.extend({
 	},
 
 	load: function() {
-		console.log('load!');
 		this._super();
 	},
 	
@@ -1580,6 +1571,7 @@ App.ReunionConsultaController = Ember.Object.extend({
 	url: "/com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
+	isEdit: false,
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -1888,8 +1880,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	createCompleted: function (data) {
-		//TO-DO Revisar que devuelva OK
-		
+		//TO-DO Revisar que devuelva OK		
 		console.log('Crear completado sig msg..');
 		if (data.responseText)
 		{
@@ -2065,8 +2056,6 @@ App.SesionesController  = App.RestController.extend({
 		else
 			timer.start();
 
-		console.log(timer);
-
 		if(!sesion.get('horaInicio')){
 			sesion.set('horaInicio', Math.round(timer.get('startTime')/1000));
 			sesion.save();
@@ -2075,8 +2064,6 @@ App.SesionesController  = App.RestController.extend({
 		sesion.set('timer', timer);
 
 		this.set('sesionActual', sesion);
-
-		console.log(sesion);
 	},
 
 	stopTimer : function (sesion) {
