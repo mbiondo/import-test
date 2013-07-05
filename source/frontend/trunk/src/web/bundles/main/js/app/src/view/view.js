@@ -1,9 +1,17 @@
 
 JQ = Ember.Namespace.create();
 
+Ember.View.reopen({
+	didInsertElement: function () {
+		this._super();
+		this.$().fadeIn(1000);
+	},
+});
+
 JQ.Widget = Em.Mixin.create({
 
     didInsertElement: function () {
+    	this._super();
         "use strict";
         var options = this._gatherOptions(), ui;
 
@@ -228,7 +236,7 @@ App.ContentView = Ember.View.extend({
 	},
 
 	didInsertElement: function () {
-	
+		this._super();
 		$("ul.userNav li a.sidebar").click(function() { 
 			$(".secNav").toggleClass('display');
 		});	
@@ -261,6 +269,7 @@ App.LoginView = Ember.View.extend({
 	password: '',
 
 	didInsertElement: function(){
+		this._super();
 		this.$('#user_username'	).focus();
 	},
 	loginError: function(){
@@ -377,11 +386,11 @@ App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
 	templateName: 'oradores-diputados-sesion-consulta',
 
 	didInsertElement: function(){
+		this._super();
 		//===== Accordion =====//		
 		$('div.menu_body:eq(0)').show();
 		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
-		
-		$(".acc .whead").click(function() {	
+		$(".acc .whead").click(function(){
 			$(this).css({color:"#2B6893"}).next("div.menu_body").slideToggle(200).siblings("div.menu_body").slideUp("slow");
 			$(this).siblings().css({color:"#404040"});
 		});
@@ -430,6 +439,7 @@ App.PlanDeLaborListView = App.ListFilterView.extend({
 App.PlanDeLaborView = Ember.View.extend({
 	templateName: 'plan-de-labor-detalle',
 	contentBinding: "App.planDeLaborController.content",
+
 
 	crearSesion: function () {
 
@@ -521,10 +531,6 @@ App.ODMiniView = Ember.View.extend({
 	}.property('content'),
 
 
-	didInsertElement: function () {
-		//$('#htmlText').text(this.get('content.texto'));
-	},
-
 });
 
 App.ExpedienteMiniView = Ember.View.extend({
@@ -538,6 +544,7 @@ App.ExpedienteMiniView = Ember.View.extend({
 App.DictamenMiniView = Ember.View.extend({
 	templateName: 'dictamen-mini',
 	didInsertElement: function(){
+		this._super();
 		//===== Accordion =====//		
 		$('div.menu_body:eq(0)').show();
 		$('.acc .whead:eq(0)').show().css({color:"#2B6893"});
@@ -879,6 +886,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	},
 	
 	didInsertElement: function(){
+		this._super();
 		$("#expedientesAdvancedSearch").hide();
 	},
 
@@ -1076,6 +1084,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	},
 	
 	didInsertElement: function(){
+			this._super();
             $("#confirmarBotonDiv").hide();
             this.set('content', App.get('envioArchivoConsultaController.content'));
             if (App.get('envioArchivoConsultaController.content.estado')=="Pendiente") {
@@ -1134,9 +1143,6 @@ App.CitacionesView = App.ListFilterView.extend({
 	comisionesCalendarOcultar: function(){
 		this.set('comisionesCalendar', false);
 	},
-
-	didInsertElement: function () {
-	},
 });
 
 
@@ -1182,6 +1188,7 @@ App.UploaderView = Em.View.extend({
 	}.observes('url'),
 
 	didInsertElement: function () {
+		this._super();
 		this.$("input:file").uniform();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
     }
@@ -1265,6 +1272,7 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeEditar: false,
 
 	didInsertElement: function(){
+		this._super();
 		if((App.citacionConsultaController.content.estado.id == 2) 
 			&& (!App.citacionConsultaController.content.reunion) 
 			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
@@ -1293,6 +1301,7 @@ App.CalendarTool = Em.View.extend({
     classNamesBindings: ['class'],
 
     didInsertElement: function(){
+    	this._super();
         $('#mycalendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -1709,7 +1718,7 @@ App.CitacionCrearView = Em.View.extend({
 	},	
 
 	didInsertElement: function() {
-		
+		this._super();
 		if (this.get("invitado")) {					
 			this.set('invitado',App.CitacionInvitado.create());
 		}
@@ -1777,6 +1786,7 @@ App.ComfirmarCitacionView = App.ModalView.extend({
 	}, 
 	
 	didInsertElement: function () {
+		this._super();
 		if (!App.get('citacionCrearController.content'))
 			App.set('citacionCrearController.content', App.get('citacionConsultaController.content'));
 	}	
@@ -1801,6 +1811,7 @@ App.CancelarCitacionView = App.ModalView.extend({
 	}, 
 
 	didInsertElement: function () {
+		this._super();
 		if (!App.get('citacionCrearController.content'))
 			App.set('citacionCrearController.content', App.get('citacionConsultaController.content'));
 	}
@@ -1916,6 +1927,7 @@ App.CitacionExpedienteSeleccionado = Em.View.extend({
 	},
 	
 	didInsertElement: function () {
+		this._super();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
 	},
 });
@@ -2083,6 +2095,7 @@ App.CrearParteView = Ember.View.extend({
 	},
 
 	didInsertElement: function () {
+		this._super();
 		var parte = App.get('reunionConsultaController.content.parte');
 		if (parte)
 		{
@@ -2200,6 +2213,7 @@ App.DictamenCrearView = Ember.View.extend({
 	}.property('content.proyectosVistos.@each', 'filterProyectosVistos', 'adding'),
 
 	didInsertElement: function () {
+		this._super();
 		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
@@ -2212,7 +2226,8 @@ App.DictamenCrearView = Ember.View.extend({
 		var pv = [];
 		var orden = 0;
 
-		if(!$('#formCrearParteDictamen .formCrearParteDictamenTexto').parsley('validate')) return false;
+		$('#formCrearParteDictamen').parsley('destroy');
+		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
 
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
@@ -2297,6 +2312,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	},
 	
 	didInsertElement: function (){
+		this._super();
 		this.$("select, .check, .check :checkbox, input:radio").uniform();
 		this.$(".wbody").slideUp(000);
 		this.$(".wbody").slideDown(900);
@@ -2370,6 +2386,7 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 	},
 
 	didInsertElement: function() {
+		this._super();
 		this.sortable();
 	},
 
@@ -2429,6 +2446,7 @@ App.RadioButton = Ember.View.extend({
 	},
 	
 	didInsertElement: function() {
+		this._super();
 		this.bindingChanged();
 	},  
 });
@@ -3001,6 +3019,7 @@ App.CrearSesionView = App.ModalView.extend({
 		},    
 		
 		didInsertElement: function() {
+			this._super();
 			self = this;
 
 			this.set('fecha', moment().format("DD-MM-YYYY"));
@@ -3230,6 +3249,7 @@ App.PieGraphView = Ember.View.extend({
 	}.observes('content.@each'),
 
 	didInsertElement: function () {
+		this._super();
  		Ember.run.next(this, this.redrawChart);
 	}
 });
