@@ -71,26 +71,6 @@ App.menuController = App.MenuController.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Buscador de expedientes',
 							url: '#/expedientes',
-						}),
-						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Vigentes',
-							url: '#/expedientes',
-						}),
-						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Con dictamen',
-							url: '#/expedientes',
-						}),								
-						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Con orden del día',
-							url: '#/expedientes',
-						}),									
-						App.MenuItem.create({
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Archivados',
-							url: '#/expedientes',
 						}),													
 					],
 				}),
@@ -147,27 +127,14 @@ App.menuController = App.MenuController.create({
 							titulo: 'Dictamenes pendientes',
 							url: '#/comisiones/dictamenes/pendientes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
-						}),						
-					],
-				}),	
-
-				App.MenuItem.create({
-					titulo: 'Ordenes del día',
-					url: '#/comisiones/OD/dictamenes',
-					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
-					subMenu: [
+						}),			
 						App.MenuItem.create({
-							titulo: 'Dictamenes sin OD',
+							titulo: 'Dictamenes',
 							url: '#/comisiones/OD/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
-						}),	
-						App.MenuItem.create({
-							titulo: 'Listado de OD',
-							url: '#/comisiones/OD/listado',
-							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
-						}),							
+						}),										
 					],
-				}),							
+				})			
 			]			
 		}),	
 
