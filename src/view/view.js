@@ -2212,6 +2212,8 @@ App.DictamenCrearView = Ember.View.extend({
 		var pv = [];
 		var orden = 0;
 
+		if(!$('#formCrearParteDictamen .formCrearParteDictamenTexto').parsley('validate')) return false;
+
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
 			orden++;
@@ -2230,7 +2232,6 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var url = App.get('apiController.url') + "/par/evento";
 
-/*
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -2239,10 +2240,11 @@ App.DictamenCrearView = Ember.View.extend({
 			data : JSON.stringify(dictamen),
 			success: function( data ) 
 			{
-//				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
 			}
 		});		
-*/	},
+
+	},
 });
 
 App.DictamenTextoCrearView = Ember.View.extend({
