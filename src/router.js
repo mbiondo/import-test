@@ -345,21 +345,26 @@ App.Router =  Em.Router.extend({
 
 				deserialize: function(router, params) {
 				
-					if (App.get('expedientesController.loaded'))
-						return null;
 					
-					var deferred = $.Deferred(),
-					
+					var deferred = $.Deferred();
+
+					App.get('expedientesController').set('loaded', false);
+					App.get('expedientesController').set('loaded', false);
+
 					fn = function() {
-						App.get('expedientesController').removeObserver('loaded', this, fn);	
-						deferred.resolve(null);					
+						if (App.get('expedientesController.loaded') && App.get('comisionesController.loaded'))
+						{
+							App.get('expedientesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						}
 					};
 
 					App.get('expedientesController').addObserver('loaded', this, fn);
-					App.get('expedientesController').load();
-
-					App.get('comisionesController').load();
 					App.get('comisionesController').addObserver('loaded', this, fn);
+
+					App.get('expedientesController').load();
+					App.get('comisionesController').load();
+
 									
 					return deferred.promise();
 

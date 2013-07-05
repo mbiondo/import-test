@@ -153,9 +153,13 @@ App.IoController = Em.Object.extend({
 		self = this;
 				
 		this.get('socket').on('message', function (data) {
-			var type = data.type,
-					action = data.action,
-					options = JSON.parse(data.options);
+			console.log(data);
+			var type = data.type;
+			var	action = data.action;
+			var options = null;
+
+			if (data.options)
+				options = JSON.parse(data.options);
 			
 			switch (action) {
 				case self.get('MODIFICADO'):

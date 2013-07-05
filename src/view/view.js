@@ -4,7 +4,8 @@ JQ = Ember.Namespace.create();
 Ember.View.reopen({
 	didInsertElement: function () {
 		this._super();
-		this.$().fadeIn(1000);
+		if (this.$())
+			this.$().fadeIn(500);
 	},
 });
 
@@ -3136,6 +3137,10 @@ App.CrearTurnoInlineView = Em.View.extend({
 	}.property('turno', 'turno.oradores', 'turno.oradores.length'),
 	
 	agregarOrador: function (user) {
+
+		if (this.get('oradores').length > 0)
+			return false;
+		
         var turnoUser = {
           orden: this.get('oradores').get('length'),
           user: {
