@@ -244,7 +244,7 @@ App.PlanDeLabor = Em.Object.extend({
 	fecha: '',
 	
 	label: function () {
-		return this.get('sumario');
+		return moment(this.get('fecha'), 'DD/MM/YYYY').format('LL') + this.get('sumario') + this.get('fecha');
 	}.property('sumario'),
 });
 
