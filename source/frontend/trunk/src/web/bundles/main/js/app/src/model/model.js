@@ -290,12 +290,11 @@ App.Dictamen = Em.Object.extend({
     observaciones: '',
     textos: '',
 
-    label: function () {
+    label: function (){
     	if (this.get('sumario') == null)
     		return "";
-    	return this.get('sumario');
+    	return  moment(this.get('fechaReunion'), 'YYYY-MM-DD').format('LL') + this.get('sumario');
     }.property('sumario'),
-
     fecha: function () {
     	return this.get('fechaImpresion');
     }.property('fechaImpresion'),
@@ -639,7 +638,6 @@ App.Lista = Em.Object.extend({
 		}, this);
 
 		return !turnos.length;
-
 	}.property('App.temaController.content', 'App.turnosController.content.length'),
 
 	url : function () {
