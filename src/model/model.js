@@ -94,7 +94,7 @@ App.ExpedienteBase = Em.Object.extend({
 	seleccionado: false,
 	
 	label: function () {
-        return this.get('titulo') + this.get('tipo')+ this.get('expdip') +  this.get('iniciado');
+		return this.get('titulo') + this.get('tipo')+ this.get('expdip') +  this.get('iniciado');
 	}.property('titulo'),
 });
 
@@ -114,9 +114,9 @@ App.Expediente = Em.Object.extend({
 	}.property('tipo'),
 
 	label: function () {
-        return this.get('titulo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
+		return this.get('titulo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
 	}.property('titulo'),
-                
+				
 	firmantesLabel: function() {
 		var firmantes = this.get('firmantes').sort(function (a, b) {
 			return a.orden - b.orden;
@@ -155,14 +155,14 @@ App.Expediente = Em.Object.extend({
 
 
 App.Envio = Em.Object.extend({
-        id: '',
-        
+		id: '',
+		
 	sortValue: '',
 	
 	seleccionado: false,
 
 	label: function () {
-    	return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('autor') + this.get('estado');
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('autor') + this.get('estado');
 	}.property('autor'),
 
 });
@@ -218,11 +218,11 @@ App.MenuItem = Em.Object.extend({
 
 App.CitacionInvitado = Em.Object.extend({
 	id: null,
-    nombre: '',
-    apellido: '',
-    caracter: '',
-    mail: '',
-    orden: '',
+	nombre: '',
+	apellido: '',
+	caracter: '',
+	mail: '',
+	orden: '',
 });
 
 App.CitacionTema = Em.Object.extend({
@@ -265,15 +265,15 @@ App.OrdeDelDia = Em.Object.extend({
 		'fechaImpresion', 
 	],	
 
-    label: function () {
+	label: function () {
 		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numero');
-    }.property('sumario'),
+	}.property('sumario'),
 	sumarioHTML: function () {
 		return this.get('sumario').htmlSafe();
 	}.property('sumario'),
-    textoCompleto: function () {
-    	return this.get('texto').htmlSafe();
-    }.property('texto'),
+	textoCompleto: function () {
+		return this.get('texto').htmlSafe();
+	}.property('texto'),
 });
 
 App.Dictamen = Em.Object.extend({
@@ -284,35 +284,42 @@ App.Dictamen = Em.Object.extend({
 	copete: '',
 	tipo: 'Dictamen',
 	art114: false,
-    art204: false,
-    unanimidad: false,
-    caracterDespacho: '',
-    observaciones: '',
-    textos: '',
+	art204: false,
+	unanimidad: false,
+	caracterDespacho: '',
+	observaciones: '',
+	textos: '',
 
-    label: function (){
-    	if (this.get('sumario') == null)
-    		return "";
-    	return  moment(this.get('fechaReunion'), 'YYYY-MM-DD').format('LL') + this.get('sumario');
-    }.property('sumario'),
-    fecha: function () {
-    	return this.get('fechaImpresion');
-    }.property('fechaImpresion'),
+	label: function (){
+		var proyectoSTR  = null;
+		var proyecto = this.get('proyectos.firstObject');
 
-   	proyectosLabel: function () {
-   		var st = "";
-   		this.get('proyectos').forEach(function (proyecto) {
-   			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
-   		})
-   		return st.htmlSafe();
-   	}.property('proyectos'),    
+		if(proyecto){
+			proyectoSTR = proyecto.proyecto.expdip;
+			proyectoSTR += ' ';
+			proyectoSTR += proyecto.proyecto.titulo;			
+		}
+
+		if (this.get('sumario') == null && proyectoSTR == null) return "";
+		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD').format('LL') + this.get('sumario')  + proyectoSTR;
+	}.property('sumario'),
+	fecha: function () {
+		return this.get('fechaImpresion');
+	}.property('fechaImpresion'),
+	proyectosLabel: function () {
+		var st = "";
+		this.get('proyectos').forEach(function (proyecto) {
+			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
+		})
+		return st.htmlSafe();
+	}.property('proyectos'),    
 });
 
 
 
 App.FirmanteTextoDictamen = Em.Object.extend({  
-    disidencia: 2,
-    diputado: '',
+	disidencia: 2,
+	diputado: '',
 });
 
 
@@ -331,16 +338,16 @@ App.CaracterDespacho = Em.Object.extend({
 
 App.DictamenTexto = Em.Object.extend({
 	firmantes: '',
-    url: '',
-    unificados: false,
-    modificado: false,
-    sumario: '',
-    pr: '',
-    rechazo: false,
-    pl: '',
-    pd: '',
-    copete: '',
-   	texto: '',
+	url: '',
+	unificados: false,
+	modificado: false,
+	sumario: '',
+	pr: '',
+	rechazo: false,
+	pl: '',
+	pd: '',
+	copete: '',
+	texto: '',
 });
 
 
@@ -509,17 +516,17 @@ App.Sesion = Em.Object.extend({
 	}.property('sesionSeleccionada'),
 
   serializable : [
-    'id',
-    'titulo', 
-    'fecha', 
-    'horaInicio', 
-    'horaFin', 
-    'tipo',
-    'periodoOrdinario',
-    'sesion',
-    'reunion',
-    'temas',
-    'plId'
+	'id',
+	'titulo', 
+	'fecha', 
+	'horaInicio', 
+	'horaFin', 
+	'tipo',
+	'periodoOrdinario',
+	'sesion',
+	'reunion',
+	'temas',
+	'plId'
 	],
 });
 
@@ -528,12 +535,12 @@ App.Sesion = Em.Object.extend({
 App.Tema = Em.Object.extend({
 	notificationType : 'Tema',
 	temaSeleccionadoBinding: 'App.temaController.content',
- 	id: null,
- 	sesionId: null,
-  	titulo: null,
-  	useApi: false,
-  	plId: '',
-  	plTipo: '',
+	id: null,
+	sesionId: null,
+	titulo: null,
+	useApi: false,
+	plId: '',
+	plTipo: '',
   
   imprimirURL: function () {
 	return ('/listas-imprimir/%@').fmt(encodeURIComponent(this.get('id')));
@@ -551,7 +558,7 @@ App.Tema = Em.Object.extend({
 		'id',
 		'sesionId',
 		'titulo',
-        'orden'
+		'orden'
 	],
 });
 
@@ -561,7 +568,7 @@ App.Lista = Em.Object.extend({
 	listaSeleccionadaBinding: 'App.listaController.content',
 	id: null,
 	titulo: null,
-    useApi: false,
+	useApi: false,
 	
 	seleccionada : function (){
 		return (this == this.get('listaSeleccionada'));
@@ -814,7 +821,7 @@ App.Turno = Em.Object.extend({
 App.ListaEnvioArchivo = Em.Object.extend({
 	expedientes: '',
 	fecha: '',
-    autor: ''
+	autor: ''
 });
 
 
