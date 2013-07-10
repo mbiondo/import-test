@@ -1237,6 +1237,17 @@ App.AttachFileView = Em.View.extend({
 
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
+	didInsertElement: function(){
+		this._super();
+		$(".submenu-news").bind('click', function(){
+			var lista 	= $("#news-lista");
+			var get_id 	= $(this).prop('id');
+
+			lista.find("ul").stop();
+			lista.find("ul").not('.'+get_id).fadeOut(0);
+			lista.find("ul."+get_id).fadeIn(900);
+		});
+	},
 });
 
 
