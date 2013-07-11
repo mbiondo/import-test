@@ -230,7 +230,7 @@ App.menuController = App.MenuController.create({
 			id: 6,
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Expedientes Archivados',
-			url: '#/expedientesArchivados',
+			url: '#/enviosArchivo',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 			
 			subMenu: [
