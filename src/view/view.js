@@ -3115,7 +3115,6 @@ App.CrearTurnoInlineView = Em.View.extend({
 	filterText: '',
 	selectedFilterText: '',
 	clickGuardar: null,
-	tagSelect: null,
 
 	tags: [
 			{id: "Dictamen de Mayoria", titulo: "Dictamen de Mayoria"},
@@ -3125,7 +3124,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 	
 	esDictamen : function () {
 		if (this.get('turno')){
-			return this.get('turno').get('listaId') == 1;			
+			return this.get('turno').get('listaId') == 1;	
 		}
 		return false;
 	}.property('turno.listaId'),
@@ -3181,16 +3180,15 @@ App.CrearTurnoInlineView = Em.View.extend({
 	
 	esInvalido: function () {
 		var turno = App.get('crearTurnoController').get('turno');
-		if(this.get('esDictamen') && turno.tag != null) this.set('tagSelect', true);
 
-		if (turno.tiempo < 1 || turno.orden < 0 || turno.listaId == null || turno.oradores == null || turno.oradores.length == 0 || (this.get('esDictamen') && turno.tag == null)) 
+		if (turno.tiempo < 1 || turno.listaId == null || turno.oradores == null || turno.oradores.length == 0 || (this.get('esDictamen') && turno.tag == null)) 
 			return true;
 		else
 			return false;
 	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
 	
 	guardar: function(opts, event) {   
-	this.set('clickGuardar', true);  
+		this.set('clickGuardar', true);  
 
 	  if (this.get('esInvalido')) 
 		return false;
@@ -3203,19 +3201,14 @@ App.CrearTurnoInlineView = Em.View.extend({
 	  	turno.set('orden', App.get('turnosController.content.length'));
 		turno.set('tema', App.get('temaController.content'));
 		App.get('turnosController').createObject(turno, true);
-
-	  	// Seteo vars para una validacion correcta
-		this.set('clickGuardar', false);
-		this.set('tagSelect', false);
-
-		// limpio los input radio
-		// $(".controls input[type='radio']").removeProp('checked');
 	  }
 
-	  this.refreshTurno();
+	  this.refreshTurno();	
   	},
 
   	refreshTurno: function () {
+		this.set('clickGuardar', false);
+
 		if(App.get('listaController.content'))
 			lista = App.get('listaController.content');
 		else
@@ -3225,11 +3218,13 @@ App.CrearTurnoInlineView = Em.View.extend({
 		
 		var turno = App.Turno.create({
 				temaId:  App.get('temaController').get('content').get('id'),
-				listaId: lista == null ? null : lista.get('id'),
+				//listaId: lista == null ? null : lista.get('id'),
+				listaId: null,
 				tiempo: 5,
 				oradores: []
 		});
 		App.get('crearTurnoController').set('turno', turno);  	
+		this.$(".controls input[type='radio']").removeProp('checked');
   	}.observes('temaController.content', 'listaController.content'),
 
   	willInsertElement: function () {
