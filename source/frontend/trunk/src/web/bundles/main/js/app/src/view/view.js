@@ -2279,20 +2279,37 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen-texto',
 	filterFirmantes: '',
 	adding: false,
+	firmanteSeleccionado: null,
+	disicencias: [{id: 1, titulo: "Sin dicedencias"}, {titulo: "Dicidencia Parcial", id: 2}, {titulo: "Dicidencia total", id: 3}],
 
 	clickFirmante: function (firmante) {
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
+		this.set('firmanteSeleccionado', null);
+	    _self = this;
+		Ember.run.next(function () {
+	        if (!item) {
+	        	_self.set('firmanteSeleccionado', firmante);	
 
-        if (!item) {
-        	firmante.set('seleccionado', true);
-			this.get('content.firmantes').pushObject(firmante);
-		}
-		else {
-			firmante.set('seleccionado', false);
-			this.get('content.firmantes').removeObject(firmante);
-		}
-		this.set('adding', !this.get('adding'));		
+	        	Ember.run.next(function () {
+	        		_self.$("input:radio").uniform();
+	        	});
+			}
+			else {
+				_self.get('content.firmantes').removeObject(firmante);
+				_self.set('adding', !_self.get('adding'));	
+				firmante.set('seleccionado', false);
+			}
+		});
 	},
+
+	addFirmante: function () {
+		this.get('content.firmantes').pushObject(this.get('firmanteSeleccionado'));
+		this.get('firmanteSeleccionado').set('seleccionado', true);
+		this.set('firmanteSeleccionado', null);
+		this.set('adding', !this.get('adding'));	
+	},
+
+
 
 	listaFirmantes: function () {
 		var filtered;

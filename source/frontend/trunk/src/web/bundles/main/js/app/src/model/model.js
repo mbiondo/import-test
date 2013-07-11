@@ -318,8 +318,24 @@ App.Dictamen = Em.Object.extend({
 
 
 App.FirmanteTextoDictamen = Em.Object.extend({  
-	disidencia: 2,
+	disidencia: "1",
 	diputado: '',
+
+	disidenciaLabel: function () {
+		switch (this.get('disidencia')) {
+			case "1":
+				return "Sin dicidencias";
+				break;
+			case "2":
+				return "Dicidencia parcial";
+				break;
+			case "3":
+				return "Dicidencia completa";
+				break;
+			default:
+				return "";
+		}
+	}.property('disidencia'),
 });
 
 
