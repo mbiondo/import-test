@@ -22,6 +22,13 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
+							titulo: 'Todas las Novedades',
+							url: '#',
+							id: 'news',
+							clases: 'submenu-news',
+						}),
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
 							titulo: 'Movimientos de Expedientes',
 							url: '#',
 							id: 'news-expedientes',
