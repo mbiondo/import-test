@@ -10,8 +10,8 @@ Handlebars.registerHelper("linkExpediente", function(id, options) {
 Handlebars.registerHelper("linkEnvio", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
-  
-  return "#/enviosArchivo/envio/ver/" + id;
+
+  return "#/expedientesArchivados/envios/archivo/"+id+"/ver/";
 });
 
 Handlebars.registerHelper("linkConfirmarEnvio", function(id, options) {
@@ -26,6 +26,13 @@ Handlebars.registerHelper("linkCitacion", function(id, options) {
   var id = getPath(context, id, options.fn);
   
   return "#/comisiones/citaciones/citacion/" + id + "/ver";
+});
+
+Handlebars.registerHelper("linkOD", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/comisiones/OD/orden/" + id + "/ver";
 });
 
 Handlebars.registerHelper("linkReunion", function(id, options) {
