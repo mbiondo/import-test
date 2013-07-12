@@ -139,7 +139,7 @@ App.menuController = App.MenuController.create({
 
 				App.MenuItem.create({
 					titulo: 'Dictamenes',
-					url: '#/comisiones/dictamenes/pendientes',
+					url: '#/comisiones/dictamenes',
 					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
@@ -149,7 +149,7 @@ App.menuController = App.MenuController.create({
 						}),			
 						App.MenuItem.create({
 							titulo: 'Dictamenes',
-							url: '#/comisiones/OD/dictamenes',
+							url: '#/comisiones/dictamenes/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),										
 					],
@@ -165,17 +165,17 @@ App.menuController = App.MenuController.create({
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Labor',
+					titulo: 'Labor Parlamentaria',
 					url: '',
 					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Planes de labor',
+							titulo: 'Planes de Labor',
 							url: '#/plan/de/labor/listado',
 							roles: ['ROLE_USER'],
 						}),	
 						App.MenuItem.create({
-							titulo: 'Crear Plan de labor',
+							titulo: 'Crear Plan de Labor',
 							url: '#/secretaria/parlamentaria/labor/crear',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
@@ -237,24 +237,24 @@ App.menuController = App.MenuController.create({
 			id: 6,
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Expedientes Archivados',
-			url: '#/enviosArchivo',
+			url: '#/expedientesArchivados/envios/archivo',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 			
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Expedientes Archivados',
-					url: '#/expedientesArchivados',
+					url: '#/expedientesArchivados/envios/crear',
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Crear env&iacute;o',
-							url: '#/expedientesArchivados',
+							titulo: 'Env&iacute;os a archivo',
+							url: '#/expedientesArchivados/envios/archivo',
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Env&iacute;os a archivo',
-							url: '#/enviosArchivo',
+							titulo: 'Crear env&iacute;o',
+							url: '#/expedientesArchivados/envio/crear',
 						}),
 					],
 				}),
