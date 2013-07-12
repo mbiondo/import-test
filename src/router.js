@@ -199,7 +199,7 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-						{titulo: 'Listado', url: '#/plan/de/labor/listado'}
+						{titulo: 'Planes de Labor', url: '#/plan/de/labor/listado'}
 					]);				
 
 					App.get('menuController').seleccionar(4);							
@@ -433,97 +433,59 @@ App.Router =  Em.Router.extend({
 
 		expedientesArchivados: Em.Route.extend({
 			route: "/expedientesArchivados",
-                        
-                        deserialize: function(router, params) {
 
-                            if (App.get('expedientesArchivadosController.loaded'))
-                                    return null;
-
-                            var deferred = $.Deferred(),
-
-                            fn = function() {
-                                    App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
-                                    deferred.resolve(null);					
-                            };
-
-                            App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
-                            App.get('expedientesArchivadosController').load();
-
-                            return deferred.promise();
-                        },	
-
-
-                    connectOutlets: function(router, context) {
-
-                            var appController = router.get('applicationController');	
-                            appController.connectOutlet('main', 'expedientesArchivados');
-                            appController.connectOutlet('menu', 'subMenu');
-
-                            App.get('menuController').seleccionar(6);
-
-                            App.get('breadCumbController').set('content', [
-                                    {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados'}
-                            ]);				
-                    },
-		}), 
-        
-		enviosArchivo: Em.Route.extend({
-			route: "/enviosArchivo",
-                        
 			index: Em.Route.extend({
-				route: '/',	
-                                        
-                                deserialize: function(router, params) {
+				route: "/envios/archivo",
 
-                                        if (App.get('envioArchivoController.loaded'))
-                                                return null;
+				index: Em.Route.extend({
+					route: '/',	
+	                                        
+	                deserialize: function(router, params) {
+                        if (App.get('envioArchivoController.loaded'))
+                            return null;
 
-                                        var deferred = $.Deferred(),
+                        var deferred = $.Deferred(),
 
-                                        fn = function() {
-                                                App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-                                                deferred.resolve(null);					
-                                        };
+                        fn = function() {
+                            App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+                            deferred.resolve(null);					
+                        };
 
-                                        App.get('envioArchivoController').addObserver('loaded', this, fn);
-                                        App.get('envioArchivoController').load();
+                        App.get('envioArchivoController').addObserver('loaded', this, fn);
+                        App.get('envioArchivoController').load();
 
-                                        return deferred.promise();
-                                },	
+                        return deferred.promise();
+	                },	
 
-                                connectOutlets: function(router, context) {
+	                connectOutlets: function(router, context) {
+	                        var appController = router.get('applicationController');	
+	                        appController.connectOutlet('main', 'enviosArchivados');
+	                        appController.connectOutlet('menu', 'subMenu');
 
-                                        var appController = router.get('applicationController');	
-                                        appController.connectOutlet('main', 'enviosArchivados');
-                                        appController.connectOutlet('menu', 'subMenu');
+	                        App.get('menuController').seleccionar(6);
 
-                                        App.get('menuController').seleccionar(6);
+	                        App.get('breadCumbController').set('content', [
+                                {titulo: 'Expedientes Archivados', url: '#expedientesArchivados/envios/archivo'},
+                                {titulo: 'Envíos', url: '#expedientesArchivados/envios/archivo'},
+                                {titulo: 'Archivo', url: '#expedientesArchivados/envios/archivo'}
+	                        ]);				
+	                },
+	        	}),
 
-                                        App.get('breadCumbController').set('content', [
-                                                {titulo: 'Env&iacute;os a Archivo', url: '#/enviosArchivo'}
-                                        ]);				
-
-                                },
-                        }),
-                
-			envioConsulta: Ember.Route.extend({
-
-				route: '/envio',
-
-				indexSubRoute: Ember.Route.extend({
-					route: '/ver/:envio',
+				ver: Ember.Route.extend({
+					route: '/:envio/ver',
 
 					deserialize: function(router, params) {
-						App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
+					App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
 						
-						var deferred = $.Deferred(),
-						fn = function() {
-							if (App.get('envioArchivoConsultaController.loaded')) {
-								var envio = App.get('envioArchivoConsultaController.content');
-								deferred.resolve(envio);
-                                                                App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);							
-							}
-						};
+					var deferred = $.Deferred(),
+					fn = function() {
+						if (App.get('envioArchivoConsultaController.loaded')) {
+							var envio = App.get('envioArchivoConsultaController.content');
+							deferred.resolve(envio);
+                            App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);							
+						}
+					};
 						
 						App.get('envioArchivoConsultaController').addObserver('loaded', this, fn);
 						App.get('envioArchivoConsultaController').load();				
@@ -541,16 +503,50 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Env&iacute;os a Archivo', url: '#/enviosArchivo'},
-							{titulo: 'Env&iacute;o ' + App.get('envioArchivoConsultaController.content').get('id'), url: '#/enviosArchivo/envio/ver/'+App.get('envioArchivoConsultaController.content').get('id')}
+	                        {titulo: 'Expedientes Archivados', url: '#/enviosArchivo'},
+							{titulo: 'Envíos a Archivo', url: '#/enviosArchivo'},
+							{titulo: 'Envío ' + App.get('envioArchivoConsultaController.content').get('id'), url: '#/enviosArchivo/envio/ver/'+App.get('envioArchivoConsultaController.content').get('id')}
 						]);
 						App.get('menuController').seleccionar(6);					
 					},
 				}),
-			}),	                                
+			}), 
+			crear: Em.Route.extend({
+				route: "/envio/crear",
+
+                deserialize: function(router, params) {
+                    if (App.get('expedientesArchivadosController.loaded'))
+                        return null;
+
+                    var deferred = $.Deferred(),
+
+                    fn = function() {
+                        App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
+                        deferred.resolve(null);					
+                    };
+
+                    App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
+                    App.get('expedientesArchivadosController').load();
+
+                    return deferred.promise();
+                },	
+
+                connectOutlets: function(router, context) {
+                    var appController = router.get('applicationController');	
+                    appController.connectOutlet('main', 'expedientesArchivados');
+                    appController.connectOutlet('menu', 'subMenu');
+
+                    App.get('menuController').seleccionar(6);
+
+                    App.get('breadCumbController').set('content', [
+                        {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados/envio/crear'},
+                        {titulo: 'Envío', url: '#/expedientesArchivados/envio/crear'},
+                        {titulo: 'Crear', url: '#/expedientesArchivados/envio/crear'},
+                    ]);				
+                },
+			}),
 		}), 
-        
-        
+                        
 		comisiones: Em.Route.extend({
 			route: "/comisiones",
 			
@@ -560,6 +556,38 @@ App.Router =  Em.Router.extend({
 
 			dictamenes: Em.Route.extend({
 				route: "/dictamenes",
+
+				dictamenes: Ember.Route.extend({
+					route: "/dictamenes",
+					
+					deserialize: function(router, params) {
+						if (!App.get('dictamenesController'))
+							App.dictamenesController = App.DictamenesController.create();
+
+						var deferred = $.Deferred(),
+						fn = function() {
+							 App.get('dictamenesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						};
+
+						App.get('dictamenesController').addObserver('loaded', this, fn);
+						App.get('dictamenesController').load();
+
+						return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'OrdenesDelDiaDictamenesList');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
+							{titulo: 'Dictámenes'},
+						]);					
+						App.get('menuController').seleccionar(2);					
+					},						
+				}),	
 
 				pendientes: Em.Route.extend({
 					route: "/pendientes",
@@ -1014,6 +1042,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 							{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'}
 						]);					
 						App.get('menuController').seleccionar(2);
@@ -1058,7 +1087,7 @@ App.Router =  Em.Router.extend({
 							App.set('citacionCrearController.isEdit', false);
 							App.get('menuController').seleccionar(2);
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
+								{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
 								{titulo: 'Crear', url: '#/comisiones/citaciones/citacion/crear'}
 							]);					
@@ -1236,6 +1265,7 @@ App.Router =  Em.Router.extend({
 
 
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Recinto', url: '#/recinto/oradores'},	
 							{titulo: 'Oradores', url: '#/recinto/oradores'},	
 						]);					
 						App.get('menuController').seleccionar(3);
@@ -1426,6 +1456,7 @@ App.Router =  Em.Router.extend({
 							
 							var tema = App.get('temaController.content');
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Recinto', url: '#/recinto/oradores'},	
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
 								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
 								{titulo: tema.get('titulo')}
