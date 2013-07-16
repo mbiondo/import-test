@@ -1089,24 +1089,32 @@ App.CitacionesController = App.RestController.extend({
 
 	citaciones: function () {
 		var roles = App.get('userController.roles');
-
-		if (roles.contains('ROLE_DIRECCION_COMISIONES'))
-			return this.get('content');
-
-		var comsiones = App.get('userController.user.comisiones');
 		var citaciones = [];
 
-		this.get('arrangedContent').forEach(function (citacion) {
-			comsiones.forEach(function (comision) {
-				citacion.get('comisiones').forEach(function (c) {
-					if (c.id == comision.id) {
-						citaciones.pushObject(citacion);
-						return true;
-					}
-					return false;
-				});
+		if (roles.contains('ROLE_DIPUTADO')) {
+			this.get('arrangedContent').forEach(function (citacion) {
+				if (citacion.get('estado.id') != 1)
+					citaciones.pushObject(citacion);
 			});
-		});
+		} else {
+			if (roles.contains('ROLE_DIRECCION_COMISIONES')) {
+				citaciones = this.get('content');
+			} else {
+				var comsiones = App.get('userController.user.comisiones');
+
+				this.get('arrangedContent').forEach(function (citacion) {
+					comsiones.forEach(function (comision) {
+						citacion.get('comisiones').forEach(function (c) {
+							if (c.id == comision.id) {
+								citaciones.pushObject(citacion);
+								return true;
+							}
+							return false;
+						});
+					});
+				});
+			}
+		}
 		return citaciones;
 	}.property('content'),
 });
