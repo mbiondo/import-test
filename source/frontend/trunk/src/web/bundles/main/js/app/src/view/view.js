@@ -1773,12 +1773,14 @@ App.CitacionCrearView = Em.View.extend({
 		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
 		//$('#crear-citacion-form').validationEngine('attach');
-		
 		fo = null;
-		var cu = App.get('userController.user.comisiones')[0];
-		if (cu) {
-			var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
-			App.get('citacionCrearController.content.comisiones').pushObject(c);
+
+		if (!App.get('citacionCrearController.content')) {
+			var cu = App.get('userController.user.comisiones')[0];
+			if (cu) {
+				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
+				App.get('citacionCrearController.content.comisiones').pushObject(c);
+			}
 		}
 	}, 
 });
