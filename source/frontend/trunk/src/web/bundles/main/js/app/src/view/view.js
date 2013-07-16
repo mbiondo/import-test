@@ -1852,6 +1852,7 @@ App.CrearReunionView = App.ModalView.extend({
 				comisiones: $.map(this.get('citacion.comisiones'), function (value, key) {  
 					return {orden: key, nombre: value.nombre, comision: {id: value.id}}; 
 				}),
+				art108: this.get('art108'),
 				citacion: App.Citacion.create({id: this.get('citacion.id') })
 			}));
 		} else if (opts.secondary) {
@@ -1864,6 +1865,9 @@ App.CrearReunionView = App.ModalView.extend({
 	
 	didInsertElement: function(){	
 		this._super();
+
+		this.$(":checkbox").uniform();
+
 		this.set('startFecha', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD').format('DD/MM/YYYY'));
 		this.set('startHora', moment(App.get('citacionConsultaController').content.start, 'YYYY-MM-DD HH:ss').format('HH:ss'));
 		
@@ -2202,17 +2206,9 @@ App.DictamenCrearView = Ember.View.extend({
 		{
 			filtered = App.get('expedientesController.content');
 		}
-		
-		if (this.get('content.proyectosVistos'))
-		{
-			this.get('content.proyectosVistos').forEach(function (expediente) {
-				filtered = filtered.without(expediente);
-			});
-			return filtered;
-		}
-		else
-			return filtered;
-	}.property('content', 'content.proyectosVistos.@each',  'filterExpedientes'),
+
+		return filtered;
+	}.property('content', 'filterExpedientes'),
 
 	listaProyectosVistos: function () {
 		var filtered = [];
@@ -2288,30 +2284,34 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	disicencias: [{id: 1, titulo: "Sin dicedencias"}, {titulo: "Dicidencia Parcial", id: 2}, {titulo: "Dicidencia total", id: 3}],
 
 	clickFirmante: function (firmante) {
-		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		this.set('firmanteSeleccionado', null);
+
+		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 	    _self = this;
+
 		Ember.run.next(function () {
 	        if (!item) {
-	        	_self.set('firmanteSeleccionado', firmante);	
+	        	_self.set('firmanteSeleccionado', firmante);
 
 	        	Ember.run.next(function () {
 	        		_self.$("input:radio").uniform();
 	        	});
 			}
 			else {
-				_self.get('content.firmantes').removeObject(firmante);
+				_self.get('content.firmantes').removeObject(item);
 				_self.set('adding', !_self.get('adding'));	
-				firmante.set('seleccionado', false);
+				item.set('seleccionado', false);
 			}
 		});
 	},
 
 	addFirmante: function () {
-		this.get('content.firmantes').pushObject(this.get('firmanteSeleccionado'));
-		this.get('firmanteSeleccionado').set('seleccionado', true);
+		var item = App.FirmanteTextoDictamen.create(Ember.copy(this.get('firmanteSeleccionado')));
+		console.log(item);
+		this.get('content.firmantes').pushObject(item);
+		item.set('seleccionado', true);
 		this.set('firmanteSeleccionado', null);
-		this.set('adding', !this.get('adding'));	
+		this.set('adding', !this.get('adding'));
 	},
 
 
@@ -2322,13 +2322,13 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
 			
-			filtered = App.get('firmantesController.content').filter(function(firmante) {
+			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
 				return regex.test((firmante.id));
 			});
 		}
 		else
 		{
-			filtered = App.get('firmantesController.content');
+			filtered = App.get('firmantesController.arrangedContent');
 		}
 
 		if (this.get('content.firmantes'))

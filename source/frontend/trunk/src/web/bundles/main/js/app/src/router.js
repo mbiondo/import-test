@@ -113,7 +113,7 @@ App.Router =  Em.Router.extend({
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('menu', 'subMenu');
-				
+
 				Ember.run.next(function () {
 					appController.connectOutlet('main', 'inicio');
 				});
@@ -647,19 +647,26 @@ App.Router =  Em.Router.extend({
 
 							var deferred = $.Deferred();
 							
+							fn2 = function () {
+								if (App.get('firmantesController.loaded')) {
+									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));	
+									deferred.resolve(dictamen);
+								}
+							}
+
 							fn = function () {
-								if (App.get('dictamenesPendientesController.loaded') && App.get('firmantesController.loaded') && App.get('expedientesController.loaded')) {
+								if (App.get('dictamenesPendientesController.loaded') && App.get('expedientesController.loaded')) {
 									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));
 									App.set('dictamenController.content', dictamen);
-									deferred.resolve(dictamen);									
+									App.get('firmantesController').set('comision_id', dictamen.get('comision_id'));
+									App.get('firmantesController').addObserver('loaded', this, fn2);
+									App.get('firmantesController').load();				
 								}
 							}	
 
 	 						App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
-							App.get('firmantesController').addObserver('loaded', this, fn);
 							App.get('expedientesController').addObserver('loaded', this, fn);
 							App.get('dictamenesPendientesController').load();
-							App.get('firmantesController').load();
 							App.get('expedientesController').load();
 
 							return deferred.promise();

@@ -711,19 +711,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 		
 		item = App.PlanDeLabor.create(data);
 		item.setProperties(data);
-		
-		if(save){
-			$.ajax({
-				url: this.get('url'),
-				dataType: 'JSON',
-				type: 'POST',
-				context : {controller: this, model : item },
-				data : item.getJson(),
-				success: this.createSucceeded,
-			});
-		}else{
-			this.addObject(item);
-		}
+		this.addObject(item);
 	},		
 });
 
@@ -740,10 +728,17 @@ App.DictamenesPendientesController = App.RestController.extend({
 	createObject: function (data, save) {
 	
 		save = save || false;
-		
+		var comision_id = null;
+
+		if (data.reunion.comisiones) {
+			comision_id = data.reunion.comisiones[0].comision.id;
+		}
+
 		item = App.Dictamen.extend(App.Savable).create(data.evento);
 		item.setProperties(data.evento);
 		item.set('fechaReunion', data.reunion.fecha);
+		item.set('comision_id', comision_id);
+
 		if (item.get('textos').length == 0)
 			this.addObject(item);
 	},	
@@ -1198,11 +1193,20 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	url: '/dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+	url: '/com/integrantes/%@/' + moment().format('DD/MM/YYYY'),
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
+	comision_id: '',
+	sortProperties: ['apellido'],
+	sortAscending: true,
 	
 	init : function () {
+		this._super();
+	},
+
+
+	load: function () {
+		this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
 		this._super();
 	},
 
@@ -1212,21 +1216,8 @@ App.FirmantesController = App.RestController.extend({
 	
 	createObject: function (data, save) {
 		save = save || false;
-		
-		item = App.FirmanteTextoDictamen.create({diputado: data});
-		
-		if(save){
-			$.ajax({
-				url: this.get('url'),
-				dataType: 'JSON',
-				type: 'POST',
-				context : {controller: this, model : item },
-				data : item.getJson(),
-				success: this.createSucceeded,
-			});
-		}else{
-			this.addObject(item);
-		}			
+		item = App.FirmanteTextoDictamen.create({diputado: data.diputado, apellido: data.diputado.datosPersonales.apellido});
+		this.addObject(item);
 	},	
 });
 
