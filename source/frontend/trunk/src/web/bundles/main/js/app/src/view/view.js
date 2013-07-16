@@ -4,8 +4,11 @@ JQ = Ember.Namespace.create();
 Ember.View.reopen({
 	didInsertElement: function () {
 		this._super();
-		if (this.$())
+
+		if (this.$()){
 			this.$().fadeIn(500);
+			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+		}
 	},
 });
 
@@ -657,8 +660,7 @@ App.DictamenView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'orden-del-dia-dictamen-item',
 
-	crearOD: function () {
-
+	crearOD: function (){
 		 if (!App.get('dictamenController'))
 		 	App.dictamenController = App.DictamenController.create();
 
