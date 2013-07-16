@@ -112,8 +112,11 @@ App.Router =  Em.Router.extend({
 			route: "/",
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
-				appController.connectOutlet('main', 'inicio');
 				appController.connectOutlet('menu', 'subMenu');
+				
+				Ember.run.next(function () {
+					appController.connectOutlet('main', 'inicio');
+				});
 				
 				App.get('menuController').seleccionar(0);
 				App.get('breadCumbController').set('content', [
