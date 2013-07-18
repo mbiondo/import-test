@@ -310,6 +310,7 @@ App.IoController = Em.Object.extend({
 	},	
 });
 
+
 App.UserController = Em.Controller.extend({
 	user : undefined,
 	loginError: false,
@@ -876,6 +877,20 @@ App.RolesController = App.RestController.extend({
 	},	
 });
 
+App.NotificacionTiposController = App.RestController.extend({
+	url: '/notification/types',
+	type: App.NotificacionTipo,
+	useApi: false,
+	sortProperties: ['nivel'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.NotificacionTipo.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+})
 
 App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos',

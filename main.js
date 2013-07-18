@@ -252,7 +252,12 @@ App.menuController = App.MenuController.create({
 							titulo: 'Comisiones por usuarios',
 							url: '#/admin/comisiones',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-						}),										
+						}),		
+						App.MenuItem.create({
+							titulo: 'Tipos de notificaciones',
+							url: '#/admin/notificaciones',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+						}),	
 					],
 				}),
 			]			

@@ -723,9 +723,110 @@ App.RolesAdminView = Ember.View.extend({
 
 });
 
+
+
 App.ComisionesAdminView = Ember.View.extend({
 	templateName: 'comisiones-admin',
 
+});
+
+App.ItemMultiSelectView = Em.View.extend({
+	tagName: 'li',
+	templateName: 'item-multiselect',	
+	clickItem: function () {
+		this.get('parentView').get('parentView').itemClicked(this.get('content'));
+	}, 
+});
+
+App.MultiSelectView = Ember.CollectionView.extend({
+    classNames : ['subNav'],  
+	tagName: 'ul',
+	itemViewClass: App.ItemMultiSelectView, 
+});
+
+
+
+App.NotificacionTipoCrearView = Ember.View.extend({
+	templateName: 'notificacion-tipo-crear',
+
+	notificationType: null,
+
+	itemClicked: function (object) {
+		switch (object.constructor.toString()) {
+			case "(subclass of App.Rol)":
+				var item = this.get('notificationType.roles').findProperty("id", object.get('id'));
+		        if (!item) {
+					this.get('notificationType.roles').pushObject(object);
+				}
+				else {
+					this.get('notificationType.roles').removeObject(item);
+				}
+				break;
+			case "App.Comision":
+				var item = this.get('notificationType.comisiones').findProperty("id", object.get('id'));
+		        if (!item) {
+					this.get('notificationType.comisiones').pushObject(object);
+				}
+				else {
+					this.get('notificationType.comisiones').removeObject(item);
+				}
+				break;
+			case "(subclass of App.Estructura)":
+				var item = this.get('notificationType.estructuras').findProperty("id", object.get('id'));
+		        if (!item) {
+					this.get('notificationType.estructuras').pushObject(object);
+				}
+				else {
+					this.get('notificationType.estructuras').removeObject(item);
+				}
+				break;
+			case "(subclass of App.Funcion)":
+				var item = this.get('notificationType.funciones').findProperty("id", object.get('id'));
+		        if (!item) {
+					this.get('notificationType.funciones').pushObject(object);
+				}
+				else {
+					this.get('notificationType.funciones').removeObject(item);
+				}
+				break;
+		}
+	},
+
+	guardar: function () {
+		var url = '/notification/createType';
+		$.ajax({
+			url:  url,
+			contentType: 'text/plain',
+			type: 'POST',
+			context: this,
+			data : this.get('notificationType').getJson(),
+			success: function( data ) 
+			{
+				console.log(data);
+			},
+		});					
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create({}));
+	},
+});
+
+App.NotificacionesAdminView = Ember.View.extend({
+	templateName: 'notificaciones-admin',
+
+});
+
+App.NotificacionTipoItemView = Em.View.extend({
+	content: '',
+	templateName: 'item-notificacion-tipo',
+	tagName: 'tr',
+});
+
+App.NotificacionTipoListView = App.ListFilterView.extend({ 
+	itemViewClass: App.NotificacionTipoItemView, 	
+	columnas: ['ID', 'Nombre','Titulo', 'icono', 'Roles', 'Estructuras', 'Funciones', 'Comisiones'],
 });
 
 
@@ -1239,7 +1340,10 @@ App.AttachFileView = Em.View.extend({
 	},
 
 	fileWithOutFolder: function () {
-		return this.get('content').replace(this.get('folder'), '');
+		if (this.get('content')) {
+			return this.get('content').replace(this.get('folder'), '');
+		}
+		return "";
 	}.property('content', 'folder'),
 });
 

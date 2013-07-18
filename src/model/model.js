@@ -88,6 +88,31 @@ App.Rol = Em.Object.extend({
 	},
 });
 
+App.NotificacionTipo = Em.Object.extend({
+	icono: '',
+	nombre: '',
+	titulo: '',
+	roles: [],
+	comisiones: [],
+	funciones: [],
+	estructuras: [],
+	
+	serializable: [
+		"id",
+		"nombre",
+		"titulo",
+		"icono",
+		"roles",
+		"comisiones",
+		"funciones",
+		"estructuras",
+	],
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),
+});
+
 App.ExpedienteBase = Em.Object.extend({
 	sortValue: '',
 	
