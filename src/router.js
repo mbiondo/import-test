@@ -593,6 +593,7 @@ App.Router =  Em.Router.extend({
 				}),	
 
 				pendientes: Em.Route.extend({
+
 					route: "/pendientes",
 
 					deserialize: function(router, params) {
@@ -628,7 +629,46 @@ App.Router =  Em.Router.extend({
 
 				dictamen: Ember.Route.extend({
 					route: '/dictamen',
+					dictamenConsulta: Ember.Route.extend({
+						route: '/:reunion/ver',
 
+						deserialize: function(router, params) {
+						 	App.dictamenConsultaController = App.DictamenConsultaController.create();
+							App.set('dictamenConsultaController.loaded', false);
+							App.set('dictamenConsultaController.content', App.Dictamen.create({id: params.reunion}));
+
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								var dictamen = App.get('dictamenConsultaController.content');
+								deferred.resolve(dictamen);				
+								App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
+							 };
+
+							 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
+							 App.get('dictamenConsultaController').load();
+
+							 return deferred.promise();							
+						},	
+
+						serialize: function (router, context) {
+							return {reunion: context.get('id')};
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'DictamenConsulta');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/dictamenes'},
+								{titulo: 'Dictamen', url: '#/comisiones/dictamenes/dictamenes'},
+							//	{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
+							]);				
+
+							App.get('menuController').seleccionar(2);					
+						},
+						
+					}),	
 					cargar: Ember.Route.extend({
 						route: '/:dictamen/cargar',
 						deserialize: function(router, params) {
