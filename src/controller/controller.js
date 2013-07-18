@@ -1,6 +1,18 @@
 App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
 	
+	create: function () {
+		$.ajax({
+			url:  this.get('url'),
+			dataType: 'JSON',
+			type: 'POST',
+			context: this,
+			data : this.getJson(),
+			success: this.saveSucceeded,
+			complete: this.saveCompleted,
+		});
+	},
+
 	save: function () {
 	
 		this.set('saveSuccess', '');

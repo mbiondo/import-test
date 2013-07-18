@@ -88,6 +88,18 @@ App.Rol = Em.Object.extend({
 	},
 });
 
+App.Notificacion = Em.Object.extend({
+	url: '/notification/create',
+	tipo: '',
+
+	serializable: [
+		"id",
+		"tipo",
+		"link",
+		"objectId"
+	],	
+});
+
 App.NotificacionTipo = Em.Object.extend({
 	icono: '',
 	nombre: '',
