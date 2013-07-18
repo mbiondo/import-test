@@ -1359,6 +1359,18 @@ App.InicioView = Em.View.extend({
 			lista.find("ul").not('.'+get_id).fadeOut(0);
 			lista.find("ul."+get_id).fadeIn(900);
 		});
+
+		//CREATE NOTIFICATION TEST 
+
+		var notification = App.Notificacion.extend(App.Savable).create();
+		notification.set('tipo', 'sesionCreada');
+		notification.set('objectId', 1);
+		notification.set('link', "http://wwww.google.com");
+
+		notification.create();
+
+
+		//
 	},
 });
 
