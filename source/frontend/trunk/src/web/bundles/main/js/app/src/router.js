@@ -337,7 +337,83 @@ App.Router =  Em.Router.extend({
 					App.get('menuController').seleccionar(5);							
 				},									
 			}),	
+			
+			notificaciones: Em.Route.extend({
+				route: "/notificaciones",
+				indexSubRoute: Em.Route.extend({
+					route:'/',
+					deserialize: function(router, params) {
+						 App.notificacionTiposController = App.NotificacionTiposController.create();
 
+						 var deferred = $.Deferred(),
+						
+						 fn = function() {
+						 	 if (App.get('notificacionTiposController.loaded')) {
+								deferred.resolve(null);
+						 	 }					
+						 };
+
+						 App.get('notificacionTiposController').addObserver('loaded', this, fn);
+						 App.get('notificacionTiposController').load();
+
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'notificacionesAdmin');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+						]);					
+						App.get('menuController').seleccionar(5);							
+					},								
+				}),
+
+				crear: Em.Route.extend({
+					route: '/tipo/crear',
+
+					deserialize: function(router, params) {
+						
+						 App.comisionesController = App.ComisionesController.create();
+						 App.funcionesController = App.FuncionesController.create();
+						 App.estructurasController = App.EstructurasController.create();
+						 App.rolesController = App.RolesController.create();
+
+						 var deferred = $.Deferred(),
+						
+						 fn = function() {
+						 	 if (App.get('comisionesController.loaded') && App.get('funcionesController.loaded') && App.get('estructurasController.loaded') && App.get('rolesController.loaded')) {
+								deferred.resolve(null);
+						 	 }					
+						 };
+
+						 App.get('comisionesController').addObserver('loaded', this, fn);
+						 App.get('funcionesController').addObserver('loaded', this, fn);
+						 App.get('estructurasController').addObserver('loaded', this, fn);
+						 App.get('rolesController').addObserver('loaded', this, fn);
+
+						 App.get('comisionesController').load();
+						 App.get('funcionesController').load();
+						 App.get('estructurasController').load();
+						 App.get('rolesController').load();
+						
+						 return deferred.promise();
+					},
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'notificacionTipoCrear');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+						]);					
+						App.get('menuController').seleccionar(5);							
+					},								
+				})
+			}),
 		}),
 		
 		expedientes: Em.Route.extend({
