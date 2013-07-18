@@ -1035,6 +1035,8 @@ App.ExpedientesArchivadosView = Ember.View.extend({
                     App.get('router').transitionTo('expedientesArchivados.index.index');					
                 };
 
+                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
+				App.get('envioArchivoController').addObserver('loaded', this, fn);
                 $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });                
                 App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
@@ -2034,6 +2036,10 @@ App.DictamenView = Ember.View.extend({
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	
 	columnas: ['Fecha Reunion','Proyectos', 'Cargar Dictamen'],
+});
+
+App.DictamenConsultaView = Em.View.extend({
+	templateName: 'dictamenConsulta',
 });
 
 App.ReunionConsultaView = Em.View.extend({
