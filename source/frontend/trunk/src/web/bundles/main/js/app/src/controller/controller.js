@@ -153,13 +153,9 @@ App.IoController = Em.Object.extend({
 		self = this;
 				
 		this.get('socket').on('message', function (data) {
-			console.log(data);
-			var type = data.type;
-			var	action = data.action;
-			var options = null;
-
-			if (data.options)
-				options = JSON.parse(data.options);
+			var type = data.type,
+					action = data.action,
+					options = JSON.parse(data.options);
 			
 			switch (action) {
 				case self.get('MODIFICADO'):
@@ -1361,6 +1357,42 @@ App.OrdenDelDiaController = Ember.Object.extend({
 
 	loadSucceeded: function(data) {
 		item = App.OrdeDelDia.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+});
+
+App.DictamenConsultaController = Ember.Object.extend({
+	content: null,
+	url: '/par/evento/%@',
+//	url: "/par/parte/%@",
+//	url: "/dic/dictamen/%@",
+//	url: "/od/orden/del/dia",
+	loaded : false,
+		useApi: true,
+	
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+
+	load: function () {
+		_self = this;
+		this.set('loaded', false);
+		$.ajax({
+			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},	
+
+	loadSucceeded: function(data) {
+		item = App.Dictamen.create();
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
