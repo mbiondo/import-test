@@ -793,18 +793,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 	},
 
 	guardar: function () {
-		var url = '/notification/createType';
-		$.ajax({
-			url:  url,
-			contentType: 'text/plain',
-			type: 'POST',
-			context: this,
-			data : this.get('notificationType').getJson(),
-			success: function( data ) 
-			{
-				console.log(data);
-			},
-		});					
+		data : this.get('notificationType').create(),
 	},
 
 	didInsertElement: function () {
@@ -1361,15 +1350,11 @@ App.InicioView = Em.View.extend({
 		});
 
 		//CREATE NOTIFICATION TEST 
-
 		var notification = App.Notificacion.extend(App.Savable).create();
 		notification.set('tipo', 'sesionCreada');
 		notification.set('objectId', 1);
 		notification.set('link', "http://wwww.google.com");
-
 		notification.create();
-
-
 		//
 	},
 });
