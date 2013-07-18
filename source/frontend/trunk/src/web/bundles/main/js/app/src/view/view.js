@@ -793,7 +793,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 	},
 
 	guardar: function () {
-		data : this.get('notificationType').create(),
+		this.get('notificationType').create();
 	},
 
 	didInsertElement: function () {
