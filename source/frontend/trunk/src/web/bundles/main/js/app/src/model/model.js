@@ -309,10 +309,17 @@ App.Dictamen = Em.Object.extend({
 	proyectosLabel: function () {
 		var st = "";
 		this.get('proyectos').forEach(function (proyecto) {
-			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
+//			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
+
+			st += "<div class='fluid'>";
+			st += "<div class='grid2'>"+proyecto.proyecto.expdip+"</div>";
+			st += "<div class='grid10'>"+proyecto.proyecto.titulo+"</div>";
+			st += "<div class='clear'></div>";
+			st += "</div>";
+
 		})
 		return st.htmlSafe();
-	}.property('proyectos'),    
+	}.property('proyectos'),  
 });
 
 
