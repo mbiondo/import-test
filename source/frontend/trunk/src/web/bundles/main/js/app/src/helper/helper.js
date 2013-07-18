@@ -28,6 +28,13 @@ Handlebars.registerHelper("linkCitacion", function(id, options) {
   return "#/comisiones/citaciones/citacion/" + id + "/ver";
 });
 
+Handlebars.registerHelper("linkDictamen", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/comisiones/dictamenes/dictamen/" + id + "/ver";
+});
+
 Handlebars.registerHelper("linkOD", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
