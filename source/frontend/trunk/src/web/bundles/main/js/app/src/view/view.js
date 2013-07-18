@@ -351,6 +351,8 @@ App.ListFilterView = Ember.View.extend({
 			return regex.test(item.get('label').toLowerCase());
 		});
 
+//		console.log(filtered);
+
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
@@ -986,9 +988,9 @@ App.ExpedienteArchivadoListView = App.ListFilterView.extend({
 
 
 App.ExpedientesArchivadosView = Ember.View.extend({
-	templateName: 'expedientesArchivados',
-	startFecha: '',
-	endFecha: '',
+    templateName: 'expedientesArchivados',
+    startFecha: '',
+    endFecha: '',
     archivadoFecha: '',
     anio:2012,
     anios: [2012, 2011, 2010, 2009],
@@ -1028,12 +1030,13 @@ App.ExpedientesArchivadosView = Ember.View.extend({
             
             if (data.id) {
                 fn = function() {
+                    App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-                    App.get('router').transitionTo('enviosArchivo.index');					
+                    App.get('router').transitionTo('expedientesArchivados.index.index');					
                 };
 
-                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });                App.get('envioArchivoController').addObserver('loaded', this, fn);
-				 App.get('envioArchivoController').addObserver('loaded', this, fn);
+                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });                
+                App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
                
             } else 
