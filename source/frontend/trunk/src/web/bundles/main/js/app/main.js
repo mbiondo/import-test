@@ -1,6 +1,6 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:8080/sparl/rest',
-	//url: '',	
+	//url: 'http://10.185.204.12:8080/sparl/rest',
+	url: '',	
 	key: '',
 	secret: '',
 });
@@ -156,7 +156,32 @@ App.menuController = App.MenuController.create({
 				})			
 			]			
 		}),	
-
+		App.MenuItem.create({
+			id: 8,
+			titulo: 'Orden Del Dia',
+			url: '#/OD/listado',
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			subMenu: [
+				App.MenuItem.create({
+					titulo: 'Orden Del Dia',
+					url: '',
+					roles: ['ROLE_USER'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Listado',
+							url: '#/OD/listado',
+							roles: ['ROLE_USER'],
+						}),	
+						App.MenuItem.create({
+							titulo: 'Dictamenes sin OD',
+							url: '#/OD/dictamenes',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+						}),							
+					],
+				}),				
+			]			
+		}),	
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
