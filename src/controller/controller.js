@@ -952,7 +952,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.ExpedientesArchivadosController = App.RestController.extend({
-    url: '/exp/proyectos',
+    url: '/exp/proyectos/archivables',
 	type: App.ExpedienteBase,
 	useApi: true,
 	sortProperties: ['fechaPub'],
