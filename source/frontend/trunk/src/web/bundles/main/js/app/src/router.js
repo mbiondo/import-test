@@ -110,6 +110,24 @@ App.Router =  Em.Router.extend({
 		
 		index: Em.Route.extend({
 			route: "/",
+
+			deserialize: function () {
+				
+				if (!App.get('notificacionesController'))
+					App.notificacionesController = App.NotificacionesController.create({content: []});
+				
+				var deferred = $.Deferred(),
+				
+				fn = function() {
+						App.get('notificacionesController').removeObserver('loaded', this, fn);	
+						deferred.resolve(null);	
+				};					
+
+				App.get('notificacionesController').addObserver('loaded', this, fn);
+				App.get('notificacionesController').load();
+				
+				return deferred.promise();				
+			},
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('menu', 'subMenu');

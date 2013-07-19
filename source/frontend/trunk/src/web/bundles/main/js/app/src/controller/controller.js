@@ -756,6 +756,48 @@ App.DictamenesPendientesController = App.RestController.extend({
 //OD
 
 
+//Notificaciones
+
+App.NotificacionesController = App.RestController.extend({
+	url: '/notification/all',
+	type: App.Notificacion,
+	useApi: false,
+	sortProperties: ['fecha'],
+	sortAscending: false,
+
+	load: function() {
+		this.set('loaded', false);
+		var url =  this.get('url');
+
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				type: 'POST',
+				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+	parse : function (data) {
+		return data.notificaciones;
+	},
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Notificacion.extend(App.Savable).create(data);
+		item.setProperties(data);
+
+		this.addObject(item);
+
+	},	
+});
+
 //UserLogin
 App.UsuariosController = App.RestController.extend({
 	url: '/user/users',

@@ -91,12 +91,15 @@ App.Rol = Em.Object.extend({
 App.Notificacion = Em.Object.extend({
 	url: '/notification/create',
 	tipo: '',
+	fecha: '',
 
 	serializable: [
 		"id",
 		"tipo",
 		"link",
-		"objectId"
+		"objectId",
+		"fecha",
+		"mensaje",
 	],	
 });
 
