@@ -1,7 +1,9 @@
 App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
+	createSuccess: '',
 	
 	create: function () {
+		this.set('createSuccess', '');
 		$.ajax({
 			url:  this.get('url'),
 			dataType: 'JSON',
@@ -15,11 +17,11 @@ App.Savable = Ember.Mixin.create({
 
 	createSucceded: function (data) {
 		if (this.get('useApi') && data.id) {
-			this.set('saveSuccess', true);
+			this.set('createSuccess', true);
 		}
 
 		if (data.success == true) {
-			this.set('saveSuccess', true);
+			this.set('createSuccess', true);
 			if (this.get('notificationType'))
 			{
 				console.log('A VER!!')
@@ -31,11 +33,11 @@ App.Savable = Ember.Mixin.create({
 
 	createCompleted: function(xhr){
 		if (this.get('useApi') && xhr.status == 200) {
-			this.set('saveSuccess', true);
+			this.set('createSuccess', true);
 		} 
 		else
 		{
-			this.set('saveSuccess', false);
+			this.set('createSuccess', false);
 		}
 	},	
 
