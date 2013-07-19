@@ -89,6 +89,7 @@ App.Rol = Em.Object.extend({
 });
 
 App.Notificacion = Em.Object.extend({
+	notificationType : 'Notificacion',
 	url: '/notification/create',
 	tipo: '',
 	fecha: '',

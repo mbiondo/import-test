@@ -8,10 +8,36 @@ App.Savable = Ember.Mixin.create({
 			type: 'POST',
 			context: this,
 			data : this.getJson(),
-			success: this.saveSucceeded,
-			complete: this.saveCompleted,
+			success: this.createSucceded,
+			complete: this.createCompleted,
 		});
 	},
+
+	createSucceded: function (data) {
+		if (this.get('useApi') && data.id) {
+			this.set('saveSuccess', true);
+		}
+
+		if (data.success == true) {
+			this.set('saveSuccess', true);
+			if (this.get('notificationType'))
+			{
+				console.log('A VER!!')
+				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson());
+			}
+		}		
+		
+	},
+
+	createCompleted: function(xhr){
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('saveSuccess', true);
+		} 
+		else
+		{
+			this.set('saveSuccess', false);
+		}
+	},	
 
 	save: function () {
 	
@@ -248,6 +274,11 @@ App.IoController = Em.Object.extend({
 			case "Sesion" :
 				App.get('sesionesController').addObject(App.Sesion.extend(App.Savable).create(options));
 				break;
+
+			case "Notificacion" :
+				if (App.get('sesionesController'))
+					App.get('notificacionesController').addObject(App.Notificacion.extend(App.Savable).create(options));
+				break;				
 		}
 	},
 
