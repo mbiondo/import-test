@@ -562,9 +562,9 @@ App.Router =  Em.Router.extend({
 	                        App.get('menuController').seleccionar(6);
 
 	                        App.get('breadCumbController').set('content', [
-                                {titulo: 'Expedientes Archivados', url: '#expedientesArchivados/envios/archivo'},
-                                {titulo: 'Envíos', url: '#expedientesArchivados/envios/archivo'},
-                                {titulo: 'Archivo', url: '#expedientesArchivados/envios/archivo'}
+                                {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados/envios/archivo'},
+                                {titulo: 'Envíos', url: '#/expedientesArchivados/envios/archivo'},
+                                {titulo: 'Archivo', url: '#/expedientesArchivados/envios/archivo'}
 	                        ]);				
 	                },
 	        	}),
@@ -600,9 +600,9 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-	                        {titulo: 'Expedientes Archivados', url: '#/enviosArchivo'},
-							{titulo: 'Envíos a Archivo', url: '#/enviosArchivo'},
-							{titulo: 'Envío ' + App.get('envioArchivoConsultaController.content').get('id'), url: '#/enviosArchivo/envio/ver/'+App.get('envioArchivoConsultaController.content').get('id')}
+	                        {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados/envios/archivo'},
+							{titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envios/archivo'},							
+							{titulo: 'Envío ' + App.get('envioArchivoConsultaController.content').get('id'), url: '#/expedientesArchivados/envios/archivo/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
 						]);
 						App.get('menuController').seleccionar(6);					
 					},
