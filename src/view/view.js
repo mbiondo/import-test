@@ -1352,12 +1352,18 @@ App.InicioView = Em.View.extend({
 
 		//CREATE NOTIFICATION TEST 
 		var notification = App.Notificacion.extend(App.Savable).create();
-		notification.set('tipo', 'sesionCreada');
-		notification.set('objectId', 1);
-		notification.set('link', "http://wwww.google.com");
-		notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
-		notification.set('mensaje', "Custon message here!!");
-		notification.create();
+		//ACA TITULO DE LA NOTIFICACION
+		//notification.set('tipo', 'asd');
+		//Si hace falta ID del objeto modificado
+		//notification.set('objectId', 1);
+		//Link del objeto
+		//notification.set('link', "http://wwww.google.com");
+		//CreateAt
+		//notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		//Custom message
+		//notification.set('mensaje', "Custon message here!!");
+		//Crear
+		//notification.create();
 		//
 	},
 });
