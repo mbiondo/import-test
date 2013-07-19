@@ -136,7 +136,10 @@ App.ExpedienteBase = Em.Object.extend({
 	seleccionado: false,
 	
 	label: function () {
-		return this.get('titulo') + this.get('tipo')+ this.get('expdip') +  this.get('iniciado');
+		var str = this.get('titulo') + this.get('tipo') + this.get('expdip') +  this.get('iniciado');
+		if (str)
+			return str;
+		return "";
 	}.property('titulo'),
 });
 

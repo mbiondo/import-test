@@ -8,7 +8,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -1353,17 +1353,18 @@ App.InicioView = Em.View.extend({
 		//CREATE NOTIFICATION TEST 
 		var notification = App.Notificacion.extend(App.Savable).create();
 		//ACA TITULO DE LA NOTIFICACION
-		//notification.set('tipo', 'asd');
+		//notification.set('tipo', 'Test');
 		//Si hace falta ID del objeto modificado
 		//notification.set('objectId', 1);
 		//Link del objeto
-		//notification.set('link', "http://wwww.google.com");
+		//notification.set('link', "#/citaciones");
 		//CreateAt
 		//notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 		//Custom message
 		//notification.set('mensaje', "Custon message here!!");
 		//Crear
 		//notification.create();
+
 		//
 	},
 });
