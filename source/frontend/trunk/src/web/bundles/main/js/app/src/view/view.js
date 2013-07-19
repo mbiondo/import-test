@@ -1351,13 +1351,13 @@ App.InicioView = Em.View.extend({
 		});
 
 		//CREATE NOTIFICATION TEST 
-		//var notification = App.Notificacion.extend(App.Savable).create();
-		//notification.set('tipo', 'sesionCreada');
-		//notification.set('objectId', 1);
-		//notification.set('link', "http://wwww.google.com");
-		//notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
-		//notification.set('mensaje', "Custon message here!!");
-		//notification.create();
+		var notification = App.Notificacion.extend(App.Savable).create();
+		notification.set('tipo', 'sesionCreada');
+		notification.set('objectId', 1);
+		notification.set('link', "http://wwww.google.com");
+		notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		notification.set('mensaje', "Custon message here!!");
+		notification.create();
 		//
 	},
 });
