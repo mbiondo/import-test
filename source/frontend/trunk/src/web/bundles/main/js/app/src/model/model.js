@@ -143,6 +143,13 @@ App.ExpedienteBase = Em.Object.extend({
 	}.property('titulo'),
 });
 
+App.ExpedienteArchivable = Em.Object.extend({
+	sortValue: '',
+	
+	label: function () {
+		return this.get('titulo') + this.get('expdip');
+	}.property('titulo'),
+});
 
 App.Expediente = Em.Object.extend({
 	sortValue: '',
