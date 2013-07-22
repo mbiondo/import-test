@@ -979,6 +979,27 @@ App.NotificacionTiposController = App.RestController.extend({
 	},
 })
 
+
+App.ExpedientesArchivablesController = App.RestController.extend({
+    url: '/exp/proyectos/archivables',
+	type: App.ExpedienteArchivable,
+	useApi: true,
+	sortProperties: ['fechaPub'],
+	sortAscending: true,
+	loaded: false,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		var item = App.ExpedienteArchivable.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		App.get('expedientesArchivablesController').addObject(item);
+
+	},	
+});
+
 App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos',
 	type: App.Expediente,
