@@ -2151,6 +2151,21 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 
 App.DictamenConsultaView = Em.View.extend({
 	templateName: 'dictamenConsulta',
+	rechazoUnificadosModificado: false,
+	pResolucionDeclaracionLey: false,
+
+	didInsertElement: function(){
+		this._super();
+		object 		= App.get('dictamenConsultaController.content.textos.firstObject');
+
+		if(object.rechazo || object.unificados || object.modificado)
+			this.set('rechazoUnificadosModificado', true);
+		if(object.pr ||object.pd || object.pl)
+			this.set('pResolucionDeclaracionLey', true);
+
+		console.log(this.get('rechazoUnificadosModificado'));
+		console.log(this.get('pResolucionDeclaracionLey'));
+	}
 });
 
 App.ReunionConsultaView = Em.View.extend({
