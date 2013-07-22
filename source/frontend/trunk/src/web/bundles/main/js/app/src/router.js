@@ -727,7 +727,7 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
-						 	App.dictamenConsultaController = App.DictamenConsultaController.create();
+						 	App.dictamenConsultaController = App.DictamenConsultaController.crearCitacione();
 							App.set('dictamenConsultaController.loaded', false);
 							App.set('dictamenConsultaController.content', App.Dictamen.create({id: params.reunion}));
 
@@ -773,6 +773,9 @@ App.Router =  Em.Router.extend({
 							if (!App.get('dictamenesPendientesController'))
 						 		App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
 
+							if (!App.get('expedientesArchivablesController'))
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();							
+
 							//App.dictamenController.set('content', App.Dictamen.create({id: params.dictamen}))
 
 							App.caracterDespachoController = App.CaracterDespachoController.create();
@@ -789,7 +792,7 @@ App.Router =  Em.Router.extend({
 							}
 
 							fn = function () {
-								if (App.get('dictamenesPendientesController.loaded') && App.get('expedientesController.loaded')) {
+								if (App.get('dictamenesPendientesController.loaded') && App.get('expedientesArchivablesController.loaded')) {
 									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));
 									App.set('dictamenController.content', dictamen);
 									App.get('firmantesController').set('comision_id', dictamen.get('comision_id'));
@@ -797,12 +800,10 @@ App.Router =  Em.Router.extend({
 									App.get('firmantesController').load();				
 								}
 							}	
-
 	 						App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
-							App.get('expedientesController').addObserver('loaded', this, fn);
+							App.get('expedientesArchivablesController').addObserver('loaded', this, fn);
 							App.get('dictamenesPendientesController').load();
-							App.get('expedientesController').load();
-
+							App.get('expedientesArchivablesController').load();
 							return deferred.promise();
 						},
 
