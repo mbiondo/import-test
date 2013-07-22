@@ -727,7 +727,8 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
-						 	App.dictamenConsultaController = App.DictamenConsultaController.crearCitacione();
+							if (!App.get('dictamenConsultaController'))
+							 	App.dictamenConsultaController = App.DictamenConsultaController.create();
 							App.set('dictamenConsultaController.loaded', false);
 							App.set('dictamenConsultaController.content', App.Dictamen.create({id: params.reunion}));
 
