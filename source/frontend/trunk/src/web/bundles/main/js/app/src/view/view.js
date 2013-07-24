@@ -2373,13 +2373,20 @@ App.DictamenCrearView = Ember.View.extend({
 	guardar: function () {
 		var dictamen = this.get('content');
 		var pv = [];
-		var orden = 0;
+		var orden = 1;
 
 		$('#formCrearParteDictamen').parsley('destroy');
 		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
 
 		dictamen.get('proyectosVistos').forEach(function (proyecto){
 			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+			orden++;
+		});
+
+		orden = 1;
+
+		dictamen.get('textos').forEach(function (texto){
+			texto.set('orden', orden);
 			orden++;
 		});
 
