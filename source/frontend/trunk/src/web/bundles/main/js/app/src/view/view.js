@@ -1,4 +1,3 @@
-
 JQ = Ember.Namespace.create();
 
 Ember.View.reopen({
@@ -8,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -563,8 +562,8 @@ App.DictamenMiniView = Ember.View.extend({
 	},	
 });
 
-App.CrearODView = Ember.View.extend({
-	templateName: 'crear-orden-del-dia',
+App.OrdenDelDiaCrearView = Ember.View.extend({
+	templateName: 'orden-del-dia-crear',
 	url: '',
 	anio: '',
 	numero: '',
@@ -658,10 +657,9 @@ App.OrdenesDelDiaDictamenesListView = Ember.View.extend({
 	templateName: 'orden-del-dia-dictamenes',
 });
 
-
 App.DictamenView = Ember.View.extend({
 	tagName: 'tr',
-	templateName: 'orden-del-dia-dictamen-item',
+	templateName: 'dictamen-item',
 
 	crearOD: function (){
 		 if (!App.get('dictamenController'))
@@ -676,8 +674,35 @@ App.DictamenView = Ember.View.extend({
 	},
 });
 
+App.DictamenesView = Em.View.extend({
+	templateName: 'dictamenes',
+});
+
+
 App.DictamenesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenView, 	
+	columnas: ['Fecha', 'Sumario', 'Ver Dictamen'],
+});
+
+App.DictamenSinODItemView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'dictamen-sin-od-item',
+
+	crearOD: function (){
+		 if (!App.get('dictamenController'))
+		 	App.dictamenController = App.DictamenController.create();
+
+		 fn = function() {
+			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
+		 };
+
+		 App.get('dictamenController').addObserver('loaded', this, fn);
+		 App.get('dictamenController').load();
+	},
+});
+
+App.DictamenesSinOrdenDelDiaListView = App.ListFilterView.extend({ 
+	itemViewClass: App.DictamenSinODItemView, 	
 	columnas: ['Fecha', 'Sumario', 'Crear OD'],
 });
 
@@ -2093,7 +2118,7 @@ App.SinReunionesListView = App.ListFilterView.extend({
 
 App.ReunionesSinParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
-	columnas: ['Fecha', 'Nota', 'Comisión'],
+	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
 });
 
 App.ReunionesSinParteView = Em.View.extend({
@@ -2102,7 +2127,7 @@ App.ReunionesSinParteView = Em.View.extend({
 
 App.ReunionesConParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
-	columnas: ['Fecha', 'Nota', 'Comisión'],
+	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
 });
 
 App.ReunionesConParteView = App.ListFilterView.extend({
@@ -2115,7 +2140,6 @@ App.CrearDictamenView = Em.View.extend({
 
 });
 
-
 App.DictamenesPendientesView = Em.View.extend({
 	templateName: 'dictamenes-pendientes',
 });
@@ -2123,25 +2147,7 @@ App.DictamenesPendientesView = Em.View.extend({
 
 App.DictamenPendienteView = Ember.View.extend({
 	tagName: 'tr',
-	templateName: 'orden-del-dia-dictamen-item-pendiente',
-});
-
-App.DictamenView = Ember.View.extend({
-	tagName: 'tr',
-	templateName: 'orden-del-dia-dictamen-item',
-
-	crearOD: function () {
-
-		 if (!App.get('dictamenController'))
-		 	App.dictamenController = App.DictamenController.create();
-
-		 fn = function() {
-			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ordenConsulta.crearOrden');				
-		 };
-
-		 App.get('dictamenController').addObserver('loaded', this, fn);
-		 App.get('dictamenController').load();
-	},
+	templateName: 'dictamen-pendiente-item',
 });
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
@@ -2167,6 +2173,11 @@ App.DictamenConsultaView = Em.View.extend({
 		console.log(this.get('pResolucionDeclaracionLey'));
 	}
 });
+
+App.DictamenesSinOrdenDelDiaView = Em.View.extend({
+	templateName: 'dictamenes-sin-orden-del-dia',
+});
+
 
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
