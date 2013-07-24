@@ -675,7 +675,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'OrdenesDelDiaDictamenesList');
+						appController.connectOutlet('main', 'Dictamenes');
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
@@ -775,7 +775,7 @@ App.Router =  Em.Router.extend({
 						 		App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
 
 							if (!App.get('expedientesArchivablesController'))
-						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();							
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 
 							//App.dictamenController.set('content', App.Dictamen.create({id: params.dictamen}))
 
@@ -1223,8 +1223,7 @@ App.Router =  Em.Router.extend({
 				}),				
 			}),
 		}),
-		
-		
+				
 		ordenDelDia: Em.Route.extend({
 			route: "/OD",
 
@@ -1249,7 +1248,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
-					appController.connectOutlet('main', 'OrdenesDelDiaDictamenesList');
+					appController.connectOutlet('main', 'DictamenesSinOrdenDelDia');
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
@@ -1281,7 +1280,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
-					appController.connectOutlet('menu', 'subMenu');
+					appController.connectOutlet('menu', 'subMenu');					
 					appController.connectOutlet('main', 'OrdenesDelDiaList');
 					
 					App.get('breadCumbController').set('content', [
@@ -1294,7 +1293,7 @@ App.Router =  Em.Router.extend({
 			}),	
 
 			ordenDelDia: Em.Route.extend({ 
-				route: '/orden-del-dia',
+				route: '/orden',
 
 				crear: Ember.Route.extend({
 					route: '/:id/crear',
@@ -1324,7 +1323,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {							
 						var appController = router.get('applicationController');
 						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'crearOD');
+						appController.connectOutlet('main', 'OrdenDelDiaCrear');
 						
 						App.get('menuController').seleccionar(8);
 						App.get('breadCumbController').set('content', [
@@ -1336,7 +1335,7 @@ App.Router =  Em.Router.extend({
 				}),		
 				
 				ordenConsulta: Ember.Route.extend({
-					route: '/orden',
+					route: '/',
 					verOrden: Ember.Route.extend({
 						route: '/:orden/ver',
 
