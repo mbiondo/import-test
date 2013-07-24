@@ -39,7 +39,7 @@ Handlebars.registerHelper("linkOD", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
   
-  return "#/comisiones/OD/orden/" + id + "/ver";
+  return "#/OD/orden/" + id + "/ver";
 });
 
 Handlebars.registerHelper("linkReunion", function(id, options) {
@@ -61,6 +61,14 @@ Handlebars.registerHelper("linkCargarDictamen", function(id, options) {
   var id = getPath(context, id, options.fn);
   
   return "#/comisiones/dictamenes/dictamen/" + id + "/cargar";
+});
+
+
+Handlebars.registerHelper("linkCrearOD", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/OD/orden/" + id + "/crear";
 });
 
 
