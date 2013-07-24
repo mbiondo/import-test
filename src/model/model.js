@@ -423,6 +423,7 @@ App.DictamenTexto = Em.Object.extend({
 	pd: '',
 	copete: '',
 	texto: '',
+	orden: '',
 });
 
 
