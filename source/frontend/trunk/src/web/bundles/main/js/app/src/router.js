@@ -675,7 +675,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'Dictamenes');
+						appController.connectOutlet('main', 'Dictámenes');
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
@@ -755,7 +755,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/dictamenes'},
+								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 								{titulo: 'Dictamen', url: '#/comisiones/dictamenes/dictamenes'},
 							//	{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
