@@ -2248,7 +2248,7 @@ App.ReunionConsultaView = Em.View.extend({
 		citacion.get('temas').forEach(function (tema) {
 			var t = App.CitacionTema.create(tema);
 			temas.addObject(t);
-			t.set('proyectos', mapObjectsInArrays(_self.get('listaExpedientes'), t.get('proyectos')));
+			t.set('proyectos', mapObjectsInArrays(_self.get('expedientes'), t.get('proyectos')));
 			var proyectos = t.get('proyectos');
 			proyectos.forEach(function (proyecto) {
 				if (t.get('grupo')) {
