@@ -2378,16 +2378,17 @@ App.ReunionConsultaView = Em.View.extend({
 	
 	agruparExpedientes: function () {
 		var seleccionados = this.get('listaExpedientesSeleccionados').filterProperty('seleccionado', true);
+		_self = this;
 		seleccionados.forEach(function(expediente){
 			
-			var temaAnterior = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));
+			var temaAnterior = _self.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));
 			
 			if (temaAnterior)
 			{
 				temaAnterior.get('proyectos').removeObject(expediente);
 			}
 			
-			var temaInicial = this.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
+			var temaInicial = _self.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
 			
 			if (temaInicial)
 			{
