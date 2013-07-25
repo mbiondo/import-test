@@ -1196,7 +1196,7 @@ App.EnviosArchivadosView = App.ListFilterView.extend({
 App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	templateName: 'expedientesEnvioConsulta',
 	filterFirmantes: '',
-        archivadoFecha: '',
+    archivadoFecha: '',
         
   	isExpanded: false,
         isPendiente: false,
@@ -2205,7 +2205,8 @@ App.DictamenesSinOrdenDelDiaView = Em.View.extend({
 
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
-	urlExpedientes: '/exp/proyectos',
+//	urlExpedientes: '/exp/proyectos',
+	urlExpedientes: '/com/%@/proyectos/',
 	filterExpedientes: '',
 	tituloNuevoTema: '',
 	seleccionados: false,
@@ -2592,6 +2593,7 @@ App.DictamenCrearView = Ember.View.extend({
 
 	clickExpediente: function (expediente) {
 		var item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
+        
         if (!item) {
 			this.get('content.proyectosVistos').pushObject(expediente);
 		}
@@ -2737,9 +2739,9 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		if (this.get('filterFirmantes') != '')
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-			
-			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
-				return regex.test((firmante.id));
+			filtered = App.get('firmantesController.content').filter(function(firmante) {
+				return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
+//				return regex.test((firmante.id));
 			});
 		}
 		else
