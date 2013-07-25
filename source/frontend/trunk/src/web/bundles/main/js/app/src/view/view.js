@@ -1684,16 +1684,17 @@ App.CitacionCrearView = Em.View.extend({
 		
 		if (App.get('citacionCrearController.isEdit') == true) return;
 
-		this.set('adding', !this.get('adding'));
+		if (App.get('citacionCrearController.content.comisiones.length') > 0 && !App.get('userController').hasRole('ROL_DIRECTOR_COMISIONES')) return;	
+
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
-        	console.log('Agregando Comision');
 			App.get('citacionCrearController.content.comisiones').pushObject(comision);
 		}
 		else {
-        	console.log('Removiendo Comision');
 			App.get('citacionCrearController.content.comisiones').removeObject(comision);
 		}
+
+		this.set('adding', !this.get('adding'));
 	},
 	
 	clickExpediente: function (expediente) {
@@ -1918,11 +1919,12 @@ App.CitacionCrearView = Em.View.extend({
 		//$('#crear-citacion-form').validationEngine('attach');
 		fo = null;
 
-		if (!App.get('citacionCrearController.content')) {
+		if (!App.get('citacionCrearController.content.id')) {
 			var cu = App.get('userController.user.comisiones')[0];
 			if (cu) {
 				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
-				App.get('citacionCrearController.content.comisiones').pushObject(c);
+				if (c)
+					App.get('citacionCrearController.content.comisiones').pushObject(c);
 			}
 		}
 	}, 
@@ -2203,7 +2205,240 @@ App.DictamenesSinOrdenDelDiaView = Em.View.extend({
 
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
+	urlExpedientes: '/exp/proyectos',
+	filterExpedientes: '',
+	tituloNuevoTema: '',
+	seleccionados: false,
+	citacion: null,
+	isEdit: false,
+
+
+	crearTemaHabilitado: function () {
+		return this.get('tituloNuevoTema') != '';
+	}.property('tituloNuevoTema'),
+
+	cargarExpedientes: function () {
+		this.set('isEdit', true);
+
+		$.ajax({
+			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('citacion.comisiones').objectAt(0).id)),
+			crossDomain: 'true',
+			dataType: 'JSON',
+			type: 'GET',
+			context: this,
+			success: this.cargarExpedientesSucceeded,
+			beforeSend: function () {		
+				this.set('loaded', false);
+			}
+		});			
+	},
+
+	cargarExpedientesSucceeded: function (data) {
+		var exp = [];
+		data.forEach(function(i){
+			exp.addObject(App.Expediente.extend(App.Savable).create(i));
+		}, this);
+		this.set('expedientes', exp);
+		this.set('loaded', true);
+
+		citacion = this.get('citacion');
+		var temas = citacion.get('temas');
+		var temas = [];
+		_self = this;
+		citacion.get('temas').forEach(function (tema) {
+			var t = App.CitacionTema.create(tema);
+			temas.addObject(t);
+			t.set('proyectos', mapObjectsInArrays(_self.get('listaExpedientes'), t.get('proyectos')));
+			var proyectos = t.get('proyectos');
+			proyectos.forEach(function (proyecto) {
+				if (t.get('grupo')) {
+					proyecto.set('tema', t.get('descripcion'));
+				}
+			});									
+		});
+		citacion.set('temas', temas);
+	},
+
+	listaExpedientes: function () {
+		var filtered = [];
+
+		if (this.get('filterExpedientes') != '')
+		{
+			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
+			
+			filtered = this.get('expedientes').filter(function(expediente) {
+				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = this.get('expedientes');
+		}
+
+		if (this.get('listaExpedientesSeleccionados'))
+		{
+			if (filtered) {
+				this.get('listaExpedientesSeleccionados').forEach(function (expediente) {
+					filtered = filtered.without(expediente)
+				});
+			}
+		}		
+		return filtered;
+	}.property('expedientes', 'filterExpedientes'),
+
+
+	seleccionarTodos: function () {
+		var _self = this;
+		this.set('seleccionados', !this.get('seleccionados'));
+		this.get('listaExpedientesSeleccionados').forEach(function (expediente) {
+			expediente.set('seleccionado', _self.get('seleccionados'));
+		});
+	},
 	
+	crearTema: function () {
+		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
+		this.set('tituloNuevoTema', '');
+		
+		this.get('citacion.temas').addObject(tema);
+
+		this.set('temaSeleccionado', tema);
+		
+		this.set('adding', !this.get('adding'));
+	},
+	
+	
+	guardar: function () {
+		
+		var temas = this.get('citacion.temas');
+		var temasToRemove = [];
+		temas.forEach(function (tema) {
+			var proyectos = tema.get('proyectos');
+			if (proyectos.length == 0)
+				temasToRemove.addObject(tema);
+		});
+		temas.removeObjects(temasToRemove);
+
+		this.get('citacion').set('temas', temas);
+		this.get('citacion').save();
+		this.get('citacion').addObserver('saveSuccess', this, this.saveSuccess);		
+	},
+	
+	saveSuccess: function () {
+		this.get('citacion').removeObserver('saveSuccess', this, fn);
+
+		if (this.get('content.saveSuccess') == true)
+		{
+			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));
+			$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
+		}			
+		else
+		{
+			$.jGrowl('Ocurrió un error al intentar guardar los cambios en la reunion!', { life: 5000 });
+		}		
+	},
+
+	
+	clickExpediente: function (expediente) {
+		var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+		this.get('citacion.temas').addObject(tema);
+		tema.get('proyectos').addObject(expediente);
+		this.set('adding', !this.get('adding'));
+	},	
+	
+	clickBorrar: function (expediente) {
+		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));		
+		if (tema)
+			tema.get('proyectos').removeObject(expediente);
+			
+		var temaInicial = this.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
+		if (temaInicial)
+			this.get('citacion.temas').removeObject(temaInicial);
+			
+		expediente.set('tema', null);
+		
+		this.set('adding', !this.get('adding'));
+	},
+	
+	
+	clickDesagrupar: function (expediente) {
+		
+		var temaAnterior = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));
+		temaAnterior.get('proyectos').removeObject(expediente);
+		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
+		if (!tema)
+		{
+			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+			this.get('citacion.temas').addObject(tema);			
+		}
+
+		tema.get('proyectos').addObject(expediente);
+		
+		expediente.set('tema', null);
+	},
+	
+	agruparExpedientes: function () {
+		var seleccionados = this.get('listaExpedientesSeleccionados').filterProperty('seleccionado', true);
+		seleccionados.forEach(function(expediente){
+			
+			var temaAnterior = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));
+			
+			if (temaAnterior)
+			{
+				temaAnterior.get('proyectos').removeObject(expediente);
+			}
+			
+			var temaInicial = this.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
+			
+			if (temaInicial)
+			{
+				temaInicial.get('proyectos').removeObject(expediente);
+			}			
+			
+			expediente.set('seleccionado', false);
+			expediente.set('tema', this.get('temaSeleccionado').get('descripcion'));
+			
+			this.get('temaSeleccionado.proyectos').addObject(expediente);
+		}, this);
+	},
+	
+	listaTemas: function () {
+		var temas = [];
+		if (this.get('citacion'))
+			temas = this.get('citacion.temas').filterProperty('grupo', true);
+		return temas;
+	}.property('citacion.temas', 'adding'),
+	
+	listaExpedientesSeleccionados: function () {
+		var expedientesSeleccionados = [];
+		var temas = this.get('citacion.temas');
+		if (!temas)
+			return expedientesSeleccionados;
+		
+		temas.forEach(function (tema) {
+			var proyectos = tema.get('proyectos');
+			proyectos.forEach(function (expediente) {
+				expedientesSeleccionados.addObject(expediente);
+			});
+		});
+		return expedientesSeleccionados;
+	}.property('citacion.temas', 'citacion.temas.@each.proyectos', 'adding'),
+	
+	borrarExpedientes: function () {
+
+		App.set('citacionCrearController.content.temas', []);
+		App.set('citacionCrearController.expedientes', []);
+
+		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		if (fo)
+		{
+			App.get('citacionCrearController').addObserver('loaded', this, this.cargarExpedientesSuccess);
+			App.get('citacionCrearController').cargarExpedientes();
+		}
+
+		fo = null;
+		
+	},
+
 	crearParte: function () {
 		App.set('reunionConsultaController.content.parte', []);
 		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
@@ -2211,6 +2446,12 @@ App.ReunionConsultaView = Em.View.extend({
 	
 	editarParte: function () {
 		App.get('router').transitionTo('comisiones.partes.parteConsulta.editarParte');	
+	},
+
+	didInsertElement: function () {
+		this._super();
+		var citacion = App.Citacion.extend(App.Savable).create(App.get('citacionConsultaController.content'));
+		this.set('citacion', citacion);
 	},
 });
 
