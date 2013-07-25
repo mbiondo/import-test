@@ -339,7 +339,7 @@ App.Dictamen = Em.Object.extend({
 	art204: false,
 	unanimidad: false,
 	caracterDespacho: '',
-	observaciones: '',
+	//observaciones: '',
 	textos: '',
 
 	label: function (){
