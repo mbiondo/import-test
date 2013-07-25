@@ -445,6 +445,10 @@ App.UserController = Em.Controller.extend({
 		else
 			return false;
 	}.property('roles'),
+
+	hasRole: function (role) {
+		return this.get('roles').contains(role);
+	}
 });
 
 App.ApiController = Em.Controller.extend({
