@@ -1087,7 +1087,6 @@ App.ExpedientesView = Em.View.extend({
 	templateName: 'expedientes',
 });
 
-
 App.ExpedienteArchivadoItemListView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'expedienteArchivado',
@@ -1376,7 +1375,7 @@ App.InicioView = Em.View.extend({
 		});
 
 		//CREATE NOTIFICATION TEST 
-		var notification = App.Notificacion.extend(App.Savable).create();
+		//var notification = App.Notificacion.extend(App.Savable).create();
 		//ACA TITULO DE LA NOTIFICACION
 		//notification.set('tipo', 'Test');
 		//Si hace falta ID del objeto modificado
@@ -2160,6 +2159,7 @@ App.DictamenConsultaView = Em.View.extend({
 	rechazoUnificadosModificado: false,
 	pResolucionDeclaracionLey: false,
 
+/*
 	didInsertElement: function(){
 		this._super();
 		object 		= App.get('dictamenConsultaController.content.textos.firstObject');
@@ -2168,9 +2168,31 @@ App.DictamenConsultaView = Em.View.extend({
 			this.set('rechazoUnificadosModificado', true);
 		if(object.pr ||object.pd || object.pl)
 			this.set('pResolucionDeclaracionLey', true);
+	}
+*/
 
-		console.log(this.get('rechazoUnificadosModificado'));
-		console.log(this.get('pResolucionDeclaracionLey'));
+});
+
+App.DictamenTextoView = Em.View.extend({
+	templateName: 'dictamen-texto',
+	disicencias: false,
+
+	didInsertElement: function(){
+		this._super();
+	}
+});
+App.DictamenFirmantesView = Em.View.extend({
+	templateName: 'dictamen-firmantes',
+	disidenciaTipo1: false,
+	disidenciaTipo2o3: false,
+
+	didInsertElement: function(){
+		this._super();
+
+		if(this.get('content').disidencia == 1) 
+			this.set('disidenciaTipo1', true);
+		if(this.get('content').disidencia == 2 || this.get('content').disidencia == 3) 
+			this.set('disidenciaTipo2o3', true);
 	}
 });
 
@@ -2344,16 +2366,15 @@ App.DictamenCrearView = Ember.View.extend({
 		{
 			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
 			
-			filtered = App.get('expedientesController.content').filter(function(expediente) {
+			filtered = App.get('expedientesArchivablesController.content').filter(function(expediente) {
 				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
 			});
 		}
 		else
 		{
-			filtered = App.get('expedientesController.content');
+			filtered = App.get('expedientesArchivablesController.content');
 		}
-
-		return filtered;
+		return filtered.splice(0, 10);
 	}.property('content', 'filterExpedientes'),
 
 	listaProyectosVistos: function () {
