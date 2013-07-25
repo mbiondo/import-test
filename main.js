@@ -43,7 +43,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
-							titulo: 'Dictamenes',
+							titulo: 'Dictámenes',
 							url: '#',
 							id: 'news-dictamenes',
 							clases: 'submenu-news',
@@ -138,17 +138,17 @@ App.menuController = App.MenuController.create({
 				}),	
 
 				App.MenuItem.create({
-					titulo: 'Dictamenes',
+					titulo: 'Dictámenes',
 					url: '#/comisiones/dictamenes',
 					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Dictamenes pendientes',
+							titulo: 'Dictámenes pendientes',
 							url: '#/comisiones/dictamenes/pendientes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),			
 						App.MenuItem.create({
-							titulo: 'Dictamenes',
+							titulo: 'Dictámenes',
 							url: '#/comisiones/dictamenes/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),										
@@ -158,13 +158,13 @@ App.menuController = App.MenuController.create({
 		}),	
 		App.MenuItem.create({
 			id: 8,
-			titulo: 'Orden Del Dia',
+			titulo: 'Orden Del Día',
 			url: '#/OD/listado',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Orden Del Dia',
+					titulo: 'Orden Del Día',
 					url: '',
 					roles: ['ROLE_USER'],
 					subMenu: [
@@ -174,7 +174,7 @@ App.menuController = App.MenuController.create({
 							roles: ['ROLE_USER'],
 						}),	
 						App.MenuItem.create({
-							titulo: 'Dictamenes sin OD',
+							titulo: 'Dictámenes sin OD',
 							url: '#/OD/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
