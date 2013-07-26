@@ -359,7 +359,7 @@ App.ListFilterView = Ember.View.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
-		return filtered.splice(0, this.get('totalRecords'));
+		return filtered.slice(0, this.get('totalRecords'));
 	}.property('filterText', 'content', 'totalRecords', 'step'),
 
 	totalRecords: 10,
@@ -1077,7 +1077,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
-		return filtered.splice(0, this.get('totalRecords'));
+		return filtered.slice(0, this.get('totalRecords'));
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),	
 });
 
@@ -2621,14 +2621,15 @@ App.DictamenCrearView = Ember.View.extend({
 			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
 			
 			filtered = App.get('expedientesArchivablesController.content').filter(function(expediente) {
-				return regex.test((expediente.tipo).toLowerCase() + (expediente.titulo).toLowerCase() + (expediente.expdip).toLowerCase());
+				return regex.test(expediente.get('label').toLowerCase());
 			});
 		}
 		else
 		{
 			filtered = App.get('expedientesArchivablesController.content');
 		}
-		return filtered.splice(0, 10);
+
+		return filtered.slice(0, 10);
 	}.property('content', 'filterExpedientes'),
 
 	listaProyectosVistos: function () {
@@ -2639,7 +2640,7 @@ App.DictamenCrearView = Ember.View.extend({
 			var regex = new RegExp(this.get('filterProyectosVistos').toString().toLowerCase());
 			
 			filtered = this.get('content.proyectosVistos').filter(function(expediente) {
-				 return regex.test(expediente.titulo.toLowerCase());
+				 return regex.test(expediente.get('label').toLowerCase());
 			});
 			return filtered;
 		} else {
