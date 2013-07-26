@@ -769,42 +769,56 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 
 							if (!App.get('dictamenController'))
-								App.dictamenController = App.DictamenController.create();
+								App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.dictamen})});
 
-							if (!App.get('dictamenesPendientesController'))
-						 		App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
+							//if (!App.get('dictamenesPendientesController'))
+						 	//	App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
 
 							if (!App.get('expedientesArchivablesController'))
 						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 
+							if (!App.get('reunionConsultaController'))
+						 		App.reunionConsultaController = App.ReunionConsultaController.create();						 	
+
 							//App.dictamenController.set('content', App.Dictamen.create({id: params.dictamen}))
 
-							App.caracterDespachoController = App.CaracterDespachoController.create();
+							//App.caracterDespachoController = App.CaracterDespachoController.create();
 							App.firmantesController = App.FirmantesController.create();
-							App.eventosParteController = App.EventosParteController.create();
+							//App.eventosParteController = App.EventosParteController.create();
 
 							var deferred = $.Deferred();
 							
-							fn2 = function () {
+							cargarFirmantesSuccess = function () {
 								if (App.get('firmantesController.loaded')) {
-									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));	
+									var dictamen = App.get('dictamenController.content');	
 									deferred.resolve(dictamen);
 								}
 							}
 
-							fn = function () {
-								if (App.get('dictamenesPendientesController.loaded') && App.get('expedientesArchivablesController.loaded')) {
-									var dictamen = App.get('dictamenesPendientesController.content').findProperty('id', parseInt(params.dictamen));
-									App.set('dictamenController.content', dictamen);
-									App.get('firmantesController').set('comision_id', dictamen.get('comision_id'));
-									App.get('firmantesController').addObserver('loaded', this, fn2);
-									App.get('firmantesController').load();				
+							cargarReunionSuccess = function () {
+								if (App.get('reunionConsultaController.loaded')) {
+									var reunion = App.get('reunionConsultaController.content');
+									var comision_id = reunion.citacion.comisiones[0].id;
+									App.get('firmantesController').set('comision_id', comision_id);
+									App.get('firmantesController').addObserver('loaded', this, cargarFirmantesSuccess);
+									App.get('firmantesController').load();			
+								}							
+							}
+
+							cargarDictamenSuccess = function () {
+								if (App.get('dictamenController.loaded') && App.get('expedientesArchivablesController.loaded')) {
+									var dictamen = App.get('dictamenController.content');
+									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
+									App.get('reunionConsultaController').addObserver('loaded', this, cargarReunionSuccess);
+									App.get('reunionConsultaController').load();			
 								}
-							}	
-	 						App.get('dictamenesPendientesController').addObserver('loaded', this, fn);
-							App.get('expedientesArchivablesController').addObserver('loaded', this, fn);
-							App.get('dictamenesPendientesController').load();
+							}
+
+	 						App.get('dictamenController').addObserver('loaded', this, cargarDictamenSuccess);
+							App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
+							//App.get('dictamenesPendientesController').load();
 							App.get('expedientesArchivablesController').load();
+							App.get('dictamenController').load();
 							return deferred.promise();
 						},
 
