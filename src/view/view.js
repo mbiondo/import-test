@@ -2161,17 +2161,16 @@ App.DictamenConsultaView = Em.View.extend({
 	rechazoUnificadosModificado: false,
 	pResolucionDeclaracionLey: false,
 
-/*
 	didInsertElement: function(){
 		this._super();
-		object 		= App.get('dictamenConsultaController.content.textos.firstObject');
 
-		if(object.rechazo || object.unificados || object.modificado)
-			this.set('rechazoUnificadosModificado', true);
-		if(object.pr ||object.pd || object.pl)
-			this.set('pResolucionDeclaracionLey', true);
+		$(".whead").live('click', function(){
+			block = $(this).parent().children(":eq(1)");
+			block.clearQueue;
+			block.stop();
+			block.slideToggle(1200);
+		});
 	}
-*/
 
 });
 
@@ -2642,6 +2641,7 @@ App.DictamenCrearView = Ember.View.extend({
 		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		// 
 		$(".whead").live('click', function(){
 			$(this).next().slideToggle(1200);
 		});
