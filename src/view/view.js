@@ -2284,7 +2284,7 @@ App.ReunionConsultaView = Em.View.extend({
 			}
 		}		
 		return filtered;
-	}.property('expedientes', 'filterExpedientes'),
+	}.property('expedientes', 'filterExpedientes', 'listaExpedientesSeleccionados'),
 
 
 	seleccionarTodos: function () {
@@ -2320,14 +2320,15 @@ App.ReunionConsultaView = Em.View.extend({
 
 		this.get('citacion').set('temas', temas);
 		this.get('citacion').save();
-		this.get('citacion').addObserver('saveSuccess', this, this.saveSuccess);		
+		this.get('citacion').addObserver('saveSuccess', this, this.saveSuccess);	
 	},
 	
 	saveSuccess: function () {
-		this.get('citacion').removeObserver('saveSuccess', this, fn);
+		this.get('citacion').removeObserver('saveSuccess', this, this.saveSuccess);
 
-		if (this.get('content.saveSuccess') == true)
+		if (this.get('citacion.saveSuccess') == true)
 		{
+			App.get('router').transitionTo('index');
 			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));
 			$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
 		}			
@@ -2339,11 +2340,14 @@ App.ReunionConsultaView = Em.View.extend({
 
 	
 	clickExpediente: function (expediente) {
-		var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
-		this.get('citacion.temas').addObject(tema);
-		tema.get('proyectos').addObject(expediente);
-		this.set('adding', !this.get('adding'));
-	},	
+		if (!this.get('listaExpedientesSeleccionados').findProperty('id', expediente.get('id'))) {
+			console.log('chupala');
+			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+			this.get('citacion.temas').addObject(tema);
+			tema.get('proyectos').addObject(expediente);
+			this.set('adding', !this.get('adding'));
+		}
+	},
 	
 	clickBorrar: function (expediente) {
 		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));		
@@ -2441,8 +2445,15 @@ App.ReunionConsultaView = Em.View.extend({
 	},
 
 	crearParte: function () {
-		App.set('reunionConsultaController.content.parte', []);
-		App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
+		App.eventosParteController = App.EventosParteController.create();
+
+		fn = function () {
+			App.set('reunionConsultaController.content.parte', []);
+			App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
+		}
+		
+		App.get('eventosParteController').addObserver('loaded', this, fn);
+		App.get('eventosParteController').load();
 	},
 	
 	editarParte: function () {

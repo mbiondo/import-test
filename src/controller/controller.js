@@ -992,15 +992,30 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	sortAscending: true,
 	loaded: false,
 
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+
+		this.set('content', []);
+
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+		
+		this.set('loaded', true);
+	},
+
 	createObject: function (data, save) {
 	
 		save = save || false;
 		
 		var item = App.ExpedienteArchivable.extend(App.Savable).create(data);
 		item.setProperties(data);
-		
-		App.get('expedientesArchivablesController').addObject(item);
-
+		this.addObject(item);	
 	},	
 });
 
@@ -1040,6 +1055,8 @@ App.ExpedientesController = App.RestController.extend({
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);		
 
+		console.log(items);
+
 		if(!data || !items){
 			App.get('expedientesController').set('loaded', true);
 			return;
@@ -1058,19 +1075,8 @@ App.ExpedientesController = App.RestController.extend({
 		
 		item = App.Expediente.extend(App.Savable).create(data);
 		item.setProperties(data);
-		
-		if(save){
-			$.ajax({
-				url: this.get('url'),
-				dataType: 'JSON',
-				type: 'POST',
-				context : {controller: this, model : item },
-				data : item.getJson(),
-				success: this.createSucceeded,
-			});
-		}else{
-			App.get('expedientesController').addObject(item);
-		}
+
+		this.addObject(item);
 	},	
 });
 
