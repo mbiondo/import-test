@@ -2642,8 +2642,16 @@ App.DictamenCrearView = Ember.View.extend({
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 		// 
+/*
 		$(".whead").live('click', function(){
 			$(this).next().slideToggle(1200);
+		});
+*/
+		$(".whead").live('click', function(){
+			block = $(this).parent().children(":eq(1)");
+			block.clearQueue;
+			block.stop();
+			block.slideToggle(1200);
 		});
 	},
 	guardar: function () {
