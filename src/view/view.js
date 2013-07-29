@@ -2165,7 +2165,7 @@ App.DictamenConsultaView = Em.View.extend({
 		this._super();
 
 		$(".whead").on('click', function(){
-			$(this).parent().children(":eq(1)").slideToggle(1200);
+			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
 	}
 });
@@ -2652,7 +2652,7 @@ App.DictamenCrearView = Ember.View.extend({
 		// 
 		
 		$(".whead").on('click', function(){
-			$(this).parent().children(":eq(1)").slideToggle(1200);
+			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
 		
 	},
