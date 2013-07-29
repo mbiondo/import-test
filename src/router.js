@@ -753,10 +753,13 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'DictamenConsulta');
 							appController.connectOutlet('menu', 'subMenu');
+
+							var copete = App.get('dictamenConsultaController.content.copete');
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 								{titulo: 'Dictamen', url: '#/comisiones/dictamenes/dictamenes'},
+								{titulo: copete.substr(0,1).toUpperCase() + copete.substr(1, 60).toLowerCase(), url: '#/comisiones/dictamenes/dictamen/'+App.get('dictamenConsultaController.content.id') +'/ver'},								
 							//	{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
 
