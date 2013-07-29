@@ -2167,11 +2167,10 @@ App.DictamenConsultaView = Em.View.extend({
 		$(".whead").live('click', function(){
 			block = $(this).parent().children(":eq(1)");
 			block.clearQueue;
-			block.stop();
+//			block.stop();
 			block.slideToggle(1200);
 		});
 	}
-
 });
 
 App.DictamenTextoView = Em.View.extend({
@@ -2662,7 +2661,7 @@ App.DictamenCrearView = Ember.View.extend({
 		$(".whead").live('click', function(){
 			block = $(this).parent().children(":eq(1)");
 			block.clearQueue;
-			block.stop();
+//			block.stop();
 			block.slideToggle(1200);
 		});
 	},
