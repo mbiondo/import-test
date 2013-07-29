@@ -759,7 +759,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 								{titulo: 'Dictamen', url: '#/comisiones/dictamenes/dictamenes'},
-								{titulo: copete.substr(0,1).toUpperCase() + copete.substr(1, 60).toLowerCase(), url: '#/comisiones/dictamenes/dictamen/'+App.get('dictamenConsultaController.content.id') +'/ver'},								
+								{titulo: copete.substr(0,1).toUpperCase() + copete.substr(1, 60).toLowerCase()+'...', url: '#/comisiones/dictamenes/dictamen/'+App.get('dictamenConsultaController.content.id') +'/ver'},								
 							//	{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
 
