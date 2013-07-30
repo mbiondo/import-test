@@ -282,6 +282,7 @@ App.CitacionTema = Em.Object.extend({
 	descripcion: '',
 	grupo: false,
 	estadoParte: '',
+	
 	toString: function () {
 		return this.get('descripcion');
 	},

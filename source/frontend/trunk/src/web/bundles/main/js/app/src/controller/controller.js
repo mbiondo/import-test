@@ -669,6 +669,17 @@ App.RestController = Em.ArrayController.extend({
 	}
 });
 
+App.ConfirmActionController = Ember.Object.extend({
+	success: false,
+	title: '',
+	message: '',
+	ok: 'Confirmar',
+	cancel: 'Cancelar',
+
+	show: function () {
+		App.ConfirmActionPopupView.popup();
+	},
+});
 
 App.UploaderController = Ember.Object.extend({
 	content: null,

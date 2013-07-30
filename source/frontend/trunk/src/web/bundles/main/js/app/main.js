@@ -414,6 +414,8 @@ App.crearParteController = App.CrearParteController.create();
 
 App.userController = App.UserController.create();
 
+App.confirmActionController = App.ConfirmActionController.create();
+
 //App.initialize();
 Storage.prototype.setObject = function(key, value) {
 	this.setItem(key, JSON.stringify(value));
