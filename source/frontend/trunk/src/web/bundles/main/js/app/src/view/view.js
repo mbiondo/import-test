@@ -2307,10 +2307,16 @@ App.ReunionConsultaView = Em.View.extend({
 		
 		var temas = this.get('citacion.temas');
 		var temasToRemove = [];
+		var orden = 1;
 		temas.forEach(function (tema) {
 			var proyectos = tema.get('proyectos');
 			if (proyectos.length == 0)
 				temasToRemove.addObject(tema);
+			else
+			{
+				tema.set('orden', orden);
+				orden++;
+			}
 		});
 		temas.removeObjects(temasToRemove);
 
