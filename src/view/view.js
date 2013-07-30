@@ -380,6 +380,27 @@ App.ListFilterWithSortView = App.ListFilterView.extend({
 
 
 
+App.ConfirmActionPopupView = App.ModalView.extend({
+	templateName: 'confirmar-accion-popup',
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			App.get('confirmActionController').set('success', true);
+		} else if (opts.secondary) {
+			//alert('cancel')
+			App.get('confirmActionController').set('success', false);
+		} else {
+			//alert('close')
+			App.get('confirmActionController').set('success', false);
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+	}, 
+});
+
 
 
 //DIPUTADOS ORADORES VIEW
@@ -2304,27 +2325,42 @@ App.ReunionConsultaView = Em.View.extend({
 	
 	
 	guardar: function () {
-		
-		var temas = this.get('citacion.temas');
-		var temasToRemove = [];
-		var orden = 1;
-		temas.forEach(function (tema) {
-			var proyectos = tema.get('proyectos');
-			if (proyectos.length == 0)
-				temasToRemove.addObject(tema);
-			else
-			{
-				tema.set('orden', orden);
-				orden++;
-			}
+		App.confirmActionController.setProperties({
+			title: 'Confirmar Temario',
+			message: '¿ Esta seguro que desea modificar el temario ?',
+			success: null,
 		});
-		temas.removeObjects(temasToRemove);
 
-		this.get('citacion').set('temas', temas);
-		this.get('citacion').save();
-		this.get('citacion').addObserver('saveSuccess', this, this.saveSuccess);	
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
 	},
 	
+
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
+		if (App.get('confirmActionController.success')) {
+			var temas = this.get('citacion.temas');
+			var temasToRemove = [];
+			var orden = 1;
+			temas.forEach(function (tema) {
+				var proyectos = tema.get('proyectos');
+				if (proyectos.length == 0)
+					temasToRemove.addObject(tema);
+				else
+				{
+					tema.set('orden', orden);
+					orden++;
+				}
+			});
+			temas.removeObjects(temasToRemove);
+
+			this.get('citacion').set('temas', temas);
+			this.get('citacion').save();
+			this.get('citacion').addObserver('saveSuccess', this, this.saveSuccess);				
+		}
+	},
+
 	saveSuccess: function () {
 		this.get('citacion').removeObserver('saveSuccess', this, this.saveSuccess);
 
@@ -2478,65 +2514,79 @@ App.CrearParteView = Ember.View.extend({
 	}.property('citacionConsultaController.content.temas'),
 	
 	guardarParte: function () {
-		var parte = [];
 
-		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
-			if (tema.get('parteEstado').id) {
-				var parteItem;
-				parteItem = Em.Object.create(tema.get('parteEstado'));
-				parteItem.id = null;
-				parteItem.set('itemParte', tema.get('parteEstado.id'));
-				parteItem.set('tipo', tema.get('parteEstado.tipo'));
-				parteItem.proyectos = [];
-
-				filtered = parte.filter(function (parteItem) {
-					return parteItem.itemParte == tema.get('parteEstado.id');
-				});
-				parteItem.orden = filtered.length + 1;
-
-				var orden = 0;
-				tema.get('proyectos').forEach(function (proyecto){
-					parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
-					orden++;
-				});					
-				/*if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
-					parteItem.caracterDespacho = App.CaracterDespacho.create({
-						tipo: 'CaracterDictamen',
-						id: 5,
-						descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
-						itemParte: 4,
-						resumen: "con modif. D. de Mayoría y D. de Minoría",
-						tipoDict: "OD",						
-					});
-				}*/
-				parte.addObject(parteItem);
-			}
+		App.confirmActionController.setProperties({
+			title: 'Confirmar Crear parte',
+			message: '¿ Esta seguro que desea crear el parte ?',
+			success: null,
 		});
 
-		App.set('reunionConsultaController.content.parte', parte);
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
 
-		fn = function () {
-			App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
-			if (App.get('reunionConsultaController.content.saveSuccess') == true)
-			{
-				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
+	},
 
-				if(App.get('reunionConsultaController.isEdit')){
-					$.jGrowl('Parte editado con éxito!', { life: 5000 });
-				}else{
-					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
+	confirmActionDone: function () {
+		if (App.get('confirmActionController.success')) {
+			var parte = [];
+
+			App.get('citacionConsultaController.content.temas').forEach(function(tema) {
+				if (tema.get('parteEstado').id) {
+					var parteItem;
+					parteItem = Em.Object.create(tema.get('parteEstado'));
+					parteItem.id = null;
+					parteItem.set('itemParte', tema.get('parteEstado.id'));
+					parteItem.set('tipo', tema.get('parteEstado.tipo'));
+					parteItem.proyectos = [];
+
+					filtered = parte.filter(function (parteItem) {
+						return parteItem.itemParte == tema.get('parteEstado.id');
+					});
+					parteItem.orden = filtered.length + 1;
+
+					var orden = 0;
+					tema.get('proyectos').forEach(function (proyecto){
+						parteItem.proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+						orden++;
+					});					
+					/*if (tema.get('dictamen') && tema.get('parteEstado').id == 4) {
+						parteItem.caracterDespacho = App.CaracterDespacho.create({
+							tipo: 'CaracterDictamen',
+							id: 5,
+							descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+							itemParte: 4,
+							resumen: "con modif. D. de Mayoría y D. de Minoría",
+							tipoDict: "OD",						
+						});
+					}*/
+					parte.addObject(parteItem);
 				}
+			});
 
+			App.set('reunionConsultaController.content.parte', parte);
+
+			fn = function () {
+				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
+				if (App.get('reunionConsultaController.content.saveSuccess') == true)
+				{
+					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
+
+					if(App.get('reunionConsultaController.isEdit')){
+						$.jGrowl('Parte editado con éxito!', { life: 5000 });
+					}else{
+						$.jGrowl('Parte creado con éxito!', { life: 5000 });					
+					}
+
+				}
+				else
+				{
+					$.jGrowl('No se pudo crear el parte!', { life: 5000 });
+				}
 			}
-			else
-			{
-				$.jGrowl('No se pudo crear el parte!', { life: 5000 });
-			}
+
+			App.get('reunionConsultaController.content').save();
+			App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
 		}
-
-		App.get('reunionConsultaController.content').save();
-		App.get('reunionConsultaController.content').addObserver('saveSuccess', this, fn);
-
 	},
 
 	didInsertElement: function () {
@@ -2662,51 +2712,67 @@ App.DictamenCrearView = Ember.View.extend({
 		});
 		
 	},
+
+
+
 	guardar: function () {
-		var dictamen = this.get('content');
-		var pv = [];
-		var orden = 1;
-
-		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
-
-		dictamen.get('proyectosVistos').forEach(function (proyecto){
-			pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
-			orden++;
+		App.confirmActionController.setProperties({
+			title: 'Cargar Dictamen',
+			message: '¿ Esta seguro que desea guardar el dictamen ?',
+			success: null,
 		});
 
-		orden = 1;
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
+	},
+	
 
-		dictamen.get('textos').forEach(function (texto){
-			texto.set('orden', orden);
-			orden++;
-		});
+	confirmActionDone: function () {
+		if (App.get('confirmActionController.success')) {
+			var dictamen = this.get('content');
+			var pv = [];
+			var orden = 1;
 
-		dictamen.caracterDespacho = App.CaracterDespacho.create({
-			tipo: 'CaracterDictamen',
-			id: 5,
-			descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
-			itemParte: 4,
-			resumen: "con modif. D. de Mayoría y D. de Minoría",
-			tipoDict: "OD",
-		});
+			$('#formCrearParteDictamen').parsley('destroy');
+			if(!$('#formCrearParteDictamen').parsley('validate')) return false;
 
-		dictamen.proyectosVistos = pv;	
+			dictamen.get('proyectosVistos').forEach(function (proyecto){
+				pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+				orden++;
+			});
 
-		var url = App.get('apiController.url') + "/par/evento";
+			orden = 1;
 
-		$.ajax({
-			url:  url,
-			contentType: 'text/plain',
-			type: 'POST',
-			context: this,
-			data : JSON.stringify(dictamen),
-			success: function( data ) 
-			{
-				App.get('router').transitionTo('comisiones.dictamenes.pendientes');
-			}
-		});		
+			dictamen.get('textos').forEach(function (texto){
+				texto.set('orden', orden);
+				orden++;
+			});
 
+			dictamen.caracterDespacho = App.CaracterDespacho.create({
+				tipo: 'CaracterDictamen',
+				id: 5,
+				descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+				itemParte: 4,
+				resumen: "con modif. D. de Mayoría y D. de Minoría",
+				tipoDict: "OD",
+			});
+
+			dictamen.proyectosVistos = pv;	
+
+			var url = App.get('apiController.url') + "/par/evento";
+
+			$.ajax({
+				url:  url,
+				contentType: 'text/plain',
+				type: 'POST',
+				context: this,
+				data : JSON.stringify(dictamen),
+				success: function( data ) 
+				{
+					App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+				}
+			});		
+		}
 	},
 });
 
