@@ -1004,8 +1004,8 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	loaded: false,
 
 	loadSucceeded: function(data){
-		var item, items = this.parse(data);		
-
+		var item, items = this.parse(data);
+		
 		this.set('content', []);
 
 		if(!data || !items){
