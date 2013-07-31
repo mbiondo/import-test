@@ -1469,6 +1469,10 @@ App.CitacionConsultaView = Em.View.extend({
 	crearReunion: function () {
 		App.CrearReunionView.popup();		
 	},	
+
+	exportar: function () {
+		$.download('exportar-citacion', "&data=" + JSON.stringify(App.citacionConsultaController.content));
+	},
 });
 
 App.CalendarTool = Em.View.extend({
@@ -2367,7 +2371,7 @@ App.ReunionConsultaView = Em.View.extend({
 		if (this.get('citacion.saveSuccess') == true)
 		{
 			App.get('router').transitionTo('index');
-			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', this.get('content'));
+			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 			$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
 		}			
 		else
@@ -2568,13 +2572,11 @@ App.CrearParteView = Ember.View.extend({
 				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
 				if (App.get('reunionConsultaController.content.saveSuccess') == true)
 				{
+					console.log(App.get('reunionConsultaController.content'));
+
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
-					if(App.get('reunionConsultaController.isEdit')){
-						$.jGrowl('Parte editado con éxito!', { life: 5000 });
-					}else{
-						$.jGrowl('Parte creado con éxito!', { life: 5000 });					
-					}
+					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
 
 				}
 				else
