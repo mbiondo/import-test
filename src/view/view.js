@@ -2379,7 +2379,6 @@ App.ReunionConsultaView = Em.View.extend({
 	
 	clickExpediente: function (expediente) {
 		if (!this.get('listaExpedientesSeleccionados').findProperty('id', expediente.get('id'))) {
-			console.log('chupala');
 			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
 			this.get('citacion.temas').addObject(tema);
 			tema.get('proyectos').addObject(expediente);
