@@ -2263,12 +2263,13 @@ App.ReunionConsultaView = Em.View.extend({
 		this.set('loaded', true);
 
 		citacion = this.get('citacion');
-		var temas = citacion.get('temas');
 		var temas = [];
 		_self = this;
 		citacion.get('temas').forEach(function (tema) {
-			var t = App.CitacionTema.create(tema);
+			var t = App.CitacionTema.create();
+			t.setProperties(tema);
 			temas.addObject(t);
+			//console.log(t);
 			t.set('proyectos', mapObjectsInArrays(_self.get('expedientes'), t.get('proyectos')));
 			var proyectos = t.get('proyectos');
 			proyectos.forEach(function (proyecto) {
@@ -2277,6 +2278,7 @@ App.ReunionConsultaView = Em.View.extend({
 				}
 			});									
 		});
+
 		citacion.set('temas', temas);
 	},
 
@@ -2367,12 +2369,18 @@ App.ReunionConsultaView = Em.View.extend({
 
 	saveSuccess: function () {
 		this.get('citacion').removeObserver('saveSuccess', this, this.saveSuccess);
-
 		if (this.get('citacion.saveSuccess') == true)
 		{
-			App.get('router').transitionTo('index');
-			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-			$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
+			fn = function() {
+				//console.log('pepe');
+				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
+				App.get('router').transitionTo('index');
+				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
+				$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
+			}			
+			App.set('reunionConsultaController.loaded', false);			
+			App.get('reunionConsultaController').addObserver('loaded', this, fn);
+			App.get('reunionConsultaController').load();			
 		}			
 		else
 		{
@@ -2441,18 +2449,20 @@ App.ReunionConsultaView = Em.View.extend({
 			}			
 			
 			expediente.set('seleccionado', false);
-			expediente.set('tema', this.get('temaSeleccionado').get('descripcion'));
+			expediente.set('tema', _self.get('temaSeleccionado').get('descripcion'));
 			
-			this.get('temaSeleccionado.proyectos').addObject(expediente);
+			_self.get('temaSeleccionado.proyectos').addObject(expediente);
 		}, this);
+		this.set('seleccionados', false);
 	},
 	
 	listaTemas: function () {
 		var temas = [];
-		if (this.get('citacion'))
+		if (this.get('citacion')) {
 			temas = this.get('citacion.temas').filterProperty('grupo', true);
+		}
 		return temas;
-	}.property('citacion.temas', 'adding'),
+	}.property('citacion.temas.@each', 'adding'),
 	
 	listaExpedientesSeleccionados: function () {
 		var expedientesSeleccionados = [];
@@ -2469,22 +2479,6 @@ App.ReunionConsultaView = Em.View.extend({
 		return expedientesSeleccionados;
 	}.property('citacion.temas', 'citacion.temas.@each.proyectos', 'adding'),
 	
-	borrarExpedientes: function () {
-
-		App.set('citacionCrearController.content.temas', []);
-		App.set('citacionCrearController.expedientes', []);
-
-		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
-		if (fo)
-		{
-			App.get('citacionCrearController').addObserver('loaded', this, this.cargarExpedientesSuccess);
-			App.get('citacionCrearController').cargarExpedientes();
-		}
-
-		fo = null;
-		
-	},
-
 	crearParte: function () {
 		App.eventosParteController = App.EventosParteController.create();
 
@@ -2503,7 +2497,7 @@ App.ReunionConsultaView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		var citacion = App.Citacion.extend(App.Savable).create(App.get('citacionConsultaController.content'));
+		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
 		this.set('citacion', citacion);
 	},
 });
@@ -2572,7 +2566,7 @@ App.CrearParteView = Ember.View.extend({
 				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
 				if (App.get('reunionConsultaController.content.saveSuccess') == true)
 				{
-					console.log(App.get('reunionConsultaController.content'));
+					//console.log(App.get('reunionConsultaController.content'));
 
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
@@ -2808,7 +2802,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 	addFirmante: function () {
 		var item = App.FirmanteTextoDictamen.create(Ember.copy(this.get('firmanteSeleccionado')));
-		console.log(item);
+		//console.log(item);
 		this.get('content.firmantes').pushObject(item);
 		item.set('seleccionado', true);
 		this.set('firmanteSeleccionado', null);
@@ -3522,7 +3516,7 @@ App.CrearSesionView = App.ModalView.extend({
 
 				this.$('form').parsley('validate');
 				if (!this.$('form').parsley('isValid')){
-					console.log('validando..');
+					//console.log('validando..');
 					return false;
 				}
 
