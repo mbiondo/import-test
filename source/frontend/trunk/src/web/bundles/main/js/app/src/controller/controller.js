@@ -1638,7 +1638,7 @@ App.OrdenesDelDiaController = App.RestController.extend({
 	type: App.OrdeDelDia,
 	useApi: true,
 
-	sortProperties: ['numero', 'fechaImpresion'],
+	sortProperties: ['fechaImpresion', 'numero'],
 	sortAscending: false,
 
 	init : function () {
