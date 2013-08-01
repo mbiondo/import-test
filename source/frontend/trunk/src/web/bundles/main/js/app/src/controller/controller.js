@@ -994,7 +994,6 @@ App.NotificacionTiposController = App.RestController.extend({
 	},
 })
 
-
 App.ExpedientesArchivablesController = App.RestController.extend({
     url: '/exp/proyectos/archivables',
 	type: App.ExpedienteArchivable,
@@ -1606,7 +1605,6 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 	},	
 });
 
-
 App.DictamenesController = App.RestController.extend({
 	url: '/dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
@@ -1639,7 +1637,10 @@ App.OrdenesDelDiaController = App.RestController.extend({
 	url: '/dic/ods/vigentes/130',
 	type: App.OrdeDelDia,
 	useApi: true,
-	
+
+	sortProperties: ['numero', 'fechaImpresion'],
+	sortAscending: false,
+
 	init : function () {
 		this._super();
 	},
