@@ -71,6 +71,26 @@ App.Funcion = Em.Object.extend({
 	}.property('nombre'),	
 });
 
+
+App.Audit = Em.Object.extend({
+	url: '/audit',
+	id: '',
+	usuario: '',
+	accion: '',
+	objeto: '',
+	objetoId: '',
+	fecha: '',
+
+	serializable: [
+	    'id',
+	    'usuario',
+	    'accion',
+	    'objeto',
+	    'objetoId',
+	    'fecha'
+	],
+});
+
 App.Rol = Em.Object.extend({
 	url: '/user/rol',
 	id: '',
@@ -231,6 +251,7 @@ App.Citacion = Em.Object.extend({
 	sala: '',	
 	allDay: false,
 	fecha:'',
+	auditable: true,
 	
 	serializable : [
 		'id',
@@ -243,13 +264,6 @@ App.Citacion = Em.Object.extend({
 		'estado',
 		'sala'
 	],
-	
-	saveSucceeded: function (data) {
-		if (data.responseText)
-		{
-			App.get('router').transitionTo('citaciones');
-		}
-	},	
 
 	label: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('title') + this.get('sala.numero') + this.get('observaciones') + this.get('estado.descripcion');
