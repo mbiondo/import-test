@@ -27,7 +27,22 @@ App.Savable = Ember.Mixin.create({
 				console.log('A VER!!')
 				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson());
 			}
-		}		
+		}
+
+		if (this.get('createSuccess') == true) 
+		{
+			if (this.get('auditable')) 
+			{
+				var notification = App.Notificacion.extend(App.Savable).create();
+				audit.set('tipo', 'Test');
+				audit.set('accion', 'Creado');
+				audit.set('usuario', App.get('userController.user.cuil'));
+				audit.set('objeto', this.constructor.toString());
+				audit.set('objectoId', this.get('id'));
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.create();				
+			}			
+		}	
 		
 	},
 
@@ -116,6 +131,21 @@ App.Savable = Ember.Mixin.create({
 				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson());
 			}
 		}		
+
+		if (this.get('saveSuccess') == true) 
+		{
+			if (this.get('auditable')) 
+			{
+				var notification = App.Notificacion.extend(App.Savable).create();
+				audit.set('tipo', 'Test');
+				audit.set('accion', 'Modificado');
+				audit.set('usuario', App.get('userController.user.cuil'));
+				audit.set('objeto', this.constructor.toString());
+				audit.set('objectoId', this.get('id'));
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.create();				
+			}
+		}			
 	},
 	
 	saveCompleted: function(xhr){
