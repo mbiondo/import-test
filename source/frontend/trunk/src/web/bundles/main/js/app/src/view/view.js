@@ -1471,7 +1471,7 @@ App.CitacionConsultaView = Em.View.extend({
 	},	
 
 	exportar: function () {
-		$.download('exportar-citacion', "&data=" + JSON.stringify(App.citacionConsultaController.content));
+		$.download('exportar/citacion', "&type=citacion&data=" + JSON.stringify(App.citacionConsultaController.content));
 	},
 });
 
@@ -2144,7 +2144,8 @@ App.SinReunionesListView = App.ListFilterView.extend({
 
 App.ReunionesSinParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
-	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+//	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+	columnas: ['Fecha', 'Comisiones convocadas'],
 });
 
 App.ReunionesSinParteView = Em.View.extend({
@@ -2153,7 +2154,8 @@ App.ReunionesSinParteView = Em.View.extend({
 
 App.ReunionesConParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
-	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+//	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+	columnas: ['Fecha', 'Comisiones convocadas'],
 });
 
 App.ReunionesConParteView = App.ListFilterView.extend({
