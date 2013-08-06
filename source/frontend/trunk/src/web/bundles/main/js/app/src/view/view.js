@@ -2194,7 +2194,10 @@ App.DictamenConsultaView = Em.View.extend({
 		$(".whead").on('click', function(){
 			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
-	}
+	},
+	exportar: function(){
+		$.download('exportar/dictamen', "&type=dictamen&data=" + JSON.stringify(App.dictamenConsultaController.content));
+	},
 });
 
 App.DictamenTextoView = Em.View.extend({
