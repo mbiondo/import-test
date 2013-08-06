@@ -1447,6 +1447,24 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeCrearReunion: false,
 	puedeEditar: false,
 
+	hasPermission: function () {
+		var comisiones = App.get('citacionConsultaController.content.comisiones');
+		if (comisiones.length > 1) {
+			if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES'))
+				return true;
+			else
+				return false;
+		} else {
+			if (comisiones.length == 1) {
+				if (App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') || App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES'))
+					return true;
+				else
+					return false;
+			}
+		}
+		return true;
+	}.property('citacionConsultaController.content.id'),	
+
 	didInsertElement: function(){
 		this._super();
 		if((App.citacionConsultaController.content.estado.id == 2) 
@@ -1454,17 +1472,19 @@ App.CitacionConsultaView = Em.View.extend({
 			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
 			this.set('puedeCrearReunion', true);
 
-		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeConfirmar', true);
-		if(App.citacionConsultaController.content.estado.id != 3) 	this.set('puedeCancelar', true);	
+		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
+		if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
 	},
 
 	confirmar: function () {
-		App.ComfirmarCitacionView.popup();
+		if (this.get('hasPermission'))
+			App.ComfirmarCitacionView.popup();
 	},
 		
 	cancelar: function () {
-		App.CancelarCitacionView.popup();
+		if (this.get('hasPermission'))
+			App.CancelarCitacionView.popup();
 	},
 	crearReunion: function () {
 		App.CrearReunionView.popup();		
@@ -1709,7 +1729,7 @@ App.CitacionCrearView = Em.View.extend({
 		
 		if (App.get('citacionCrearController.isEdit') == true) return;
 
-		if (App.get('citacionCrearController.content.comisiones.length') > 0 && !App.get('userController').hasRole('ROL_DIRECTOR_COMISIONES')) return;	
+		//if (App.get('citacionCrearController.content.comisiones.length') > 0 && !App.get('userController').hasRole('ROL_DIRECTOR_COMISIONES')) return;	
 
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
         if (!item) {
@@ -2176,6 +2196,10 @@ App.DictamenesPendientesView = Em.View.extend({
 App.DictamenPendienteView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'dictamen-pendiente-item',
+
+	puedeCargar: function () {
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user')
 });
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
@@ -2238,10 +2262,14 @@ App.ReunionConsultaView = Em.View.extend({
 	citacion: null,
 	isEdit: false,
 
+	puedeCrearParte: function () {
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')
+	}.property('App.userController.user'),
 
 	exportar: function(){
 		$.download('exportar/reunion', "&type=reunion&data=" + JSON.stringify(App.reunionConsultaController.content)+"&data2=" + JSON.stringify(App.citacionConsultaController.content));
 	},
+
 	crearTemaHabilitado: function () {
 		return this.get('tituloNuevoTema') != '';
 	}.property('tituloNuevoTema'),
@@ -2512,6 +2540,7 @@ App.ReunionConsultaView = Em.View.extend({
 
 App.CrearParteView = Ember.View.extend({
 	templateName: 'crear-parte',
+	nota: '',
 	expedientes: [],
 
 	listaTemas: function () {
@@ -2519,6 +2548,8 @@ App.CrearParteView = Ember.View.extend({
 	}.property('citacionConsultaController.content.temas'),
 	
 	guardarParte: function () {
+		$('#formCrearParte').parsley('destroy');
+		if(!$('#formCrearParte').parsley('validate')) return false;
 
 		App.confirmActionController.setProperties({
 			title: 'Confirmar Crear parte',
@@ -2569,6 +2600,7 @@ App.CrearParteView = Ember.View.extend({
 			});
 
 			App.set('reunionConsultaController.content.parte', parte);
+			App.set('reunionConsultaController.content.nota', this.get('nota'));
 
 			fn = function () {
 				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
@@ -2684,7 +2716,8 @@ App.DictamenCrearView = Ember.View.extend({
 			filtered = App.get('expedientesArchivablesController.content');
 		}
 
-		return filtered.slice(0, 10);
+//		return filtered.slice(0, 10);
+		return filtered;
 	}.property('content', 'filterExpedientes'),
 
 	listaProyectosVistos: function () {
@@ -2719,6 +2752,9 @@ App.DictamenCrearView = Ember.View.extend({
 
 
 	guardar: function () {
+		$('#formCrearParteDictamen').parsley('destroy');
+		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
+
 		App.confirmActionController.setProperties({
 			title: 'Cargar Dictamen',
 			message: '¿ Esta seguro que desea guardar el dictamen ?',
@@ -2736,8 +2772,6 @@ App.DictamenCrearView = Ember.View.extend({
 			var pv = [];
 			var orden = 1;
 
-			$('#formCrearParteDictamen').parsley('destroy');
-			if(!$('#formCrearParteDictamen').parsley('validate')) return false;
 
 			dictamen.get('proyectosVistos').forEach(function (proyecto){
 				pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
