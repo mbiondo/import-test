@@ -1221,7 +1221,10 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
         
   	isExpanded: false,
         isPendiente: false,
-
+	
+	exportar: function () {
+		$.download('exportar/envio', "&type=envio&data=" + JSON.stringify(App.envioArchivoConsultaController.content));
+	},
 	toggleBotonConfirmar: function() {
             this.set('isExpanded', !this.get('isExpanded'));
             this.$("#confirmarBotonDiv").slideToggle();
