@@ -771,11 +771,15 @@ App.Router =  Em.Router.extend({
 						route: '/:dictamen/cargar',
 						deserialize: function(router, params) {
 
+						 	console.log(params);			
+
 							if (!App.get('dictamenController'))
-								App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.dictamen})});
+//								App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.dictamen})});
+								App.dictamenController = App.DictamenController.create();
+								App.get('dictamenController').set('content', App.Dictamen.create({id: params.dictamen}));
 
 							//if (!App.get('dictamenesPendientesController'))
-						 	//	App.dictamenesPendientesController = App.DictamenesPendientesController.create();							
+						 	//	App.dictamenesPendientesController = App.DictamenesPendientesController.create();	
 
 							if (!App.get('expedientesArchivablesController'))
 						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
@@ -933,13 +937,15 @@ App.Router =  Em.Router.extend({
 						 var deferred = $.Deferred(),
 						
 						 fn = function() {
-							 App.get('reunionesConParteController').removeObserver('loaded', this, fn);	
+							App.get('reunionesConParteController').removeObserver('loaded', this, fn);	
+
+
 							deferred.resolve(null);					
 						 };
 
 						 App.get('reunionesConParteController').addObserver('loaded', this, fn);
 						 App.get('reunionesConParteController').load();
-						
+
 						 return deferred.promise();
 					},
 					
