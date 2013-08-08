@@ -340,6 +340,19 @@ App.ListFilterView = Ember.View.extend({
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
 	
+	didInsertElement: function(){
+		this._super();
+		/*
+		// comentado por si después se quiere hacer scroll automatico
+		var _self = this;
+		$(window).scroll(function(){
+			if($(window).scrollTop() == $(document).height() - $(window).height()){
+				_self.set('totalRecords', _self.get('totalRecords') + _self.get('step'));
+		    }
+		 });
+		*/
+		
+	},
 	mostrarMas: function () {
 		this.set('totalRecords', this.get('totalRecords') + this.get('step'));
 	},
@@ -350,8 +363,6 @@ App.ListFilterView = Ember.View.extend({
 			return regex.test(item.get('label').toLowerCase());
 		});
 
-//		console.log(filtered);
-
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
@@ -359,8 +370,17 @@ App.ListFilterView = Ember.View.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
+
 		return filtered.slice(0, this.get('totalRecords'));
 	}.property('filterText', 'content', 'totalRecords', 'step'),
+	
+	updateScroll: function () {
+
+//		Ember.run.next(this, function () {
+		  	$(document).scrollTop($(document).height());
+//		});
+
+	}.observes('lista'),
 
 	totalRecords: 10,
 });
