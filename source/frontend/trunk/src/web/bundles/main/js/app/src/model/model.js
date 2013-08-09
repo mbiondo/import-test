@@ -162,7 +162,7 @@ App.ExpedienteBase = Em.Object.extend({
 		return "";
 	}.property('titulo'),
 });
-
+/*
 App.ExpedienteArchivable = Em.Object.extend({
 	sortValue: '',
 	
@@ -170,7 +170,7 @@ App.ExpedienteArchivable = Em.Object.extend({
 		return this.get('titulo') + this.get('expdip');
 	}.property('titulo'),
 });
-
+*/
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	
@@ -377,16 +377,24 @@ App.Dictamen = Em.Object.extend({
 		var st = "";
 		this.get('proyectos').forEach(function (proyecto) {
 //			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
-
 			st += "<div class='fluid'>";
 			st += "<div class='grid2'>"+proyecto.proyecto.expdip+"</div>";
 			st += "<div class='grid10'>"+proyecto.proyecto.titulo+"</div>";
 			st += "<div class='clear'></div>";
 			st += "</div>";
-
 		})
 		return st.htmlSafe();
-	}.property('proyectos'),  
+	}.property('proyectos'),
+	comisionesLabel: function () {
+		var st = "";
+		this.get('comisiones').forEach(function (comision) {
+			st += "<div class='fluid'>";
+			st += "<div class='grid12'>"+comision.comision.nombre+"</div>";
+			st += "<div class='clear'></div>";
+			st += "</div>";
+		})
+		return st.htmlSafe();
+	}.property('comisiones')
 });
 
 
