@@ -2411,9 +2411,9 @@ App.ReunionConsultaView = Em.View.extend({
 			var temas = this.get('citacion.temas');
 			var temasToRemove = [];
 			var orden = 1;
-			temas.forEach(function (tema) {
+			temas.forEach(function(tema){
 				var proyectos = tema.get('proyectos');
-				if (proyectos.length == 0)
+				if(proyectos.length == 0)
 					temasToRemove.addObject(tema);
 				else
 				{
@@ -2421,6 +2421,7 @@ App.ReunionConsultaView = Em.View.extend({
 					orden++;
 				}
 			});
+
 			temas.removeObjects(temasToRemove);
 
 			this.get('citacion').set('temas', temas);
@@ -2434,6 +2435,7 @@ App.ReunionConsultaView = Em.View.extend({
 		if (this.get('citacion.saveSuccess') == true)
 		{
 			fn = function() {
+				App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
