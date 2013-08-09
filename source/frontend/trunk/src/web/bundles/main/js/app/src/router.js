@@ -813,6 +813,7 @@ App.Router =  Em.Router.extend({
 							}
 
 							cargarDictamenSuccess = function () {
+								//if (App.get('dictamenController.loaded')) {
 								if (App.get('dictamenController.loaded') && App.get('expedientesArchivablesController.loaded')) {
 									var dictamen = App.get('dictamenController.content');
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
