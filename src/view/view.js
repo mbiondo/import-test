@@ -354,31 +354,35 @@ App.ListFilterView = Ember.View.extend({
 		
 	},
 	mostrarMas: function () {
+		this.set('scroll', $(document).scrollTop());
 		this.set('totalRecords', this.get('totalRecords') + this.get('step'));
 	},
 	
-	lista: function (){
+	contenidoLista: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = this.get('content').filter(function(item){
 			return regex.test(item.get('label').toLowerCase());
 		});
-
+		
+		return filtered;
+	}.property('filterText', 'content'),
+	
+	lista: function (){
 		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
-			max = filtered.length;
+		if (this.get('contenidoLista').length <= max) {
+			max = this.get('contenidoLista').length;
 			this.set('mostrarMasEnabled', false);
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
-
-		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords', 'step'),
+		return this.get('contenidoLista').slice(0, this.get('totalRecords'));
+	}.property('totalRecords', 'step'),
 	
 	updateScroll: function () {
+		_self = this;
 		Ember.run.next(this, function () {
-		  	$(document).scrollTop($(document).height());
+		 	$(document).scrollTop(_self.get('scroll'));
 		});
-
 	}.observes('lista'),
 
 	totalRecords: 10,
@@ -2839,7 +2843,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	filterFirmantes: '',
 	adding: false,
 	firmanteSeleccionado: null,
-	disicencias: [{id: 1, titulo: "Sin dicedencias"}, {titulo: "Dicidencia Parcial", id: 2}, {titulo: "Dicidencia total", id: 3}],
+	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
 
 	clickFirmante: function (firmante) {
 		this.set('firmanteSeleccionado', null);

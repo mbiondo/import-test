@@ -398,13 +398,13 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 	disidenciaLabel: function () {
 		switch (this.get('disidencia')) {
 			case "1":
-				return "Sin dicidencias";
+				return "Sin disidencias";
 				break;
 			case "2":
-				return "Dicidencia parcial";
+				return "Disidencia parcial";
 				break;
 			case "3":
-				return "Dicidencia completa";
+				return "Disidencia completa";
 				break;
 			default:
 				return "";
@@ -490,6 +490,7 @@ App.Reunion = Em.Object.extend({
 		'comisiones', 
 		'fecha', 
 		'parte',
+		'art108',
 	],	
 
 	label: function () {
