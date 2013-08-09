@@ -725,7 +725,7 @@ App.DictamenesView = Em.View.extend({
 
 App.DictamenesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenView, 	
-	columnas: ['Fecha', 'Sumario', 'Ver Dictamen'],
+	columnas: ['Fecha', 'Sumario', 'Comisiones', 'Ver Dictamen'],
 });
 
 App.DictamenSinODItemView = Ember.View.extend({
@@ -2230,7 +2230,7 @@ App.DictamenPendienteView = Ember.View.extend({
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	
-	columnas: ['Fecha Reunion','Proyectos', 'Cargar Dictamen'],
+	columnas: ['Fecha Reunion','Proyectos', 'Comisiones', 'Cargar Dictamen'],
 });
 
 App.DictamenConsultaView = Em.View.extend({
@@ -2253,9 +2253,12 @@ App.DictamenConsultaView = Em.View.extend({
 App.DictamenTextoView = Em.View.extend({
 	templateName: 'dictamen-texto',
 	disicencias: false,
+	nombreArchivo: null,
 
 	didInsertElement: function(){
 		this._super();
+		url = this.get('content.url');
+		this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
 	}
 });
 App.DictamenFirmantesView = Em.View.extend({
