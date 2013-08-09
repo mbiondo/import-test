@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -375,10 +375,9 @@ App.ListFilterView = Ember.View.extend({
 	}.property('filterText', 'content', 'totalRecords', 'step'),
 	
 	updateScroll: function () {
-
-//		Ember.run.next(this, function () {
+		Ember.run.next(this, function () {
 		  	$(document).scrollTop($(document).height());
-//		});
+		});
 
 	}.observes('lista'),
 
@@ -2431,7 +2430,6 @@ App.ReunionConsultaView = Em.View.extend({
 		if (this.get('citacion.saveSuccess') == true)
 		{
 			fn = function() {
-				//console.log('pepe');
 				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
