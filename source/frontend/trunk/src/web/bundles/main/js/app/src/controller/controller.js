@@ -1750,9 +1750,32 @@ App.ReunionesSinParteController = App.RestController.extend({
 		
 		this.addObject(item);	
 	},	
+	
+	reuniones: function () {
+		var reuniones = [];
+		if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
+			reuniones = this.get('content');
+		} else {
+			
+			var comsiones = App.get('userController.user.comisiones');
+
+			this.get('arrangedContent').forEach(function (reunion) {
+				comsiones.forEach(function (comision) {
+					reunion.get('citacion.comisiones').forEach(function (c) {
+						if (c.id == comision.id) {
+							reuniones.pushObject(reunion);
+							return true;
+						}
+						return false;
+					});
+				});
+			});
+		}
+		return reuniones;
+	}.property('content'),	
 });
 
-App.ReunionesConParteController = App.RestController.extend({
+App.ReunionesConParteController = App.ReunionesSinParteController.extend({
 	url: '/com/reun/cp/' /* + moment().format('DD/MM/YYYY')*/,
 	type: App.Reunion,
 	useApi: true,
