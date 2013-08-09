@@ -2847,41 +2847,82 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen-texto',
 	filterFirmantes: '',
 	adding: false,
-	firmanteSeleccionado: null,
+	firmanteTipo: "1",
+	
 	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
 
 	clickFirmante: function (firmante) {
-		this.set('firmanteSeleccionado', null);
+		//this.set('firmanteSeleccionado', null);
+		if (!this.get('firmantesSeleccionados'))
+			this.set('firmantesSeleccionados', []);
 
-		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 	    _self = this;
-
+		
+		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
+		var pseudoItem = this.get('firmantesSeleccionados').findProperty("diputado.id", firmante.get('diputado.id'));
 		Ember.run.next(function () {
-	        if (!item) {
-	        	_self.set('firmanteSeleccionado', firmante);
-
-	        	Ember.run.next(function () {
-	        		_self.$("input:radio").uniform();
-	        	});
-			}
-			else {
-				_self.get('content.firmantes').removeObject(item);
-				_self.set('adding', !_self.get('adding'));	
+			if (item) {
+				App.get('firmantesController.content').addObject(item);
 				item.set('seleccionado', false);
+				_self.get('content.firmantes').removeObject(item);
+				this.set('adding', !this.get('adding'));
+			} else {
+				if (!pseudoItem) {
+					_self.get('firmantesSeleccionados').pushObject(firmante);
+					if (_self.get('firmantesSeleccionados').length == 1) {
+						Ember.run.next(function () {
+							_self.$("input:radio").uniform();
+						});
+					}
+				}
+				else {
+					_self.get('firmantesSeleccionados').removeObject(pseudoItem);
+				}
 			}
+			
 		});
 	},
 
+	
+	fsd: function () {
+		if (this.get('content.firmantes').length > 0)
+			return this.get('content.firmantes').filterProperty('disidencia', "1").length;
+		else
+			return 0;
+	}.property('content.firmantes.length'),
+	
+	fcdp: function () {
+		if (this.get('content.firmantes').length > 0)
+			return this.get('content.firmantes').filterProperty('disidencia', "2").length;
+		else
+			return 0;
+	}.property('content.firmantes.length'),	
+	
+	fcdt: function () {
+		if (this.get('content.firmantes').length > 0)
+			return this.get('content.firmantes').filterProperty('disidencia', "3").length;
+		else
+			return 0;
+	}.property('content.firmantes.length'),		
+	
+	fs: function () {
+		if (!this.get('firmantesSeleccionados'))
+			return false;
+		return this.get('firmantesSeleccionados').length > 0;
+	}.property('firmantesSeleccionados.length'),
+	
 	addFirmante: function () {
-		var item = App.FirmanteTextoDictamen.create(Ember.copy(this.get('firmanteSeleccionado')));
-		//console.log(item);
-		this.get('content.firmantes').pushObject(item);
-		item.set('seleccionado', true);
-		this.set('firmanteSeleccionado', null);
+		_self = this;
+		this.get('firmantesSeleccionados').forEach(function (firmante) {
+			var item = firmante;
+			item.set('disidencia', _self.get('firmanteTipo'));
+			_self.get('content.firmantes').pushObject(item);
+			item.set('seleccionado', true);
+			App.get('firmantesController.content').removeObject(item);
+		});
+		this.set('firmantesSeleccionados', []);
 		this.set('adding', !this.get('adding'));
 	},
-
-
 
 	listaFirmantes: function () {
 		var filtered;
@@ -2907,7 +2948,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		}
 		else
 			return filtered;
-	}.property('filterFirmantes', 'content.firmantes', 'adding'),
+	}.property('filterFirmantes', 'content.firmantes', 'adding', 'App.firmantesController.content.@each'),
 
 	willInsertElement: function(){
 		$(".widget-dictamen-texto > .wbody").slideUp(900);
