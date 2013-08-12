@@ -2442,7 +2442,7 @@ App.ReunionConsultaView = Em.View.extend({
 				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-				$.jGrowl('Reunion editada con éxito!', { life: 5000 });								
+				$.jGrowl('Temario editado exitosamente!', { life: 5000 });								
 			}			
 			App.set('reunionConsultaController.loaded', false);			
 			App.get('reunionConsultaController').addObserver('loaded', this, fn);
@@ -2712,6 +2712,8 @@ App.DictamenCrearView = Ember.View.extend({
 	filterExpedientes: '',
 	filterProyectosVistos: '',
 	adding: false,
+	faltanFirmantes: false,
+	guardar: false,
 
 	agregarTexto: function () {
 		var texto = App.DictamenTexto.create({firmantes: []});
@@ -2782,6 +2784,24 @@ App.DictamenCrearView = Ember.View.extend({
 
 
 	guardar: function () {
+		this.set('guardar', true);
+/*
+		App.get('dictamenController.content.textos').forEach(function(item){
+			if(item.firmantes.length > 0)
+				this.set('faltanFirmantes', true);
+			else
+				this.set('faltanFirmantes', false);
+
+		});
+*/
+//			console.log(this.get('faltanFirmantes'));
+/*
+		if(App.get('dictamenController.content.textos.firstObject.firmantes').length > 0)
+			this.set('existFirmantes', true);
+		else
+			this.set('existFirmantes', false);			
+*/
+
 		$('#formCrearParteDictamen').parsley('destroy');
 		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
 
