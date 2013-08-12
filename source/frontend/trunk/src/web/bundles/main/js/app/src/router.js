@@ -770,9 +770,6 @@ App.Router =  Em.Router.extend({
 					cargar: Ember.Route.extend({
 						route: '/:dictamen/cargar',
 						deserialize: function(router, params) {
-
-						 	console.log(params);			
-
 							if (!App.get('dictamenController'))
 //								App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.dictamen})});
 								App.dictamenController = App.DictamenController.create();
