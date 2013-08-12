@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -2191,7 +2191,7 @@ App.SinReunionesListView = App.ListFilterView.extend({
 App.ReunionesSinParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['Fecha', 'Temas','Comisiones convocadas'],
+	columnas: ['Fecha', 'Nota', 'Temas','Comisiones convocadas'],
 });
 
 App.ReunionesSinParteView = Em.View.extend({
@@ -2201,7 +2201,7 @@ App.ReunionesSinParteView = Em.View.extend({
 App.ReunionesConParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['Fecha', 'Temas', 'Comisiones convocadas'],
+	columnas: ['Fecha', 'Nota', 'Temas','Comisiones convocadas'],
 });
 
 App.ReunionesConParteView = App.ListFilterView.extend({
