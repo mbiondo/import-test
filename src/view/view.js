@@ -725,7 +725,7 @@ App.DictamenesView = Em.View.extend({
 
 App.DictamenesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenView, 	
-	columnas: ['Fecha', 'Sumario', 'Comisiones', 'Ver Dictamen'],
+	columnas: ['Fecha', 'Sumario', 'Comisiones convocadas', 'Ver Dictamen'],
 });
 
 App.DictamenSinODItemView = Ember.View.extend({
@@ -884,7 +884,7 @@ App.NotificacionTipoItemView = Em.View.extend({
 
 App.NotificacionTipoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.NotificacionTipoItemView, 	
-	columnas: ['ID', 'Nombre','Titulo', 'icono', 'Roles', 'Estructuras', 'Funciones', 'Comisiones'],
+	columnas: ['ID', 'Nombre','Titulo', 'icono', 'Roles', 'Estructuras', 'Funciones', 'Comisiones convocadas'],
 });
 
 
@@ -979,7 +979,7 @@ App.ItemComisionableComisionView = Em.View.extend({
 
 App.ComisionableListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ItemComisionableView, 	
-	columnas: ['ID', 'Label','Comisiones', 'Acciones'],
+	columnas: ['ID', 'Label','Comisiones convocadas', 'Acciones'],
 });
 
 
@@ -1034,7 +1034,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
-		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
+		App.SortableColumn.create({nombre: 'Comisiones convocadas', campo: 'girosLabel'}),
 	],	
 
 	filterFirmantes: '',
@@ -2230,7 +2230,7 @@ App.DictamenPendienteView = Ember.View.extend({
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	
-	columnas: ['Fecha Reunion','Proyectos', 'Comisiones', 'Cargar Dictamen'],
+	columnas: ['Fecha Reunion','Proyectos', 'Comisiones convocadas', 'Cargar Dictamen'],
 });
 
 App.DictamenConsultaView = Em.View.extend({
