@@ -162,7 +162,7 @@ App.ExpedienteBase = Em.Object.extend({
 		return "";
 	}.property('titulo'),
 });
-/*
+
 App.ExpedienteArchivable = Em.Object.extend({
 	sortValue: '',
 	
@@ -170,7 +170,7 @@ App.ExpedienteArchivable = Em.Object.extend({
 		return this.get('titulo') + this.get('expdip');
 	}.property('titulo'),
 });
-*/
+
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	
