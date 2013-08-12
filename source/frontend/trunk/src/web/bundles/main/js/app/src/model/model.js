@@ -388,10 +388,7 @@ App.Dictamen = Em.Object.extend({
 	comisionesLabel: function () {
 		var st = "";
 		this.get('comisiones').forEach(function (comision) {
-			st += "<div class='fluid'>";
-			st += "<div class='grid12'>"+comision.comision.nombre+"</div>";
-			st += "<div class='clear'></div>";
-			st += "</div>";
+			st += "<li>"+comision.comision.nombre+"</li>";
 		})
 		return st.htmlSafe();
 	}.property('comisiones')
