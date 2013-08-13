@@ -905,7 +905,6 @@ App.Router =  Em.Router.extend({
 						 var deferred = $.Deferred(),
 						
 						 fn = function() {
-							App.get('reunionesConParteController').set('content', null);	
 							 App.get('reunionesSinParteController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);					
 						 };
@@ -936,7 +935,6 @@ App.Router =  Em.Router.extend({
 						 var deferred = $.Deferred(),
 						
 						 fn = function() {
-							App.get('reunionesSinParteController').set('content', null);	
 							App.get('reunionesConParteController').removeObserver('loaded', this, fn);	
 
 							deferred.resolve(null);					
