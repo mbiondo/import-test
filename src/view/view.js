@@ -2258,21 +2258,19 @@ App.DictamenTextoView = Em.View.extend({
 	didInsertElement: function(){
 		this._super();
 		url = this.get('content.url');
-		this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
+		if(url)
+			this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
 	}
 });
 App.DictamenFirmantesView = Em.View.extend({
 	templateName: 'dictamen-firmantes',
-	disidenciaTipo1: false,
-	disidenciaTipo2o3: false,
+	disidenciaTipo: null,
 
 	didInsertElement: function(){
 		this._super();
 
 		if(this.get('content').disidencia == 1) 
-			this.set('disidenciaTipo1', true);
-		if(this.get('content').disidencia == 2 || this.get('content').disidencia == 3) 
-			this.set('disidenciaTipo2o3', true);
+			this.set('disidenciaTipo', true);
 	}
 });
 
