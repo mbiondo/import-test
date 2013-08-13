@@ -2201,7 +2201,7 @@ App.ReunionesSinParteView = Em.View.extend({
 App.ReunionesConParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['Fecha ', 'Temas','Comisiones convocadas'],
+	columnas: ['Fecha reunión ', 'Temario','Comisiones convocadas'],
 });
 
 App.ReunionesConParteView = App.ListFilterView.extend({
