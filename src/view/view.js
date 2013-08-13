@@ -463,7 +463,7 @@ App.CalendarItemListView = Ember.View.extend({
 
 App.CalendarListView = App.ListFilterView.extend({ 
 	itemViewClass: App.CalendarItemListView, 	
-	columnas: ['Fecha', 'Titulo', 'Sala', 'Observaciones', 'Estado'],
+	columnas: ['Fecha citación', 'Titulo', 'Sala', 'Observaciones', 'Estado citación'],
 });
 
 
