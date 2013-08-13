@@ -463,7 +463,7 @@ App.CitacionSala = Em.Object.extend({
 	pisos: '',
 	
 	toString: function () {
-		return "Sala " + String(this.get('numero'));
+		return String(this.get('numero'));
 	},
 });
 
