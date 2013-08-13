@@ -2712,12 +2712,15 @@ App.DictamenCrearView = Ember.View.extend({
 	filterExpedientes: '',
 	filterProyectosVistos: '',
 	adding: false,
+	dictamenesAgregados: false,
 //	faltanFirmantes: false,
-//	guardar: false,
+	clickGuardar: null,
 
 	agregarTexto: function () {
 		var texto = App.DictamenTexto.create({firmantes: []});
 		this.get('content.textos').addObject(texto);
+
+		this.set('dictamenesAgregados', true);
 	},
 
 	clickExpediente: function (expediente) {
@@ -2775,17 +2778,18 @@ App.DictamenCrearView = Ember.View.extend({
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 		// 
 		
+
 		$(".whead").on('click', function(){
 			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
-		
 	},
 
 
 
 	guardar: function () {
+		this.set('clickGuardar', true);
+
 /*
-		this.set('guardar', true);
 		App.get('dictamenController.content.textos').forEach(function(item){
 			if(item.firmantes.length > 0)
 				this.set('faltanFirmantes', true);
@@ -2802,8 +2806,14 @@ App.DictamenCrearView = Ember.View.extend({
 			this.set('existFirmantes', false);			
 */
 
+		if(App.get('dictamenController.content.textos').length > 0){
+			this.set('dictamenesAgregados', true);
+		}
+
 		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
+		if(!$('#formCrearParteDictamen').parsley('validate') || !this.get('dictamenesAgregados')) return false;
+
+		console.log(this.get('dictamenesAgregados'));
 
 		App.confirmActionController.setProperties({
 			title: 'Cargar Dictamen',
