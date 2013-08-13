@@ -2257,9 +2257,11 @@ App.DictamenTextoView = Em.View.extend({
 
 	didInsertElement: function(){
 		this._super();
+
 		url = this.get('content.url');
-		if(url)
-			this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
+		if(url){
+			this.set('nombreArchivo', url.substr(url.lastIndexOf('/') + 1));
+		}
 	}
 });
 App.DictamenFirmantesView = Em.View.extend({
