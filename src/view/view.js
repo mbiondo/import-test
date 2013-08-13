@@ -2712,8 +2712,8 @@ App.DictamenCrearView = Ember.View.extend({
 	filterExpedientes: '',
 	filterProyectosVistos: '',
 	adding: false,
-	faltanFirmantes: false,
-	guardar: false,
+//	faltanFirmantes: false,
+//	guardar: false,
 
 	agregarTexto: function () {
 		var texto = App.DictamenTexto.create({firmantes: []});
@@ -2784,8 +2784,8 @@ App.DictamenCrearView = Ember.View.extend({
 
 
 	guardar: function () {
-		this.set('guardar', true);
 /*
+		this.set('guardar', true);
 		App.get('dictamenController.content.textos').forEach(function(item){
 			if(item.firmantes.length > 0)
 				this.set('faltanFirmantes', true);
