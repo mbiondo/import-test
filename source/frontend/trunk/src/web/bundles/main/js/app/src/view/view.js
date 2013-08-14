@@ -2787,7 +2787,7 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var textosAreValid = true;
 
-		if(dictamenController.content.textos){
+		if(App.get('dictamenController.content.textos')){
 			App.get('dictamenController.content.textos').forEach(function(item){
 				if(item.firmantes.length < 1) {
 					item.set('faltanFirmantes', true);
