@@ -2785,29 +2785,24 @@ App.DictamenCrearView = Ember.View.extend({
 	guardar: function () {
 		this.set('clickGuardar', true);
 
-/*
-		App.get('dictamenController.content.textos').forEach(function(item){
-			if(item.firmantes.length > 0)
-				this.set('faltanFirmantes', true);
-			else
-				this.set('faltanFirmantes', false);
+		var textosAreValid = true;
 
+		App.get('dictamenController.content.textos').forEach(function(item){
+			if(item.firmantes.length < 1) {
+				item.set('faltanFirmantes', true);
+				textosAreValid = false;
+			}
+			else{
+				item.set('faltanFirmantes', false);
+			}
 		});
-*/
-//			console.log(this.get('faltanFirmantes'));
-/*
-		if(App.get('dictamenController.content.textos.firstObject.firmantes').length > 0)
-			this.set('existFirmantes', true);
-		else
-			this.set('existFirmantes', false);			
-*/
 
 		if(App.get('dictamenController.content.textos').length > 0){
 			this.set('dictamenesAgregados', true);
 		}
 
 		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate') || !this.get('dictamenesAgregados')) return false;
+		if(!$('#formCrearParteDictamen').parsley('validate') || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
 
 		console.log(this.get('dictamenesAgregados'));
 
@@ -2874,7 +2869,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	filterFirmantes: '',
 	adding: false,
 	firmanteTipo: "1",
-	
+
 	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
 
 	clickFirmante: function (firmante) {
@@ -2883,7 +2878,6 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			this.set('firmantesSeleccionados', []);
 
 	    _self = this;
-		
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		var pseudoItem = this.get('firmantesSeleccionados').findProperty("diputado.id", firmante.get('diputado.id'));
 		Ember.run.next(function () {
@@ -2946,6 +2940,9 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			item.set('seleccionado', true);
 			App.get('firmantesController.content').removeObject(item);
 		});
+
+		this.set('content.faltanFirmantes', false);
+
 		this.set('firmantesSeleccionados', []);
 		this.set('adding', !this.get('adding'));
 	},
