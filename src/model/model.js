@@ -358,37 +358,44 @@ App.Dictamen = Em.Object.extend({
 	textos: '',
 
 	label: function (){
-		var proyectoSTR  = null;
-		var proyecto = this.get('proyectos.firstObject');
-
-		if(proyecto){
-			proyectoSTR = proyecto.proyecto.expdip;
-			proyectoSTR += ' ';
-			proyectoSTR += proyecto.proyecto.titulo;			
-		}
-
-		if (this.get('sumario') == null && proyectoSTR == null) return "";
-		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD').format('LL') + this.get('sumario')  + proyectoSTR;
+		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');
 	}.property('sumario'),
 	fecha: function () {
 		return this.get('fechaImpresion');
 	}.property('fechaImpresion'),
 	proyectosLabel: function () {
 		var st = "";
-		this.get('proyectos').forEach(function (proyecto) {
-//			st += "<strong>" + proyecto.proyecto.expdip + "</strong><span> " +  proyecto.proyecto.titulo + "</span><br />";
+		this.get('proyectos').forEach(function(proyecto){
 			st += "<div class='fluid'>";
 			st += "<div class='grid2'>"+proyecto.proyecto.expdip+"</div>";
 			st += "<div class='grid10'>"+proyecto.proyecto.titulo+"</div>";
 			st += "<div class='clear'></div>";
 			st += "</div>";
 		})
+
+		return st.htmlSafe();
+	}.property('proyectos'),
+	proyectosLabel2: function () {
+		var st = "";
+		this.get('proyectos').forEach(function (proyecto) {
+			st += proyecto.proyecto.expdip + " " + proyecto.proyecto.titulo;
+		})
 		return st.htmlSafe();
 	}.property('proyectos'),
 	comisionesLabel: function () {
+		var comisiones = this.comisiones;
+
+		if(comisiones.length > 0) {
+			if (comisiones.length ==1)
+				return comisiones.objectAt(0).nombre;
+			else
+				return comisiones.objectAt(0).nombre + " y otras (" + (comisiones.length - 1 ) + ")"; 		
+		}
+	}.property('comisiones'),
+	comisionesLabel2: function () {
 		var st = "";
 		this.get('comisiones').forEach(function (comision) {
-			st += "<li>"+comision.comision.nombre+"</li>";
+			st += comision.comision.nombre;
 		})
 		return st.htmlSafe();
 	}.property('comisiones')
@@ -499,19 +506,29 @@ App.Reunion = Em.Object.extend({
 	],	
 
 	label: function () {
-		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('nota') + this.get('comisionesLabel');
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('comisionesLabel') + this.get('temarioLabel');
 	}.property('nota'),
-
 	comisionesLabel: function () {
-		var comisiones = this.comisiones;
-
-		if(comisiones.length > 0) {
-			if (comisiones.length ==1)
-				return comisiones.objectAt(0).nombre;
-			else
-				return comisiones.objectAt(0).nombre + " y otras (" + (comisiones.length - 1 ) + ")"; 		
-		}
+		var st = "";
+		this.get('comisiones').forEach(function (comision) {
+			st += "<li>"+comision.comision.nombre+"</li>";
+		})
+		return st.htmlSafe();
 	}.property('comisiones'),
+	comisionesLabel2: function () {
+		var st = "";
+		this.get('comisiones').forEach(function (comision) {
+			st += comision.comision.nombre;
+		})
+		return st.htmlSafe();
+	}.property('comisiones'),
+	temarioLabel: function(){
+		var st = "";
+		this.get('citacion').temas.forEach(function(tema){
+			st += tema.descripcion;
+		});
+		return st.htmlSafe();
+	}.property('citacion')
 
 });
 
