@@ -2787,15 +2787,17 @@ App.DictamenCrearView = Ember.View.extend({
 
 		var textosAreValid = true;
 
-		App.get('dictamenController.content.textos').forEach(function(item){
-			if(item.firmantes.length < 1) {
-				item.set('faltanFirmantes', true);
-				textosAreValid = false;
-			}
-			else{
-				item.set('faltanFirmantes', false);
-			}
-		});
+		if(dictamenController.content.textos){
+			App.get('dictamenController.content.textos').forEach(function(item){
+				if(item.firmantes.length < 1) {
+					item.set('faltanFirmantes', true);
+					textosAreValid = false;
+				}
+				else{
+					item.set('faltanFirmantes', false);
+				}
+			});			
+		}
 
 		if(App.get('dictamenController.content.textos').length > 0){
 			this.set('dictamenesAgregados', true);
