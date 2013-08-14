@@ -270,6 +270,10 @@ App.Citacion = Em.Object.extend({
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('title') + this.get('sala.numero') + this.get('observaciones') + this.get('estado.descripcion');
 	}.property('title'),
 
+	observacionesHTML: function () {
+		return this.get('observaciones').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('observaciones')
+
 });
 
 
@@ -417,7 +421,7 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 				return "Disidencia parcial";
 				break;
 			case "3":
-				return "Disidencia completa";
+				return "Disidencia total";
 				break;
 			default:
 				return "";
@@ -452,6 +456,7 @@ App.DictamenTexto = Em.Object.extend({
 	copete: '',
 	texto: '',
 	orden: '',
+	mayoria: false,
 });
 
 
