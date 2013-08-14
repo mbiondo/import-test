@@ -252,6 +252,7 @@ App.Citacion = Em.Object.extend({
 	allDay: false,
 	fecha:'',
 	auditable: true,
+	useApi: true,
 	
 	serializable : [
 		'id',
@@ -468,10 +469,7 @@ App.CitacionSala = Em.Object.extend({
 	puertas: '',
 	internos: '',
 	pisos: '',
-	
-	toString: function () {
-		return String(this.get('numero'));
-	},
+
 });
 
 App.CitacionEstado = Em.Object.extend({

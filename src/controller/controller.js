@@ -4,11 +4,19 @@ App.Savable = Ember.Mixin.create({
 	
 	create: function () {
 		this.set('createSuccess', '');
+		var url = this.get('url');
+
+		if (this.get('useApi')) {
+			url = App.get('apiController').get('url') + this.get('url');	
+		}
+
 		$.ajax({
-			url:  this.get('url'),
+			url:  url,
 			dataType: 'JSON',
 			type: 'POST',
 			context: this,
+			contentType: 'text/plain',
+			crossDomain: 'true',			
 			data : this.getJson(),
 			success: this.createSucceded,
 			complete: this.createCompleted,
@@ -17,14 +25,15 @@ App.Savable = Ember.Mixin.create({
 
 	createSucceded: function (data) {
 		if (this.get('useApi') && data.id) {
+			this.set('id', data.id);
 			this.set('createSuccess', true);
 		}
 
 		if (data.success == true) {
 			this.set('createSuccess', true);
+			this.set('id', data.id);
 			if (this.get('notificationType'))
 			{
-				console.log('A VER!!')
 				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson());
 			}
 		}
@@ -33,12 +42,12 @@ App.Savable = Ember.Mixin.create({
 		{
 			if (this.get('auditable')) 
 			{
-				var notification = App.Notificacion.extend(App.Savable).create();
+				var audit = App.Audit.extend(App.Savable).create();
 				audit.set('tipo', 'Test');
 				audit.set('accion', 'Creado');
 				audit.set('usuario', App.get('userController.user.cuil'));
 				audit.set('objeto', this.constructor.toString());
-				audit.set('objectoId', this.get('id'));
+				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 				audit.create();				
 			}			
@@ -1096,8 +1105,6 @@ App.ExpedientesController = App.RestController.extend({
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);		
 
-		console.log(items);
-
 		if(!data || !items){
 			App.get('expedientesController').set('loaded', true);
 			return;
@@ -2096,13 +2103,16 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 
 	create: function () {
-		console.log('Desactivando los botones..');
+		//console.log('Desactivando los botones..');
 
 		$('.buttonSave').attr('disabled', 'disabled');
-		$('.buttonSave').val('Guardando...');
+		$('.buttonSave').val('Guardando...');	
 
+		this.get('content').create();
+		this.get('content').addObserver('createSuccess', this, this.createCompleted);
 		
-		$.ajax({
+
+		/*$.ajax({
 			url: App.get('apiController').get('url') + this.get('url'),
 			contentType: 'text/plain',
 			crossDomain: 'true',
@@ -2111,22 +2121,19 @@ App.CitacionCrearController = Em.Object.extend({
 			success: this.createCompleted,
 			complete: this.createCompleted,
 			data : this.get('content').getJson()
-		});	
+		});
+		*/	
 	},
 	
 	createCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK		
-		console.log('Crear completado sig msg..');
-		if (data.responseText)
+		if (this.get('content.createSuccess'))
 		{
-			var obj = JSON.parse(data.responseText);
-			console.log('Activando los botones..');
-
 			$('.buttonSave').removeAttr('disabled');
 			$('.buttonSave').val('Guardar');
 
 			App.set('citacionConsultaController.loaded', false);
-			App.set('citacionConsultaController.content', App.Citacion.create(obj));
+			App.set('citacionConsultaController.content', this.get('content'));
 
 			fn = function() {
 				var citacion = App.get('citacionConsultaController.content');
@@ -2138,7 +2145,6 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').load();
 			
 			$.jGrowl('Citación creada con éxito!', { life: 5000 });
-
 		}
 	},
 	
