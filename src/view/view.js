@@ -139,6 +139,7 @@ Ember.TextArea.reopen({
     attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 });
 
+
 Ember.Checkbox.reopen({
     attributeBindings: ['data-group', 'name'],
 });
@@ -721,7 +722,7 @@ App.DictamenesView = Em.View.extend({
 
 App.DictamenesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenView, 	
-	columnas: ['Fecha', 'Sumario', 'Comisiones convocadas', 'Ver Dictamen'],
+	columnas: ['Fecha Dictamen', 'Sumario', 'Comisión cabecera', 'Ver Dictamen'],
 });
 
 App.DictamenSinODItemView = Ember.View.extend({
