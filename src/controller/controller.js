@@ -145,12 +145,12 @@ App.Savable = Ember.Mixin.create({
 		{
 			if (this.get('auditable')) 
 			{
-				var notification = App.Notificacion.extend(App.Savable).create();
+				var audit = App.Audit.extend(App.Savable).create();
 				audit.set('tipo', 'Test');
 				audit.set('accion', 'Modificado');
 				audit.set('usuario', App.get('userController.user.cuil'));
 				audit.set('objeto', this.constructor.toString());
-				audit.set('objectoId', this.get('id'));
+				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 				audit.create();				
 			}
@@ -2061,7 +2061,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	cancelar: function () {
-		console.log('Cancelando');
+		//console.log('Cancelando');
 
 		$.ajax({
 			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
@@ -2150,7 +2150,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	save: function () {
 		fn = function () {
-			console.log('Desactivando los botones..');
+			//console.log('Desactivando los botones..');
 			$('.buttonSave').attr('disabled', 'disabled');
 			$('.buttonSave').val('Guardando...');
 
@@ -2162,11 +2162,11 @@ App.CitacionCrearController = Em.Object.extend({
 			}			
 			else
 			{
-				console.log('Activando los botones..');
+				//console.log('Activando los botones..');
 				$('.buttonSave').removeAttr('disabled');
 				$('.buttonSave').val('Guardar');
 
-				console.log('Citacion editada con Exito');
+				//console.log('Citacion editada con Exito');
 				$.jGrowl('Ocurrió un error al intentar guardar los cambios en la citación!', { life: 5000 });
 			}
 		}

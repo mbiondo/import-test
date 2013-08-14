@@ -2288,6 +2288,18 @@ App.ReunionConsultaView = Em.View.extend({
 	citacion: null,
 	isEdit: false,
 
+	cancelarEdicion: function () {
+		fn = function() {
+			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+			App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
+			App.get('router').transitionTo('index');
+			App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));							
+		}			
+		App.set('reunionConsultaController.loaded', false);			
+		App.get('reunionConsultaController').addObserver('loaded', this, fn);
+		App.get('reunionConsultaController').load();	
+	},
+
 	puedeCrearParte: function () {
 		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')
 	}.property('App.userController.user'),
@@ -2570,6 +2582,10 @@ App.CrearParteView = Ember.View.extend({
 	nota: '',
 	expedientes: [],
 
+	cancelar: function () {
+		App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
+	},
+
 	listaTemas: function () {
 		return App.get('citacionConsultaController.content.temas');
 	}.property('citacionConsultaController.content.temas'),
@@ -2713,6 +2729,34 @@ App.DictamenCrearView = Ember.View.extend({
 //	faltanFirmantes: false,
 	clickGuardar: null,
 
+
+	setMayoria: function () {
+		
+		var i = 0;
+		this.get('content.textos').forEach(function (texto) {
+			if (i == 0)
+				texto.set('mayoria', true);
+			else
+				texto.set('mayoria', false);
+			i++;
+		});
+
+		if (this.get('content.textos').length == 0) {
+			this.set('dictamenesAgregados', false);
+		}
+
+	}.observes('content.textos.@each', 'content.textos'),
+
+
+	hacerMayoria: function (texto) {
+		this.get('content.textos').removeObject(texto);
+		this.get('content.textos').insertAt(0, texto);	
+	},
+
+	borrarTexto: function (texto) {
+		this.get('content.textos').removeObject(texto);
+	},
+
 	agregarTexto: function () {
 		var texto = App.DictamenTexto.create({firmantes: []});
 		this.get('content.textos').addObject(texto);
@@ -2748,8 +2792,8 @@ App.DictamenCrearView = Ember.View.extend({
 			filtered = App.get('expedientesArchivablesController.content');
 		}
 
-//		return filtered.slice(0, 10);
-		return filtered;
+		return filtered.slice(0, 10);
+		//return filtered;
 	}.property('content', 'filterExpedientes'),
 
 	listaProyectosVistos: function () {
@@ -2807,7 +2851,6 @@ App.DictamenCrearView = Ember.View.extend({
 		$('#formCrearParteDictamen').parsley('destroy');
 		if(!$('#formCrearParteDictamen').parsley('validate') || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
 
-		console.log(this.get('dictamenesAgregados'));
 
 		App.confirmActionController.setProperties({
 			title: 'Cargar Dictamen',
@@ -2874,6 +2917,14 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	firmanteTipo: "1",
 
 	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
+
+	borrar: function () {
+		this.get('parentView').borrarTexto(this.get('content'));
+	},
+
+	hacerMayoria: function () {
+		this.get('parentView').hacerMayoria(this.get('content'));
+	},
 
 	clickFirmante: function (firmante) {
 		//this.set('firmanteSeleccionado', null);
