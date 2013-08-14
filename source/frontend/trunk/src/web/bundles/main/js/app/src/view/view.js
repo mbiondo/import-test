@@ -358,25 +358,21 @@ App.ListFilterView = Ember.View.extend({
 		this.set('totalRecords', this.get('totalRecords') + this.get('step'));
 	},
 	
-	contenidoLista: function () {
+	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = this.get('content').filter(function(item){
 			return regex.test(item.get('label').toLowerCase());
 		});
-		
-		return filtered;
-	}.property('filterText', 'content'),
-	
-	lista: function (){
+
 		var max = this.get('totalRecords');
-		if (this.get('contenidoLista').length <= max) {
-			max = this.get('contenidoLista').length;
+		if (filtered.length <= max) {
+			max = filtered.length;
 			this.set('mostrarMasEnabled', false);
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
-		return this.get('contenidoLista').slice(0, this.get('totalRecords'));
-	}.property('totalRecords', 'step'),
+		return filtered.slice(0, this.get('totalRecords'));
+	}.property('filterText', 'content', 'totalRecords', 'step'),
 	
 	updateScroll: function () {
 		_self = this;
