@@ -2254,7 +2254,7 @@ App.DictamenConsultaView = Em.View.extend({
 			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
 
-		if(this.get('content.art108') != null || this.get('content.art204') != null  || this.get('content.art114') != null || this.get('content.unanimidad') != null){
+		if(App.get('dictamenConsultaController.content.art108') != null || App.get('dictamenConsultaController.content.art204') != null  || App.get('dictamenConsultaController.content.art114') != null || App.get('dictamenConsultaController.content.unanimidad') != null){
 			this.set('articulos', true);
 		}
 	},
