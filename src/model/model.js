@@ -412,7 +412,7 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 	disidencia: "1",
 	diputado: '',
 
-	orden: function () {
+	sortOrden: function () {
 		return this.get('cargo.orden');
 	}.property('cargo'),
 
