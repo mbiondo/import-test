@@ -412,6 +412,10 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 	disidencia: "1",
 	diputado: '',
 
+	orden: function () {
+		return this.get('cargo.orden');
+	}.property('cargo'),
+
 	disidenciaLabel: function () {
 		switch (this.get('disidencia')) {
 			case "1":
