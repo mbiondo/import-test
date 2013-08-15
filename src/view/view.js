@@ -138,8 +138,16 @@ Ember.TextField.reopen({
 Ember.TextArea.reopen({
     attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 });
-
-
+/*
+Ember.Select.reopen({
+	selectionChanged: function(){
+		console.log('a');
+	},
+	contentChanged: function(){
+		console.log('b');
+	}
+});
+*/
 Ember.Checkbox.reopen({
     attributeBindings: ['data-group', 'name'],
 });
@@ -2237,8 +2245,7 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 
 App.DictamenConsultaView = Em.View.extend({
 	templateName: 'dictamenConsulta',
-	rechazoUnificadosModificado: false,
-	pResolucionDeclaracionLey: false,
+	articulos: false,
 
 	didInsertElement: function(){
 		this._super();
@@ -2246,6 +2253,10 @@ App.DictamenConsultaView = Em.View.extend({
 		$(".whead").on('click', function(){
 			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
+
+		if(this.get('content.art108') != null || this.get('content.art204') != null  || this.get('content.art114') != null || this.get('content.unanimidad') != null){
+			this.set('articulos', true);
+		}
 	},
 	exportar: function(){
 		$.download('exportar/dictamen', "&type=dictamen&data=" + JSON.stringify(App.dictamenConsultaController.content));
@@ -2256,9 +2267,18 @@ App.DictamenTextoView = Em.View.extend({
 	templateName: 'dictamen-texto',
 	disicencias: false,
 	nombreArchivo: null,
+	rechazoUnificadosModificado: false,
+	proyectos:false,
 
 	didInsertElement: function(){
 		this._super();
+
+		if(this.get('content.rechazo') != null || this.get('content.unificados') != null || this.get('content.modificado') != null){
+			this.set('rechazoUnificadosModificado', true);
+		}
+		if(this.get('content.pr') != null || this.get('content.pd') != null || this.get('content.pl') != null){
+			this.set('proyectos', true);
+		}
 
 		url = this.get('content.url');
 		if(url){
