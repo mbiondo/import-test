@@ -1743,6 +1743,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 	url: '/com/reun/sp',
 	type: App.Reunion,
 	useApi: true,
+	loaded : false,
 	
 	init : function () {
 		this._super();
@@ -1788,6 +1789,7 @@ App.ReunionesConParteController = App.ReunionesSinParteController.extend({
 	url: '/com/reun/cp/' /* + moment().format('DD/MM/YYYY')*/,
 	type: App.Reunion,
 	useApi: true,
+	loaded : false,
 	
 	init : function () {
 		this._super();
@@ -1974,13 +1976,41 @@ App.CitacionCrearController = Em.Object.extend({
 		if (data.responseText)
 		{
 			var obj = JSON.parse(data.responseText);
-			App.set('reunionConsultaController.loaded', false);
-			App.set('reunionConsultaController.content', App.Reunion.create(obj));
 
+
+							App.eventosParteController = App.EventosParteController.create();
+							App.reunionConsultaController = App.ReunionConsultaController.create();
+
+							App.set('reunionConsultaController.loaded', false);
+							App.set('eventosParteController.loaded', false);
+
+//							App.set('reunionConsultaController.content', App.Reunion.create(obj));
+							App.set('reunionConsultaController.content', App.Citacion.create({id: obj.id}));
+
+							fn2 = function () {
+								if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
+									var reunion = App.get('reunionConsultaController.content');
+									var citacion = App.get('citacionConsultaController.content');
+									var temas = [];
+									citacion.get('temas').forEach(function (tema) {
+										temas.addObject(App.CitacionTema.create(tema));
+									});
+									citacion.set('temas', temas);								
+									
+									App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);										
+								}
+							}
+							
 			fn = function() {
-				var reunion = App.get('reunionConsultaController.content');
-				App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);
+								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+								var reunion = App.get('reunionConsultaController.content');
+								App.set('citacionConsultaController.loaded', false);
+								App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+								App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+								App.get('citacionConsultaController').load();
+								App.get('eventosParteController').addObserver('loaded', this, fn2);
+								App.get('eventosParteController').load();
+				
 			};
 
 			App.get('reunionConsultaController').addObserver('loaded', this, fn);
@@ -1988,7 +2018,7 @@ App.CitacionCrearController = Em.Object.extend({
 			
 			$.jGrowl('Reunión creada con éxito!', { life: 5000 });
 		}
-	},	
+	},
 	
 	confirmar: function () {
 
