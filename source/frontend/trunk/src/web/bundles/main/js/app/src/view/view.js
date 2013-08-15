@@ -348,7 +348,7 @@ App.ListFilterView = Ember.View.extend({
 	itemViewClass: App.SimpleListItemView,
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
-	
+
 	didInsertElement: function(){
 		this._super();
 		/*
@@ -364,7 +364,7 @@ App.ListFilterView = Ember.View.extend({
 	},
 
 	filterTextChanged: function () {
-		this.set('scroll', 0)
+		this.set('scroll', 0);
 	}.observes('filterText'),
 
 	mostrarMas: function () {
@@ -2928,7 +2928,19 @@ App.DictamenCrearView = Ember.View.extend({
 				data : JSON.stringify(dictamen),
 				success: function( data ) 
 				{
-					App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+					if (!App.get('dictamenConsultaController'))
+						App.dictamenConsultaController = App.DictamenConsultaController.create();
+					App.set('dictamenConsultaController.loaded', false);
+					App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
+
+					 fn = function() {
+						App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
+						var dictamen = App.get('dictamenConsultaController.content');		
+						App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
+					 };
+
+					 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
+					 App.get('dictamenConsultaController').load();
 				}
 			});		
 		}
@@ -2962,8 +2974,8 @@ App.DictamenTextoCrearView = Ember.View.extend({
 		Ember.run.next(function () {
 			if (item) {
 				App.get('firmantesController.content').addObject(item);
-				item.set('seleccionado', false);
 				_self.get('content.firmantes').removeObject(item);
+				item.set('seleccionado', false);
 				this.set('adding', !this.get('adding'));
 			} else {
 				if (!pseudoItem) {
@@ -3022,9 +3034,20 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 		this.set('content.faltanFirmantes', false);
 
+		var fController = Ember.ArrayController.create({
+		  content: this.get('content.firmantes'),
+		  sortProperties: ['orden'],
+		  sortAscending: true
+		});		
+
+		this.set('content.firmantes', fController.get('arrangedContent'));
+
 		this.set('firmantesSeleccionados', []);
 		this.set('adding', !this.get('adding'));
 	},
+
+
+
 
 	listaFirmantes: function () {
 		var filtered;

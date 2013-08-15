@@ -1374,9 +1374,9 @@ App.FirmantesController = App.RestController.extend({
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
-	sortProperties: ['apellido'],
+	sortProperties: ['orden'],
 	sortAscending: true,
-	
+
 	init : function () {
 		this._super();
 	},
@@ -1393,7 +1393,7 @@ App.FirmantesController = App.RestController.extend({
 	
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.FirmanteTextoDictamen.create({diputado: data.diputado, apellido: data.diputado.datosPersonales.apellido});
+		item = App.FirmanteTextoDictamen.create({diputado: data.diputado, apellido: data.diputado.datosPersonales.apellido, cargo: data.cargo});
 		this.addObject(item);
 	},	
 });
