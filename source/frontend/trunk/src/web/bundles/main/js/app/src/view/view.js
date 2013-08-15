@@ -2866,6 +2866,8 @@ App.DictamenCrearView = Ember.View.extend({
 				else{
 					item.set('faltanFirmantes', false);
 				}
+
+				
 			});			
 		}
 
@@ -2904,6 +2906,12 @@ App.DictamenCrearView = Ember.View.extend({
 
 			dictamen.get('textos').forEach(function (texto){
 				texto.set('orden', orden);
+				var fController = Ember.ArrayController.create({
+				  content: texto.get('firmantes'),
+				  sortProperties: ['orden'],
+				  sortAscending: true
+				});		
+				texto.set('firmantes', fController.get('arrangedContent'));				
 				orden++;
 			});
 
@@ -2920,12 +2928,15 @@ App.DictamenCrearView = Ember.View.extend({
 
 			var url = App.get('apiController.url') + "/par/evento";
 
+			var dictamenJSON = JSON.stringify(dictamen);
+
+
 			$.ajax({
 				url:  url,
 				contentType: 'text/plain',
 				type: 'POST',
 				context: this,
-				data : JSON.stringify(dictamen),
+				data : dictamenJSON,
 				success: function( data ) 
 				{
 					if (!App.get('dictamenConsultaController'))
@@ -3036,11 +3047,17 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 		var fController = Ember.ArrayController.create({
 		  content: this.get('content.firmantes'),
-		  sortProperties: ['orden'],
+		  sortProperties: ['sortOrden'],
 		  sortAscending: true
 		});		
 
 		this.set('content.firmantes', fController.get('arrangedContent'));
+
+		var orden = 0;
+		this.get('content.firmantes').forEach(function (firmante) {
+			firmante.set('orden', orden);
+			orden++;
+		});
 
 		this.set('firmantesSeleccionados', []);
 		this.set('adding', !this.get('adding'));

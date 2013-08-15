@@ -1374,7 +1374,7 @@ App.FirmantesController = App.RestController.extend({
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
-	sortProperties: ['orden'],
+	sortProperties: ['sortOrden'],
 	sortAscending: true,
 
 	init : function () {
