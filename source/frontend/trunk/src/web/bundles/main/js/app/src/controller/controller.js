@@ -819,7 +819,7 @@ App.DictamenesPendientesController = App.RestController.extend({
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fecha'],
-	sortAscending: false,
+	sortAscending: true,
 
 	createObject: function (data, save) {
 	
