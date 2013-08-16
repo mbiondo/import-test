@@ -2257,6 +2257,9 @@ App.DictamenConsultaView = Em.View.extend({
 		if(App.get('dictamenConsultaController.content.art108') != null || App.get('dictamenConsultaController.content.art204') != null  || App.get('dictamenConsultaController.content.art114') != null || App.get('dictamenConsultaController.content.unanimidad') != null){
 			this.set('articulos', true);
 		}
+
+		App.set('dictamenConsultaController.content.textos.firstObject.mayoria', true);
+
 	},
 	exportar: function(){
 		$.download('exportar/dictamen', "&type=dictamen&data=" + JSON.stringify(App.dictamenConsultaController.content));
