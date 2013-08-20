@@ -138,16 +138,7 @@ Ember.TextField.reopen({
 Ember.TextArea.reopen({
     attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 });
-/*
-Ember.Select.reopen({
-	selectionChanged: function(){
-		console.log('a');
-	},
-	contentChanged: function(){
-		console.log('b');
-	}
-});
-*/
+
 Ember.Checkbox.reopen({
     attributeBindings: ['data-group', 'name'],
 });
@@ -2439,6 +2430,7 @@ App.ReunionConsultaView = Em.View.extend({
 			success: null,
 		});
 
+
 		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
 		App.confirmActionController.show();
 	},
@@ -2619,6 +2611,14 @@ App.CrearParteView = Ember.View.extend({
 	}.property('citacionConsultaController.content.temas'),
 	
 	guardarParte: function () {
+		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
+			if(!tema.get('parteEstado').id){
+				tema.set('faltaSeleccionar', true); 
+			} else {
+				tema.set('faltaSeleccionar', false); 
+			}
+		});
+
 		$('#formCrearParte').parsley('destroy');
 		if(!$('#formCrearParte').parsley('validate')) return false;
 
@@ -2732,10 +2732,10 @@ App.CrearParteView = Ember.View.extend({
 	},
 });
 
+
 App.EstadoParteView = Ember.View.extend({
 	templateName: 'parte-estado',
 	estado: 'Seleccione una accion',
-
 	listaEstados: function () {
 		var arr = ['Seleccione tratamiento'];
 		if (App.get('eventosParteController.content')) {
