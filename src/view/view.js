@@ -2685,7 +2685,7 @@ App.CrearParteView = Ember.View.extend({
 				{
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
-					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
+					$.jGrowl('Dictamen creado con éxito!', { life: 5000 });					
 
 				}
 				else
