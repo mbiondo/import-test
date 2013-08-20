@@ -780,7 +780,7 @@ App.Router =  Em.Router.extend({
 						 	//	App.dictamenesPendientesController = App.DictamenesPendientesController.create();	
 
 							if (!App.get('expedientesArchivablesController'))
-						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
 
 							if (!App.get('reunionConsultaController'))
 						 		App.reunionConsultaController = App.ReunionConsultaController.create();						 	
@@ -817,7 +817,7 @@ App.Router =  Em.Router.extend({
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
 									App.get('reunionConsultaController').addObserver('loaded', this, cargarReunionSuccess);
 									App.get('reunionConsultaController').load();	
-									console.log(App.get('expedientesArchivablesController'));		
+									console.log(App.get('expedientesArchivablesController.content'));		
 								}
 							}
 
