@@ -816,7 +816,8 @@ App.Router =  Em.Router.extend({
 									var dictamen = App.get('dictamenController.content');
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
 									App.get('reunionConsultaController').addObserver('loaded', this, cargarReunionSuccess);
-									App.get('reunionConsultaController').load();			
+									App.get('reunionConsultaController').load();	
+									console.log(App.get('expedientesArchivablesController'));		
 								}
 							}
 
