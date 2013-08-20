@@ -211,7 +211,19 @@ App.Expediente = Em.Object.extend({
 			}		
 		}
 	}.property('firmantes'),	
-	
+	firmantesLabel2: function() {
+		var firmantes = this.get('firmantes').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+
+		var strFirmantes = '';
+		firmantes.forEach(function (firmante) {
+			strFirmantes+=firmante.nombre;
+		});
+		
+		return strFirmantes;
+
+	}.property('firmantes'),
 	girosLabel: function () {
 		var field = "orden";
 		var giros = this.get('giro').sort(function (a, b) {
@@ -272,8 +284,29 @@ App.Citacion = Em.Object.extend({
 
 	observacionesHTML: function () {
 		return this.get('observaciones').replace(/\n/g, "<br/>").htmlSafe();
-	}.property('observaciones')
-
+	}.property('observaciones'),	
+	firmantesLabel: function() {
+		var firmantes = this.get('firmantes').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+		var strFirmantes = [];
+		
+		var regex = new RegExp('-PE-');
+		var regex2 = new RegExp('-JGM-');
+		if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
+			return firmantes.objectAt(0).nombre;
+		} else {
+			if (firmantes.length < 3) {
+				firmantes.forEach(function (firmante) {
+					strFirmantes.addObject(firmante.nombre);
+				});
+				return strFirmantes.join(' y ');
+			}
+			else {
+				return firmantes.objectAt(0).nombre + " y otros (" + (firmantes.length - 1 ) + ")"; 
+			}		
+		}
+	}.property('firmantes'),	
 });
 
 
