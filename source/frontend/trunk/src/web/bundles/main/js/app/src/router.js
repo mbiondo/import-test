@@ -817,15 +817,14 @@ App.Router =  Em.Router.extend({
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
 									App.get('reunionConsultaController').addObserver('loaded', this, cargarReunionSuccess);
 									App.get('reunionConsultaController').load();	
-									console.log(App.get('expedientesArchivablesController.content'));		
 								}
 							}
 
 	 						App.get('dictamenController').addObserver('loaded', this, cargarDictamenSuccess);
 							App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
 							//App.get('dictamenesPendientesController').load();
-							App.get('expedientesArchivablesController').load();
 							App.get('dictamenController').load();
+							App.get('expedientesArchivablesController').load();
 							return deferred.promise();
 						},
 

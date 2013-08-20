@@ -613,6 +613,10 @@ App.RestController = Em.ArrayController.extend({
 		var url =  this.get('url');
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
+
+		var async = true;
+		if (this.get('async'))
+			async = this.get('async');
 			
 		if ( url ) {
 			$.ajax({
@@ -621,6 +625,7 @@ App.RestController = Em.ArrayController.extend({
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
+				async: async,
 			});
 
 		}
@@ -1041,6 +1046,7 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	sortProperties: ['fechaPub'],
 	sortAscending: true,
 	loaded: false,
+	async: false,
 
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);
@@ -1144,13 +1150,13 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 	},
 
 	createObject: function (data, save) {
-	
+		console.log('pepe');
 		save = save || false;
 		
 		item = App.ExpedienteBase.extend(App.Savable).create(data);
 		item.setProperties(data);
 		
-		App.get('expedientesArchivadosController').addObject(item);
+		this.addObject(item);
 
 	},	
 });
