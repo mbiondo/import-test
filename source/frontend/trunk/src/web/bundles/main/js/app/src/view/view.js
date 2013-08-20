@@ -2601,6 +2601,7 @@ App.CrearParteView = Ember.View.extend({
 	templateName: 'crear-parte',
 	nota: '',
 	expedientes: [],
+	faltaSeleccionar: null,
 
 	cancelar: function () {
 		App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
@@ -2611,16 +2612,21 @@ App.CrearParteView = Ember.View.extend({
 	}.property('citacionConsultaController.content.temas'),
 	
 	guardarParte: function () {
+		var _self = this;
 		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
 			if(!tema.get('parteEstado').id){
+				_self.set('faltaSeleccionar', true);
 				tema.set('faltaSeleccionar', true); 
 			} else {
+				_self.set('faltaSeleccionar', false);
 				tema.set('faltaSeleccionar', false); 
 			}
 		});
 
+		console.log(this.get('faltaSeleccionar'));
+
 		$('#formCrearParte').parsley('destroy');
-		if(!$('#formCrearParte').parsley('validate')) return false;
+		if(!$('#formCrearParte').parsley('validate') || this.get('faltaSeleccionar') == true) return false;
 
 		App.confirmActionController.setProperties({
 			title: 'Confirmar Crear parte',
@@ -2677,8 +2683,6 @@ App.CrearParteView = Ember.View.extend({
 				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
 				if (App.get('reunionConsultaController.content.saveSuccess') == true)
 				{
-					//console.log(App.get('reunionConsultaController.content'));
-
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
 					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
