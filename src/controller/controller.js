@@ -2156,8 +2156,8 @@ App.CitacionCrearController = Em.Object.extend({
 			App.set('citacionConsultaController.content', App.Citacion.create(this.get('content')));
 
 			fn = function() {
-				var citacion = App.get('citacionConsultaController.content');
 				App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+				var citacion = App.get('citacionConsultaController.content');
 				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', citacion);
 			};
 
