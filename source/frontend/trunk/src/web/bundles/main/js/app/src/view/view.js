@@ -678,11 +678,11 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
 
 		 fn = function() {
-			App.get('router').transitionTo('comisiones.ordenesDelDia.listadoOD');				
+			App.get('router').transitionTo('root.ordenDelDia.listadoOD');				
 		 };
 
 		 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
-		 App.get('ordenesDelDiaController').load();		
+		 App.get('ordenesDelDiaController').load();	
 	},
 
 	loadSucceeded: function () {

@@ -1673,6 +1673,36 @@ App.DictamenesController = App.RestController.extend({
 		item.set('fechaReunion', data.reunion.fecha);
 		item.set('comisiones', data.reunion.comisiones);
 
+		//if (data.dictamen == null && item.get('textos').length >= 1)
+		if (item.get('textos').length >= 1)
+			this.addObject(item);	
+	},		
+});
+
+App.DictamenesSinOdController = App.RestController.extend({
+	url: '/dic/dictamenes/01/01/2013/31/12/2013',
+	type: App.Dictamen,
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+	},
+
+	load: function() {
+		this._super();
+	},
+	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.Dictamen.create(data.evento);
+		item.setProperties(data.evento);
+		item.set('fechaReunion', data.reunion.fecha);
+		item.set('comisiones', data.reunion.comisiones);
+
 		if (data.dictamen == null && item.get('textos').length >= 1)
 			this.addObject(item);	
 	},		
