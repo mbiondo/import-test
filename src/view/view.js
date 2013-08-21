@@ -1285,8 +1285,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
         },
                 
 
-	createSucceeded: function (data) {
-            
+	createSucceeded: function (data) {            
             if (data.id) {
                 fn = function() {
                     App.get('envioArchivoController').removeObserver('loaded', this, fn);	
@@ -1692,7 +1691,7 @@ App.CitacionCrearView = Em.View.extend({
 		var empty = !(invitado.nombre != '' && invitado.apellido != '');
 		
 		return !empty && $("#formInvitados").validationEngine('validate');		
-	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail'),
+	}.property('invitado.nombre', 'invitado.apellido', 'invitado.caracter', 'invitado.mail', 'invitado.motivo'),
 	
 	cargarExpedientesHabilitado: function () {
 		return App.get('citacionCrearController.content.comisiones').length > 0;
@@ -2469,7 +2468,7 @@ App.ReunionConsultaView = Em.View.extend({
 				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-				$.jGrowl('Temario editado exitosamente!', { life: 5000 });								
+				$.jGrowl('Temario editado exitosamente!', { life: 5000 });
 			}			
 			App.set('reunionConsultaController.loaded', false);			
 			App.get('reunionConsultaController').addObserver('loaded', this, fn);
