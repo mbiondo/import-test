@@ -327,6 +327,23 @@ App.CitacionInvitado = Em.Object.extend({
 	caracter: '',
 	mail: '',
 	orden: '',
+	motivo:'',
+
+	motivoCorto: function(){
+		var motivo = this.get('motivo');
+		var motivoString = '';
+
+		if(motivo.length > 55)
+		{			
+			motivoString = motivo.substr(0, 55) + '...';
+		}
+		else
+		{
+			motivoString = motivo;
+		}
+
+		return motivoString;
+	}.property('motivo')
 });
 
 App.CitacionTema = Em.Object.extend({
