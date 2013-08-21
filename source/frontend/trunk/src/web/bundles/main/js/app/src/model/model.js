@@ -333,9 +333,9 @@ App.CitacionInvitado = Em.Object.extend({
 		var motivo = this.get('motivo');
 		var motivoString = '';
 
-		if(motivo.length > 55)
+		if(motivo.length > 90)
 		{			
-			motivoString = motivo.substr(0, 55) + '...';
+			motivoString = motivo.substr(0, 90) + '...';
 		}
 		else
 		{
