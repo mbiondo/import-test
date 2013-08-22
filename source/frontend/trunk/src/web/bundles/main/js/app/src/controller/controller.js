@@ -1276,7 +1276,7 @@ App.CitacionesController = App.RestController.extend({
 			});
 		} else {
 			if (roles.contains('ROLE_DIRECCION_COMISIONES')) {
-				citaciones = this.get('content');
+				citaciones = this.get('arrangedContent');
 			} else {
 				var comsiones = App.get('userController.user.comisiones');
 
