@@ -453,7 +453,13 @@ App.Dictamen = Em.Object.extend({
 			st += comision.comision.nombre;
 		})
 		return st.htmlSafe();
-	}.property('comisiones')
+	}.property('comisiones'),
+	sumarioHTML: function () {
+		return this.get('sumario').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('sumario'),	
+	copeteHTML: function () {
+		return this.get('copete').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('copete'),
 });
 
 
@@ -511,6 +517,16 @@ App.DictamenTexto = Em.Object.extend({
 	texto: '',
 	orden: '',
 	mayoria: false,
+
+	sumarioHTML: function () {
+		return this.get('sumario').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('sumario'),	
+	copeteHTML: function () {
+		return this.get('copete').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('copete'),	
+	textoHTML: function () {
+		return this.get('texto').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('texto'),	
 });
 
 
