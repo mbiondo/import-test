@@ -822,6 +822,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 App.DictamenesPendientesController = App.RestController.extend({
 	url: '/dic/dictamenes/pendientes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
+	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fecha'],
 	sortAscending: true,
@@ -1084,7 +1085,7 @@ App.ExpedientesController = App.RestController.extend({
 	loaded: false,
 	loaded2012: false,
 	
-	init : function () {
+	init : function(){
 		this._super();
 	},
 
@@ -1563,6 +1564,14 @@ App.DictamenConsultaController = Ember.Object.extend({
 		if(xhr.status == 400 || xhr.status == 420) {
 		}
 		this.set('loaded', true);
+
+		var textos = [];
+
+		this.get('content.textos').forEach(function(texto){
+			textos.pushObject(App.DictamenTexto.create(texto));
+		});
+
+		this.set('content.textos', textos);
 	},
 
 	load: function () {
@@ -1594,8 +1603,8 @@ App.DictamenController = Ember.Object.extend({
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
-		}
-		this.set('loaded', true);
+		}		
+		this.set('loaded', true);		
 	},
 	
 	load: function () {
@@ -1683,6 +1692,8 @@ App.DictamenesSinOdController = App.RestController.extend({
 	url: '/dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
+	sortProperties: ['fechaReunion'],
+	sortAscending: false,
 	
 	init : function () {
 		this._super();
