@@ -601,7 +601,10 @@ App.Reunion = Em.Object.extend({
 			st += tema.descripcion;
 		});
 		return st.htmlSafe();
-	}.property('citacion')
+	}.property('citacion'),
+	notaHTML: function () {
+		return this.get('nota').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('nota'),	
 
 });
 
