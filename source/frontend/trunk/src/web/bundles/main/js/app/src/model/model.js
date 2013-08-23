@@ -350,6 +350,8 @@ App.CitacionTema = Em.Object.extend({
 	id: '',
 	descripcion: '',
 	grupo: false,
+	art109: false,
+	sobreTablas: false,
 	estadoParte: '',
 	
 	toString: function () {

@@ -1672,7 +1672,7 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	crearTema: function () {
-		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true});
+		var tema = App.CitacionTema.create({descripcion: this.get('tituloNuevoTema'), proyectos: [], grupo: true, sobreTablas: false, art109: false});
 		this.set('tituloNuevoTema', '');
 		
 		App.get('citacionCrearController.content.temas').addObject(tema);
@@ -1770,7 +1770,7 @@ App.CitacionCrearView = Em.View.extend({
 	
 	clickExpediente: function (expediente) {
 		if (!this.get('listaExpedientesSeleccionados').findProperty('id', expediente.get('id'))) {
-			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), proyectos: [], grupo: false, sobreTablas: false, art109: false})
 			App.get('citacionCrearController.content.temas').addObject(tema);
 			tema.get('proyectos').addObject(expediente);
 			expediente.get('tema', null);
@@ -1799,7 +1799,7 @@ App.CitacionCrearView = Em.View.extend({
 		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (!tema)
 		{
-			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), proyectos: [], grupo: false, sobreTablas: false, art109: false})
 			App.get('citacionCrearController.content.temas').addObject(tema);			
 		}
 		
@@ -2511,7 +2511,7 @@ App.ReunionConsultaView = Em.View.extend({
 		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (!tema)
 		{
-			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: []})
+			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), proyectos: [], grupo: false, sobreTablas: false, art109: false})
 			this.get('citacion.temas').addObject(tema);			
 		}
 
