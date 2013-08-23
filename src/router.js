@@ -1266,7 +1266,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'OD', url: '#/comisiones/OD/dictamenes'},
+						{titulo: 'Orden del Día', url: '#/comisiones/OD/dictamenes'},
 						{titulo: 'Dictámenes sin OD'},
 					]);					
 					App.get('menuController').seleccionar(8);					
@@ -1298,7 +1298,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('main', 'OrdenesDelDiaList');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'OD', url: '#/OD/listado'},
+						{titulo: 'Orden del Día', url: '#/OD/listado'},
 						{titulo: 'Listado de OD'},
 					]);			
 
