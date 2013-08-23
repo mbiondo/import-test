@@ -169,7 +169,7 @@ App.menuController = App.MenuController.create({
 					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Listado',
+							titulo: 'Listado de OD',
 							url: '#/OD/listado',
 							roles: ['ROLE_USER'],
 						}),	
