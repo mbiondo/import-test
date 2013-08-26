@@ -772,10 +772,9 @@ App.Router =  Em.Router.extend({
 						route: '/:dictamen/cargar',
 
 						deserialize: function(router, params){
-	
-							if (!App.get('dictamenController'))
-						 		App.dictamenController = App.DictamenController.create({content: {id: params.dictamen }});
 
+						 	App.dictamenController = App.DictamenController.create({content: {id: params.dictamen }});
+						
 							if (!App.get('expedientesArchivablesController'))
 						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
 
@@ -807,6 +806,7 @@ App.Router =  Em.Router.extend({
 							cargarDictamenSuccess = function () {
 								if (App.get('dictamenController.loaded') && App.get('expedientesArchivablesController.loaded')) {
 									var dictamen = App.get('dictamenController.content');
+
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
 									App.get('reunionConsultaController').addObserver('loaded', this, cargarReunionSuccess);
 									App.get('reunionConsultaController').load();	
