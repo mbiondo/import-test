@@ -139,7 +139,6 @@ App.menuController = App.MenuController.create({
 
 				App.MenuItem.create({
 					titulo: 'Dictámenes',
-					url: '#/comisiones/dictamenes',
 					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 					subMenu: [
 						App.MenuItem.create({
@@ -151,9 +150,25 @@ App.menuController = App.MenuController.create({
 							titulo: 'Dictámenes',
 							url: '#/comisiones/dictamenes/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
-						}),										
+						}),
+						App.MenuItem.create({
+							titulo: 'Crear Dictamen',
+							url: '#/comisiones/dictamenes/crear',
+							roles: ['ROLE_DIRECCION_COMISIONES'],
+						}),
 					],
-				})			
+				}),
+				App.MenuItem.create({
+					titulo: 'Análisis de Competencia Mixta',
+					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
+					subMenu: [
+						App.MenuItem.create({
+							titulo: 'Análisis de Competencia Mixta pendientes',
+							url: '#/comisiones/mixta/pendientes',
+							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
+						}),			
+					],
+				})
 			]			
 		}),	
 		App.MenuItem.create({

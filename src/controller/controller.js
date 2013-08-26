@@ -1377,12 +1377,13 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	url: '/com/integrantes/%@/' + moment().format('DD/MM/YYYY'),
-	type: App.FirmanteTextoDictamen,
+	url: '/dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+        type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
 	sortProperties: ['sortOrden'],
 	sortAscending: true,
+	loaded: false,
 
 	init : function () {
 		this._super();
@@ -1390,17 +1391,18 @@ App.FirmantesController = App.RestController.extend({
 
 
 	load: function () {
-		this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
+		//this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
 		this._super();
 	},
 
 	loadSucceeded: function(data){
 		this._super(data);
+		this.set('loaded', true);
 	},
 	
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.FirmanteTextoDictamen.create({diputado: data.diputado, apellido: data.diputado.datosPersonales.apellido, cargo: data.cargo});
+		item = App.FirmanteTextoDictamen.create({diputado: data, apellido: data.datosPersonales.apellido});
 		this.addObject(item);
 	},	
 });
@@ -1594,6 +1596,17 @@ App.DictamenConsultaController = Ember.Object.extend({
 		this.set('loaded', true);
 	},	
 });
+
+App.DictamenCrearController = Ember.Object.extend({
+	content: null,
+	loaded : false,
+	useApi: false,
+	
+        load: function () {
+            this.set('loaded', true); 
+        },
+});
+
 
 App.DictamenController = Ember.Object.extend({
 	content: null,
