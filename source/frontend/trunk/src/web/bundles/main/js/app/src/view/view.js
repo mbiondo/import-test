@@ -2636,6 +2636,8 @@ App.CrearParteView = Ember.View.extend({
 	},
 
 	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
 		if (App.get('confirmActionController.success')) {
 			var parte = [];
 
@@ -2868,9 +2870,7 @@ App.DictamenCrearView = Ember.View.extend({
 				}
 				else{
 					item.set('faltanFirmantes', false);
-				}
-
-				
+				}				
 			});			
 		}
 
@@ -2894,6 +2894,8 @@ App.DictamenCrearView = Ember.View.extend({
 	
 
 	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
 		if (App.get('confirmActionController.success')) {
 			var dictamen = this.get('content');
 			var pv = [];
@@ -2942,19 +2944,29 @@ App.DictamenCrearView = Ember.View.extend({
 				data : dictamenJSON,
 				success: function( data ) 
 				{
-					if (!App.get('dictamenConsultaController'))
-						App.dictamenConsultaController = App.DictamenConsultaController.create();
-					App.set('dictamenConsultaController.loaded', false);
-					App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
+					if(data.id){					
+						if (!App.get('dictamenConsultaController'))
+							App.dictamenConsultaController = App.DictamenConsultaController.create();
 
-					 fn = function() {
-						App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
-						var dictamen = App.get('dictamenConsultaController.content');		
-						App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
-					 };
+						App.set('dictamenConsultaController.loaded', false);
+						App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
 
-					 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
-					 App.get('dictamenConsultaController').load();
+						 fn = function() {
+						 	App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
+							App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
+							var dictamen = App.get('dictamenConsultaController.content');
+
+							App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
+							$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+						 };
+
+						 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
+						 App.get('dictamenConsultaController').load();
+					}
+				else
+				{
+					$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+				}					
 				}
 			});		
 		}
