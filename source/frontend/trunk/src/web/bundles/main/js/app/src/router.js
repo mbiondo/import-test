@@ -721,6 +721,66 @@ App.Router =  Em.Router.extend({
 					},						
 				}),
 
+                crear: Em.Route.extend({
+                    route: '/crear',
+
+                    deserialize: function(router, params) {
+
+                        if (!App.get('dictamenCrearController')) { 
+                            App.dictamenCrearController = App.DictamenCrearController.create();
+                        }
+
+                        App.get('dictamenCrearController').set('content', App.Dictamen.create());
+                     
+                
+                        if (!App.get('expedientesArchivablesController')) {
+                            App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
+						}
+                        
+                        App.firmantesController = App.FirmantesController.create();
+
+                        
+                        var deferred = $.Deferred();
+
+                        cargarFirmantesSuccess = function () {
+                                if (App.get('firmantesController.loaded')) {
+                                        var dictamen = App.get('dictamenCrearController.content');	
+                                        deferred.resolve(dictamen);
+                                }
+                        }
+
+                        cargarDictamenSuccess = function () {
+                                if (App.get('dictamenCrearController.loaded') && App.get('expedientesArchivablesController.loaded')) {
+                                        App.get('firmantesController').addObserver('loaded', this, cargarFirmantesSuccess);
+                                        App.get('firmantesController').load();			
+                                }
+                        }
+
+                        App.get('dictamenCrearController').addObserver('loaded', this, cargarDictamenSuccess);
+                        App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
+
+                        App.get('dictamenCrearController').load();
+
+						App.get('expedientesArchivablesController').load();
+
+                        return deferred.promise();
+                     },
+
+                    connectOutlets: function(router, context) {
+                            var appController = router.get('applicationController');
+                            appController.connectOutlet('main', 'crearDictamen');
+                            appController.connectOutlet('menu', 'subMenu');
+
+                            App.get('breadCumbController').set('content', [
+                                    {titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+                                    {titulo: 'Crear Dictamen' }
+                            ]);							
+
+                            App.get('menuController').seleccionar(2);					
+                    },						
+
+                }),
+
 				dictamen: Ember.Route.extend({
 					route: '/dictamen',
 					dictamenConsulta: Ember.Route.extend({
@@ -826,7 +886,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
-							appController.connectOutlet('main', 'crearDictamen');
+							appController.connectOutlet('main', 'cargarDictamen');
 							appController.connectOutlet('menu', 'subMenu');
 
 							App.get('breadCumbController').set('content', [
@@ -839,8 +899,9 @@ App.Router =  Em.Router.extend({
 						},						
 
 					}),
-				}),			
-
+                                        
+				}),
+                                
 			}),
 			
 			partes: Em.Route.extend({

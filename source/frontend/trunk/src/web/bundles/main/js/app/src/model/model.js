@@ -401,8 +401,8 @@ App.OrdeDelDia = Em.Object.extend({
 });
 
 App.Dictamen = Em.Object.extend({
-	proyectosVistos: '',
-	proyectos: '',
+	proyectosVistos: [],
+	proyectos: [],
 	sumario: '',
 	id_reunion: '',
 	copete: '',
@@ -412,7 +412,7 @@ App.Dictamen = Em.Object.extend({
 	unanimidad: false,
 	caracterDespacho: '',
 	//observaciones: '',
-	textos: '',
+	textos: [],
 
 	label: function (){
 		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');

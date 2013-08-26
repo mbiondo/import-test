@@ -2208,6 +2208,12 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 
 App.CrearDictamenView = Em.View.extend({
 	templateName: 'crear-dictamen',
+});
+
+    
+    
+App.CargarDictamenView = Em.View.extend({
+	templateName: 'cargar-dictamen',
 
 });
 
@@ -2271,8 +2277,8 @@ App.DictamenTextoView = Em.View.extend({
 		}
 
 		url = this.get('content.url');
-		if(url){
-			this.set('nombreArchivo', url.substr(url.lastIndexOf('/') + 1));
+		if (url != null) {
+			this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
 		}
 	}
 });
@@ -2749,8 +2755,230 @@ App.EstadoParteView = Ember.View.extend({
 	}.property('App.eventosParteController.content')
 });
 
-
 App.DictamenCrearView = Ember.View.extend({
+	templateName: 'crear-dictamen-detalle',
+	filterExpedientesDictaminar: '',
+	filterProyectosVistosDictaminar: '',
+	filterExpedientes: '',
+	filterProyectosVistos: '',
+	adding: false,
+	dictamenesAgregados: false,
+//	faltanFirmantes: false,
+	clickGuardar: null,
+
+	hacerMayoria: function (texto) {
+		this.get('content.textos').removeObject(texto);
+		this.get('content.textos').insertAt(0, texto);	
+	},
+
+	borrarTexto: function (texto) {
+		this.get('content.textos').removeObject(texto);
+	},
+
+	agregarTexto: function () {
+		var texto = App.DictamenTexto.create({firmantes: []});
+		this.get('content.textos').addObject(texto);
+
+		this.set('dictamenesAgregados', true);
+	},
+
+	clickExpediente: function (expediente) {
+            var item;
+            if (this.get('content.proyectosVistos') != '') {
+                item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
+            }
+
+
+            if (!item) {
+                    this.get('content.proyectosVistos').pushObject(expediente);
+            }
+            else {
+                    this.get('content.proyectosVistos').removeObject(expediente);
+            }
+            this.set('adding', !this.get('adding'));
+	},
+
+	clickExpedienteDictamenCrear: function (expediente) {
+            var item;
+            if (this.get('content.proyectos') != '') {
+                item = this.get('content.proyectos').findProperty("id", expediente.get('id'));
+            }
+
+
+            if (!item) {
+                    this.get('content.proyectos').pushObject(expediente);
+            }
+            else {
+                    this.get('content.proyectos').removeObject(expediente);
+            }
+            this.set('adding', !this.get('adding'));
+	},
+
+	listaExpedientes: function () {
+		var filtered;
+
+		if (this.get('filterExpedientes') != '')
+		{
+			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
+			
+			filtered = App.get('expedientesArchivablesController.content').filter(function(expediente) {
+				return regex.test(expediente.get('label').toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = App.get('expedientesArchivablesController.content');
+		}
+
+		return filtered.slice(0, 10);
+	}.property('content', 'filterExpedientes'),
+
+	listaExpedientesNuevos: function () {
+		var filtered;
+
+		if (this.get('filterExpedientesDictaminar') != '')
+		{
+			var regex = new RegExp(this.get('filterExpedientesDictaminar').toString().toLowerCase());
+			
+			filtered = App.get('expedientesArchivablesController.content').filter(function(expediente) {
+				return regex.test(expediente.get('label').toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = App.get('expedientesArchivablesController.content');
+		}
+
+		return filtered.slice(0, 10);
+	}.property('content', 'filterExpedientesDictaminar'),
+
+
+
+	listaProyectosVistos: function () {
+		var filtered = [];
+		if (this.get('filterProyectosVistos') != '')
+		{
+			var filtered = [];
+			var regex = new RegExp(this.get('filterProyectosVistos').toString().toLowerCase());
+			
+			filtered = this.get('content.proyectosVistos').filter(function(expediente) {
+				 return regex.test(expediente.get('label').toLowerCase());
+			});
+			return filtered;
+		} else {
+			return this.get('content.proyectosVistos');
+		}
+	}.property('content.proyectosVistos.@each', 'filterProyectosVistos', 'adding'),
+
+
+	listaProyectosVistosNuevos: function () {
+		var filtered = [];
+		if (this.get('filterProyectosVistosDictaminar') != '')
+		{
+			var filtered = [];
+			var regex = new RegExp(this.get('filterProyectosVistosDictaminar').toString().toLowerCase());
+			
+			filtered = this.get('content.proyectos').filter(function(expediente) {
+				 return regex.test(expediente.get('label').toLowerCase());
+			});
+			return filtered;
+		} else {
+			return this.get('content.proyectos');
+		}
+	}.property('content.proyectos.@each', 'filterProyectosVistosDictaminar', 'adding'),
+
+	didInsertElement: function () {
+		this._super();
+		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
+		//===== Form elements styling =====//
+		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		// 
+		
+		$(".whead").on('click', function(){
+			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
+		});
+		
+	},
+
+
+
+	guardar: function () {
+		$('#formCrearParteDictamen').parsley('destroy');
+		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
+
+		App.confirmActionController.setProperties({
+			title: 'Crear Dictamen',
+			message: '¿ Esta seguro que desea guardar el dictamen ?',
+			success: null,
+		});
+
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
+	},
+	
+
+	confirmActionDone: function () {
+		if (App.get('confirmActionController.success')) {
+			var dictamen = this.get('content');
+			var proyectos = [];
+			var pv = [];
+			var orden = 1;
+
+			dictamen.get('proyectos').forEach(function (proyecto){
+				proyectos.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+				orden++;
+			});
+
+			orden = 1;
+
+			dictamen.get('proyectosVistos').forEach(function (proyecto){
+				pv.addObject({proyecto: proyecto, orden: orden, id: {id_proy: proyecto.id}});
+				orden++;
+			});
+
+			orden = 1;
+
+			dictamen.get('textos').forEach(function (texto){
+				texto.set('orden', orden);
+				orden++;
+			});
+
+			dictamen.caracterDespacho = App.CaracterDespacho.create({
+				tipo: 'CaracterDictamen',
+				id: 5,
+				descripcion: "Aprobado con modificaciones Dictamen de Mayoría y Dictamen de Minoría",
+				itemParte: 4,
+				resumen: "con modif. D. de Mayoría y D. de Minoría",
+				tipoDict: "OD",
+			});
+
+			dictamen.proyectos = proyectos;
+			dictamen.proyectosVistos = pv;	
+			dictamen.tipo = "Dictamen";
+			dictamen.orden = "1";
+			dictamen.itemParte = "4";
+    		dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
+
+
+			var url = App.get('apiController.url') + "/par/evento";
+
+			$.ajax({
+				url:  url,
+				contentType: 'text/plain',
+				type: 'POST',
+				context: this,
+				data : JSON.stringify(dictamen),
+				success: function( data ) 
+				{
+					App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+				}
+			});		
+		}
+	},
+});
+
+
+App.DictamenCargarView = Ember.View.extend({
 	templateName: 'reunion-crear-parte-dictamen',
 	filterExpedientes: '',
 	filterProyectosVistos: '',
@@ -3143,6 +3371,15 @@ App.ExpedienteItemListView = Em.View.extend({
 
 	clickItem: function () {
 		this.get('parentView').get('parentView').clickExpediente(this.get('content'));
+	}
+});
+
+App.ExpedienteItemListDictamenCrearView = Em.View.extend({
+	templateName: 'expediente-item-list',
+	tagName: 'li',
+
+	clickItem: function () {
+		this.get('parentView').get('parentView').clickExpedienteDictamenCrear(this.get('content'));
 	}
 });
 
