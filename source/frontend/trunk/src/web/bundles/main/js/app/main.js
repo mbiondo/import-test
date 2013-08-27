@@ -100,7 +100,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_COMISIONES'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Citaciones',
@@ -157,7 +157,7 @@ App.menuController = App.MenuController.create({
 							roles: ['ROLE_DIRECCION_COMISIONES'],
 						}),
 					],
-				}),/*
+				}),
 				App.MenuItem.create({
 					titulo: 'Análisis de Competencia Mixta',
 					roles: ['ROLE_USER', 'ROLE_COMISIONES'],
@@ -168,7 +168,7 @@ App.menuController = App.MenuController.create({
 							roles: ['ROLE_USER', 'ROLE_COMISIONES'],
 						}),			
 					],
-				})*/
+				})
 			]			
 		}),	
 		App.MenuItem.create({
