@@ -1473,6 +1473,10 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeCrearReunion: false,
 	puedeEditar: false,
 
+	hayInvitados: function () {
+		return App.get('citacionConsultaController.content.invitados').length > 0;
+	}.property('citacionConsultaController.content.invitados', 'adding'),
+
 	hasPermission: function () {
 		var comisiones = App.get('citacionConsultaController.content.comisiones');
 		if (comisiones.length > 1) {
@@ -1744,12 +1748,10 @@ App.CitacionCrearView = Em.View.extend({
 		
 		this.set('adding', !this.get('adding'));
 	},
-	
 	clickInvitado : function (invitado) {
 		App.get('citacionCrearController.content.invitados').removeObject(invitado);
 		this.set('adding', !this.get('adding'));
 	},
-	
 	clickComision: function (comision) {
 		//App.get('citacionCrearController').cargarExpedientes();
 		
@@ -1787,13 +1789,13 @@ App.CitacionCrearView = Em.View.extend({
 			App.get('citacionCrearController.content.temas').removeObject(temaInicial);
 			
 		expediente.set('tema', null);
-		
+
 		this.set('adding', !this.get('adding'));
 	},
 	
 	
-	clickDesagrupar: function (expediente) {
-		
+	clickDesagrupar: function (expediente)
+	{
 		var temaAnterior = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));
 		temaAnterior.get('proyectos').removeObject(expediente);
 		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
@@ -1802,9 +1804,9 @@ App.CitacionCrearView = Em.View.extend({
 			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), proyectos: [], grupo: false, sobreTablas: false, art109: false})
 			App.get('citacionCrearController.content.temas').addObject(tema);			
 		}
-		
+
 		tema.get('proyectos').addObject(expediente);
-		
+
 		expediente.set('tema', null);
 	},
 	
@@ -2309,6 +2311,20 @@ App.ReunionConsultaView = Em.View.extend({
 	citacion: null,
 	isEdit: false,
 
+	didInsertElement: function () {
+		this._super();
+		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
+		this.set('citacion', citacion);
+	},
+	puedeEditarTemario: function(){
+		return (App.get('reunionConsultaController.content.parte').length == 0);
+	}.property('App.reunionConsultaController'),
+	puedeVerParte: function(){
+		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
+	}.property('App.reunionConsultaController'),
+	puedeCrearParte: function () {
+		return ((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0))
+	}.property('App.userController.user', 'App.reunionConsultaController'),
 	cancelarEdicion: function () {
 		fn = function() {
 			App.get('reunionConsultaController').removeObserver('loaded', this, fn);
@@ -2321,9 +2337,6 @@ App.ReunionConsultaView = Em.View.extend({
 		App.get('reunionConsultaController').load();	
 	},
 
-	puedeCrearParte: function () {
-		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')
-	}.property('App.userController.user'),
 
 	exportar: function(){
 		$.download('exportar/reunion', "&type=reunion&data=" + JSON.stringify(App.reunionConsultaController.content)+"&data2=" + JSON.stringify(App.citacionConsultaController.content));
@@ -2592,11 +2605,6 @@ App.ReunionConsultaView = Em.View.extend({
 		App.get('router').transitionTo('comisiones.partes.parteConsulta.editarParte');	
 	},
 
-	didInsertElement: function () {
-		this._super();
-		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
-		this.set('citacion', citacion);
-	},
 });
 
 App.CrearParteView = Ember.View.extend({
