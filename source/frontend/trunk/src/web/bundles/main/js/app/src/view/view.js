@@ -1477,7 +1477,7 @@ App.CitacionConsultaView = Em.View.extend({
 		return App.get('citacionConsultaController.content.invitados').length > 0;
 	}.property('citacionConsultaController.content.invitados', 'adding'),
 
-	hasPermission: function () {
+	hasPermission: function (){
 		var comisiones = App.get('citacionConsultaController.content.comisiones');
 		if (comisiones.length > 1) {
 			if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
@@ -2122,7 +2122,7 @@ App.ComisionesView = Ember.CollectionView.extend({
 });
 
 App.InvitadoView = Em.View.extend({
-	tagName: 'tr',
+	tagName: 'div',
 	templateName: 'invitado',
 	
 	clickInvitado: function () {
