@@ -400,6 +400,7 @@ App.UserController = Em.Controller.extend({
 	loginError: false,
 
 	loginCheck: function(cuil, password){
+		//var url = '/usr/autenticate';
 		var url = App.get('apiController.url') + '/usr/autenticate';
 		$.ajax({
 			url:  url,
@@ -423,6 +424,7 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 
+		//var urlUserData = '/usr/userdata';
 		var urlUserData = App.get('apiController.url') + '/usr/userdata';
 		var _self = this;
 
@@ -1270,7 +1272,7 @@ App.CitacionesController = App.RestController.extend({
 		var roles = App.get('userController.roles');
 		var citaciones = [];
 
-		if (roles.contains('ROLE_DIPUTADO')) {
+		if (roles.contains('ROLE_DIPUTADO') && !roles.contains('ROLE_DIRECCION_COMISIONES')) {
 			this.get('arrangedContent').forEach(function (citacion) {
 				if (citacion.get('estado.id') != 1)
 					citaciones.pushObject(citacion);
@@ -2038,28 +2040,30 @@ App.CitacionCrearController = Em.Object.extend({
 			var obj = JSON.parse(data.responseText);
 
 
-							App.eventosParteController = App.EventosParteController.create();
-							App.reunionConsultaController = App.ReunionConsultaController.create();
+			App.eventosParteController = App.EventosParteController.create();
+			App.reunionConsultaController = App.ReunionConsultaController.create();
 
-							App.set('reunionConsultaController.loaded', false);
-							App.set('eventosParteController.loaded', false);
+			App.set('reunionConsultaController.loaded', false);
+			App.set('eventosParteController.loaded', false);
 
 //							App.set('reunionConsultaController.content', App.Reunion.create(obj));
-							App.set('reunionConsultaController.content', App.Citacion.create({id: obj.id}));
+			App.set('reunionConsultaController.content', App.Citacion.create({id: obj.id}));
 
-							fn2 = function () {
-								if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
-									var reunion = App.get('reunionConsultaController.content');
-									var citacion = App.get('citacionConsultaController.content');
-									var temas = [];
-									citacion.get('temas').forEach(function (tema) {
-										temas.addObject(App.CitacionTema.create(tema));
-									});
-									citacion.set('temas', temas);								
-									
-									App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);										
-								}
-							}
+			fn2 = function () {
+				if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
+					App.get('citacionConsultaController').removeObserver('loaded', this, fn2);
+					App.get('eventosParteController').removeObserver('loaded', this, fn2);					
+					var reunion = App.get('reunionConsultaController.content');
+					var citacion = App.get('citacionConsultaController.content');
+					var temas = [];
+					citacion.get('temas').forEach(function (tema) {
+						temas.addObject(App.CitacionTema.create(tema));
+					});
+					citacion.set('temas', temas);								
+					
+					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);										
+				}
+			}
 							
 			fn = function() {
 								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
