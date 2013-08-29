@@ -2323,7 +2323,7 @@ App.ReunionConsultaView = Em.View.extend({
 		this.set('citacion', citacion);
 	},
 	puedeEditarTemario: function(){
-		return (App.get('reunionConsultaController.content.parte').length == 0);
+		return (App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == '');
 	}.property('App.reunionConsultaController'),
 	puedeVerParte: function(){
 		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
