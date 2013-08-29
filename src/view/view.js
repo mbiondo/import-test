@@ -1480,16 +1480,20 @@ App.CitacionConsultaView = Em.View.extend({
 	hasPermission: function () {
 		var comisiones = App.get('citacionConsultaController.content.comisiones');
 		if (comisiones.length > 1) {
-			if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES'))
+			if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
 				return true;
-			else
+			}
+			else {
 				return false;
+			}
 		} else {
 			if (comisiones.length == 1) {
-				if (App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') || App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES'))
+				if (App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') || App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
 					return true;
-				else
+				}
+				else {
 					return false;
+				}
 			}
 		}
 		return true;
@@ -1505,6 +1509,8 @@ App.CitacionConsultaView = Em.View.extend({
 		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
 		if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
+
+		console.log(this);
 	},
 
 	confirmar: function () {
@@ -2621,11 +2627,26 @@ App.CrearParteView = Ember.View.extend({
 		return App.get('citacionConsultaController.content.temas');
 	}.property('citacionConsultaController.content.temas'),
 	
+
+	clearErrors: function () {
+		if (this.get('submitting')) {
+			App.get('citacionConsultaController.content.temas').forEach(function(tema) {
+				if(!tema.get('parteEstado').id){
+					tema.set('faltaSeleccionar', true); 
+				} else {
+					tema.set('faltaSeleccionar', false); 
+				}
+			});
+		}
+	}.observes('App.citacionConsultaController.content.temas.@each.parteEstado.id'),
+
+
 	guardarParte: function () {
 		var _self = this;
+		this.set('submitting', true);
+		this.set('faltaSeleccionar', true);
 		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
 			if(!tema.get('parteEstado').id){
-				_self.set('faltaSeleccionar', true);
 				tema.set('faltaSeleccionar', true); 
 			} else {
 				_self.set('faltaSeleccionar', false);
@@ -2633,7 +2654,6 @@ App.CrearParteView = Ember.View.extend({
 			}
 		});
 
-		console.log(this.get('faltaSeleccionar'));
 
 		$('#formCrearParte').parsley('destroy');
 		if(!$('#formCrearParte').parsley('validate') || this.get('faltaSeleccionar') == true) return false;
@@ -2713,6 +2733,7 @@ App.CrearParteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		this.set('submitting', false);
 		var parte = App.get('reunionConsultaController.content.parte');
 		if (parte)
 		{
