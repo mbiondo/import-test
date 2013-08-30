@@ -1472,6 +1472,7 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeCancelar: false,
 	puedeCrearReunion: false,
 	puedeEditar: false,
+	invitadosx: [],
 
 	hayInvitados: function () {
 		return App.get('citacionConsultaController.content.invitados').length > 0;
@@ -1501,6 +1502,7 @@ App.CitacionConsultaView = Em.View.extend({
 
 	didInsertElement: function(){
 		this._super();
+
 		if((App.citacionConsultaController.content.estado.id == 2) 
 			&& (!App.citacionConsultaController.content.reunion) 
 			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
@@ -1510,7 +1512,6 @@ App.CitacionConsultaView = Em.View.extend({
 		if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
 		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
 
-		console.log(this);
 	},
 
 	confirmar: function () {
@@ -1672,6 +1673,61 @@ App.CitacionCrearView = Em.View.extend({
 	citacionCrear: false,
 	
 //	showErrors: false,
+	didInsertElement: function() {
+		this._super();
+		if (this.get("invitado")) {					
+			this.set('invitado',App.CitacionInvitado.create());
+		}
+
+		
+		/*
+			Se presenta esta condicion en caso de que:
+				*La citación ya exista
+				*Si se está modificando los datos de una citación existente
+		*/
+
+		if(App.get('citacionConsultaController.content.estado.descripcion') == 'borrador'){
+			this.set('estadoBorrador', true);
+		}
+		if (App.get('citacionCrearController.content.id'))
+		{
+			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
+			this.set('startHora', App.get('citacionCrearController.content.start').split(' ')[1]);
+		}
+		else
+		{			
+			this.set('startFecha', moment().format("DD/MM/YYYY"));
+			this.set('startHora', moment().format("HH:SS"));
+		}
+		
+		$('.timepicker').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: this.get('startHora'),
+			timeSteps: [1, 15, 1],
+		});	 
+		
+		$('.timepicker').timeEntry('setTime', this.get('startHora'));
+		
+		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		
+		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
+		
+		//$('#crear-citacion-form').validationEngine('attach');
+		fo = null;
+
+		if (!App.get('citacionCrearController.content.id')) {
+			var cu = App.get('userController.user.comisiones')[0];
+			if (cu) {
+				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
+				if (c)
+					App.get('citacionCrearController.content.comisiones').pushObject(c);
+			}
+		}
+	}, 
 
 	seleccionarTodos: function () {
 		var _self = this;
@@ -1949,61 +2005,7 @@ App.CitacionCrearView = Em.View.extend({
 		App.CrearReunionView.popup();		
 	},	
 
-	didInsertElement: function() {
-		this._super();
-		if (this.get("invitado")) {					
-			this.set('invitado',App.CitacionInvitado.create());
-		}
 
-		
-		/*
-			Se presenta esta condicion en caso de que:
-				*La citación ya exista
-				*Si se está modificando los datos de una citación existente
-		*/
-
-		if(App.get('citacionConsultaController.content.estado.descripcion') == 'borrador'){
-			this.set('estadoBorrador', true);
-		}
-		if (App.get('citacionCrearController.content.id'))
-		{
-			this.set('startFecha', moment(App.get('citacionCrearController.content.start').split(' ')[0], 'YYYY-MM-DD').format('DD/MM/YYYY'));
-			this.set('startHora', App.get('citacionCrearController.content.start').split(' ')[1]);
-		}
-		else
-		{			
-			this.set('startFecha', moment().format("DD/MM/YYYY"));
-			this.set('startHora', moment().format("HH:SS"));
-		}
-		
-		$('.timepicker').timeEntry({
-			show24Hours: true, // 24 hours format
-			showSeconds: false, // Show seconds?
-			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
-			spinnerSize: [19, 26, 0], // Image size
-			spinnerIncDecOnly: true, // Only up and down arrows
-			defaultTime: this.get('startHora'),
-			timeSteps: [1, 15, 1],
-		});	 
-		
-		$('.timepicker').timeEntry('setTime', this.get('startHora'));
-		
-		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
-		
-		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
-		
-		//$('#crear-citacion-form').validationEngine('attach');
-		fo = null;
-
-		if (!App.get('citacionCrearController.content.id')) {
-			var cu = App.get('userController.user.comisiones')[0];
-			if (cu) {
-				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
-				if (c)
-					App.get('citacionCrearController.content.comisiones').pushObject(c);
-			}
-		}
-	}, 
 });
 
 App.ComfirmarCitacionView = App.ModalView.extend({
@@ -2657,7 +2659,7 @@ App.CrearParteView = Ember.View.extend({
 		//console.log(this.get('faltaSeleccionar'));
 
 		$('#formCrearParte').parsley('destroy');
-		if(!$('#formCrearParte').parsley('validate') || this.get('faltaSeleccionar') == true) return false;
+		if(!$('#formCrearParte').parsley('validate') || (App.get('citacionConsultaController.content.temas').length > 0 && this.get('faltaSeleccionar') == true)) return false;
 
 		App.confirmActionController.setProperties({
 			title: 'Confirmar Crear parte',
