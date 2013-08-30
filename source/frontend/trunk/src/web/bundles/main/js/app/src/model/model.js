@@ -281,7 +281,6 @@ App.Citacion = Em.Object.extend({
 	label: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('title') + this.get('sala.numero') + this.get('observaciones') + this.get('estado.descripcion');
 	}.property('title'),
-
 	observacionesHTML: function () {
 		return this.get('observaciones').replace(/\n/g, "<br/>").htmlSafe();
 	}.property('observaciones'),	
@@ -328,6 +327,10 @@ App.CitacionInvitado = Em.Object.extend({
 	mail: '',
 	orden: '',
 	motivo:'',
+
+	motivoLabel: function () {
+		return this.get('motivo').replace(/\n/g, "<br/>").htmlSafe();
+	}.property('motivo'),	
 
 	motivoCorto: function(){
 		var motivo = this.get('motivo');
