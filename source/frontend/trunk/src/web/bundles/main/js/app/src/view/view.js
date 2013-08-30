@@ -2654,6 +2654,7 @@ App.CrearParteView = Ember.View.extend({
 			}
 		});
 
+		//console.log(this.get('faltaSeleccionar'));
 
 		$('#formCrearParte').parsley('destroy');
 		if(!$('#formCrearParte').parsley('validate') || this.get('faltaSeleccionar') == true) return false;
