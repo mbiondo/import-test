@@ -1945,7 +1945,14 @@ App.CitacionConsultaController = Ember.Object.extend({
 		item.setProperties(data);
 		item.set('useApi', true);
 		this.set('content', item);
-		
+
+		var invitados = [];
+		this.get('content.invitados').forEach(function (invitado) {
+			invitados.addObject(App.CitacionInvitado.create(invitado));
+		});
+		this.set('content.invitados', invitados);
+
+
 		$.ajax({
 			url:  (App.get('apiController').get('url') + '/com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
@@ -1954,8 +1961,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 			success: this.loadReunionSucceded,
 			complete: this.loadReuionCompleted
 		});		
-	},
-	
+	},	
 	
 	
 	loadReunionSucceded: function (data) {
