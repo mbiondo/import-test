@@ -4379,6 +4379,8 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 	},
 
 	guardar: function () {
+
+		this.get('controller.content').normalize();	
 		this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('controller.content').create();
 	},

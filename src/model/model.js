@@ -1074,6 +1074,12 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     	'items',
     	'secciones'
     ],
+
+    normalize: function () {
+    	this.get('items').forEach(function (planDeLaborTentativoItem) {
+    		planDeLaborTentativoItem.normalize();
+    	});
+    }, 
 });
 
 App.PlanDeLaborTentativoItem = Ember.Object.extend({
@@ -1082,4 +1088,21 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     observaciones: null,
     proyectos: null,
     dictamenes: null,
+
+    normalize: function () {
+    	var p = [];
+    	var d = [];
+
+    	this.get('proyectos').forEach(function (proyecto) {
+    		p.addObject({proyecto: proyecto});
+    	});
+
+    	this.set('proyectos', p);
+
+    	this.get('dictamenes').forEach(function (dictamen) {
+    		d.addObject({dictamen: dictamen});
+    	});
+
+    	this.set('dictamenes', d); 	
+    }
 });
