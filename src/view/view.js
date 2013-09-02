@@ -136,7 +136,7 @@ Ember.TextField.reopen({
 });
 
 Ember.TextArea.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'maxlength'],
 });
 
 Ember.Checkbox.reopen({
