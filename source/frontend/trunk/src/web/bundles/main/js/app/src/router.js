@@ -940,7 +940,7 @@ App.Router =  Em.Router.extend({
 				
 				parteConsulta: Em.Route.extend({
 					route: '/parte',
-
+					/*
 					crearParte: Ember.Route.extend({
 						route: '/crear',
 						connectOutlets: function(router, context) {
@@ -957,7 +957,8 @@ App.Router =  Em.Router.extend({
 							
 							App.get('menuController').seleccionar(2);					
 						},						
-					}),				
+					}),			
+					*/	
 					editarParte: Ember.Route.extend({
 						route: '/editar',
 						connectOutlets: function(router, context) {
@@ -977,8 +978,6 @@ App.Router =  Em.Router.extend({
 						},						
 					}),		
 				}),	
-
-
 			}),
 			
 			reuniones: Em.Route.extend({
@@ -1110,7 +1109,77 @@ App.Router =  Em.Router.extend({
 							]);					
 							App.get('menuController').seleccionar(2);
 						},
+
 					}),	
+					parte: Em.Route.extend({
+						route: '/',
+
+						crear: Ember.Route.extend({
+							route: '/:reunion/parte/crear',
+
+							deserialize: function(router, params) {
+
+								App.eventosParteController = App.EventosParteController.create();
+								App.reunionConsultaController = App.ReunionConsultaController.create();
+
+								App.set('reunionConsultaController.loaded', false);
+								App.set('eventosParteController.loaded', false);
+
+								App.set('reunionConsultaController.content', App.Citacion.create({id: params.reunion}));
+
+								var deferred = $.Deferred();
+								
+								fn2 = function () {
+									if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
+										var reunion = App.get('reunionConsultaController.content');
+										var citacion = App.get('citacionConsultaController.content');
+										var temas = [];
+										citacion.get('temas').forEach(function (tema) {
+											temas.addObject(App.CitacionTema.create(tema));
+										});
+										citacion.set('temas', temas);
+										
+										deferred.resolve(reunion);										
+									}
+					
+								}
+								
+								fn = function() {
+									App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+									var reunion = App.get('reunionConsultaController.content');
+									App.set('citacionConsultaController.loaded', false);
+									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+									App.get('citacionConsultaController').load();
+									App.get('eventosParteController').addObserver('loaded', this, fn2);
+									App.get('eventosParteController').load();
+								}							
+								
+								App.get('reunionConsultaController').addObserver('loaded', this, fn);
+								App.get('reunionConsultaController').load();
+								return deferred.promise();
+							},
+							serialize: function(router, context) {
+								return {reunion: context.get('id')};			
+							},
+							connectOutlets: function(router, context) {
+								var appController = router.get('applicationController');
+								appController.connectOutlet('main', 'crearParte');
+								appController.connectOutlet('menu', 'subMenu');
+								
+								App.get('breadCumbController').set('content', [
+									{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
+									{titulo: 'Reunión'},
+									{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero'), url:'#/comisiones/reuniones/reunion/' + App.get('reunionConsultaController.content').get('id') + '/ver'},
+									{titulo: 'Parte' },
+									{titulo: 'Crear' }
+								]);
+								
+								App.get('menuController').seleccionar(2);					
+							},						
+						}),
+					}),	
+
 				}),
 			}),
 			
@@ -1130,7 +1199,7 @@ App.Router =  Em.Router.extend({
 						// App.get('citacionesController').load();
 						
 						// return deferred.promise();
-					// },		
+					// },
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
