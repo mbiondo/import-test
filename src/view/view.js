@@ -4379,7 +4379,6 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 	},
 
 	guardar: function () {
-
 		this.get('controller.content').normalize();	
 		this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('controller.content').create();
@@ -4402,7 +4401,7 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 					dictamenes.removeObject(dictamen);
 				});
 			})
-			return dictamenes.slice(0, 10);
+			return dictamenes;
 		} else {
 			return [];
 		}
@@ -4416,7 +4415,7 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 					proyectos.removeObject(proyecto);
 				});
 			})
-			return proyectos.slice(0, 10);
+			return proyectos;
 		} else {
 			return [];
 		}
