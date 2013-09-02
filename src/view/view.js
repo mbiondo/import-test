@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -1895,6 +1895,7 @@ App.CitacionCrearView = Em.View.extend({
 			
 			this.get('temaSeleccionado.proyectos').addObject(expediente);
 		}, this);
+		this.set('seleccionados', false);
 	},
 	
 	listaComisiones: function () {
