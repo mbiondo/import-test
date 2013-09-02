@@ -63,6 +63,13 @@ Handlebars.registerHelper("linkCargarDictamen", function(id, options) {
   return "#/comisiones/dictamenes/dictamen/" + id + "/cargar";
 });
 
+Handlebars.registerHelper("linkCrearParte", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/comisiones/reuniones/reunion/" + id + "/parte/crear";
+});
+
 
 Handlebars.registerHelper("linkCrearOD", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
