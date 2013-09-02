@@ -1112,7 +1112,7 @@ App.ExpedientesController = App.RestController.extend({
 	},
 
 	loadSucceeded: function(data){
-		var item, items = this.parse(data);		
+		var item, items = this.parse(data);
 
 		if(!data || !items){
 			App.get('expedientesController').set('loaded', true);
