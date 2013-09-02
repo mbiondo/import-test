@@ -1,5 +1,6 @@
 App.apiController = App.ApiController.create({
 	url: 'http://10.185.204.12:8080/sparl/rest',
+	//url: 'http://186.23.200.128:8080/sparl/rest',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -216,7 +217,7 @@ App.menuController = App.MenuController.create({
 						}),	
 						App.MenuItem.create({
 							titulo: 'Crear Plan de Labor',
-							url: '#/secretaria/parlamentaria/labor/crear',
+							url: '#/plan/de/labor/plan/de/labor/crear',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
 					],

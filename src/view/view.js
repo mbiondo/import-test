@@ -4367,3 +4367,147 @@ App.EstadisticaTableView = App.ListFilterView.extend({
 
 	itemViewClass: App.EstadisticaTableItemView,
 });
+
+//Plan De Labor Crear
+App.CrearPlanDeLaborView = Ember.View.extend({
+	templateName: "crear-plan-de-labor",
+
+	addItem: function (item) {
+		item.set('orden', this.get('controller.content.items').length);
+		this.get('controller.content.items').pushObject(item);
+	},
+
+	guardar: function () {
+		this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('controller.content').create();
+	},
+
+	createSucceeded: function () {
+		this.get('controller.content').removeObserver('createSuccess', this, this.createSucceeded);
+		if (this.get('controller.content.createSuccess') == true) {
+			console.log('create');
+		} else {
+			console.log('no create');
+		}
+	},
+
+	dictamenes: function () {
+		if (this.get('controller.ordenesDelDia')) {
+			var dictamenes = this.get('controller.ordenesDelDia');
+			this.get('controller.content.items').forEach(function (item) {
+				item.get('dictamenes').forEach(function (dictamen) {
+					dictamenes.removeObject(dictamen);
+				});
+			})
+			return dictamenes.slice(0, 10);
+		} else {
+			return [];
+		}
+	}.property('controller.content.items.@each'),
+
+	proyectos: function () {
+		if (this.get('controller.expedientes')) {
+			var proyectos = this.get('controller.expedientes');
+			this.get('controller.content.items').forEach(function (item) {
+				item.get('proyectos').forEach(function (proyecto) {
+					proyectos.removeObject(proyecto);
+				});
+			})
+			return proyectos.slice(0, 10);
+		} else {
+			return [];
+		}
+	}.property('controller.content.items.@each'),
+
+	didInsertElement: function () {
+		this._super();
+		this.set('controller', App.crearPlanDeLaborController);
+	}
+});
+
+App.CrearPlanDeLaborItemView = Ember.View.extend({
+	templateName: 'crear-plan-de-labor-item',
+	item: null,
+	filterExpedientes: '',
+	filterDictamenes: '',
+
+	proyectosList: function () {
+		var filtered;
+
+		if (this.get('filterExpedientes') != '')
+		{
+			var regex = new RegExp(this.get('filterExpedientes').toString().toLowerCase());
+			
+			filtered = this.get('proyectos').filter(function(expediente) {
+				return regex.test(expediente.get('label').toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = this.get('proyectos');
+		}
+
+		return filtered.slice(0, 10);
+	}.property('filterExpedientes', 'proyectos'),
+
+	dictamenesList: function () {
+		var filtered;
+
+		if (this.get('filterDictamenes') != '')
+		{
+			var regex = new RegExp(this.get('filterDictamenes').toString().toLowerCase());
+			
+			filtered = this.get('dictamenes').filter(function(expediente) {
+				return regex.test(expediente.get('label').toLowerCase());
+			});
+		}
+		else
+		{
+			filtered = this.get('dictamenes');
+		}
+
+		return filtered.slice(0, 10);
+	}.property('filterDictamenes', 'dictamenes'),
+
+
+	clickExpediente: function (proyecto) {
+		var item = this.get('item.proyectos').findProperty('id', proyecto.id);
+		if (!item) {
+			this.get('item.proyectos').pushObject(proyecto);
+		} else {
+			this.get('item.proyectos').removeObject(proyecto);
+		}
+	},
+
+	itemClicked: function (dictamen) {
+		var item = this.get('item.dictamenes').findProperty('id', dictamen.id);
+		if (!item) {
+			this.get('item.dictamenes').pushObject(dictamen);
+		} else {
+			this.get('item.dictamenes').removeObject(dictamen);
+		}
+	},
+
+	guardar: function () {
+		this.get('parentView').addItem(this.get('item'));
+		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
+	},
+});
+
+App.PlanDeLaborTentativoItemView = Ember.View.extend({
+	templateName: 'plan-de-labor-tentativo-item',
+});
+
+App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
+	itemViewClass: App.PlanDeLaborTentativoItemView, 
+	classNames: ['subNav'],
+
+	updateSort : function (idArray){
+
+	},
+});
