@@ -2597,19 +2597,20 @@ App.ReunionConsultaView = Em.View.extend({
 		});
 		return expedientesSeleccionados.reverse();
 	}.property('citacion.temas', 'citacion.temas.@each.proyectos'),
-	
+	/*
 	crearParte: function () {
 		App.eventosParteController = App.EventosParteController.create();
 
 		fn = function () {
 			App.set('reunionConsultaController.content.parte', []);
-			App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
+//			App.get('router').transitionTo('comisiones.partes.parteConsulta.crearParte');
+			App.get('router').transitionTo('comisiones.reunionesConsulta.parte.crear');
 		}
 		
 		App.get('eventosParteController').addObserver('loaded', this, fn);
 		App.get('eventosParteController').load();
 	},
-	
+	*/
 	editarParte: function () {
 		App.get('router').transitionTo('comisiones.partes.parteConsulta.editarParte');	
 	},
