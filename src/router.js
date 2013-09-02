@@ -951,7 +951,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 								{titulo: 'Reunión'},
-								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
+								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero')},
 								{titulo: 'Crear Parte' }
 							]);
 							
@@ -1203,6 +1203,15 @@ App.Router =  Em.Router.extend({
 								var citacion = App.get('citacionConsultaController.content');
 								deferred.resolve(citacion);
 								App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+
+								/*
+								var citacion = App.get('citacionConsultaController.content');
+								var invitados = [];
+								citacion.get('invitados').forEach(function (invitado) {
+									invitados.addObject(App.CitacionInvitado.create(invitado));
+								});
+								citacion.set('invitados', invitados);
+								*/
 							};
 
 							App.get('citacionConsultaController').addObserver('loaded', this, fn);
