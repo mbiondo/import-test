@@ -1027,3 +1027,59 @@ App.EstadisticaTema = Ember.Object.extend({
 		return this.get('titulo');
 	}
 });
+
+
+/* Plan De Labor */
+
+
+App.PlanDeLaborGrupo = Ember.Object.extend({
+
+});
+
+App.PlanDeLaborTentativo = Ember.Object.extend({
+	url: "/pdl/plan",
+	auditable: true,
+	useApi: true,
+
+	id: null,
+	reunion: {
+        id: 1103
+    },
+    observaciones: '',
+    items: null,
+
+	secciones: [
+        {
+            id: null,
+            seccion: {
+                id: 1
+            },
+            orden: 1,
+            texto: null
+        },
+        {
+            id: null,
+            seccion: {
+                id: 2
+            },
+            orden: 2,
+            texto: null
+        }
+    ],
+    
+    serializable: [
+    	'id',
+    	'reunion',
+    	'observaciones',
+    	'items',
+    	'secciones'
+    ],
+});
+
+App.PlanDeLaborTentativoItem = Ember.Object.extend({
+    sumario: null,
+    grupo: null,
+    observaciones: null,
+    proyectos: null,
+    dictamenes: null,
+});

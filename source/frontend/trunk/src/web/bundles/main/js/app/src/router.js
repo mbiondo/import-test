@@ -229,6 +229,37 @@ App.Router =  Em.Router.extend({
 
 			planDeLabor: Em.Route.extend({ 
 				route: '/plan/de/labor',
+				crear: Ember.Route.extend({
+					route: '/crear',
+
+					deserialize: function(router, params) {
+						 var deferred = $.Deferred();
+
+						 var crearPlanDeLaborLoaded = function () {
+						 	deferred.resolve(null);
+						 };
+
+						 App.crearPlanDeLaborController = App.CrearPlanDeLaborController.create();
+						 
+						 App.get('crearPlanDeLaborController').addObserver('loaded', this, crearPlanDeLaborLoaded)
+						 App.get('crearPlanDeLaborController').load();
+
+						 return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('main', 'CrearPlanDeLabor', "saraza", "sadasdasd", "asdasdsad");
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
+							{titulo: "Crear"}
+						]);				
+
+						App.get('menuController').seleccionar(4);						
+					},
+				}),
 
 				ver: Ember.Route.extend({
 					route: '/:plan/ver',
