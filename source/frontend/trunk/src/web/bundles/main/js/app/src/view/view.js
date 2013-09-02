@@ -1950,7 +1950,7 @@ App.CitacionCrearView = Em.View.extend({
 				expedientesSeleccionados.addObject(expediente);
 			});
 		});
-		return expedientesSeleccionados;
+		return expedientesSeleccionados.reverse();
 	}.property('App.citacionCrearController.content.temas', 'App.citacionCrearController.content.temas.@each.proyectos'),
 	
 	hayInvitados: function () {
@@ -2587,14 +2587,15 @@ App.ReunionConsultaView = Em.View.extend({
 		var temas = this.get('citacion.temas');
 		if (!temas)
 			return expedientesSeleccionados;
-		
+		console.log(temas);
 		temas.forEach(function (tema) {
+			console.log(tema);
 			var proyectos = tema.get('proyectos');
 			proyectos.forEach(function (expediente) {
 				expedientesSeleccionados.addObject(expediente);
 			});
 		});
-		return expedientesSeleccionados;
+		return expedientesSeleccionados.reverse();
 	}.property('citacion.temas', 'citacion.temas.@each.proyectos'),
 	
 	crearParte: function () {
