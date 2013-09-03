@@ -1675,7 +1675,9 @@ App.DictamenesController = App.RestController.extend({
 	url: '/dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
-	
+	sortProperties: ['fechaReunion'],
+	sortAscending: false,
+		
 	init : function () {
 		this._super();
 	},
