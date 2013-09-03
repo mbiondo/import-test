@@ -2325,6 +2325,9 @@ App.ReunionConsultaView = Em.View.extend({
 		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
 		this.set('citacion', citacion);
 	},
+	puedeExportar: function(){
+		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
+	}.property('App.reunionConsultaController'),
 	puedeEditarTemario: function(){
 		return (App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == '');
 	}.property('App.reunionConsultaController'),
