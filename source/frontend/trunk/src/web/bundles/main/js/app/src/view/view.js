@@ -2814,7 +2814,7 @@ App.DictamenCrearView = Ember.View.extend({
 	},
 
 	agregarTexto: function () {
-		var texto = App.DictamenTexto.create({firmantes: []});
+		var texto = App.DictamenTexto.create({firmantes: [], pr: 0, pl: 0, pd: 0});
 		this.get('content.textos').addObject(texto);
 
 		this.set('dictamenesAgregados', true);
@@ -3200,7 +3200,6 @@ App.DictamenCargarView = Ember.View.extend({
 			var url = App.get('apiController.url') + "/par/evento";
 
 			var dictamenJSON = JSON.stringify(dictamen);
-
 
 			$.ajax({
 				url:  url,
@@ -4383,6 +4382,10 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 		this.get('controller.content.items').pushObject(item);
 	},
 
+	borrarItem: function () {
+		this.get('controller.content.items').removeObject(item);
+	},
+
 	guardar: function () {
 		this.get('controller.content').normalize();	
 		this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
@@ -4500,6 +4503,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
 	},
 
+
 	didInsertElement: function () {
 		this._super();
 		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
@@ -4508,13 +4512,24 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 
 App.PlanDeLaborTentativoItemView = Ember.View.extend({
 	templateName: 'plan-de-labor-tentativo-item',
+
+	borrarItem: function () {
+		this.get('parentView').borrarItem(this.get('content'));
+	}
 });
 
 App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 	itemViewClass: App.PlanDeLaborTentativoItemView, 
 	classNames: ['subNav'],
 
-	updateSort : function (idArray){
+	borrarItem: function (item) {
+		if (this.get('parentView').borrarItem)
+		{
+			this.get('parentView').borrarItem(item);
+		}
+	},
+
+	updateSort : function (idArray) {
 
 	},
 });

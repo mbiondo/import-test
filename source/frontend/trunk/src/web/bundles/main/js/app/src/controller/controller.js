@@ -509,7 +509,7 @@ App.NotificationController = Em.Controller.extend({
 	enviarNotificacion: function (notificacion) {
 		var havePermission = this.get('estado');
 		
-		if (havePermission == 0 && window.webkitNotifications) {
+		if (havePermission == 0 && window.webkitNotifications && !App.get('userController').get('esDiputado')) {
 			var notification = window.webkitNotifications.createNotification(
 			  notificacion.icono,
 			  notificacion.titulo,
@@ -3463,15 +3463,15 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 	content: null,
 
 	expedientes: function () {
-		return this.get('expedientesController.content');
+		return this.get('expedientesController.arrangedContent');
 	}.property('expedientesController.content'),
 
 	grupos: function () {
-		return this.get('gruposController.content');
+		return this.get('gruposController.arrangedContent');
 	}.property('gruposController.content'),
 
 	ordenesDelDia: function () {
-		return this.get('ordenesDelDiaController.content');
+		return this.get('ordenesDelDiaController.arrangedContent');
 	}.property('ordenesDelDiaController.content'),
 
 	load: function () {

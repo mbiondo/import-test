@@ -514,13 +514,13 @@ App.DictamenTexto = Em.Object.extend({
 	unificados: false,
 	modificado: false,
 	sumario: '',
-	pr: '',
+	pr: 0,
 	rechazo: false,
-	pl: '',
-	pd: '',
+	pl: 0,
+	pd: 0,
 	copete: '',
 	texto: '',
-	orden: '',
+	orden: 0,
 	mayoria: false,
 
 	sumarioHTML: function () {
@@ -1046,6 +1046,7 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
         id: 1103
     },
     observaciones: '',
+    fechaEstimada: '',
     items: null,
 
 	secciones: [
@@ -1072,10 +1073,12 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     	'reunion',
     	'observaciones',
     	'items',
-    	'secciones'
+    	'secciones',
+    	'fechaEstimada'
     ],
 
     normalize: function () {
+    	this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm'));
     	this.get('items').forEach(function (planDeLaborTentativoItem) {
     		planDeLaborTentativoItem.normalize();
     	});
