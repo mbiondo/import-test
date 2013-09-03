@@ -824,7 +824,6 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 App.DictamenesPendientesController = App.RestController.extend({
 	url: '/dic/dictamenes/pendientes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
-	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
 	sortAscending: false,
@@ -3434,4 +3433,74 @@ App.EstadisticasController = Ember.Object.extend({
 	  	}
 		return data;
 	}.property('content.@each'),
+});
+
+//Crear Plan De PlanDeLabor
+
+App.PlanDeLaborGruposController = App.RestController.extend({
+	url: '/pdl/grupos',
+	useApi: true,
+	loaded: false,
+	type: App.PlanDeLaborGrupo,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.PlanDeLaborGrupo.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},	
+});
+
+App.CrearPlanDeLaborController = Ember.Object.extend({
+	loaded: false,
+
+	gruposController: null,
+	expedientesController: null,
+	ordenesDelDiaController: null,
+	content: null,
+
+	expedientes: function () {
+		return this.get('expedientesController.content');
+	}.property('expedientesController.content'),
+
+	grupos: function () {
+		return this.get('gruposController.content');
+	}.property('gruposController.content'),
+
+	ordenesDelDia: function () {
+		return this.get('ordenesDelDiaController.content');
+	}.property('ordenesDelDiaController.content'),
+
+	load: function () {
+
+		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create({items: []}));
+
+		if (!this.get('gruposController')) {
+			this.set('gruposController', App.PlanDeLaborGruposController.create());
+		}
+		this.get('gruposController').addObserver('loaded', this, this.controllersLoaded);
+		this.get('gruposController').load();
+
+		if (!this.get('expedientesController')) {
+			this.set('expedientesController', App.ExpedientesArchivablesController.create());
+		}
+		this.get('expedientesController').addObserver('loaded', this, this.controllersLoaded);
+		this.get('expedientesController').load();		
+
+		if (!this.get('ordenesDelDiaController'))
+			this.set('ordenesDelDiaController', App.OrdenesDelDiaController.create());
+
+		this.get('ordenesDelDiaController').addObserver('loaded', this, this.controllersLoaded);
+		this.get('ordenesDelDiaController').load();		
+	},
+
+	controllersLoaded: function () {
+		if (this.get('gruposController.loaded') && this.get('expedientesController.loaded') && this.get('ordenesDelDiaController.loaded')) {
+			this.get('gruposController').removeObserver('loaded', this, this.controllersLoaded);
+			this.get('expedientesController').removeObserver('loaded', this, this.controllersLoaded);
+			this.get('ordenesDelDiaController').removeObserver('loaded', this, this.controllersLoaded);
+			this.set('loaded', true);
+		}
+	},
 });
