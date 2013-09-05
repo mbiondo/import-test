@@ -366,7 +366,7 @@ App.ListFilterView = Ember.View.extend({
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = this.get('content').filter(function(item){
-			return regex.test(item.get('label').toLowerCase());
+			return regex.test(item.get('label'));
 		});
 
 		var max = this.get('totalRecords');
@@ -933,7 +933,7 @@ App.ItemRoleableRolView = Em.View.extend({
 
 App.RoleabeListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ItemRoleableView, 	
-	columnas: ['ID', 'Label','Roles', 'Acciones'],
+	columnas: ['ID', 'Datos','Roles', 'Acciones'],
 });
 
 App.ItemComisionableView = Em.View.extend({
@@ -2543,7 +2543,7 @@ App.ReunionConsultaView = Em.View.extend({
 		if (!tema)
 		{
 			tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), proyectos: [], grupo: false, sobreTablas: false, art109: false})
-			this.get('citacion.temas').addObject(tema);			
+			this.get('citacion.temas').addObject(tema);
 		}
 
 		tema.get('proyectos').addObject(expediente);
@@ -2814,7 +2814,7 @@ App.DictamenCrearView = Ember.View.extend({
 	},
 
 	agregarTexto: function () {
-		var texto = App.DictamenTexto.create({firmantes: [], pr: 0, pl: 0, pd: 0});
+		var texto = App.DictamenTexto.create({firmantes: []});
 		this.get('content.textos').addObject(texto);
 
 		this.set('dictamenesAgregados', true);
@@ -3022,7 +3022,6 @@ App.DictamenCargarView = Ember.View.extend({
 	filterProyectosVistos: '',
 	adding: false,
 	dictamenesAgregados: false,
-//	faltanFirmantes: false,
 	clickGuardar: null,
 
 
@@ -3127,6 +3126,7 @@ App.DictamenCargarView = Ember.View.extend({
 		this.set('clickGuardar', true);
 
 		var textosAreValid = true;
+		var numeroDeProyectos = 0;
 
 		if(App.get('dictamenController.content.textos')){
 			App.get('dictamenController.content.textos').forEach(function(item){
@@ -3137,7 +3137,19 @@ App.DictamenCargarView = Ember.View.extend({
 				else{
 					item.set('faltanFirmantes', false);
 				}				
-			});			
+
+				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
+
+//				if(!isNaN(numeroDeProyectos)){
+					if(numeroDeProyectos > 0){
+						item.set('faltanProyectos', false)
+					}
+					else{
+						item.set('faltanProyectos', true)
+					}
+//				}
+
+			});
 		}
 
 		if(App.get('dictamenController.content.textos').length > 0){
