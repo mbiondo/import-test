@@ -271,8 +271,9 @@ App.Router =  Em.Router.extend({
 						 App.get('planDeLaborController').set('content', App.PlanDeLabor.create({id: params.plan}));
 						 var deferred = $.Deferred(),
 						 fn = function() {
-							 App.get('planDeLaborController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);					
+							App.get('planDeLaborController').removeObserver('loaded', this, fn);	
+							var plan = App.get('planDeLaborController.content');
+							deferred.resolve(plan);				
 						 };
 
 						 App.get('planDeLaborController').addObserver('loaded', this, fn);
@@ -1646,7 +1647,7 @@ App.Router =  Em.Router.extend({
 								App.planDeLaborController = App.PlanDeLaborController.create();
 							}
 							
-							App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+							App.set('planDeLaborController.content', App.PlanDeLabor.create({id: context.get('idPl')}));
 							App.get('planDeLaborController').load();							
 														
 							var appController = router.get('applicationController');

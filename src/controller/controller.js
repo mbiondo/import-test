@@ -734,9 +734,9 @@ App.UploaderController = Ember.Object.extend({
 
 App.PlanDeLaborController = Ember.Object.extend({
 	content: null,
-	url: "/plan-de-labor/%@",
+	url: "/pdl/plan/%@",
 	loaded : false,
-	useApi: false,
+	useApi: true,
 	
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -746,8 +746,9 @@ App.PlanDeLaborController = Ember.Object.extend({
 	
 	load: function () {
 		this.set('loaded', false);
+
 		$.ajax({
-			url: this.get('url').fmt(encodeURIComponent(this.get('content.id'))),
+			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content.id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -757,8 +758,9 @@ App.PlanDeLaborController = Ember.Object.extend({
 	},
 	
 	loadSucceeded: function(data) {
-		item = App.PlanDeLabor.create();
+		item = App.PlanDeLaborTentativo.create();
 		item.setProperties(data);
+		item.desNormalize();
 		this.set('content', item);
 		this.set('loaded', true);
 	},	
@@ -768,26 +770,32 @@ App.PlanDeLaborController = Ember.Object.extend({
 		var obj = null;
 		if (tema && App.get('planDeLaborController.content')) {
 			switch (tema.get('plTipo')) {
-				case "o": 
-					if (App.get('planDeLaborController.content.ods')) 
-						obj = App.OrdeDelDia.create(App.get('planDeLaborController.content.ods').findProperty('id', tema.get('plId')));
+				case "p": 
+					if (App.get('planDeLaborController.content.items')) 
+						obj = App.PlanDeLaborTentativoItem.create(App.get('planDeLaborController.content.items').findProperty('id', tema.get('plItemId')));
 					break;
 				case "d":
-					if (App.get('planDeLaborController.content.dictamenes')) 
-						obj = App.Dictamen.create(App.get('planDeLaborController.content.dictamenes').findProperty('id', tema.get('plId')));
+					if (App.get('planDeLaborController.content.items')) 
+						var item = App.get('planDeLaborController.content.items').findProperty('id', tema.get('plItemId'));
+						if (item) {
+							obj = App.Dictamen.create(item.get('dictamenes').findProperty('id', tema.get('plId')));
+						}
 					break;
 				case "e":
-					if (App.get('planDeLaborController.content.proyectos')) 
-						obj = App.Expediente.create(App.get('planDeLaborController.content.proyectos').findProperty('id', tema.get('plId')));
+					if (App.get('planDeLaborController.content.items')) 
+						var item = App.get('planDeLaborController.content.items').findProperty('id', tema.get('plItemId'));
+						if (item) {
+							obj = App.Expediente.create(item.get('proyectos').findProperty('id', tema.get('plId')));
+						}
 					break;
 			}
 		}
 		return obj;
 	}.property('App.temaController.content', 'App.planDeLaborController.content'),
 
-	plEsOD: function () {
+	plEsPaquete: function () {
 		var tema = App.get('temaController.content');
-		return tema.get('plTipo') == 'o';
+		return tema.get('plTipo') == 'p';
  	}.property('App.temaController.content', 'App.planDeLaborController.content'),
 
 	plEsDictamen: function () {
@@ -803,16 +811,16 @@ App.PlanDeLaborController = Ember.Object.extend({
 });
 
 App.PlanDeLaborListadoController = App.RestController.extend({
-	url: '/plan-de-labor/listado',
+	url: '/pdl/all',
 //	url: '/pdl/all'
-	useApi: false,
+	useApi: true,
 	loaded: false,
-	type: App.PlanDeLabor,
+	type: App.PlanDeLaborTentativo,
 
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.PlanDeLabor.create(data);
+		item = App.PlanDeLaborTentativo.create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},		
@@ -2645,14 +2653,16 @@ App.TurnosController = App.RestController.extend({
 
 		if(turnoAnterior === undefined){
 			turno = this.get('arrangedContent').objectAt(fromIndex);
-			if(turno.get('horaInicio')){
-				turno.set('hora', turno.get('horaInicio'));
-				turno.set('horaEstimada', false);
-			}else{
-				turno.set('hora', sesionFecha);
-				turno.set('horaEstimada', true);
+			if (turno)
+			{
+				if(turno.get('horaInicio')){
+					turno.set('hora', turno.get('horaInicio'));
+					turno.set('horaEstimada', false);
+				}else{
+					turno.set('hora', sesionFecha);
+					turno.set('horaEstimada', true);
+				}
 			}
-
 			turnoAnterior = turno;
 			fromIndex++;
 		}
@@ -2810,6 +2820,7 @@ App.TemasController = App.RestController.extend({
 	sortUrl: '/temas/ordenar',
 	sortProperties: ['orden'],
 	useAPi: false,
+
 	parse : function (data) {
 		return data.temas;
 	},
@@ -2854,7 +2865,28 @@ App.TemasController = App.RestController.extend({
 			return true;
 
 		return false;
-	}.property('App.turnosController.turnoHablando', 'App.puedeEditar')
+	}.property('App.turnosController.turnoHablando', 'App.puedeEditar'),
+
+
+	temasOrdenadosPorGrupo: function () {
+		console.log('pepepe');
+		_self = this;
+		var items = this.get('arrangedContent').filter(function(tema) {
+			return (tema.get('plTipo') == 'p');
+		});
+
+		items.forEach(function (item) {
+			var filtered = _self.get('arrangedContent').filter(function(tema) {
+				return ((tema.get('plTipo') != 'p') && (tema.get('plItemId') == item.get('plItemId')));
+			});
+			var sorted = filtered.sort(function(a,b) {
+			    return a.get('orden') - b.get('orden');
+			});			
+			item.set('subTemas', sorted);
+		});
+
+		return items;
+	}.property('arrangedContent', 'content.@each.orden'),
 });
 
 App.TemaController = Em.Object.extend({

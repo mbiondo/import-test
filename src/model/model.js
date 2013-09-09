@@ -396,7 +396,12 @@ App.OrdeDelDia = Em.Object.extend({
 		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numero');
 	}.property('sumario'),
 	sumarioHTML: function () {
-		return this.get('sumario').htmlSafe();
+		if (this.get('sumario')) {
+			return this.get('sumario').htmlSafe();
+		}
+		else {
+			return "";
+		}
 	}.property('sumario'),
 	textoCompleto: function () {
 		return this.get('texto').htmlSafe();
@@ -753,7 +758,8 @@ App.Tema = Em.Object.extend({
 		'id',
 		'sesionId',
 		'titulo',
-		'orden'
+		'orden',
+		'tieneLista'
 	],
 });
 
@@ -1083,6 +1089,22 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     		planDeLaborTentativoItem.normalize();
     	});
     }, 
+
+    desNormalize: function () {
+    	var items = [];
+
+     	this.get('items').forEach(function (planDeLaborTentativoItem) {
+     		var pl =  App.PlanDeLaborTentativoItem.create(planDeLaborTentativoItem);
+    		pl.desNormalize();
+    		items.addObject(pl);
+    	});   	
+
+    	this.set('items', items);
+    },
+
+    label: function () {
+    	return this.get('observaciones');
+    }.property('observaciones'),
 });
 
 App.PlanDeLaborTentativoItem = Ember.Object.extend({
@@ -1107,5 +1129,22 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	});
 
     	this.set('dictamenes', d); 	
-    }
+    },
+
+    desNormalize: function () {
+    	var p = [];
+    	var d = [];
+
+    	this.get('proyectos').forEach(function (proyecto) {
+    		p.addObject(App.Expediente.create(proyecto.proyecto));
+    	});
+
+    	this.set('proyectos', p);
+
+    	this.get('dictamenes').forEach(function (dictamen) {
+    		d.addObject(App.OrdeDelDia.create(dictamen.dictamen));
+    	});
+
+    	this.set('dictamenes', d); 	
+    },
 });
