@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -3279,6 +3279,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	filterFirmantes: '',
 	adding: false,
 	firmanteTipo: "1",
+	hayFirmantesSeleccionados: false,
 
 	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
 
@@ -3291,9 +3292,20 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	},
 
 	clickFirmante: function (firmante) {
-		//this.set('firmanteSeleccionado', null);
 		if (!this.get('firmantesSeleccionados'))
 			this.set('firmantesSeleccionados', []);
+
+		if(!this.get('hayFirmantesSeleccionados'))
+			this.set('hayFirmantesSeleccionados', true);
+
+		if(this.get('firmantesSeleccionados.lenght') > 0)
+		{
+			this.set('hayFirmantesSeleccionados', true);
+		}
+		else
+		{
+			this.set('hayFirmantesSeleccionados', false);			
+		}
 
 	    _self = this;
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
