@@ -2336,6 +2336,14 @@ App.ReunionConsultaView = Em.View.extend({
 		this._super();
 		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
 		this.set('citacion', citacion);
+/*
+		if((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0)){
+			console.log('step1');
+		}
+		if(App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == ''){
+			console.log('step2');
+		}
+*/
 	},
 	puedeExportar: function(){
 		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
@@ -2348,6 +2356,10 @@ App.ReunionConsultaView = Em.View.extend({
 	}.property('App.reunionConsultaController'),
 	puedeCrearParte: function () {
 		return ((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0))
+	}.property('App.userController.user', 'App.reunionConsultaController'),
+	puedeCrearParteyPuedeEditarTemario:function(){
+		if((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0) || (App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == ''))
+			return true;
 	}.property('App.userController.user', 'App.reunionConsultaController'),
 	cancelarEdicion: function () {
 		fn = function() {
