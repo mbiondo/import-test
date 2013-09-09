@@ -866,7 +866,7 @@ App.NotificacionesController = App.RestController.extend({
 	type: App.Notificacion,
 	useApi: false,
 	sortProperties: ['fecha'],
-	sortAscending: false,
+	sortAscending: true,
 
 	load: function() {
 		this.set('loaded', false);

@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -567,7 +567,22 @@ App.PlanDeLaborView = Ember.View.extend({
 	createSucceeded: function (data) {
 		if (data.success == true) {
 			this.model.set('id', data.id);
-			console.log(this.model);
+
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'crearSesion');
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', data.id);
+			//Link del objeto
+			notification.set('link', "#/recinto/oradores/sesion/" + data.id + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			//Custom message
+			notification.set('mensaje', "Se ha creado una la sesion del dia " + this.model.get('fechaEstimada'));
+			//Crear
+			notification.create();		
+				
 			App.get('router').transitionTo('recinto.oradores.sesionConsulta.indexSubRoute', this.model);
 		}		
 	}
