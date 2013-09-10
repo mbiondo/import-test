@@ -121,6 +121,7 @@ App.Notificacion = Em.Object.extend({
 		"objectId",
 		"fecha",
 		"mensaje",
+		"titulo"
 	],	
 });
 
@@ -742,13 +743,17 @@ App.Tema = Em.Object.extend({
 	plId: '',
 	plTipo: '',
   
-  imprimirURL: function () {
-	return ('/listas-imprimir/%@').fmt(encodeURIComponent(this.get('id')));
-  }.property('url'),
+    imprimirURL: function () {
+	  return ('/listas-imprimir/%@').fmt(encodeURIComponent(this.get('id')));
+    }.property('url'),
   
 	sortValue: function () {
-		return  this.get('orden');
-	}.property('orden'),
+		if (this.get('parentOrden')) {
+			return this.get('parentOrden') + this.get('orden');
+		} else {
+			return  this.get('orden');
+		}
+	}.property('orden', 'parentOrden'),
 
 	seleccionado : function (){
 		return (this == this.get('temaSeleccionado'));

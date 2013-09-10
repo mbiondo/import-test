@@ -494,7 +494,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 	crearSesion: function () {
 
-		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion " + moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').format('MM/DD/YYYY') , fecha: moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').unix(), tipo: "SesionOrdinariaDeTablas", periodoOrdinario:130, sesion:6, reunion:7, idPl: this.get('content.id')});
+		var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion " + moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').format('MM/DD/YYYY') , fecha: moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:mm').unix(), tipo: "SesionOrdinariaDeTablas", periodoOrdinario:130, sesion:6, reunion:7, idPl: this.get('content.id')});
 
 		var temas = [];
 		var orden = 0;
@@ -571,18 +571,21 @@ App.PlanDeLaborView = Ember.View.extend({
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
-			notification.set('tipo', 'crearSesion');
+			notification.set('tipo', 'crearSesion');	
+			
+			notification.set('titulo', 'Crear Sesion');
+
 			//Si hace falta ID del objeto modificado
 			notification.set('objectId', data.id);
 			//Link del objeto
 			notification.set('link', "#/recinto/oradores/sesion/" + data.id + "/ver");
 			//CreateAt
-			notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
-			notification.set('mensaje', "Se ha creado una la sesion del dia " + this.model.get('fechaEstimada'));
+			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
 			//Crear
 			notification.create();		
-				
+
 			App.get('router').transitionTo('recinto.oradores.sesionConsulta.indexSubRoute', this.model);
 		}		
 	}
@@ -3809,6 +3812,14 @@ App.TemasView = App.JQuerySortableView.extend({
 
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
+
+		this.get('content').forEach(function (tema) {
+			if (tema.get('subTemas')) {
+				tema.get('subTemas').forEach(function (subTema) {
+					subTema.set('parentOrden', tema.get('orden'));
+				});
+			}
+		});	
 
 		App.get('temasController').saveSort(sortArr);
 		App.get('turnosController').actualizarHora();
