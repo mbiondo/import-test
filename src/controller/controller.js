@@ -317,8 +317,8 @@ App.IoController = Em.Object.extend({
 				break;
 
 			case "Notificacion" :
-				if (App.get('sesionesController'))
-					App.get('notificacionesController').addObject(App.Notificacion.extend(App.Savable).create(options));
+				if (App.get('notificacionesController'))
+					App.get('notificacionesController').addObject(App.Notificacion.create(options));
 				break;				
 		}
 	},
@@ -384,9 +384,22 @@ App.IoController = Em.Object.extend({
 
 				ap.forEach(function(item, index){
 					tema = App.get('temasController').findProperty('id', item);
-					if (tema)
-						tema.set('orden', index);
+					//if (tema)
+					//	tema.set('orden', index);
+					if (tema) {
+						if (tema.get('subTemas')) {
+							tema.set('orden', index * 1000);
+							tema.get('subTemas').forEach(function (subTema) {
+								subTema.set('parentOrden', tema.get('orden'));
+							});
+						}
+						else {
+							tema.set('orden', index);
+						}
+					}					
 				});
+
+				App.get('temasController').set('refresh', true);
 
 				App.get('turnosController').actualizarHora();
 				break;
@@ -699,7 +712,8 @@ App.RestController = Em.ArrayController.extend({
 		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + url;	
 		}
-			
+
+
 		$.ajax({
 			url: url,
 			dataType: 'JSON',
@@ -813,6 +827,8 @@ App.PlanDeLaborController = Ember.Object.extend({
 App.PlanDeLaborListadoController = App.RestController.extend({
 	url: '/pdl/all',
 //	url: '/pdl/all'
+	sortProperties: ['fechaEstimada'],
+	sortAscending: false,
 	useApi: true,
 	loaded: false,
 	type: App.PlanDeLaborTentativo,
@@ -866,7 +882,7 @@ App.NotificacionesController = App.RestController.extend({
 	type: App.Notificacion,
 	useApi: false,
 	sortProperties: ['fecha'],
-	sortAscending: true,
+	sortAscending: false,
 
 	load: function() {
 		this.set('loaded', false);
@@ -2824,6 +2840,38 @@ App.TemasController = App.RestController.extend({
 	parse : function (data) {
 		return data.temas;
 	},
+
+	saveSort : function(ids) {
+		var url = this.get('sortUrl');
+
+		if (this.get('useApi')) {
+			url = App.get('apiController').get('url') + url;	
+		}
+
+		ids.forEach(function(item, index){
+
+			var tema = App.get('temasController').findProperty('id', item);
+			if (tema) {
+				if (tema.get('subTemas')) {
+					tema.set('orden', index * 1000);
+					tema.get('subTemas').forEach(function (subTema) {
+						subTema.set('parentOrden', tema.get('orden'));
+					});
+				}
+				else
+					tema.set('orden', index);
+			}
+		});			
+			
+		$.ajax({
+			url: url,
+			dataType: 'JSON',
+			type: 'POST',
+			context : this,
+			data : {sort: JSON.stringify(ids)},
+			success: this.sortSucceeded,
+		});
+	},	
 	
 	createObject: function (data, save) {
 		save = save || false;
@@ -2869,24 +2917,29 @@ App.TemasController = App.RestController.extend({
 
 
 	temasOrdenadosPorGrupo: function () {
-		console.log('pepepe');
 		_self = this;
 		var items = this.get('arrangedContent').filter(function(tema) {
 			return (tema.get('plTipo') == 'p');
 		});
 
 		items.forEach(function (item) {
+
+			item.set('orden', parseInt(item.get('orden') * 1000));
+
 			var filtered = _self.get('arrangedContent').filter(function(tema) {
 				return ((tema.get('plTipo') != 'p') && (tema.get('plItemId') == item.get('plItemId')));
 			});
-			var sorted = filtered.sort(function(a,b) {
-			    return a.get('orden') - b.get('orden');
-			});			
-			item.set('subTemas', sorted);
+
+			item.set('subTemas', filtered);
+
+			item.get('subTemas').forEach(function (tema) {
+				tema.set('parentOrden', item.get('orden'));
+			});
 		});
 
+		this.set('refresh', false);
 		return items;
-	}.property('arrangedContent', 'content.@each.orden'),
+	}.property('arrangedContent', 'content', 'refresh'),
 });
 
 App.TemaController = Em.Object.extend({
