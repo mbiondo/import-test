@@ -3165,6 +3165,7 @@ App.DictamenCargarView = Ember.View.extend({
 		this.set('clickGuardar', true);
 
 		var textosAreValid = true;
+		var proyectosAreValid = true;
 		var numeroDeProyectos = 0;
 
 		if(App.get('dictamenController.content.textos')){
@@ -3181,10 +3182,11 @@ App.DictamenCargarView = Ember.View.extend({
 
 //				if(!isNaN(numeroDeProyectos)){
 					if(numeroDeProyectos > 0){
-						item.set('faltanProyectos', false)
+						item.set('faltanProyectos', false);
 					}
 					else{
-						item.set('faltanProyectos', true)
+						proyectosAreValid = false;
+						item.set('faltanProyectos', true);
 					}
 //				}
 
@@ -3196,7 +3198,7 @@ App.DictamenCargarView = Ember.View.extend({
 		}
 
 		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate') || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
+		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
 
 
 		App.confirmActionController.setProperties({
