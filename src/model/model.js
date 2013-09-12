@@ -23,14 +23,27 @@ App.Usuario = Em.Object.extend({
 	],
 
 	label: function () {
+		return this.get('id') + ' ' + this.get('datosLabel2') + ' ' + this.get('rolesLabel');
+	}.property('id'),
+	
+	datosLabel: function () {
 		var str = "<p>" + this.get('nombre') + " " +this.get('apellido') + "</p><small>" + this.get('cuil') + "</small>"; 
-		return str;
+		return str.htmlSafe();
 	}.property('cuil', 'nombre', 'apellido'),
 
-	labelSafe: function () {
-		return this.get('label').htmlSafe();
-	}.property('label'),
-	
+	datosLabel2: function () {
+		var str = this.get('nombre') + " " + this.get('apellido') + " " + this.get('cuil'); 		
+		return str.htmlSafe();
+	}.property('cuil', 'nombre', 'apellido'),
+
+	rolesLabel: function () {
+		var str = "";
+		this.get('roles').forEach(function(rol){
+			str += rol.nombre;
+		});
+		return str.htmlSafe();
+	}.property('roles'),
+
 	estructura: function () {
 		return this.get('estructuraReal');
 	}.property('estructuraReal'),
@@ -520,10 +533,10 @@ App.DictamenTexto = Em.Object.extend({
 	unificados: false,
 	modificado: false,
 	sumario: '',
-	pr: 0,
 	rechazo: false,
-	pl: 0,
-	pd: 0,
+	pr: '',
+	pl: '',
+	pd: '',
 	copete: '',
 	texto: '',
 	orden: 0,
