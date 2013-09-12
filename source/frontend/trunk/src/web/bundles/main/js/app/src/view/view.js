@@ -366,7 +366,7 @@ App.ListFilterView = Ember.View.extend({
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered = this.get('content').filter(function(item){
-			return regex.test(item.get('label'));
+			return regex.test(item.get('label').toLowerCase());
 		});
 
 		var max = this.get('totalRecords');
