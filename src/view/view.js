@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			// this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -3183,7 +3183,9 @@ App.DictamenCargarView = Ember.View.extend({
 
 				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
 
-//				if(!isNaN(numeroDeProyectos)){
+				console.log(numeroDeProyectos);
+
+				if(!isNaN(numeroDeProyectos)){
 					if(numeroDeProyectos > 0){
 						item.set('faltanProyectos', false);
 					}
@@ -3191,7 +3193,7 @@ App.DictamenCargarView = Ember.View.extend({
 						proyectosAreValid = false;
 						item.set('faltanProyectos', true);
 					}
-//				}
+				}
 
 			});
 		}
@@ -3630,6 +3632,7 @@ App.ListaTabView = Ember.View.extend({
 	content : null,
 
 	listaClick: function () {
+		console.log(App.get('turnosController.turnoHablando').get('listaId')+ ' - ' +this.get('content.id'));
 		App.get('listaController').set('content', this.get('content'));
 	}
 });
