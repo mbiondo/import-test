@@ -2526,6 +2526,17 @@ App.TurnosController = App.RestController.extend({
 
 	turnoHablandoBinding : null,
 
+	saveSort: function (ids) {
+		this._super(ids);
+
+		ids.forEach(function(item, index){
+			var turno = App.get('turnosController').findProperty('id', item);
+			if (turno) {
+				turno.set('orden', index);
+			}
+		});			
+	},
+
 	misTurnos: function () {
 		var misTurnos = this.get('arrangedContent').filter(function (turno) {
 			var tengoOrador =  false;
@@ -2853,9 +2864,10 @@ App.TemasController = App.RestController.extend({
 			var tema = App.get('temasController').findProperty('id', item);
 			if (tema) {
 				if (tema.get('subTemas')) {
-					tema.set('orden', index * 1000);
+					tema.set('orden', (index + 1) * 1000);
 					tema.get('subTemas').forEach(function (subTema) {
 						subTema.set('parentOrden', tema.get('orden'));
+						subTema.set('orden', subTema.get('orden') + 1);
 					});
 				}
 				else
@@ -2923,8 +2935,10 @@ App.TemasController = App.RestController.extend({
 		});
 
 		items.forEach(function (item) {
+			item.set('orden', item.get('orden') + 1);
 
-			item.set('orden', parseInt(item.get('orden') * 1000));
+			if (item.get('orden') < 100) 
+				item.set('orden', parseInt(item.get('orden') * 1000));
 
 			var filtered = _self.get('arrangedContent').filter(function(tema) {
 				return ((tema.get('plTipo') != 'p') && (tema.get('plItemId') == item.get('plItemId')));
@@ -2934,12 +2948,15 @@ App.TemasController = App.RestController.extend({
 
 			item.get('subTemas').forEach(function (tema) {
 				tema.set('parentOrden', item.get('orden'));
+				tema.set('orden', tema.get('orden') + 1);
 			});
 		});
 
 		this.set('refresh', false);
-		return items;
-	}.property('arrangedContent', 'content', 'refresh'),
+		return items.sort(function(a, b) {
+			return a.get('sortValue') - b.get('sortValue');
+		});
+	}.property('arrangedContent', 'content', 'refresh', 'App.temaController.content'),
 });
 
 App.TemaController = Em.Object.extend({

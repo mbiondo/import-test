@@ -749,9 +749,9 @@ App.Tema = Em.Object.extend({
   
 	sortValue: function () {
 		if (this.get('parentOrden')) {
-			return this.get('parentOrden') + this.get('orden');
+			return parseInt(this.get('parentOrden')) + parseInt(this.get('orden'));
 		} else {
-			return  this.get('orden');
+			return  parseInt(this.get('orden'));
 		}
 	}.property('orden', 'parentOrden'),
 
@@ -902,7 +902,7 @@ App.Turno = Em.Object.extend({
 		bloqueado = this.get('bloqueado') == true ? 0 : 1;
 
 		
-		orden = $().zeroFill(tema.get('orden'),2) +
+		orden = $().zeroFill(tema.get('sortValue'), 4) +
 						$().zeroFill(this.get('listaId'),2) +
 						$().zeroFill(bloqueado,2)
 
@@ -912,6 +912,7 @@ App.Turno = Em.Object.extend({
 			orden = orden + $().zeroFill(this.get('orden'),14);
 		}
 
+		console.log(orden);
 		return orden;
 
 	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin'),
