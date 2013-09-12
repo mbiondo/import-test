@@ -3632,7 +3632,6 @@ App.ListaTabView = Ember.View.extend({
 	content : null,
 
 	listaClick: function () {
-		console.log(App.get('turnosController.turnoHablando').get('listaId')+ ' - ' +this.get('content.id'));
 		App.get('listaController').set('content', this.get('content'));
 	}
 });
