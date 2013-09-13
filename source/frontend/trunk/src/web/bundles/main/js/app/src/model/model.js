@@ -62,15 +62,29 @@ App.Estructura = Em.Object.extend({
 	],
 
 	label: function () {
-		return this.get('nombre');
+		return this.get('id') + ' ' + this.get('nombre') + ' ' + this.get('rolesLabel');
+	}.property('id', 'nombre'),
+	
+	datosLabel: function () {
+		var str = "<p>" + this.get('nombre') + "</p>"; 
+		return str.htmlSafe();
 	}.property('nombre'),
 
+	rolesLabel: function () {
+		var str = "";
+		this.get('roles').forEach(function(rol){
+			str += rol.nombre;
+		});
+		return str.htmlSafe();
+	}.property('roles'),
 });
 
 App.Funcion = Em.Object.extend({
 	url: '/user/funcion',
 	id: '',
 	nombre: '',
+
+	cuil: '',
 	roles: '',
 	
 	serializable: [
@@ -80,8 +94,21 @@ App.Funcion = Em.Object.extend({
 	],
 
 	label: function () {
-		return this.get('nombre');
-	}.property('nombre'),	
+		return this.get('id') + ' ' + this.get('nombre') + ' ' + this.get('rolesLabel');
+	}.property('id', 'nombre'),
+	
+	datosLabel: function () {
+		var str = "<p>" + this.get('nombre') + "</p>"; 
+		return str.htmlSafe();
+	}.property('nombre'),
+
+	rolesLabel: function () {
+		var str = "";
+		this.get('roles').forEach(function(rol){
+			str += rol.nombre;
+		});
+		return str.htmlSafe();
+	}.property('roles'),
 });
 
 
