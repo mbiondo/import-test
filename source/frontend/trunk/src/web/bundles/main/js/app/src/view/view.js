@@ -356,6 +356,8 @@ App.ListFilterView = Ember.View.extend({
 
 	filterTextChanged: function () {
 		this.set('scroll', 0);
+		if(this.get('filterText').length == 1)
+			this.set('scroll', $(document).scrollTop());
 	}.observes('filterText'),
 
 	mostrarMas: function () {
