@@ -3068,7 +3068,28 @@ App.DictamenCargarView = Ember.View.extend({
 	dictamenesAgregados: false,
 	clickGuardar: null,
 
-
+	unanimidadChange: function(){		
+		if(this.get('content.unanimidad') == true)
+		{
+			if(this.get('content.textos').length > 0)
+			{	
+				var _self = this;
+				this.set('content.desactivarAgregarDictamen', true);
+				this.set('content.textos.firstObject.dictamenNormal', true);				
+				this.get('content.textos').forEach(function(value, key){
+					if(key > 0)
+					{
+						_self.get('content.textos').removeObject(value);
+					}
+				});
+			}
+		}
+		else
+		{
+			this.set('content.desactivarAgregarDictamen', false);			
+			this.set('content.textos.firstObject.dictamenNormal', false);
+		}
+	}.observes('content.unanimidad', 'content.textos'),
 	setMayoria: function () {
 		
 		var i = 0;
