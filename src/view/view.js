@@ -3068,30 +3068,26 @@ App.DictamenCargarView = Ember.View.extend({
 	dictamenesAgregados: false,
 	clickGuardar: null,
 
-	unanimidadChange: function(){		
-		if(this.get('content.unanimidad') == true)
-		{
-			if(this.get('content.textos').length > 0)
-			{	
+	unanimidadChange: function(){
+		if(this.get('content.textos').length > 0)
+		{		
+			if(this.get('content.unanimidad') == true)
+			{			
 				var _self = this;
 				this.set('content.desactivarAgregarDictamen', true);
 				this.set('content.textos.firstObject.dictamenNormal', true);				
-				this.get('content.textos').forEach(function(value, key){
-					if(key > 0)
-					{
-						_self.get('content.textos').removeObject(value);
-					}
+				this.get('content.textos').slice(1).forEach(function(texto){
+					_self.get('content.textos').removeObject(texto);
 				});
 			}
-		}
-		else
-		{
-			this.set('content.desactivarAgregarDictamen', false);			
-			this.set('content.textos.firstObject.dictamenNormal', false);
+			else
+			{
+				this.set('content.desactivarAgregarDictamen', false);			
+				this.set('content.textos.firstObject.dictamenNormal', false);
+			}
 		}
 	}.observes('content.unanimidad', 'content.textos'),
 	setMayoria: function () {
-		
 		var i = 0;
 		this.get('content.textos').forEach(function (texto) {
 			if (i == 0)
@@ -3101,11 +3097,11 @@ App.DictamenCargarView = Ember.View.extend({
 			i++;
 		});
 
-		if (this.get('content.textos').length == 0) {
+		if (this.get('content.textos').length == 0)
+		{
 			this.set('dictamenesAgregados', false);
 		}
-
-	}.observes('content.textos.@each', 'content.textos'),
+	}.observes('content.textos.@each', 'content.textos', 'content.unanimidad'),
 
 
 	hacerMayoria: function (texto) {
