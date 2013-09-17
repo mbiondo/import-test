@@ -955,7 +955,6 @@ App.Turno = Em.Object.extend({
 			orden = orden + $().zeroFill(this.get('orden'),14);
 		}
 
-		console.log(orden);
 		return orden;
 
 	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin'),

@@ -643,24 +643,11 @@ App.Router =  Em.Router.extend({
 			crear: Em.Route.extend({
 				route: "/envio/crear",
 
-                deserialize: function(router, params) {
-                    if (App.get('expedientesArchivadosController.loaded'))
-                        return null;
-
-                    var deferred = $.Deferred(),
-
-                    fn = function() {
-                        App.get('expedientesArchivadosController').removeObserver('loaded', this, fn);	
-                        deferred.resolve(null);					
-                    };
-
-                    App.get('expedientesArchivadosController').addObserver('loaded', this, fn);
-                    App.get('expedientesArchivadosController').load();
-
-                    return deferred.promise();
-                },	
 
                 connectOutlets: function(router, context) {
+
+ 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
+
                     var appController = router.get('applicationController');	
                     appController.connectOutlet('main', 'expedientesArchivados');
                     appController.connectOutlet('menu', 'subMenu');
@@ -671,7 +658,8 @@ App.Router =  Em.Router.extend({
                         {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados/envio/crear'},
                         {titulo: 'Envío', url: '#/expedientesArchivados/envio/crear'},
                         {titulo: 'Crear', url: '#/expedientesArchivados/envio/crear'},
-                    ]);				
+                    ]);	
+                    			
                 },
 			}),
 		}), 
