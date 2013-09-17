@@ -2706,8 +2706,6 @@ App.CrearParteView = Ember.View.extend({
 			}
 		});
 
-		//console.log(this.get('faltaSeleccionar'));
-
 		$('#formCrearParte').parsley('destroy');
 		if(!$('#formCrearParte').parsley('validate') || (App.get('citacionConsultaController.content.temas').length > 0 && this.get('faltaSeleccionar') == true)) return false;
 
@@ -4479,6 +4477,7 @@ App.EstadisticaTableView = App.ListFilterView.extend({
 	itemViewClass: App.EstadisticaTableItemView,
 });
 
+
 //Plan De Labor Crear
 App.CrearPlanDeLaborView = Ember.View.extend({
 	templateName: "crear-plan-de-labor",
@@ -4546,7 +4545,12 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 	item: null,
 	filterExpedientes: '',
 	filterDictamenes: '',
+	grupoFaltaSeleccionar: false,
 
+	didInsertElement: function () {
+		this._super();
+		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
+	},
 	proyectosList: function () {
 		var filtered;
 
@@ -4604,15 +4608,21 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		}
 	},
 
-	guardar: function () {
+	guardar: function (){		
+		if(!this.get('item.grupo.id'))
+		{
+			this.set('grupoFaltaSeleccionar', true);
+		}
+		else
+		{
+			this.set('grupoFaltaSeleccionar', false);
+		}
+
+		if(!$('#formAgregarPlanDeLabor').parsley('validate') && this.get('grupoFaltaSeleccionar') == true) return false;
+
 		this.get('parentView').addItem(this.get('item'));
 		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
-	},
 
-
-	didInsertElement: function () {
-		this._super();
-		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
 	},
 });
 
