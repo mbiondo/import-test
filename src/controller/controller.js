@@ -601,6 +601,29 @@ App.RestController = Em.ArrayController.extend({
 	loaded : false,
 	useAPi: true,
 
+	filter: function (filterText) {
+		this.set('loaded', false);
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url + "/" + filterText;
+
+		var async = true;
+		if (this.get('async'))
+			async = this.get('async');
+			
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+				async: async,
+			});
+
+		}		
+	},
+
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
 		}
@@ -3149,6 +3172,9 @@ App.ListaController = Em.Object.extend({
 
 		this.get('turnosDesbloqueados').setEach('tiempo', tiempo);
 		this.get('turnosDesbloqueados').invoke('save');
+
+		
+		App.get('turnosController').actualizarHora();
 	},
 
 	imprimir : function() {

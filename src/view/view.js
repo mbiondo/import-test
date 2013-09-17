@@ -355,8 +355,8 @@ App.ListFilterView = Ember.View.extend({
 	},
 
 	filterTextChanged: function () {
-		this.set('scroll', 0);
-		if(this.get('filterText').length == 1)
+		//this.set('scroll', 0);
+		/*if(this.get('filterText').length == 1)*/
 			this.set('scroll', $(document).scrollTop());
 	}.observes('filterText'),
 
@@ -379,10 +379,11 @@ App.ListFilterView = Ember.View.extend({
 			this.set('mostrarMasEnabled', true);
 		}
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords', 'step'),
+	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each'),
 	
 	updateScroll: function () {
 		_self = this;
+
 		Ember.run.next(this, function () {
 		 	$(document).scrollTop(_self.get('scroll'));
 		});
@@ -1167,13 +1168,19 @@ App.ExpedientesView = Em.View.extend({
 App.ExpedienteArchivadoItemListView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'expedienteArchivado',
+
+	borrar: function () {
+		this.get('parentView').itemSelect(this.get('content'));
+	},
 });
 
 App.ExpedienteArchivadoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ExpedienteArchivadoItemListView, 	
-	columnas: ['Seleccionar', 'N&uacute;mero de Expediente', 'Tipo de Proyecto', 'T&iacute;tulo', 'C&aacute;mara de Inicio']
-    
-     
+	columnas: ['N&uacute;mero de Expediente', 'T&iacute;tulo', 'Eliminar'],
+
+	itemSelect: function (item) {
+		this.get('parentView').removeItem(item);
+	},
 });
 
 
@@ -1185,13 +1192,20 @@ App.ExpedientesArchivadosView = Ember.View.extend({
     archivadoFecha: '',
     anio:2012,
     anios: [2012, 2011, 2010, 2009],
+    filterText: '',
+
+    proyectos: [],
+
+    removeItem: function (item) {
+    	this.get('proyectos').removeObject(item);
+    },
 
     cambiarAnio: function () {
     	App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
     }.observes('anio'),
 
     archivarExpedientes: function (){
-            var seleccionados = App.get('expedientesArchivadosController').get('arrangedContent').filterProperty('seleccionado', true);
+            var seleccionados = this.get('proyectos');
 
             var fecha = this.get('archivadoFecha');
             var user = localStorage.getObject('user');
@@ -1240,6 +1254,10 @@ App.ExpedientesArchivadosView = Ember.View.extend({
         
         
 	mostrarMasEnabled: true,
+
+	didInsertElement: function () {
+		this._super();
+	},
 });
 
 
@@ -1260,7 +1278,7 @@ App.EnviosArchivadosView = App.ListFilterView.extend({
 	sorting: false,
 	startFecha: '',
 	endFecha: '',
-        archivadoFecha: '',
+    archivadoFecha: '',
 
                 
 	mostrarMasEnabled: true,
@@ -2635,9 +2653,9 @@ App.ReunionConsultaView = Em.View.extend({
 		var temas = this.get('citacion.temas');
 		if (!temas)
 			return expedientesSeleccionados;
-		console.log(temas);
+		//console.log(temas);
 		temas.forEach(function (tema) {
-			console.log(tema);
+			//console.log(tema);
 			var proyectos = tema.get('proyectos');
 			proyectos.forEach(function (expediente) {
 				expedientesSeleccionados.addObject(expediente);
@@ -4654,4 +4672,75 @@ App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
 
-})
+});
+
+
+App.SugestView = Ember.View.extend({
+	templateName: 'sugest',
+	sugestText: '',
+	controllerName: '',
+	threshold: 3,
+
+	sugestTextChanged: function () {
+		if (this.get('sugestText').length >= this.get('threshold')) {
+			this.get('controller').filter(this.get('sugestText'));
+		} else {
+			this.set('controller.content', []);
+		}
+	}.observes('sugestText'),
+
+	sugestList: function () {
+		if (this.get('controller.content'))
+			return this.get('controller.content');
+		else
+			return null;
+	}.property('controller.content'),
+
+	itemSelect: function(item) {
+		if (!this.get('selection').findProperty('id', item.get('id')))
+		{
+			this.get('selection').addObject(item);
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('controller',  App.get(this.get('controllerName')));
+	},
+});
+
+
+App.SugestListItemView = Ember.View.extend({
+	templateName: 'sugest-item',
+
+	click: function () {
+		this.get('parentView').itemSelect(this.get('content'));
+	},
+
+	didInsertElement: function () {
+		this._super();
+	}
+});
+
+App.ExpedienteSugestListItemView = Ember.View.extend({
+	templateName: 'expediente-sugest-item',
+
+	click: function () {
+		this.get('parentView').itemSelect(this.get('content'));
+	},
+
+	didInsertElement: function () {
+		this._super();
+	}
+});
+
+App.SugestListView = Ember.CollectionView.extend({
+	classNames: ['subNav'],
+
+	tagName: 'ul',
+	itemViewClass: App.SugestListItemView,
+
+	itemSelect: function (item) {
+		this.get('parentView').itemSelect(item);
+	},
+});
