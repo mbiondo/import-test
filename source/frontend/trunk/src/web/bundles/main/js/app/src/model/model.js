@@ -1151,7 +1151,7 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     },
 
     label: function () {
-    	return this.get('observaciones');
+    	return moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('LL') + this.get('observaciones');
     }.property('observaciones'),
 });
 
