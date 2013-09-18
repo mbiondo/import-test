@@ -2374,14 +2374,6 @@ App.ReunionConsultaView = Em.View.extend({
 		this._super();
 		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
 		this.set('citacion', citacion);
-/*
-		if((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0)){
-			console.log('step1');
-		}
-		if(App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == ''){
-			console.log('step2');
-		}
-*/
 	},
 	puedeExportar: function(){
 		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
@@ -3217,8 +3209,6 @@ App.DictamenCargarView = Ember.View.extend({
 				}				
 
 				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
-
-				console.log(numeroDeProyectos);
 
 				if(!isNaN(numeroDeProyectos)){
 					if(numeroDeProyectos > 0){
@@ -4510,9 +4500,11 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 	},
 
 	guardar: function () {
-		this.get('controller.content').normalize();	
-		this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('controller.content').create();
+		if($('#formCrearPlanDeLabor').parsley('validate')){
+			this.get('controller.content').normalize();	
+			this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('controller.content').create();			
+		}
 	},
 
 	createSucceeded: function () {
@@ -4564,6 +4556,8 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 	filterExpedientes: '',
 	filterDictamenes: '',
 	grupoFaltaSeleccionar: false,
+	faltaSeleccionarDictamenesProyectos: false,
+	formularioNoValido: false,
 
 	didInsertElement: function () {
 		this._super();
@@ -4626,8 +4620,10 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		}
 	},
 
-	guardar: function (){		
-		if(!this.get('item.grupo.id'))
+	guardar: function (){
+		var itemsSeleccionadosPorDictamenesProyectos = (parseInt(this.get('item.dictamenes').length) + parseInt(this.get('item.proyectos').length));
+
+		if(this.get('item.grupo') == null)
 		{
 			this.set('grupoFaltaSeleccionar', true);
 		}
@@ -4636,11 +4632,27 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 			this.set('grupoFaltaSeleccionar', false);
 		}
 
-		if(!$('#formAgregarPlanDeLabor').parsley('validate') && this.get('grupoFaltaSeleccionar') == true) return false;
+		if(itemsSeleccionadosPorDictamenesProyectos > 0)
+		{
+			this.set('faltaSeleccionarDictamenesProyectos', false);
+		}
+		else
+		{
+			this.set('faltaSeleccionarDictamenesProyectos', true);			
+		}
 
-		this.get('parentView').addItem(this.get('item'));
-		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
+		if(!$('#formAgregarPlanDeLabor').parsley('validate') || this.get('grupoFaltaSeleccionar') == true || this.get('faltaSeleccionarDictamenesProyectos') == true){
+			this.set('formularioNoValido', true);
+		}
+		else{
+			this.set('formularioNoValido', false);			
+		}
 
+		if(this.get('formularioNoValido') == false)
+		{
+			this.get('parentView').addItem(this.get('item'));
+			this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));			
+		}
 	},
 });
 
