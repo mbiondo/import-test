@@ -486,7 +486,7 @@ App.PlanDeLaborItemView = Ember.View.extend({
 
 App.PlanDeLaborListView = App.ListFilterView.extend({ 
 	itemViewClass: App.PlanDeLaborItemView, 	
-	columnas: ['Fecha', 'titulo', 'Ver'],
+	columnas: ['Fecha Estimada', 'Observaciones', 'Ver'],
 });
 
 
