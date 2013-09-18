@@ -1104,8 +1104,8 @@ App.Router =  Em.Router.extend({
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
-								{titulo: 'Reunión'},
 								{titulo: conOsinParte},
+								{titulo: 'Reunión'},
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero')},
 							]);					
 							App.get('menuController').seleccionar(2);
