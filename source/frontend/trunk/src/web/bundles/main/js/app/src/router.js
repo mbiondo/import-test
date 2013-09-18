@@ -1090,10 +1090,22 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('main', 'reunionConsulta');
 							appController.connectOutlet('menu', 'subMenu');
+							
+							var conOsinParte;
+
+							if(App.reunionConsultaController.content.parte.length > 0)
+							{
+								conOsinParte = ' con Parte';
+							}
+							else
+							{
+								conOsinParte = ' sin Parte';
+							}
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
 								{titulo: 'Reunión'},
+								{titulo: conOsinParte},
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero')},
 							]);					
 							App.get('menuController').seleccionar(2);
