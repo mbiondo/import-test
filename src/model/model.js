@@ -570,7 +570,7 @@ App.DictamenTexto = Em.Object.extend({
 	mayoria: false,
 
 	ordenLabel: function(){
-		return this.get('orden') - 1;
+		return convert(this.get('orden') - 1);
 	}.property('orden'),
 	sumarioHTML: function () {
 		return this.get('sumario').replace(/\n/g, "<br/>").htmlSafe();
