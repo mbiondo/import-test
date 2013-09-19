@@ -14,71 +14,71 @@ Ember.View.reopen({
 
 JQ.Widget = Em.Mixin.create({
 
-    didInsertElement: function () {
-    	this._super();
-        "use strict";
-        var options = this._gatherOptions(), ui;
+	didInsertElement: function () {
+		this._super();
+		"use strict";
+		var options = this._gatherOptions(), ui;
 
-        this._gatherEvents(options);
+		this._gatherEvents(options);
 
-        if (typeof jQuery.ui[this.get('uiType')] === 'function') {
-            ui = jQuery.ui[this.get('uiType')](options, this.get('element'));
-        } else {
-            ui = $(this.get('element'))[this.get('uiType')](options);
-        }
-        
-        this.set('ui', ui);
-    },
+		if (typeof jQuery.ui[this.get('uiType')] === 'function') {
+			ui = jQuery.ui[this.get('uiType')](options, this.get('element'));
+		} else {
+			ui = $(this.get('element'))[this.get('uiType')](options);
+		}
+		
+		this.set('ui', ui);
+	},
 
-    willDestroyElement: function () {
-        "use strict";
-        var ui = this.get('ui'), observers, prop;
+	willDestroyElement: function () {
+		"use strict";
+		var ui = this.get('ui'), observers, prop;
 
-        if (ui) {
-            observers = this._observers;
-            for (prop in observers) {
-                if (observers.hasOwnProperty(prop)) {
-                    this.removeObserver(prop, observers[prop]);
-                }
-            }
-            //ui._destroy();
-        }
-    },
+		if (ui) {
+			observers = this._observers;
+			for (prop in observers) {
+				if (observers.hasOwnProperty(prop)) {
+					this.removeObserver(prop, observers[prop]);
+				}
+			}
+			//ui._destroy();
+		}
+	},
 
-    _gatherOptions: function () {
-        "use strict";
-        var uiOptions = this.get('uiOptions'), options = {};
+	_gatherOptions: function () {
+		"use strict";
+		var uiOptions = this.get('uiOptions'), options = {};
 
-        uiOptions.forEach(function (key) {
-            options[key] = this.get(key);
+		uiOptions.forEach(function (key) {
+			options[key] = this.get(key);
 
-            var observer = function () {
-                var value = this.get(key);
-                this.get('ui')._setOption(key, value);
-            };
+			var observer = function () {
+				var value = this.get(key);
+				this.get('ui')._setOption(key, value);
+			};
 
-            this.addObserver(key, observer);
+			this.addObserver(key, observer);
 
-            this._observers = this._observers || {};
-            this._observers[key] = observer;
-        }, this);
+			this._observers = this._observers || {};
+			this._observers[key] = observer;
+		}, this);
 
-        return options;
-    },
+		return options;
+	},
 
 
-    _gatherEvents: function (options) {
-        "use strict";
-        var uiEvents = this.get('uiEvents') || [], self = this;
+	_gatherEvents: function (options) {
+		"use strict";
+		var uiEvents = this.get('uiEvents') || [], self = this;
 
-        uiEvents.forEach(function (event) {
-            var callback = self[event];
+		uiEvents.forEach(function (event) {
+			var callback = self[event];
 
-            if (callback) {
-                options[event] = function (event, ui) { return callback.call(self, event, ui); };
-            }
-        });
-    }
+			if (callback) {
+				options[event] = function (event, ui) { return callback.call(self, event, ui); };
+			}
+		});
+	}
 });
 
 App.ModalView = Bootstrap.ModalPane.extend({
@@ -86,71 +86,71 @@ App.ModalView = Bootstrap.ModalPane.extend({
 });
 
 JQ.Button = Em.View.extend(JQ.Widget, {
-    uiType: 'button',
-    uiOptions: ['disabled', 'text', 'icons', 'label'],
-    uiEvents: ['create'],
+	uiType: 'button',
+	uiOptions: ['disabled', 'text', 'icons', 'label'],
+	uiEvents: ['create'],
 
-    tagName: 'button'
+	tagName: 'button'
 });
 
 JQ.ChosenMultipleSelect = Em.Select.extend({
-    multiple: true,
-    attributeBindings: [ 'multiple' ],
-    placeholder: '',
+	multiple: true,
+	attributeBindings: [ 'multiple' ],
+	placeholder: '',
 
-    didInsertElement: function(){
-        this._super();
-        //this.$().data("placeholder", this.get('placeholder')).chosen();
-    },
+	didInsertElement: function(){
+		this._super();
+		//this.$().data("placeholder", this.get('placeholder')).chosen();
+	},
  
-    selectionChanged: function() {
-        this.$().trigger('liszt:updated');
-    }.observes('selection')
+	selectionChanged: function() {
+		this.$().trigger('liszt:updated');
+	}.observes('selection')
 });
 
 JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
-    uiType: 'menu',
-    uiOptions: ['disabled'],
-    uiEvents: ['create', 'focus', 'blur', 'select'],
+	uiType: 'menu',
+	uiOptions: ['disabled'],
+	uiEvents: ['create', 'focus', 'blur', 'select'],
 
-    tagName: 'ul',
+	tagName: 'ul',
 
 
-    arrayDidChange: function (content, start, removed, added) {
-        "use strict";
-        this._super(content, start, removed, added);
+	arrayDidChange: function (content, start, removed, added) {
+		"use strict";
+		this._super(content, start, removed, added);
 
-        var ui = this.get('ui');
-        if (ui) {
+		var ui = this.get('ui');
+		if (ui) {
 
-            Em.run.schedule('render', function () {
-                ui.refresh();
-            });
-        }
-    }
+			Em.run.schedule('render', function () {
+				ui.refresh();
+			});
+		}
+	}
 });
 
 
 Ember.TextField.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength'],
 });
 
 Ember.TextArea.reopen({
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'maxlength'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'maxlength'],
 });
 
 Ember.Checkbox.reopen({
-    attributeBindings: ['data-group', 'name'],
+	attributeBindings: ['data-group', 'name'],
 });
 
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
-    uiType: 'datepicker',
-    uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
-    uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
+	uiType: 'datepicker',
+	uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
+	uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
 
-    tagName: 'input',
-    type: "text",
-    attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message'],
+	tagName: 'input',
+	type: "text",
+	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
@@ -158,7 +158,7 @@ App.DatePicker = JQ.DatePicker.extend({
    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
  
   beforeShowDay: function(date) {
-      return [true, ""];
+	  return [true, ""];
   },
   
   onSelect: function (date) {
@@ -348,7 +348,7 @@ App.ListFilterView = Ember.View.extend({
 		$(window).scroll(function(){
 			if($(window).scrollTop() == $(document).height() - $(window).height()){
 				_self.set('totalRecords', _self.get('totalRecords') + _self.get('step'));
-		    }
+			}
 		 });
 		*/
 		
@@ -385,7 +385,7 @@ App.ListFilterView = Ember.View.extend({
 		_self = this;
 
 		Ember.run.next(this, function () {
-		 	$(document).scrollTop(_self.get('scroll'));
+			$(document).scrollTop(_self.get('scroll'));
 		});
 	}.observes('lista'),
 
@@ -691,24 +691,24 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 
 		delete d.id;
 
-	    var dJson = JSON.stringify(dictamen);
+		var dJson = JSON.stringify(dictamen);
 
-	   	var url = "/dic/od";
+		var url = "/dic/od";
 
-        $.ajax({
-            url: App.get('apiController').get('url') + url,
-            contentType: 'text/plain',
-            dataType: 'JSON',
-            type: 'POST',
-            data : dJson,
+		$.ajax({
+			url: App.get('apiController').get('url') + url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'POST',
+			data : dJson,
 			success: this.loadSucceeded,
 			complete: this.loadCompleted
-        });		
+		});		
 	},
 
 	loadCompleted: function () { 
 		 if (!App.get('ordenesDelDiaController'))
-		 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
+			App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
 
 		 fn = function() {
 			App.get('router').transitionTo('root.ordenDelDia.listadoOD');				
@@ -741,7 +741,7 @@ App.DictamenView = Ember.View.extend({
 
 	crearOD: function (){
 		 if (!App.get('dictamenController'))
-		 	App.dictamenController = App.DictamenController.create();
+			App.dictamenController = App.DictamenController.create();
 
 		 fn = function() {
 			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
@@ -768,7 +768,7 @@ App.DictamenSinODItemView = Ember.View.extend({
 
 	crearOD: function (){
 		 if (!App.get('dictamenController'))
-		 	App.dictamenController = App.DictamenController.create();
+			App.dictamenController = App.DictamenController.create();
 
 		 fn = function() {
 			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.crear');				
@@ -790,7 +790,7 @@ App.OrdenDelDiaView = Ember.View.extend({
 
 	verOD: function(){
 		 if (!App.get('ordenDelDiaController'))
-		 	App.ordenDelDiaController = App.OrdenDelDiaController.create();
+			App.ordenDelDiaController = App.OrdenDelDiaController.create();
 
 		 fn = function() {
 			App.get('router').transitionTo('comisiones.ordenesDelDia.ordenDelDia.ordenConsulta.verOrden', this.get('content'));
@@ -842,7 +842,7 @@ App.ItemMultiSelectView = Em.View.extend({
 });
 
 App.MultiSelectView = Ember.CollectionView.extend({
-    classNames : ['subNav'],  
+	classNames : ['subNav'],  
 	tagName: 'ul',
 	itemViewClass: App.ItemMultiSelectView, 
 });
@@ -858,7 +858,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 		switch (object.constructor.toString()) {
 			case "(subclass of App.Rol)":
 				var item = this.get('notificationType.roles').findProperty("id", object.get('id'));
-		        if (!item) {
+				if (!item) {
 					this.get('notificationType.roles').pushObject(object);
 				}
 				else {
@@ -867,7 +867,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 				break;
 			case "App.Comision":
 				var item = this.get('notificationType.comisiones').findProperty("id", object.get('id'));
-		        if (!item) {
+				if (!item) {
 					this.get('notificationType.comisiones').pushObject(object);
 				}
 				else {
@@ -876,7 +876,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 				break;
 			case "(subclass of App.Estructura)":
 				var item = this.get('notificationType.estructuras').findProperty("id", object.get('id'));
-		        if (!item) {
+				if (!item) {
 					this.get('notificationType.estructuras').pushObject(object);
 				}
 				else {
@@ -885,7 +885,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 				break;
 			case "(subclass of App.Funcion)":
 				var item = this.get('notificationType.funciones').findProperty("id", object.get('id'));
-		        if (!item) {
+				if (!item) {
 					this.get('notificationType.funciones').pushObject(object);
 				}
 				else {
@@ -1120,9 +1120,9 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 			filtered 	= filtered.filter(function(expediente){
 			   var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; });
 			   if (!giros.contains(comision))
-			           return false;
+					   return false;
 			   else
-			        return true;
+					return true;
 			});        
 		}
 
@@ -1186,76 +1186,73 @@ App.ExpedienteArchivadoListView = App.ListFilterView.extend({
 
 
 App.ExpedientesArchivadosView = Ember.View.extend({
-    templateName: 'expedientesArchivados',
-    startFecha: '',
-    endFecha: '',
-    archivadoFecha: '',
-    anio:2012,
-    anios: [2012, 2011, 2010, 2009],
-    filterText: '',
-
-    proyectos: [],
-
-    removeItem: function (item) {
-    	this.get('proyectos').removeObject(item);
-    },
-
-    cambiarAnio: function () {
-    	App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
-    }.observes('anio'),
-
-    archivarExpedientes: function (){
-            var seleccionados = this.get('proyectos');
-
-            var fecha = this.get('archivadoFecha');
-            var user = localStorage.getObject('user');
-            var usuario = App.Usuario.create(JSON.parse(user));
-            
-            var listaEnvioArchivo = App.ListaEnvioArchivo.create();
-            
-            listaEnvioArchivo.set('fecha', moment(fecha, 'DD/MM/YYYY').format("YYYY-MM-DD  HH:mm"));
-            listaEnvioArchivo.set('autor', usuario.get('nombre') + " " + usuario.get('apellido') );
-            listaEnvioArchivo.set('expedientes', seleccionados);
-            
-            var listaJSON = JSON.stringify(listaEnvioArchivo);
-            
-            var url = "/com/env/envio";
-            
-            $.ajax({
-                    url: App.get('apiController').get('url') + url,
-                    contentType: 'text/plain',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data : listaJSON,
-                    success: this.createSucceeded,
-            });
-	},
-
-	createSucceeded: function (data) {
-            
-            if (data.id) {
-                fn = function() {
-                    App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
-                    App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-                    App.get('router').transitionTo('expedientesArchivados.index.index');					
-                };
-
-                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
-				App.get('envioArchivoController').addObserver('loaded', this, fn);
-                App.get('envioArchivoController').load();
-               
-            } else 
-            {
-                $.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
-            }
-	},
-        
-        
+	templateName: 'expedientesArchivados',
+	startFecha: '',
+	endFecha: '',
+	archivadoFecha: '',
+	anio:2012,
+	anios: [2012, 2011, 2010, 2009],
+	filterText: '',
+	proyectos: [],
 	mostrarMasEnabled: true,
 
 	didInsertElement: function () {
 		this._super();
+		this.set('proyectos', []);
 	},
+	removeItem: function (item) {
+		this.get('proyectos').removeObject(item);
+	},
+	cambiarAnio: function () {
+		App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
+	}.observes('anio'),
+	archivarExpedientes: function (){
+			var seleccionados = this.get('proyectos');
+
+			var fecha = this.get('archivadoFecha');
+			var user = localStorage.getObject('user');
+			var usuario = App.Usuario.create(JSON.parse(user));
+			
+			var listaEnvioArchivo = App.ListaEnvioArchivo.create();
+			
+			listaEnvioArchivo.set('fecha', moment(fecha, 'DD/MM/YYYY').format("YYYY-MM-DD  HH:mm"));
+			listaEnvioArchivo.set('autor', usuario.get('nombre') + " " + usuario.get('apellido') );
+			listaEnvioArchivo.set('expedientes', seleccionados);
+			
+			var listaJSON = JSON.stringify(listaEnvioArchivo);
+			
+			var url = "/com/env/envio";
+			
+			$.ajax({
+					url: App.get('apiController').get('url') + url,
+					contentType: 'text/plain',
+					dataType: 'JSON',
+					type: 'POST',
+					data : listaJSON,
+					success: this.createSucceeded,
+			});
+	},
+	createSucceeded: function (data) {
+			if (data.id)
+			{
+				fn = function() {
+					App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
+					App.get('envioArchivoController').removeObserver('loaded', this, fn);                    
+					App.get('router').transitionTo('expedientesArchivados.index.index');                     
+				};
+
+				$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
+				App.get('envioArchivoController').addObserver('loaded', this, fn);
+				App.get('envioArchivoController').load();
+			   
+			}
+			else 
+			{
+				$.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
+			}
+	},
+		
+		
 });
 
 
@@ -1276,9 +1273,9 @@ App.EnviosArchivadosView = App.ListFilterView.extend({
 	sorting: false,
 	startFecha: '',
 	endFecha: '',
-    archivadoFecha: '',
+	archivadoFecha: '',
 
-                
+				
 	mostrarMasEnabled: true,
 });
 
@@ -1289,63 +1286,63 @@ App.EnviosArchivadosView = App.ListFilterView.extend({
 App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	templateName: 'expedientesEnvioConsulta',
 	filterFirmantes: '',
-    archivadoFecha: '',
-        
-  	isExpanded: false,
-        isPendiente: false,
+	archivadoFecha: '',
+		
+	isExpanded: false,
+		isPendiente: false,
 	
 	exportar: function () {
 		$.download('exportar/envio', "&type=envio&data=" + JSON.stringify(App.envioArchivoConsultaController.content));
 	},
 	toggleBotonConfirmar: function() {
-            this.set('isExpanded', !this.get('isExpanded'));
-            this.$("#confirmarBotonDiv").slideToggle();
+			this.set('isExpanded', !this.get('isExpanded'));
+			this.$("#confirmarBotonDiv").slideToggle();
 	},
 	
 	didInsertElement: function(){
 			this._super();
-            $("#confirmarBotonDiv").hide();
-            this.set('content', App.get('envioArchivoConsultaController.content'));
-            if (App.get('envioArchivoConsultaController.content.estado')=="Pendiente") {
-                this.set('isPendiente', true);
-            }
+			$("#confirmarBotonDiv").hide();
+			this.set('content', App.get('envioArchivoConsultaController.content'));
+			if (App.get('envioArchivoConsultaController.content.estado')=="Pendiente") {
+				this.set('isPendiente', true);
+			}
 	},
 
 	confirmarToggle: function(){
 		this.$("#confirmarBotonDiv").slideToggle();
 	}, 
-        
-        
-        confirmarEnvio: function(){
-    
-            var idConfirmar = JSON.stringify(this.get('content.id'));
-            
-            var url = "/com/env/envio/confirmar";
-            
-            $.ajax({
-                    url: App.get('apiController').get('url') + url,
-                    contentType: 'text/plain',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data : idConfirmar,
-                    success: this.createSucceeded,
-            });        
-        },
-                
+		
+		
+		confirmarEnvio: function(){
+	
+			var idConfirmar = JSON.stringify(this.get('content.id'));
+			
+			var url = "/com/env/envio/confirmar";
+			
+			$.ajax({
+					url: App.get('apiController').get('url') + url,
+					contentType: 'text/plain',
+					dataType: 'JSON',
+					type: 'POST',
+					data : idConfirmar,
+					success: this.createSucceeded,
+			});        
+		},
+				
 
 	createSucceeded: function (data) {            
-            if (data.id) {
-                fn = function() {
-                    App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-                    App.get('router').transitionTo('enviosArchivo.index');					
-                };
+			if (data.id) {
+				fn = function() {
+					App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('enviosArchivo.index');					
+				};
 
-                App.get('envioArchivoController').addObserver('loaded', this, fn);
-                App.get('envioArchivoController').load();
-            } else 
-            {
-                $.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000 });
-            }
+				App.get('envioArchivoController').addObserver('loaded', this, fn);
+				App.get('envioArchivoController').load();
+			} else 
+			{
+				$.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000 });
+			}
 	}, 
 	mostrarMasEnabled: true,
 });
@@ -1373,43 +1370,43 @@ App.UploaderView = Em.View.extend({
 
 	fileChange: function () {
 		_self = this;
-        var formData = new FormData(this.$('#' + this.get('formId'))[0]);
-        $.ajax({
-            url: 'upload.php',  //server script to process data
-            type: 'POST',
-       		data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,      
- 	        xhr: function() {  // custom xhr
-	            myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){ // if upload property exists
-                    myXhr.upload.addEventListener('progress', function(a) { 
-                    	_self.set('percent', Math.round(a.loaded / a.totalSize * 100));
-                    	_self.$('#progress').attr('original-title', _self.get('percent') + "%");
-                    	_self.$('#progress').attr('style', "width: " + _self.get('percent') + "%;");
-                    }, false); // progressbar
-                }
-                return myXhr;
-            },
-       		beforeSend: function(){
+		var formData = new FormData(this.$('#' + this.get('formId'))[0]);
+		$.ajax({
+			url: 'upload.php',  //server script to process data
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,      
+			xhr: function() {  // custom xhr
+				myXhr = $.ajaxSettings.xhr();
+				if(myXhr.upload){ // if upload property exists
+					myXhr.upload.addEventListener('progress', function(a) { 
+						_self.set('percent', Math.round(a.loaded / a.totalSize * 100));
+						_self.$('#progress').attr('original-title', _self.get('percent') + "%");
+						_self.$('#progress').attr('style', "width: " + _self.get('percent') + "%;");
+					}, false); // progressbar
+				}
+				return myXhr;
+			},
+			beforeSend: function(){
 
-       		},
-       		success: function(payload)
-       		{
-       			data = JSON.parse(payload);
-       			if (data.result == "ok") {
-       				_self.set('file', data.file);
-       			} 
-       		}
-        });
+			},
+			success: function(payload)
+			{
+				data = JSON.parse(payload);
+				if (data.result == "ok") {
+					_self.set('file', data.file);
+				} 
+			}
+		});
 	}.observes('url'),
 
 	didInsertElement: function () {
 		this._super();
 		this.$("input:file").uniform();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
-    }
+	}
 });
 
 App.UploaderModalView = App.ModalView.extend({
@@ -1511,7 +1508,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 	
 	clickTextoCompleto: function(e){
 //        console.log(this.getPath('App.expedienteConsultaController.content.url'));
-    }
+	}
 });
 
 App.CitacionConsultaView = Em.View.extend({
@@ -1581,100 +1578,100 @@ App.CitacionConsultaView = Em.View.extend({
 });
 
 App.CalendarTool = Em.View.extend({
-    tagName: 'div',
-    attributeBindings: ['id', 'events', 'owner'],
-    classNamesBindings: ['class'],
+	tagName: 'div',
+	attributeBindings: ['id', 'events', 'owner'],
+	classNamesBindings: ['class'],
 
-    didInsertElement: function(){
-    	this._super();
-        $('#mycalendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay '
-            },
-            editable: false,
-            timeFormat: {
-                agenda: 'H:mm',
-                '': 'H:mm'
-            },
-            axisFormat: 'H:mm',
-            monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
-            monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-            buttonText: {
-             today: 'Hoy',
-             month: 'Mes',
-             week: 'Semana',
-             day: 'Día'
-            },
-            titleFormat: {
-                month: 'MMMM yyyy',
-                week: "dd MMM[ yyyy]{ '&#8212;' dd MMM yyyy}",
-                day: 'd MMM yyyy'
-            },
-            columnFormat: {
-                month: 'ddd',
-                week: "ddd dd/MM",
-                day: 'dddd dd/MM'
-            },
-            allDayText: 'Todo el día',
-            events: function(start, end, callback) {
+	didInsertElement: function(){
+		this._super();
+		$('#mycalendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay '
+			},
+			editable: false,
+			timeFormat: {
+				agenda: 'H:mm',
+				'': 'H:mm'
+			},
+			axisFormat: 'H:mm',
+			monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
+			monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+			dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+			buttonText: {
+			 today: 'Hoy',
+			 month: 'Mes',
+			 week: 'Semana',
+			 day: 'Día'
+			},
+			titleFormat: {
+				month: 'MMMM yyyy',
+				week: "dd MMM[ yyyy]{ '&#8212;' dd MMM yyyy}",
+				day: 'd MMM yyyy'
+			},
+			columnFormat: {
+				month: 'ddd',
+				week: "ddd dd/MM",
+				day: 'dddd dd/MM'
+			},
+			allDayText: 'Todo el día',
+			events: function(start, end, callback) {
 				
-                var fn = function() {
+				var fn = function() {
 
-                        App.get('citacionesController').removeObserver('loaded', this, fn);
-                        App.get('citacionesController').get('citaciones').forEach(function (citacion) {
-                                var color = '';
-                                if (citacion.get('estado'))
-                                {
-                                    switch (citacion.get('estado').id)
-                                    {
-                                            case 2:
-                                                    color = "green";
-                                            break;
-                                            case 3:
-                                                    color = "red";
-                                            break;						
-                                            default:
-                                                    color = "";
-                                            break;
-                                    }					
-                                    citacion.set('color', color);
-                                   
-                                }	
-                                citacion.set('url', '');
+						App.get('citacionesController').removeObserver('loaded', this, fn);
+						App.get('citacionesController').get('citaciones').forEach(function (citacion) {
+								var color = '';
+								if (citacion.get('estado'))
+								{
+									switch (citacion.get('estado').id)
+									{
+											case 2:
+													color = "green";
+											break;
+											case 3:
+													color = "red";
+											break;						
+											default:
+													color = "";
+											break;
+									}					
+									citacion.set('color', color);
+								   
+								}	
+								citacion.set('url', '');
 
-                                if (citacion.get('title').length > 75) {
-                                	citacion.set('title', citacion.get('title').substr(0, 75) + "...");
-                                }
-                        });			
-                        callback(App.get('citacionesController').get('citaciones'));
-                }
+								if (citacion.get('title').length > 75) {
+									citacion.set('title', citacion.get('title').substr(0, 75) + "...");
+								}
+						});			
+						callback(App.get('citacionesController').get('citaciones'));
+				}
 
-                App.get('citacionesController').set('anio', moment(start).format('YYYY'));
-                App.get('citacionesController').set('loaded', false);
-                App.get('citacionesController').addObserver('loaded', this, fn);
-                App.get('citacionesController').load();				
-            },
+				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
+				App.get('citacionesController').set('loaded', false);
+				App.get('citacionesController').addObserver('loaded', this, fn);
+				App.get('citacionesController').load();				
+			},
 			
-            eventRender: function(event, element, view) {
-                element.bind('click', function() {
-                        App.set('citacionConsultaController.loaded', false);
-                        App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
-                        App.get('router').transitionTo('loading');
-                        fn = function() {
-                                App.get('citacionConsultaController').removeObserver('loaded', this, fn);
-                                App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
-                        };
+			eventRender: function(event, element, view) {
+				element.bind('click', function() {
+						App.set('citacionConsultaController.loaded', false);
+						App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
+						App.get('router').transitionTo('loading');
+						fn = function() {
+								App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+								App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
+						};
 
-                        App.get('citacionConsultaController').addObserver('loaded', this, fn);			
-                        App.get('citacionConsultaController').load();
-                });
-            },            
-        });	
-    }
+						App.get('citacionConsultaController').addObserver('loaded', this, fn);			
+						App.get('citacionConsultaController').load();
+				});
+			},            
+		});	
+	}
 });
 
 App.MenuView = Em.View.extend({
@@ -1870,7 +1867,7 @@ App.CitacionCrearView = Em.View.extend({
 		//if (App.get('citacionCrearController.content.comisiones.length') > 0 && !App.get('userController').hasRole('ROL_DIRECTOR_COMISIONES')) return;	
 
 		var item = App.get('citacionCrearController.content.comisiones').findProperty("id", comision.get('id'));
-        if (!item) {
+		if (!item) {
 			App.get('citacionCrearController.content.comisiones').pushObject(comision);
 		}
 		else {
@@ -2109,7 +2106,7 @@ App.CrearReunionView = App.ModalView.extend({
 	startFecha: '',
 	startHora: '',
 	nota:'',
- 	
+	
 	citacionBinding: 'App.citacionCrearController.content',
 
 	callback: function(opts, event){
@@ -2167,7 +2164,7 @@ App.ComisionView = Em.View.extend({
 });
 
 App.ComisionesView = Ember.CollectionView.extend({
-    classNames : ['subNav'],  
+	classNames : ['subNav'],  
 	tagName: 'ul',
 	itemViewClass: App.ComisionView, 
 });
@@ -2182,7 +2179,7 @@ App.InvitadoView = Em.View.extend({
 });
 
 App.InvitadosView = Ember.CollectionView.extend({
-    classNames : [],  
+	classNames : [],  
 	tagName: 'tbody',
 	itemViewClass: App.InvitadoView, 
 });
@@ -2198,7 +2195,7 @@ App.CitacionExpediente = Em.View.extend({
 
 
 App.CitacionExpedientes = Ember.CollectionView.extend({
-    classNames : ['subNav'],  
+	classNames : ['subNav'],  
 	tagName: 'ul',
 	itemViewClass: App.CitacionExpediente, 
 });
@@ -2269,8 +2266,8 @@ App.CrearDictamenView = Em.View.extend({
 	templateName: 'crear-dictamen',
 });
 
-    
-    
+	
+	
 App.CargarDictamenView = Em.View.extend({
 	templateName: 'cargar-dictamen',
 
@@ -2871,35 +2868,35 @@ App.DictamenCrearView = Ember.View.extend({
 	},
 
 	clickExpediente: function (expediente) {
-            var item;
-            if (this.get('content.proyectosVistos') != '') {
-                item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
-            }
+			var item;
+			if (this.get('content.proyectosVistos') != '') {
+				item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
+			}
 
 
-            if (!item) {
-                    this.get('content.proyectosVistos').pushObject(expediente);
-            }
-            else {
-                    this.get('content.proyectosVistos').removeObject(expediente);
-            }
-            this.set('adding', !this.get('adding'));
+			if (!item) {
+					this.get('content.proyectosVistos').pushObject(expediente);
+			}
+			else {
+					this.get('content.proyectosVistos').removeObject(expediente);
+			}
+			this.set('adding', !this.get('adding'));
 	},
 
 	clickExpedienteDictamenCrear: function (expediente) {
-            var item;
-            if (this.get('content.proyectos') != '') {
-                item = this.get('content.proyectos').findProperty("id", expediente.get('id'));
-            }
+			var item;
+			if (this.get('content.proyectos') != '') {
+				item = this.get('content.proyectos').findProperty("id", expediente.get('id'));
+			}
 
 
-            if (!item) {
-                    this.get('content.proyectos').pushObject(expediente);
-            }
-            else {
-                    this.get('content.proyectos').removeObject(expediente);
-            }
-            this.set('adding', !this.get('adding'));
+			if (!item) {
+					this.get('content.proyectos').pushObject(expediente);
+			}
+			else {
+					this.get('content.proyectos').removeObject(expediente);
+			}
+			this.set('adding', !this.get('adding'));
 	},
 
 	listaExpedientes: function () {
@@ -3045,7 +3042,7 @@ App.DictamenCrearView = Ember.View.extend({
 			dictamen.tipo = "Dictamen";
 			dictamen.orden = "1";
 			dictamen.itemParte = "4";
-    		dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
+			dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
 
 
 			var url = App.get('apiController.url') + "/par/evento";
@@ -3128,8 +3125,8 @@ App.DictamenCargarView = Ember.View.extend({
 
 	clickExpediente: function (expediente) {
 		var item = this.get('content.proyectosVistos').findProperty("id", expediente.get('id'));
-        
-        if (!item) {
+		
+		if (!item) {
 			this.get('content.proyectosVistos').pushObject(expediente);
 		}
 		else {
@@ -3298,7 +3295,7 @@ App.DictamenCargarView = Ember.View.extend({
 						App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
 
 						 fn = function() {
-						 	App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
+							App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
 							App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
 							var dictamen = App.get('dictamenConsultaController.content');
 
@@ -3352,7 +3349,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			this.set('hayFirmantesSeleccionados', false);			
 		}
 
-	    _self = this;
+		_self = this;
 		var item = this.get('content.firmantes').findProperty("diputado.id", firmante.get('diputado.id'));
 		var pseudoItem = this.get('firmantesSeleccionados').findProperty("diputado.id", firmante.get('diputado.id'));
 		Ember.run.next(function () {
@@ -3594,7 +3591,7 @@ App.RadioButton = Ember.View.extend({
 
 	classNames: ['ember-radio-button'],
 	templateName: "radio-button",
-    attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
 
 	bindingChanged: function(){
 		var input = this.$('input:radio');
@@ -3925,7 +3922,7 @@ App.OradorView = Em.View.extend({
 });
 
 App.TurnoOradorView = Ember.CollectionView.extend({
-    classNames : [],  
+	classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.OradorView, 
 }),
@@ -3939,7 +3936,7 @@ App.DiputadoView = Em.View.extend({
 });
 
 App.DiputadosView = Ember.CollectionView.extend({
-    classNames : [],  
+	classNames : [],  
 	tagName: 'ul',
 	itemViewClass: App.DiputadoView, 
 });
@@ -3950,7 +3947,7 @@ App.ErrorMensajeView = Em.View.extend({
 });
 
 App.ErroresMensajesView = Ember.CollectionView.extend({
-    classNames : ['nav'],  
+	classNames : ['nav'],  
 	tagName: 'ul',
 	itemViewClass: App.ErrorMensajeView, 
 });
@@ -3958,7 +3955,7 @@ App.ErroresMensajesView = Ember.CollectionView.extend({
 
 App.FormValidate = Ember.View.extend({
 	tagName: 'form',
-    attributeBindings: ['data-validate'],
+	attributeBindings: ['data-validate'],
 });
 
 
@@ -3976,7 +3973,7 @@ App.DiputadoSeleccionadoView = Em.View.extend({
 
 App.DiputadosSeleccionadosView = Ember.CollectionView.extend({
 	tagName: 'div',
-    classNames : ['grid12','headerDiputadosSelected'],  
+	classNames : ['grid12','headerDiputadosSelected'],  
 	itemViewClass: App.DiputadoSeleccionadoView, 
 })
 
@@ -4019,22 +4016,22 @@ App.CrearTurnoView = App.ModalView.extend({
 	}.property('turno', 'turno.oradores', 'turno.oradores.length'),
 	
 	agregarOrador: function (user) {
-        var turnoUser = {
-          orden: this.get('oradores').get('length'),
-          user: {
-            id: user.get('id'),
-            nombre: user.get('nombre'),
-            apellido: user.get('apellido'),
-            avatar: user.get('avatar'),
+		var turnoUser = {
+		  orden: this.get('oradores').get('length'),
+		  user: {
+			id: user.get('id'),
+			nombre: user.get('nombre'),
+			apellido: user.get('apellido'),
+			avatar: user.get('avatar'),
 			bloque: user.get('bloque')
-          }
-        };
-        var item = this.get('oradores').findProperty("user.id", user.get('id'));
-        if (!item) {
-          this.get('oradores').pushObject(turnoUser);
-          return true;
-        }
-        return false;
+		  }
+		};
+		var item = this.get('oradores').findProperty("user.id", user.get('id'));
+		if (!item) {
+		  this.get('oradores').pushObject(turnoUser);
+		  return true;
+		}
+		return false;
 	},
 		
 		
@@ -4067,7 +4064,7 @@ App.CrearTurnoView = App.ModalView.extend({
 	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
 	
 	callback: function(opts, event) {
-      if (opts.primary) {
+	  if (opts.primary) {
 		  if (this.get('esInvalido')) 
 			return false;
 		  var turno = App.get('crearTurnoController').get('turno');
@@ -4078,12 +4075,12 @@ App.CrearTurnoView = App.ModalView.extend({
 			turno.set('tema', App.get('temaController.content'));
 			App.get('turnosController').createObject(turno, true);
 		  }
-      } else if (opts.secondary) {
-        //alert('cancel')
-      } else {
-        //alert('close')
-      }
-      event.preventDefault();
+	  } else if (opts.secondary) {
+		//alert('cancel')
+	  } else {
+		//alert('close')
+	  }
+	  event.preventDefault();
   },
 });
 
@@ -4167,7 +4164,7 @@ App.CrearSesionView = App.ModalView.extend({
 
 
 				var sesion = App.get('crearSesionController').get('sesion');
-		        //sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
+				//sesion.set('horaInicio', moment($('.dropdown-timepicker').val(), "hh:mm A").unix())
 				// var horaSesion = moment($('.dropdown-timepicker').val(), "hh:mm A");
 				// var minutos = horaSesion.minutes();
 				// var horas = horaSesion.hours();
@@ -4324,22 +4321,22 @@ App.CrearTurnoInlineView = Em.View.extend({
 		if (this.get('oradores').length > 0)
 			return false;
 		
-        var turnoUser = {
-          orden: this.get('oradores').get('length'),
-          user: {
-            id: user.get('id'),
-            nombre: user.get('nombre'),
-            apellido: user.get('apellido'),
-            avatar: user.get('avatar'),
+		var turnoUser = {
+		  orden: this.get('oradores').get('length'),
+		  user: {
+			id: user.get('id'),
+			nombre: user.get('nombre'),
+			apellido: user.get('apellido'),
+			avatar: user.get('avatar'),
 			bloque: user.get('bloque')
-          }
-        };
-        var item = this.get('oradores').findProperty("user.id", user.get('id'));
-        if (!item) {
-          this.get('oradores').pushObject(turnoUser);
-          return true;
-        }
-        return false;
+		  }
+		};
+		var item = this.get('oradores').findProperty("user.id", user.get('id'));
+		if (!item) {
+		  this.get('oradores').pushObject(turnoUser);
+		  return true;
+		}
+		return false;
 	},
 		
 		
@@ -4367,15 +4364,15 @@ App.CrearTurnoInlineView = Em.View.extend({
 		turno.save();
 		App.get('turnosController').actualizarHora();
 	  } else {		
-	  	turno.set('orden', App.get('turnosController.content.length'));
+		turno.set('orden', App.get('turnosController.content.length'));
 		turno.set('tema', App.get('temaController.content'));
 		App.get('turnosController').createObject(turno, true);
 	  }
 
 	  this.refreshTurno();	
-  	},
+	},
 
-  	refreshTurno: function () {
+	refreshTurno: function () {
 		this.set('clickGuardar', false);
 
 		if(App.get('listaController.content'))
@@ -4396,11 +4393,11 @@ App.CrearTurnoInlineView = Em.View.extend({
 			App.get('crearTurnoController').set('turno', turno);  	
 		}
 		this.$(".controls input[type='radio']").removeProp('checked');
-  	}.observes('temaController.content', 'listaController.content'),
+	}.observes('temaController.content', 'listaController.content'),
 
-  	willInsertElement: function () {
-  		this.refreshTurno();
-  	},
+	willInsertElement: function () {
+		this.refreshTurno();
+	},
 });
 
 /* Estadisticas */
@@ -4412,43 +4409,43 @@ App.PieGraphView = Ember.View.extend({
 
 	redrawChart: function () {
 		this.$().highcharts({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            title: {
-                text: this.get('title')
-            },
-            tooltip: {
-            	pointFormat: '',
-	    		//pointFormat: "Value: {point.percentage:.2f}%" , 
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>';
-                        }
-                    }
-                }
-            },
-            series: [{
-                type:  this.get('type'),
-                name: this.get('name'),
-                data: this.get('content')
-            }]
-       });
+			chart: {
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
+			title: {
+				text: this.get('title')
+			},
+			tooltip: {
+				pointFormat: '',
+				//pointFormat: "Value: {point.percentage:.2f}%" , 
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true,
+						color: '#000000',
+						connectorColor: '#000000',
+						formatter: function() {
+							return '<b>'+ this.point.name +'</b>';
+						}
+					}
+				}
+			},
+			series: [{
+				type:  this.get('type'),
+				name: this.get('name'),
+				data: this.get('content')
+			}]
+	   });
 	}.observes('content.@each'),
 
 	didInsertElement: function () {
 		this._super();
- 		Ember.run.next(this, this.redrawChart);
+		Ember.run.next(this, this.redrawChart);
 	}
 });
 
