@@ -294,12 +294,12 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Env&iacute;os a archivo',
+							titulo: 'Estado',
 							url: '#/expedientesArchivados/envios/archivo',
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Crear env&iacute;o',
+							titulo: 'Expedientes',
 							url: '#/expedientesArchivados/envio/crear',
 						}),
 					],
