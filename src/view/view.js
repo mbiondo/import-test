@@ -1195,6 +1195,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 	filterText: '',
 	proyectos: [],
 	mostrarMasEnabled: true,
+	faltanAgregarExpedientes: false,
 
 	didInsertElement: function () {
 		this._super();
@@ -1207,10 +1208,21 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 		App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
 	}.observes('anio'),
 	archivarExpedientes: function (){
-			var seleccionados = this.get('proyectos');
+		var seleccionados = this.get('proyectos');
+		var fecha = this.get('archivadoFecha');
+		var user = localStorage.getObject('user');
 
-			var fecha = this.get('archivadoFecha');
-			var user = localStorage.getObject('user');
+		if(seleccionados.length > 0)
+		{
+			this.set('faltanAgregarExpedientes', false);
+		}
+		else
+		{
+			this.set('faltanAgregarExpedientes', true);
+		}
+
+		if($('#formCrearEnvio').parsley('validate') && this.get('faltanAgregarExpedientes') == false && this.get('archivadoFecha'))
+		{
 			var usuario = App.Usuario.create(JSON.parse(user));
 			
 			var listaEnvioArchivo = App.ListaEnvioArchivo.create();
@@ -1231,25 +1243,26 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 					data : listaJSON,
 					success: this.createSucceeded,
 			});
+		}
 	},
 	createSucceeded: function (data) {
-			if (data.id)
-			{
-				fn = function() {
-					App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
-					App.get('envioArchivoController').removeObserver('loaded', this, fn);                    
-					App.get('router').transitionTo('expedientesArchivados.index.index');                     
-				};
+		if (data.id)
+		{
+			fn = function() {
+				App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
+				App.get('envioArchivoController').removeObserver('loaded', this, fn);                    
+				App.get('router').transitionTo('expedientesArchivados.index.index');                     
+			};
 
-				$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
-				App.get('envioArchivoController').addObserver('loaded', this, fn);
-				App.get('envioArchivoController').load();
-			   
-			}
-			else 
-			{
-				$.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
-			}
+			$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
+			App.get('envioArchivoController').addObserver('loaded', this, fn);
+			App.get('envioArchivoController').load();
+		   
+		}
+		else 
+		{
+			$.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
+		}
 	},
 		
 		
