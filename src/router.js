@@ -631,7 +631,7 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envios/archivo'},							
-							{titulo: 'Envío ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/expedientesArchivados/envios/archivo/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
+							{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/expedientesArchivados/envios/archivo/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
 						]);
 						App.get('menuController').seleccionar(6);					
 					},
