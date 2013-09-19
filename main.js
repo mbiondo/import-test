@@ -282,13 +282,13 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 6,
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-			titulo: 'Expedientes Archivados',
+			titulo: 'Envíos a Archivo',
 			url: '#/expedientesArchivados/envios/archivo',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 			
 			subMenu: [
 				App.MenuItem.create({
-					titulo: 'Expedientes Archivados',
+					titulo: 'Envíos a Archivo',
 					url: '#/expedientesArchivados/envios/crear',
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
