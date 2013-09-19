@@ -656,8 +656,8 @@ App.Router =  Em.Router.extend({
 
                     App.get('breadCumbController').set('content', [
                         {titulo: 'Expedientes Archivados', url: '#/expedientesArchivados/envio/crear'},
-                        {titulo: 'Envío', url: '#/expedientesArchivados/envio/crear'},
-                        {titulo: 'Crear', url: '#/expedientesArchivados/envio/crear'},
+                        {titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envio/crear'},
+                        {titulo: 'Crear Envío', url: '#/expedientesArchivados/envio/crear'},
                     ]);	
                     			
                 },
