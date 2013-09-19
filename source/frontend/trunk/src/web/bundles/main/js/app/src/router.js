@@ -1092,7 +1092,7 @@ App.Router =  Em.Router.extend({
 							
 							var conOsinParte;
 
-							if(App.reunionConsultaController.content.parte.length > 0)
+							if(App.get('reunionConsultaController.content.parte').length > 0)
 							{
 								conOsinParte = ' con Parte';
 							}
