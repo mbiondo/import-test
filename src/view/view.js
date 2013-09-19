@@ -1242,8 +1242,6 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 
                 $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
 				App.get('envioArchivoController').addObserver('loaded', this, fn);
-                $.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });                
-                App.get('envioArchivoController').addObserver('loaded', this, fn);
                 App.get('envioArchivoController').load();
                
             } else 
