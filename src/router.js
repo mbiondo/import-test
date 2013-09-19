@@ -1092,18 +1092,20 @@ App.Router =  Em.Router.extend({
 							
 							var conOsinParte;
 
-							if(App.get('reunionConsultaController.content.parte').length > 0)
+							 if(App.get('reunionConsultaController.content.parte').length > 0)
 							{
 								conOsinParte = ' con Parte';
+								conOsinParteLink = 'con';
 							}
 							else
 							{
 								conOsinParte = ' sin Parte';
+								conOsinParteLink = 'sin';
 							}
 
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Reuniones', url: '#/comisiones/reuniones/sin/parte'},
-								{titulo: conOsinParte},
+								{titulo: 'Reuniones'},
+								{titulo: conOsinParte, url: '#/comisiones/reuniones/'+ conOsinParteLink +'/parte'},
 								{titulo: 'Reunión'},
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero')},
 							]);					
