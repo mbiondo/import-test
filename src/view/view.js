@@ -597,6 +597,22 @@ App.PlanDeLaborView = Ember.View.extend({
 
 App.PlanDeLaborListadoView = Ember.View.extend({
 	templateName: 'plan-de-labor-listado',
+
+	titulo: function () {
+		console.log(App.get('planDeLaborListadoController.estado'));
+		switch (App.get('planDeLaborListadoController.estado')) {
+			case "0":
+				return "Planes de labor tentativos";
+				break;
+			case "1":
+				return "Planes de labor confirmados";
+				break;
+			case "2":
+				return "Planes de labor definitivos";
+				break;								
+		}
+		return "";
+	}.property('App.planDeLaborListadoController.estado'),
 });
 
 App.ODMiniView = Ember.View.extend({
@@ -4520,12 +4536,12 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 		this.get('content').desNormalize();
 		if (this.get('content.createSuccess') == true) {
 
-			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 0});
 
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
 					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('planDeLabor.index', {estado: 0}); 
+					App.get('router').transitionTo('planDeLabor.index', {estado: 0});
 				}
 			};
 
@@ -4742,7 +4758,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess') == true) {
 
-			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 1});
 
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
@@ -4839,7 +4855,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'POST',
-			context : {model : sesion },
+			context : {model : sesion, pl: this.get('content'), scope: this },
 			data : sesion.getJson(),
 			success: this.createSucceeded,
 		});
@@ -4867,10 +4883,10 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			//Crear
 			notification.create();
 
-			this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
-			this.get('content').set('estado', 2);
-			this.get('content').normalize();
-			this.get('content').save();
+			this.pl.addObserver('saveSuccess', scope, scope.saveSuccessed);
+			this.pl.set('estado', 2);
+			this.pl.normalize();
+			this.pl.save();
 		}		
 	},
 
@@ -4878,7 +4894,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess') == true) {
 
-			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 2});
 
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
