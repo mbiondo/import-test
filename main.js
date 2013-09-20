@@ -1,6 +1,6 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:8080/sparl/rest',
-	//url: 'http://186.23.200.128:8080/sparl/rest',
+	//url: 'http://10.185.204.12:8080/sparl/rest',
+	url: 'http://186.23.200.128:8080/sparl/rest',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -201,7 +201,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/plan/de/labor/listado',
+			url: '#/plan/de/labor/listado/1',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
@@ -211,10 +211,21 @@ App.menuController = App.MenuController.create({
 					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Planes de Labor',
-							url: '#/plan/de/labor/listado',
+							titulo: 'Planes de Labor borradores',
+							url: '#/plan/de/labor/listado/0',
+							roles: ['ROLE_USER'],
+						}),						
+						App.MenuItem.create({
+							titulo: 'Planes de Labor Tentativos',
+							url: '#/plan/de/labor/listado/1',
 							roles: ['ROLE_USER'],
 						}),	
+
+						App.MenuItem.create({
+							titulo: 'Planes de Labor efectivos',
+							url: '#/plan/de/labor/listado/2',
+							roles: ['ROLE_USER'],
+						}),							
 						App.MenuItem.create({
 							titulo: 'Crear Plan de Labor',
 							url: '#/plan/de/labor/plan/de/labor/crear',

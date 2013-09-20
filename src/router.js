@@ -29,6 +29,27 @@ function hasRole(role) {
 	return false;	 
 }
 
+var get = Ember.get, set = Ember.set;
+
+Em.Route.reopen({
+	roles: null,
+
+
+	enter: function () {
+		if (Ember.isArray(this.get('roles'))) 
+		{
+			var userRoles = App.get('userController.roles');
+			var roles = this.get('roles');
+			var router = this.get('router');
+			roles.forEach(function (rolRequiered) {
+			 if (!userRoles.contains(rolRequiered)) {
+				router.transitionTo('page403');
+			 }
+			});
+		}
+	},
+});
+
 App.Router =  Em.Router.extend({
 	enableLogging: true,
 	location: 'hash',
@@ -37,7 +58,7 @@ App.Router =  Em.Router.extend({
 		
 	route: function(path) {
 	  this._super(path);
-	  
+
 	  if (!App.get('userController.user'))
 	  {
 	  		this.transitionTo("index");
@@ -97,7 +118,7 @@ App.Router =  Em.Router.extend({
 			route: '/403',
 				
 			connectOutlets: function(router, context) {
-			
+				
 				var appController = router.get('applicationController');
 				appController.connectOutlet('main', 'page403');
 				appController.connectOutlet('menu', 'subMenu');
@@ -192,18 +213,18 @@ App.Router =  Em.Router.extend({
 			route: '/plan/de/labor',
 
 			index: Ember.Route.extend({
-				route: '/listado',
+				route: '/listado/:estado',
 
 				deserialize: function(router, params) {
-					if (!App.get('planDeLaborListadoController'))
-						App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+
+					App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: params.estado});
 					
 					var deferred = $.Deferred(),
 					
 					fn = function() {
 						if (App.get('planDeLaborListadoController.loaded')) {
 							App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);	
+							deferred.resolve(params);	
 						}
 					};
 
@@ -248,6 +269,8 @@ App.Router =  Em.Router.extend({
 					},	
 
 					connectOutlets: function(router, context) {
+
+						App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 						var appController = router.get('applicationController');
 						appController.connectOutlet('main', 'CrearPlanDeLabor', "saraza", "sadasdasd", "asdasdsad");
 						appController.connectOutlet('menu', 'subMenu');
@@ -265,12 +288,14 @@ App.Router =  Em.Router.extend({
 					route: '/:plan/ver',
 
 					deserialize: function(router, params) {
-						 if (!App.get('planDeLaborController'))
-						 	App.planDeLaborController = App.PlanDeLaborController.create();
+
+ 					 	 App.planDeLaborController = App.PlanDeLaborController.create();
 						
 						 App.get('planDeLaborController').set('content', App.PlanDeLabor.create({id: params.plan}));
 						 var deferred = $.Deferred(),
+
 						 fn = function() {
+						 	if ( App.get('crearPlanDeLaborController.loaded') &&  App.get('planDeLaborController.loaded'))
 							App.get('planDeLaborController').removeObserver('loaded', this, fn);	
 							var plan = App.get('planDeLaborController.content');
 							deferred.resolve(plan);				
@@ -278,6 +303,12 @@ App.Router =  Em.Router.extend({
 
 						 App.get('planDeLaborController').addObserver('loaded', this, fn);
 						 App.get('planDeLaborController').load();
+
+						 App.crearPlanDeLaborController = App.CrearPlanDeLaborController.create();
+						 App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
+						 
+						 App.get('crearPlanDeLaborController').addObserver('loaded', this, fn)
+						 App.get('crearPlanDeLaborController').load();						 
 						
 						 return deferred.promise();
 					},	
@@ -288,12 +319,27 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'PlanDeLabor');
+
+						switch (App.get('planDeLaborController.content.estado')) {
+							case "Pendiente":
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+									appController.connectOutlet('main', 'PlanDeLaborBorradorEdit');
+								else
+									appController.connectOutlet('main', 'PlanDeLaborBorrador');
+								break;
+							case "Tentativo":
+								appController.connectOutlet('main', 'PlanDeLaborTentativo');
+								break;
+							case "Efectivo":
+								appController.connectOutlet('main', 'PlanDeLaborEfectivo');
+								break;
+						}
+
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-							{titulo: App.get('planDeLaborController.content.sumario')}
+							{titulo: App.get('planDeLaborController.content.observaciones')}
 						]);				
 
 						App.get('menuController').seleccionar(4);						
@@ -662,6 +708,7 @@ App.Router =  Em.Router.extend({
                         
 		comisiones: Em.Route.extend({
 			route: "/comisiones",
+			roles: ["PEDRO"],
 			
 			index: Ember.Route.extend({
 				route: "/",	
@@ -969,7 +1016,8 @@ App.Router =  Em.Router.extend({
 				route: "/reuniones",
 				index: Ember.Route.extend({
 					route: "/sin/parte",
-					
+					roles: ['MIRANDA', 'PEDRO'],
+
 					deserialize: function(router, params) {
 						 var deferred = $.Deferred(),
 						

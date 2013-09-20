@@ -135,14 +135,15 @@ App.Savable = Ember.Mixin.create({
 
 		if (data.success == true) {
 			this.set('saveSuccess', true);
-			if (this.get('notificationType'))
-			{
-				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson());
-			}
 		}		
 
 		if (this.get('saveSuccess') == true) 
 		{
+			if (this.get('notificationType'))
+			{
+				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson());
+			}
+
 			if (this.get('auditable')) 
 			{
 				var audit = App.Audit.extend(App.Savable).create();
@@ -295,6 +296,18 @@ App.IoController = Em.Object.extend({
 						App.get('sesionesController').startTimer(sesion);
 					} 
 
+				}
+				break;
+
+			case "PlanDeLaborTentativo":
+				if (App.get('planDeLaborController')) {
+					if (App.get('planDeLaborController.content'))
+					{
+						var pl = App.PlanDeLaborTentativo.create(options);
+						pl.desNormalize();
+
+						App.get('planDeLaborController').set('content', pl);
+					}
 				}
 				break;
 		}
@@ -795,7 +808,7 @@ App.PlanDeLaborController = Ember.Object.extend({
 	},
 	
 	loadSucceeded: function(data) {
-		item = App.PlanDeLaborTentativo.create();
+		item = App.PlanDeLaborTentativo.extend(App.Savable).create();
 		item.setProperties(data);
 		item.desNormalize();
 		this.set('content', item);
@@ -848,13 +861,18 @@ App.PlanDeLaborController = Ember.Object.extend({
 });
 
 App.PlanDeLaborListadoController = App.RestController.extend({
-	url: '/pdl/all',
+	url: '/pdl/planesdelabor/estado/',
 //	url: '/pdl/all'
 	sortProperties: ['fechaEstimada'],
 	sortAscending: false,
 	useApi: true,
 	loaded: false,
 	type: App.PlanDeLaborTentativo,
+
+	load: function () {
+		this.set('url', this.get('url') + this.get('estado'));
+		this._super();
+	},
 
 	createObject: function (data, save) {
 		save = save || false;
@@ -3586,13 +3604,8 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 	loaded: false,
 
 	gruposController: null,
-	expedientesController: null,
 	ordenesDelDiaController: null,
 	content: null,
-
-	expedientes: function () {
-		return this.get('expedientesController.arrangedContent');
-	}.property('expedientesController.content'),
 
 	grupos: function () {
 		return this.get('gruposController.arrangedContent');
@@ -3604,19 +3617,14 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 
 	load: function () {
 
-		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create({items: []}));
+		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create({items: [], estado: 0}));
 
 		if (!this.get('gruposController')) {
 			this.set('gruposController', App.PlanDeLaborGruposController.create());
 		}
 		this.get('gruposController').addObserver('loaded', this, this.controllersLoaded);
 		this.get('gruposController').load();
-
-		if (!this.get('expedientesController')) {
-			this.set('expedientesController', App.ExpedientesArchivablesController.create());
-		}
-		this.get('expedientesController').addObserver('loaded', this, this.controllersLoaded);
-		this.get('expedientesController').load();		
+	
 
 		if (!this.get('ordenesDelDiaController'))
 			this.set('ordenesDelDiaController', App.OrdenesDelDiaController.create());
@@ -3626,9 +3634,8 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 	},
 
 	controllersLoaded: function () {
-		if (this.get('gruposController.loaded') && this.get('expedientesController.loaded') && this.get('ordenesDelDiaController.loaded')) {
+		if (this.get('gruposController.loaded') && this.get('ordenesDelDiaController.loaded')) {
 			this.get('gruposController').removeObserver('loaded', this, this.controllersLoaded);
-			this.get('expedientesController').removeObserver('loaded', this, this.controllersLoaded);
 			this.get('ordenesDelDiaController').removeObserver('loaded', this, this.controllersLoaded);
 			this.set('loaded', true);
 		}
