@@ -1144,6 +1144,7 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     }, 
 
     desNormalize: function () {
+    	this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
     	if (this.get('items')) {
     		var items = [];
 	     	this.get('items').forEach(function (planDeLaborTentativoItem) {
@@ -1172,13 +1173,13 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	var d = [];
 
     	this.get('proyectos').forEach(function (proyecto) {
-    		p.addObject({proyecto: proyecto});
+    		p.addObject({proyecto: proyecto, id: proyecto.pseudoId});
     	});
 
     	this.set('proyectos', p);
 
     	this.get('dictamenes').forEach(function (dictamen) {
-    		d.addObject({dictamen: dictamen});
+    		d.addObject({dictamen: dictamen, id: dictamen.pseudoId});
     	});
 
     	this.set('dictamenes', d); 	
@@ -1189,15 +1190,21 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	var d = [];
 
     	this.get('proyectos').forEach(function (proyecto) {
-    		if (proyecto.proyecto)
-    			p.addObject(App.Expediente.create(proyecto.proyecto));
+    		if (proyecto.proyecto) {
+    			var proy = App.Expediente.create(proyecto.proyecto);
+    			proy.set('pseudoId', proyecto.id);
+    			p.addObject(proy);
+    		}
     	});
 
     	this.set('proyectos', p);
 
     	this.get('dictamenes').forEach(function (dictamen) {
-    		if (dictamen.dictamen)
-    			d.addObject(App.OrdeDelDia.create(dictamen.dictamen));
+    		if (dictamen.dictamen){
+    			var dic = App.OrdeDelDia.create(dictamen.dictamen);
+    			dic.set('pseudoId', dictamen.id);
+    			d.addObject(dic);
+    		}
     	});
 
     	this.set('dictamenes', d); 	

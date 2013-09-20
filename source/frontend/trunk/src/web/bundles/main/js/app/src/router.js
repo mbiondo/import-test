@@ -33,8 +33,6 @@ var get = Ember.get, set = Ember.set;
 
 Em.Route.reopen({
 	roles: null,
-
-
 	enter: function () {
 		if (Ember.isArray(this.get('roles'))) 
 		{
@@ -43,10 +41,16 @@ Em.Route.reopen({
 			var router = this.get('router');
 			roles.forEach(function (rolRequiered) {
 			 if (!userRoles.contains(rolRequiered)) {
-				router.transitionTo('page403');
+				router.goto403();
 			 }
 			});
 		}
+	},
+});
+
+Em.Router.reopen({
+	goto403: function () {
+		this.transitionTo('page403');
 	},
 });
 
@@ -234,6 +238,11 @@ App.Router =  Em.Router.extend({
 					return deferred.promise();
 				},	
 
+				serialize: function (router, context) {
+					this._super();
+					return {estado: context.estado};
+				},
+
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
 					appController.connectOutlet('main', 'PlanDeLaborListado');
@@ -321,16 +330,16 @@ App.Router =  Em.Router.extend({
 						var appController = router.get('applicationController');
 
 						switch (App.get('planDeLaborController.content.estado')) {
-							case "Pendiente":
+							case "Tentativo":
 								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
 									appController.connectOutlet('main', 'PlanDeLaborBorradorEdit');
 								else
 									appController.connectOutlet('main', 'PlanDeLaborBorrador');
 								break;
-							case "Tentativo":
+							case "Confirmado":
 								appController.connectOutlet('main', 'PlanDeLaborTentativo');
 								break;
-							case "Efectivo":
+							case "Definitivo":
 								appController.connectOutlet('main', 'PlanDeLaborEfectivo');
 								break;
 						}
