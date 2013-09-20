@@ -4499,35 +4499,50 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 	templateName: "crear-plan-de-labor",
 
 	addItem: function (item) {
-		item.set('orden', this.get('controller.content.items').length);
-		this.get('controller.content.items').pushObject(item);
+		item.set('orden', this.get('content.items').length);
+		this.get('content.items').pushObject(item);
 	},
 
 	borrarItem: function () {
-		this.get('controller.content.items').removeObject(item);
+		this.get('content.items').removeObject(item);
 	},
 
 	guardar: function () {
 		if($('#formCrearPlanDeLabor').parsley('validate')){
-			this.get('controller.content').normalize();	
-			this.get('controller.content').addObserver('createSuccess', this, this.createSucceeded);
-			this.get('controller.content').create();			
+			this.get('content').normalize();
+			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('content').create();			
 		}
 	},
 
 	createSucceeded: function () {
-		this.get('controller.content').removeObserver('createSuccess', this, this.createSucceeded);
-		if (this.get('controller.content.createSuccess') == true) {
-			console.log('create');
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		this.get('content').desNormalize();
+		if (this.get('content.createSuccess') == true) {
+
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+
+			fn = function() {
+				if (App.get('planDeLaborListadoController.loaded')) {
+					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('planDeLabor.index', {estado: 0}); 
+				}
+			};
+
+			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+			App.get('planDeLaborListadoController').load();
+
+			$.jGrowl('Se ha creado el plan de labor satisfactoriamente!', { life: 5000 });
+
 		} else {
-			console.log('no create');
+			$.jGrowl('Ocurrio un error al crear el plan de labor!', { life: 5000 });
 		}
 	},
 
 	dictamenes: function () {
-		if (this.get('controller.ordenesDelDia')) {
-			var dictamenes = this.get('controller.ordenesDelDia');
-			this.get('controller.content.items').forEach(function (item) {
+		if (App.crearPlanDeLaborController.get('ordenesDelDia')) {
+			var dictamenes = App.crearPlanDeLaborController.get('ordenesDelDia');
+			this.get('content.items').forEach(function (item) {
 				item.get('dictamenes').forEach(function (dictamen) {
 					dictamenes.removeObject(dictamen);
 				});
@@ -4536,25 +4551,11 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 		} else {
 			return [];
 		}
-	}.property('controller.content.items.@each'),
-
-	proyectos: function () {
-		if (this.get('controller.expedientes')) {
-			var proyectos = this.get('controller.expedientes');
-			this.get('controller.content.items').forEach(function (item) {
-				item.get('proyectos').forEach(function (proyecto) {
-					proyectos.removeObject(proyecto);
-				});
-			})
-			return proyectos;
-		} else {
-			return [];
-		}
-	}.property('controller.content.items.@each'),
+	}.property('content.items.@each'),
 
 	didInsertElement: function () {
 		this._super();
-		this.set('controller', App.crearPlanDeLaborController);
+		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create());
 	}
 });
 
@@ -4605,8 +4606,9 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		{
 			filtered = this.get('dictamenes');
 		}
-
-		return filtered.slice(0, 10);
+		if (filtered)
+			return filtered.slice(0, 10);
+		return [];
 	}.property('filterDictamenes', 'dictamenes'),
 
 
@@ -4694,6 +4696,232 @@ App.PLMiniView = Ember.View.extend({
 
 });
 
+App.PlanDeLaborEfectivoView = Ember.View.extend({
+	templateName: 'plan-de-labor-efectivo',
+	contentBinding: "App.planDeLaborController.content",
+});
+
+App.PlanDeLaborBorradorView = Ember.View.extend({
+	templateName: 'plan-de-labor-borrador',
+	contentBinding: "App.planDeLaborController.content",
+});
+
+App.PlanDeLaborBorradorEditView = Ember.View.extend({
+	templateName: 'plan-de-labor-borrador-edit',
+	contentBinding: "App.planDeLaborController.content",
+	
+	addItem: function (item) {
+		item.set('orden', this.get('content.items').length);
+		this.get('content.items').pushObject(item);
+
+		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
+
+		clone.normalize();
+		clone.set('estado', 0);
+		clone.addObserver('saveSuccess', this, this.itemAddedSuccess);
+		clone.save();
+	},
+
+	borrarItem: function () {
+		this.get('content.items').removeObject(item);
+	},
+
+	guardar: function () {
+		this.get('content').normalize();
+		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.set('content.estado', 1);
+		this.get('content').save();
+	},	
+
+	itemAddedSuccess : function () {
+		this.get('content').desNormalize();
+	},
+
+
+	saveSuccessed: function () {
+		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('content.saveSuccess') == true) {
+
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+
+			fn = function() {
+				if (App.get('planDeLaborListadoController.loaded')) {
+					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('planDeLabor.index', {estado: 1}); 
+				}
+			};
+
+			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+			App.get('planDeLaborListadoController').load();
+
+			$.jGrowl('Se ha cambiado el estado del plan de labor a tentativo!', { life: 5000 });
+
+		} else {
+			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
+		}
+	},
+
+});
+
+App.PlanDeLaborTentativoView = Ember.View.extend({
+	templateName: 'plan-de-labor-tentativo',
+	contentBinding: "App.planDeLaborController.content",
+
+	sesion: null,
+
+	crearSesion: function () {
+
+		//var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion " + moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').format('MM/DD/YYYY') , fecha: moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:mm').unix(), tipo: "SesionOrdinariaDeTablas", periodoOrdinario:130, sesion:6, reunion:7, idPl: this.get('content.id')});
+		var sesion = this.get('sesion');
+		var temas = [];
+		var orden = 0;
+		sesion.set('plId', this.get('content.id'));
+		sesion.set('idPl', this.get('content.id'));
+
+		var fechaSesion = moment(this.get('fecha') + ' ' + this.get('hora') + '+0000', "DD-MM-YYYY HH:mm z");
+		sesion.set('fecha', fechaSesion.unix());
+
+		this.get('content.items').forEach(function (item) {
+			var tema = App.Tema.create();
+
+			tema.setProperties({
+					titulo: item.get('sumario'),
+					orden: orden,
+					plId: 0,
+					plTipo: 'p',
+					plGrupo: item.get('grupo.descripcion'),
+					plItemId: item.get('id'),
+			});
+
+			temas.addObject(tema);
+
+			orden = orden + 1;
+
+			if (item.get('dictamenes')) {
+				item.get('dictamenes').forEach(function (dictamen){
+					var tema = App.Tema.create();
+					tema.setProperties({
+							titulo: "Dictamen: " + dictamen.sumario,
+							orden: orden,
+							plId: dictamen.id,
+							plTipo: 'd',
+							plGrupo: '',
+							plItemId: item.get('id'),
+					});
+					temas.addObject(tema);
+					orden = orden + 1;
+				});
+			}
+
+			if (item.get('proyectos')) {
+				item.get('proyectos').forEach(function (expediente){
+					temas.addObject(
+						App.Tema.create({
+							titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+							orden: orden,
+							plId: expediente.id,
+							plTipo: 'e',
+							plGrupo: '',
+							plItemId: item.get('id'),
+						})
+					);
+					orden = orden + 1;
+				});				
+			}
+		})
+
+		sesion.set('temas', temas);
+
+		var url = "/crearSesion/planDeLabor";
+
+		$.ajax({
+			url: url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'POST',
+			context : {model : sesion },
+			data : sesion.getJson(),
+			success: this.createSucceeded,
+		});
+	},
+
+	createSucceeded: function (data) {
+		if (data.success == true) {
+			this.model.set('id', data.id);
+
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'crearSesion');	
+			
+			notification.set('titulo', 'Crear Sesion');
+
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', data.id);
+			//Link del objeto
+			notification.set('link', "#/recinto/oradores/sesion/" + data.id + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			//Custom message
+			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
+			//Crear
+			notification.create();
+
+			this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+			this.get('content').set('estado', 2);
+			this.get('content').normalize();
+			this.get('content').save();
+		}		
+	},
+
+	saveSuccessed: function () {
+		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('content.saveSuccess') == true) {
+
+			App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: []});
+
+			fn = function() {
+				if (App.get('planDeLaborListadoController.loaded')) {
+					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('planDeLabor.index', {estado: 2}); 
+				}
+			};
+
+			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+			App.get('planDeLaborListadoController').load();
+
+			$.jGrowl('Se ha cambiado el estado del plan de labor a tentativo!', { life: 5000 });
+
+		} else {
+			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
+		}
+	},	
+
+	didInsertElement: function () {
+		this._super();
+
+		this.set('sesion', App.Sesion.extend(App.Savable).create({}));
+
+		self = this;
+
+		this.set('fecha', moment().format("DD-MM-YYYY"));
+		this.set('hora', moment().format("hh:ss"));
+		
+		$('.timepicker').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: this.get('hora'),
+			timeSteps: [1, 15, 1],
+		});	 
+		
+		$('.timepicker').timeEntry('setTime', this.get('hora'));		
+	}
+
+});
+
 
 App.SugestView = Ember.View.extend({
 	templateName: 'sugest',
@@ -4710,10 +4938,10 @@ App.SugestView = Ember.View.extend({
 	}.observes('sugestText'),
 
 	sugestList: function () {
-		if (this.get('controller.content'))
+		if (this.get('controller.content') == App.get(this.get('controllerName')).get('content'))
 			return this.get('controller.content');
 		else
-			return null;
+			return [];
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
@@ -4742,16 +4970,8 @@ App.SugestListItemView = Ember.View.extend({
 	}
 });
 
-App.ExpedienteSugestListItemView = Ember.View.extend({
+App.ExpedienteSugestListItemView = App.SugestListItemView.extend({
 	templateName: 'expediente-sugest-item',
-
-	click: function () {
-		this.get('parentView').itemSelect(this.get('content'));
-	},
-
-	didInsertElement: function () {
-		this._super();
-	}
 });
 
 App.SugestListView = Ember.CollectionView.extend({
@@ -4764,3 +4984,5 @@ App.SugestListView = Ember.CollectionView.extend({
 		this.get('parentView').itemSelect(item);
 	},
 });
+
+

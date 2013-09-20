@@ -635,6 +635,7 @@ App.Reunion = Em.Object.extend({
 	label: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('comisionesLabel') + this.get('temarioLabel');
 	}.property('nota'),
+	
 	comisionesLabel: function () {
 		var st = "";
 		this.get('comisiones').forEach(function (comision) {
@@ -1092,6 +1093,7 @@ App.PlanDeLaborGrupo = Ember.Object.extend({
 
 App.PlanDeLaborTentativo = Ember.Object.extend({
 	url: "/pdl/plan",
+	notificationType : 'PlanDeLaborTentativo',
 	auditable: true,
 	useApi: true,
 
@@ -1128,26 +1130,29 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     	'observaciones',
     	'items',
     	'secciones',
-    	'fechaEstimada'
+    	'fechaEstimada',
+    	'estado'
     ],
 
     normalize: function () {
     	this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm'));
-    	this.get('items').forEach(function (planDeLaborTentativoItem) {
-    		planDeLaborTentativoItem.normalize();
-    	});
+    	if (this.get('items')) {
+	    	this.get('items').forEach(function (planDeLaborTentativoItem) {
+	    		planDeLaborTentativoItem.normalize();
+	    	});
+	    }
     }, 
 
     desNormalize: function () {
-    	var items = [];
-
-     	this.get('items').forEach(function (planDeLaborTentativoItem) {
-     		var pl =  App.PlanDeLaborTentativoItem.create(planDeLaborTentativoItem);
-    		pl.desNormalize();
-    		items.addObject(pl);
-    	});   	
-
-    	this.set('items', items);
+    	if (this.get('items')) {
+    		var items = [];
+	     	this.get('items').forEach(function (planDeLaborTentativoItem) {
+	     		var pl =  App.PlanDeLaborTentativoItem.create(planDeLaborTentativoItem);
+	    		pl.desNormalize();
+	    		items.addObject(pl);
+	    	});   	
+	    	this.set('items', items);
+    	}
     },
 
     label: function () {
@@ -1184,13 +1189,15 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	var d = [];
 
     	this.get('proyectos').forEach(function (proyecto) {
-    		p.addObject(App.Expediente.create(proyecto.proyecto));
+    		if (proyecto.proyecto)
+    			p.addObject(App.Expediente.create(proyecto.proyecto));
     	});
 
     	this.set('proyectos', p);
 
     	this.get('dictamenes').forEach(function (dictamen) {
-    		d.addObject(App.OrdeDelDia.create(dictamen.dictamen));
+    		if (dictamen.dictamen)
+    			d.addObject(App.OrdeDelDia.create(dictamen.dictamen));
     	});
 
     	this.set('dictamenes', d); 	
