@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength', 'data-max'],
 });
 
 Ember.TextArea.reopen({
@@ -4383,22 +4383,26 @@ App.CrearTurnoInlineView = Em.View.extend({
 	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
 	
 	guardar: function(opts, event) {   
+		if($('#formAgregarOrador').parsley('validate')){
 		this.set('clickGuardar', true);  
 
-	  if (this.get('esInvalido')) 
-		return false;
+		if (this.get('esInvalido')){
+			return false;			
+		}
 
-	  var turno = App.get('crearTurnoController').get('turno');
-	  if (turno.get('id')) {
+		var turno = App.get('crearTurnoController').get('turno');
+		if (turno.get('id')) {
 		turno.save();
 		App.get('turnosController').actualizarHora();
-	  } else {		
+		} else {		
 		turno.set('orden', App.get('turnosController.content.length'));
 		turno.set('tema', App.get('temaController.content'));
 		App.get('turnosController').createObject(turno, true);
-	  }
+		}
 
-	  this.refreshTurno();	
+		this.refreshTurno();	
+
+		}
 	},
 
 	refreshTurno: function () {
