@@ -808,7 +808,11 @@ App.Tema = Em.Object.extend({
 		'sesionId',
 		'titulo',
 		'orden',
-		'tieneLista'
+		'tieneLista',
+		'plId',
+		'plTipo',
+		'plGrupo',
+		'plItemId'
 	],
 });
 

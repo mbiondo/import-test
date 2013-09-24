@@ -4161,8 +4161,14 @@ App.CrearTemaView = App.ModalView.extend({
 	callback: function(opts, event) {
 			if (opts.primary) {
 				if (this.get('esInvalido')) 
-					return false;			
+					return false;		
+
 				var tema = App.get('crearTemaController').get('tema');
+				tema.set('plId', 0);
+				tema.set('plTipo', 't');
+				tema.set('plGrupo', '');
+				tema.set('plItemId', 0);
+
 				if (tema.get('id')) {
 					 tema.save();
 				} else {
