@@ -838,6 +838,8 @@ App.PlanDeLaborController = Ember.Object.extend({
 							obj = App.Expediente.create(item.get('proyectos').findProperty('id', tema.get('plId')));
 						}
 					break;
+				case "t":
+					return null;
 			}
 		}
 		return obj;
@@ -2972,7 +2974,7 @@ App.TemasController = App.RestController.extend({
 	temasOrdenadosPorGrupo: function () {
 		_self = this;
 		var items = this.get('arrangedContent').filter(function(tema) {
-			return (tema.get('plTipo') == 'p');
+			return (tema.get('plTipo') == 'p') || (tema.get('plTipo') == 't');
 		});
 
 		items.forEach(function (item) {
@@ -2982,7 +2984,7 @@ App.TemasController = App.RestController.extend({
 				item.set('orden', parseInt(item.get('orden') * 1000));
 
 			var filtered = _self.get('arrangedContent').filter(function(tema) {
-				return ((tema.get('plTipo') != 'p') && (tema.get('plItemId') == item.get('plItemId')));
+				return ((tema.get('plTipo') != 'p')  &&  (tema.get('plTipo') != 't') && (tema.get('plItemId') == item.get('plItemId')));
 			});
 
 			item.set('subTemas', filtered);
@@ -2997,7 +2999,7 @@ App.TemasController = App.RestController.extend({
 		return items.sort(function(a, b) {
 			return a.get('sortValue') - b.get('sortValue');
 		});
-	}.property('arrangedContent', 'content', 'refresh', 'App.temaController.content'),
+	}.property('arrangedContent', 'content.@each', 'refresh', 'App.temaController.content'),
 });
 
 App.TemaController = Em.Object.extend({
