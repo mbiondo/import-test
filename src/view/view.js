@@ -4912,7 +4912,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			//Crear
 			notification.create();
 
-			this.pl.addObserver('saveSuccess', scope, scope.saveSuccessed);
+			this.pl.addObserver('saveSuccess', this.scope, this.scope.saveSuccessed);
 			this.pl.set('estado', 2);
 			this.pl.normalize();
 			this.pl.save();
