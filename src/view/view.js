@@ -225,12 +225,19 @@ App.SubMenuOradoresView = Ember.View.extend({
 	stopTimer : function () {
 		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
 	},	
+
 	hayOradoresPendientes: function(){
-		if(App.get('temaController.turnosPendientes') > 0)
-		{
+		var t = App.get('turnosController.content').findProperty('yaHablo', false);
+		
+		if(t)
+		{			
 			return true;
 		}
-	}.property('App.temaController.turnosPendientes')
+		else
+		{
+			return false;
+		}
+	}.property('App.turnosController.content.@each.yaHablo').cacheable(),
 });
 
 App.ContentView = Ember.View.extend({
