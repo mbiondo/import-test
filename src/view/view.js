@@ -224,7 +224,13 @@ App.SubMenuOradoresView = Ember.View.extend({
 
 	stopTimer : function () {
 		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
-	},		
+	},	
+	hayOradoresPendientes: function(){
+		if(App.get('temaController.turnosPendientes') > 0)
+		{
+			return true;
+		}
+	}.property('App.temaController.turnosPendientes')
 });
 
 App.ContentView = Ember.View.extend({
@@ -2324,6 +2330,9 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 App.DictamenConsultaView = Em.View.extend({
 	templateName: 'dictamenConsulta',
 	articulos: false,
+	resumen: null,
+
+	art108:null,
 
 	didInsertElement: function(){
 		this._super();
@@ -2331,6 +2340,15 @@ App.DictamenConsultaView = Em.View.extend({
 		$(".whead").on('click', function(){
 			$(this).parent().children(":eq(1)").stop().slideToggle(1200);
 		});
+
+		if(App.get('dictamenConsultaController.content.art108'))
+			this.set('art108', true);
+		if(App.get('dictamenConsultaController.content.art204'))
+			this.set('art204', true);
+		if(App.get('dictamenConsultaController.content.art114'))
+			this.set('art114', true);
+
+		this.set('resumen', 'ehh');
 
 		if(App.get('dictamenConsultaController.content.art108') != null || App.get('dictamenConsultaController.content.art204') != null  || App.get('dictamenConsultaController.content.art114') != null || App.get('dictamenConsultaController.content.unanimidad') != null){
 			this.set('articulos', true);
