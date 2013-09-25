@@ -33,7 +33,7 @@ var get = Ember.get, set = Ember.set;
 
 Em.Route.reopen({
 	roles: null,
-	enter: function () {
+	/*enter: function () {
 		if (Ember.isArray(this.get('roles'))) 
 		{
 			var userRoles = App.get('userController.roles');
@@ -45,7 +45,7 @@ Em.Route.reopen({
 			 }
 			});
 		}
-	},
+	},*/
 });
 
 Em.Router.reopen({
@@ -1729,6 +1729,7 @@ App.Router =  Em.Router.extend({
 							
 							var sesion = App.get('sesionController.content');
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Recinto', url: '#/recinto/oradores'},	
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
 								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
 							]);					
