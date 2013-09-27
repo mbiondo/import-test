@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.13:8080/sparl/rest',
+	url: 'http://10.185.204.12:8080/sparl/rest',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	//url: '',	
 	key: '',
@@ -292,24 +292,24 @@ App.menuController = App.MenuController.create({
 			id: 6,
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Envíos a Archivo',
-			url: '#/expedientesArchivados/envios/archivo',
+			url: '#/envios',
 			icono: 'bundles/main/images/icons/mainnav/forms.png',
 			
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Envíos a Archivo',
-					url: '#/expedientesArchivados/envios/crear',
+					url: '#/envios',
 					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Estado',
-							url: '#/expedientesArchivados/envios/archivo',
+							titulo: 'Envios a Archivo',
+							url: '#/envios',
 						}),
 						App.MenuItem.create({
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-							titulo: 'Expedientes',
-							url: '#/expedientesArchivados/envio/crear',
+							titulo: 'Crear Envío a Archivo',
+							url: '#/envios/envio/crear',
 						}),
 					],
 				}),
