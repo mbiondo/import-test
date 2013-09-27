@@ -1382,7 +1382,6 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 			if (data.id) {
 				fn = function() {
 					App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);						
-					// App.get('router').transitionTo('enviosArchivados.ver', App.Envio.create({id:34, estado: "Confirmado"}));					
 					this.set('content', App.get('envioArchivoConsultaController.content'));
 				};
 				App.get('envioArchivoConsultaController').set('loaded', false);
