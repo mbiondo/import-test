@@ -1280,7 +1280,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 			fn = function() {
 				App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
 				App.get('envioArchivoController').removeObserver('loaded', this, fn);                    
-				App.get('router').transitionTo('expedientesArchivados.index.index');                     
+				App.get('router').transitionTo('enviosArchivados.index');                     
 			};
 
 			$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
