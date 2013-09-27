@@ -615,15 +615,12 @@ App.Router =  Em.Router.extend({
 			}),			
 		}),
 
-		expedientesArchivados: Em.Route.extend({
-			route: "/expedientesArchivados",
-
-			index: Em.Route.extend({
-				route: "/envios/archivo",
+		enviosArchivados: Em.Route.extend({
+			route: "/envios",
 
 				index: Em.Route.extend({
-					route: '/',	
-	                                        
+					route: '/',
+
 	                deserialize: function(router, params) {
                         if (App.get('envioArchivoController.loaded'))
                             return null;
@@ -649,13 +646,12 @@ App.Router =  Em.Router.extend({
 	                        App.get('menuController').seleccionar(6);
 
 	                        App.get('breadCumbController').set('content', [
-                                {titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envios/archivo'},
+                                {titulo: 'Envíos a Archivo', url: '#/envios'},
 	                        ]);				
 	                },
 	        	}),
-
 				ver: Ember.Route.extend({
-					route: '/:envio/ver',
+					route: '/envio/:envio/ver',
 
 					deserialize: function(router, params) {
 					App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
@@ -685,34 +681,30 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envios/archivo'},							
-							{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/expedientesArchivados/envios/archivo/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
+							{titulo: 'Envíos a Archivo', url: '#/envios'},
+							{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/envios/envio/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
 						]);
 						App.get('menuController').seleccionar(6);					
 					},
 				}),
-			}), 
-			crear: Em.Route.extend({
-				route: "/envio/crear",
+				crear: Em.Route.extend({
+					route: "/envio/crear",
+	                connectOutlets: function(router, context) {
+	 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 
+	                    var appController = router.get('applicationController');	
+	                    appController.connectOutlet('main', 'expedientesArchivados');
+	                    appController.connectOutlet('menu', 'subMenu');
 
-                connectOutlets: function(router, context) {
+	                    App.get('menuController').seleccionar(6);
 
- 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
-
-                    var appController = router.get('applicationController');	
-                    appController.connectOutlet('main', 'expedientesArchivados');
-                    appController.connectOutlet('menu', 'subMenu');
-
-                    App.get('menuController').seleccionar(6);
-
-                    App.get('breadCumbController').set('content', [
-                        {titulo: 'Envíos a Archivo', url: '#/expedientesArchivados/envio/crear'},
-                        {titulo: 'Crear Envío', url: '#/expedientesArchivados/envio/crear'},
-                    ]);	
-                    			
-                },
-			}),
+	                    App.get('breadCumbController').set('content', [
+	                        {titulo: 'Envíos a Archivo', url: '#/envios'},
+	                        {titulo: 'Crear Envío a Archivo', url: '#/envios/envio/crear'},
+	                    ]);	
+	                    			
+	                },
+				}),
 		}), 
                         
 		comisiones: Em.Route.extend({
@@ -1729,7 +1721,6 @@ App.Router =  Em.Router.extend({
 							
 							var sesion = App.get('sesionController.content');
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Recinto', url: '#/recinto/oradores'},	
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
 								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
 							]);					
