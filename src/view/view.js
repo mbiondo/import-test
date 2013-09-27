@@ -1331,8 +1331,16 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	archivadoFecha: '',
 		
 	isExpanded: false,
-		isPendiente: false,
+	isPendiente: false,
 	
+	cambiaEstado: function(){
+		if (this.get('content.estado')=="Pendiente") {
+			this.set('isPendiente', true);
+		}else{
+			this.set('isPendiente', false);
+		}
+	}.observes('content.estado'),
+
 	exportar: function () {
 		$.download('exportar/envio', "&type=envio&data=" + JSON.stringify(App.envioArchivoConsultaController.content));
 	},
@@ -1345,9 +1353,6 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 			this._super();
 			$("#confirmarBotonDiv").hide();
 			this.set('content', App.get('envioArchivoConsultaController.content'));
-			if (App.get('envioArchivoConsultaController.content.estado')=="Pendiente") {
-				this.set('isPendiente', true);
-			}
 	},
 
 	confirmarToggle: function(){
@@ -1356,7 +1361,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 		
 		
 		confirmarEnvio: function(){
-	
+			this.confirmarToggle();
 			var idConfirmar = JSON.stringify(this.get('content.id'));
 			
 			var url = "/com/env/envio/confirmar";
@@ -1367,20 +1372,22 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 					dataType: 'JSON',
 					type: 'POST',
 					data : idConfirmar,
+					context: this,
 					success: this.createSucceeded,
 			});        
 		},
 				
 
-	createSucceeded: function (data) {            
+	createSucceeded: function (data) {
 			if (data.id) {
 				fn = function() {
-					App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('enviosArchivo.index');					
+					App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);						
+					// App.get('router').transitionTo('enviosArchivados.ver', App.Envio.create({id:34, estado: "Confirmado"}));					
+					this.set('content', App.get('envioArchivoConsultaController.content'));
 				};
-
-				App.get('envioArchivoController').addObserver('loaded', this, fn);
-				App.get('envioArchivoController').load();
+				App.get('envioArchivoConsultaController').set('loaded', false);
+				App.get('envioArchivoConsultaController').addObserver('loaded', this, fn);
+				App.get('envioArchivoConsultaController').load();
 			} else 
 			{
 				$.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000 });
