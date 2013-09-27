@@ -11,7 +11,7 @@ Handlebars.registerHelper("linkEnvio", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
 
-  return "#/expedientesArchivados/envios/archivo/"+id+"/ver/";
+  return "#/envios/envio/"+id+"/ver/";
 });
 
 Handlebars.registerHelper("linkConfirmarEnvio", function(id, options) {
