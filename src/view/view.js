@@ -1229,6 +1229,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.set('proyectos', []);
+		this.set('faltanAgregarExpedientes', false);
 	},
 	removeItem: function (item) {
 		this.get('proyectos').removeObject(item);
@@ -1236,12 +1237,25 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 	cambiarAnio: function () {
 		App.get('expedientesArchivadosController').loadByAnio(this.get('anio'));
 	}.observes('anio'),
+	validateFields: function(){
+		$('#formCrearEnvio').parsley( 'validate' );
+	}.observes('archivadoFecha'),
+	checkListExpedientes: function(){
+		if(this.get('proyectos').length > 0)
+		{
+			this.set('faltanAgregarExpedientes', false);
+		}
+		else
+		{
+			this.set('faltanAgregarExpedientes', true);
+		}
+	}.observes('proyectos.@each', 'archivadoFecha'),
 	archivarExpedientes: function (){
 		var seleccionados = this.get('proyectos');
 		var fecha = this.get('archivadoFecha');
 		var user = localStorage.getObject('user');
 
-		if(seleccionados.length > 0)
+		if(this.get('proyectos').length > 0)
 		{
 			this.set('faltanAgregarExpedientes', false);
 		}
