@@ -1249,7 +1249,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 		{
 			this.set('faltanAgregarExpedientes', true);
 		}
-	}.observes('proyectos.@each', 'archivadoFecha'),
+	}.observes('proyectos.@each'),
 	archivarExpedientes: function (){
 		var seleccionados = this.get('proyectos');
 		var fecha = this.get('archivadoFecha');
