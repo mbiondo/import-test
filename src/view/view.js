@@ -4825,81 +4825,86 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 	contentBinding: "App.planDeLaborController.content",
 
 	sesion: null,
+	clickGuardar: null,
 
 	crearSesion: function () {
+		this.set('clickGuardar', true);
 
-		//var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion " + moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').format('MM/DD/YYYY') , fecha: moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:mm').unix(), tipo: "SesionOrdinariaDeTablas", periodoOrdinario:130, sesion:6, reunion:7, idPl: this.get('content.id')});
-		var sesion = this.get('sesion');
-		var temas = [];
-		var orden = 0;
-		sesion.set('plId', this.get('content.id'));
-		sesion.set('idPl', this.get('content.id'));
+		if($("#formCrearSesion").parsley('validate') && this.get('sesion.tipo')){
+			//var sesion = App.Sesion.extend(App.Savable).create({titulo:"Sesion " + moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:ss').format('MM/DD/YYYY') , fecha: moment(this.get('content.fechaEstimada'), 'YYYY-MM-DD HH:mm').unix(), tipo: "SesionOrdinariaDeTablas", periodoOrdinario:130, sesion:6, reunion:7, idPl: this.get('content.id')});
+			var sesion = this.get('sesion');
+			var temas = [];
+			var orden = 0;
+			sesion.set('plId', this.get('content.id'));
+			sesion.set('idPl', this.get('content.id'));
 
-		var fechaSesion = moment(this.get('fecha') + ' ' + this.get('hora') + '+0000', "DD-MM-YYYY HH:mm z");
-		sesion.set('fecha', fechaSesion.unix());
+			var fechaSesion = moment(this.get('fecha') + ' ' + this.get('hora') + '+0000', "DD-MM-YYYY HH:mm z");
+			sesion.set('fecha', fechaSesion.unix());
 
-		this.get('content.items').forEach(function (item) {
-			var tema = App.Tema.create();
+			this.get('content.items').forEach(function (item) {
+				var tema = App.Tema.create();
 
-			tema.setProperties({
-					titulo: item.get('sumario'),
-					orden: orden,
-					plId: 0,
-					plTipo: 'p',
-					plGrupo: item.get('grupo.descripcion'),
-					plItemId: item.get('id'),
+				tema.setProperties({
+						titulo: item.get('sumario'),
+						orden: orden,
+						plId: 0,
+						plTipo: 'p',
+						plGrupo: item.get('grupo.descripcion'),
+						plItemId: item.get('id'),
+				});
+
+				temas.addObject(tema);
+
+				orden = orden + 1;
+
+				if (item.get('dictamenes')) {
+					item.get('dictamenes').forEach(function (dictamen){
+						var tema = App.Tema.create();
+						tema.setProperties({
+								titulo: "Dictamen: " + dictamen.sumario,
+								orden: orden,
+								plId: dictamen.id,
+								plTipo: 'd',
+								plGrupo: '',
+								plItemId: item.get('id'),
+						});
+						temas.addObject(tema);
+						orden = orden + 1;
+					});
+				}
+
+				if (item.get('proyectos')) {
+					item.get('proyectos').forEach(function (expediente){
+						temas.addObject(
+							App.Tema.create({
+								titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+								orden: orden,
+								plId: expediente.id,
+								plTipo: 'e',
+								plGrupo: '',
+								plItemId: item.get('id'),
+							})
+						);
+						orden = orden + 1;
+					});				
+				}
+			})
+
+			sesion.set('temas', temas);
+
+			var url = "/crearSesion/planDeLabor";
+
+			$.ajax({
+				url: url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'POST',
+				context : {model : sesion, pl: this.get('content'), scope: this },
+				data : sesion.getJson(),
+				success: this.createSucceeded,
 			});
 
-			temas.addObject(tema);
-
-			orden = orden + 1;
-
-			if (item.get('dictamenes')) {
-				item.get('dictamenes').forEach(function (dictamen){
-					var tema = App.Tema.create();
-					tema.setProperties({
-							titulo: "Dictamen: " + dictamen.sumario,
-							orden: orden,
-							plId: dictamen.id,
-							plTipo: 'd',
-							plGrupo: '',
-							plItemId: item.get('id'),
-					});
-					temas.addObject(tema);
-					orden = orden + 1;
-				});
-			}
-
-			if (item.get('proyectos')) {
-				item.get('proyectos').forEach(function (expediente){
-					temas.addObject(
-						App.Tema.create({
-							titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
-							orden: orden,
-							plId: expediente.id,
-							plTipo: 'e',
-							plGrupo: '',
-							plItemId: item.get('id'),
-						})
-					);
-					orden = orden + 1;
-				});				
-			}
-		})
-
-		sesion.set('temas', temas);
-
-		var url = "/crearSesion/planDeLabor";
-
-		$.ajax({
-			url: url,
-			contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'POST',
-			context : {model : sesion, pl: this.get('content'), scope: this },
-			data : sesion.getJson(),
-			success: this.createSucceeded,
-		});
+		}
 	},
 
 	createSucceeded: function (data) {
@@ -4957,6 +4962,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 
+		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 		this.set('sesion', App.Sesion.extend(App.Savable).create({}));
 
 		self = this;
