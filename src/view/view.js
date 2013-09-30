@@ -2343,9 +2343,9 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 App.DictamenConsultaView = Em.View.extend({
 	templateName: 'dictamenConsulta',
 	articulos: false,
-	resumen: null,
-
 	art108:null,
+	leyenda:null,
+
 
 	didInsertElement: function(){
 		this._super();
@@ -2361,13 +2361,129 @@ App.DictamenConsultaView = Em.View.extend({
 		if(App.get('dictamenConsultaController.content.art114'))
 			this.set('art114', true);
 
-		this.set('resumen', 'ehh');
-
 		if(App.get('dictamenConsultaController.content.art108') != null || App.get('dictamenConsultaController.content.art204') != null  || App.get('dictamenConsultaController.content.art114') != null || App.get('dictamenConsultaController.content.unanimidad') != null){
 			this.set('articulos', true);
 		}
 
 		App.set('dictamenConsultaController.content.textos.firstObject.mayoria', true);
+
+
+		var leyenda		 = null;
+		var dictamen 	 = App.get('dictamenConsultaController.content');
+		var textos 		 = dictamen.textos;
+		var art108		 = dictamen.art108;
+		var art114		 = dictamen.art114;
+		var art204		 = dictamen.art204;
+		var unanimidad   = dictamen.unanimidad;
+		var idReunion	 = dictamen.id_reunion;
+		var texto 					= null;
+
+		function estaAprobado() {
+			var aprobado = true;
+			textos.forEach(function(value) {
+				if (value.rechazado == true) {
+					aprobado = false;
+				}
+			});
+			return aprobado;
+		}
+
+		function conModificaciones() {
+			var modificado = false;
+			textos.forEach(function(value) {
+				if (value.modificado == true) {
+					modificado = true;
+				}
+			});
+			return modificado;
+		}
+
+		function art108PrimerParrafo() {
+			return false;
+		}
+
+		function art108SegundoParrafo() {
+			return art108;
+		}
+
+		function estaUnificado(){
+			var unificado = false;
+			textos.forEach(function(value) {
+				if (value.unificado == true) {
+					unificado = true;
+				}
+			});
+		}
+
+		function dictamenDeMayoriaFirmanteConDisidencia(textos){
+			var array = $.map(textos[0].firmantes, function(firmante){
+				return (firmante.disidencia > 0);
+			});
+
+			if(array.length > 0) return true;
+		}
+
+		function dictamenesDeMinoriaFirmanteConDisidencia(textos){
+			var disidencia = false;
+
+			textos.slice(1).forEach(function(texto){
+				texto.firmantes.forEach(function(firmante){
+					if(firmante.disidencia > 0)
+					{
+						disidencia = true;
+					}
+				});
+			});
+
+			return disidencia;
+		}
+
+		if (estaAprobado()) {
+			leyenda = "Aprobado ";
+		}
+		if (unanimidad) {
+			leyenda = leyenda + "por unanimidad ";
+		}
+		if (conModificaciones()) {
+			leyenda = leyenda + "con modificaciones ";
+		} else {
+			leyenda = leyenda + "sin modificaciones ";
+		}
+		if (art108PrimerParrafo()) {
+			leyenda = leyenda + "en los términos del artículo 108 primer párrafo del reglamento de la H. Cámara ";
+		} else if (art108SegundoParrafo()) {
+			leyenda = leyenda + "en los términos del artículo 108 segundo párrafo del reglamento de la H. Cámara ";
+		} else if (art114) {
+			leyenda = leyenda + "en los términos del articulo 114 del reglamento de la H. Cámara ";
+		} else if (art204) {
+			leyenda = leyenda + "en los términos del articulo 204 del reglamento de la H. Cámara ";
+		}
+		if (estaUnificado()) {
+			leyenda = leyenda + "unificados ";
+		}
+		if (textos.length == 1) {
+			leyenda = leyenda + "en un solo dictamen ";
+			if (dictamenDeMayoriaFirmanteConDisidencia(textos)) {
+				leyenda = leyenda + "con disidencia ";
+			}
+		} else if ( textos.length > 1 ) {
+			leyenda = leyenda + "con dictamen de mayoría ";
+			if (dictamenDeMayoriaFirmanteConDisidencia(textos)) {
+				leyenda = leyenda + "con disidencia ";
+			}
+
+			if (textos.length > 2) {
+				leyenda = leyenda + "y con dictamen de mayoría ";
+			}  else {
+				leyenda = leyenda + "y con " + textos.length-1 + " dictamenes de minoría ";
+			}
+
+			if (dictamenesDeMinoriaFirmanteConDisidencia(textos)) {
+				leyenda = leyenda + "con disidencia ";
+			}
+		}
+
+		this.set('leyenda', leyenda);
 
 	},
 	exportar: function(){
