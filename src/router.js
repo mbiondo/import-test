@@ -622,9 +622,6 @@ App.Router =  Em.Router.extend({
 					route: '/',
 
 	                deserialize: function(router, params) {
-                        if (App.get('envioArchivoController.loaded'))
-                            return null;
-
                         var deferred = $.Deferred(),
 
                         fn = function() {
