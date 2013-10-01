@@ -1005,6 +1005,10 @@ App.Turno = Em.Object.extend({
 		return mostrarTimer;
 	}.property('turnoHablando', 'timer', 'horaInicio', 'horaFin'),
 
+	oradorPendiente : function () {
+		return (this.get('horaFin') == null);
+	}.property('horaFin'),
+
 	yaHablo : function () {
 		return (this.get('horaInicio') !=null) || (this.get('horaFin') != null);
 	}.property('horaInicio', 'horaFin'),
