@@ -602,7 +602,7 @@ App.ApplicationController = Em.Controller.extend({
 		temaController.set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(sesion.get('id'))));
 		temaController.load();
 
-		turnosController.set('url', '/app_dev.php/sesion/%@/turnos'.fmt(encodeURIComponent(sesion.get('id'))));
+		turnosController.set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(sesion.get('id'))));
 		turnosController.load();
 	},
 });
@@ -1148,30 +1148,37 @@ App.ExpedientesController = App.RestController.extend({
 	url: '/exp/proyectos',
 	type: App.Expediente,
 	useApi: true,
-	sortProperties: ['fechaPub'],
-	sortAscending: true,
+	sortProperties: ['expdipA', 'expdipN'],
+	sortAscending: false,
 	loaded: false,
 	loaded2012: false,
+	pageSize: 25,
+	pageNumber: 1,
+
 	
 	init : function(){
 		this._super();
 	},
 
-	load2012: function () {
-		App.get('expedientesController').set('loaded', false);
-		App.get('expedientesController').set('loaded2012', true);
+	nextPage: function () {
+		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.load();
+	},
 
+	load: function() {
+		this.set('loaded', false);
 		var url =  this.get('url');
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-			
+
+		url = url + "?pageNumber=" + this.get('pageNumber') + "&pageSize=" + this.get('pageSize');
 		if ( url ) {
 			$.ajax({
 				url: url,
 				dataType: 'JSON',
 				context: this,
 				success: this.loadSucceeded,
-				complete: this.loadCompleted
+				complete: this.loadCompleted,
 			});
 
 		}
@@ -3000,6 +3007,7 @@ App.TemasController = App.RestController.extend({
 			return a.get('sortValue') - b.get('sortValue');
 		});
 	}.property('arrangedContent', 'content.@each', 'refresh', 'App.temaController.content'),
+
 });
 
 App.TemaController = Em.Object.extend({

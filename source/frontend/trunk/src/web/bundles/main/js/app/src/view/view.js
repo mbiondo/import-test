@@ -1091,6 +1091,11 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	templateName: 'expedientes-sortable-list',
 	itemViewClass: App.ExpedienteView,
 
+	mostrarMas: function () {
+		this.set('scroll', $(document).scrollTop());
+		App.get('expedientesController').nextPage();
+	},
+
 	columnas: [
 		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
@@ -1134,7 +1139,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		localStorage.setObject('tipos', App.get('comisionesController.content'));
 
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
+		filtered = App.get('expedientesController').get('content').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
 
@@ -1177,15 +1182,9 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 			});
 		}
 
-		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
-			max = filtered.length;
-			this.set('mostrarMasEnabled', false);
-		} else {
-			this.set('mostrarMasEnabled', true);
-		}
-		return filtered.slice(0, this.get('totalRecords'));
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent', 'totalRecords', 'sorting'),	
+		this.set('mostrarMasEnabled', true);
+		return filtered;
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });
 
 
@@ -4947,7 +4946,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
 
-			$.jGrowl('Se ha cambiado el estado del plan de labor a tentativo!', { life: 5000 });
+			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
 
 		} else {
 			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
@@ -5088,10 +5087,10 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
 
-			$.jGrowl('Se ha cambiado el estado del plan de labor a tentativo!', { life: 5000 });
+			$.jGrowl('Se ha creado la sesión satisfactoriamente!', { life: 5000 });
 
 		} else {
-			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al crear la sesión!', { life: 5000 });
 		}
 	},	
 
