@@ -4295,22 +4295,28 @@ App.CrearTemaView = App.ModalView.extend({
 	}.property('tema.titulo'),
 	
 	callback: function(opts, event) {
-			if (opts.primary) {
-				if (this.get('esInvalido')) 
-					return false;		
+			if (opts.primary)
+			{
+				if($("#formCrearTema").parsley('validate'))
+				{
+					var tema = App.get('crearTemaController').get('tema');
+					tema.set('plId', 0);
+					tema.set('plTipo', 't');
+					tema.set('plGrupo', '');
+					tema.set('plItemId', 0);
 
-				var tema = App.get('crearTemaController').get('tema');
-				tema.set('plId', 0);
-				tema.set('plTipo', 't');
-				tema.set('plGrupo', '');
-				tema.set('plItemId', 0);
-
-				if (tema.get('id')) {
-					 tema.save();
-				} else {
-					 App.get('temasController').createObject(tema, true);
+					if (tema.get('id')) {
+						 tema.save();
+					} else {
+						 App.get('temasController').createObject(tema, true);
+					}
 				}
-			} else if (opts.secondary) {
+				else
+				{
+					return false;
+				}
+			}
+			else if (opts.secondary) {
 				//alert('cancel')
 			} else {
 				//alert('close')
