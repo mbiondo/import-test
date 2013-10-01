@@ -227,9 +227,9 @@ App.SubMenuOradoresView = Ember.View.extend({
 	},	
 
 	hayOradoresPendientes: function(){
-		var t = App.get('turnosController.content').findProperty('yaHablo', false);
+		var oradorPendiente = App.get('turnosController.content').findProperty('oradorPendiente', true);
 		
-		if(t)
+		if(oradorPendiente)
 		{			
 			return true;
 		}
@@ -237,7 +237,7 @@ App.SubMenuOradoresView = Ember.View.extend({
 		{
 			return false;
 		}
-	}.property('App.turnosController.content.@each.yaHablo').cacheable(),
+	}.property('App.turnosController.content.@each.oradorPendiente').cacheable(),
 });
 
 App.ContentView = Ember.View.extend({
