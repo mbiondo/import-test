@@ -4907,7 +4907,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		item.set('orden', this.get('content.items').length);
 		this.get('content.items').pushObject(item);
 
-		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
+		var clone = this.get('content'); //App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
 
 		clone.normalize();
 		clone.set('estado', 0);
