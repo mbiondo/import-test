@@ -4906,7 +4906,8 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		item.set('orden', this.get('content.items').length);
 		this.get('content.items').pushObject(item);
 
-		var clone = this.get('content'); //App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
+		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
+
 
 		clone.normalize();
 		clone.set('estado', 0);
@@ -5103,8 +5104,8 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 		self = this;
 
 		this.set('fecha', moment().format("DD-MM-YYYY"));
-		this.set('hora', moment().format("hh:ss"));
-		
+		this.set('hora', moment().format("HH:mm"));
+			
 		$('.timepicker').timeEntry({
 			show24Hours: true, // 24 hours format
 			showSeconds: false, // Show seconds?
