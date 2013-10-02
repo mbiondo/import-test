@@ -647,42 +647,51 @@ App.Router =  Em.Router.extend({
 	                        ]);				
 	                },
 	        	}),
-				ver: Ember.Route.extend({
-					route: '/envio/:envio/ver',
 
-					deserialize: function(router, params) {
-					App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
-						
-					var deferred = $.Deferred(),
-					fn = function() {
-						if (App.get('envioArchivoConsultaController.loaded')) {
-							var envio = App.get('envioArchivoConsultaController.content');
-							deferred.resolve(envio);
-                            App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);							
-						}
-					};
-						
-						App.get('envioArchivoConsultaController').addObserver('loaded', this, fn);
-						App.get('envioArchivoConsultaController').load();				
-						return deferred.promise();
-					},
+				enviosArchivadosConsulta: Ember.Route.extend({
+					route: '/envio',
 
-					serialize: function(router, context) {
-						var envioId = context.get('id');
-						return {envio: envioId}
-					},
+					verEnvio: Ember.Route.extend({				
+						route: '/:envio/ver',
 
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('main', 'expedientesEnvioConsulta');
-						appController.connectOutlet('menu', 'subMenu');
-						
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Envíos a Archivo', url: '#/envios'},
-							{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/envios/envio/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
-						]);
-						App.get('menuController').seleccionar(6);					
-					},
+						deserialize: function(router, params) {
+						// if (!App.get('envioArchivoConsultaController'))
+						//  	App.envioArchivoConsultaController = App.EnvioArchivoConsultaController.create();
+						// App.set('envioArchivoConsultaController.loaded', false);
+
+						App.set('envioArchivoConsultaController.content', App.Envio.create({id: params.envio}));
+							
+						var deferred = $.Deferred(),
+						fn = function() {
+							if (App.get('envioArchivoConsultaController.loaded')) {
+								var envio = App.get('envioArchivoConsultaController.content');
+								deferred.resolve(envio);
+	                            App.get('envioArchivoConsultaController').removeObserver('loaded', this, fn);							
+							}
+						};
+							
+							App.get('envioArchivoConsultaController').addObserver('loaded', this, fn);
+							App.get('envioArchivoConsultaController').load();				
+							return deferred.promise();
+						},
+
+						serialize: function(router, context) {
+							var envioId = context.get('id');
+							return {envio: envioId}
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'expedientesEnvioConsulta');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Envíos a Archivo', url: '#/envios'},
+								{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/envios/envio/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
+							]);
+							App.get('menuController').seleccionar(6);					
+						},
+					}),
 				}),
 				crear: Em.Route.extend({
 					route: "/envio/crear",
@@ -706,7 +715,6 @@ App.Router =  Em.Router.extend({
                         
 		comisiones: Em.Route.extend({
 			route: "/comisiones",
-			roles: ["PEDRO"],
 			
 			index: Ember.Route.extend({
 				route: "/",	
