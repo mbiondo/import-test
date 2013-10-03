@@ -199,7 +199,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/plan/de/labor/listado/1',
+			url: '#/laborparlamentaria/planesdelabor/tentativos',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 			icono: 'bundles/main/images/icons/mainnav/messages.png',
 			subMenu: [
@@ -209,24 +209,27 @@ App.menuController = App.MenuController.create({
 					roles: ['ROLE_USER'],
 					subMenu: [
 						App.MenuItem.create({
-							titulo: 'Planes de Labor tentativos',
-							url: '#/plan/de/labor/listado/0',
+							titulo: 'Planes de Labor Tentativos',
+							url: '#/laborparlamentaria/planesdelabor/tentativos',
+							// url: '#/plan/de/labor/listado/0',
 							roles: ['ROLE_USER'],
 						}),						
 						App.MenuItem.create({
 							titulo: 'Planes de Labor Confirmados',
-							url: '#/plan/de/labor/listado/1',
+							url: '#/laborparlamentaria/planesdelabor/confirmados',
+							// url: '#/plan/de/labor/listado/1',
 							roles: ['ROLE_USER'],
 						}),	
 
 						App.MenuItem.create({
 							titulo: 'Planes de Labor Definitivos',
-							url: '#/plan/de/labor/listado/2',
+							url: '#/laborparlamentaria/planesdelabor/definitivos',
+							// url: '#/plan/de/labor/listado/2',
 							roles: ['ROLE_USER'],
 						}),							
 						App.MenuItem.create({
 							titulo: 'Crear Plan de Labor',
-							url: '#/plan/de/labor/plan/de/labor/crear',
+							url: '#/laborparlamentaria/plandelabor/crear',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),							
 					],
