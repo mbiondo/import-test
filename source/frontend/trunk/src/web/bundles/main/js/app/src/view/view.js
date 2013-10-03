@@ -4717,7 +4717,7 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
 					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('planDeLabor.index', {estado: 0});
+					App.get('router').transitionTo('planDeLabor.index.index', {estado: 0});
 				}
 			};
 
