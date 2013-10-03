@@ -214,51 +214,137 @@ App.Router =  Em.Router.extend({
 		}),
 
 		planDeLabor: Em.Route.extend({
-			route: '/plan/de/labor',
+			route: '/laborparlamentaria',
 
 			index: Ember.Route.extend({
-				route: '/listado/:estado',
+				route: '/planesdelabor',
 
-				deserialize: function(router, params) {
+					index: Ember.Route.extend({
+						route: '/tentativos',
 
-					App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: params.estado});
-					
-					var deferred = $.Deferred(),
-					
-					fn = function() {
-						if (App.get('planDeLaborListadoController.loaded')) {
-							App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-							deferred.resolve(params);	
-						}
-					};
+						deserialize: function(router, params) {
 
-					App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
-					App.get('planDeLaborListadoController').load();
-					
-					return deferred.promise();
-				},	
+							App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 0});
+							
+							var deferred = $.Deferred(),
+							
+							fn = function() {
+								if (App.get('planDeLaborListadoController.loaded')) {
+									App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+									deferred.resolve(params);	
+								}
+							};
 
-				serialize: function (router, context) {
-					this._super();
-					return {estado: context.estado};
-				},
+							App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+							App.get('planDeLaborListadoController').load();
+							
+							return deferred.promise();
+						},	
 
-				connectOutlets: function(router, context) {
-					var appController = router.get('applicationController');
-					appController.connectOutlet('main', 'PlanDeLaborListado');
-					appController.connectOutlet('menu', 'subMenu');
-					
-					App.get('breadCumbController').set('content', [
-						{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-						{titulo: 'Planes de Labor', url: '#/plan/de/labor/listado'}
-					]);				
+						serialize: function (router, context) {
+							this._super();
+							return {estado: 0};
+						},
 
-					App.get('menuController').seleccionar(4);							
-				},					
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'PlanDeLaborListado');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Labor Parlamentaria'},
+								{titulo: 'Planes de Labor Tentativos', url: '#/laborparlamentaria/planesdelabor/tentativos'}
+							]);				
+
+							App.get('menuController').seleccionar(4);							
+						},					
+					}),	
+
+					planesDeLaborConfirmados: Ember.Route.extend({
+						route: '/confirmados',
+
+						deserialize: function(router, params) {
+
+							App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 1});
+							
+							var deferred = $.Deferred(),
+							
+							fn = function() {
+								if (App.get('planDeLaborListadoController.loaded')) {
+									App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+									deferred.resolve(params);	
+								}
+							};
+
+							App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+							App.get('planDeLaborListadoController').load();
+							
+							return deferred.promise();
+						},	
+
+						serialize: function (router, context) {
+							this._super();
+							return {estado: 1};
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'PlanDeLaborListado');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Labor Parlamentaria'},
+								{titulo: 'Planes de Labor Confirmados', url: '#/laborparlamentaria/planesdelabor/confirmados'}
+							]);				
+
+							App.get('menuController').seleccionar(4);							
+						},					
+					}),	
+					planesDeLaborDefinitivos: Ember.Route.extend({
+						route: '/definitivos',
+
+						deserialize: function(router, params) {
+
+							App.planDeLaborListadoController = App.PlanDeLaborListadoController.create({content: [], estado: 2});
+							
+							var deferred = $.Deferred(),
+							
+							fn = function() {
+								if (App.get('planDeLaborListadoController.loaded')) {
+									App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
+									deferred.resolve(params);	
+								}
+							};
+
+							App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
+							App.get('planDeLaborListadoController').load();
+							
+							return deferred.promise();
+						},	
+
+						serialize: function (router, context) {
+							this._super();
+							return {estado: 2};
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('main', 'PlanDeLaborListado');
+							appController.connectOutlet('menu', 'subMenu');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Labor Parlamentaria'},
+								{titulo: 'Planes de Labor Definitivos', url: '#/laborparlamentaria/planesdelabor/definitivos'}
+							]);				
+
+							App.get('menuController').seleccionar(4);							
+						},					
+					}),	
+
 			}),
 
 			planDeLabor: Em.Route.extend({ 
-				route: '/plan/de/labor',
+				route: '/plandelabor',
 				crear: Ember.Route.extend({
 					route: '/crear',
 
@@ -285,8 +371,9 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-							{titulo: "Crear"}
+							{titulo: 'Labor Parlamentaria'},
+							{titulo: "Plan de Labor"},
+							{titulo: "Crear", url:'#/laborparlamentaria/plandelabor/crear'}
 						]);				
 
 						App.get('menuController').seleccionar(4);						
@@ -347,8 +434,9 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Labor Parlamentaria', url: '#/plan/de/labor'},
-							{titulo: App.get('planDeLaborController.content.observaciones')}
+							{titulo: 'Labor Parlamentaria'},
+							{titulo: 'Plan de Labor'},
+							{titulo: moment(App.get('planDeLaborController.content.fechaEstimada'), 'DD/MM/YYYY').format('LL'), url:'#/laborparlamentaria/plandelabor/' + App.get('planDeLaborController.content.id') + '/ver/'}
 						]);				
 
 						App.get('menuController').seleccionar(4);						
