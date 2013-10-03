@@ -2183,6 +2183,25 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmarSuccess: function (data) {
 		//this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
 		//$.jGrowl('Se ha cambiado el estado de la sitacion a Convocada!', { life: 5000 });
+
+		//CREATE NOTIFICATION TEST 
+		var notification = App.Notificacion.extend(App.Savable).create();
+		//ACA TITULO DE LA NOTIFICACION
+		notification.set('tipo', 'confirmarCitacion');	
+		
+		notification.set('titulo', 'Confirmar Citación');
+
+		//Si hace falta ID del objeto modificado
+		notification.set('objectId', data.id);
+		//Link del objeto
+		notification.set('link', "#/comisiones/citaciones/citacion/" + data.id + "/ver");
+		//CreateAt
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		//Custom message
+		notification.set('mensaje', "Se ha convocado la citación del día " + moment().format('dddd') + " " + moment().format('LL') + " a las " + this.get('content.start').substring(this.get('content.start').indexOf(' ')));
+		//Crear
+		notification.create();
+
 	},
 	
 	confirmarCompleted: function (xhr) {
