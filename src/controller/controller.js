@@ -196,7 +196,7 @@ App.IoController = Em.Object.extend({
 			self.recieveNotification();
 
 			self.get('rooms').forEach(function (room) {
-				self.joinRoom(room);
+				self.joinRoom(room, false);
 			});
 		});
 
@@ -206,9 +206,9 @@ App.IoController = Em.Object.extend({
 	},	
 	
 
-	joinRoom: function (room) {
+	joinRoom: function (room, addToArray) {
 		this.get('socket').emit('joinRoom', room);
-		this.get('rooms').pushObject(room);
+		if (addToArray != false) this.get('rooms').pushObject(room);
 	},
 
 	leaveRoom: function (room) {

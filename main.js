@@ -13,7 +13,7 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_USER'],
 			titulo: 'Inicio',
 			url: '#',
-			icono: 'bundles/main/images/icons/mainnav/forms.png',
+			icono: 'ic ic-novedades',
 
 			subMenu: [
 				App.MenuItem.create({
@@ -79,7 +79,7 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_USER'],
 			titulo: 'Expedientes',
 			url: '#/expedientes',
-			icono: 'bundles/main/images/icons/mainnav/forms.png',
+			icono: 'ic ic-expedientes',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -100,7 +100,7 @@ App.menuController = App.MenuController.create({
 			id: 2,
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
-			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			icono: 'ic ic-comisiones',
 			roles: ['ROLE_COMISIONES'],
 			subMenu: [
 				App.MenuItem.create({
@@ -175,7 +175,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Orden Del Día',
 			url: '#/OD/listado',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
-			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			icono: 'ic ic-od',
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Orden Del Día',
@@ -201,7 +201,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Labor Parlamentaria',
 			url: '#/laborparlamentaria/planesdelabor/tentativos',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
-			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			icono: 'ic ic-labor',
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Labor Parlamentaria',
@@ -241,7 +241,7 @@ App.menuController = App.MenuController.create({
 			id: 3,
 			titulo: 'Recinto',
 			url: '#/recinto/oradores',
-			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			icono: 'ic ic-recinto',
 			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
@@ -263,7 +263,7 @@ App.menuController = App.MenuController.create({
 			id: 5,
 			titulo: 'Administrar Accessos',
 			url: '#/admin/roles',
-			icono: 'bundles/main/images/icons/mainnav/messages.png',
+			icono: 'ic ic-accesos',
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			subMenu: [
 				App.MenuItem.create({

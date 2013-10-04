@@ -1855,6 +1855,7 @@ App.Router =  Em.Router.extend({
 						exit: function () {
 							App.get('ioController').leaveRoom('oradores');
 						},
+						
 						deserialize: function(router, params) {
 							if (!App.get('planDeLaborController'))
 								App.planDeLaborController = App.PlanDeLaborController.create();
