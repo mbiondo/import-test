@@ -149,7 +149,10 @@ App.Rol = Em.Object.extend({
 });
 
 App.Notificacion = Em.Object.extend({
+	
 	notificationType : 'Notificacion',
+	notificationRoom: 'notificaciones',
+
 	url: '/notification/create',
 	tipo: '',
 	fecha: '',
@@ -780,6 +783,8 @@ App.Sesion = Em.Object.extend({
 App.Tema = Em.Object.extend({
 	notificationType : 'Tema',
 	temaSeleccionadoBinding: 'App.temaController.content',
+	notificationRoom: 'oradores',
+
 	id: null,
 	sesionId: null,
 	titulo: null,
@@ -914,6 +919,7 @@ App.Turno = Em.Object.extend({
 	elapsedTimeBinding : 'timer.elapsedTime',
 	turnoHablandoBinding : 'App.turnosController.turnoHablando',
 	useApi: false,
+	notificationRoom: 'oradores',
 	
 	serializable : [
 		'id',
@@ -1102,6 +1108,7 @@ App.PlanDeLaborGrupo = Ember.Object.extend({
 App.PlanDeLaborTentativo = Ember.Object.extend({
 	url: "/pdl/plan",
 	notificationType : 'PlanDeLaborTentativo',
+	notificationRoom: 'planDeLabor',
 	auditable: true,
 	useApi: true,
 
