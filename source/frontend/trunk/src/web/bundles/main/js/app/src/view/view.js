@@ -2204,7 +2204,7 @@ App.CrearReunionView = App.ModalView.extend({
 			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
 			spinnerSize: [19, 26, 0], // Image size
 			spinnerIncDecOnly: true, // Only up and down arrows
-			timeSteps: [1, 0, 1],
+			timeSteps: [1, 1, 1],
 			defaultTime: this.get('startHora')
 		});	 
 		
