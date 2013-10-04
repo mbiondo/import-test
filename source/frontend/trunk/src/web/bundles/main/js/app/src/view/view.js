@@ -3514,6 +3514,10 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 	disicencias: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
 
+	uploadFolder: function () {
+		return "uploads/dictamen/" + this.get('parentView').get('content.id') + "/";
+	}.property('content'),
+
 	borrar: function () {
 		this.get('parentView').borrarTexto(this.get('content'));
 	},
@@ -4731,20 +4735,6 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 		}
 	},
 
-	dictamenes: function () {
-		if (App.crearPlanDeLaborController.get('ordenesDelDia')) {
-			var dictamenes = App.crearPlanDeLaborController.get('ordenesDelDia');
-			this.get('content.items').forEach(function (item) {
-				item.get('dictamenes').forEach(function (dictamen) {
-					dictamenes.removeObject(dictamen);
-				});
-			})
-			return dictamenes;
-		} else {
-			return [];
-		}
-	}.property('content.items.@each'),
-
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create());
@@ -4962,6 +4952,13 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 	sesion: null,
 	clickGuardar: null,
+
+	puedeCrearSesion: function () {
+		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+			return true;
+		else
+			return false;
+	}.property('App.userController.roles.@each'),
 
 	crearSesion: function () {
 		this.set('clickGuardar', true);

@@ -34,7 +34,7 @@ App.Savable = Ember.Mixin.create({
 			this.set('id', data.id);
 			if (this.get('notificationType'))
 			{
-				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson());
+				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson(), this.get('notificationRoom'));
 			}
 		}
 
@@ -141,7 +141,7 @@ App.Savable = Ember.Mixin.create({
 		{
 			if (this.get('notificationType'))
 			{
-				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson());
+				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson(), this.get('notificationRoom'));
 			}
 
 			if (this.get('auditable')) 
@@ -178,7 +178,9 @@ App.IoController = Em.Object.extend({
 
 	socket: null,
 	connected: false,
-	
+
+	rooms: ['notificaciones'],
+
 	init: function () {
 		//if (this.get('connected') == false) 
 		//	this.connect();
@@ -192,6 +194,10 @@ App.IoController = Em.Object.extend({
 			self.set('connected', true);
 			self.recieveMessage();
 			self.recieveNotification();
+
+			self.get('rooms').forEach(function (room) {
+				self.joinRoom(room);
+			});
 		});
 
 		this.get('socket').on('disconnect', function (data) {
@@ -199,6 +205,17 @@ App.IoController = Em.Object.extend({
 		});
 	},	
 	
+
+	joinRoom: function (room) {
+		this.get('socket').emit('joinRoom', room);
+		this.get('rooms').pushObject(room);
+	},
+
+	leaveRoom: function (room) {
+		this.get('socket').emit('leaveRoom', room);
+		this.get('rooms').removeObject(room);
+	},	
+
 	sendNotification: function (notificacion) {
 		this.get('socket').json.emit('notification', notificacion);
 	},
@@ -209,12 +226,13 @@ App.IoController = Em.Object.extend({
 		}
 	},
 	
-	sendMessage: function (type, action, options) {
+	sendMessage: function (type, action, options, room) {
 		if (this.get('connected')) {
 			var data = {
 				type : type,
 				action: action,
 				options: options,
+				room: room,
 			};
 			this.get('socket').json.emit('message', data);
 		} 
@@ -235,7 +253,9 @@ App.IoController = Em.Object.extend({
 		this.get('socket').on('message', function (data) {
 			var type = data.type,
 					action = data.action,
-					options = JSON.parse(data.options);
+					options = JSON.parse(data.options),
+					room = data.room;
+			console.log(room);
 			
 			switch (action) {
 				case self.get('MODIFICADO'):
@@ -266,7 +286,7 @@ App.IoController = Em.Object.extend({
 							App.get('turnosController').startTimer(turno);
 						}else{
 							if(App.get('turnosController').turnoHablando == turno)
-								App.get('turnosController').stopTimer(turno);
+								App.get('turnosController').stopTimer(turno, false);
 						}
 					}
 
@@ -761,7 +781,8 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	sortSucceeded : function(data) {
-		App.get('ioController').sendMessage(this.get('notificationType'), "ordenado", JSON.stringify(data.orden));
+		App.get('ioController').sendMessage(this.get('notificationType'), "ordenado", JSON.stringify(data.orden), this.get('notificationRoom'));
+
 	}
 });
 
@@ -2592,6 +2613,7 @@ App.TurnosController = App.RestController.extend({
 	sortProperties: ['sortValue'],
 	timer : null,
 	useAPi: false,
+	notificationRoom: 'oradores',
 
 	turnoHablandoBinding : null,
 
@@ -2662,12 +2684,13 @@ App.TurnosController = App.RestController.extend({
 		this.actualizarHora(0);
 	},
 
-	stopTimer : function (turno) {
+	stopTimer : function (turno, save) {
 		this.get('timer').stop();
 
 		turno.set('horaFin', Math.round(this.get('timer.endTime')/1000));
 		turno.set('timer', null);
-		turno.save();
+		if (save != false)
+			turno.save();
 
 		this.set('turnoHablando', null);
 
@@ -2817,7 +2840,7 @@ App.TurnosController = App.RestController.extend({
 		if (data.success == true) {
 			var turnosController = App.get('turnosController');
 			turnosController.actualizarHora();
-			App.get('ioController').sendMessage(this.controller.get('notificationType'), "creado", this.model.getJson());
+			App.get('ioController').sendMessage(this.controller.get('notificationType'), "creado", this.model.getJson(), this.controller.get('notificationRoom'));
 			
 			var temaController = App.get('temaController');
 			var turnos = App.get('turnosController.arrangedContent').filter(function(item){
@@ -2848,7 +2871,7 @@ App.TurnosController = App.RestController.extend({
 			if(turnosController.length)
 				turnosController.actualizarHora();
 				
-			App.get('ioController').sendMessage(this.controller.get('notificationType'), "borrado", this.model.get('id'));
+			App.get('ioController').sendMessage(this.controller.get('notificationType'), "borrado", this.model.get('id'), this.controller.get('notificationRoom'));
 		}
 	},
 	
@@ -2916,6 +2939,7 @@ App.TemasController = App.RestController.extend({
 	sortUrl: '/temas/ordenar',
 	sortProperties: ['orden'],
 	useAPi: false,
+	notificationRoom: 'oradores',
 
 	parse : function (data) {
 		return data.temas;
@@ -2978,14 +3002,14 @@ App.TemasController = App.RestController.extend({
 	createSucceeded: function (data) {
 		this._super(data);
 		if (data.success == true) {
-			App.get('ioController').sendMessage(this.controller.get('notificationType'), "creado" , this.model.getJson());
+			App.get('ioController').sendMessage(this.controller.get('notificationType'), "creado" , this.model.getJson(), this.controller.get('notificationRoom'));
 		}
 	},	
 	deleteSucceeded: function (data) {
 		this._super(data);
 
 		if (data.success == true) {
-			App.get('ioController').sendMessage(this.controller.get('notificationType'), "borrado", this.model.get('id'));
+			App.get('ioController').sendMessage(this.controller.get('notificationType'), "borrado", this.model.get('id'), this.controller.get('notificationRoom'));
 		}
 	},
 

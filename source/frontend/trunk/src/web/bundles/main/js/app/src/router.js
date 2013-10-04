@@ -383,6 +383,14 @@ App.Router =  Em.Router.extend({
 				ver: Ember.Route.extend({
 					route: '/:plan/ver',
 
+					enter: function () {
+						App.get('ioController').joinRoom('planDeLabor');
+					},
+
+					exit: function () {
+						App.get('ioController').leaveRoom('planDeLabor');
+					},
+
 					deserialize: function(router, params) {
 
  					 	 App.planDeLaborController = App.PlanDeLaborController.create();
@@ -1718,6 +1726,14 @@ App.Router =  Em.Router.extend({
 				index: Em.Route.extend({
 					route: '/',
 					
+					enter: function () {
+						App.get('ioController').joinRoom('oradores');
+					},
+
+					exit: function () {
+						App.get('ioController').leaveRoom('oradores');
+					},
+
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 
@@ -1746,6 +1762,14 @@ App.Router =  Em.Router.extend({
 
 					indexSubRoute: Ember.Route.extend({
 						route: '/:sesion/ver',
+
+						enter: function () {
+							App.get('ioController').joinRoom('oradores');
+						},
+
+						exit: function () {
+							App.get('ioController').leaveRoom('oradores');
+						},
 
 						deserialize: function(router, params) {
 
@@ -1824,6 +1848,13 @@ App.Router =  Em.Router.extend({
 					tema: Em.Route.extend({
 						route: "/:sesion/tema/:tema",
 
+						enter: function () {
+							App.get('ioController').joinRoom('oradores');
+						},
+
+						exit: function () {
+							App.get('ioController').leaveRoom('oradores');
+						},
 						deserialize: function(router, params) {
 							if (!App.get('planDeLaborController'))
 								App.planDeLaborController = App.PlanDeLaborController.create();
