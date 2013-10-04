@@ -169,6 +169,62 @@ App.DatePicker = JQ.DatePicker.extend({
 App.SubMenuView = Ember.View.extend({
 	templateName: "sub-menu",
 
+didInsertElement: function () {
+		this._super();
+		var $menuWrapper =  $('.mainMenu'),
+			$secondLevel = $('.secondLevel'),
+			$firstLevel = $('.firstLevel'),
+			/* ver que onda esto*/
+			$route = $('.firstLevel ul li a'),
+			$goBack = $('.menuBack');
+
+		function displayBlock(e){
+			e.css('display','block');
+		}
+
+		function initMenu(){
+			toggleMainMenu();
+			// $secondLevel.hide();
+			// $secondLevel._x = -$secondLevelW;
+		}
+
+		function animateToSecondLevel(){
+			$firstLevel.animate({
+				opacity:0
+			}, 500, function(){
+				$firstLevel.css('display','none');
+				displayBlock($secondLevel);
+				$secondLevel.animate({
+					opacity:1
+				}, 500,function(){
+					//callback
+				});
+			});
+		}
+
+		function goBack(){
+			$secondLevel.animate({
+				opacity:0
+			}, 500, function(){
+				$secondLevel.css('display','none');
+				displayBlock($firstLevel);
+				$firstLevel.animate({
+					opacity:1
+				}, 500,function(){
+					//callback
+				});
+			});
+		}
+
+		$route.click(function(){
+			animateToSecondLevel();
+		});
+
+		//boton volver
+		$goBack.click(function(){
+			goBack();
+		});		
+	},
 	
 });
 
@@ -269,6 +325,162 @@ App.ContentView = Ember.View.extend({
 			if (! $clicked.parents().hasClass("leftUserDrop"))
 			$(".leftUser").slideUp(200);
 		});
+
+	var $menuWrapper =  $('.mainMenu'),
+		$secondLevel = $('.secondLevel'),
+		$firstLevel = $('.firstLevel'),
+		/* ver que onda esto*/
+		$route = $('.firstLevel ul li a'),
+		$goBack = $('.menuBack');
+
+	function displayBlock(e){
+		e.css('display','block');
+	}
+
+	function initMenu(){
+		toggleMainMenu();
+		// $secondLevel.hide();
+		// $secondLevel._x = -$secondLevelW;
+	}
+
+	function animateToSecondLevel(){
+		$firstLevel.animate({
+			opacity:0
+		}, 500, function(){
+			$firstLevel.css('display','none');
+			displayBlock($secondLevel);
+			$secondLevel.animate({
+				opacity:1
+			}, 500,function(){
+				//callback
+			});
+		});
+		
+	}
+
+	function goBack(){
+		$secondLevel.animate({
+			opacity:0
+		}, 500, function(){
+			$secondLevel.css('display','none');
+			displayBlock($firstLevel);
+			$firstLevel.animate({
+				opacity:1
+			}, 500,function(){
+				//callback
+			});
+		});
+	}
+
+	$route.click(function(){
+		animateToSecondLevel();
+	});
+
+	//boton volver
+	$goBack.click(function(){
+		goBack();
+	});
+
+	
+	//show/hide mainMenu
+	function toggleMainMenu(){
+		var $toggle = $('.toggleMainMenu'),
+			$leftColumn = $('#leftColumn'),
+			$middleColumn = $('#middleColumn'),
+			$rightColumn = $('#rightColumn');
+			$toggleHelp = $('.toggleHelp');
+
+		function helpMessage(contextHelp){
+			// console.log(contextHelp);
+			if (contextHelp == true){
+				$toggleHelp.hover(function(){
+					$toggleHelp.popover('show');
+
+				},function(){
+					$toggleHelp.popover('hide');
+				});
+			}
+			else{
+				$toggleHelp.hover(function(){
+					$toggleHelp.popover('destroy');
+					// console.info("toggleHelp destroyed");
+				});
+			}
+		}
+
+		$toggle.click(function(){
+
+			$menuWrapper.toggle();
+			$leftColumn.find('h3').toggle();
+			if ($leftColumn.hasClass('col-md-3')){
+				$leftColumn.removeClass('col-md-3').addClass('col-md-1');
+
+				if(($middleColumn).hasClass('col-md-9')){
+					$middleColumn.removeClass('col-md-9').addClass('col-md-11');
+				}
+
+				else if(($middleColumn).hasClass('col-md-7')){
+
+					$middleColumn.removeClass('col-md-7').addClass('col-md-9');
+				}
+
+			}
+
+			else{
+
+				$leftColumn.removeClass('col-md-1').addClass('col-md-3');
+
+				if ($middleColumn.hasClass('col-md-11')){
+					$middleColumn.removeClass('col-md-11').addClass('col-md-9');
+				}
+
+				else{
+					$middleColumn.removeClass('col-md-9').addClass('col-md-7');
+				}
+			}
+			return false;
+		});
+
+		$toggleHelp.click(function(){
+			if ($rightColumn.hasClass('col-md-2')){
+
+				$('.support').css('display','none');
+				$rightColumn.removeClass('col-md-2').addClass('col-md-0');
+
+				if ($middleColumn.hasClass('col-md-7')){
+					$middleColumn.removeClass('col-md-7').addClass('col-md-9');
+				}
+
+				else if ($middleColumn.hasClass('col-md-9')){
+					$middleColumn.removeClass('col-md-9').addClass('col-md-11');
+				}	
+
+			}
+			else{
+				$rightColumn.removeClass('col-md-0').addClass('col-md-2');
+				var delayConstruction = setTimeout(function(){$('.support').fadeIn('fast'); clearTimeout(delayConstruction);}, 350);
+				helpMessage(false);
+
+
+				if ($middleColumn.hasClass('col-md-11')){
+					$middleColumn.removeClass('col-md-11').addClass('col-md-9');
+				}
+
+				else if ($middleColumn.hasClass('col-md-9')){
+					$middleColumn.removeClass('col-md-9').addClass('col-md-7');
+				}				
+			}
+			return false;
+		});
+
+		helpMessage(true);
+		
+	}
+
+
+	initMenu();
+
+
 	},	
 });
 
@@ -1737,7 +1949,7 @@ App.CalendarTool = Em.View.extend({
 
 App.MenuView = Em.View.extend({
 	templateName: 'menu',
-	classNames: ['nav'],
+	classNames: [],
 	tagName: 'ul',
 });
 
