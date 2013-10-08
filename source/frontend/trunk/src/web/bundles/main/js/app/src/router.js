@@ -137,22 +137,27 @@ App.Router =  Em.Router.extend({
 			route: "/",
 
 			deserialize: function () {
-				
 				if (!App.get('notificacionesController'))
 					App.notificacionesController = App.NotificacionesController.create({content: []});
 				
-				var deferred = $.Deferred(),
-				
-				fn = function() {
-						App.get('notificacionesController').removeObserver('loaded', this, fn);	
-						deferred.resolve(null);	
-				};					
+				if (App.get('userController').get('isLogin'))
+				{
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+							App.get('notificacionesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);	
+					};					
 
-				App.get('notificacionesController').addObserver('loaded', this, fn);
-				App.get('notificacionesController').load();
-				
-				return deferred.promise();				
+					App.get('notificacionesController').addObserver('loaded', this, fn);
+					App.get('notificacionesController').load();
+					
+					return deferred.promise();				
+				} else {
+					return null;
+				}
 			},
+
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
 				appController.connectOutlet('menu', 'subMenu');
@@ -1795,6 +1800,7 @@ App.Router =  Em.Router.extend({
 
 							App.get('sesionesController').addObserver('loaded', this, fn);
 							App.get('sesionesController').load();
+							App.get('diputadosController').load();
 
 							return deferred.promise();
 						},
@@ -1901,6 +1907,7 @@ App.Router =  Em.Router.extend({
 							App.get('sesionesController').addObserver('loaded', this, fnSesion);
 							
 							App.get('sesionesController').load();
+							App.get('diputadosController').load();
 
 							return deferred.promise();
 						},

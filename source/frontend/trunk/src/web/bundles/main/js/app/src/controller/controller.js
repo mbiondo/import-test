@@ -506,7 +506,9 @@ App.UserController = Em.Controller.extend({
 					_self.set('user', tmpUser);
 
 					localStorage.setObject('user', JSON.stringify(tmpUser));
-					
+										
+					App.get('notificacionesController').load();		
+								
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
 					
@@ -2427,7 +2429,7 @@ App.DiputadosController  = App.RestController.extend({
 	filtro : true,
 
 	init : function(){
-		this.load();
+		//this.load();
 	},
 
 	parse: function (data) {
