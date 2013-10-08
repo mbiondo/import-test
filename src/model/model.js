@@ -1158,8 +1158,9 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
 	    }
     }, 
 
-    desNormalize: function () {
-    	this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+    desNormalize: function (withDate) {
+    	if (withDate != false) 
+    		this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
     	if (this.get('items')) {
     		var items = [];
 	     	this.get('items').forEach(function (planDeLaborTentativoItem) {
