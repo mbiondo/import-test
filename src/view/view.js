@@ -5109,6 +5109,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		this.get('content.items').pushObject(item);
 
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
+		//var clone = this.get('content').copy(true);
 
 
 		clone.normalize();
@@ -5129,7 +5130,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 	},	
 
 	itemAddedSuccess : function () {
-		this.get('content').desNormalize();
+		this.get('content').desNormalize(false);
 	},
 
 
