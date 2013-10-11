@@ -256,6 +256,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'PlanDeLaborListado');
 							appController.connectOutlet('menu', 'subMenu');
 							
+							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Labor Parlamentaria'},
 								{titulo: 'Planes de Labor Tentativos', url: '#/laborparlamentaria/planesdelabor/tentativos'}
@@ -1824,12 +1825,15 @@ App.Router =  Em.Router.extend({
 							
 							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
-								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 									appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+									//appController.connectOutlet('help', 'crearTurnoInline');
+								}
 							 	else
 									appController.connectOutlet('main', 'sesionConsulta');
 							}
-							else {
+							else 
+							{
 								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
 							}
 							
@@ -1942,11 +1946,15 @@ App.Router =  Em.Router.extend({
 							App.get('temaController').set('content', context);
 
 							var appController = router.get('applicationController');
+
+							var tema = App.get('temaController.content');
 							
 							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
-								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT'))
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+									//appController.connectOutlet('help', 'crearTurnoInline');
 									appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+								}
 							 	else
 									appController.connectOutlet('main', 'sesionConsulta');
 
@@ -1961,7 +1969,6 @@ App.Router =  Em.Router.extend({
 							//appController.cargarSesiones(true);
 							
 							
-							var tema = App.get('temaController.content');
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Recinto', url: '#/recinto/oradores'},	
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
