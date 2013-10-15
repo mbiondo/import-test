@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			 this.$().prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -260,9 +260,20 @@ App.ContentView = Ember.View.extend({
 
 	appColumnsChange: function () {
 		this.set('columns', App.get('router.applicationController.columns'));
-		this.setupColumns(this.get('columns').objectAt(0), this.get('columns').objectAt(1) + this.get('columns').objectAt(2), 0);
-		this.$('.support').hide(); 
-		this.set('toggleHelp', true);
+		
+		var l = this.get('toggleMenu') == true ? 1 : this.get('columns').objectAt(0);
+		var r = this.get('toggleHelp') == true ? 0 : this.get('columns').objectAt(2);
+		var m = this.get('toggleMenu') == true ? this.get('columns').objectAt(1) + (this.get('columns').objectAt(0) - 1) : this.get('columns').objectAt(1);
+
+		if (this.get('toggleHelp')) {
+			m = m + this.get('columns').objectAt(2);
+		}	
+
+		console.log(l);
+		console.log(m);
+		console.log(r);
+		this.setupColumns(l, m, r);
+
 	}.observes('App.router.applicationController.columns.@each'),
 
 	setupColumns: function (l, m, r) {
