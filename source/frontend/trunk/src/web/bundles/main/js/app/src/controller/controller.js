@@ -255,7 +255,6 @@ App.IoController = Em.Object.extend({
 					action = data.action,
 					options = JSON.parse(data.options),
 					room = data.room;
-			console.log(room);
 			
 			switch (action) {
 				case self.get('MODIFICADO'):
@@ -350,8 +349,19 @@ App.IoController = Em.Object.extend({
 				break;
 
 			case "Notificacion" :
-				if (App.get('notificacionesController'))
-					App.get('notificacionesController').addObject(App.Notificacion.create(options));
+				if (App.get('notificacionesController')) {
+					//App.get('notificacionesController').addObject(App.Notificacion.create(options));
+					$.ajax({
+						url: '/notification/' + options.id,
+						dataType: 'JSON',
+						type: 'POST',
+						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+						context: this,
+						success: function (data) {
+							console.log(data);
+						},
+					});
+				}
 				break;				
 		}
 	},
@@ -988,6 +998,43 @@ App.NotificacionesController = App.RestController.extend({
 	},	
 });
 
+
+App.NotificacionesGruposController = App.RestController.extend({
+	url: '/notification/gruops',
+	type: App.NotificacionGrupo,
+	useApi: false,
+
+	load: function() {
+		this.set('loaded', false);
+		var url =  this.get('url');
+
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				type: 'POST',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+	parse : function (data) {
+		return data;
+	},
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.NotificacionGrupo.extend(App.Savable).create(data);
+		item.setProperties(data);
+
+		this.addObject(item);
+
+	},	
+});
 //UserLogin
 App.UsuariosController = App.RestController.extend({
 	url: '/user/users',
