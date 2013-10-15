@@ -1910,7 +1910,7 @@ App.Router =  Em.Router.extend({
 							this._super();
 							App.get('ioController').joinRoom('oradores');
 							var appController = App.get('router.applicationController');
-							appController.setLayout(3, 5, 4);
+							appController.setLayout(3, 6, 3);
 							App.get('menuController').seleccionar(3);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						},
