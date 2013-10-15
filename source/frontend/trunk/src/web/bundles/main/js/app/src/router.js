@@ -167,6 +167,8 @@ App.Router =  Em.Router.extend({
 				});
 				
 				App.get('menuController').seleccionar(0);
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Inicio', url: '#'}
 				]);				
@@ -213,7 +215,9 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Oradores', url: '#/estadisticas/oradores'}
 					]);				
 
-					App.get('menuController').seleccionar(7);							
+					App.get('menuController').seleccionar(7);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 				},				
 			})
 		}),
@@ -262,7 +266,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Tentativos', url: '#/laborparlamentaria/planesdelabor/tentativos'}
 							]);				
 
-							App.get('menuController').seleccionar(4);							
+							App.get('menuController').seleccionar(4);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 						},					
 					}),	
 
@@ -303,7 +308,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Confirmados', url: '#/laborparlamentaria/planesdelabor/confirmados'}
 							]);				
 
-							App.get('menuController').seleccionar(4);							
+							App.get('menuController').seleccionar(4);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 						},					
 					}),	
 					planesDeLaborDefinitivos: Ember.Route.extend({
@@ -343,7 +349,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Definitivos', url: '#/laborparlamentaria/planesdelabor/definitivos'}
 							]);				
 
-							App.get('menuController').seleccionar(4);							
+							App.get('menuController').seleccionar(4);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 						},					
 					}),	
 
@@ -382,7 +389,8 @@ App.Router =  Em.Router.extend({
 							{titulo: "Crear", url:'#/laborparlamentaria/plandelabor/crear'}
 						]);				
 
-						App.get('menuController').seleccionar(4);						
+						App.get('menuController').seleccionar(4);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},
 				}),
 
@@ -453,7 +461,8 @@ App.Router =  Em.Router.extend({
 							{titulo: moment(App.get('planDeLaborController.content.fechaEstimada'), 'DD/MM/YYYY').format('LL'), url:'#/laborparlamentaria/plandelabor/' + App.get('planDeLaborController.content.id') + '/ver/'}
 						]);				
 
-						App.get('menuController').seleccionar(4);						
+						App.get('menuController').seleccionar(4);		
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},
 				}),						
 			}),
@@ -504,7 +513,8 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
 					]);					
-					App.get('menuController').seleccionar(5);							
+					App.get('menuController').seleccionar(5);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 				},									
 			}),	
 
@@ -541,7 +551,8 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
 					]);					
-					App.get('menuController').seleccionar(5);							
+					App.get('menuController').seleccionar(5);	
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 				},									
 			}),	
 			
@@ -575,7 +586,8 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
 						]);					
-						App.get('menuController').seleccionar(5);							
+						App.get('menuController').seleccionar(5);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 					},								
 				}),
 
@@ -617,7 +629,8 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
 						]);					
-						App.get('menuController').seleccionar(5);							
+						App.get('menuController').seleccionar(5);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},								
 				})
 			}),
@@ -664,6 +677,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 
 					App.get('menuController').seleccionar(1);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Expedientes', url: '#/expedientes'}
@@ -711,7 +725,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Expedientes', url: '#/expedientes'},
 							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
 						]);					
-						App.get('menuController').seleccionar(1);					
+						App.get('menuController').seleccionar(1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},
 				}),
 			}),			
@@ -743,6 +758,7 @@ App.Router =  Em.Router.extend({
 	                        appController.connectOutlet('menu', 'subMenu');
 
 	                        App.get('menuController').seleccionar(6);
+	                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 	                        App.get('breadCumbController').set('content', [
                                 {titulo: 'Envíos a Archivo', url: '#/envios'},
@@ -791,7 +807,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Envíos a Archivo', url: '#/envios'},
 								{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/envios/envio/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
 							]);
-							App.get('menuController').seleccionar(6);					
+							App.get('menuController').seleccionar(6);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 						},
 					}),
 				}),
@@ -805,6 +822,7 @@ App.Router =  Em.Router.extend({
 	                    appController.connectOutlet('menu', 'subMenu');
 
 	                    App.get('menuController').seleccionar(6);
+	                    App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 	                    App.get('breadCumbController').set('content', [
 	                        {titulo: 'Envíos a Archivo', url: '#/envios'},
@@ -853,7 +871,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 							{titulo: 'Dictámenes'},
 						]);					
-						App.get('menuController').seleccionar(2);					
+						App.get('menuController').seleccionar(2);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},						
 				}),	
 
@@ -888,7 +907,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Pendientes'},
 						]);					
 
-						App.get('menuController').seleccionar(2);					
+						App.get('menuController').seleccionar(2);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},						
 				}),
 
@@ -947,7 +967,8 @@ App.Router =  Em.Router.extend({
                                     {titulo: 'Crear Dictamen' }
                             ]);							
 
-                            App.get('menuController').seleccionar(2);					
+                            App.get('menuController').seleccionar(2);		
+                            App.get('tituloController').set('titulo', App.get('menuController.titulo'));			
                     },						
 
                 }),
@@ -995,7 +1016,8 @@ App.Router =  Em.Router.extend({
 							//	{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
 
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);		
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));			
 						},
 						
 					}),	
@@ -1066,7 +1088,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Cargar Dictamen' }
 							]);							
 							
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 
 					}),
@@ -1095,7 +1118,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Crear Parte' }
 							]);
 							
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 					}),			
 					*/	
@@ -1114,6 +1138,7 @@ App.Router =  Em.Router.extend({
 							]);
 							
 							App.get('menuController').seleccionar(2);		
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.set('reunionConsultaController.isEdit', true);			
 						},						
 					}),		
@@ -1149,7 +1174,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'sin Parte'},
 						]);					
-						App.get('menuController').seleccionar(2);							
+						App.get('menuController').seleccionar(2);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},						
 				}),
 				
@@ -1181,7 +1207,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'con Parte'},
 						]);					
-						App.get('menuController').seleccionar(2);							
+						App.get('menuController').seleccionar(2);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},						
 				}),				
 				
@@ -1263,6 +1290,7 @@ App.Router =  Em.Router.extend({
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero')},
 							]);					
 							App.get('menuController').seleccionar(2);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						},
 
 					}),	
@@ -1330,7 +1358,8 @@ App.Router =  Em.Router.extend({
 									{titulo: 'Crear' }
 								]);
 								
-								App.get('menuController').seleccionar(2);					
+								App.get('menuController').seleccionar(2);		
+								App.get('tituloController').set('titulo', App.get('menuController.titulo'));			
 							},						
 						}),
 					}),	
@@ -1366,6 +1395,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'}
 						]);					
 						App.get('menuController').seleccionar(2);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},					
 				}),
 
@@ -1406,6 +1436,7 @@ App.Router =  Em.Router.extend({
 							
 							App.set('citacionCrearController.isEdit', false);
 							App.get('menuController').seleccionar(2);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
@@ -1460,7 +1491,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Citación'},
 								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('citacionConsultaController.content.sala.numero')},
 							]);					
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 						},
 					}),	
 					
@@ -1555,7 +1587,8 @@ App.Router =  Em.Router.extend({
 								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('citacionConsultaController.content.sala.numero'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
 								{titulo: 'Editar'}
 							]);						
-							App.get('menuController').seleccionar(2);					
+							App.get('menuController').seleccionar(2);		
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));			
 						},
 						
 					}),	
@@ -1594,7 +1627,8 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Orden del Día', url: '#/comisiones/OD/dictamenes'},
 						{titulo: 'Dictámenes sin OD'},
 					]);					
-					App.get('menuController').seleccionar(8);					
+					App.get('menuController').seleccionar(8);	
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 				},						
 			}),	
 
@@ -1627,7 +1661,8 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Listado de OD'},
 					]);			
 
-					App.get('menuController').seleccionar(8);					
+					App.get('menuController').seleccionar(8);	
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 				},						
 			}),	
 
@@ -1665,6 +1700,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('main', 'OrdenDelDiaCrear');
 						
 						App.get('menuController').seleccionar(8);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
 							{titulo: 'OD', url: '#/OD/listado'},
 							{titulo: 'Nueva Orden Del Día'},
@@ -1712,7 +1748,8 @@ App.Router =  Em.Router.extend({
 								{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
 
-							App.get('menuController').seleccionar(8);					
+							App.get('menuController').seleccionar(8);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),	
 				}),							
@@ -1734,6 +1771,8 @@ App.Router =  Em.Router.extend({
 					
 					enter: function () {
 						App.get('ioController').joinRoom('oradores');
+						App.get('menuController').seleccionar(3);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 
 					exit: function () {
@@ -1759,6 +1798,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Oradores', url: '#/recinto/oradores'},	
 						]);					
 						App.get('menuController').seleccionar(3);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
 				
@@ -1771,6 +1811,8 @@ App.Router =  Em.Router.extend({
 
 						enter: function () {
 							App.get('ioController').joinRoom('oradores');
+							App.get('menuController').seleccionar(3);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						},
 
 						exit: function () {
@@ -1813,11 +1855,16 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 
-							var sesion = App.get('sesionesController.content').findProperty('id', parseInt(context.get('id')))
+							var sesion = App.get('sesionesController.content').findProperty('id', parseInt(context.get('id')));
+
 							if (!App.get('planDeLaborController')) {
 								App.planDeLaborController = App.PlanDeLaborController.create();
 							}
 							
+							if (!App.get('diputadosController.loaded')) {
+								App.get('diputadosController').load();
+							}
+
 							App.set('planDeLaborController.content', App.PlanDeLabor.create({id: context.get('idPl')}));
 							App.get('planDeLaborController').load();							
 														
@@ -1851,7 +1898,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Oradores', url: '#/recinto/oradores'},	
 								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
 							]);					
-							App.get('menuController').seleccionar(3);					
+							App.get('menuController').seleccionar(3);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),
 					
@@ -1859,11 +1907,19 @@ App.Router =  Em.Router.extend({
 						route: "/:sesion/tema/:tema",
 
 						enter: function () {
+							this._super();
 							App.get('ioController').joinRoom('oradores');
+							var appController = App.get('router.applicationController');
+							appController.setLayout(3, 5, 4);
+							App.get('menuController').seleccionar(3);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						},
 
 						exit: function () {
+							this._super();
 							App.get('ioController').leaveRoom('oradores');
+							var appController = App.get('router.applicationController');
+							appController.setLayout(3, 7, 2);							
 						},
 						
 						deserialize: function(router, params) {
@@ -1886,7 +1942,7 @@ App.Router =  Em.Router.extend({
 							},
 
 							fnSesion = function() {
-								if (App.get('sesionesController.loaded')) {
+								if (App.get('sesionesController.loaded') && App.get('diputadosController.loaded')) {
 									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionController').set('content', sesion);
 									
@@ -1909,6 +1965,7 @@ App.Router =  Em.Router.extend({
 
 
 							App.get('sesionesController').addObserver('loaded', this, fnSesion);
+							App.get('diputadosController').addObserver('loaded', this, fnSesion);
 							
 							App.get('sesionesController').load();
 							App.get('diputadosController').load();
@@ -1943,16 +2000,21 @@ App.Router =  Em.Router.extend({
 								App.get('turnosController').load();
 							}
 
+							if (!App.get('diputadosController.loaded')) {
+								App.get('diputadosController').load();
+							}
+
 							App.get('temaController').set('content', context);
 
 							var appController = router.get('applicationController');
 
 							var tema = App.get('temaController.content');
 							
+
 							if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 								//appController.connectOutlet('menu', 'subMenu');
 								if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
-									//appController.connectOutlet('help', 'crearTurnoInline');
+									appController.connectOutlet('help', 'crearTurnoInline');
 									appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
 								}
 							 	else
@@ -1975,7 +2037,6 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
 								{titulo: tema.get('titulo')}
 							]);					
-							App.get('menuController').seleccionar(3);					
 						},
 					}),
 				}),					

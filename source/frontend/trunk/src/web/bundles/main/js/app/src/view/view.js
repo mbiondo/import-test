@@ -169,37 +169,19 @@ App.DatePicker = JQ.DatePicker.extend({
 App.SubMenuView = Ember.View.extend({
 	templateName: "sub-menu",
 
-didInsertElement: function () {
+	clickItem: function (item) {
+		App.get('menuController').seleccionar(item.get('id'));
+	},
+
+	didInsertElement: function () {
 		this._super();
-		var $menuWrapper =  $('.mainMenu'),
-			$secondLevel = $('.secondLevel'),
+
+		var $secondLevel = $('.secondLevel'),
 			$firstLevel = $('.firstLevel'),
-			/* ver que onda esto*/
-			$route = $('.firstLevel ul li a'),
 			$goBack = $('.menuBack');
 
 		function displayBlock(e){
 			e.css('display','block');
-		}
-
-		function initMenu(){
-			toggleMainMenu();
-			// $secondLevel.hide();
-			// $secondLevel._x = -$secondLevelW;
-		}
-
-		function animateToSecondLevel(){
-			$firstLevel.animate({
-				opacity:0
-			}, 500, function(){
-				$firstLevel.css('display','none');
-				displayBlock($secondLevel);
-				$secondLevel.animate({
-					opacity:1
-				}, 500,function(){
-					//callback
-				});
-			});
 		}
 
 		function goBack(){
@@ -214,13 +196,8 @@ didInsertElement: function () {
 					//callback
 				});
 			});
-		}
+		}		
 
-		$route.click(function(){
-			animateToSecondLevel();
-		});
-
-		//boton volver
 		$goBack.click(function(){
 			goBack();
 		});		
@@ -230,7 +207,7 @@ didInsertElement: function () {
 
 
 
-App.SubMenuOradoresView = Ember.View.extend({
+App.SubMenuOradoresView = App.SubMenuView.extend({
 	templateName: "sub-menu-oradores",
 
 	crearTema: function () {
@@ -246,29 +223,6 @@ App.SubMenuOradoresView = Ember.View.extend({
 		App.CrearTemaView.popup();
 	},
 		
-	crearTurno: function () {
-		var lista;
-
-		if(App.get('listaController.content'))
-			lista = App.get('listaController.content');
-		else
-			lista = null;
-			
-		var temaController = App.get('temaController');
-		
-		var turno = App.Turno.create({
-				temaId:  App.get('temaController').get('content').get('id'),
-				listaId: lista == null ? null : lista.get('id'),
-				tiempo: 5,
-				orden: 0,
-				oradores: []
-			});
-			
-			
-		App.get('crearTurnoController').set('turno', turno);
-		App.CrearTurnoView.popup();
-	},
-
 	borrarTema: function () {
 		var temaController = App.get('temaController');
 		temaController.set('borrarTema', !temaController.get('borrarTema'));
@@ -299,6 +253,79 @@ App.SubMenuOradoresView = Ember.View.extend({
 App.ContentView = Ember.View.extend({
 	templateName: 'content',
 
+	toggleMenu: false,
+	toggleHelp: true,
+	oldColumns: [],
+
+
+	appColumnsChange: function () {
+		this.set('columns', App.get('router.applicationController.columns'));
+		this.setupColumns(this.get('columns').objectAt(0), this.get('columns').objectAt(1) + this.get('columns').objectAt(2), 0);
+		this.$('.support').hide(); 
+		this.set('toggleHelp', true);
+	}.observes('App.router.applicationController.columns.@each'),
+
+	setupColumns: function (l, m, r) {
+		var $leftColumn = $('#leftColumn'),
+			$middleColumn = $('#middleColumn'),
+			$rightColumn = $('#rightColumn');
+
+		$leftColumn.removeClass('col-md-' + this.get('oldColumns').objectAt(0)).addClass('col-md-' + l);
+		$middleColumn.removeClass('col-md-' + this.get('oldColumns').objectAt(1)).addClass('col-md-' + m);
+		$rightColumn.removeClass('col-md-' + this.get('oldColumns').objectAt(2)).addClass('col-md-' + r);
+		this.set('oldColumns', [l, m, r]);
+	},
+
+	clickMenu: function () {
+		var $menuWrapper =  this.$('.mainMenu');
+
+		$menuWrapper.toggle();
+
+		if (this.get('toggleMenu')) {
+			this.setupColumns(this.get('columns').objectAt(0), this.get('oldColumns').objectAt(1) - (this.get('columns').objectAt(0)) + 1, this.get('oldColumns').objectAt(2));
+		}
+		else {
+			this.setupColumns(1, this.get('oldColumns').objectAt(1) + (this.get('oldColumns').objectAt(0) - 1), this.get('oldColumns').objectAt(2));
+		}
+
+		this.set('toggleMenu', !this.get('toggleMenu'));
+	},
+
+
+	clickHelp: function () {
+
+		if (this.get('toggleHelp')) {
+			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , this.get('columns').objectAt(2));
+			$('.support').fadeIn('fast'); 
+			this.helpMessage(false);
+		}
+		else {
+			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) + (this.get('columns').objectAt(2)), 0);
+			this.$('.support').hide(); 
+			this.helpMessage(true);
+		}	
+		this.set('toggleHelp', !this.get('toggleHelp'));	
+	},
+
+	helpMessage: function (contextHelp){
+		var $toggleHelp = this.$('.toggleHelp');
+
+		if (contextHelp == true){
+			$toggleHelp.hover(function(){
+				//$toggleHelp.popover('show');
+
+			},function(){
+				//$toggleHelp.popover('hide');
+			});
+		}
+		else
+		{
+			$toggleHelp.hover(function(){
+				//$toggleHelp.popover('destroy');
+			});
+		}
+	},
+
 	logout: function () {
 		App.get('router').transitionTo('loading');
 		
@@ -310,177 +337,9 @@ App.ContentView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		$("ul.userNav li a.sidebar").click(function() { 
-			$(".secNav").toggleClass('display');
-		});	
-		
-		//===== User nav dropdown =====//		
-		
-		$('a.leftUserDrop').click(function () {
-			$('.leftUser').slideToggle(200);
-		});
-		
-		$(document).bind('click', function(e) {
-			var $clicked = $(e.target);
-			if (! $clicked.parents().hasClass("leftUserDrop"))
-			$(".leftUser").slideUp(200);
-		});
-
-	var $menuWrapper =  $('.mainMenu'),
-		$secondLevel = $('.secondLevel'),
-		$firstLevel = $('.firstLevel'),
-		/* ver que onda esto*/
-		$route = $('.firstLevel ul li a'),
-		$goBack = $('.menuBack');
-
-	function displayBlock(e){
-		e.css('display','block');
-	}
-
-	function initMenu(){
-		toggleMainMenu();
-		// $secondLevel.hide();
-		// $secondLevel._x = -$secondLevelW;
-	}
-
-	function animateToSecondLevel(){
-		$firstLevel.animate({
-			opacity:0
-		}, 500, function(){
-			$firstLevel.css('display','none');
-			displayBlock($secondLevel);
-			$secondLevel.animate({
-				opacity:1
-			}, 500,function(){
-				//callback
-			});
-		});
-		
-	}
-
-	function goBack(){
-		$secondLevel.animate({
-			opacity:0
-		}, 500, function(){
-			$secondLevel.css('display','none');
-			displayBlock($firstLevel);
-			$firstLevel.animate({
-				opacity:1
-			}, 500,function(){
-				//callback
-			});
-		});
-	}
-
-	$route.click(function(){
-		animateToSecondLevel();
-	});
-
-	//boton volver
-	$goBack.click(function(){
-		goBack();
-	});
-
-	
-	//show/hide mainMenu
-	function toggleMainMenu(){
-		var $toggle = $('.toggleMainMenu'),
-			$leftColumn = $('#leftColumn'),
-			$middleColumn = $('#middleColumn'),
-			$rightColumn = $('#rightColumn');
-			$toggleHelp = $('.toggleHelp');
-
-		function helpMessage(contextHelp){
-			// console.log(contextHelp);
-			if (contextHelp == true){
-				$toggleHelp.hover(function(){
-					$toggleHelp.popover('show');
-
-				},function(){
-					$toggleHelp.popover('hide');
-				});
-			}
-			else{
-				$toggleHelp.hover(function(){
-					$toggleHelp.popover('destroy');
-					// console.info("toggleHelp destroyed");
-				});
-			}
-		}
-
-		$toggle.click(function(){
-
-			$menuWrapper.toggle();
-			$leftColumn.find('h3').toggle();
-			if ($leftColumn.hasClass('col-md-3')){
-				$leftColumn.removeClass('col-md-3').addClass('col-md-1');
-
-				if(($middleColumn).hasClass('col-md-9')){
-					$middleColumn.removeClass('col-md-9').addClass('col-md-11');
-				}
-
-				else if(($middleColumn).hasClass('col-md-7')){
-
-					$middleColumn.removeClass('col-md-7').addClass('col-md-9');
-				}
-
-			}
-
-			else{
-
-				$leftColumn.removeClass('col-md-1').addClass('col-md-3');
-
-				if ($middleColumn.hasClass('col-md-11')){
-					$middleColumn.removeClass('col-md-11').addClass('col-md-9');
-				}
-
-				else{
-					$middleColumn.removeClass('col-md-9').addClass('col-md-7');
-				}
-			}
-			return false;
-		});
-
-		$toggleHelp.click(function(){
-			if ($rightColumn.hasClass('col-md-2')){
-
-				$('.support').css('display','none');
-				$rightColumn.removeClass('col-md-2').addClass('col-md-0');
-
-				if ($middleColumn.hasClass('col-md-7')){
-					$middleColumn.removeClass('col-md-7').addClass('col-md-9');
-				}
-
-				else if ($middleColumn.hasClass('col-md-9')){
-					$middleColumn.removeClass('col-md-9').addClass('col-md-11');
-				}	
-
-			}
-			else{
-				$rightColumn.removeClass('col-md-0').addClass('col-md-2');
-				var delayConstruction = setTimeout(function(){$('.support').fadeIn('fast'); clearTimeout(delayConstruction);}, 350);
-				helpMessage(false);
-
-
-				if ($middleColumn.hasClass('col-md-11')){
-					$middleColumn.removeClass('col-md-11').addClass('col-md-9');
-				}
-
-				else if ($middleColumn.hasClass('col-md-9')){
-					$middleColumn.removeClass('col-md-9').addClass('col-md-7');
-				}				
-			}
-			return false;
-		});
-
-		helpMessage(true);
-		
-	}
-
-
-	initMenu();
-
-
+		this.set('columns', App.get('router.applicationController.columns'));
+		this.setupColumns(this.get('columns').objectAt(0), this.get('columns').objectAt(1) + this.get('columns').objectAt(2), 0);
+		this.helpMessage(true);
 	},	
 });
 
@@ -1951,11 +1810,28 @@ App.MenuView = Em.View.extend({
 	templateName: 'menu',
 	classNames: [],
 	tagName: 'ul',
+
+	clickItem: function (item) {
+		App.get('menuController').seleccionar(item.get('id'));
+	}
 });
 
 App.MenuItemView = Em.View.extend({
 	tagName: 'li',
 	templateName: 'menuItem',
+
+	click: function () {
+		this.get('parentView').clickItem(this.get('content'));
+	}
+});
+
+App.MenuItemThumbView = App.MenuItemView.extend({
+	tagName: 'li',
+	templateName: 'menuItemThumb',
+
+	click: function () {
+		this.get('parentView').clickItem(this.get('content'));
+	}
 });
 
 App.MenuItemLink = Em.View.extend({
