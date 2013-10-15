@@ -996,6 +996,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 	},
 
 	guardar: function () {
+		this.get('notificationType').set('grupo', this.get('notificationType.grupoSelected.id'));
 		this.get('notificationType').create();
 	},
 

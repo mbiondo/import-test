@@ -600,11 +600,12 @@ App.Router =  Em.Router.extend({
 						 App.funcionesController = App.FuncionesController.create();
 						 App.estructurasController = App.EstructurasController.create();
 						 App.rolesController = App.RolesController.create();
+						 App.notificacionesGruposController = App.NotificacionesGruposController.create();
 
 						 var deferred = $.Deferred(),
 						
 						 fn = function() {
-						 	 if (App.get('comisionesController.loaded') && App.get('funcionesController.loaded') && App.get('estructurasController.loaded') && App.get('rolesController.loaded')) {
+						 	 if (App.get('notificacionesGruposController.loaded') && App.get('comisionesController.loaded') && App.get('funcionesController.loaded') && App.get('estructurasController.loaded') && App.get('rolesController.loaded')) {
 								deferred.resolve(null);
 						 	 }					
 						 };
@@ -613,11 +614,13 @@ App.Router =  Em.Router.extend({
 						 App.get('funcionesController').addObserver('loaded', this, fn);
 						 App.get('estructurasController').addObserver('loaded', this, fn);
 						 App.get('rolesController').addObserver('loaded', this, fn);
+						 App.get('notificacionesGruposController').addObserver('loaded', this, fn);
 
 						 App.get('comisionesController').load();
 						 App.get('funcionesController').load();
 						 App.get('estructurasController').load();
 						 App.get('rolesController').load();
+						 App.get('notificacionesGruposController').load();
 						
 						 return deferred.promise();
 					},

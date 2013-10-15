@@ -187,11 +187,21 @@ App.NotificacionTipo = Em.Object.extend({
 		"comisiones",
 		"funciones",
 		"estructuras",
+		"grupo"
 	],
 
 	label: function () {
 		return this.get('nombre');
 	}.property('nombre'),
+});
+
+App.NotificacionGrupo = Em.Object.extend({
+	id: null,
+	nombre: '',
+	serializable: [
+		"id",
+		"nombre",
+	],
 });
 
 App.ExpedienteBase = Em.Object.extend({
