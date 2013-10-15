@@ -208,6 +208,7 @@ App.IoController = Em.Object.extend({
 
 	joinRoom: function (room, addToArray) {
 		this.get('socket').emit('joinRoom', room);
+		console.log("Entrando en " + room);
 		if (addToArray != false) this.get('rooms').pushObject(room);
 	},
 
@@ -358,7 +359,11 @@ App.IoController = Em.Object.extend({
 						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
 						context: this,
 						success: function (data) {
-							console.log(data);
+							if (data.notificaciones) {
+								data.notificaciones.forEach(function (notificacion) {
+									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));		
+								});
+							}
 						},
 					});
 				}

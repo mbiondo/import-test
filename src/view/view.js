@@ -1598,23 +1598,6 @@ App.InicioView = Em.View.extend({
 			lista.find("ul").not('.'+get_id).fadeOut(0);
 			lista.find("ul."+get_id).fadeIn(900);
 		});
-
-		//CREATE NOTIFICATION TEST 
-		//var notification = App.Notificacion.extend(App.Savable).create();
-		//ACA TITULO DE LA NOTIFICACION
-		//notification.set('tipo', 'Test');
-		//Si hace falta ID del objeto modificado
-		//notification.set('objectId', 1);
-		//Link del objeto
-		//notification.set('link', "#/citaciones");
-		//CreateAt
-		//notification.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
-		//Custom message
-		//notification.set('mensaje', "Custon message here!!");
-		//Crear
-		//notification.create();
-
-		//
 	},
 });
 
@@ -5150,9 +5133,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
-			notification.set('tipo', 'crearSesion');	
-			
-			notification.set('titulo', 'Crear Sesion');
+			notification.set('tipo', 'crearSesion');
 
 			//Si hace falta ID del objeto modificado
 			notification.set('objectId', data.id);
