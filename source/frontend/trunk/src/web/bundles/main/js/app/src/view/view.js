@@ -1645,6 +1645,7 @@ App.CitacionConsultaView = Em.View.extend({
 	puedeCrearReunion: false,
 	puedeEditar: false,
 	invitadosx: [],
+	citacionClone: null,
 
 	hayInvitados: function () {
 		return App.get('citacionConsultaController.content.invitados').length > 0;
@@ -1670,7 +1671,52 @@ App.CitacionConsultaView = Em.View.extend({
 			}
 		}
 		return true;
-	}.property('citacionConsultaController.content.id'),	
+	}.property('citacionConsultaController.content.id'),
+
+	clonar: function () {
+		if (App.citacionConsultaController.content.estado.id == 3) {
+			var citacionClone = App.Citacion.extend(App.Savable).create(Ember.copy(App.citacionConsultaController.content));
+			citacionClone.set('id', null);
+			citacionClone.set('estado', App.CitacionEstado.create({id: 1}));
+
+			this.set('citacionClone', citacionClone);
+
+			this.get('citacionClone').addObserver('createSuccess', this, this.createCompleted);
+			this.get('citacionClone').create();
+		}
+	},
+
+	puedeClonar: function () {
+		if (App.citacionConsultaController.content.estado.id == 3 && App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}.property('citacionConsultaController.content.id'),
+	
+	createCompleted: function (data) {
+		//TO-DO Revisar que devuelva OK		
+		if (this.get('citacionClone.createSuccess'))
+		{
+			$('.buttonSave').removeAttr('disabled');
+			$('.buttonSave').val('Guardar');
+
+			App.set('citacionConsultaController.loaded', false);
+			App.set('citacionConsultaController.content', this.get('citacionClone'));
+
+			fn = function() {
+				var citacion = App.get('citacionConsultaController.content');
+				App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', citacion);
+			};
+
+			App.get('citacionConsultaController').addObserver('loaded', this, fn);
+			App.get('citacionConsultaController').load();
+			
+			$.jGrowl('Citación clonada con éxito!', { life: 5000 });
+		}
+	},
 
 	didInsertElement: function(){
 		this._super();

@@ -156,6 +156,7 @@ App.Notificacion = Em.Object.extend({
 	url: '/notification/create',
 	tipo: '',
 	fecha: '',
+	comisiones: [],
 
 	serializable: [
 		"id",
@@ -164,7 +165,7 @@ App.Notificacion = Em.Object.extend({
 		"objectId",
 		"fecha",
 		"mensaje",
-		"titulo"
+		"comisiones"
 	],	
 });
 

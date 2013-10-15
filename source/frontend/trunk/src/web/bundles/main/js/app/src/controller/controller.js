@@ -2280,9 +2280,6 @@ App.CitacionCrearController = Em.Object.extend({
 		var notification = App.Notificacion.extend(App.Savable).create();
 		//ACA TITULO DE LA NOTIFICACION
 		notification.set('tipo', 'confirmarCitacion');	
-		
-		notification.set('titulo', 'Confirmar Citación');
-
 		//Si hace falta ID del objeto modificado
 		notification.set('objectId', data.id);
 		//Link del objeto
@@ -2291,6 +2288,8 @@ App.CitacionCrearController = Em.Object.extend({
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
 		notification.set('mensaje', "Se ha convocado la citación del día " + moment().format('dddd') + " " + moment().format('LL') + " a las " + this.get('content.start').substring(this.get('content.start').indexOf(' ')));
+
+		notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
 
