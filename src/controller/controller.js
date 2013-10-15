@@ -446,8 +446,8 @@ App.UserController = Em.Controller.extend({
 	loginError: false,
 
 	loginCheck: function(cuil, password){
-		//var url = '/usr/autenticate';
-		var url = App.get('apiController.url') + '/usr/autenticate';
+		var url = '/usr/autenticate';
+		//var url = App.get('apiController.url') + '/usr/autenticate';
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -470,8 +470,8 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 
-		//var urlUserData = '/usr/userdata';
-		var urlUserData = App.get('apiController.url') + '/usr/userdata';
+		var urlUserData = '/usr/userdata';
+		//var urlUserData = App.get('apiController.url') + '/usr/userdata';
 		var _self = this;
 
 		$.ajax({
@@ -581,6 +581,11 @@ App.ApplicationController = Em.Controller.extend({
 	
 	socket: null,
 	connected: false,
+	columns: [3, 7, 2],
+
+	setLayout: function (left, middle, right) {
+		this.set('columns', [left, middle, right]);
+	},
 	
 	init: function () {
 		//this.connect();
@@ -2084,10 +2089,22 @@ App.MenuController = Em.ArrayController.extend({
 		
 		if (sel)
 		{
-			App.get('tituloController').set('titulo', sel.get('titulo'));
+			this.set('titulo', sel.get('titulo'));
 			App.get('tituloController').set('fecha', moment().format('LL'));
 			this.set('seleccionado', sel);
 			sel.set('seleccionado', true);
+
+			$('.firstLevel').animate({
+				opacity:0
+			}, 500, function(){
+				$('.firstLevel').css('display','none');
+				$('.secondLevel').css('display','block');
+				$('.secondLevel').animate({
+					opacity:1
+				}, 500,function(){
+					//callback
+				});
+			});
 		}
 	},
 });
