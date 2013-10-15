@@ -137,20 +137,23 @@ App.Router =  Em.Router.extend({
 			route: "/",
 
 			deserialize: function () {
-				if (!App.get('notificacionesController'))
-					App.notificacionesController = App.NotificacionesController.create({content: []});
-				
+
+				App.notificacionesController = App.NotificacionesController.create({content: []});
+
 				if (App.get('userController').get('isLogin'))
 				{
 					var deferred = $.Deferred(),
 					
 					fn = function() {
+						if (App.get('notificacionesController.loaded')) {
 							App.get('notificacionesController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);	
+						}
 					};					
 
 					App.get('notificacionesController').addObserver('loaded', this, fn);
-					App.get('notificacionesController').load();
+					App.get('notificacionesController').load();		
+
 					
 					return deferred.promise();				
 				} else {
@@ -173,6 +176,54 @@ App.Router =  Em.Router.extend({
 					{titulo: 'Inicio', url: '#'}
 				]);				
 			},		
+		}),
+
+		novedades: Em.Route.extend({
+			route: '/novedades/:id',
+			deserialize: function(router, params) {
+				App.notificacionesController = App.NotificacionesController.create({content: [], url: "/notification/grupo/" + params.id});
+
+				if (App.get('userController').get('isLogin'))
+				{
+					var deferred = $.Deferred(),
+					
+					fn = function() {
+						if (App.get('notificacionesController.loaded')) {
+							App.get('notificacionesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(params);	
+						}
+					};					
+
+					App.get('notificacionesController').addObserver('loaded', this, fn);
+					App.get('notificacionesController').load();		
+
+					
+					return deferred.promise();				
+				} else {
+					return null;
+				}
+			},	
+
+			serialize: function (router, context) {
+				this._super();
+				return {id: context.id};
+			},
+
+			connectOutlets: function(router, context) {
+				var appController = router.get('applicationController');
+				appController.connectOutlet('menu', 'subMenu');
+
+				Ember.run.next(function () {
+					appController.connectOutlet('main', 'inicio');
+				});
+				
+				App.get('menuController').seleccionar(0);
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Inicio', url: '#'}
+				]);								
+			},							
 		}),
 
 		estadisticas: Em.Route.extend({
