@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			// this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -5073,7 +5073,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
 					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('planDeLabor.index', {estado: 1}); 
+					App.get('router').transitionTo('planDeLabor.index.index', {estado: 1}); 
 				}
 			};
 
@@ -5219,7 +5219,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			fn = function() {
 				if (App.get('planDeLaborListadoController.loaded')) {
 					App.get('planDeLaborListadoController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('planDeLabor.index', {estado: 2}); 
+					App.get('router').transitionTo('planDeLabor.index.index', {estado: 2}); 
 				}
 			};
 
