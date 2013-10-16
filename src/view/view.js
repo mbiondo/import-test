@@ -759,6 +759,10 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 	fecha: '',
 	copete: '',
 
+	uploadFolder: function () {
+		return "uploads/od/" + App.get('dictamenController.content.id') + "/";
+	}.property('content'),
+
 	crear: function () {
 		var d = App.get('dictamenController.content');
 		var p = d.get('proyectos');
