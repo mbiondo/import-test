@@ -3367,7 +3367,7 @@ App.DictamenCrearView = Ember.View.extend({
 			var dictamen = this.get('content');
 			var proyectos = [];
 			var pv = [];
-			//var txts = [];
+			var txts = [];
 			var orden = 1;
 
 			dictamen.get('proyectos').forEach(function (proyecto){
@@ -3383,13 +3383,12 @@ App.DictamenCrearView = Ember.View.extend({
 			});
 
 			orden = 1;
-/*
+
 			dictamen.get('textos').forEach(function (texto){
-				txts.addObject({texto: texto, orden: orden});
-				//texto.set('orden', orden);
-				orden++;
-			});*/
-/*
+				txts.addObject(texto);
+			});
+			dictamen.textos = txts;
+
 			dictamen.get('textos').forEach(function (texto){
 
 				texto.set('orden', orden);
@@ -3401,7 +3400,7 @@ App.DictamenCrearView = Ember.View.extend({
 				texto.set('firmantes', fController.get('arrangedContent'));				
 				orden++;
 			});
-*/
+
 
 			dictamen.caracterDespacho = App.CaracterDespacho.create({
 				tipo: 'CaracterDictamen',
@@ -3414,15 +3413,14 @@ App.DictamenCrearView = Ember.View.extend({
 
 			dictamen.proyectos = proyectos;
 			dictamen.proyectosVistos = pv;	
-			//dictamen.textos = txts;
 			dictamen.tipo = "Dictamen";
 			dictamen.orden = "1";
 			dictamen.itemParte = "4";
 			dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
 
-			//console.log(dictamen.textos);
 
-			console.log(JSON.stringify(dictamen));
+			console.log(dictamen);
+			console.log(dictamen.textos);
 
 			var url = App.get('apiController.url') + "/par/evento";
 
@@ -3681,6 +3679,8 @@ App.DictamenCargarView = Ember.View.extend({
 			var url = App.get('apiController.url') + "/par/evento";
 
 			var dictamenJSON = JSON.stringify(dictamen);
+
+			
 
 			$.ajax({
 				url:  url,
