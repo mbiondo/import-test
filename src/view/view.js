@@ -188,6 +188,9 @@ App.SubMenuView = Ember.View.extend({
 				//callback
 			});
 		});
+
+		//tooltip bootstrap 3
+		$().tooltip();
 	},
 	
 });
@@ -235,6 +238,14 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 			return false;
 		}
 	}.property('App.turnosController.content.@each.oradorPendiente').cacheable(),
+
+
+	didInsertElement: function(){
+		this._super();
+
+		this.$('.widget-menu a').tooltip();
+	}
+
 });
 
 App.ContentView = Ember.View.extend({
