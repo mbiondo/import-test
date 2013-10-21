@@ -178,6 +178,102 @@ App.Router =  Em.Router.extend({
 			},		
 		}),
 
+
+		mesaDeEntrada: Em.Route.extend({
+			route: '/mesa/de/entrada',
+
+			giros: Em.Route.extend({
+				route: '/giros',
+
+				crear: Em.Route.extend({
+					route: '/listado',
+
+					deserialize: function(router, params) {
+
+						App.girosController = App.GirosController.create({content: []});
+						
+						var deferred = $.Deferred(),
+						
+						fn = function() {
+							if (App.get('girosController.loaded')) {
+								App.get('girosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(params);	
+							}
+						};
+
+						App.get('girosController').addObserver('loaded', this, fn);
+						App.get('girosController').load();
+						
+						return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+
+						Ember.run.next(function () {
+							appController.connectOutlet('main', 'Giros');
+						});
+						
+						App.get('menuController').seleccionar(9);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Mesa de entrada'},
+							{titulo: 'Giros'}
+						]);								
+					},
+				}),			
+			}),
+
+			proyecto: Em.Route.extend({
+				route: '/proyecto',
+
+				crear: Em.Route.extend({
+					route: '/crear',
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+
+						Ember.run.next(function () {
+							appController.connectOutlet('main', 'CrearExpediente');
+						});
+						
+						App.get('menuController').seleccionar(9);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Mesa de entrada'},
+							{titulo: 'Crear Proyecto'}
+						]);								
+					},
+				}),
+
+				girar: Em.Route.extend({
+					route: '/girar',
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+
+						Ember.run.next(function () {
+							appController.connectOutlet('main', 'CrearGiro');
+						});
+						
+						App.get('menuController').seleccionar(9);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Mesa de entrada'},
+							{titulo: 'Giros'},
+							{titulo: 'Girar expediente'}
+						]);								
+					},						
+				}),
+			}),
+		}),
+
 		novedades: Em.Route.extend({
 			route: '/novedades/:id',
 			deserialize: function(router, params) {
