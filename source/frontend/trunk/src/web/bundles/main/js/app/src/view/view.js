@@ -360,7 +360,7 @@ App.LoginView = Ember.View.extend({
 	}.property('App.userController.loginError'),
 	
 	falseLogin: function (){
-		var usuario = App.Usuario.create({nombre: "Test", apellido: "Test", funcion: "DIPUTADO NACIONAL", cuil: "27176066194", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 5, nivel: 5, nombre: "ROLE_DIPUTADO"})], comisiones:[App.Comision.create({id: 51, nombre: "JUSTICIA"})]});
+		var usuario = App.Usuario.create({nombre: "Test", apellido: "Test", funcion: "DIPUTADO NACIONAL", cuil: "27176066194", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 5, nivel: 5, nombre: "ROLE_DIPUTADO"})], comisiones:[App.Comision.create({id: 51, nombre: "JUSTICIA"})], estructura: "DIRECCION COMISIONES"});
 		App.userController.set('user', usuario);
 		localStorage.setObject('user', JSON.stringify(usuario));
 		App.get('router').transitionTo('loading');
@@ -3292,7 +3292,7 @@ App.DictamenCrearView = Ember.View.extend({
 	},
 
 
-
+/*
 	guardar: function () {
 		$('#formCrearParteDictamen').parsley('destroy');
 		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
@@ -3305,14 +3305,69 @@ App.DictamenCrearView = Ember.View.extend({
 
 		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
 		App.confirmActionController.show();
+	}, */
+
+
+	guardar: function () {
+		this.set('clickGuardar', true);
+
+		var textosAreValid = true;
+		var proyectosAreValid = true;
+		var numeroDeProyectos = 0;
+
+		$('#formCrearParteDictamen').parsley('destroy');
+
+		if(App.get('dictamenCrearController.content.textos')){
+			App.get('dictamenCrearController.content.textos').forEach(function(item){
+				if(item.firmantes.length < 1) {
+					item.set('faltanFirmantes', true);
+					textosAreValid = false;
+				}
+				else{
+					item.set('faltanFirmantes', false);
+				}				
+
+				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
+
+				if(!isNaN(numeroDeProyectos)){
+					if(numeroDeProyectos > 0){
+						item.set('faltanProyectos', false);
+					}
+					else{
+						proyectosAreValid = false;
+						item.set('faltanProyectos', true);
+					}
+				}
+
+			});
+		}
+
+		if(App.get('dictamenCrearController.content.textos').length > 0){
+			this.set('dictamenesAgregados', true);
+		}
+
+		$('#formCrearParteDictamen').parsley('destroy');
+		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
+
+
+		App.confirmActionController.setProperties({
+			title: 'Cargar Dictamen',
+			message: '¿ Esta seguro que desea guardar el dictamen ?',
+			success: null,
+		});
+
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
 	},
 	
+
 
 	confirmActionDone: function () {
 		if (App.get('confirmActionController.success')) {
 			var dictamen = this.get('content');
 			var proyectos = [];
 			var pv = [];
+			//var txts = [];
 			var orden = 1;
 
 			dictamen.get('proyectos').forEach(function (proyecto){
@@ -3328,11 +3383,25 @@ App.DictamenCrearView = Ember.View.extend({
 			});
 
 			orden = 1;
-
+/*
 			dictamen.get('textos').forEach(function (texto){
+				txts.addObject({texto: texto, orden: orden});
+				//texto.set('orden', orden);
+				orden++;
+			});*/
+/*
+			dictamen.get('textos').forEach(function (texto){
+
 				texto.set('orden', orden);
+				var fController = Ember.ArrayController.create({
+				  content: texto.get('firmantes'),
+				  sortProperties: ['orden'],
+				  sortAscending: true
+				});		
+				texto.set('firmantes', fController.get('arrangedContent'));				
 				orden++;
 			});
+*/
 
 			dictamen.caracterDespacho = App.CaracterDespacho.create({
 				tipo: 'CaracterDictamen',
@@ -3345,11 +3414,15 @@ App.DictamenCrearView = Ember.View.extend({
 
 			dictamen.proyectos = proyectos;
 			dictamen.proyectosVistos = pv;	
+			//dictamen.textos = txts;
 			dictamen.tipo = "Dictamen";
 			dictamen.orden = "1";
 			dictamen.itemParte = "4";
 			dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
 
+			//console.log(dictamen.textos);
+
+			console.log(JSON.stringify(dictamen));
 
 			var url = App.get('apiController.url') + "/par/evento";
 
@@ -3359,9 +3432,33 @@ App.DictamenCrearView = Ember.View.extend({
 				type: 'POST',
 				context: this,
 				data : JSON.stringify(dictamen),
-				success: function( data ) 
+				success: function( dataid ) 
 				{
-					App.get('router').transitionTo('comisiones.dictamenes.pendientes');
+					data = JSON.parse(dataid);
+
+					if(data.id){					
+						if (!App.get('dictamenConsultaController'))
+							App.dictamenConsultaController = App.DictamenConsultaController.create();
+
+						App.set('dictamenConsultaController.loaded', false);
+						App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
+
+						 fn = function() {
+							App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
+							App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
+							var dictamen = App.get('dictamenConsultaController.content');
+
+							App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
+							$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+						 };
+
+						 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
+						 App.get('dictamenConsultaController').load();
+					}
+				else
+				{
+					$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+				}					
 				}
 			});		
 		}
@@ -3588,11 +3685,13 @@ App.DictamenCargarView = Ember.View.extend({
 			$.ajax({
 				url:  url,
 				contentType: 'text/plain',
-				type: 'POST',
+				type: 'PUT',
 				context: this,
 				data : dictamenJSON,
-				success: function( data ) 
+				success: function( dataid ) 
 				{
+					data = JSON.parse(dataid);
+					
 					if(data.id){					
 						if (!App.get('dictamenConsultaController'))
 							App.dictamenConsultaController = App.DictamenConsultaController.create();
