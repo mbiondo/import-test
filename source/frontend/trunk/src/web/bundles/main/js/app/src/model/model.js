@@ -254,10 +254,42 @@ App.ExpedienteArchivable = Em.Object.extend({
 	}.property('titulo'),
 });
 
+App.Giro = Em.Object.extend({
+	auditable: true,
+	useApi: true,
+	notificationType : 'Giro',
+	notificationRoom: 'mesaDeEntrada',	
+
+	id: null,
+	proy_id: null,
+	giros: [],
+	url: '/giro',
+
+	serializable: [
+		'id',
+		'proy_id',
+		'comisiones'
+	],
+
+	label: function () {
+		return this.get('proy_id');
+	}.property('proy_id'),
+
+});
+
 App.Expediente = Em.Object.extend({
 	sortValue: '',
-	
+	auditable: true,
+	useApi: true,
 	seleccionado: false,
+	notificationType : 'Expediente',
+	notificationRoom: 'mesaDeEntrada',
+
+	url: '/expediente',	
+
+	serializable: [
+		'id'
+	],
 
 	tipolabel: function () {
 		var regex = new RegExp('MENSAJE');

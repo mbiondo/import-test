@@ -173,34 +173,21 @@ App.SubMenuView = Ember.View.extend({
 		App.get('menuController').seleccionar(item.get('id'));
 	},
 
-	didInsertElement: function () {
-		this._super();
-
+	goBack: function () {
 		var $secondLevel = $('.secondLevel'),
-			$firstLevel = $('.firstLevel'),
-			$goBack = $('.menuBack');
+			$firstLevel = $('.firstLevel');
 
-		function displayBlock(e){
-			e.css('display','block');
-		}
-
-		function goBack(){
-			$secondLevel.animate({
-				opacity:0
-			}, 500, function(){
-				$secondLevel.css('display','none');
-				displayBlock($firstLevel);
-				$firstLevel.animate({
-					opacity:1
-				}, 500,function(){
-					//callback
-				});
+		$secondLevel.animate({
+			opacity:0
+		}, 500, function(){
+			$secondLevel.css('display','none');
+			$('.firstLevel').css('display','block');
+			$firstLevel.animate({
+				opacity:1
+			}, 500,function(){
+				//callback
 			});
-		}		
-
-		$goBack.click(function(){
-			goBack();
-		});		
+		});
 	},
 	
 });
@@ -269,9 +256,6 @@ App.ContentView = Ember.View.extend({
 			m = m + this.get('columns').objectAt(2);
 		}	
 
-		console.log(l);
-		console.log(m);
-		console.log(r);
 		this.setupColumns(l, m, r);
 
 	}.observes('App.router.applicationController.columns.@each'),
@@ -5327,3 +5311,74 @@ App.SugestListView = Ember.CollectionView.extend({
 });
 
 
+/**/
+
+App.CrearExpedienteView = Ember.View.extend({
+	templateName: 'crear-expediente',
+
+	guardar: function () {
+		this.get('content').addObserver('createSucceeded', this.createSucceeded);
+		this.get('content').create();
+	},
+
+	createSucceeded: function () {
+		if (this.get('content.createSucceeded')) {
+			App.set('expedienteConsultaController.content', App.Expediente.create(this.get('content')));
+			fn = function() {
+				if (App.get('expedienteConsultaController.loaded')) {
+					App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
+					var expediente = App.get('expedienteConsultaController.content');
+					App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
+				}
+			};
+			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
+			App.get('expedienteConsultaController').load();			
+		} else {
+
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.Expediente.extend(App.Savable).create());
+	}
+});
+
+
+App.CrearGiroView = Ember.View.extend({
+	templateName: 'crear-giro',
+
+	guardar: function () {
+		this.get('content').addObserver('createSucceeded', this.createSucceeded);
+		this.get('content').create();
+	},
+
+	createSucceeded: function () {
+		if (this.get('content.createSucceeded')) {
+		} else {
+
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.Giro.extend(App.Savable).create());
+	}
+});
+
+
+App.GirosView = Ember.View.extend({
+	templateName: 'giros',
+});
+
+App.GiroListItemView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'reunion',
+});
+
+App.GirosListView = App.ListFilterView.extend({
+	itemViewClass: App.GiroListItemView,
+//	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+	columnas: ['Fecha giro ', 'Expediente', 'Comisiones'],
+});

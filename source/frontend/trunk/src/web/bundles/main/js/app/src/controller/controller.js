@@ -2145,20 +2145,28 @@ App.MenuController = Em.ArrayController.extend({
 			App.get('tituloController').set('fecha', moment().format('LL'));
 			this.set('seleccionado', sel);
 			sel.set('seleccionado', true);
-
-			$('.firstLevel').animate({
-				opacity:0
-			}, 500, function(){
-				$('.firstLevel').css('display','none');
-				$('.secondLevel').css('display','block');
-				$('.secondLevel').animate({
-					opacity:1
-				}, 500,function(){
-					//callback
+			if ($('.firstLevel').css('opacity') == "1") {
+				$('.firstLevel').animate({
+					opacity:0
+				}, 500, function(){
+					$('.firstLevel').css('display','none');
+					$('.secondLevel').css('display','block');
+					$('.secondLevel').animate({
+						opacity:1
+					}, 500,function(){
+						//callback
+					});
 				});
-			});
+			}
 		}
 	},
+
+	esOradores: function () {
+		if (this.get('seleccionado').get('id') == 3)
+			return true;
+		else
+			return false;
+	}.property('seleccionado')
 });
 
 App.TituloController = Em.Object.extend({
@@ -3763,4 +3771,19 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 			this.set('loaded', true);
 		}
 	},
+});
+
+App.GirosController = App.RestController.extend({
+	url: '/giros',
+	useApi: true,
+	loaded: false,
+	type: App.Giro,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Giro.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},	
 });
