@@ -3154,9 +3154,42 @@ App.DictamenCrearView = Ember.View.extend({
 	filterProyectosVistos: '',
 	adding: false,
 	dictamenesAgregados: false,
-//	faltanFirmantes: false,
 	clickGuardar: null,
 
+	unanimidadChange: function(){
+		if(this.get('content.textos').length > 0)
+		{		
+			if(this.get('content.unanimidad') == true)
+			{			
+				var _self = this;
+				this.set('content.desactivarAgregarDictamen', true);
+				this.set('content.textos.firstObject.dictamenNormal', true);				
+				this.get('content.textos').slice(1).forEach(function(texto){
+					_self.get('content.textos').removeObject(texto);
+				});
+			}
+			else
+			{
+				this.set('content.desactivarAgregarDictamen', false);			
+				this.set('content.textos.firstObject.dictamenNormal', false);
+			}
+		}
+	}.observes('content.unanimidad', 'content.textos'),
+	setMayoria: function () {
+		var i = 0;
+		this.get('content.textos').forEach(function (texto) {
+			if (i == 0)
+				texto.set('mayoria', true);
+			else
+				texto.set('mayoria', false);
+			i++;
+		});
+
+		if (this.get('content.textos').length == 0)
+		{
+			this.set('dictamenesAgregados', false);
+		}
+	}.observes('content.textos.@each', 'content.textos', 'content.unanimidad'),
 	hacerMayoria: function (texto) {
 		this.get('content.textos').removeObject(texto);
 		this.get('content.textos').insertAt(0, texto);	
@@ -3294,8 +3327,44 @@ App.DictamenCrearView = Ember.View.extend({
 
 /*
 	guardar: function () {
+		this.set('clickGuardar', true);
+
+		var textosAreValid = true;
+		var proyectosAreValid = true;
+		var numeroDeProyectos = 0;
+
+		if(App.get('dictamenController.content.textos')){
+			App.get('dictamenController.content.textos').forEach(function(item){
+				if(item.firmantes.length < 1) {
+					item.set('faltanFirmantes', true);
+					textosAreValid = false;
+				}
+				else{
+					item.set('faltanFirmantes', false);
+				}
+
+				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
+
+				if(!isNaN(numeroDeProyectos)){
+					if(numeroDeProyectos > 0){
+						item.set('faltanProyectos', false);
+					}
+					else{
+						proyectosAreValid = false;
+						item.set('faltanProyectos', true);
+					}
+				}
+			});
+
+			if(App.get('dictamenController.content.textos').length > 0){
+				this.set('dictamenesAgregados', true);
+			}
+		}
+
+
 		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate')) return false;
+		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
+
 
 		App.confirmActionController.setProperties({
 			title: 'Crear Dictamen',
