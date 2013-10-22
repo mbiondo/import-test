@@ -536,13 +536,30 @@ App.Dictamen = Em.Object.extend({
 	caracterDespacho: '',
 	//observaciones: '',
 	textos: [],
-
 	label: function (){
 		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');
 	}.property('sumario'),
 	fecha: function () {
 		return this.get('fechaImpresion');
 	}.property('fechaImpresion'),
+/*
+	expdipLabel: function () {
+		var st = "";
+		this.get('proyectos').forEach(function(proyecto){
+			st += proyecto.proyecto.expdip+"</br />";
+		})
+
+		return st.htmlSafe();
+	}.property('proyectos'),
+	tituloLabel: function () {
+		var st = "";
+		this.get('proyectos').forEach(function(proyecto){
+			st += proyecto.proyecto.titulo+"<br />";
+		})
+
+		return st.htmlSafe();
+	}.property('proyectos'),
+*/
 	proyectosLabel: function () {
 		var st = "";
 		this.get('proyectos').forEach(function(proyecto){
@@ -635,9 +652,9 @@ App.DictamenTexto = Em.Object.extend({
 	modificado: false,
 	sumario: '',
 	rechazo: false,
-	pr: '',
-	pl: '',
-	pd: '',
+	pr: 0,
+	pl: 0,
+	pd: 0,
 	copete: '',
 	texto: '',
 	orden: 0,
