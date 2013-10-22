@@ -743,9 +743,12 @@ App.Reunion = Em.Object.extend({
 	}.property('comisiones'),
 	temarioLabel: function(){
 		var st = "";
-		this.get('citacion').temas.forEach(function(tema){
-			st += tema.descripcion;
-		});
+			this.get('citacion').temas.forEach(function(tema){
+				if(tema)
+				{
+					st += tema.descripcion;				
+				}
+			});			
 		return st.htmlSafe();
 	}.property('citacion'),
 	notaHTML: function () {
