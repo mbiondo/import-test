@@ -3167,6 +3167,16 @@ App.DictamenCrearView = Ember.View.extend({
 	dictamenesAgregados: false,
 	clickGuardar: null,
 
+	proyectosDictaminadosChange: function(){
+		if(this.get('content.proyectos').length > 0 )
+		{
+			this.set('content.hayProyectosDictaminados', true);
+		}
+		else
+		{
+			this.set('content.hayProyectosDictaminados', false);
+		}
+	}.observes('content.proyectos.@each'),
 	unanimidadChange: function(){
 		if(this.get('content.textos').length > 0)
 		{		
@@ -3394,6 +3404,7 @@ App.DictamenCrearView = Ember.View.extend({
 		var textosAreValid = true;
 		var proyectosAreValid = true;
 		var numeroDeProyectos = 0;
+		var proyectosDictaminadosAreValid = true;
 
 		$('#formCrearParteDictamen').parsley('destroy');
 
@@ -3426,8 +3437,16 @@ App.DictamenCrearView = Ember.View.extend({
 			this.set('dictamenesAgregados', true);
 		}
 
+
+		if(!App.get('dictamenCrearController.content.hayProyectosDictaminados') || App.get('dictamenCrearController.content.hayProyectosDictaminados') == false)
+		{
+			proyectosDictaminadosAreValid = false;
+		}else{			
+			proyectosDictaminadosAreValid = true;
+		}
+
 		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
+		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosDictaminadosAreValid || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
 
 
 		App.confirmActionController.setProperties({
