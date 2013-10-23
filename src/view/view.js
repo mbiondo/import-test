@@ -4821,7 +4821,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 			return regex.test((user.nombre + " " + user.apellido).toLowerCase()) || regex.test((user.apellido + " " + user.nombre).toLowerCase());
 		});
 		return filtered;
-	}.property('filterText', 'App.diputadosController.content'),
+	}.property('filterText', 'App.diputadosController.content.@each'),
 	
 	oradores : function () {
 		if(!this.get('turno'))
@@ -4875,30 +4875,29 @@ App.CrearTurnoInlineView = Em.View.extend({
 	
 	guardar: function(opts, event) {   
 		if($('#formAgregarOrador').parsley('validate')){
-		this.set('clickGuardar', true);  
+			this.set('clickGuardar', true);  
 
-		if (this.get('esInvalido')){
-			return false;			
-		}
+			if (this.get('esInvalido')){
+				return false;			
+			}
 
-		var turno = App.get('crearTurnoController').get('turno');
-		if (turno.get('id')) {
-		turno.save();
-		App.get('turnosController').actualizarHora();
-		} else {		
-		turno.set('orden', App.get('turnosController.content.length'));
-		turno.set('tema', App.get('temaController.content'));
-		App.get('turnosController').createObject(turno, true);
-		}
+			var turno = App.get('crearTurnoController').get('turno');
+			if (turno.get('id')) {
+				turno.save();
+				App.get('turnosController').actualizarHora();
+			} else {		
+				turno.set('orden', App.get('turnosController.content.length'));
+				turno.set('tema', App.get('temaController.content'));
+				App.get('turnosController').createObject(turno, true);
+			}
 
-		this.refreshTurno();	
+			this.refreshTurno();	
 
 		}
 	},
 
 	refreshTurno: function () {
 		this.set('clickGuardar', false);
-
 		if(App.get('listaController.content'))
 			lista = App.get('listaController.content');
 		else
@@ -4919,7 +4918,8 @@ App.CrearTurnoInlineView = Em.View.extend({
 		this.$(".controls input[type='radio']").removeProp('checked');
 	}.observes('temaController.content', 'listaController.content'),
 
-	willInsertElement: function () {
+	didInsertElement: function () {
+		this._super();
 		this.refreshTurno();
 	},
 });
@@ -5049,19 +5049,6 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 			$.jGrowl('Ocurrio un error al crear el plan de labor!', { life: 5000 });
 		}
 	},
-	dictamenes: function () {
-		if (App.crearPlanDeLaborController.get('ordenesDelDia')) {
-			var dictamenes = App.crearPlanDeLaborController.get('ordenesDelDia');
-			this.get('content.items').forEach(function (item) {
-				item.get('dictamenes').forEach(function (dictamen) {
-					dictamenes.removeObject(dictamen);
-				});
-			})
-			return dictamenes;
-		} else {
-			return [];
-		}
-	}.property('content.items.@each'),
 	
 	didInsertElement: function () {
 		this._super();
