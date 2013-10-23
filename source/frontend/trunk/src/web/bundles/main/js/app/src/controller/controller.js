@@ -2215,52 +2215,58 @@ App.CitacionCrearController = Em.Object.extend({
 
 	crearReunionCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK
-		if (data.responseText)
+		var obj = JSON.parse(data.responseText);
+		
+		if(data.responseText)
 		{
-			var obj = JSON.parse(data.responseText);
-
-
-			App.eventosParteController = App.EventosParteController.create();
-			App.reunionConsultaController = App.ReunionConsultaController.create();
-
-			App.set('reunionConsultaController.loaded', false);
-			App.set('eventosParteController.loaded', false);
-
-//							App.set('reunionConsultaController.content', App.Reunion.create(obj));
-			App.set('reunionConsultaController.content', App.Citacion.create({id: obj.id}));
-
-			fn2 = function () {
-				if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
-					App.get('citacionConsultaController').removeObserver('loaded', this, fn2);
-					App.get('eventosParteController').removeObserver('loaded', this, fn2);					
-					var reunion = App.get('reunionConsultaController.content');
-					var citacion = App.get('citacionConsultaController.content');
-					var temas = [];
-					citacion.get('temas').forEach(function (tema) {
-						temas.addObject(App.CitacionTema.create(tema));
-					});
-					citacion.set('temas', temas);								
-					
-					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);										
-				}
+			if (obj.error)
+			{
+				$.jGrowl('Ocurrió un error al intentar crear la reunión!', { life: 5000 });
 			}
-							
-			fn = function() {
-								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-								var reunion = App.get('reunionConsultaController.content');
-								App.set('citacionConsultaController.loaded', false);
-								App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
-								App.get('citacionConsultaController').addObserver('loaded', this, fn2);
-								App.get('citacionConsultaController').load();
-								App.get('eventosParteController').addObserver('loaded', this, fn2);
-								App.get('eventosParteController').load();
-				
-			};
+			else
+			{			
+				App.eventosParteController = App.EventosParteController.create();
+				App.reunionConsultaController = App.ReunionConsultaController.create();
 
-			App.get('reunionConsultaController').addObserver('loaded', this, fn);
-			App.get('reunionConsultaController').load();
-			
-			$.jGrowl('Reunión creada con éxito!', { life: 5000 });
+				App.set('reunionConsultaController.loaded', false);
+				App.set('eventosParteController.loaded', false);
+
+	//							App.set('reunionConsultaController.content', App.Reunion.create(obj));
+				App.set('reunionConsultaController.content', App.Citacion.create({id: obj.id}));
+
+				fn2 = function () {
+					if (App.get('citacionConsultaController.loaded') && App.get('eventosParteController.loaded')) {
+						App.get('citacionConsultaController').removeObserver('loaded', this, fn2);
+						App.get('eventosParteController').removeObserver('loaded', this, fn2);					
+						var reunion = App.get('reunionConsultaController.content');
+						var citacion = App.get('citacionConsultaController.content');
+						var temas = [];
+						citacion.get('temas').forEach(function (tema) {
+							temas.addObject(App.CitacionTema.create(tema));
+						});
+						citacion.set('temas', temas);								
+						
+						App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', reunion);										
+					}
+				}
+								
+				fn = function() {
+									App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+									var reunion = App.get('reunionConsultaController.content');
+									App.set('citacionConsultaController.loaded', false);
+									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+									App.get('citacionConsultaController').load();
+									App.get('eventosParteController').addObserver('loaded', this, fn2);
+									App.get('eventosParteController').load();
+					
+				};
+
+				App.get('reunionConsultaController').addObserver('loaded', this, fn);
+				App.get('reunionConsultaController').load();
+				
+				$.jGrowl('Reunión creada con éxito!', { life: 5000 });
+			}
 		}
 	},
 	
