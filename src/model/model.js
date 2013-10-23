@@ -542,32 +542,37 @@ App.Dictamen = Em.Object.extend({
 	fecha: function () {
 		return this.get('fechaImpresion');
 	}.property('fechaImpresion'),
-/*
-	expdipLabel: function () {
-		var st = "";
-		this.get('proyectos').forEach(function(proyecto){
-			st += proyecto.proyecto.expdip+"</br />";
-		})
 
-		return st.htmlSafe();
-	}.property('proyectos'),
-	tituloLabel: function () {
-		var st = "";
-		this.get('proyectos').forEach(function(proyecto){
-			st += proyecto.proyecto.titulo+"<br />";
-		})
-
-		return st.htmlSafe();
-	}.property('proyectos'),
-*/
 	proyectosLabel: function () {
 		var st = "";
+		var count  = 0;
+		var numeroDeProyectos = this.get('proyectos').length;
+		var agregarBorde;
+
 		this.get('proyectos').forEach(function(proyecto){
-			st += "<div class='fluid'>";
-			st += "<div class='grid2'>"+proyecto.proyecto.expdip+"</div>";
-			st += "<div class='grid10'>"+proyecto.proyecto.titulo+"</div>";
+			count++;
+			// st += "<div class='fluid'>";
+			// st += "<div class='grid2'>"+proyecto.proyecto.expdip+"</div>";
+			// st += "<div class='grid10'>"+proyecto.proyecto.titulo+"</div>";
+			// st += "<div class='clear'></div>";
+			// st += "</div>";
+
+			if(numeroDeProyectos > 1 && count < numeroDeProyectos)
+			{
+				agregarBorde = 'border-bottom: 1px solid #eee;';
+			}
+			else
+			{
+				agregarBorde = '';				
+			}
+
+			st += '<div class="grid12" style="padding-bottom: 10px;margin-bottom:10px;'+ agregarBorde +'">';
+			st += '<div>'
+			st += '<b>'+proyecto.proyecto.expdip+'</b>'
+			st += '</div>'
+			st += '<div>'+proyecto.proyecto.titulo+'</div>'
 			st += "<div class='clear'></div>";
-			st += "</div>";
+			st += '</div>';
 		})
 
 		return st.htmlSafe();
