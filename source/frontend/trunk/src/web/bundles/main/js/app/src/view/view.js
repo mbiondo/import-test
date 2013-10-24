@@ -3345,57 +3345,6 @@ App.DictamenCrearView = Ember.View.extend({
 	},
 
 
-/*
-	guardar: function () {
-		this.set('clickGuardar', true);
-
-		var textosAreValid = true;
-		var proyectosAreValid = true;
-		var numeroDeProyectos = 0;
-
-		if(App.get('dictamenController.content.textos')){
-			App.get('dictamenController.content.textos').forEach(function(item){
-				if(item.firmantes.length < 1) {
-					item.set('faltanFirmantes', true);
-					textosAreValid = false;
-				}
-				else{
-					item.set('faltanFirmantes', false);
-				}
-
-				numeroDeProyectos = parseInt(item.pl) + parseInt(item.pd) + parseInt(item.pr);
-
-				if(!isNaN(numeroDeProyectos)){
-					if(numeroDeProyectos > 0){
-						item.set('faltanProyectos', false);
-					}
-					else{
-						proyectosAreValid = false;
-						item.set('faltanProyectos', true);
-					}
-				}
-			});
-
-			if(App.get('dictamenController.content.textos').length > 0){
-				this.set('dictamenesAgregados', true);
-			}
-		}
-
-
-		$('#formCrearParteDictamen').parsley('destroy');
-		if(!$('#formCrearParteDictamen').parsley('validate') || !proyectosAreValid || !this.get('dictamenesAgregados') || !textosAreValid ) return false;
-
-
-		App.confirmActionController.setProperties({
-			title: 'Crear Dictamen',
-			message: '¿ Esta seguro que desea guardar el dictamen ?',
-			success: null,
-		});
-
-		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
-		App.confirmActionController.show();
-	}, */
-
 
 	guardar: function () {
 		this.set('clickGuardar', true);
@@ -3449,7 +3398,7 @@ App.DictamenCrearView = Ember.View.extend({
 
 
 		App.confirmActionController.setProperties({
-			title: 'Cargar Dictamen',
+			title: 'Crear Dictamen',
 			message: '¿ Esta seguro que desea guardar el dictamen ?',
 			success: null,
 		});
@@ -3547,10 +3496,10 @@ App.DictamenCrearView = Ember.View.extend({
 						 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
 						 App.get('dictamenConsultaController').load();
 					}
-				else
-				{
-					$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
-				}					
+					else
+					{
+						$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+					}					
 				}
 			});		
 		}
