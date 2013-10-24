@@ -208,7 +208,7 @@ App.IoController = Em.Object.extend({
 
 	joinRoom: function (room, addToArray) {
 		this.get('socket').emit('joinRoom', room);
-		console.log("Entrando en " + room);
+		// console.log("Entrando en " + room);
 		if (addToArray != false) this.get('rooms').pushObject(room);
 	},
 
