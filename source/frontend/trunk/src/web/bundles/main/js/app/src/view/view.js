@@ -689,7 +689,6 @@ App.PlanDeLaborListadoView = Ember.View.extend({
 	templateName: 'plan-de-labor-listado',
 
 	titulo: function () {
-		console.log(App.get('planDeLaborListadoController.estado'));
 		switch (App.get('planDeLaborListadoController.estado')) {
 			case "0":
 				return "Planes de labor tentativos";
@@ -3516,10 +3515,6 @@ App.DictamenCrearView = Ember.View.extend({
 			dictamen.orden = "1";
 			dictamen.itemParte = "4";
 			dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
-
-
-			console.log(dictamen);
-			console.log(dictamen.textos);
 
 			var url = App.get('apiController.url') + "/par/evento";
 
