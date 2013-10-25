@@ -109,6 +109,7 @@ App.Router =  Em.Router.extend({
 			
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
 				appController.connectOutlet('main', 'page404');
 				appController.connectOutlet('menu', 'subMenu');
 				
@@ -124,6 +125,7 @@ App.Router =  Em.Router.extend({
 			connectOutlets: function(router, context) {
 				
 				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
 				appController.connectOutlet('main', 'page403');
 				appController.connectOutlet('menu', 'subMenu');
 				
@@ -163,6 +165,7 @@ App.Router =  Em.Router.extend({
 
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
 				appController.connectOutlet('menu', 'subMenu');
 
 				Ember.run.next(function () {
@@ -209,6 +212,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 
 						Ember.run.next(function () {
@@ -234,6 +238,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 
 						Ember.run.next(function () {
@@ -255,6 +260,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 
 						Ember.run.next(function () {
@@ -307,6 +313,7 @@ App.Router =  Em.Router.extend({
 
 			connectOutlets: function(router, context) {
 				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
 				appController.connectOutlet('menu', 'subMenu');
 
 				Ember.run.next(function () {
@@ -354,6 +361,7 @@ App.Router =  Em.Router.extend({
 
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('main', 'estadisticas');
 					appController.connectOutlet('menu', 'subMenu');
 					
@@ -404,6 +412,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'PlanDeLaborListado');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -447,6 +456,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'PlanDeLaborListado');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -488,6 +498,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'PlanDeLaborListado');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -527,6 +538,7 @@ App.Router =  Em.Router.extend({
 
 						App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'CrearPlanDeLabor', "saraza", "sadasdasd", "asdasdsad");
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -584,6 +596,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 
 						switch (App.get('planDeLaborController.content.estado')) {
 							case "Tentativo":
@@ -654,6 +667,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('main', 'rolesAdmin');
 					appController.connectOutlet('menu', 'subMenu');
 					
@@ -692,6 +706,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('main', 'comisionesAdmin');
 					appController.connectOutlet('menu', 'subMenu');
 					
@@ -727,6 +742,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'notificacionesAdmin');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -773,6 +789,7 @@ App.Router =  Em.Router.extend({
 					},
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 						appController.connectOutlet('main', 'notificacionTipoCrear');
 						
@@ -823,6 +840,7 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 				
 					var appController = router.get('applicationController');	
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('main', 'expedientes');
 					appController.connectOutlet('menu', 'subMenu');
 
@@ -868,6 +886,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'expedienteConsulta');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -903,7 +922,8 @@ App.Router =  Em.Router.extend({
 	                },	
 
 	                connectOutlets: function(router, context) {
-	                        var appController = router.get('applicationController');	
+	                        var appController = router.get('applicationController');
+	                        appController.connectOutlet('help', 'Help');	
 	                        appController.connectOutlet('main', 'enviosArchivados');
 	                        appController.connectOutlet('menu', 'subMenu');
 
@@ -950,6 +970,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'expedientesEnvioConsulta');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -968,6 +989,7 @@ App.Router =  Em.Router.extend({
 	 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 
 	                    var appController = router.get('applicationController');	
+	                    appController.connectOutlet('help', 'Help');
 	                    appController.connectOutlet('main', 'expedientesArchivados');
 	                    appController.connectOutlet('menu', 'subMenu');
 
@@ -1014,6 +1036,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'Dictamenes');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -1049,6 +1072,7 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'dictamenesPendientes');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -1109,6 +1133,7 @@ App.Router =  Em.Router.extend({
 
                     connectOutlets: function(router, context) {
                             var appController = router.get('applicationController');
+                            appController.connectOutlet('help', 'Help');
                             appController.connectOutlet('main', 'crearDictamen');
                             appController.connectOutlet('menu', 'subMenu');
 
@@ -1154,6 +1179,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'DictamenConsulta');
 							appController.connectOutlet('menu', 'subMenu');
 
@@ -1229,6 +1255,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'cargarDictamen');
 							appController.connectOutlet('menu', 'subMenu');
 
@@ -1277,6 +1304,7 @@ App.Router =  Em.Router.extend({
 						route: '/editar',
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'crearParte');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -1317,6 +1345,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'reunionesSinParte');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -1350,6 +1379,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'reunionesConParte');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -1417,6 +1447,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'reunionConsulta');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -1497,6 +1528,7 @@ App.Router =  Em.Router.extend({
 							},
 							connectOutlets: function(router, context) {
 								var appController = router.get('applicationController');
+								appController.connectOutlet('help', 'Help');
 								appController.connectOutlet('main', 'crearParte');
 								appController.connectOutlet('menu', 'subMenu');
 								
@@ -1537,6 +1569,7 @@ App.Router =  Em.Router.extend({
 					
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('main', 'citaciones');
 						appController.connectOutlet('menu', 'subMenu');
 						
@@ -1581,6 +1614,7 @@ App.Router =  Em.Router.extend({
 						
 						connectOutlets: function(router, context) {							
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'citacionCrear');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -1631,6 +1665,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'citacionConsulta');
 							appController.connectOutlet('menu', 'subMenu');
 
@@ -1728,6 +1763,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('main', 'citacionCrear');
 							appController.connectOutlet('menu', 'subMenu');
 							
@@ -1770,6 +1806,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('main', 'DictamenesSinOrdenDelDia');
 					appController.connectOutlet('menu', 'subMenu');
 					
@@ -1803,6 +1840,7 @@ App.Router =  Em.Router.extend({
 				
 				connectOutlets: function(router, context) {
 					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
 					appController.connectOutlet('menu', 'subMenu');					
 					appController.connectOutlet('main', 'OrdenesDelDiaList');
 					
@@ -1846,6 +1884,7 @@ App.Router =  Em.Router.extend({
 
 					connectOutlets: function(router, context) {							
 						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 						appController.connectOutlet('main', 'OrdenDelDiaCrear');
 						
@@ -1889,6 +1928,7 @@ App.Router =  Em.Router.extend({
 
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('menu', 'subMenu');
 							appController.connectOutlet('main', 'ordenDelDiaDetalle');
 							
