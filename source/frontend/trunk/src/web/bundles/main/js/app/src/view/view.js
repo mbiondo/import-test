@@ -5511,3 +5511,7 @@ App.GirosListView = App.ListFilterView.extend({
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
 	columnas: ['Fecha giro ', 'Expediente', 'Comisiones'],
 });
+
+App.HelpView = Ember.View.extend({
+	templateName: 'help',
+});
