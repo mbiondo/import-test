@@ -461,8 +461,8 @@ App.UserController = Em.Controller.extend({
 	loginError: false,
 
 	loginCheck: function(cuil, password){
-		//var url = '/usr/autenticate';
-		var url = App.get('apiController.url') + '/usr/autenticate';
+		//var url = 'usr/autenticate';
+		var url = App.get('apiController.url') + 'usr/autenticate';
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -485,8 +485,8 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 
-		//var urlUserData = '/usr/userdata';
-		var urlUserData = App.get('apiController.url') + '/usr/userdata';
+		//var urlUserData = 'usr/userdata';
+		var urlUserData = App.get('apiController.url') + 'usr/userdata';
 		var _self = this;
 
 		$.ajax({
@@ -499,7 +499,7 @@ App.UserController = Em.Controller.extend({
 			success: function (data) {
 				var tmpUser = App.Usuario.create(data);
 
-				var url = '/user/access';
+				var url = 'user/access';
 				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
 				posting.done(function( data ){
 					data = JSON.parse(data);
@@ -641,10 +641,10 @@ App.ApplicationController = Em.Controller.extend({
 		temaController.set('content', []);
 		turnosController.set('content', []);
 		
-		temaController.set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(sesion.get('id'))));
+		temaController.set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(sesion.get('id'))));
 		temaController.load();
 
-		turnosController.set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(sesion.get('id'))));
+		turnosController.set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(sesion.get('id'))));
 		turnosController.load();
 	},
 });
@@ -827,7 +827,7 @@ App.UploaderController = Ember.Object.extend({
 
 App.PlanDeLaborController = Ember.Object.extend({
 	content: null,
-	url: "/pdl/plan/%@",
+	url: "pdl/plan/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -906,7 +906,7 @@ App.PlanDeLaborController = Ember.Object.extend({
 });
 
 App.PlanDeLaborListadoController = App.RestController.extend({
-	url: '/pdl/planesdelabor/estado/',
+	url: 'pdl/planesdelabor/estado/',
 //	url: '/pdl/all'
 	sortProperties: ['fechaEstimada'],
 	sortAscending: false,
@@ -932,7 +932,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: '/dic/dictamenes/pendientes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/pendientes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -964,7 +964,7 @@ App.DictamenesPendientesController = App.RestController.extend({
 //Notificaciones
 
 App.NotificacionesController = App.RestController.extend({
-	url: '/notification/all',
+	url: 'notification/all',
 	type: App.Notificacion,
 	useApi: false,
 	sortProperties: ['fecha'],
@@ -1005,7 +1005,7 @@ App.NotificacionesController = App.RestController.extend({
 
 
 App.NotificacionesGruposController = App.RestController.extend({
-	url: '/notification/gruops',
+	url: 'notification/gruops',
 	type: App.NotificacionGrupo,
 	useApi: false,
 
@@ -1042,7 +1042,7 @@ App.NotificacionesGruposController = App.RestController.extend({
 });
 //UserLogin
 App.UsuariosController = App.RestController.extend({
-	url: '/user/users',
+	url: 'user/users',
 	type: App.Usuario,
 	useApi: false,
 	sortProperties: ['nivel'],
@@ -1071,7 +1071,7 @@ App.UsuariosController = App.RestController.extend({
 });
 
 App.EstructurasController = App.RestController.extend({
-	url: '/user/estructuras',
+	url: 'user/estructuras',
 	type: App.Estructura,
 	useApi: false,
 	sortProperties: ['nombre'],
@@ -1100,7 +1100,7 @@ App.EstructurasController = App.RestController.extend({
 });
 
 App.FuncionesController = App.RestController.extend({
-	url: '/user/funciones',
+	url: 'user/funciones',
 	type: App.Funcion,
 	useApi: false,
 	sortProperties: ['nombre'],
@@ -1129,7 +1129,7 @@ App.FuncionesController = App.RestController.extend({
 });
 
 App.RolesController = App.RestController.extend({
-	url: '/user/roles',
+	url: 'user/roles',
 	type: App.Rol,
 	useApi: false,
 	sortProperties: ['nivel'],
@@ -1174,7 +1174,7 @@ App.RolesController = App.RestController.extend({
 });
 
 App.NotificacionTiposController = App.RestController.extend({
-	url: '/notification/types',
+	url: 'notification/types',
 	type: App.NotificacionTipo,
 	useApi: false,
 	sortProperties: ['nivel'],
@@ -1189,7 +1189,7 @@ App.NotificacionTiposController = App.RestController.extend({
 })
 
 App.ExpedientesArchivablesController = App.RestController.extend({
-    url: '/exp/proyectos/archivables',
+    url: 'exp/proyectos/archivables',
 	type: App.ExpedienteArchivable,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1225,7 +1225,7 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 });
 
 App.ExpedientesController = App.RestController.extend({
-	url: '/exp/proyectos',
+	url: 'exp/proyectos',
 	type: App.Expediente,
 	useApi: true,
 	sortProperties: ['expdipA', 'expdipN'],
@@ -1291,7 +1291,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.ExpedientesArchivadosController = App.RestController.extend({
-    url: '/exp/proyectos/archivables',
+    url: 'exp/proyectos/archivables',
 	type: App.ExpedienteBase,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1319,7 +1319,7 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 
 // Envios a archivo
 App.EnvioArchivoController = App.RestController.extend({
-        url: '/com/env/envios',
+        url: 'com/env/envios',
 	type: App.Envio,
 	useApi: true,
 	sortProperties: ['fechaUltimaModificacion'],
@@ -1339,7 +1339,7 @@ App.EnvioArchivoController = App.RestController.extend({
 
 App.EnvioArchivoConsultaController = Ember.Object.extend({
         content: '',
-        url: '/com/env/envio/%@',
+        url: 'com/env/envio/%@',
 	loaded : false,
 	useApi: true,
 	
@@ -1371,7 +1371,7 @@ App.EnvioArchivoConsultaController = Ember.Object.extend({
 
 
 App.CitacionesController = App.RestController.extend({
-	url: '/cit/citaciones/%@',
+	url: 'cit/citaciones/%@',
 	type: App.Citacion,
 	anio: '',
 	useApi: true,
@@ -1497,7 +1497,7 @@ App.CaracterDespachoController = App.RestController.extend({
 });
 
 App.ParteEstadosController = App.RestController.extend({
-	url: '/par/secciones',
+	url: 'par/secciones',
 	type: App.ParteEstado,
 	useApi: true,
 	
@@ -1531,7 +1531,7 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	url: '/dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
         type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
@@ -1562,7 +1562,7 @@ App.FirmantesController = App.RestController.extend({
 });
 
 App.CitacionEstadosController = App.RestController.extend({
-	url: '/citEst/estados',
+	url: 'citEst/estados',
 	type: App.CitacionEstado,
 	useApi: true,
 	
@@ -1596,7 +1596,7 @@ App.CitacionEstadosController = App.RestController.extend({
 });
 
 App.CitacionSalasController = App.RestController.extend({
-	url: '/sal/salas',
+	url: 'sal/salas',
 	type: App.CitacionSala,
 	selected: '',
 	useApi: true,
@@ -1632,7 +1632,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: '/com/comisiones/CD/P/resumen',
+	url: 'com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -1675,7 +1675,7 @@ App.ExpedienteController = Ember.Object.extend({
 
 App.OrdenDelDiaController = Ember.Object.extend({
 	content: null,
-	url: "/dic/dictamen/%@",
+	url: "dic/dictamen/%@",
 //	url: "/od/orden/del/dia",
 	loaded : false,
 	useApi: true,
@@ -1709,7 +1709,7 @@ App.OrdenDelDiaController = Ember.Object.extend({
 
 App.DictamenConsultaController = Ember.Object.extend({
 	content: null,
-	url: '/par/evento/%@',
+	url: 'par/evento/%@',
 //	url: "/par/parte/%@",
 //	url: "/dic/dictamen/%@",
 //	url: "/od/orden/del/dia",
@@ -1764,7 +1764,7 @@ App.DictamenCrearController = Ember.Object.extend({
 
 App.DictamenController = Ember.Object.extend({
 	content: null,
-	url: "/par/evento/%@",
+	url: "par/evento/%@",
 	loaded : false,
 	useApi: false,
 	
@@ -1796,7 +1796,7 @@ App.DictamenController = Ember.Object.extend({
 
 App.ExpedienteConsultaController = Ember.Object.extend({
 	content: null,
-	url: "/exp/proyecto/%@",
+	url: "exp/proyecto/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -1826,7 +1826,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 });
 
 App.DictamenesController = App.RestController.extend({
-	url: '/dic/dictamenes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -1858,7 +1858,7 @@ App.DictamenesController = App.RestController.extend({
 });
 
 App.DictamenesSinOdController = App.RestController.extend({
-	url: '/dic/dictamenes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/01/01/2013/31/12/2013',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -1889,7 +1889,7 @@ App.DictamenesSinOdController = App.RestController.extend({
 });
 
 App.OrdenesDelDiaController = App.RestController.extend({
-	url: '/dic/ods/vigentes/130',
+	url: 'dic/ods/vigentes/130',
 	type: App.OrdeDelDia,
 	useApi: true,
 
@@ -1921,7 +1921,7 @@ App.ParteCrearController = Ember.Object.extend({
 });
 
 App.PartesController = App.RestController.extend({
-	url: '/parte/partes',
+	url: 'parte/partes',
 	type: App.Parte,
 	useApi: true,
 	
@@ -1943,7 +1943,7 @@ App.PartesController = App.RestController.extend({
 });
 
 App.EventosParteController = App.RestController.extend({
-	url: '/par/secciones',
+	url: 'par/secciones',
 	type: App.EventoParte,
 	useApi: true,
 	
@@ -1956,7 +1956,7 @@ App.EventosParteController = App.RestController.extend({
 });
 
 App.ReunionesSinParteController = App.RestController.extend({
-	url: '/com/reun/sp',
+	url: 'com/reun/sp',
 	type: App.Reunion,
 	useApi: true,
 	loaded : false,
@@ -2002,7 +2002,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 });
 
 App.ReunionesConParteController = App.ReunionesSinParteController.extend({
-	url: '/com/reun/cp/' /* + moment().format('DD/MM/YYYY')*/,
+	url: 'com/reun/cp/' /* + moment().format('DD/MM/YYYY')*/,
 	type: App.Reunion,
 	useApi: true,
 	loaded : false,
@@ -2028,7 +2028,7 @@ App.ReunionesConParteController = App.ReunionesSinParteController.extend({
 
 App.ReunionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "/com/reun/reunion/%@",
+	url: "com/reun/reunion/%@",
 	loaded : false,
 	useApi: true,
 	isEdit: false,
@@ -2061,7 +2061,7 @@ App.ReunionConsultaController = Ember.Object.extend({
 
 App.CitacionConsultaController = Ember.Object.extend({
 	content: null,
-	url: "/cit/citacion/%@",
+	url: "cit/citacion/%@",
 	loaded : false,
 	useApi: true,
 	
@@ -2108,7 +2108,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 
 
 		$.ajax({
-			url:  (App.get('apiController').get('url') + '/com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			url:  (App.get('apiController').get('url') + 'com/reun/reunionPorCitacion' + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -2190,9 +2190,9 @@ App.CitacionCrearController = Em.Object.extend({
 	expedientes: '',	
 	isEdit: false,
 	
-	url: '/cit/citacion',
+	url: 'cit/citacion',
 	
-	urlExpedientes: '/com/%@/proyectos/',
+	urlExpedientes: 'com/%@/proyectos/',
 	//urlExpedientes: '/expedientes-listar',
 	
 	loading: false,
@@ -2200,7 +2200,7 @@ App.CitacionCrearController = Em.Object.extend({
 	
 	crearReunion: function (reunion) {
 		$.ajax({
-			url: App.get('apiController').get('url') + "/com/reun/reunion",
+			url: App.get('apiController').get('url') + "com/reun/reunion",
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -2273,7 +2273,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmar: function () {
 
 		$.ajax({
-			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 2,
+			url: App.get('apiController').get('url') + "cit/citacion/" + this.get('content.id') + "/estado/" + 2,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -2362,7 +2362,7 @@ App.CitacionCrearController = Em.Object.extend({
 		//console.log('Cancelando');
 
 		$.ajax({
-			url: App.get('apiController').get('url') + "/cit/citacion/" + this.get('content.id') + "/estado/" + 3,
+			url: App.get('apiController').get('url') + "cit/citacion/" + this.get('content.id') + "/estado/" + 3,
 			contentType: 'text/plain',
 			crossDomain: 'true',
 			dataType: 'JSON',
@@ -2505,7 +2505,7 @@ App.CitacionCrearController = Em.Object.extend({
 */
 
 App.DiputadosController  = App.RestController.extend({
-	url: '/lista-diputados',
+	url: 'lista-diputados',
 	type: App.User,
 	useAPi: false,
 	filtro : true,
@@ -2544,7 +2544,7 @@ App.DiputadosController  = App.RestController.extend({
 App.SesionesController  = App.RestController.extend({
 	notificationType: "Sesion",
 	useAPi: false,
-	url: '/sesiones',
+	url: 'sesiones',
 	type: App.Sesion,
 	sortProperties: ['sortValue'],
 	sortAscending: false,
@@ -2692,7 +2692,7 @@ App.SesionController = Ember.Object.extend({
 
 App.TurnosController = App.RestController.extend({
 	notificationType : 'Turno',
-	sortUrl: '/turnos/ordenar',
+	sortUrl: 'turnos/ordenar',
 	type : App.Turno,
 	sortProperties: ['sortValue'],
 	timer : null,
@@ -3020,7 +3020,7 @@ App.TurnosController = App.RestController.extend({
 App.TemasController = App.RestController.extend({
 	notificationType : 'Tema',
 	type: App.Tema,
-	sortUrl: '/temas/ordenar',
+	sortUrl: 'temas/ordenar',
 	sortProperties: ['orden'],
 	useAPi: false,
 	notificationRoom: 'oradores',
@@ -3723,7 +3723,7 @@ App.EstadisticasController = Ember.Object.extend({
 //Crear Plan De PlanDeLabor
 
 App.PlanDeLaborGruposController = App.RestController.extend({
-	url: '/pdl/grupos',
+	url: 'pdl/grupos',
 	useApi: true,
 	loaded: false,
 	type: App.PlanDeLaborGrupo,
@@ -3780,7 +3780,7 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 });
 
 App.GirosController = App.RestController.extend({
-	url: '/giros',
+	url: 'giros',
 	useApi: true,
 	loaded: false,
 	type: App.Giro,
