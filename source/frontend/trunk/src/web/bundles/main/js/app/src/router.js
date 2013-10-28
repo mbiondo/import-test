@@ -33,26 +33,24 @@ var get = Ember.get, set = Ember.set;
 
 Em.Route.reopen({
 	roles: null,
-	/*enter: function () {
+	/*
+	enter: function () {
 		if (Ember.isArray(this.get('roles'))) 
 		{
 			var userRoles = App.get('userController.roles');
 			var roles = this.get('roles');
-			var router = this.get('router');
+			var _self = this;
 			roles.forEach(function (rolRequiered) {
-			 if (!userRoles.contains(rolRequiered)) {
-				router.goto403();
-			 }
+				 if (!userRoles.contains(rolRequiered)) {
+					App.router.transitionTo("novedades", {id: 2});
+					return;
+				 }
 			});
 		}
-	},*/
+	},
+	*/
 });
 
-Em.Router.reopen({
-	goto403: function () {
-		this.transitionTo('page403');
-	},
-});
 
 App.Router =  Em.Router.extend({
 	enableLogging: true,
@@ -86,7 +84,6 @@ App.Router =  Em.Router.extend({
 		 if (!userRoles.contains(rolRequiered)){
 			_self.transitionTo("page403");
 		 }
-			 
 	  });
 	 
 	},	
@@ -137,6 +134,7 @@ App.Router =  Em.Router.extend({
 		
 		index: Em.Route.extend({
 			route: "/",
+			roles: ['pepe'],
 
 			deserialize: function () {
 
@@ -982,27 +980,29 @@ App.Router =  Em.Router.extend({
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 						},
 					}),
+
+					crear: Em.Route.extend({
+						route: "/crear",
+		                connectOutlets: function(router, context) {
+		 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
+
+		                    var appController = router.get('applicationController');	
+		                    appController.connectOutlet('help', 'Help');
+		                    appController.connectOutlet('main', 'expedientesArchivados');
+		                    appController.connectOutlet('menu', 'subMenu');
+
+		                    App.get('menuController').seleccionar(6);
+		                    App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+		                    App.get('breadCumbController').set('content', [
+		                        {titulo: 'Envíos a Archivo', url: '#/envios'},
+		                        {titulo: 'Crear Envío a Archivo', url: '#/envios/envio/crear'},
+		                    ]);	
+		                    			
+		                },
+					}),
 				}),
-				crear: Em.Route.extend({
-					route: "/envio/crear",
-	                connectOutlets: function(router, context) {
-	 					App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
 
-	                    var appController = router.get('applicationController');	
-	                    appController.connectOutlet('help', 'Help');
-	                    appController.connectOutlet('main', 'expedientesArchivados');
-	                    appController.connectOutlet('menu', 'subMenu');
-
-	                    App.get('menuController').seleccionar(6);
-	                    App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-
-	                    App.get('breadCumbController').set('content', [
-	                        {titulo: 'Envíos a Archivo', url: '#/envios'},
-	                        {titulo: 'Crear Envío a Archivo', url: '#/envios/envio/crear'},
-	                    ]);	
-	                    			
-	                },
-				}),
 		}), 
                         
 		comisiones: Em.Route.extend({
@@ -1091,9 +1091,10 @@ App.Router =  Em.Router.extend({
 
                     deserialize: function(router, params) {
 
-                        if (!App.get('dictamenCrearController')) { 
-                            App.dictamenCrearController = App.DictamenCrearController.create();
-                        }
+                        // if (!App.get('dictamenCrearController')) { 
+                        //     App.dictamenCrearController = App.DictamenCrearController.create();
+                        // }
+                        App.dictamenCrearController = App.DictamenCrearController.create();
 
                         App.get('dictamenCrearController').set('content', App.Dictamen.create());
                      
@@ -1133,6 +1134,9 @@ App.Router =  Em.Router.extend({
 
                     connectOutlets: function(router, context) {
                             var appController = router.get('applicationController');
+
+                            App.get('dictamenCrearController').set('content', App.Dictamen.create());
+                            
                             appController.connectOutlet('help', 'Help');
                             appController.connectOutlet('main', 'crearDictamen');
                             appController.connectOutlet('menu', 'subMenu');
@@ -2078,7 +2082,7 @@ App.Router =  Em.Router.extend({
 							
 
 							App.get('sesionController').set('content', context);
-							App.get('temasController').set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
+							App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
 							App.get('temasController').load();
 							
 							//appController.cargarSesiones(true);
@@ -2136,11 +2140,11 @@ App.Router =  Em.Router.extend({
 									sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
 									App.get('sesionController').set('content', sesion);
 									
-									App.get('temasController').set('url', '/sesion/%@/temas'.fmt(encodeURIComponent(params.sesion)));
+									App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(params.sesion)));
 									App.get('temasController').addObserver('loaded', this, fnTema);
 									App.get('temasController').load();
 
-									App.get('turnosController').set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
+									App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
 									App.get('turnosController').addObserver('loaded', this, fnTema);
 									App.get('turnosController').load();		
 									
@@ -2186,7 +2190,7 @@ App.Router =  Em.Router.extend({
 							App.get('sesionController').set('content', App.get('sesionesController.content').findProperty('id', parseInt(context.get('sesionId'))));
 
 							if(App.get('temaController.content.sesionId') != context.get('sesionId')){
-								App.get('turnosController').set('url', '/sesion/%@/turnos'.fmt(encodeURIComponent(context.get('sesionId'))));
+								App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(context.get('sesionId'))));
 								App.get('turnosController').load();
 							}
 
