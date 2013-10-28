@@ -2569,11 +2569,14 @@ App.DictamenConsultaView = Em.View.extend({
 		}
 
 		function dictamenDeMayoriaFirmanteConDisidencia(textos){
-			var array = $.map(textos[0].firmantes, function(firmante){
-				return (firmante.disidencia > 0);
+			var conDisidencia = false;
+			(textos[0].firmantes).forEach (function(firmante) {
+				if (firmante.disidencia > 1) {
+					conDisidencia = true;
+				}
 			});
 
-			if(array.length > 0) return true;
+			return conDisidencia;
 		}
 
 		function dictamenesDeMinoriaFirmanteConDisidencia(textos){
@@ -2581,7 +2584,7 @@ App.DictamenConsultaView = Em.View.extend({
 
 			textos.slice(1).forEach(function(texto){
 				texto.firmantes.forEach(function(firmante){
-					if(firmante.disidencia > 0)
+					if(firmante.disidencia > 1)
 					{
 						disidencia = true;
 					}
@@ -2625,10 +2628,11 @@ App.DictamenConsultaView = Em.View.extend({
 				leyenda = leyenda + "con disidencia ";
 			}
 
-			if (textos.length > 2) {
-				leyenda = leyenda + "y con dictamen de mayoría ";
+			if (textos.length == 2) {
+				leyenda = leyenda + "y con dictamen de minoría ";
 			}  else {
-				leyenda = leyenda + "y con " + textos.length-1 + " dictamenes de minoría ";
+				var largo = textos.length - 1;
+				leyenda = leyenda + "y con " + largo + " dictamenes de minoría ";
 			}
 
 			if (dictamenesDeMinoriaFirmanteConDisidencia(textos)) {
