@@ -644,7 +644,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 		sesion.set('temas', temas);
 
-		var url = "/crearSesion/planDeLabor";
+		var url = "crearSesion/planDeLabor";
 
 		$.ajax({
 			url: url,
@@ -802,7 +802,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 
 		var dJson = JSON.stringify(dictamen);
 
-		var url = "/dic/od";
+		var url = "dic/od";
 
 		$.ajax({
 			url: App.get('apiController').get('url') + url,
@@ -1356,7 +1356,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 			
 			var listaJSON = JSON.stringify(listaEnvioArchivo);
 			
-			var url = "/com/env/envio";
+			var url = "com/env/envio";
 			
 			$.ajax({
 					url: App.get('apiController').get('url') + url,
@@ -1438,9 +1438,18 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	exportar: function () {
 		$.download('exportar/envio', "&type=envio&data=" + JSON.stringify(App.envioArchivoConsultaController.content));
 	},
+
 	toggleBotonConfirmar: function() {
-			this.set('isExpanded', !this.get('isExpanded'));
-			this.$("#confirmarBotonDiv").slideToggle();
+//			this.set('isExpanded', !this.get('isExpanded'));
+//			this.$("#confirmarBotonDiv").slideToggle();
+		App.confirmActionController.setProperties({
+			title: 'Confirmar Envío',
+			message: '¿ Esta seguro que desea confirmar el Envío ?',
+			success: null,
+		});
+
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
 	},
 	
 	didInsertElement: function(){
@@ -1450,15 +1459,18 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	},
 
 	confirmarToggle: function(){
-		this.$("#confirmarBotonDiv").slideToggle();
+//		this.$("#confirmarBotonDiv").slideToggle();
 	}, 
 		
-		
-		confirmarEnvio: function(){
-			this.confirmarToggle();
+	confirmActionDone: function () {
+	//confirmarEnvio: function(){
+		//this.confirmarToggle();
+		console.log(App.get('confirmActionController.success'));
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		if (App.get('confirmActionController.success')) {
 			var idConfirmar = JSON.stringify(this.get('content.id'));
 			
-			var url = "/com/env/envio/confirmar";
+			var url = "com/env/envio/confirmar";
 			
 			$.ajax({
 					url: App.get('apiController').get('url') + url,
@@ -1468,9 +1480,10 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 					data : idConfirmar,
 					context: this,
 					success: this.createSucceeded,
-			});        
-		},
-				
+			});   
+		}     
+	},
+			
 
 	createSucceeded: function (data) {
 			if (data.id) {
@@ -2674,7 +2687,7 @@ App.DictamenesSinOrdenDelDiaView = Em.View.extend({
 App.ReunionConsultaView = Em.View.extend({
 	templateName: 'reunionConsulta',
 //	urlExpedientes: '/exp/proyectos',
-	urlExpedientes: '/com/%@/proyectos/',
+	urlExpedientes: 'com/%@/proyectos/',
 	filterExpedientes: '',
 	tituloNuevoTema: '',
 	seleccionados: false,
@@ -3465,7 +3478,7 @@ App.DictamenCrearView = Ember.View.extend({
 			dictamen.itemParte = "4";
 			dictamen.caracter= "Aprobado por Unanimidad insistiendo en el texto sancionado originalmente";
 
-			var url = App.get('apiController.url') + "/par/evento";
+			var url = App.get('apiController.url') + "par/evento";
 
 			$.ajax({
 				url:  url,
@@ -3473,9 +3486,11 @@ App.DictamenCrearView = Ember.View.extend({
 				type: 'POST',
 				context: this,
 				data : JSON.stringify(dictamen),
+				dataType: 'json',
 				success: function( dataid ) 
 				{
-					data = JSON.parse(dataid);
+					//data = JSON.parse(dataid);
+					data = dataid;
 
 					if(data.id){					
 						if (!App.get('dictamenConsultaController'))
@@ -3719,7 +3734,7 @@ App.DictamenCargarView = Ember.View.extend({
 
 			dictamen.proyectosVistos = pv;	
 
-			var url = App.get('apiController.url') + "/par/evento";
+			var url = App.get('apiController.url') + "par/evento";
 
 			var dictamenJSON = JSON.stringify(dictamen);
 
@@ -3733,7 +3748,8 @@ App.DictamenCargarView = Ember.View.extend({
 				data : dictamenJSON,
 				success: function( dataid ) 
 				{
-					data = JSON.parse(dataid);
+//					data = JSON.parse(dataid);
+					data = dataid;
 					
 					if(data.id){					
 						if (!App.get('dictamenConsultaController'))
@@ -5285,7 +5301,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 			sesion.set('temas', temas);
 
-			var url = "/crearSesion/planDeLabor";
+			var url = "crearSesion/planDeLabor";
 
 			$.ajax({
 				url: url,
