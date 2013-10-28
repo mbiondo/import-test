@@ -4,7 +4,7 @@ App.SortableColumn = Em.Object.extend({
 });
 
 App.Usuario = Em.Object.extend({
-	url: '/user',
+	url: 'user',
 	nombre: '',
 	apellido: '',
 	
@@ -50,7 +50,7 @@ App.Usuario = Em.Object.extend({
 });
 
 App.Estructura = Em.Object.extend({
-	url: '/user/estructura',
+	url: 'user/estructura',
 	id: '',
 	nombre: '',
 	roles: '',
@@ -80,7 +80,7 @@ App.Estructura = Em.Object.extend({
 });
 
 App.Funcion = Em.Object.extend({
-	url: '/user/funcion',
+	url: 'user/funcion',
 	id: '',
 	nombre: '',
 
@@ -113,7 +113,7 @@ App.Funcion = Em.Object.extend({
 
 
 App.Audit = Em.Object.extend({
-	url: '/audit',
+	url: 'audit',
 	id: '',
 	usuario: '',
 	accion: '',
@@ -132,7 +132,7 @@ App.Audit = Em.Object.extend({
 });
 
 App.Rol = Em.Object.extend({
-	url: '/user/rol',
+	url: 'user/rol',
 	id: '',
 	nombre: '',
 	nivel: '',
@@ -153,7 +153,7 @@ App.Notificacion = Em.Object.extend({
 	notificationType : 'Notificacion',
 	notificationRoom: 'notificaciones',
 
-	url: '/notification/create',
+	url: 'notification/create',
 	tipo: '',
 	fecha: '',
 	comisiones: [],
@@ -170,7 +170,7 @@ App.Notificacion = Em.Object.extend({
 });
 
 App.NotificacionTipo = Em.Object.extend({
-	url: '/notification/createType',
+	url: 'notification/createType',
 	icono: '',
 	nombre: '',
 	titulo: '',
@@ -263,7 +263,7 @@ App.Giro = Em.Object.extend({
 	id: null,
 	proy_id: null,
 	giros: [],
-	url: '/giro',
+	url: 'giro',
 
 	serializable: [
 		'id',
@@ -285,7 +285,7 @@ App.Expediente = Em.Object.extend({
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
 
-	url: '/expediente',	
+	url: 'expediente',	
 
 	serializable: [
 		'id'
@@ -368,7 +368,7 @@ App.Envio = Em.Object.extend({
 
 
 App.Citacion = Em.Object.extend({
-	url: "/cit/citacion",
+	url: "cit/citacion",
 	id: null,
 	title: '',
 	start: '',
@@ -710,7 +710,7 @@ App.Comision = Em.Object.extend({
 
 
 App.Reunion = Em.Object.extend({
-	url: '/com/reun/reunion',
+	url: 'com/reun/reunion',
 	id: '',
 	nota: '',
 	comisiones: '',
@@ -1202,7 +1202,7 @@ App.PlanDeLaborGrupo = Ember.Object.extend({
 });
 
 App.PlanDeLaborTentativo = Ember.Object.extend({
-	url: "/pdl/plan",
+	url: "pdl/plan",
 	notificationType : 'PlanDeLaborTentativo',
 	notificationRoom: 'planDeLabor',
 	auditable: true,
