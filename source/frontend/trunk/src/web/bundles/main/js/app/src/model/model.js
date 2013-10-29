@@ -359,11 +359,15 @@ App.Expediente = Em.Object.extend({
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
 
-	url: 'expediente',	
+	url: 'exp/proyecto',	
 
-	serializable: [
-		'id'
-	],
+    normalize: function () {
+    	this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    },
+
+    desNormalize: function ()  {
+    	this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+    },
 
 	tipolabel: function () {
 		var regex = new RegExp('MENSAJE');
@@ -400,6 +404,7 @@ App.Expediente = Em.Object.extend({
 			}		
 		}
 	}.property('firmantes'),	
+
 	firmantesLabel2: function() {
 		var firmantes = this.get('firmantes').sort(function (a, b) {
 			return a.orden - b.orden;
@@ -413,16 +418,18 @@ App.Expediente = Em.Object.extend({
 		return strFirmantes;
 
 	}.property('firmantes'),
+	
 	girosLabel: function () {
 		var field = "orden";
 		var giros = this.get('giro').sort(function (a, b) {
 			return a.orden - b.orden;
 		});
 		
-		if (giros.length == 1)
-			return giros.objectAt(0).comision;
-		else
-			return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")"; 		
+		if (giros.length > 0)
+			if (giros.length == 1)
+				return giros.objectAt(0).comision;
+			else
+				return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
 	}.property('giro'),
 
 	serializable: [

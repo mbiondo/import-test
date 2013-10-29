@@ -5503,7 +5503,7 @@ App.CrearDiputadoView = Ember.View.extend({
 	guardar: function () {
 
 		this.get('content').normalize();
-		this.get('content').addObserver('createSucceeded', this.createSucceeded);
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
 	},
 
@@ -5512,9 +5512,9 @@ App.CrearDiputadoView = Ember.View.extend({
 	}.observes('distrito'),
 
 	createSucceeded: function () {
-		this.get('content').removeObserver('createSucceeded', this.createSucceeded);
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').desNormalize();
-		if (this.get('content.createSucceeded')) {
+		if (this.get('content.createSuccess')) {
 			fn = function() {
 				if (App.get('diputadosVigentesController.loaded')) {
 					App.get('router').transitionTo('direccionSecretaria.diputados.listado');
@@ -5570,12 +5570,15 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	guardar: function () {
-		this.get('content').addObserver('createSucceeded', this.createSucceeded);
+		this.get('content').normalize();
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
 	},
 
 	createSucceeded: function () {
-		if (this.get('content.createSucceeded')) {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		if (this.get('content.createSuccess')) {
 			App.set('expedienteConsultaController.content', App.Expediente.create(this.get('content')));
 			fn = function() {
 				if (App.get('expedienteConsultaController.loaded')) {
