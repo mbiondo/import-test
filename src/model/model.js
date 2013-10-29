@@ -233,6 +233,72 @@ App.NotificacionGrupo = Em.Object.extend({
 	],
 });
 
+
+App.Mandato = Em.Object.extend({
+	url: 'dip/diputado',
+	id: null,
+    id_cargo: 1,
+    cargo: "Diputadoo",
+    distrito: "",
+    grupo: "",
+    partido: null,
+    fechaIncorporacion: "",
+    fechaCese: "",
+    fechaInicioMandato: "",
+    fechaFinMandato: "",
+    fechaJuramento: "",
+    datosPersonales: null,
+    mandatoActual: null,
+    auditable: true,
+    useApi: true,
+
+    normalize: function () {
+    	this.set('fechaJuramento', moment(this.get('fechaJuramento'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    	this.set('fechaInicioMandato', moment(this.get('fechaInicioMandato'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    	this.set('fechaFinMandato', moment(this.get('fechaFinMandato'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    },
+
+    desNormalize: function ()  {
+    	this.set('fechaJuramento', moment(this.get('fechaJuramento'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+    	this.set('fechaFinMandato', moment(this.get('fechaFinMandato'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+    	this.set('fechaInicioMandato', moment(this.get('fechaInicioMandato'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+    },
+
+    serializable: [
+    	'id',
+    	'id_cargo',
+    	'cargo',
+    	'distrito',
+    	'grupo',
+    	'partido',
+    	'fechaIncorporacion',
+    	'fechaCese',
+    	'fechaInicioMandato',
+    	'fechaFinMandato',
+    	'fechaJuramento',
+    	'datosPersonales',
+    	'mandatoActual',
+    ],
+
+    label: function () {
+    	return this.get('datosPersonales.apellido') + " " + this.get('datosPersonales.nombre');
+    }.property('datosPersonales'),
+});
+
+
+App.Autoridad = Em.Object.extend({
+    id: null,
+    nombre: "",
+    apellido: "",
+    sexo: "",
+    email: "",
+    sitio: null,
+    despacho: null,
+    piso: null,
+    tel1: null,
+    tel2: null,
+});
+
 App.ExpedienteBase = Em.Object.extend({
 	sortValue: '',
 	
@@ -350,6 +416,22 @@ App.Expediente = Em.Object.extend({
 		else
 			return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")"; 		
 	}.property('giro'),
+
+	serializable: [
+    	"tipo",
+    	"titulo",
+    	"sumario",
+    	"referencias",
+    	"expdip",
+    	"expdipA",
+    	"expdipT",
+    	"expdipN",
+    	"periodo",
+    	"iniciado",
+    	"pubtipo",
+    	"pubnro",
+    	"pubFecha",
+	],
 });
 
 

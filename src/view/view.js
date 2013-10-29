@@ -5402,6 +5402,8 @@ App.SugestView = Ember.View.extend({
 	sugestText: '',
 	controllerName: '',
 	threshold: 3,
+	titulo: "Buscar expediente",
+	placeHolder: "Expediente N°",
 
 	sugestTextChanged: function () {
 		if (this.get('sugestText').length >= this.get('threshold')) {
@@ -5421,7 +5423,10 @@ App.SugestView = Ember.View.extend({
 	itemSelect: function(item) {
 		if (!this.get('selection').findProperty('id', item.get('id')))
 		{
-			this.get('selection').addObject(item);
+			if (Ember.isArray(this.get('selection')))
+				this.get('selection').addObject(item);
+			else
+				this.set('selection', item);
 		}
 	},
 
@@ -5462,8 +5467,73 @@ App.SugestListView = Ember.CollectionView.extend({
 
 /**/
 
+App.CrearDiputadoView = Ember.View.extend({
+	templateName: 'crear-diputado',
+
+	guardar: function () {
+
+		this.get('content').normalize();
+		this.get('content').addObserver('createSucceeded', this.createSucceeded);
+		this.get('content').create();
+	},
+
+	createSucceeded: function () {
+		this.get('content').removeObserver('createSucceeded', this.createSucceeded);
+		this.get('content').desNormalize();
+		if (this.get('content.createSucceeded')) {
+			fn = function() {
+				if (App.get('diputadosVigentesController.loaded')) {
+					App.get('router').transitionTo('direccionSecretaria.diputados.listado');
+				}
+			};
+
+			App.get('diputadosVigentesController').addObserver('loaded', this, fn);
+			App.get('diputadosVigentesController').load();
+		} else {
+
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.Mandato.extend(App.Savable).create({datosPersonales: App.Autoridad.create({})}));
+	}	
+});
+
+
+App.ListaDiputadosView = Ember.View.extend({
+	templateName: 'diputados',
+});
+
+App.DiputadoListItemView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'mandato',
+});
+
+App.DiputadosListView = App.ListFilterView.extend({
+	itemViewClass: App.DiputadoListItemView,
+//	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+	columnas: ['Fecha Juramento', 'Nombre', 'Partido', 'Distrito'],
+});
+
+
 App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
+
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION'],
+
+	esLey: function () {
+		return this.get('content.tipo') == "LEY";
+	}.property('content.tipo'),
+
+	esDeclaracion: function () {
+		return this.get('content.tipo') == "DECLARACION";
+	}.property('content.tipo'),
+
+	esResolucion: function () {
+		return this.get('content.tipo') == "RESOLUCION";
+	}.property('content.tipo'),
 
 	guardar: function () {
 		this.get('content').addObserver('createSucceeded', this.createSucceeded);
@@ -5489,10 +5559,35 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.set('content', App.Expediente.extend(App.Savable).create());
+		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: ''}));
 	}
 });
 
+App.ExpedienteFormLeyView = Ember.View.extend({
+	templateName: 'expediente-form-ley',
+	camaras: ["Diputados", "Senadores"],
+
+	camaraChange: function () {
+		if (this.get('content.iniciado') == "Diputados") {
+			this.get('content').set('expdipT', 'D');
+		} else {
+			this.get('content').set('expdipT', 'S');
+		}
+	}.observes('content.iniciado'),
+
+	numeroChange: function () {
+		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT') + "-" + this.get('content.expdipA'));
+	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
+
+});
+
+App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
+	templateName: 'expediente-form-ley'
+});
+
+App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
+	templateName: 'expediente-form-ley'
+});
 
 App.CrearGiroView = Ember.View.extend({
 	templateName: 'crear-giro',
