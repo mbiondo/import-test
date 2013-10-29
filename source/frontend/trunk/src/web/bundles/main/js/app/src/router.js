@@ -1167,17 +1167,12 @@ App.Router =  Em.Router.extend({
 
                     deserialize: function(router, params) {
 
-                        // if (!App.get('dictamenCrearController')) { 
-                        //     App.dictamenCrearController = App.DictamenCrearController.create();
-                        // }
                         App.dictamenCrearController = App.DictamenCrearController.create();
 
                         App.get('dictamenCrearController').set('content', App.Dictamen.create());
                      
-                
-                        if (!App.get('expedientesArchivablesController')) {
-                            App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
-						}
+
+                        App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
                         
                         App.firmantesController = App.FirmantesController.create();
 
@@ -1211,7 +1206,8 @@ App.Router =  Em.Router.extend({
                     connectOutlets: function(router, context) {
                             var appController = router.get('applicationController');
 
-                            App.get('dictamenCrearController').set('content', App.Dictamen.create());
+                            // App.get('dictamenCrearController').set('content', App.Dictamen.create());
+							App.set('dictamenCrearController.content', App.Dictamen.extend(App.Savable).create({proyectos: [], proyectosVistos: [], textos: []}));
                             
                             appController.connectOutlet('help', 'Help');
                             appController.connectOutlet('main', 'crearDictamen');
