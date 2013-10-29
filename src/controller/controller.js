@@ -3818,14 +3818,14 @@ App.AutoridadesController = App.RestController.extend({
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
-				async: async,
+				async: async
 			});
 
 		}		
 	},
+
 	createObject: function (data, save) {
 		save = save || false;
-		
 		item = App.Autoridad.create(data);
 		item.setProperties(data);
 		this.addObject(item);
@@ -3843,6 +3843,24 @@ App.DiputadosVigentesController = App.RestController.extend({
 		
 		item = App.Mandato.create(data);
 		item.setProperties(data);
+		this.addObject(item);
+	},	
+});
+
+
+App.DistritosController = App.RestController.extend({
+	url: 'dip/distritos/',
+
+	useApi: true,
+	loaded: false,
+	type: App.Distrito,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Distrito.create(data);
+		item.setProperties(data);
+		item.set('id', Math.floor((Math.random()*99999)+1));
 		this.addObject(item);
 	},	
 });

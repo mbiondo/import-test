@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
-	//url: 'http://10.185.204.12:8080/sparl/rest/',
+	url: 'http://10.185.204.13:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
-	url: 'http://201.250.117.149:9009/sparl/rest/',
+	//url: 'http://201.250.117.149:9009/sparl/rest/',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -102,7 +102,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
 			icono: 'ic ic-comisiones',
-			roles: ['ROLE_COMISIONES'],
+			roles: ['ROLE_USER'],
 			subMenu: [
 				App.MenuItem.create({
 					titulo: 'Citaciones',
@@ -201,7 +201,7 @@ App.menuController = App.MenuController.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
 			url: '#/laborparlamentaria/planesdelabor/tentativos',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+			roles: ['ROLE_USER'],
 			icono: 'ic ic-labor',
 			subMenu: [
 				App.MenuItem.create({
@@ -213,7 +213,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Tentativos',
 							url: '#/laborparlamentaria/planesdelabor/tentativos',
 							// url: '#/plan/de/labor/listado/0',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 						}),						
 						App.MenuItem.create({
 							titulo: 'Planes de Labor Confirmados',
@@ -226,7 +226,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 						}),							
 						App.MenuItem.create({
 							titulo: 'Crear Plan de Labor',
@@ -363,7 +363,7 @@ App.menuController = App.MenuController.create({
 						}),
 
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 							titulo: 'Alta',
 							url: '#/direccion/secretaria/diputados/alta',
 						}),	
@@ -384,7 +384,7 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Giros',
 					url: '',
-					roles: ['ROLE_USER'],
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],

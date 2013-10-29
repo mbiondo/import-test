@@ -5429,6 +5429,7 @@ App.SugestView = Ember.View.extend({
 	threshold: 3,
 	titulo: "Buscar expediente",
 	placeHolder: "Expediente N°",
+	itemViewClass: 'App.SugestListItemView',
 
 	sugestTextChanged: function () {
 		if (this.get('sugestText').length >= this.get('threshold')) {
@@ -5446,13 +5447,15 @@ App.SugestView = Ember.View.extend({
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
-		if (!this.get('selection').findProperty('id', item.get('id')))
-		{
-			if (Ember.isArray(this.get('selection')))
+		if (Ember.isArray(this.get('selection'))) {
+			if (!this.get('selection').findProperty('id', item.get('id'))) {
 				this.get('selection').addObject(item);
-			else
-				this.set('selection', item);
+			}
 		}
+		else {
+			this.set('selection', item);
+		}
+		this.set('sugestText', '');
 	},
 
 	didInsertElement: function () {
@@ -5495,6 +5498,7 @@ App.SugestListView = Ember.CollectionView.extend({
 
 App.CrearDiputadoView = Ember.View.extend({
 	templateName: 'crear-diputado',
+	distrito: null,
 
 	guardar: function () {
 
@@ -5502,6 +5506,10 @@ App.CrearDiputadoView = Ember.View.extend({
 		this.get('content').addObserver('createSucceeded', this.createSucceeded);
 		this.get('content').create();
 	},
+
+	distritoChange: function () {
+		this.get('content').set('distrito', this.get('distrito.descripcion'));
+	}.observes('distrito'),
 
 	createSucceeded: function () {
 		this.get('content').removeObserver('createSucceeded', this.createSucceeded);
