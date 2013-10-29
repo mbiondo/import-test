@@ -780,6 +780,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		d.set('fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
 		d.set('copete', this.get('copete'));
 		d.set('parte', null);
+		d.set('url', this.get('url'));
 
 
 
@@ -797,6 +798,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		dictamen.set('estado', 1);
 		dictamen.set('fecha_estado', null);
 		dictamen.set('fecha_113', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
+		dictamen.set('url', this.get('url'));
 
 		delete d.id;
 
@@ -834,6 +836,28 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 
 App.OrdenDelDiaDetalleView = Ember.View.extend({
 	templateName: 'orden-del-dia-detalle',
+	nombreArchivo: null,
+
+	didInsertElement: function(){
+		this._super();
+
+		url = App.get('ordenDelDiaController.content.url');
+		if (url != null) {
+			this.set('nombreArchivo', url.substr(url.lastIndexOf('/')+1));
+		}
+	},
+	hayArchivoAdjunto: function(){
+		var str = '';
+		
+			if(App.get('ordenDelDiaController.content.url') != '' && App.get('ordenDelDiaController.content.url') != null)
+			{
+				str = true;
+			}else{
+				str = false;
+			}
+		
+		return str;
+	}.property('App.ordenDelDiaController.content.url')
 });
 
 App.OrdenesDelDiaListView = Ember.View.extend({
@@ -3493,8 +3517,9 @@ App.DictamenCrearView = Ember.View.extend({
 				dataType: 'json',
 				success: function( dataid ) 
 				{
-					//data = JSON.parse(dataid);
+					// data = JSON.parse('{"id":21346}');
 					data = dataid;
+					// data = JSON.parse(dataid);
 
 					if(data.id){					
 						if (!App.get('dictamenConsultaController'))
