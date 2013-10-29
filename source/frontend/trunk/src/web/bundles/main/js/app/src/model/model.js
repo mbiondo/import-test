@@ -233,6 +233,10 @@ App.NotificacionGrupo = Em.Object.extend({
 	],
 });
 
+App.Distrito = Em.Object.extend({
+	id: null,
+	descripcion: '',
+});
 
 App.Mandato = Em.Object.extend({
 	url: 'dip/diputado',

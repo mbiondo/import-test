@@ -189,6 +189,25 @@ App.Router =  Em.Router.extend({
 				alta: Em.Route.extend({
 					route: '/alta',
 
+					deserialize: function(router, params) {
+
+						App.distritosController = App.DistritosController.create({content: []});
+						
+						var deferred = $.Deferred(),
+						
+						fn = function() {
+							if (App.get('distritosController.loaded')) {
+								App.get('distritosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(params);	
+							}
+						};
+
+						App.get('distritosController').addObserver('loaded', this, fn);
+						App.get('distritosController').load();
+						
+						return deferred.promise();
+					},	
+
 					connectOutlets: function(router, context) {
 
 						App.autoridadesController = App.AutoridadesController.create({content: []});
