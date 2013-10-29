@@ -3793,3 +3793,56 @@ App.GirosController = App.RestController.extend({
 		this.addObject(item);
 	},	
 });
+
+
+App.AutoridadesController = App.RestController.extend({
+	url: 'dip/autoridades',
+	useApi: true,
+	loaded: false,
+	type: App.Autoridad,
+
+	filter: function (filterText) {
+		this.set('loaded', false);
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url + "?apellido=" + filterText;
+
+		var async = true;
+		if (this.get('async'))
+			async = this.get('async');
+			
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+				async: async,
+			});
+
+		}		
+	},
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Autoridad.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},	
+});
+
+App.DiputadosVigentesController = App.RestController.extend({
+	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/resumen',
+	useApi: true,
+	loaded: false,
+	type: App.Mandato,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Mandato.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},	
+});

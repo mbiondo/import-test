@@ -180,13 +180,89 @@ App.Router =  Em.Router.extend({
 		}),
 
 
+		direccionSecretaria: Em.Route.extend({
+			route: '/direccion/secretaria',
+
+			diputados: Em.Route.extend({
+				route: '/diputados',
+
+				alta: Em.Route.extend({
+					route: '/alta',
+
+					connectOutlets: function(router, context) {
+
+						App.autoridadesController = App.AutoridadesController.create({content: []});
+
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+
+						Ember.run.next(function () {
+							appController.connectOutlet('main', 'CrearDiputado');
+						});
+						
+						App.get('menuController').seleccionar(9);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Direccion de Secretaria'},
+							{titulo: 'Diputados'},
+							{titulo: 'Alta'}
+						]);									
+					},
+				}),
+
+				listado: Em.Route.extend({
+					route: '/listado',
+
+					deserialize: function(router, params) {
+
+						App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
+						
+						var deferred = $.Deferred(),
+						
+						fn = function() {
+							if (App.get('diputadosVigentesController.loaded')) {
+								App.get('diputadosVigentesController').removeObserver('loaded', this, fn);	
+								deferred.resolve(params);	
+							}
+						};
+
+						App.get('diputadosVigentesController').addObserver('loaded', this, fn);
+						App.get('diputadosVigentesController').load();
+						
+						return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+
+						Ember.run.next(function () {
+							appController.connectOutlet('main', 'ListaDiputados');
+						});
+						
+						App.get('menuController').seleccionar(9);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Direccion de Secretaria'},
+							{titulo: 'Diputados'}
+						]);								
+					},
+				}),			
+
+			}),
+		}),
+
 		mesaDeEntrada: Em.Route.extend({
 			route: '/mesa/de/entrada',
 
 			giros: Em.Route.extend({
 				route: '/giros',
 
-				crear: Em.Route.extend({
+				listado: Em.Route.extend({
 					route: '/listado',
 
 					deserialize: function(router, params) {
