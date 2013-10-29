@@ -297,6 +297,10 @@ App.Autoridad = Em.Object.extend({
     piso: null,
     tel1: null,
     tel2: null,
+
+    label: function () {
+    	return this.get('apellido') + " " + this.get('nombre');
+    }.property('nombre', 'apellido'),
 });
 
 App.ExpedienteBase = Em.Object.extend({

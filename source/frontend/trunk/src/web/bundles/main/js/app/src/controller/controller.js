@@ -3796,7 +3796,7 @@ App.GirosController = App.RestController.extend({
 
 
 App.AutoridadesController = App.RestController.extend({
-	url: 'dip/autoridades',
+	url: 'dip/autoridades/',
 	useApi: true,
 	loaded: false,
 	type: App.Autoridad,
