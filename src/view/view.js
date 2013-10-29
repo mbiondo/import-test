@@ -5439,6 +5439,7 @@ App.SugestView = Ember.View.extend({
 
 App.SugestListItemView = Ember.View.extend({
 	templateName: 'sugest-item',
+	classNames: ['list-group-item'],
 
 	click: function () {
 		this.get('parentView').itemSelect(this.get('content'));
@@ -5454,7 +5455,7 @@ App.ExpedienteSugestListItemView = App.SugestListItemView.extend({
 });
 
 App.SugestListView = Ember.CollectionView.extend({
-	classNames: ['subNav'],
+	classNames: ['list-group'],
 
 	tagName: 'ul',
 	itemViewClass: App.SugestListItemView,
