@@ -2052,11 +2052,8 @@ App.Router =  Em.Router.extend({
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 
-						if (hasRole('ROLE_LABOR_PARLAMENTARIA'))
-							appController.connectOutlet('main', 'OradoresIndex');
-						else
-							appController.connectOutlet('main', 'OradoresDiputadoIndex');
-
+						appController.connectOutlet('main', 'OradoresIndex');
+						
 						appController.connectOutlet('menu', 'SubMenu');
 						
 						App.get('temaController').set('content', null);						
