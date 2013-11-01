@@ -982,6 +982,16 @@ App.MultiSelectView = Ember.CollectionView.extend({
 
 
 
+App.NotificacionTipoConsultaView = Ember.View.extend({
+	templateName: 'notificacion-tipo-consulta',
+	content: '',
+
+	didInsertElement: function(){
+		this._super();
+		this.set('content', App.get('notificacionTipoController.content'));
+	}
+});
+
 App.NotificacionTipoCrearView = Ember.View.extend({
 	templateName: 'notificacion-tipo-crear',
 
