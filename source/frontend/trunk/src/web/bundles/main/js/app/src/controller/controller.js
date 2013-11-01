@@ -1173,6 +1173,36 @@ App.RolesController = App.RestController.extend({
 	},	
 });
 
+App.NotificacionTipoController = Ember.Object.extend({
+	url: 'notification/types/%@',
+	type: App.NotificacionConsulta,
+	useApi: false,
+
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		$.ajax({
+			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+                
+	loadSucceeded: function(data) {
+		item = App.NotificacionConsulta.create();
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
+});
+
 App.NotificacionTiposController = App.RestController.extend({
 	url: 'notification/types',
 	type: App.NotificacionTipo,
