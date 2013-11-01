@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.13:8080/sparl/rest/',
+	url: 'http://10.185.204.12:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	//url: 'http://201.250.117.149:9009/sparl/rest/',
 	//url: '',	
@@ -285,6 +285,11 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							titulo: 'Tipos de notificaciones',
 							url: '#/admin/notificaciones',
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+						}),	
+						App.MenuItem.create({
+							titulo: 'Crear Notificación',
+							url: '#/admin/notificaciones/tipo/crear',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
 					],
