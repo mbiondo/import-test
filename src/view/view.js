@@ -1041,8 +1041,24 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 	guardar: function () {
 		this.get('notificationType').set('grupo', this.get('notificationType.grupoSelected.id'));
 		this.get('notificationType').create();
+		this.get('notificationType').addObserver('createSuccess', this, this.createSuccess);
 	},
+	createSuccess: function (data){
+		if(data.id){
+			App.notificacionTipoController = App.NotificacionTipoController.create();
 
+			App.set('notificacionTipoController.loaded', false);
+			App.set('notificacionTipoController.content', App.NotificacionConsulta.create({id: data.id}));
+
+			fn = function(){
+				App.get('notificacionTipoController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', data);
+			};
+
+			App.get('notificacionTipoController').addObserver('loaded', this, fn);
+			App.get('notificacionTipoController').load();
+		}
+	},
 	didInsertElement: function () {
 		this._super();
 		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create({}));
