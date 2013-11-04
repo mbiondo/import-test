@@ -21,6 +21,13 @@ Handlebars.registerHelper("linkNotificacion", function(id, options) {
   return "#/admin/notificaciones/tipo/"+id+"/ver";
 });
 
+Handlebars.registerHelper("linkNotificacionEditar", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/admin/notificaciones/tipo/"+id+"/editar";
+});
+
 Handlebars.registerHelper("linkConfirmarEnvio", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
