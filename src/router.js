@@ -1233,7 +1233,7 @@ App.Router =  Em.Router.extend({
                             appController.connectOutlet('menu', 'subMenu');
 
                             App.get('breadCumbController').set('content', [
-                                    {titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+                                    {titulo: 'Dictámenes', url: '#/comisiones/dictamenes/pendientes'},
                                     {titulo: 'Crear Dictamen' }
                             ]);							
 
@@ -1355,7 +1355,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Dictamenes', url: '#/comisiones/dictamenes/pendientes'},
+								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/pendientes'},
 								{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
 								{titulo: 'Cargar Dictamen' }
 							]);							
