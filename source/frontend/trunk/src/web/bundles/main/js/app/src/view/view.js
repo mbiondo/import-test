@@ -1001,8 +1001,6 @@ App.MultiSelectView = Ember.CollectionView.extend({
 	itemViewClass: App.ItemMultiSelectView, 
 });
 
-
-
 App.NotificacionTipoConsultaView = Ember.View.extend({
 	templateName: 'notificacion-tipo-consulta',
 	content: '',
@@ -1012,6 +1010,7 @@ App.NotificacionTipoConsultaView = Ember.View.extend({
 		this.set('content', App.get('notificacionTipoController.content'));
 	}
 });
+
 
 App.NotificacionTipoCrearView = Ember.View.extend({
 	templateName: 'notificacion-tipo-crear',
@@ -1064,25 +1063,66 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 		this.get('notificationType').create();
 		this.get('notificationType').addObserver('createSuccess', this, this.createSuccess);
 	},
-	createSuccess: function (data){
-		if(data.id){
+
+	createSuccess: function (){
+		if(this.get('notificationType.createSuccess')){
 			App.notificacionTipoController = App.NotificacionTipoController.create();
 
 			App.set('notificacionTipoController.loaded', false);
-			App.set('notificacionTipoController.content', App.NotificacionConsulta.create({id: data.id}));
+			App.set('notificacionTipoController.content', App.NotificacionConsulta.create({id: this.get('notificationType.id')}));
 
 			fn = function(){
 				App.get('notificacionTipoController').removeObserver('loaded', this, fn);
-				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', data);
+				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', App.get('notificacionTipoController.content'));
 			};
 
 			App.get('notificacionTipoController').addObserver('loaded', this, fn);
 			App.get('notificacionTipoController').load();
 		}
 	},
+
+	initNotificacion: function  () {
+		// body...
+		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create());
+	},
+
 	didInsertElement: function () {
 		this._super();
-		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create({}));
+		this.initNotificacion();
+	},
+});
+
+App.NotificacionTipoEditarView = App.NotificacionTipoCrearView.extend({
+	content: '',
+
+	guardar: function () {
+		this.get('notificationType').set('grupo', this.get('notificationType.grupoSelected.id'));
+		this.get('notificationType').save();
+		this.get('notificationType').addObserver('saveSuccess', this, this.createSuccess);
+	},
+
+	createSuccess: function (){
+		if(this.get('notificationType.saveSuccess')){
+			App.notificacionTipoController = App.NotificacionTipoController.create();
+
+			App.set('notificacionTipoController.loaded', false);
+			App.set('notificacionTipoController.content', App.NotificacionTipo.create({id: this.get('notificationType.id')}));
+
+			fn = function(){
+				App.get('notificacionTipoController').removeObserver('loaded', this, fn);
+				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', App.get('notificacionTipoController.content'));
+			};
+
+			App.get('notificacionTipoController').addObserver('loaded', this, fn);
+			App.get('notificacionTipoController').load();
+		}
+	},
+
+	initNotificacion: function  () {
+		// body...
+		this.set('notificationType', App.get('notificacionTipoController.content'));
+		var g = App.get('notificacionesGruposController').findProperty('id', this.get('notificationType.grupo'));
+		this.set('notificationType.grupoSelected', g);
 	},
 });
 
