@@ -220,6 +220,27 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 	startTimer : function () {
 		App.get('sesionesController').startTimer(App.get('sesionController.content'));
+
+		var sesionId = App.get('sesionController').get('content').get('id');
+		var temasSesion = App.get('sesionController').get('content').get('temas');
+
+		//CREATE NOTIFICATION TEST 
+		var notification = App.Notificacion.extend(App.Savable).create();
+		//ACA TITULO DE LA NOTIFICACION
+		notification.set('tipo', 'sesionIniciada');	
+		//Si hace falta ID del objeto modificado
+		notification.set('objectId', sesionId);
+		//Link del objeto
+		notification.set('link', "/#/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
+		//CreateAt
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		//Custom message
+		notification.set('mensaje', "Se ha iniciado la sesión del día " + moment().format('LLLL'));
+
+		//notification.set('comisiones', this.get('content.comisiones'));
+		//Crear
+		notification.create();
+
 	},
 
 	stopTimer : function () {
@@ -5057,6 +5078,24 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
+
+
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'crearLaborParlamentaria');	
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', this.get('content.id'));
+			//Link del objeto
+			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			//Custom message
+			notification.set('mensaje', "Se ha creado un nuevo Plan de Labor Tentativo");
+
+			//notification.set('comisiones', this.get('content.comisiones'));
+			//Crear
+			notification.create();
 
 			$.jGrowl('Se ha creado el plan de labor satisfactoriamente!', { life: 5000 });
 
