@@ -1175,7 +1175,7 @@ App.RolesController = App.RestController.extend({
 
 App.NotificacionTipoController = Ember.Object.extend({
 	url: 'notification/types/%@',
-	type: App.NotificacionConsulta,
+	type: App.NotificacionTipo,
 	useApi: false,
 
 	loadCompleted: function(xhr){
@@ -1196,7 +1196,7 @@ App.NotificacionTipoController = Ember.Object.extend({
 	},
                 
 	loadSucceeded: function(data) {
-		item = App.NotificacionConsulta.create();
+		item = App.NotificacionTipo.extend(App.Savable).create();
 		item.setProperties(data);
 		this.set('content', item);
 		this.set('loaded', true);
