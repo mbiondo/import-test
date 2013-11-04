@@ -169,28 +169,6 @@ App.Notificacion = Em.Object.extend({
 	],	
 });
 
-App.NotificacionConsulta = Em.Object.extend({
-	url: 'notification/types',
-	icono: '',
-	nombre: '',
-	titulo: '',
-	roles: [],
-	comisiones: [],
-	funciones: [],
-	estructuras: [],
-	serializable: [
-		"id",
-		"nombre",
-		"titulo",
-		"icono",
-		"roles",
-		"comisiones",
-		"funciones",
-		"estructuras",
-		"grupo"
-	],
-});
-
 App.NotificacionTipo = Em.Object.extend({
 	url: 'notification/createType',
 	icono: '',
