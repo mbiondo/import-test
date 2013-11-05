@@ -406,17 +406,18 @@ App.Expediente = Em.Object.extend({
 	}.property('firmantes'),	
 
 	firmantesLabel2: function() {
-		var firmantes = this.get('firmantes').sort(function (a, b) {
-			return a.orden - b.orden;
-		});
-
 		var strFirmantes = '';
-		firmantes.forEach(function (firmante) {
-			strFirmantes+=firmante.nombre;
-		});
 		
-		return strFirmantes;
+		if (this.get('firmantes')) {
+			var firmantes = this.get('firmantes').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
 
+			firmantes.forEach(function (firmante) {
+				strFirmantes+=firmante.nombre;
+			});
+		}
+		return strFirmantes;
 	}.property('firmantes'),
 	
 	girosLabel: function () {
