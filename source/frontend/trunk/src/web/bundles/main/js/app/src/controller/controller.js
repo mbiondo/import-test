@@ -1165,7 +1165,7 @@ App.RolesController = App.RestController.extend({
 		}
 
 		// this.set('content', [App.Rol.create({id: -1, nombre: 'Seleccione un Rol'})]);
-		this.set('content', [App.Rol.create()]);
+		this.set('content', []);
 		items.forEach(function(i){
 			this.createObject(i);
 		}, this);
