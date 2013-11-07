@@ -1069,11 +1069,11 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 			App.notificacionTipoController = App.NotificacionTipoController.create();
 
 			App.set('notificacionTipoController.loaded', false);
-			App.set('notificacionTipoController.content', App.NotificacionConsulta.create({id: this.get('notificationType.id')}));
+			App.set('notificacionTipoController.content', this.get('notificationType'));
 
 			fn = function(){
 				App.get('notificacionTipoController').removeObserver('loaded', this, fn);
-				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', App.get('notificacionTipoController.content'));
+				App.get('router').transitionTo('notificaciones.notificacionConsulta.ver', this.get('notificationType'));
 			};
 
 			App.get('notificacionTipoController').addObserver('loaded', this, fn);
@@ -1106,7 +1106,7 @@ App.NotificacionTipoEditarView = App.NotificacionTipoCrearView.extend({
 			App.notificacionTipoController = App.NotificacionTipoController.create();
 
 			App.set('notificacionTipoController.loaded', false);
-			App.set('notificacionTipoController.content', App.NotificacionTipo.create({id: this.get('notificationType.id')}));
+			App.set('notificacionTipoController.content', this.get('notificationType'));
 
 			fn = function(){
 				App.get('notificacionTipoController').removeObserver('loaded', this, fn);
