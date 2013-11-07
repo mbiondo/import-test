@@ -1066,9 +1066,6 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 
 	createSuccess: function (){
 		if(this.get('notificationType.createSuccess')){
-			App.notificacionTipoController = App.NotificacionTipoController.create();
-
-			App.set('notificacionTipoController.loaded', false);
 			App.set('notificacionTipoController.content', this.get('notificationType'));
 
 			fn = function(){
@@ -1083,7 +1080,8 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 
 	initNotificacion: function  () {
 		// body...
-		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create());
+		// this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create());
+		this.set('notificationType', App.NotificacionTipo.extend(App.Savable).create({comisiones:[], estructuras: [], funciones: [], roles: []}));
 	},
 
 	didInsertElement: function () {
