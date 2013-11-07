@@ -30,12 +30,12 @@ App.Savable = Ember.Mixin.create({
 		}
 
 		if (data.success == true) {
-			this.set('createSuccess', true);
 			this.set('id', data.id);
 			if (this.get('notificationType'))
 			{
 				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson(), this.get('notificationRoom'));
 			}
+			this.set('createSuccess', true);
 		}
 
 		if (this.get('createSuccess') == true) 
