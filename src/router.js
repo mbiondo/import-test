@@ -952,12 +952,14 @@ App.Router =  Em.Router.extend({
 						route: '/crear',
 
 						deserialize: function(router, params) {
-							
+							App.notificacionTipoController = App.NotificacionTipoController.create();
 							 App.comisionesController = App.ComisionesController.create();
 							 App.funcionesController = App.FuncionesController.create();
 							 App.estructurasController = App.EstructurasController.create();
 							 App.rolesController = App.RolesController.create();
 							 App.notificacionesGruposController = App.NotificacionesGruposController.create();
+							 App.notificacionTipoController = App.NotificacionTipoController.create();
+							 
 
 							 var deferred = $.Deferred(),
 							
@@ -972,6 +974,7 @@ App.Router =  Em.Router.extend({
 							 App.get('estructurasController').addObserver('loaded', this, fn);
 							 App.get('rolesController').addObserver('loaded', this, fn);
 							 App.get('notificacionesGruposController').addObserver('loaded', this, fn);
+							 App.get('notificacionTipoController').addObserver('loaded', this, fn);
 
 							 App.get('comisionesController').load();
 							 App.get('funcionesController').load();
@@ -986,6 +989,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('menu', 'subMenu');
 							appController.connectOutlet('main', 'notificacionTipoCrear');
+
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
