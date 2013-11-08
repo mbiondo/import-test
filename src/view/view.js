@@ -1574,7 +1574,6 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	confirmActionDone: function () {
 	//confirmarEnvio: function(){
 		//this.confirmarToggle();
-		console.log(App.get('confirmActionController.success'));
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 		if (App.get('confirmActionController.success')) {
 			var idConfirmar = JSON.stringify(this.get('content.id'));
@@ -5687,6 +5686,25 @@ App.CrearExpedienteView = Ember.View.extend({
 				if (App.get('expedienteConsultaController.loaded')) {
 					App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
 					var expediente = App.get('expedienteConsultaController.content');
+
+					//CREATE NOTIFICATION TEST 
+					var notification = App.Notificacion.extend(App.Savable).create();
+					//ACA TITULO DE LA NOTIFICACION
+					notification.set('tipo', 'expedienteCreado');	
+					//Si hace falta ID del objeto modificado
+					notification.set('objectId', expediente.id);
+					//Link del objeto
+					notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
+					//CreateAt
+					notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+					//Custom message
+					notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
+
+					//notification.set('firmantes', expediente.firmantes);
+					//Crear
+					notification.create();
+
+
 					App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
 				}
 			};
