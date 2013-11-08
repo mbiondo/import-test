@@ -1197,9 +1197,34 @@ App.NotificacionTipoController = Ember.Object.extend({
 	},
                 
 	loadSucceeded: function(data) {
-		item = App.NotificacionTipo.extend(App.Savable).create();
+		item = App.NotificacionTipo.extend(App.Savable).create();		
 		item.setProperties(data);
 		this.set('content', item);
+
+		var roles = []
+		this.get('content.roles').forEach(function(rol){
+			roles.addObject(App.Rol.extend(App.Savable).create(rol));
+		});
+		this.set('content.roles', roles);
+
+		var comisiones = []
+		this.get('content.comisiones').forEach(function(comision){
+			comisiones.addObject(App.Comision.extend(App.Savable).create(comision));
+		});
+		this.set('content.comisiones', comisiones);
+
+		var estructuras = []
+		this.get('content.estructuras').forEach(function(estructura){
+			estructuras.addObject(App.Estructura.extend(App.Savable).create(estructura));
+		});
+		this.set('content.estructuras', estructuras);
+
+		var funciones = []
+		this.get('content.funciones').forEach(function(funcion){
+			estructuras.addObject(App.Funcion.extend(App.Savable).create(funcion));
+		});
+		this.set('content.funciones', funciones);
+
 		this.set('loaded', true);
 	},	
 });
@@ -1674,10 +1699,10 @@ App.ComisionesController = App.RestController.extend({
 		this._super();
 	},
 
-	//load: function() {
-		//this.set('loaded', false);
-		//this.loadSucceeded(localStorage.getObject('comisiones'));
-	//},
+	// load: function() {
+	// 	this.set('loaded', false);
+	// 	this.loadSucceeded(localStorage.getObject('comisiones'));
+	// },
 
 	createObject: function (data, save) {
 		save = save || false;
