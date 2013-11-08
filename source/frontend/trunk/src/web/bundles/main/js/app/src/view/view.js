@@ -1021,20 +1021,21 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 		switch (object.constructor.toString()) {
 			case "(subclass of App.Rol)":
 				var item = this.get('notificationType.roles').findProperty("id", object.get('id'));
+
 				if (!item) {
 					this.get('notificationType.roles').pushObject(object);
 				}
 				else {
-					this.get('notificationType.roles').removeObject(item);
+					this.get('notificationType.roles').removeObject(object);
 				}
 				break;
-			case "App.Comision":
+			case "(subclass of App.Comision)":
 				var item = this.get('notificationType.comisiones').findProperty("id", object.get('id'));
 				if (!item) {
 					this.get('notificationType.comisiones').pushObject(object);
 				}
 				else {
-					this.get('notificationType.comisiones').removeObject(item);
+					this.get('notificationType.comisiones').removeObject(object);
 				}
 				break;
 			case "(subclass of App.Estructura)":
@@ -1043,7 +1044,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 					this.get('notificationType.estructuras').pushObject(object);
 				}
 				else {
-					this.get('notificationType.estructuras').removeObject(item);
+					this.get('notificationType.estructuras').removeObject(object);
 				}
 				break;
 			case "(subclass of App.Funcion)":
@@ -1052,7 +1053,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 					this.get('notificationType.funciones').pushObject(object);
 				}
 				else {
-					this.get('notificationType.funciones').removeObject(item);
+					this.get('notificationType.funciones').removeObject(object);
 				}
 				break;
 		}
