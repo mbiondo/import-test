@@ -1354,7 +1354,6 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
-							console.log('deserialize');
 							if (!App.get('dictamenConsultaController'))
 							 	App.dictamenConsultaController = App.DictamenConsultaController.create();
 							App.set('dictamenConsultaController.loaded', false);
@@ -1375,8 +1374,6 @@ App.Router =  Em.Router.extend({
 						},	
 
 						serialize: function (router, context) {
-							console.log('serialize');
-							console.log(context);
 							return {reunion: context.get('id')};
 						},
 
@@ -2065,8 +2062,7 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params) {
 
-						 console.log(params.id);
-						 	 App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.id})});
+					 	 App.dictamenController = App.DictamenController.create({content: App.Dictamen.create({id: params.id})});
 
 						 var deferred = $.Deferred(),
 						 fn = function() {
