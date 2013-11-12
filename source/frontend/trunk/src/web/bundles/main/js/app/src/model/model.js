@@ -653,7 +653,9 @@ App.Dictamen = Em.Object.extend({
 		"itemParte",
 		"art108",
 		"observaciones",
-		"caracter"
+		"caracter",
+		"url",
+		"orden"
 	],
 
 	textos: [],
