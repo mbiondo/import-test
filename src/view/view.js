@@ -1029,7 +1029,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 					this.get('notificationType.roles').removeObject(object);
 				}
 				break;
-			case "(subclass of App.Comision)":
+			case "App.Comision":
 				var item = this.get('notificationType.comisiones').findProperty("id", object.get('id'));
 				if (!item) {
 					this.get('notificationType.comisiones').pushObject(object);
