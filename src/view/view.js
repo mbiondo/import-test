@@ -392,12 +392,41 @@ App.LoginView = Ember.View.extend({
 	}.property('App.userController.loginError'),
 	
 	falseLogin: function (){
-		var usuario = App.Usuario.create({nombre: "Test", apellido: "Test", funcion: "DIPUTADO NACIONAL", cuil: "27176066194", roles: [App.Rol.create({id: 1, nivel: 5, nombre: "ROLE_USER"}), App.Rol.create({id: 5, nivel: 5, nombre: "ROLE_DIPUTADO"})], comisiones:[App.Comision.create({id: 51, nombre: "JUSTICIA"})], estructura: "DIRECCION COMISIONES"});
-		App.userController.set('user', usuario);
-		localStorage.setObject('user', JSON.stringify(usuario));
-		App.get('router').transitionTo('loading');
-		App.get('router').transitionTo('index');
+		var tmpUser = App.Usuario.create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
+		var url = 'user/access';
+		var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
+		posting.done(function( data ){
+			data = JSON.parse(data);
+
+			var userRoles = [];
+			var roles = data.roles;
+			roles.forEach(function (rol){
+				userRoles.addObject(App.Rol.create(rol));
+			});
+
+			var userComisiones = [];
+
+			var comisiones = data.comisiones;
+			if (comisiones) {
+				comisiones.forEach(function (comision){
+					userComisiones.addObject(App.Comision.create(comision));
+				});
+			}
+
+			tmpUser.set('roles', userRoles);
+			tmpUser.set('comisiones', userComisiones);
+			App.get('userController').set('user', tmpUser);
+
+			localStorage.setObject('user', JSON.stringify(tmpUser));
+								
+			App.get('notificacionesController').load();		
+						
+			App.get('router').transitionTo('loading');
+			App.get('router').transitionTo('index');
+			
+		});
 	},	
+
 	login: function () {
 		if(!$('#login').parsley('validate')) return false;
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
@@ -1029,7 +1058,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 					this.get('notificationType.roles').removeObject(object);
 				}
 				break;
-			case "App.Comision":
+			case "(subclass of App.Comision)":
 				var item = this.get('notificationType.comisiones').findProperty("id", object.get('id'));
 				if (!item) {
 					this.get('notificationType.comisiones').pushObject(object);
