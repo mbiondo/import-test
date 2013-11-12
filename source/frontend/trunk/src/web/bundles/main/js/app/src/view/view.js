@@ -511,6 +511,8 @@ App.ListFilterView = Ember.View.extend({
 			return regex.test(item.get('label').toLowerCase());
 		});
 
+		if (!filtered)
+			filtered = [];
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
