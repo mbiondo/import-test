@@ -632,8 +632,32 @@ App.Dictamen = Em.Object.extend({
 	art204: false,
 	unanimidad: false,
 	caracterDespacho: '',
+	useApi: true,
+	url: 'par/evento',
 	//observaciones: '',
+
+	serializable: [
+		"proyectos",
+		"proyectosVistos",
+		"copete",
+		"art114",
+		"art204",
+		"unanimidad",
+		"caracterDespacho",
+		"tipo",
+		"id_reunion",
+		"sumario",
+		"fechaImpresion",
+		"id",
+		"textos",
+		"itemParte",
+		"art108",
+		"observaciones",
+		"caracter"
+	],
+
 	textos: [],
+
 	label: function (){
 		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');
 	}.property('sumario'),

@@ -513,6 +513,7 @@ App.ListFilterView = Ember.View.extend({
 
 		if (!filtered)
 			filtered = [];
+
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
@@ -3777,7 +3778,10 @@ App.DictamenCargarView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
+		var dictamen = App.Dictamen.extend(App.Savable).create();
+		dictamen.setProperties(App.get('dictamenController.content'));
+		
+		this.set('content', dictamen);
 		//===== Form elements styling =====//
 		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 		// 
@@ -3878,51 +3882,42 @@ App.DictamenCargarView = Ember.View.extend({
 			});
 
 			dictamen.proyectosVistos = pv;	
+			this.set('content', dictamen);
 
-			var url = App.get('apiController.url') + "par/evento";
-
-			var dictamenJSON = JSON.stringify(dictamen);
-
-			
-
-			$.ajax({
-				url:  url,
-				contentType: 'text/plain',
-				type: 'PUT',
-				context: this,
-				data : dictamenJSON,
-				success: function( dataid ) 
-				{
-//					data = JSON.parse(dataid);
-					data = dataid;
-					
-					if(data.id){					
-						if (!App.get('dictamenConsultaController'))
-							App.dictamenConsultaController = App.DictamenConsultaController.create();
-
-						App.set('dictamenConsultaController.loaded', false);
-						App.set('dictamenConsultaController.content', App.Dictamen.create({id: data.id}));
-
-						 fn = function() {
-							App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
-							App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
-							var dictamen = App.get('dictamenConsultaController.content');
-
-							App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
-							$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
-						 };
-
-						 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
-						 App.get('dictamenConsultaController').load();
-					}
-				else
-				{
-					$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
-				}					
-				}
-			});		
+			this.get('content').addObserver('saveSuccess', this, this.saveSuccessed)
+			this.get('content').save();
 		}
 	},
+
+	saveSuccessed: function () {
+		this.get('content').removeObserver('createSuccess', this, this.saveSuccessed);
+		if (this.get('content.saveSuccess')) {
+							
+			if (!App.get('dictamenConsultaController')) {
+				App.dictamenConsultaController = App.DictamenConsultaController.create();
+			}
+
+			App.set('dictamenConsultaController.loaded', false);
+			App.set('dictamenConsultaController.content', App.Dictamen.create({id: this.get('content.id')}));
+
+			 fn = function() {
+				App.get('dictamenConsultaController.content').removeObserver('saveSuccess', this, fn);
+				App.get('dictamenConsultaController').removeObserver('loaded', this, fn);
+				var dictamen = App.get('dictamenConsultaController.content');
+
+				App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
+				$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+			 };
+
+			 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
+			 App.get('dictamenConsultaController').load();
+		}
+		else
+		{
+			$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+		}
+	},
+
 });
 
 App.DictamenTextoCrearView = Ember.View.extend({
