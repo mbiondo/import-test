@@ -518,6 +518,7 @@ App.UserController = Em.Controller.extend({
 
 					tmpUser.set('roles', userRoles);
 					tmpUser.set('comisiones', userComisiones);
+
 					_self.set('user', tmpUser);
 
 					localStorage.setObject('user', JSON.stringify(tmpUser));
