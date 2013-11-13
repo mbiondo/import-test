@@ -2019,7 +2019,7 @@ App.MenuItemView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.$('.ic a').tooltip();
+		this.$('a').tooltip();
 	}	
 });
 
@@ -2033,7 +2033,7 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 
 	didInsertElement: function () {
 		this._super();
-		$('.ic a').tooltip();
+		this.$('a').tooltip();
 	}	
 });
 
