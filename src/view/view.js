@@ -2016,11 +2016,6 @@ App.MenuItemView = Em.View.extend({
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
 	},
-
-	didInsertElement: function () {
-		this._super();
-		this.$('a').tooltip();
-	}	
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({
