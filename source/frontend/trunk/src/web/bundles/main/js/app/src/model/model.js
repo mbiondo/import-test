@@ -193,9 +193,24 @@ App.NotificacionTipo = Em.Object.extend({
 		"grupo"
 	],
 
+
 	label: function () {
-		return this.get('id') + this.get('nombre') + this.get('titulo') + this.get('icono') + this.get('rolesLabel') + this.get('estructurasLabel') + this.get('funcionesLabel') + this.get('comisionesLabel');
+		return this.get('nombre') + this.get('titulo') + this.get('icono') + this.get('habilitadoLabel') + this.get('rolesLabel') + this.get('estructurasLabel') + this.get('funcionesLabel') + this.get('comisionesLabel');
 	}.property('nombre'),
+	habilitadoLabel: function(){
+		var str = "";
+
+		if(this.get('habilitado'))
+		{
+			str = 'Habilitado';
+		}
+		else
+		{
+			str = 'Deshabilitado';
+		}
+		return str;
+
+	}.property('habilitado'),
 	rolesLabel: function () {
 		var str = "";
 		this.get('roles').forEach(function(rol){
