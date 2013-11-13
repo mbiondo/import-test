@@ -15,11 +15,13 @@ App.Usuario = Em.Object.extend({
 	estructuraReal: '',
 	funcion: '',
 	comisiones: '',
+	avatar: '',
 
 	serializable: [
 		"cuil",
 		"roles",
-		"comisiones"
+		"comisiones",
+		"avatar"
 	],
 
 	label: function () {

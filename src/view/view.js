@@ -1175,6 +1175,7 @@ App.NotificacionTipoListView = App.ListFilterView.extend({
 
 
 App.ItemRoleableView = Em.View.extend({
+
 	content: '',
 	templateName: 'item-roleable',
 	tagName: 'tr',
@@ -1198,12 +1199,20 @@ App.ItemRoleableView = Em.View.extend({
 
 	guardarHabilitado: function () {
 		return this.get('change');
-	}.property('content','change'),
+	}.property('content', 'change'),
+
+	avatarChange: function () {
+		this.set('change', true);
+	}.observes('content.avatar'),
 
 	guardar: function () {
 		this.set('change', false);
 		this.get('content').save();
 	},
+});
+
+App.ItemUserRoleableView = App.ItemRoleableView.extend({
+	templateName: 'item-user-roleable',
 });
 
 App.ItemRoleableRolView = Em.View.extend({
@@ -1220,6 +1229,12 @@ App.RoleabeListView = App.ListFilterView.extend({
 	itemViewClass: App.ItemRoleableView, 	
 	columnas: ['ID', 'Datos','Roles', 'Acciones'],
 });
+
+App.RoleabeUserListView = App.ListFilterView.extend({ 
+	itemViewClass: App.ItemUserRoleableView, 	
+	columnas: ['ID', 'Datos', 'avatar', 'Roles', 'Acciones'],
+});
+
 
 App.ItemComisionableView = Em.View.extend({
 	content: '',
