@@ -1221,7 +1221,7 @@ App.NotificacionTipoController = Ember.Object.extend({
 
 		var funciones = []
 		this.get('content.funciones').forEach(function(funcion){
-			estructuras.addObject(App.Funcion.extend(App.Savable).create(funcion));
+			funciones.addObject(App.Funcion.extend(App.Savable).create(funcion));
 		});
 		this.set('content.funciones', funciones);
 

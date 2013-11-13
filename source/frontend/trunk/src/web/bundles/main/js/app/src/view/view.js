@@ -2015,7 +2015,12 @@ App.MenuItemView = Em.View.extend({
 
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
-	}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.$('.ic a').tooltip();
+	}	
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({
@@ -2024,7 +2029,12 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
-	}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		$('.ic a').tooltip();
+	}	
 });
 
 App.MenuItemLink = Em.View.extend({
