@@ -1170,7 +1170,7 @@ App.NotificacionTipoItemView = Em.View.extend({
 
 App.NotificacionTipoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.NotificacionTipoItemView, 	
-	columnas: ['ID','Nombre','Titulo', 'Ver Notificación'],
+	columnas: ['ID','Nombre','Titulo', 'Estado', 'Ver Notificación'],
 });
 
 
