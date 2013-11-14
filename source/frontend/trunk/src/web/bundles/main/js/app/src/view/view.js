@@ -3566,6 +3566,7 @@ App.DictamenCrearView = Ember.View.extend({
 
 		if(!App.get('dictamenCrearController.content.hayProyectosDictaminados') || App.get('dictamenCrearController.content.hayProyectosDictaminados') == false)
 		{
+			$(document).scrollTop(0);
 			proyectosDictaminadosAreValid = false;
 		}else{			
 			proyectosDictaminadosAreValid = true;
