@@ -2041,6 +2041,10 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 		this.get('parentView').clickItem(this.get('content'));
 	},
 
+	seleccionadoChange: function () {
+		this.$('a').tooltip();
+	}.observes('content.seleccionado'),
+
 	didInsertElement: function () {
 		this._super();
 		this.$('a').tooltip();

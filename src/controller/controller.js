@@ -518,6 +518,7 @@ App.UserController = Em.Controller.extend({
 
 					tmpUser.set('roles', userRoles);
 					tmpUser.set('comisiones', userComisiones);
+					tmpUser.set('avatar', data.avatar);
 
 					_self.set('user', tmpUser);
 
