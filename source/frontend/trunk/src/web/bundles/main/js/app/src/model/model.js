@@ -159,6 +159,15 @@ App.Notificacion = Em.Object.extend({
 	tipo: '',
 	fecha: '',
 	comisiones: [],
+	icono: '',
+
+	dia: function () {
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm:ss').format('DD');
+	}.property('content.fecha'),
+
+	mes: function () {
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm:ss').format('MMM').replace('.', "");
+	}.property('content.fecha'),
 
 	serializable: [
 		"id",
@@ -891,7 +900,7 @@ App.Reunion = Em.Object.extend({
 	}.property('comisiones'),
 	temarioLabel: function(){
 		var st = "";
-			this.get('citacion').temas.forEach(function(tema){
+			this.get('citacion.temas').forEach(function(tema){
 				if(tema)
 				{
 					st += tema.descripcion;				

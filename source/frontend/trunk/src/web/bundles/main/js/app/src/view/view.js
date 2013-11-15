@@ -323,7 +323,9 @@ App.ContentView = Ember.View.extend({
 
 		if (this.get('toggleHelp')) {
 			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , this.get('columns').objectAt(2));
-			$('.support').fadeIn('fast'); 
+			Ember.run.next(function () {
+				$('.support').fadeIn('slow'); 
+			});
 			this.helpMessage(false);
 		}
 		else {
@@ -1048,6 +1050,8 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 	templateName: 'notificacion-tipo-crear',
 
 	notificationType: null,
+
+	iconos: ['sprite-alert', 'sprite-info', 'sprite-check'],
 
 	itemClicked: function (object) {
 		switch (object.constructor.toString()) {
@@ -2042,7 +2046,9 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 	},
 
 	seleccionadoChange: function () {
-		this.$('a').tooltip();
+		Ember.run.next(function () {
+			this.$('a').tooltip();
+		});
 	}.observes('content.seleccionado'),
 
 	didInsertElement: function () {
