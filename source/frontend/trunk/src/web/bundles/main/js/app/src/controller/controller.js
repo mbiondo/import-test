@@ -2367,8 +2367,33 @@ App.CitacionCrearController = Em.Object.extend({
 		notification.set('link', "#/comisiones/citaciones/citacion/" + data.id + "/ver");
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+
+		var message = "La citación a la reunión de @@comisiones@@ ha sido confirmada para el día @@fecha@@ en la sala @@sala@@.";
+
+		message = message.replace("@@fecha@@", moment().format('dddd') + " " + moment().format('LL') + " a las " + this.get('content.start').substring(this.get('content.start').indexOf(' ')));
+
+		message = message.replace("@@sala@@", this.get('content.sala.numero'));
+
+		switch (this.get('content.comisiones.length'))
+		{
+			case 0: 
+				message = message.replace("@@comisiones@@", "");
+				break;
+			case 1:		
+				message = message.replace("@@comisiones@@", "la comisión de" + this.get('content.comisiones').objectAt(0).nombre);
+				break;
+			default:
+				var comisiones = [];
+				this.get('content.comisiones').forEach(function (comision) {
+					comisiones.pushObject(comision.nombre);
+				});
+				message = message.replace("@@comisiones@@", "las comisiones de " + comisiones.join(", "));
+				break;
+		}
+
+
 		//Custom message
-		notification.set('mensaje', "Se ha convocado la citación del día " + moment().format('dddd') + " " + moment().format('LL') + " a las " + this.get('content.start').substring(this.get('content.start').indexOf(' ')));
+		notification.set('mensaje', message);
 
 		notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
