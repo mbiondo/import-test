@@ -342,16 +342,16 @@ App.ContentView = Ember.View.extend({
 
 		if (contextHelp == true){
 			$toggleHelp.hover(function(){
-				//$toggleHelp.popover('show');
+				$toggleHelp.popover('show');
 
 			},function(){
-				//$toggleHelp.popover('hide');
+				$toggleHelp.popover('hide');
 			});
 		}
 		else
 		{
 			$toggleHelp.hover(function(){
-				//$toggleHelp.popover('destroy');
+				$toggleHelp.popover('destroy');
 			});
 		}
 	},
