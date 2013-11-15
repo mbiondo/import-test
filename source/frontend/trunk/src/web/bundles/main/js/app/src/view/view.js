@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			// this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			 this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -134,6 +134,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 Ember.TextField.reopen({
 	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength', 'data-min' , 'data-max'],
 });
+
 
 Ember.TextArea.reopen({
 	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'maxlength'],
@@ -371,7 +372,6 @@ App.ContentView = Ember.View.extend({
 		this.helpMessage(true);
 	},	
 });
-
 
 App.LoginInput = Ember.TextField.extend({
 	insertNewline: function(){
