@@ -411,25 +411,28 @@ App.Expediente = Em.Object.extend({
 	}.property('titulo'),
 				
 	firmantesLabel: function() {
-		var firmantes = this.get('firmantes').sort(function (a, b) {
-			return a.orden - b.orden;
-		});
 		var strFirmantes = [];
-		
-		var regex = new RegExp('-PE-');
-		var regex2 = new RegExp('-JGM-');
-		if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
-			return firmantes.objectAt(0).nombre;
-		} else {
-			if (firmantes.length < 3) {
-				firmantes.forEach(function (firmante) {
-					strFirmantes.addObject(firmante.nombre);
-				});
-				return strFirmantes.join(' y ');
+
+		if (this.get('firmantes')) {
+			var firmantes = this.get('firmantes').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
+			
+			var regex = new RegExp('-PE-');
+			var regex2 = new RegExp('-JGM-');
+			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
+				return firmantes.objectAt(0).nombre;
+			} else {
+				if (firmantes.length < 3) {
+					firmantes.forEach(function (firmante) {
+						strFirmantes.addObject(firmante.nombre);
+					});
+					return strFirmantes.join(' y ');
+				}
+				else {
+					return firmantes.objectAt(0).nombre + " y otros (" + (firmantes.length - 1 ) + ")"; 
+				}		
 			}
-			else {
-				return firmantes.objectAt(0).nombre + " y otros (" + (firmantes.length - 1 ) + ")"; 
-			}		
 		}
 	}.property('firmantes'),	
 
