@@ -1683,6 +1683,8 @@ App.Router =  Em.Router.extend({
 
 							deserialize: function(router, params) {
 
+								console.log('entre aca');
+
 								App.eventosParteController = App.EventosParteController.create();
 								App.reunionConsultaController = App.ReunionConsultaController.create();
 
@@ -1699,7 +1701,12 @@ App.Router =  Em.Router.extend({
 										var citacion = App.get('citacionConsultaController.content');
 										var temas = [];
 										citacion.get('temas').forEach(function (tema) {
-											temas.addObject(App.CitacionTema.create(tema));
+											if(tema)
+											{
+												console.log(tema);
+
+												temas.addObject(App.CitacionTema.create(tema));											
+											}
 										});
 										citacion.set('temas', temas);
 										
@@ -1709,8 +1716,11 @@ App.Router =  Em.Router.extend({
 								}
 								
 								fn = function() {
+									console.log('paso 1');									
+
 									App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 									var reunion = App.get('reunionConsultaController.content');
+									console.log(reunion);
 									App.set('citacionConsultaController.loaded', false);
 									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
 									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
@@ -1719,8 +1729,13 @@ App.Router =  Em.Router.extend({
 									App.get('eventosParteController').load();
 								}							
 								
+								console.log('a');
 								App.get('reunionConsultaController').addObserver('loaded', this, fn);
+								console.log('b');
+								console.log(App.get('reunionConsultaController'));
 								App.get('reunionConsultaController').load();
+								console.log('c');
+
 								return deferred.promise();
 							},
 							serialize: function(router, context) {
