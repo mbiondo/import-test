@@ -1433,7 +1433,11 @@ App.PerfilView = Em.View.extend({
 App.ExpedienteSearchView = Em.View.extend({
 	templateName: 'expediente-search',
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
+	collapse: true,
 
+	collapseToggle: function(){
+		this.set('collapse', !this.get('collapse'));
+	},
 	comisiones: function () {
 		var comisiones = [];
 		if (App.get('comisionesController.content')) {
