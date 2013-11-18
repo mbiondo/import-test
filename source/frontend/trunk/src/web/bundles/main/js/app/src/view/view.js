@@ -202,12 +202,14 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 	misExpedientes: function () {
 		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({firmante: App.userController.user.apellido + " " + App.userController.user.nombre}));
 		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
 		App.expedientesController.load();
 	},
 
 	query: function (query) {
 		App.expedientesController.set('query', query);
 		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
 		App.expedientesController.load();
 	},
 });
@@ -1444,6 +1446,7 @@ App.ExpedienteSearchView = Em.View.extend({
 
 	buscar: function () {
 		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
 		App.expedientesController.load();
 	},
 
