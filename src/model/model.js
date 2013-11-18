@@ -338,7 +338,7 @@ App.Autoridad = Em.Object.extend({
 App.ExpedienteQuery = Em.Object.extend({
 	id: '',
 	useApi: false,
-	url: 'search/',
+	url: 'search',
 
 	firmante: '',
 	comision: '',
