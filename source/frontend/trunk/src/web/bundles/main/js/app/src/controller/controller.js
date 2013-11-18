@@ -3988,6 +3988,7 @@ App.SearchController = App.RestController.extend({
 
 	useApi: false,
 	loaded: false,
+
 	type: App.ExpedienteQuery,
 
 	load: function() {
@@ -4015,4 +4016,8 @@ App.SearchController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},	
+
+	hasContent: function () {
+		return this.get('content.length') > 0;
+	}.property('content.@each')
 });
