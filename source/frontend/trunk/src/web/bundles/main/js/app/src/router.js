@@ -180,6 +180,29 @@ App.Router =  Em.Router.extend({
 		}),
 
 
+		perfil: Em.Route.extend({
+			route: '/perfil',
+
+			connectOutlets: function(router, context) {
+				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
+				appController.connectOutlet('menu', 'subMenu');
+
+				Ember.run.next(function () {
+					appController.connectOutlet('main', 'perfil');
+				});
+				
+				App.get('menuController').seleccionar(0);
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Inicio', url: '#'},
+					{titulo: 'Perfil', url: '/perfil'}
+				]);				
+			},			
+
+		}),
+
 		direccionSecretaria: Em.Route.extend({
 			route: '/direccion/secretaria',
 

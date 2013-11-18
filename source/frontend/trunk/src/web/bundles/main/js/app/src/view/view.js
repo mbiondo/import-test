@@ -441,6 +441,9 @@ App.LoginView = Ember.View.extend({
 
 			tmpUser.set('roles', userRoles);
 			tmpUser.set('comisiones', userComisiones);
+			tmpUser.set('avatar', data.avatar);
+			tmpUser.set('id', data.id);
+
 			App.get('userController').set('user', tmpUser);
 
 			localStorage.setObject('user', JSON.stringify(tmpUser));
@@ -1390,6 +1393,40 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });
 
+App.PerfilView = Em.View.extend({
+	templateName: 'perfil',
+	guardarEnabled: false,
+	oldAvatar: '',
+
+
+	guardar: function () {
+		App.userController.get('user').save();
+		localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
+		this.set('guardarEnabled', false);
+	},
+
+	cancelar: function () {
+		this.set('guardarEnabled', false);
+		if (this.get('oldAvatar'))
+			this.set('content.avatar', this.get('oldAvatar'));
+	},
+
+	avatarChange: function () {
+		if (this.get('content.avatar'))
+			this.set('guardarEnabled', true);
+	}.observes('content.avatar'),
+
+	cambiarFoto: function () {
+		this.set('oldAvatar', this.get('content.avatar'));
+		this.get('content').set('avatar', null);
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.userController.user);
+
+	},
+});
 
 App.ExpedienteSearchView = Em.View.extend({
 	templateName: 'expediente-search',
