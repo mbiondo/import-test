@@ -348,6 +348,7 @@ App.ExpedienteQuery = Em.Object.extend({
 	tipo: '',
 	nombre: '',
 	usuario: '',
+	archivado: false,
 
 	parametizable: [
 		'firmante',
@@ -356,6 +357,7 @@ App.ExpedienteQuery = Em.Object.extend({
 		'fechaPublicacionDesde',
 		'expdip',
 		'tipo',
+		'archivado',
 	],
 
 	serializable: [
@@ -368,6 +370,7 @@ App.ExpedienteQuery = Em.Object.extend({
 		'tipo',
 		'nombre',
 		'usuario',
+		'archivado',
 	],
 
 	normalize: function () {
@@ -396,7 +399,7 @@ App.ExpedienteQuery = Em.Object.extend({
 		this.desNormalize();
 		return queryParameters;
 
-	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo'),
+	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo', 'archivado', 'expdip'),
 
 });
 

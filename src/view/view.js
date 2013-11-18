@@ -200,7 +200,7 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 	templateName: 'sub-menu-expedientes',
 
 	misExpedientes: function () {
-		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({firmante: App.userController.user.apellido + ", " + App.userController.user.nombre}));
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({firmante: App.userController.user.apellido + " " + App.userController.user.nombre}));
 		App.expedientesController.set('pageNumber', 1);
 		App.expedientesController.set('content', []);
 		App.expedientesController.load();
@@ -1444,6 +1444,10 @@ App.ExpedienteSearchView = Em.View.extend({
 		return comisiones;
 	}.property('App.comisionesController.content.@each'),
 
+	limpiar: function () {
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
 	buscar: function () {
 		App.expedientesController.set('pageNumber', 1);
 		App.expedientesController.set('content', []);
@@ -1464,7 +1468,10 @@ App.ExpedienteSearchView = Em.View.extend({
 		{
 			App.expedientesController.get('query').set('usuario', App.userController.get('user.cuil'));
 			App.expedientesController.get('query').create();
-			App.searchController.content.pushObject(App.expedientesController.get('query'));
+			if (App.searchController.content)
+			{
+				App.searchController.content.pushObject(App.expedientesController.get('query'));
+			}
 		}
 	},
 });
