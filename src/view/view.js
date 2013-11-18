@@ -196,7 +196,31 @@ App.SubMenuView = Ember.View.extend({
 	
 });
 
+App.SubMenuExpedientesView = App.SubMenuView.extend({
+	templateName: 'sub-menu-expedientes',
 
+	misExpedientes: function () {
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({firmante: App.userController.user.apellido + " " + App.userController.user.nombre}));
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.load();
+	},
+
+	query: function (query) {
+		App.expedientesController.set('query', query);
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.load();
+	},
+});
+
+
+App.SubMenuQueryView = Ember.View.extend({
+	templateName: 'sub-menu-query-item',
+	tagName: 'li',
+
+	click: function () {
+		this.get('parentView').query(this.get('content'));
+	},
+})
 
 App.SubMenuOradoresView = App.SubMenuView.extend({
 	templateName: "sub-menu-oradores",
@@ -420,7 +444,9 @@ App.LoginView = Ember.View.extend({
 			App.get('userController').set('user', tmpUser);
 
 			localStorage.setObject('user', JSON.stringify(tmpUser));
-								
+
+			if (!App.get('notificacionesController'))
+				App.notificacionesController = App.NotificacionesController.create();
 			App.get('notificacionesController').load();		
 						
 			App.get('router').transitionTo('loading');
@@ -1347,82 +1373,17 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Comisiones convocadas', campo: 'girosLabel'}),
 	],	
 
-	filterFirmantes: '',
-	startFecha: '',
-	endFecha: '',
-	filterComisiones: [],
-	filterTipos: [],
-	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
 
-	isExpanded: false,
 
-	toogleSearch: function() {
-		this.set('isExpanded', !this.get('isExpanded'));
-	},
-	
 	didInsertElement: function(){
 		this._super();
-		$("#expedientesAdvancedSearch").hide();
-	},
-
-	expedientesAdvancedSearch: function(){
-		this.$("#expedientesAdvancedSearch").slideToggle();
-	},
-
-	deseleccionarComision: function () {
-		this.set('filterComisiones', null);
-	},
-
-	deseleccionarTipos: function () {
-		this.set('filterTipos', null);
 	},
 
 	lista: function (){
-		localStorage.setObject('tipos', App.get('comisionesController.content'));
-
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('expedientesController').get('content').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
-
-		var regexFirmantes = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-		filtered = filtered.filter(function(firmante){
-			return regexFirmantes.test((firmante.get('firmantesLabel')).toLowerCase());
-		});
-
-		if(this.get('filterComisiones')){
-			var comision = this.get('filterComisiones').get('nombre');
-
-			filtered 	= filtered.filter(function(expediente){
-			   var giros = $.map(expediente.get('giro'), function (value, key) {  return value.comision; });
-			   if (!giros.contains(comision))
-					   return false;
-			   else
-					return true;
-			});        
-		}
-
-
-		if(this.get('filterTipos')){
-			var tipo  = this.get('filterTipos');
-			filtered  = filtered.filter(function(expediente){
-				if(expediente.tipo == tipo)
-					return true;
-			});
-		}
-
-		if (this.get('startFecha') && this.get('endFecha')){
-			_self = this;
-
-			filtered = filtered.filter(function(expediente){
-				var expFecha = moment(expediente.get('pubFecha'), 'YYYY-MM-DD HH:ss');
-				var fechaD = moment(_self.get('startFecha'), 'DD/MM/YYYY');
-				var fechaH = moment(_self.get('endFecha'), 'DD/MM/YYYY');	
-				var range = moment().range(fechaD, fechaH);
-
-				return range.contains(expFecha); // false
-			});
-		}
 
 		this.set('mostrarMasEnabled', true);
 		return filtered;
@@ -1430,6 +1391,43 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 });
 
 
+App.ExpedienteSearchView = Em.View.extend({
+	templateName: 'expediente-search',
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
+
+	comisiones: function () {
+		var comisiones = [];
+		if (App.get('comisionesController.content')) {
+			App.get('comisionesController.content').forEach(function (comision) {
+				comisiones.pushObject(comision.nombre);
+			});
+		}
+		return comisiones;
+	}.property('App.comisionesController.content.@each'),
+
+	buscar: function () {
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.load();
+	},
+
+	borrar: function () {
+		App.searchController.deleteObject(App.expedientesController.get('query'));
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	guardar: function () {
+		if (App.expedientesController.get('query.id'))
+		{
+			App.expedientesController.get('query').save();	
+		} 
+		else 
+		{
+			App.expedientesController.get('query').set('usuario', App.userController.get('user.cuil'));
+			App.expedientesController.get('query').create();
+			App.searchController.content.pushObject(App.expedientesController.get('query'));
+		}
+	},
+});
 
 App.ExpedientesView = Em.View.extend({
 	templateName: 'expedientes',

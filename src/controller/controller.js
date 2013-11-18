@@ -552,6 +552,16 @@ App.UserController = Em.Controller.extend({
 			return false;
 	}.property('roles'),
 
+	comisionesQuery: function () {
+		var cq = [];
+
+		this.get('user.comisiones').forEach(function (comision) {
+			cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre}));
+		});
+
+		return cq;
+	}.property('user.comisiones.@each'),
+
 	hasRole: function (role) {
 		return this.get('roles').contains(role);
 	}
@@ -1293,6 +1303,7 @@ App.ExpedientesController = App.RestController.extend({
 	pageSize: 25,
 	pageNumber: 1,
 
+	query: null,
 	
 	init : function(){
 		this._super();
@@ -1310,6 +1321,12 @@ App.ExpedientesController = App.RestController.extend({
 			url = App.get('apiController').get('url') + url;
 
 		url = url + "?pageNumber=" + this.get('pageNumber') + "&pageSize=" + this.get('pageSize');
+
+		if (this.get('query')) 
+		{
+			url += this.get('query').get('parameters');
+		}
+
 		if ( url ) {
 			$.ajax({
 				url: url,
@@ -2233,7 +2250,15 @@ App.MenuController = Em.ArrayController.extend({
 			return true;
 		else
 			return false;
-	}.property('seleccionado')
+	}.property('seleccionado'),
+
+	esExpedientes: function () {
+	if (this.get('seleccionado').get('id') == 1)
+			return true;
+		else
+			return false;
+	}.property('seleccionado'),
+
 });
 
 App.TituloController = Em.Object.extend({
@@ -3953,6 +3978,40 @@ App.DistritosController = App.RestController.extend({
 		item = App.Distrito.create(data);
 		item.setProperties(data);
 		item.set('id', Math.floor((Math.random()*99999)+1));
+		this.addObject(item);
+	},	
+});
+
+App.SearchController = App.RestController.extend({
+	url: 'search/list',
+
+	useApi: false,
+	loaded: false,
+	type: App.ExpedienteQuery,
+
+	load: function() {
+		this.set('loaded', false);
+		var url =  this.get('url');
+
+		if ( url ) {
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				type: 'POST',
+				data : JSON.stringify({cuil: App.get('userController.user.cuil')}),
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+
+
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.ExpedienteQuery.extend(App.Savable).create(data);
+		item.setProperties(data);
 		this.addObject(item);
 	},	
 });
