@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:9090/sparl/rest/',
+	//url: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
-	//url: 'http://201.250.117.149:9009/sparl/rest/',
+	url: 'http://201.250.126.223:9009/sparl/rest/',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -524,7 +524,7 @@ App.puedeEditar = false;
 var user = localStorage.getObject('user');
 
 if (user) {
-	var usuario = App.Usuario.create(JSON.parse(user));
+	var usuario = App.Usuario.extend(App.Savable).create(JSON.parse(user));
 
 	var roles = [];
 	

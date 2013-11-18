@@ -497,7 +497,7 @@ App.UserController = Em.Controller.extend({
 			dataType: 'JSON',
 
 			success: function (data) {
-				var tmpUser = App.Usuario.create(data);
+				var tmpUser = App.Usuario.extend(App.Savable).create(data);
 
 				var url = 'user/access';
 				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
@@ -519,6 +519,7 @@ App.UserController = Em.Controller.extend({
 					tmpUser.set('roles', userRoles);
 					tmpUser.set('comisiones', userComisiones);
 					tmpUser.set('avatar', data.avatar);
+					tmpUser.set('id', data.id);
 
 					_self.set('user', tmpUser);
 
