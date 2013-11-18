@@ -1008,11 +1008,24 @@ App.Router =  Em.Router.extend({
 			index: Em.Route.extend({
 				route: '/',
 
+				enter: function () {
+					this._super();
+					var appController = App.get('router.applicationController');
+					appController.setLayout(3, 6, 3);
+				},
+
+				exit: function () {
+					this._super();
+					var appController = App.get('router.applicationController');
+					appController.setLayout(3, 7, 2);							
+				},
+
 				deserialize: function(router, params) {					
 					var deferred = $.Deferred();
+					App.searchController = App.SearchController.create();
 
 					App.get('expedientesController').set('loaded', false);
-					App.get('expedientesController').set('loaded', false);
+					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null}));
 
 					fn = function() {
 						if (App.get('expedientesController.loaded') && App.get('comisionesController.loaded'))
@@ -1027,6 +1040,7 @@ App.Router =  Em.Router.extend({
 
 					App.get('expedientesController').load();
 					App.get('comisionesController').load();
+					App.get('searchController').load();
 
 									
 					return deferred.promise();
@@ -1037,9 +1051,9 @@ App.Router =  Em.Router.extend({
 				connectOutlets: function(router, context) {
 				
 					var appController = router.get('applicationController');	
-					appController.connectOutlet('help', 'Help');
+					appController.connectOutlet('help', 'expedienteSearch');
 					appController.connectOutlet('main', 'expedientes');
-					appController.connectOutlet('menu', 'subMenu');
+					appController.connectOutlet('menu', 'subMenuExpedientes');
 
 					App.get('menuController').seleccionar(1);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));

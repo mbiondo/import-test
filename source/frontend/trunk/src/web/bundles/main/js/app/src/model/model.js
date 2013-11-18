@@ -335,6 +335,71 @@ App.Autoridad = Em.Object.extend({
     }.property('nombre', 'apellido'),
 });
 
+App.ExpedienteQuery = Em.Object.extend({
+	id: '',
+	useApi: false,
+	url: 'search/',
+
+	firmante: '',
+	comision: '',
+	fechaPublicacionHasta: '',
+	fechaPublicacionDesde: '',
+	expdip: '',
+	tipo: '',
+	nombre: '',
+	usuario: '',
+
+	parametizable: [
+		'firmante',
+		'comision',
+		'fechaPublicacionHasta',
+		'fechaPublicacionDesde',
+		'expdip',
+		'tipo',
+	],
+
+	serializable: [
+		'id',
+		'firmante',
+		'comision',
+		'fechaPublicacionHasta',
+		'fechaPublicacionDesde',
+		'expdip',
+		'tipo',
+		'nombre',
+		'usuario',
+	],
+
+	normalize: function () {
+		if (this.get('fechaPublicacionHasta'))
+			this.set('fechaPublicacionHasta', moment(this.get('fechaPublicacionHasta'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+		if (this.get('fechaPublicacionDesde'))
+			this.set('fechaPublicacionDesde', moment(this.get('fechaPublicacionDesde'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));		
+	},
+
+	desNormalize: function () {
+		if (this.get('fechaPublicacionHasta'))
+			this.set('fechaPublicacionHasta', moment(this.get('fechaPublicacionHasta'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+		if (this.get('fechaPublicacionDesde'))
+			this.set('fechaPublicacionDesde', moment(this.get('fechaPublicacionDesde'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));	
+	},
+
+	parameters: function () {
+		var queryParameters = "";
+		this.normalize();
+		_self = this;
+		this.get('parametizable').forEach(function (item) {
+			if (_self.get(item)) {
+				queryParameters += "&" + item + "=" + _self.get(item);
+			}
+		});
+		this.desNormalize();
+		return queryParameters;
+
+	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo'),
+
+});
+
 App.ExpedienteBase = Em.Object.extend({
 	sortValue: '',
 	
