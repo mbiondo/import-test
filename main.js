@@ -357,7 +357,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 9,
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Direccion secretaria',
 			url: '#/direccion/secretaria/diputados/listado',
 			icono: 'ic ic-accesos',
@@ -384,7 +384,7 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					titulo: 'Expedientes',
 					url: '',
-					roles: ['ROLE_USER'],
+					roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 					subMenu: [
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
