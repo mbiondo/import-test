@@ -945,7 +945,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Se ha creado la Orden del Día número " + data.dictamen.numero);
+		notification.set('mensaje', "Se ha cargado la Orden del Día Número " + data.dictamen.numero);
 
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
