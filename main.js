@@ -66,18 +66,18 @@ App.menuController = App.MenuController.create({
 						}),													
 						App.MenuItem.create({
 							roles: ['ROLE_USER'],
-							titulo: 'Sesiones',
-							url: '#/novedades/6',
-							id: 'news-sesiones',
-							clases: 'submenu-news',
-						}),														
-						App.MenuItem.create({
-							roles: ['ROLE_USER'],
 							titulo: 'Plan de Labor',
 							url: '#/novedades/7',
 							id: 'news-sesiones',
 							clases: 'submenu-news',
 						}),
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Sesiones',
+							url: '#/novedades/6',
+							id: 'news-sesiones',
+							clases: 'submenu-news',
+						}),														
 					],
 				}),
 			]

@@ -5483,7 +5483,6 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
 
-
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
@@ -5495,7 +5494,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
-			notification.set('mensaje', "Se ha confirmado un nuevo Plan de Labor Tentativo");
+			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del dia " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
 
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
