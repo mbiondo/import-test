@@ -207,7 +207,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/laborparlamentaria/planesdelabor/tentativos',
+			url: '#/laborparlamentaria/planesdelabor/confirmados',
 			roles: ['ROLE_USER'],
 			icono: 'ic ic-labor',
 			subMenu: [
@@ -359,7 +359,7 @@ App.menuController = App.MenuController.create({
 			id: 9,
 			roles: ['ROLE_USER'],
 			titulo: 'Direccion secretaria',
-			url: '',
+			url: '#/direccion/secretaria/diputados/listado',
 			icono: 'ic ic-accesos',
 			
 			subMenu: [
