@@ -243,7 +243,7 @@ App.IoController = Em.Object.extend({
 		self = this;
 		if (this.get('connected')) {		
 			this.get('socket').on('notification', function (notificacion) {
-				App.get('notificationController').enviarNotificacion(notificacion);
+				//App.get('notificationController').enviarNotificacion(notificacion);
 			});
 		}
 	},
@@ -361,7 +361,8 @@ App.IoController = Em.Object.extend({
 						success: function (data) {
 							if (data.notificaciones) {
 								data.notificaciones.forEach(function (notificacion) {
-									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));		
+									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));	
+									App.get('notificationController').enviarNotificacion(notificacion);
 								});
 							}
 						},
@@ -588,7 +589,7 @@ App.NotificationController = Em.Controller.extend({
 		
 		if (havePermission == 0 && window.webkitNotifications && !App.get('userController').get('esDiputado')) {
 			var notification = window.webkitNotifications.createNotification(
-			  notificacion.icono,
+			  "bundles/main/beta/img/logoHCDNSmall.png",
 			  notificacion.titulo,
 			  notificacion.mensaje
 			);
