@@ -526,6 +526,7 @@ App.UserController = Em.Controller.extend({
 					localStorage.setObject('user', JSON.stringify(tmpUser));
 										
 					App.get('notificacionesController').load();		
+					App.get('searchController').load();
 								
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
