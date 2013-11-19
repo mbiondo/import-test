@@ -1045,7 +1045,7 @@ App.Router =  Em.Router.extend({
 
 				deserialize: function(router, params) {					
 					var deferred = $.Deferred();
-					App.searchController = App.SearchController.create({content: []});
+					
 
 					App.get('expedientesController').set('loaded', false);
 					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null}));

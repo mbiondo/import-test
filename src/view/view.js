@@ -1438,6 +1438,7 @@ App.ExpedienteSearchView = Em.View.extend({
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
 	},
+
 	comisiones: function () {
 		var comisiones = [];
 		if (App.get('comisionesController.content')) {
@@ -1450,6 +1451,12 @@ App.ExpedienteSearchView = Em.View.extend({
 
 	limpiar: function () {
 		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	didInsertElement: function () {
+		this._super();
+		_self = this;
+		Ember.run.next(function () { _self.limpiar(); });
 	},
 
 	buscar: function () {
@@ -2074,16 +2081,17 @@ App.MenuView = Em.View.extend({
 
 	clickItem: function (item) {
 		App.get('menuController').seleccionar(item.get('id'));
-	}
+	},
 });
 
 App.MenuItemView = Em.View.extend({
 	tagName: 'li',
 	templateName: 'menuItem',
 
-	click: function () {
+	/*click: function () {
 		this.get('parentView').clickItem(this.get('content'));
 	},
+	*/
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({

@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
 	//url: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
-	url: 'http://201.250.126.223:9009/sparl/rest/',
+	url: 'http://201.250.123.249:9009/sparl/rest/',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -507,6 +507,7 @@ App.crearParteController = App.CrearParteController.create();
 App.userController = App.UserController.create();
 
 App.confirmActionController = App.ConfirmActionController.create();
+App.searchController = App.SearchController.create({content: []});
 
 //App.initialize();
 Storage.prototype.setObject = function(key, value) {
@@ -537,13 +538,9 @@ if (user) {
 	}
 
 	usuario.set('roles', roles);
-	
-	//ONLY TESTING
-	//usuario.set('nombre', 'MARA');
-	//usuario.set('apellido', 'BRAWER');
-	//usuario.set('estructuraReal', 'DIP ROSSI AGUSTIN OSCAR');
-	
 	App.userController.set('user', usuario);
+	
+	App.get('searchController').load();
 }
 
 $('#loadingScreen').remove();
