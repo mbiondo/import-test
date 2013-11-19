@@ -1048,7 +1048,7 @@ App.Router =  Em.Router.extend({
 					
 
 					App.get('expedientesController').set('loaded', false);
-					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null}));
+					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
 					fn = function() {
 						if (App.get('expedientesController.loaded') && App.get('comisionesController.loaded'))

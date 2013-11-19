@@ -193,6 +193,23 @@ App.SubMenuView = Ember.View.extend({
 		//tooltip bootstrap 3
 		$().tooltip();
 	},
+
+	misExpedientes: function () {
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({firmante: App.userController.user.apellido + " " + App.userController.user.nombre}));
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
+		App.expedientesController.load();
+		App.get('router').transitionTo('root.expedientes.index');
+
+	},
+
+	query: function (query) {
+		App.expedientesController.set('query', query);
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
+		App.expedientesController.load();
+		App.get('router').transitionTo('root.expedientes.index');
+	},	
 	
 });
 
@@ -1456,7 +1473,12 @@ App.ExpedienteSearchView = Em.View.extend({
 	didInsertElement: function () {
 		this._super();
 		_self = this;
-		Ember.run.next(function () { _self.limpiar(); });
+
+		Ember.run.next(function () { 
+			if (App.get('expedientesController.query.dirty')) {
+				_self.limpiar(); 
+			}
+		});
 	},
 
 	buscar: function () {

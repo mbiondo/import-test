@@ -527,7 +527,7 @@ App.UserController = Em.Controller.extend({
 										
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
-								
+
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
 					
@@ -558,7 +558,7 @@ App.UserController = Em.Controller.extend({
 		var cq = [];
 
 		this.get('user.comisiones').forEach(function (comision) {
-			cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre}));
+			cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre, editable: false}));
 		});
 
 		return cq;

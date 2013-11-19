@@ -349,6 +349,8 @@ App.ExpedienteQuery = Em.Object.extend({
 	nombre: '',
 	usuario: '',
 	archivado: false,
+	editable: true,
+	dirty: false,
 
 	parametizable: [
 		'firmante',
