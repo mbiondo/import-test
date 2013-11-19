@@ -5269,7 +5269,9 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
-			notification.create();
+
+			// Pendiente de confirmacion. Por ahora solamente se usa el confirmar plan de labor
+			//notification.create();
 
 			$.jGrowl('Se ha creado el plan de labor satisfactoriamente!', { life: 5000 });
 
@@ -5480,6 +5482,27 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
+
+
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'confirmarLaborParlamentaria');	
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', this.get('content.id'));
+			//Link del objeto
+			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			//Custom message
+			notification.set('mensaje', "Se ha confirmado un nuevo Plan de Labor Tentativo");
+
+			//notification.set('comisiones', this.get('content.comisiones'));
+			//Crear
+
+			// Pendiente de confirmacion. Por ahora solamente se usa el confirmar plan de labor
+			notification.create();
+
 
 			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
 
