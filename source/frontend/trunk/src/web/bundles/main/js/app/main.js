@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
-	//url: 'http://10.185.204.12:9090/sparl/rest/',
+	url: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
-	url: 'http://201.250.123.249:9009/sparl/rest/',
+	//url: 'http://201.250.123.249:9009/sparl/rest/',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -30,7 +30,7 @@ App.menuController = App.MenuController.create({
 							clases: 'submenu-news',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_SITE_ADMIN'],
 							titulo: 'Movimientos de Expedientes',
 							url: '#/novedades/1',
 							id: 'news-expedientes',
@@ -44,7 +44,7 @@ App.menuController = App.MenuController.create({
 							clases: 'submenu-news',
 						}),
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_SITE_ADMIN'],
 							titulo: 'Dictámenes',
 							url: '#/novedades/3',
 							id: 'news-dictamenes',
@@ -58,7 +58,7 @@ App.menuController = App.MenuController.create({
 							clases: 'submenu-news',
 						}),									
 						App.MenuItem.create({
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_SITE_ADMIN'],
 							titulo: 'Publicaciones',
 							url: '#/novedades/5',
 							id: 'news-publicaciones',
@@ -71,6 +71,13 @@ App.menuController = App.MenuController.create({
 							id: 'news-sesiones',
 							clases: 'submenu-news',
 						}),														
+						App.MenuItem.create({
+							roles: ['ROLE_USER'],
+							titulo: 'Plan de Labor',
+							url: '#/novedades/7',
+							id: 'news-sesiones',
+							clases: 'submenu-news',
+						}),
 					],
 				}),
 			]
