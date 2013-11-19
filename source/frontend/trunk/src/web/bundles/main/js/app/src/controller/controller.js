@@ -2732,8 +2732,15 @@ App.SesionesController  = App.RestController.extend({
 		sesion.set('horaFin', Math.round(this.get('timer.endTime')/1000));
 		sesion.set('timer', null);
 		sesion.set('completa', true);
+		
+		sesion addObserver('saveSuccess', this, this.finalizarSesionSucess)
 		sesion.save();
+		
 	},
+
+	finalizarSesionSucess: function () {
+		//ACA CREAR NOTIFICACION DE FINALIZAR SESION
+	}
 
 	parse : function (data) {
 		var sesiones = data.sesiones;
