@@ -2733,7 +2733,7 @@ App.SesionesController  = App.RestController.extend({
 		sesion.set('timer', null);
 		sesion.set('completa', true);
 
-		sesion addObserver('saveSuccess', this, this.finalizarSesionSucess)
+		sesion.addObserver('saveSuccess', this, this.finalizarSesionSucess);
 		sesion.save();
 		
 	},
