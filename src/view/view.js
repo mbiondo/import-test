@@ -929,11 +929,28 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		 };
 
 		 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
-		 App.get('ordenesDelDiaController').load();	
+		 App.get('ordenesDelDiaController').load();
 	},
 
-	loadSucceeded: function () {
+	loadSucceeded: function (data) {
+	
+		//CREATE NOTIFICATION TEST 
+		var notification = App.Notificacion.extend(App.Savable).create();
+		//ACA TITULO DE LA NOTIFICACION
+		notification.set('tipo', 'crearOrdenDelDia');	
+		//Si hace falta ID del objeto modificado
+		notification.set('objectId', data.dictamen.id);
+		//Link del objeto
+		notification.set('link', "#/OD/orden/" + data.dictamen.id + "/ver");
+		//CreateAt
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		//Custom message
+		notification.set('mensaje', "Se ha creado la Orden del Día número " + data.dictamen.numero);
+
+		//notification.set('comisiones', this.get('content.comisiones'));
+		//Crear
 		
+		notification.create();
 	}
 });
 
