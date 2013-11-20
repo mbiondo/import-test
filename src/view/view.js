@@ -449,6 +449,12 @@ App.LoginView = Ember.View.extend({
 				userRoles.addObject(App.Rol.create(rol));
 			});
 
+			var userRolesMerged = [];
+			var rolesmerged = data.rolesmerged;
+			rolesmerged.forEach(function (rol){
+				userRolesMerged.addObject(App.Rol.create(rol));
+			});				
+
 			var userComisiones = [];
 
 			var comisiones = data.comisiones;
@@ -459,6 +465,7 @@ App.LoginView = Ember.View.extend({
 			}
 
 			tmpUser.set('roles', userRoles);
+			tmpUser.set('rolesmerged', userRolesMerged);
 			tmpUser.set('comisiones', userComisiones);
 			tmpUser.set('avatar', data.avatar);
 			tmpUser.set('id', data.id);
