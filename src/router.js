@@ -436,11 +436,15 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('main', 'inicio');
 				});
 				
+				var tituloNovedades;
+				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'OD', 'Publicaciones', 'Plan de Labor', 'Sesiones'];
+
 				App.get('menuController').seleccionar(0);
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
-					{titulo: 'Inicio', url: '#'}
+					{titulo: 'Inicio', url: '#'},
+					{titulo: tituloNovedades[context.id], url: '#/1'}
 				]);								
 			},							
 		}),
