@@ -2219,8 +2219,17 @@ App.CitacionConsultaController = Ember.Object.extend({
 App.MenuController = Em.ArrayController.extend({
 	content: '',
 	
-	seleccionar : function (id) {
+	seleccionar : function (id, sid, ssid) {
 		this.get('content').forEach(function (menuItem) {
+			menuItem.get('subMenu').forEach(function (subMenuItem) {
+				if (subMenuItem.get('subMenu'))
+				{
+					subMenuItem.get('subMenu').forEach(function (subSubMenuItem) {
+						subSubMenuItem.set('seleccionado', false);
+					});
+				}
+				subMenuItem.set('seleccionado', false);
+			});
 			menuItem.set('seleccionado', false);
 		});
 		
@@ -2228,6 +2237,15 @@ App.MenuController = Em.ArrayController.extend({
 		
 		if (sel)
 		{
+			if (sid) {
+				var subMenu = sel.get('subMenu').findProperty('id', sid);
+				subMenu.set('seleccionado', true);
+				if (ssid) {
+					var subSubMenu = subMenu.get('subMenu').findProperty('id', sid);
+					subSubMenu.set('seleccionado', true);
+				}
+			}
+
 			this.set('titulo', sel.get('titulo'));
 			App.get('tituloController').set('fecha', moment().format('LL'));
 			this.set('seleccionado', sel);
