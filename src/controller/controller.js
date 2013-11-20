@@ -2220,6 +2220,7 @@ App.MenuController = Em.ArrayController.extend({
 	content: '',
 	
 	seleccionar : function (id, sid, ssid) {
+
 		this.get('content').forEach(function (menuItem) {
 			menuItem.get('subMenu').forEach(function (subMenuItem) {
 				if (subMenuItem.get('subMenu'))
@@ -2237,10 +2238,11 @@ App.MenuController = Em.ArrayController.extend({
 		
 		if (sel)
 		{
-			if (sid) {
+			if (sid != undefined) {
 				var subMenu = sel.get('subMenu').findProperty('id', sid);
 				subMenu.set('seleccionado', true);
-				if (ssid) {
+
+				if (ssid != undefined) {
 					var subSubMenu = subMenu.get('subMenu').findProperty('id', sid);
 					subSubMenu.set('seleccionado', true);
 				}
