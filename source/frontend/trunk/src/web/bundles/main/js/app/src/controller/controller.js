@@ -529,6 +529,7 @@ App.UserController = Em.Controller.extend({
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
 
+
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
 					
@@ -557,11 +558,11 @@ App.UserController = Em.Controller.extend({
 
 	comisionesQuery: function () {
 		var cq = [];
-
-		this.get('user.comisiones').forEach(function (comision) {
-			cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre, editable: false}));
-		});
-
+		if (this.get('user.comisiones')) {
+			this.get('user.comisiones').forEach(function (comision) {
+				cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre, editable: false}));
+			});
+		}
 		return cq;
 	}.property('user.comisiones.@each'),
 
@@ -2219,7 +2220,16 @@ App.CitacionConsultaController = Ember.Object.extend({
 App.MenuController = Em.ArrayController.extend({
 	content: '',
 	
+	oldSelection: null,
+
+
+	seleccionarAnterior: function () {
+		this.seleccionar(this.get('oldSelection').objectAt(0), this.get('oldSelection').objectAt(1), this.get('oldSelection').objectAt(2));
+	},
+
 	seleccionar : function (id, sid, ssid) {
+
+		this.set('oldSelection', [id, sid, ssid]);
 
 		this.get('content').forEach(function (menuItem) {
 			menuItem.get('subMenu').forEach(function (subMenuItem) {

@@ -2121,6 +2121,11 @@ App.MenuView = Em.View.extend({
 	clickItem: function (item) {
 		App.get('menuController').seleccionar(item.get('id'));
 	},
+
+	didInsertElement: function () {
+		this._super();
+		App.get('menuController').seleccionarAnterior();
+	}
 });
 
 App.MenuItemView = Em.View.extend({
