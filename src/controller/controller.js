@@ -2446,7 +2446,7 @@ App.CitacionCrearController = Em.Object.extend({
 				message = message.replace("@@comisiones@@", "");
 				break;
 			case 1:		
-				message = message.replace("@@comisiones@@", "la comisión de" + this.get('content.comisiones').objectAt(0).nombre);
+				message = message.replace("@@comisiones@@", "la comisión de " + this.get('content.comisiones').objectAt(0).nombre);
 				break;
 			default:
 				var comisiones = [];
