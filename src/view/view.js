@@ -458,7 +458,7 @@ App.LoginView = Ember.View.extend({
 	}.property('App.userController.loginError'),
 	
 	falseLogin: function (){
-		var tmpUser = App.Usuario.create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
+		var tmpUser = App.Usuario.extend(App.Savable).create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
 		var url = 'user/access';
 		var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
 		posting.done(function( data ){
