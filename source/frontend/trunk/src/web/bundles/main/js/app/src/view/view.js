@@ -271,7 +271,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CREATE NOTIFICATION TEST 
 		var notification = App.Notificacion.extend(App.Savable).create();
 		//ACA TITULO DE LA NOTIFICACION
-		notification.set('tipo', 'sesionIniciada');	
+		notification.set('tipo', 'iniciarSesion');	
 		//Si hace falta ID del objeto modificado
 		notification.set('objectId', sesionId);
 		//Link del objeto
@@ -289,6 +289,27 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 	stopTimer : function () {
 		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
+		var sesionId = App.get('sesionController').get('content').get('id');
+		var temasSesion = App.get('sesionController').get('content').get('temas');
+
+		//CREATE NOTIFICATION TEST 
+		var notification = App.Notificacion.extend(App.Savable).create();
+		//ACA TITULO DE LA NOTIFICACION
+		notification.set('tipo', 'finalizarSesion');	
+		//Si hace falta ID del objeto modificado
+		notification.set('objectId', sesionId);
+		//Link del objeto
+		notification.set('link', "/#/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
+		//CreateAt
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		//Custom message
+		notification.set('mensaje', "Ha finalizado la sesión del día " + moment().format('LLLL'));
+
+		//notification.set('comisiones', this.get('content.comisiones'));
+		//Crear
+		notification.create();
+
+
 	},	
 
 	hayOradoresPendientes: function(){
