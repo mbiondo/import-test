@@ -243,7 +243,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'CrearDiputado');
 						});
 						
-						App.get('menuController').seleccionar(9);
+						App.get('menuController').seleccionar(9, 0, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
@@ -285,7 +285,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'ListaDiputados');
 						});
 						
-						App.get('menuController').seleccionar(9);
+						App.get('menuController').seleccionar(9, 0, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
@@ -335,7 +335,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'Giros');
 						});
 						
-						App.get('menuController').seleccionar(9);
+						App.get('menuController').seleccionar(9, 2, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
@@ -361,7 +361,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'CrearExpediente');
 						});
 						
-						App.get('menuController').seleccionar(9);
+						App.get('menuController').seleccionar(9, 1, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
@@ -383,7 +383,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'CrearGiro');
 						});
 						
-						App.get('menuController').seleccionar(9);
+						App.get('menuController').seleccionar(9, 2, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
@@ -486,7 +486,7 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Oradores', url: '#/estadisticas/oradores'}
 					]);				
 
-					App.get('menuController').seleccionar(7);
+					App.get('menuController').seleccionar(7, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 				},				
@@ -538,7 +538,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Tentativos', url: '#/laborparlamentaria/planesdelabor/tentativos'}
 							]);				
 
-							App.get('menuController').seleccionar(4);	
+							App.get('menuController').seleccionar(4, 0, 0);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 						},					
 					}),	
@@ -581,7 +581,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Confirmados', url: '#/laborparlamentaria/planesdelabor/confirmados'}
 							]);				
 
-							App.get('menuController').seleccionar(4);
+							App.get('menuController').seleccionar(4, 0, 1);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 						},					
 					}),	
@@ -623,7 +623,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Planes de Labor Definitivos', url: '#/laborparlamentaria/planesdelabor/definitivos'}
 							]);				
 
-							App.get('menuController').seleccionar(4);
+							App.get('menuController').seleccionar(4, 0, 2);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 						},					
 					}),	
@@ -664,7 +664,7 @@ App.Router =  Em.Router.extend({
 							{titulo: "Crear", url:'#/laborparlamentaria/plandelabor/crear'}
 						]);				
 
-						App.get('menuController').seleccionar(4);	
+						App.get('menuController').seleccionar(4, 0, 3);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},
 				}),
@@ -790,7 +790,7 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
 					]);					
-					App.get('menuController').seleccionar(5);
+					App.get('menuController').seleccionar(5, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 				},									
 			}),	
@@ -829,7 +829,7 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar Roles', url: '#/admin/roles'},
 					]);					
-					App.get('menuController').seleccionar(5);	
+					App.get('menuController').seleccionar(5, 0, 1);	
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 				},									
 			}),	
@@ -865,7 +865,7 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
 						]);					
-						App.get('menuController').seleccionar(5);
+						App.get('menuController').seleccionar(5, 0, 2);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 					},								
 				}),
@@ -1017,7 +1017,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
 							]);					
-							App.get('menuController').seleccionar(5);	
+							App.get('menuController').seleccionar(5, 0, 3);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 						},								
 					})
@@ -1078,7 +1078,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('main', 'expedientes');
 					appController.connectOutlet('menu', 'subMenuExpedientes');
 
-					App.get('menuController').seleccionar(1);
+					App.get('menuController').seleccionar(1, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					
 					App.get('breadCumbController').set('content', [
@@ -1162,7 +1162,7 @@ App.Router =  Em.Router.extend({
 	                        appController.connectOutlet('main', 'enviosArchivados');
 	                        appController.connectOutlet('menu', 'subMenu');
 
-	                        App.get('menuController').seleccionar(6);
+	                        App.get('menuController').seleccionar(6, 0, 0);
 	                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 	                        App.get('breadCumbController').set('content', [
@@ -1228,7 +1228,7 @@ App.Router =  Em.Router.extend({
 		                    appController.connectOutlet('main', 'expedientesArchivados');
 		                    appController.connectOutlet('menu', 'subMenu');
 
-		                    App.get('menuController').seleccionar(6);
+		                    App.get('menuController').seleccionar(6, 0, 1);
 		                    App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 		                    App.get('breadCumbController').set('content', [
@@ -1281,7 +1281,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 							{titulo: 'Dictámenes'},
 						]);					
-						App.get('menuController').seleccionar(2);
+						App.get('menuController').seleccionar(2, 2, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},						
 				}),	
@@ -1318,7 +1318,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Pendientes'},
 						]);					
 
-						App.get('menuController').seleccionar(2);	
+						App.get('menuController').seleccionar(2, 2, 0);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},						
 				}),
@@ -1379,7 +1379,7 @@ App.Router =  Em.Router.extend({
                                     {titulo: 'Crear Dictamen' }
                             ]);							
 
-                            App.get('menuController').seleccionar(2);		
+                            App.get('menuController').seleccionar(2, 2, 2);		
                             App.get('tituloController').set('titulo', App.get('menuController.titulo'));			
                     },						
 
@@ -1590,7 +1590,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'sin Parte'},
 						]);					
-						App.get('menuController').seleccionar(2);	
+						App.get('menuController').seleccionar(2, 1, 0);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},						
 				}),
@@ -1624,7 +1624,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'con Parte'},
 						]);					
-						App.get('menuController').seleccionar(2);	
+						App.get('menuController').seleccionar(2, 1, 1);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},						
 				}),				
@@ -1652,8 +1652,12 @@ App.Router =  Em.Router.extend({
 									var reunion = App.get('reunionConsultaController.content');
 									var citacion = App.get('citacionConsultaController.content');
 									var temas = [];
+
 									citacion.get('temas').forEach(function (tema) {
-										temas.addObject(App.CitacionTema.create(tema));
+										if(tema)
+										{
+											temas.addObject(App.CitacionTema.create(tema));
+										}
 									});
 									citacion.set('temas', temas);
 									
@@ -1829,7 +1833,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 							{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'}
 						]);					
-						App.get('menuController').seleccionar(2);
+						App.get('menuController').seleccionar(2, 0, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},					
 				}),
@@ -1871,7 +1875,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 							
 							App.set('citacionCrearController.isEdit', false);
-							App.get('menuController').seleccionar(2);
+							App.get('menuController').seleccionar(2, 0, 1);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
@@ -2066,7 +2070,7 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Orden del Día', url: '#/comisiones/OD/dictamenes'},
 						{titulo: 'Dictámenes sin OD'},
 					]);					
-					App.get('menuController').seleccionar(8);	
+					App.get('menuController').seleccionar(8, 0, 1);	
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 				},						
 			}),	
@@ -2101,7 +2105,7 @@ App.Router =  Em.Router.extend({
 						{titulo: 'Listado de OD'},
 					]);			
 
-					App.get('menuController').seleccionar(8);	
+					App.get('menuController').seleccionar(8, 0, 0);	
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 				},						
 			}),	
@@ -2235,7 +2239,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Recinto', url: '#/recinto/oradores'},	
 							{titulo: 'Oradores', url: '#/recinto/oradores'},	
 						]);					
-						App.get('menuController').seleccionar(3);
+						App.get('menuController').seleccionar(3, 0, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
