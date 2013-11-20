@@ -1397,10 +1397,20 @@ App.SinExpedientesListView = App.ListFilterWithSortView.extend({
 App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	templateName: 'expedientes-sortable-list',
 	itemViewClass: App.ExpedienteView,
+	loading: false,
 
 	mostrarMas: function () {
 		this.set('scroll', $(document).scrollTop());
+		App.get('expedientesController').set('loaded', false);
 		App.get('expedientesController').nextPage();
+		this.set('loading', true);
+	},
+
+	expedientesLoaded: function () {
+		if (App.get('expedientesController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
 	},
 
 	columnas: [
@@ -1413,9 +1423,9 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	],	
 
 
-
 	didInsertElement: function(){
 		this._super();
+		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 	},
 
 	lista: function (){
@@ -1468,6 +1478,7 @@ App.ExpedienteSearchView = Em.View.extend({
 	templateName: 'expediente-search',
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
 	collapse: true,
+	loading: false,
 
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
@@ -1490,7 +1501,7 @@ App.ExpedienteSearchView = Em.View.extend({
 	didInsertElement: function () {
 		this._super();
 		_self = this;
-
+		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 		Ember.run.next(function () { 
 			if (App.get('expedientesController.query.dirty')) {
 				_self.limpiar(); 
@@ -1499,9 +1510,19 @@ App.ExpedienteSearchView = Em.View.extend({
 	},
 
 	buscar: function () {
+		App.get('expedientesController').set('loaded', false);
 		App.expedientesController.set('pageNumber', 1);
 		App.expedientesController.set('content', []);
 		App.expedientesController.load();
+		this.set('loading', true);
+
+	},
+
+	expedientesLoaded: function () {
+		if (App.get('expedientesController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
 	},
 
 	borrar: function () {

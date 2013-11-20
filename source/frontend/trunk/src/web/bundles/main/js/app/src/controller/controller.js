@@ -2224,7 +2224,8 @@ App.MenuController = Em.ArrayController.extend({
 
 
 	seleccionarAnterior: function () {
-		this.seleccionar(this.get('oldSelection').objectAt(0), this.get('oldSelection').objectAt(1), this.get('oldSelection').objectAt(2));
+		if (this.get('oldSelection'))
+			this.seleccionar(this.get('oldSelection').objectAt(0), this.get('oldSelection').objectAt(1), this.get('oldSelection').objectAt(2));
 	},
 
 	seleccionar : function (id, sid, ssid) {
