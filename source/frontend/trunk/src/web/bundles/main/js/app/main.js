@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
 	//url: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
-	url: 'http://201.250.126.223:9009/sparl/rest/',
+	url: 'http://201.250.93.194:9009/sparl/rest/',
 	//url: '',	
 	key: '',
 	secret: '',
@@ -595,6 +595,17 @@ if (user) {
 		});
 	}
 
+	var rolesmerged = [];
+	
+	if (usuario.get('rolesmerged')) {
+		usuario.get('rolesmerged').forEach(function (rol) {
+			rolesmerged.addObject(App.Rol.create(rol));
+			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA_EDIT")
+				App.puedeEditar = true;
+		});
+	}
+
+	usuario.set('rolesmerged', rolesmerged);
 	usuario.set('roles', roles);
 	App.userController.set('user', usuario);
 	

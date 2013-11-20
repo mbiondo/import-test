@@ -462,8 +462,8 @@ App.UserController = Em.Controller.extend({
 	loginError: false,
 
 	loginCheck: function(cuil, password){
-		//var url = 'usr/autenticate';
-		var url = App.get('apiController.url') + 'usr/autenticate';
+		var url = 'usr/autenticate';
+		//var url = App.get('apiController.url') + 'usr/autenticate';
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -486,8 +486,8 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 
-		//var urlUserData = 'usr/userdata';
-		var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		var urlUserData = 'usr/userdata';
+		//var urlUserData = App.get('apiController.url') + 'usr/userdata';
 		var _self = this;
 
 		$.ajax({
@@ -511,6 +511,12 @@ App.UserController = Em.Controller.extend({
 						userRoles.addObject(App.Rol.create(rol));
 					});
 
+					var userRolesMerged = [];
+					var rolesmerged = data.rolesmerged;
+					rolesmerged.forEach(function (rol){
+						userRolesMerged.addObject(App.Rol.create(rol));
+					});					
+
 					var userComisiones = [];
 					var comisiones = data.comisiones;
 					comisiones.forEach(function (comision){
@@ -518,6 +524,7 @@ App.UserController = Em.Controller.extend({
 					});
 
 					tmpUser.set('roles', userRoles);
+					tmpUser.set('rolesmerged', userRolesMerged);
 					tmpUser.set('comisiones', userComisiones);
 					tmpUser.set('avatar', data.avatar);
 					tmpUser.set('id', data.id);
@@ -540,7 +547,7 @@ App.UserController = Em.Controller.extend({
 
 	roles: function () {
 		if (this.get('user'))
-			return $.map(this.get('user.roles'), function (value, key) { return value.get('nombre'); })
+			return $.map(this.get('user.rolesmerged'), function (value, key) { return value.get('nombre'); })
 		else
 			return null;
 	}.property('user'),
