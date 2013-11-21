@@ -440,6 +440,16 @@ App.Router =  Em.Router.extend({
 				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'OD', 'Publicaciones', 'Plan de Labor', 'Sesiones'];
 
 				App.get('menuController').seleccionar(0);
+/*
+				if(context.id)
+				{
+					App.get('menuController').seleccionar(0, 0, context.id);				
+				}
+				else
+				{
+					App.get('menuController').seleccionar(0);									
+				}
+*/
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
@@ -792,7 +802,8 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Administrar Roles', url: '#/admin/roles'},
+						{titulo: 'Administrar'},
+						{titulo: 'Acceso a usuarios', url: '#/admin/roles'},
 					]);					
 					App.get('menuController').seleccionar(5, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
@@ -831,7 +842,8 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Administrar Roles', url: '#/admin/roles'},
+						{titulo: 'Administrar'},
+						{titulo: 'Comisiones por usuarios', url: '#/admin/comisiones'},
 					]);					
 					App.get('menuController').seleccionar(5, 0, 1);	
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
@@ -867,7 +879,8 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('help', 'Help');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+							{titulo: 'Administrar'},
+							{titulo: 'Tipo de notificaciones', url: '#/admin/notificaciones'},
 						]);					
 						App.get('menuController').seleccionar(5, 0, 2);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
@@ -930,7 +943,8 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'notificacionTipoEditar');
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+								{titulo: 'Administrar'},
+								{titulo: 'Crear Tipo de Notificación', url: '#/admin/notificaciones'},
 							]);					
 							App.get('menuController').seleccionar(5);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
