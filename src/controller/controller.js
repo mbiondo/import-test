@@ -2261,7 +2261,7 @@ App.MenuController = Em.ArrayController.extend({
 				subMenu.set('seleccionado', true);
 
 				if (ssid != undefined) {
-					var subSubMenu = subMenu.get('subMenu').findProperty('id', sid);
+					var subSubMenu = subMenu.get('subMenu').findProperty('id', ssid);
 					subSubMenu.set('seleccionado', true);
 				}
 			}
