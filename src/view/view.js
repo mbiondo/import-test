@@ -171,6 +171,7 @@ App.SubMenuView = Ember.View.extend({
 	templateName: "sub-menu",
 
 	clickItem: function (item) {
+
 		App.get('menuController').seleccionar(item.get('id'));
 	},
 
@@ -557,6 +558,9 @@ App.ListHeaderWithSortView = App.ListHeaderView.extend({
 	sortablController: null,
 
 	ordenarPorCampo: function (campo, asc){
+		// comentado por si despues se quiere usar (cuando se da click a un ordenar,)
+		// $(document).scrollTop($("#Expedientes").offset().top);
+
 		this.get('sortablController').set('sortProperties', [campo]);
 		this.get('sortablController').set('sortAscending', asc);
 	},	
@@ -707,7 +711,7 @@ App.CalendarItemListView = Ember.View.extend({
 
 App.CalendarListView = App.ListFilterView.extend({ 
 	itemViewClass: App.CalendarItemListView, 	
-	columnas: ['Fecha citación', 'Título', 'Sala', 'Observaciones', 'Estado citación'],
+	columnas: ['Fecha', 'Título', 'Sala', 'Observaciones', 'Estado'],
 });
 
 
@@ -838,6 +842,19 @@ App.PlanDeLaborView = Ember.View.extend({
 App.PlanDeLaborListadoView = Ember.View.extend({
 	templateName: 'plan-de-labor-listado',
 
+	tituloNuevo: function () {
+		var titulos = ['Planes de Labor Tentativos', 'Planes de Labor Confirmados', 'Planes de Labor Definitivos'];
+		var estado = App.get('planDeLaborListadoController.estado');
+		var str = "";
+
+		str = titulos[estado];		
+
+		if(str.length > 0)
+		{
+			return str;
+		}
+
+	}.property('App.planDeLaborListadoController.estado'),
 	titulo: function () {
 		switch (App.get('planDeLaborListadoController.estado')) {
 			case "0":
@@ -1932,9 +1949,14 @@ App.AttachFileView = Em.View.extend({
 
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
+	titulo: 'a',
 
 	didInsertElement: function(){
 		this._super();
+		// $("#news-expedientes, #news-comisiones, #news-dictamenes, #news-od, #news-publicaciones, #news-sesiones, #news-planes").bind('click', function(){
+		// 	this.set('titulo', $(this).text());
+		// });
+
 		$(".submenu-news").bind('click', function(){
 			var lista 	= $("#news-lista");
 			var get_id 	= $(this).prop('id');
@@ -2212,6 +2234,7 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
+		console.log(this.get('content'));
 	},
 
 	seleccionadoChange: function () {
