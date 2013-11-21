@@ -982,7 +982,8 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'notificacionTipoConsulta');
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+								{titulo: 'Administrar', url: '#/admin/notificaciones'},
+								{titulo: 'Tipo de Notificación', url: '#/admin/notificaciones/tipo/'+ App.get('notificacionTipoController.content.id') +'/ver'},
 							]);					
 							App.get('menuController').seleccionar(5);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
@@ -1033,7 +1034,8 @@ App.Router =  Em.Router.extend({
 
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Administrar Notificaciones', url: '#/admin/notificaciones'},
+								{titulo: 'Administrar'},
+								{titulo: 'Crear Tipo de Notificación', url: '#/admin/notificaciones/tipo/crear'},
 							]);					
 							App.get('menuController').seleccionar(5, 0, 3);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
