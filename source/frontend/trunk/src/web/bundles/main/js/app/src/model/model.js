@@ -468,6 +468,11 @@ App.Expediente = Em.Object.extend({
 
 	url: 'exp/proyecto',	
 
+	documentURL: function () {
+		return App.get('apiController.existURL') + "db/proyectos/proyecto.xql" + "?exp=" + this.get('expdip') + "&as=html";
+	}.property('expdip'),
+
+
     normalize: function () {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
     },
@@ -707,6 +712,10 @@ App.OrdeDelDia = Em.Object.extend({
 	fechaImpresion: '',
 	useApi: true,
 	texto: '',
+
+	documentURL: function () {
+		return App.get('apiController.existURL') + "od/queries/od_num_anio.xql" + "?num=" + this.get('numero');
+	}.property('numero'),
 
 	serializable : [
 		'id',
