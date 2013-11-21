@@ -309,7 +309,7 @@ App.menuController = App.MenuController.create({
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Administrar Accesos',
+					titulo: 'Administrar',
 					url: '#/admin/roles',
 					roles: ['ROLE_USER'],
 					subMenu: [
