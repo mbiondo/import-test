@@ -845,7 +845,7 @@ App.PlanDeLaborListadoView = Ember.View.extend({
 	tituloNuevo: function () {
 		var titulos = ['Planes de Labor Tentativos', 'Planes de Labor Confirmados', 'Planes de Labor Definitivos'];
 		var estado = App.get('planDeLaborListadoController.estado');
-		var str = "";
+		var str = '';
 
 		str = titulos[estado];		
 
