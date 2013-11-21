@@ -714,7 +714,7 @@ App.OrdeDelDia = Em.Object.extend({
 	texto: '',
 
 	documentURL: function () {
-		return App.get('apiController.existURL') + "od/queries/od_num_anio.xql" + "?num=" + this.get('numero') + "&anio=" + this.get('anio');
+		return App.get('apiController.existURL') + "od/queries/od_num_anio.xql" + "?num=" + this.get('numero') + "&anio=" + this.get('anio') + "&as=html";
 	}.property('numero'),
 
 	serializable : [
