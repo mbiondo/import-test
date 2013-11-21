@@ -437,20 +437,21 @@ App.Router =  Em.Router.extend({
 				});
 				
 				var tituloNovedades;
+				var getId = parseInt(context.id);
 				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'OD', 'Publicaciones', 'Plan de Labor', 'Sesiones'];
 
-				App.get('menuController').seleccionar(0);
-/*
+				// App.get('menuController').seleccionar(0);
+
 				if(context.id)
 				{
-					App.get('menuController').seleccionar(0, 0, context.id);				
+					App.get('menuController').seleccionar(0, 0, getId);				
 				}
 				else
 				{
 					App.get('menuController').seleccionar(0);									
 				}
-*/
-				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Inicio', url: '#'},
