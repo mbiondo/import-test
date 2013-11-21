@@ -235,10 +235,29 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 App.SubMenuQueryView = Ember.View.extend({
 	templateName: 'sub-menu-query-item',
 	tagName: 'li',
+	loading: false,
 
 	click: function () {
-		this.get('parentView').query(this.get('content'));
+		if (!this.get('loading'))
+			this.get('parentView').query(this.get('content'));
 	},
+
+	didInsertElement: function () {
+		this._super();
+		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoading);
+	},
+
+	expedientesLoading: function () {
+		if (App.get('expedientesController.loaded'))
+		{
+			this.set('loading', false);
+		}
+		else
+		{
+			this.set('loading', true);
+		}
+	},
+
 })
 
 App.SubMenuOradoresView = App.SubMenuView.extend({
