@@ -84,7 +84,7 @@ App.menuController = App.MenuController.create({
 							roles: ['ROLE_USER'],
 							titulo: 'Sesiones',
 							url: '#/novedades/6',
-							id: 'news-sesiones',
+							id: 'news-planes',
 							clases: 'submenu-news',
 						}),														
 					],
@@ -309,7 +309,7 @@ App.menuController = App.MenuController.create({
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Administrar',
+					titulo: 'Administrar Accesos',
 					url: '#/admin/roles',
 					roles: ['ROLE_USER'],
 					subMenu: [
@@ -333,7 +333,7 @@ App.menuController = App.MenuController.create({
 						}),	
 						App.MenuItem.create({
 							id: 3,
-							titulo: 'Crear Notificación',
+							titulo: 'Crear Tipo de Notificación',
 							url: '#/admin/notificaciones/tipo/crear',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
