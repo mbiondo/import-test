@@ -1949,14 +1949,13 @@ App.AttachFileView = Em.View.extend({
 
 App.InicioView = Em.View.extend({
 	templateName: 'inicio',
-	titulo: 'a',
+	titulo: '',
 
 	didInsertElement: function(){
 		this._super();
-		// $("#news-expedientes, #news-comisiones, #news-dictamenes, #news-od, #news-publicaciones, #news-sesiones, #news-planes").bind('click', function(){
-		// 	this.set('titulo', $(this).text());
-		// });
 
+		this.set('titulo', $("a.active").not(".ic").text());
+		/*
 		$(".submenu-news").bind('click', function(){
 			var lista 	= $("#news-lista");
 			var get_id 	= $(this).prop('id');
@@ -1965,6 +1964,7 @@ App.InicioView = Em.View.extend({
 			lista.find("ul").not('.'+get_id).fadeOut(0);
 			lista.find("ul."+get_id).fadeIn(900);
 		});
+		*/
 	},
 });
 
