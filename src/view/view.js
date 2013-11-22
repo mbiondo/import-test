@@ -334,15 +334,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 	hayOradoresPendientes: function(){
 		var oradorPendiente = App.get('turnosController.content').findProperty('oradorPendiente', true);
-		
-		if(oradorPendiente)
-		{			
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return oradorPendiente.length > 0;
 	}.property('App.turnosController.content.@each.oradorPendiente').cacheable(),
 
 
@@ -878,12 +870,43 @@ App.PlanDeLaborListadoView = Ember.View.extend({
 App.ODMiniView = Ember.View.extend({
 	templateName: 'od-mini',
 
+	hasDocument: true,
+
+
 	dictamen: function () {
 		if (this.get('content.dictamen'))
 			return App.Dictamen.create(this.get('content.dictamen'));
 		else
 			return null;
 	}.property('content'),
+
+
+	openDocument: function () {
+		$.ajax({
+			url: this.get('content.documentURL'),
+			type: 'GET',
+			success: this.loadSucceeded,
+			complete: this.loadCompleted,
+			contentType: 'text/plain',
+			crossDomain: true,
+			context: this,
+		});			
+	},
+
+	loadCompleted: function (data) {
+		if (data.responseText == "")
+		{
+			this.set('hasDocument', false);
+		} 
+		else
+		{
+			window.open(this.get('content.documentURL'), '_blank');
+		}
+	},
+
+	loadSucceeded: function (data) {
+		console.log(data);
+	},
 
 
 });
@@ -1992,10 +2015,38 @@ App.ApplicationView = Em.View.extend({
 
 App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
-	
+
+	openDocument: function () {
+		$.ajax({
+			url: App.get('expedienteConsultaController.content.documentURL'),
+			type: 'GET',
+			success: this.loadSucceeded,
+			complete: this.loadCompleted,
+			contentType: 'text/plain',
+			crossDomain: true,
+			context: this,
+		});			
+	},
+
+	loadCompleted: function (data) {
+		if (data.responseText == "")
+		{
+			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
+		} 
+		else
+		{
+			window.open(App.get('expedienteConsultaController.content.documentURL'), '_blank');
+		}
+	},
+
+	loadSucceeded: function (data) {
+		console.log(data);
+	},
+
 	clickTextoCompleto: function(e){
 //        console.log(this.getPath('App.expedienteConsultaController.content.url'));
-	}
+	},
+
 });
 
 App.CitacionConsultaView = Em.View.extend({
