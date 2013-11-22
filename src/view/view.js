@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			 //this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			 this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -404,9 +404,6 @@ App.ContentView = Ember.View.extend({
 
 		this.set('toggleMenu', !this.get('toggleMenu'));
 	},
-
-
-	
 
 
 	clickHelp: function () {
@@ -2237,6 +2234,11 @@ App.MenuItemView = Em.View.extend({
 
 App.MenuItemTintView = App.MenuItemView.extend({
 	templateName: 'menuItemTiny',
+
+	click: function () {
+		if (this.get('parentView.clickMenu'))
+			this.get('parentView').clickMenu();
+	},
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({
@@ -2245,7 +2247,6 @@ App.MenuItemThumbView = App.MenuItemView.extend({
 
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
-		console.log(this.get('content'));
 	},
 
 	seleccionadoChange: function () {
