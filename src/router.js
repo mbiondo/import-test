@@ -170,7 +170,8 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('main', 'inicio');
 				});
 				
-				App.get('menuController').seleccionar(0);
+				// App.get('menuController').seleccionar(0);
+				App.get('menuController').seleccionar(0,0,0);
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
