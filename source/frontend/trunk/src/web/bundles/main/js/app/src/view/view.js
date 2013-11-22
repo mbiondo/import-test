@@ -389,9 +389,11 @@ App.ContentView = Ember.View.extend({
 	},
 
 	clickMenu: function () {
-		var $menuWrapper =  this.$('.mainMenu');
+		var $menuWrapper =  this.$('#mainMenu');
+		var $menuWrapperTiny =  this.$('#mainMenuTiny');
 
 		$menuWrapper.toggle();
+		$menuWrapperTiny.toggle();
 
 		if (this.get('toggleMenu')) {
 			this.setupColumns(this.get('columns').objectAt(0), this.get('oldColumns').objectAt(1) - (this.get('columns').objectAt(0)) + 1, this.get('oldColumns').objectAt(2));
@@ -402,6 +404,9 @@ App.ContentView = Ember.View.extend({
 
 		this.set('toggleMenu', !this.get('toggleMenu'));
 	},
+
+
+	
 
 
 	clickHelp: function () {
@@ -451,6 +456,8 @@ App.ContentView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		var $menuWrapperTiny =  this.$('#mainMenuTiny');
+		$menuWrapperTiny.toggle();
 		this.set('columns', App.get('router.applicationController.columns'));
 		this.setupColumns(this.get('columns').objectAt(0), this.get('columns').objectAt(1) + this.get('columns').objectAt(2), 0);
 		this.helpMessage(true);
@@ -2226,6 +2233,10 @@ App.MenuItemView = Em.View.extend({
 		this.get('parentView').clickItem(this.get('content'));
 	},
 	*/
+});
+
+App.MenuItemTintView = App.MenuItemView.extend({
+	templateName: 'menuItemTiny',
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({
