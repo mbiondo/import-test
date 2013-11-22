@@ -900,7 +900,6 @@ App.ODMiniView = Ember.View.extend({
 	},
 
 	loadSucceeded: function (data) {
-		console.log(data);
 		this.set('loading', false);
 		if (data == "")
 		{
