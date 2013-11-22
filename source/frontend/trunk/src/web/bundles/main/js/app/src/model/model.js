@@ -469,7 +469,7 @@ App.Expediente = Em.Object.extend({
 	url: 'exp/proyecto',	
 
 	documentURL: function () {
-		return App.get('apiController.existURL') + "db/proyectos/proyecto.xql" + "?exp=" + this.get('expdip') + "&as=html";
+		return App.get('apiController.existURL') + "db/proyectos/proyecto.xql" + "?exp=" + this.get('expdip') + "&as=html1";
 	}.property('expdip'),
 
 
