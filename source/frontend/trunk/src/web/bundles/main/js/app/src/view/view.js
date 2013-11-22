@@ -871,6 +871,7 @@ App.ODMiniView = Ember.View.extend({
 	templateName: 'od-mini',
 
 	hasDocument: true,
+	loading: false,
 
 
 	dictamen: function () {
@@ -882,6 +883,7 @@ App.ODMiniView = Ember.View.extend({
 
 
 	openDocument: function () {
+		this.set('loading', true);
 		$.ajax({
 			url: this.get('content.documentURL'),
 			type: 'GET',
@@ -894,7 +896,13 @@ App.ODMiniView = Ember.View.extend({
 	},
 
 	loadCompleted: function (data) {
-		if (data.responseText == "")
+
+	},
+
+	loadSucceeded: function (data) {
+		console.log(data);
+		this.set('loading', false);
+		if (data == "")
 		{
 			this.set('hasDocument', false);
 		} 
@@ -903,11 +911,6 @@ App.ODMiniView = Ember.View.extend({
 			window.open(this.get('content.documentURL'), '_blank');
 		}
 	},
-
-	loadSucceeded: function (data) {
-		console.log(data);
-	},
-
 
 });
 
@@ -2015,8 +2018,10 @@ App.ApplicationView = Em.View.extend({
 
 App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
+	loading: false,
 
 	openDocument: function () {
+		this.set('loading', true);
 		$.ajax({
 			url: App.get('expedienteConsultaController.content.documentURL'),
 			type: 'GET',
@@ -2028,8 +2033,9 @@ App.ExpedienteConsultaView = Em.View.extend({
 		});			
 	},
 
-	loadCompleted: function (data) {
-		if (data.responseText == "")
+	loadSucceeded: function (data) {
+		this.set('loading', false);
+		if (data == "")
 		{
 			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
 		} 
@@ -2037,10 +2043,6 @@ App.ExpedienteConsultaView = Em.View.extend({
 		{
 			window.open(App.get('expedienteConsultaController.content.documentURL'), '_blank');
 		}
-	},
-
-	loadSucceeded: function (data) {
-		console.log(data);
 	},
 
 	clickTextoCompleto: function(e){
