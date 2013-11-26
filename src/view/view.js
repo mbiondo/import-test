@@ -4665,6 +4665,11 @@ App.TurnoView = Ember.View.extend({
 	index : function () {
 		return this.get('contentIndex') + 1;
 	}.property('contentIndex'),
+	didInsertElement: function(){
+		this._super();
+
+		this.$("a").tooltip();
+	}
 });
 
 App.TurnoHablandoView = Ember.View.extend({
