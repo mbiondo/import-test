@@ -379,7 +379,11 @@ App.ContentView = Ember.View.extend({
 		$rightColumn.removeClass('col-md-' + this.get('oldColumns').objectAt(2)).addClass('col-md-' + r);
 		this.set('oldColumns', [l, m, r]);
 	},
-
+	changetoggleMenu: function () {
+		Ember.run.next(function () {
+			this.$('.toggleMainMenu').tooltip();
+		});
+	}.observes('toggleMenu'),
 	clickMenu: function () {
 		var $menuWrapper =  this.$('#mainMenu');
 		var $menuWrapperTiny =  this.$('#mainMenuTiny');
@@ -450,6 +454,7 @@ App.ContentView = Ember.View.extend({
 		this.set('columns', App.get('router.applicationController.columns'));
 		this.setupColumns(this.get('columns').objectAt(0), this.get('columns').objectAt(1) + this.get('columns').objectAt(2), 0);
 		this.helpMessage(true);
+		this.$('.toggleMainMenu').tooltip();
 	},	
 });
 
