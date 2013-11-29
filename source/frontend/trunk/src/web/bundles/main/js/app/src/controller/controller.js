@@ -2196,9 +2196,12 @@ App.CitacionConsultaController = Ember.Object.extend({
 		this.set('content', item);
 
 		var invitados = [];
-		this.get('content.invitados').forEach(function (invitado) {
-			invitados.addObject(App.CitacionInvitado.create(invitado));
-		});
+		
+		if (this.get('content.invitados')) {
+			this.get('content.invitados').forEach(function (invitado) {
+				invitados.addObject(App.CitacionInvitado.create(invitado));
+			});
+		}
 		this.set('content.invitados', invitados);
 
 
