@@ -519,9 +519,12 @@ App.UserController = Em.Controller.extend({
 
 					var userComisiones = [];
 					var comisiones = data.comisiones;
-					comisiones.forEach(function (comision){
-						userComisiones.addObject(App.Comision.create(comision));
-					});
+					
+					if (comsiones) {
+						comisiones.forEach(function (comision){
+							userComisiones.addObject(App.Comision.create(comision));
+						});
+					}
 
 					tmpUser.set('roles', userRoles);
 					tmpUser.set('rolesmerged', userRolesMerged);
