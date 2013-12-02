@@ -520,7 +520,7 @@ App.UserController = Em.Controller.extend({
 					var userComisiones = [];
 					var comisiones = data.comisiones;
 					
-					if (comsiones) {
+					if (comisiones) {
 						comisiones.forEach(function (comision){
 							userComisiones.addObject(App.Comision.create(comision));
 						});
