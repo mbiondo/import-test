@@ -684,6 +684,16 @@ App.OradoresDiputadoIndexView = Ember.View.extend({
 App.OradoresDiputadoSesionConsultaView = Ember.View.extend({
 	templateName: 'oradores-diputados-sesion-consulta',
 
+	showList: false,
+
+	toggleList: function () {
+		this.set('showList', true);
+	},
+
+	toggleData: function () {
+		this.set('showList', false);
+	},
+
 	didInsertElement: function(){
 		this._super();
 		//===== Accordion =====//		
