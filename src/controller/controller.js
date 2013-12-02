@@ -519,7 +519,7 @@ App.UserController = Em.Controller.extend({
 
 					var userComisiones = [];
 					var comisiones = data.comisiones;
-					
+
 					if (comisiones) {
 						comisiones.forEach(function (comision){
 							userComisiones.addObject(App.Comision.create(comision));
@@ -605,14 +605,14 @@ App.NotificationController = Em.Controller.extend({
 			  notificacion.mensaje
 			);
 			notification.onclick = function () {
-			  window.location = notificacion.url;
+			  window.location = notificacion.link;
 			  notification.close();
 			}
 			notification.show();
 		}
 		else
 		{
-			$.jGrowl('<a href="' + notificacion.url + '" >' + notificacion.mensaje + '</a>', {header: notificacion.titulo , life: 5000 });
+			$.jGrowl('<a href="' + notificacion.link + '" >' + notificacion.mensaje + '</a>', {header: notificacion.titulo , life: 5000 });
 		}
 	},
 });
