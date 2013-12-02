@@ -2483,13 +2483,13 @@ App.Router =  Em.Router.extend({
 								}
 							 	else
 									appController.connectOutlet('main', 'sesionConsulta');
-
-								appController.connectOutlet('sesion', 'sesionTurnos');
 							}
 							else {
 								
 								appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
 							}							
+							
+							appController.connectOutlet('sesion', 'sesionTurnos');
 							appController.connectOutlet('menu', 'subMenuOradores');
 
 							//appController.cargarSesiones(true);
