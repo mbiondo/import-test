@@ -462,8 +462,8 @@ App.UserController = Em.Controller.extend({
 	loginError: false,
 
 	loginCheck: function(cuil, password){
-		//var url = 'usr/autenticate';
-		var url = App.get('apiController.url') + 'usr/autenticate';
+		var url = 'usr/autenticate';
+		//var url = App.get('apiController.url') + 'usr/autenticate';
 		$.ajax({
 			url:  url,
 			contentType: 'text/plain',
@@ -486,8 +486,8 @@ App.UserController = Em.Controller.extend({
 
 	login: function (cuil) {
 
-		//var urlUserData = 'usr/userdata';
-		var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		var urlUserData = 'usr/userdata';
+		//var urlUserData = App.get('apiController.url') + 'usr/userdata';
 		var _self = this;
 
 		$.ajax({
