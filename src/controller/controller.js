@@ -1978,8 +1978,10 @@ App.DictamenesSinOdController = App.RestController.extend({
 		save = save || false;
 		item = App.Dictamen.create(data.evento);
 		item.setProperties(data.evento);
-		item.set('fechaReunion', data.reunion.fecha);
-		item.set('comisiones', data.reunion.comisiones);
+		if (data.reunion) {
+			item.set('fechaReunion', data.reunion.fecha);
+		}
+		//item.set('comisiones', data.reunion.comisiones);
 
 		if (data.dictamen == null && item.get('textos').length >= 1)
 			this.addObject(item);	

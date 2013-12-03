@@ -781,7 +781,13 @@ App.Dictamen = Em.Object.extend({
 	textos: [],
 
 	label: function (){
-		return  moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');
+		var label = "";
+		if (this.get('fechaReunion')) {
+			label = moment(this.get('fechaReunion'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('proyectosLabel2') + this.get('comisionesLabel2');
+		} else {
+			label = this.get('proyectosLabel2') + this.get('comisionesLabel2');
+		}
+		return label;
 	}.property('sumario'),
 	fecha: function () {
 		return this.get('fechaImpresion');
@@ -840,9 +846,17 @@ App.Dictamen = Em.Object.extend({
 	}.property('comisiones'),
 	comisionesLabel2: function () {
 		var st = "";
-		this.get('comisiones').forEach(function (comision) {
-			st += comision.comision.nombre;
-		})
+		var comisiones = this.comisiones;
+
+		if (comisiones) {
+			if(comisiones.length > 0) {
+		
+				this.get('comisiones').forEach(function (comision) {
+					st += comision.comision.nombre;
+				})
+			}
+		}
+
 		return st.htmlSafe();
 	}.property('comisiones'),
 	sumarioHTML: function () {

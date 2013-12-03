@@ -1142,7 +1142,7 @@ App.DictamenSinODItemView = Ember.View.extend({
 
 App.DictamenesSinOrdenDelDiaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenSinODItemView, 	
-	columnas: ['Fecha Dictamen', 'Temario', 'Comisión cabecera', 'Crear OD'],
+	columnas: ['Fecha Dictamen', 'Temario', 'Crear OD'],
 });
 
 App.OrdenDelDiaView = Ember.View.extend({
