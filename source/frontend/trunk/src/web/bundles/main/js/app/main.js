@@ -332,7 +332,7 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Envíos a Archivo',
 			url: '#/envios',
-			icono: 'ic ic-accesos',
+			icono: 'ic ic-archivados',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -363,7 +363,7 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_LABOR_PARLAMENTARIA'],
 			titulo: 'Estadisticas',
 			url: '#/estadisticas/oradores',
-			icono: 'ic ic-accesos',
+			icono: 'ic ic-estadisticas',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -388,7 +388,7 @@ App.menuController = App.MenuController.create({
 			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 			titulo: 'Dirección Secretaría',
 			url: '#/direccion/secretaria/diputados/listado',
-			icono: 'ic ic-accesos',
+			icono: 'ic ic-pen',
 			
 			subMenu: [
 				App.MenuItem.create({
