@@ -191,7 +191,7 @@ App.menuController = App.MenuController.create({
 			id: 8,
 			titulo: 'Orden Del Día',
 			url: '#/OD/listado',
-			roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+			roles: ['ROLE_USER'],
 			icono: 'ic ic-od',
 			subMenu: [
 				App.MenuItem.create({
@@ -219,7 +219,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/laborparlamentaria/planesdelabor/confirmados',
+			url: '#/laborparlamentaria/planesdelabor/definitivos',
 			roles: ['ROLE_USER'],
 			icono: 'ic ic-labor',
 			subMenu: [
@@ -241,7 +241,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Confirmados',
 							url: '#/laborparlamentaria/planesdelabor/confirmados',
 							// url: '#/plan/de/labor/listado/1',
-							roles: ['ROLE_USER'],
+							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
 						}),	
 
 						App.MenuItem.create({
@@ -249,7 +249,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'],
+							roles: ['ROLE_USER'],
 						}),							
 						App.MenuItem.create({
 							id: 3,
