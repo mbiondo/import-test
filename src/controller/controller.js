@@ -897,7 +897,7 @@ App.PlanDeLaborController = Ember.Object.extend({
 					if (App.get('planDeLaborController.content.items')) 
 						var item = App.get('planDeLaborController.content.items').findProperty('id', tema.get('plItemId'));
 						if (item) {
-							obj = App.Dictamen.create(item.get('dictamenes').findProperty('id', tema.get('plId')));
+							obj = App.OrdeDelDia.create(item.get('dictamenes').findProperty('id', tema.get('plId')));
 						}
 					break;
 				case "e":
