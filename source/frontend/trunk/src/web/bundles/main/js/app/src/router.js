@@ -175,7 +175,8 @@ App.Router =  Em.Router.extend({
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
-					{titulo: 'Inicio', url: '#'}
+					{titulo: 'Inicio', url: '#'},
+					{titulo: 'Novedades', url: '#'},
 				]);				
 			},		
 		}),
@@ -439,7 +440,7 @@ App.Router =  Em.Router.extend({
 				
 				var tituloNovedades;
 				var getId = parseInt(context.id);
-				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'OD', 'Publicaciones', 'Plan de Labor', 'Sesiones'];
+				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'OD', 'Publicaciones', 'Sesiones', 'Plan de Labor'];
 
 				// App.get('menuController').seleccionar(0);
 
@@ -452,10 +453,10 @@ App.Router =  Em.Router.extend({
 					App.get('menuController').seleccionar(0);									
 				}
 
-					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
 					{titulo: 'Inicio', url: '#'},
+					{titulo: 'Novedades', url: '#'},
 					{titulo: tituloNovedades[context.id], url: '#/1'}
 				]);								
 			},							
