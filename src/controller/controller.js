@@ -2499,7 +2499,7 @@ App.CitacionCrearController = Em.Object.extend({
 				emailList: emailList,
 				objeto: this.get('content'),
 				url: "#/comisiones/citaciones/citacion/" + this.get('content.id') + "/ver",
-				icono: "http://files.softicons.com/download/web-icons/large-calendar-icons-by-aha-soft/png/256x256/calendar.png"
+				icono: "../../../../images/calendar.png"
 			}
 			
 			var email = notificacion;
