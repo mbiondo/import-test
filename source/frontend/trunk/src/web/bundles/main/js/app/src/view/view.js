@@ -334,7 +334,11 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 	hayOradoresPendientes: function(){
 		var oradorPendiente = App.get('turnosController.content').findProperty('oradorPendiente', true);
-		return oradorPendiente.length > 0;
+		var cantidad = 0;
+		if (oradorPendiente != null) {
+			cantidad = oradorPendiente.length;
+		}
+		return cantidad > 0;
 	}.property('App.turnosController.content.@each.oradorPendiente').cacheable(),
 
 
