@@ -6027,6 +6027,7 @@ App.DiputadosListView = App.ListFilterView.extend({
 
 App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
+	clickGuardar: false,
 
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION'],
 
@@ -6042,9 +6043,21 @@ App.CrearExpedienteView = Ember.View.extend({
 		return this.get('content.tipo') == "RESOLUCION";
 	}.property('content.tipo'),
 
+	noHayTipo: function(){
+		if(this.get('content.tipo') == null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}.property('content.tipo'),
 	guardar: function () {
+		this.set('clickGuardar', true);
+
 		if($("#formCrearExpediente").parsley('validate'))
-		{		
+		{
 			this.get('content').normalize();
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
