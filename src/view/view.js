@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength', 'data-min' , 'data-max'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength', 'data-min' , 'data-max', 'readonly'],
 });
 
 
@@ -147,16 +147,16 @@ Ember.Checkbox.reopen({
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
 	uiType: 'datepicker',
 	uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
-	uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect'],
+	uiEvents: ['create', 'beforeShow', 'beforeShowDay', 'onChangeMonthYear', 'onClose', 'onSelect', 'onChange'],
 
 	tagName: 'input',
 	type: "text",
-	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message'],
+	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message', 'readonly'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
   dateFormat: 'dd/mm/yy', //ISO 8601
-   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength'],
+   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'parsley-regex'],
  
   beforeShowDay: function(date) {
 	  return [true, ""];
@@ -973,63 +973,68 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 	}.property('content'),
 
 	crear: function () {
-		var d = App.get('dictamenController.content');
-		var p = d.get('proyectos');
-		var pList = [];
+		if($("#OrdenDelDiaCrear").parsley("validate"))
+		{
+			var d = App.get('dictamenController.content');
+			var p = d.get('proyectos');
+			var pList = [];
 
-		p.forEach(function (e) {
-			pList.push({id: e.id.id_proy});
-		});
-		
-		d.set('proyectos', pList);
-		d.set('subclass', 'OD');
-		d.set('camara', 'Diputados');
-		d.set('dict_id_orig', 0);
-		d.set('anioParl', null);
-		d.set('nroGiro', 1);
-		d.set('id_proy_cab', d.get('proyectos')[0].id);
-		d.set('tipo', null);
-		d.set('anio', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY'));
-		d.set('numero', this.get('numero'));
-		d.set('publicacion', null);
-		d.set('fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
-		d.set('copete', this.get('copete'));
-		d.set('parte', null);
-		d.set('url', this.get('url'));
+			p.forEach(function (e) {
+				pList.push({id: e.id.id_proy});
+			});
+			
+			d.set('proyectos', pList);
+			d.set('subclass', 'OD');
+			d.set('camara', 'Diputados');
+			d.set('dict_id_orig', 0);
+			d.set('anioParl', null);
+			d.set('nroGiro', 1);
+			if(d.get('proyectos')[0]){
+				d.set('id_proy_cab', d.get('proyectos')[0].id);
+			}
+			d.set('tipo', null);
+			d.set('anio', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY'));
+			d.set('numero', this.get('numero'));
+			d.set('publicacion', null);
+			d.set('fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
+			d.set('copete', this.get('copete'));
+			d.set('parte', null);
+			d.set('url', this.get('url'));
 
 
 
-		delete d.art108;
-		delete d.art114;
-		delete d.art204;
-		delete d.caracter;
-		delete d.caracterDespacho;
-		delete d.itemParte;
-		delete d.unanimidad;
+			delete d.art108;
+			delete d.art114;
+			delete d.art204;
+			delete d.caracter;
+			delete d.caracterDespacho;
+			delete d.itemParte;
+			delete d.unanimidad;
 
-		var dictamen = App.OrdenDelDia.create({dictamen: d});
+			var dictamen = App.OrdenDelDia.create({dictamen: d});
 
-		dictamen.set('id', {id_parte: d.get('id')});
-		dictamen.set('estado', 1);
-		dictamen.set('fecha_estado', null);
-		dictamen.set('fecha_113', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
-		dictamen.set('url', this.get('url'));
+			dictamen.set('id', {id_parte: d.get('id')});
+			dictamen.set('estado', 1);
+			dictamen.set('fecha_estado', null);
+			dictamen.set('fecha_113', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:ss'));
+			dictamen.set('url', this.get('url'));
 
-		delete d.id;
+			delete d.id;
 
-		var dJson = JSON.stringify(dictamen);
+			var dJson = JSON.stringify(dictamen);
 
-		var url = "dic/od";
+			var url = "dic/od";
 
-		$.ajax({
-			url: App.get('apiController').get('url') + url,
-			contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'POST',
-			data : dJson,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});		
+			$.ajax({
+				url: App.get('apiController').get('url') + url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'POST',
+				data : dJson,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});	
+		}	
 	},
 
 	loadCompleted: function () { 
@@ -1045,24 +1050,26 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 	},
 
 	loadSucceeded: function (data) {
-	
-		//CREATE NOTIFICATION TEST 
-		var notification = App.Notificacion.extend(App.Savable).create();
-		//ACA TITULO DE LA NOTIFICACION
-		notification.set('tipo', 'crearOrdenDelDia');	
-		//Si hace falta ID del objeto modificado
-		notification.set('objectId', data.dictamen.id);
-		//Link del objeto
-		notification.set('link', "#/OD/orden/" + data.dictamen.id + "/ver");
-		//CreateAt
-		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-		//Custom message
-		notification.set('mensaje', "Se ha cargado la Orden del Día Número " + data.dictamen.numero);
+		if(data)
+		{		
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'crearOrdenDelDia');	
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', data.dictamen.id);
+			//Link del objeto
+			notification.set('link', "#/OD/orden/" + data.dictamen.id + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			//Custom message
+			notification.set('mensaje', "Se ha cargado la Orden del Día Número " + data.dictamen.numero);
 
-		//notification.set('comisiones', this.get('content.comisiones'));
-		//Crear
-		
-		notification.create();
+			//notification.set('comisiones', this.get('content.comisiones'));
+			//Crear
+			
+			notification.create();
+		}
 	}
 });
 
