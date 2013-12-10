@@ -287,6 +287,8 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 		var sesionId = App.get('sesionController').get('content').get('id');
 		var temasSesion = App.get('sesionController').get('content').get('temas');
+		var numSesion = App.get('sesionController').get('content').get('sesion');
+		var reunion = App.get('sesionController').get('content').get('reunion');
 
 		//CREATE NOTIFICATION TEST 
 		var notification = App.Notificacion.extend(App.Savable).create();
@@ -299,7 +301,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Se ha iniciado la sesión del día " + moment().format('LLLL'));
+		notification.set('mensaje', "Ha iniciado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('hh:mm a') + " del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
@@ -311,6 +313,8 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
 		var sesionId = App.get('sesionController').get('content').get('id');
 		var temasSesion = App.get('sesionController').get('content').get('temas');
+		var numSesion = App.get('sesionController').get('content').get('sesion');
+		var reunion = App.get('sesionController').get('content').get('reunion');
 
 		//CREATE NOTIFICATION TEST 
 		var notification = App.Notificacion.extend(App.Savable).create();
@@ -323,12 +327,10 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha finalizado la sesión del día " + moment().format('LLLL'));
-
+		notification.set('mensaje', "Ha finalizado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('hh:mm a') + " del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
-
 
 	},	
 
