@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'data-regexp', 'maxlength', 'data-min' , 'data-max', 'readonly'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'parsley-trigger'],
 });
 
 
@@ -5972,10 +5972,12 @@ App.CrearDiputadoView = Ember.View.extend({
 	distrito: null,
 
 	guardar: function () {
-
-		this.get('content').normalize();
-		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('content').create();
+		if($("#formCrearDiputado").parsley('validate'))
+		{		
+			this.get('content').normalize();
+			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('content').create();
+		}
 	},
 
 	distritoChange: function () {
@@ -6041,9 +6043,12 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	guardar: function () {
-		this.get('content').normalize();
-		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('content').create();
+		if($("#formCrearExpediente").parsley('validate'))
+		{		
+			this.get('content').normalize();
+			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('content').create();
+		}
 	},
 
 	createSucceeded: function () {
