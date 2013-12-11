@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'parsley-trigger'],
+	attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'parsley-trigger', 'data-americandate'],
 });
 
 
@@ -151,12 +151,12 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
 	tagName: 'input',
 	type: "text",
-	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message', 'readonly'],
+	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message', 'readonly', 'data-americandate'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
   dateFormat: 'dd/mm/yy', //ISO 8601
-   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'parsley-regex'],
+   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'parsley-regex', 'data-americandate'],
  
   beforeShowDay: function(date) {
 	  return [true, ""];
