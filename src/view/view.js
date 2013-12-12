@@ -5636,6 +5636,11 @@ App.PLMiniView = Ember.View.extend({
 App.PlanDeLaborEfectivoView = Ember.View.extend({
 	templateName: 'plan-de-labor-efectivo',
 	contentBinding: "App.planDeLaborController.content",
+
+	exportar: function () {
+		$.download('exportar/plandelabor', "&type=plandelabor&data=" + JSON.stringify(App.planDeLaborController.content));
+	},
+
 });
 
 App.PlanDeLaborBorradorView = Ember.View.extend({
