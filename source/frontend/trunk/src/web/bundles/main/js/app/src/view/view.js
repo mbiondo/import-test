@@ -302,7 +302,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha iniciado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('hh:mm a') + " del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
+		notification.set('mensaje', "Ha iniciado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('HH:mm') + " hs del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
@@ -328,7 +328,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha finalizado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('hh:mm a') + " del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
+		notification.set('mensaje', "Ha finalizado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('HH:mm') + " hs del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
@@ -1924,6 +1924,7 @@ App.UploaderView = Em.View.extend({
 	fileChange: function () {
 		_self = this;
 		var formData = new FormData(this.$('#' + this.get('formId'))[0]);
+
 		$.ajax({
 			url: 'upload.php',  //server script to process data
 			type: 'POST',
@@ -1949,6 +1950,7 @@ App.UploaderView = Em.View.extend({
 			{
 				data = JSON.parse(payload);
 				if (data.result == "ok") {
+					console.log("HASH: " + data.hash);
 					_self.set('file', data.file);
 				} 
 			}
@@ -4300,6 +4302,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 	},
 
 	
+	// Firmante sin disidencia
 	fsd: function () {
 		if (this.get('content.firmantes').length > 0)
 			return this.get('content.firmantes').filterProperty('disidencia', "1").length;
@@ -4307,6 +4310,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			return 0;
 	}.property('content.firmantes.length'),
 	
+	// Firmante con disidencia parcial
 	fcdp: function () {
 		if (this.get('content.firmantes').length > 0)
 			return this.get('content.firmantes').filterProperty('disidencia', "2").length;
@@ -4314,6 +4318,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			return 0;
 	}.property('content.firmantes.length'),	
 	
+	// Firmante con disidencia total
 	fcdt: function () {
 		if (this.get('content.firmantes').length > 0)
 			return this.get('content.firmantes').filterProperty('disidencia', "3").length;
@@ -4321,6 +4326,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			return 0;
 	}.property('content.firmantes.length'),		
 	
+	// Firmantes seleccionados
 	fs: function () {
 		if (!this.get('firmantesSeleccionados'))
 			return false;
