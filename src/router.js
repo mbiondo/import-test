@@ -153,7 +153,6 @@ App.Router =  Em.Router.extend({
 
 					App.get('notificacionesController').addObserver('loaded', this, fn);
 					App.get('notificacionesController').load();		
-
 					
 					return deferred.promise();				
 				} else {
@@ -1746,9 +1745,6 @@ App.Router =  Em.Router.extend({
 							route: '/:reunion/parte/crear',
 
 							deserialize: function(router, params) {
-
-								console.log('entre aca');
-
 								App.eventosParteController = App.EventosParteController.create();
 								App.reunionConsultaController = App.ReunionConsultaController.create();
 
@@ -1767,8 +1763,6 @@ App.Router =  Em.Router.extend({
 										citacion.get('temas').forEach(function (tema) {
 											if(tema)
 											{
-												console.log(tema);
-
 												temas.addObject(App.CitacionTema.create(tema));											
 											}
 										});
@@ -1780,11 +1774,8 @@ App.Router =  Em.Router.extend({
 								}
 								
 								fn = function() {
-									console.log('paso 1');									
-
 									App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 									var reunion = App.get('reunionConsultaController.content');
-									console.log(reunion);
 									App.set('citacionConsultaController.loaded', false);
 									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
 									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
@@ -1793,12 +1784,8 @@ App.Router =  Em.Router.extend({
 									App.get('eventosParteController').load();
 								}							
 								
-								console.log('a');
 								App.get('reunionConsultaController').addObserver('loaded', this, fn);
-								console.log('b');
-								console.log(App.get('reunionConsultaController'));
 								App.get('reunionConsultaController').load();
-								console.log('c');
 
 								return deferred.promise();
 							},
