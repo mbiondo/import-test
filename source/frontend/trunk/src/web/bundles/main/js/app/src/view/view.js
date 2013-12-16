@@ -6061,18 +6061,24 @@ App.CrearExpedienteView = Ember.View.extend({
 			return true;
 		}
 		else
-		{
+		{	
 			return false;
 		}
 	}.property('content.tipo'),
-	guardar: function () {
-		this.set('clickGuardar', true);
-
-		if($("#formCrearExpediente").parsley('validate'))
+	guardar: function (){
+		if(!this.get('clickGuardar'))
 		{
-			this.get('content').normalize();
-			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-			this.get('content').create();
+			this.set('clickGuardar', true);
+		}
+
+		if(this.get('noHayTipo') == false)
+		{
+			if($("#formCrearExpediente").parsley('validate'))
+			{
+				this.get('content').normalize();
+				this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+				this.get('content').create();
+			}
 		}
 	},
 
