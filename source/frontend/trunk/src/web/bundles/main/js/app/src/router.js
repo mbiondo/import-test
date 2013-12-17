@@ -127,7 +127,7 @@ App.Router =  Em.Router.extend({
 				appController.connectOutlet('menu', 'subMenu');
 				
 				App.get('breadCumbController').set('content', [
-					{titulo: 'No Dispone de los Permisos Necesarios para Acceder', url: '#'}
+					{titulo: 'No dispone de los permisos necesarios para acceder', url: '#'}
 				]);				
 			},			
 		}),		
