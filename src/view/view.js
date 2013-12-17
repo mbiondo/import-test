@@ -1423,7 +1423,7 @@ App.RoleabeListView = App.ListFilterView.extend({
 
 App.RoleabeUserListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ItemUserRoleableView, 	
-	columnas: ['ID', 'Datos', 'avatar', 'Roles', 'Acciones'],
+	columnas: ['ID', 'Datos', 'Avatar', 'Roles', 'Acciones'],
 });
 
 
