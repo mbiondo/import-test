@@ -2157,7 +2157,7 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
 							{titulo: 'OD', url: '#/OD/listado'},
-							{titulo: 'Nueva Orden Del Día'},
+							{titulo: 'Crear Orden Del Día'},
 						]);					
 						
 					},				
