@@ -435,6 +435,20 @@ App.ExpedienteArchivable = Em.Object.extend({
 	}.property('titulo'),
 });
 
+App.DiputadoPartido = Em.Object.extend({
+	id: null,
+	nombre: null,
+	nombreCorto: null,
+	grupo: null,
+	orden: 0,
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),
+
+});
+
+
 App.Giro = Em.Object.extend({
 	auditable: true,
 	useApi: true,
@@ -1529,6 +1543,10 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     label: function () {
     	return moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('LL') + this.get('observaciones');
     }.property('observaciones'),
+});
+
+App.DiputadosPartidosItem = Ember.Object.extend({
+	partidos: null,
 });
 
 App.PlanDeLaborTentativoItem = Ember.Object.extend({
