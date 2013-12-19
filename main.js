@@ -301,19 +301,19 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							titulo: 'Acceso de usuarios',
+							titulo: 'Usuarios y Roles',
 							url: '#/admin/roles',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),		
 						App.MenuItem.create({
 							id: 1,
-							titulo: 'Comisiones por usuarios',
+							titulo: 'Usuarios y Comisiones',
 							url: '#/admin/comisiones',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),		
 						App.MenuItem.create({
 							id: 2,
-							titulo: 'Tipos de notificaciones',
+							titulo: 'Tipos de Notificaciones',
 							url: '#/admin/notificaciones',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
 						}),	
