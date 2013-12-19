@@ -215,7 +215,9 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params) {
 
+						App.diputadosPartidosController = App.DiputadosPartidosController.create();
 						App.distritosController = App.DistritosController.create({content: []});
+						App.diputadosVigentesController = App.DiputadosVigentesController.create();
 						
 						var deferred = $.Deferred(),
 						
@@ -228,6 +230,12 @@ App.Router =  Em.Router.extend({
 
 						App.get('distritosController').addObserver('loaded', this, fn);
 						App.get('distritosController').load();
+						
+						App.get('diputadosPartidosController').addObserver('loaded', this, fn);
+						App.get('diputadosPartidosController').load();
+
+						App.get('diputadosVigentesController').addObserver('loaded', this, fn);
+						App.get('diputadosVigentesController').load();
 						
 						return deferred.promise();
 					},	
