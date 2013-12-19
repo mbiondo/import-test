@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			 //this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			 // this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -4431,6 +4431,7 @@ App.ExpedienteItemListView = Em.View.extend({
 	}
 });
 
+
 App.ExpedienteItemListDictamenCrearView = Em.View.extend({
 	templateName: 'expediente-item-list',
 	tagName: 'li',
@@ -5910,7 +5911,7 @@ App.SugestView = Ember.View.extend({
 	sugestText: '',
 	controllerName: '',
 	threshold: 3,
-	titulo: "Buscar expediente",
+	titulo: null,
 	placeHolder: "Expediente N°",
 	itemViewClass: 'App.SugestListItemView',
 
@@ -5965,6 +5966,7 @@ App.ExpedienteSugestListItemView = App.SugestListItemView.extend({
 	templateName: 'expediente-sugest-item',
 });
 
+
 App.SugestListView = Ember.CollectionView.extend({
 	classNames: ['list-group'],
 
@@ -5979,14 +5981,60 @@ App.SugestListView = Ember.CollectionView.extend({
 
 /**/
 
+App.DiputadoPartidoItemListView = Em.View.extend({
+	templateName: 'diputado-partido-item-list',
+	tagName: 'li',
+
+	didInsertElement: function(){
+		this._super();
+		this.$('a').tooltip();
+	},
+	clickItem: function () {
+		this.get('parentView').get('parentView').clickPartido(this.get('content'));
+	}
+});
+
+App.DiputadoPartidoSugestListItemView = App.SugestListItemView.extend({
+	templateName: 'diputado-partido-sugest-item',
+});
+
 App.CrearDiputadoView = Ember.View.extend({
 	templateName: 'crear-diputado',
 	distrito: null,
+	item:null,
+	sexo: [{'id':'Masculino', 'titulo':'Masculino'}, {'id': 'Femenino', 'titulo': 'Femenino'}],
+	clickGuardar: false,
 
+	clickPartido: function(partido){
+		var item = this.get('item.partidos').findProperty("id", partido.get('id'));		
+		this.get('item.partidos').removeObject(partido);
+	},
+	seleccionoTipoSexo: function(){
+		var sexo = this.get('content.datosPersonales.sexo');
+
+		if(sexo){ return true; }
+		else{ return false; }
+	}.property('content.datosPersonales.sexo'),
+	noPuedeElegirMasPartidos: function(){
+		if(this.get('item'))
+		{		
+			if(this.get('item.partidos').length > 1)
+			{
+				this.get('item.partidos').removeObject(this.get('item.partidos.lastObject'));
+				return true;
+			}
+		}
+	}.property('item.partidos.@each'),
 	guardar: function () {
-		if($("#formCrearDiputado").parsley('validate'))
+		if(this.get('clickGuardar') == false)
+		{
+			this.set('clickGuardar', true);
+		}
+
+		if($("#formCrearDiputado").parsley('validate') && this.get('seleccionoTipoSexo') == true)
 		{		
 			this.get('content').normalize();
+			this.set('content.partido', this.get('item.partidos.firstObject.nombre'));
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
 		}
@@ -6012,11 +6060,12 @@ App.CrearDiputadoView = Ember.View.extend({
 
 		}
 	},
-
 	didInsertElement: function () {
 		this._super();
+		this.$('a').tooltip();
 		this.set('content', App.Mandato.extend(App.Savable).create({datosPersonales: App.Autoridad.create({})}));
-	}	
+		this.set('item', App.DiputadoPartido.create({partidos: []}));
+	},	
 });
 
 
