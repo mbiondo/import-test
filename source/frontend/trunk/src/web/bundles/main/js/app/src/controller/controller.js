@@ -1270,6 +1270,53 @@ App.NotificacionTiposController = App.RestController.extend({
 	},
 })
 
+App.DiputadosPartidosController = App.RestController.extend({
+	url: 'blo/bloques',
+	type: App.DiputadoPartido,
+	useApi: true,
+	sortAscending: true,
+	loaded: false,
+	async: false,
+	data: [],
+
+	filter: function (text) {
+		var regex = new RegExp(text.toString().toLowerCase());
+		
+		filtered = this.get('data').filter(function(partido) {
+			return regex.test(partido.get('label').toLowerCase());
+		});	
+			
+		this.set('content', filtered);
+	},
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);
+		
+		this.set('content', []);
+
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		items.forEach(function(i){
+			if(i.grupo == 'CD')
+			{
+				this.createObject(i);
+			}
+		}, this);
+		
+		this.set('loaded', true);
+	},
+
+	createObject: function (data, save) {
+		save = save || false;
+		var item = App.DiputadoPartido.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.get('data').addObject(item);
+	},
+});
+
 App.ExpedientesArchivablesController = App.RestController.extend({
     url: 'exp/proyectos/archivables',
 	type: App.ExpedienteArchivable,
