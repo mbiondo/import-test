@@ -813,7 +813,7 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar'},
-						{titulo: 'Acceso a usuarios', url: '#/admin/roles'},
+						{titulo: 'Usuarios y Roles', url: '#/admin/roles'},
 					]);					
 					App.get('menuController').seleccionar(5, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
@@ -853,7 +853,7 @@ App.Router =  Em.Router.extend({
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Administrar'},
-						{titulo: 'Comisiones por usuarios', url: '#/admin/comisiones'},
+						{titulo: 'Usuarios y Comisiones', url: '#/admin/comisiones'},
 					]);					
 					App.get('menuController').seleccionar(5, 0, 1);	
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
@@ -890,7 +890,7 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Administrar'},
-							{titulo: 'Tipo de notificaciones', url: '#/admin/notificaciones'},
+							{titulo: 'Tipo de Notificaciones', url: '#/admin/notificaciones'},
 						]);					
 						App.get('menuController').seleccionar(5, 0, 2);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
