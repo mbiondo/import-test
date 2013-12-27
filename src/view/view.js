@@ -5914,13 +5914,14 @@ App.SugestView = Ember.View.extend({
 	titulo: null,
 	placeHolder: "Expediente N°",
 	itemViewClass: 'App.SugestListItemView',
+	desactivar: false,
 
 	sugestTextChanged: function () {
 		if (this.get('sugestText').length >= this.get('threshold')) {
 			this.get('controller').filter(this.get('sugestText'));
 		} else {
 			this.set('controller.content', []);
-		}
+		}	
 	}.observes('sugestText'),
 
 	sugestList: function () {
@@ -6002,9 +6003,55 @@ App.CrearDiputadoView = Ember.View.extend({
 	templateName: 'crear-diputado',
 	distrito: null,
 	item:null,
-	sexo: [{'id':'Masculino', 'titulo':'Masculino'}, {'id': 'Femenino', 'titulo': 'Femenino'}],
+	sexo: [{'id':'M', 'titulo':'Masculino'}, {'id': 'F', 'titulo': 'Femenino'}],
 	clickGuardar: false,
+	sugestDesactivar: null,
 
+	changeContent: function(){
+		// console.log(this.get('content.datosPersonales.sexo'));
+		var getSexo = this.get('content.datosPersonales.sexo');
+
+		if(getSexo == 'M'){
+			this.set('sexo', [{'id':'M', 'titulo':'Masculino', 'checked':'checked'}, {'id': 'F', 'titulo': 'Femenino'}]);
+		}else{
+			this.set('sexo', [{'id':'M', 'titulo':'Masculino'}, {'id': 'F', 'titulo': 'Femenino', 'checked':'checked'}]);
+		}
+/*
+		this.get('sexo').forEach(function(getItem){
+
+			if(getItem.id == getSexo)
+			{
+				getItem.value 	= getSexo;
+				getItem.checked = 'CHECKED';
+			}
+			else
+			{
+				getItem.value 	= '';
+				getItem.checked = '';
+			}
+		});
+*/
+
+/*		
+		console.group('Sexo REST');
+		console.log(this.get('content.datosPersonales.sexo'));
+		console.groupEnd();
+		
+		console.group('Sexo FORM');
+		console.log(this.get('sexo'));
+		console.groupEnd();
+*/
+	}.observes('content.datosPersonales.sexo'),
+	changeTextSugest: function(){
+		if(this.get('item.partidos') && this.get('item.partidos').length > 0 )
+		{
+			this.set('sugestDesactivar', true);
+		}
+		else
+		{
+			this.set('sugestDesactivar', false);			
+		}
+	}.observes('App.diputadosPartidosController.content.@each', 'item', 'item.partidos.@each'),
 	clickPartido: function(partido){
 		var item = this.get('item.partidos').findProperty("id", partido.get('id'));		
 		this.get('item.partidos').removeObject(partido);
