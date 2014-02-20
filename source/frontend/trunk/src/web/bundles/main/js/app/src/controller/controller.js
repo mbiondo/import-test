@@ -1690,7 +1690,10 @@ App.FirmantesController = App.RestController.extend({
 
 
 	load: function () {
-		//this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
+		if (this.get('comision_id')) {
+			this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
+		}
+		
 		this._super();
 	},
 
