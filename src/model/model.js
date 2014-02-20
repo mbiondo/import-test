@@ -479,6 +479,8 @@ App.Expediente = Em.Object.extend({
 	seleccionado: false,
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
+	comisiones: [],
+	firmantes: [],
 
 	url: 'exp/proyecto',	
 
@@ -576,6 +578,8 @@ App.Expediente = Em.Object.extend({
     	"pubtipo",
     	"pubnro",
     	"pubFecha",
+    	"comisiones",
+    	"firmantes"
 	],
 });
 
