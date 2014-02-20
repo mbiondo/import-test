@@ -360,7 +360,38 @@ App.Router =  Em.Router.extend({
 
 				crear: Em.Route.extend({
 					route: '/crear',
+					
+					deserialize: function(router, params) {
+						App.firmantesController = App.FirmantesController.create();
 
+						var deferred = $.Deferred(),
+
+						fn = function() {
+							App.get('citacionSalasController').removeObserver('loaded', this, fn);
+							var sala = App.get('citacionSalasController.content').objectAt(0);
+							App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: []}));
+							App.get('comisionesController').addObserver('loaded', this, fn2);
+							App.get('comisionesController').load();				
+
+
+							App.get('firmantesController').addObserver('loaded', this, fn2);
+							App.get('firmantesController').load();		
+
+							App.get('citacionConsultaController').set('content', null);
+							App.get('citacionCrearController').set('expedientes', null);
+
+						};
+						fn2 = function() {
+							App.get('comisionesController').removeObserver('loaded', this, fn2);
+							App.set('citacionCrearController.isEdit', false);
+							deferred.resolve(null);	
+						}
+
+						App.get('citacionSalasController').addObserver('loaded', this, fn);
+						App.get('citacionSalasController').load();
+						
+						return deferred.promise();
+					},
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
