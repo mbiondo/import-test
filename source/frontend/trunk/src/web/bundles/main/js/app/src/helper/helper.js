@@ -131,8 +131,7 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
 				rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){						
 					if (!userRoles.contains(rolRequiered_value))
 					{				
-						// Si el usuario no contiene uno de los roles
-						// entonces agrego "true" por cada Array
+						// Agrego un valor "true" a la lista por cada Array de Roles que no tenga el Usuario
 
 						arraysNoValidos[rolesRequiered_index] = true;
 					}					
@@ -142,8 +141,9 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
 
                 if(arraysNoValidos.length == _self.roles.length)
                 {
-               		// Si hay 3 array con varios roles, y el usuario no posee ningun rol de los 3 arrays, 
-               		//		entonces le deniego los permisos
+                	// Comparo la cantidad de Arrays de Roles que no posee el Usuario
+                	// con el total de Arrays de Roles
+                	// (Ej.: Hay 3 Arrays de Roles, el Usuario cumple con un Array de Roles, entonces le doy permiso)
 					tienePermisos = false;
                 }
 
