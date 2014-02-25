@@ -122,33 +122,29 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
 
 	if(this.titulo == 'Dictámenes sin OD')
 	{
-
-		console.log('Menu - Dictamenes sin OD');
+		console.log('Probando con el Menu - Dictamenes sin OD');
 		console.log("Arrays Roles: "+ _self.roles.length);
 
 		this.roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
-            //if(rolesRequiered.constructor == Array){
 			if(Ember.isArray(rolesRequiered_value)){
 				// Si tiene arrays es OR (Ej.: "A y B" o "A y B")
-				//console.log('tiene arrays');
 				rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){						
 					if (!userRoles.contains(rolRequiered_value))
 					{				
-						// Agrego a la lista "arraysNoValidos" un 'true' por cada array
-						// que contenga roles no requeridos
-						//console.log("Roles Index: "+ rolesRequiered_index);
+						// Si el usuario no contiene uno de los roles
+						// entonces agrego "true" por cada Array
+
 						arraysNoValidos[rolesRequiered_index] = true;
-						//tienePermisos = false;
 					}					
-//					console.log(rolRequiered);
 				});
 
-   //             console.log("arraysNoValidos: "+ arraysNoValidos.length);
                 console.log("arraysNoValidos: " + arraysNoValidos.length +' / '+ _self.roles.length);
 
                 if(arraysNoValidos.length == _self.roles.length)
                 {
-						tienePermisos = false;
+               		// Si hay 3 array con varios roles, y el usuario no posee ningun rol de los 3 arrays, 
+               		//		entonces le deniego los permisos
+					tienePermisos = false;
                 }
 
 			}
