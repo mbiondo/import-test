@@ -109,15 +109,76 @@ Handlebars.registerHelper("formatoFechaSinHora", function(fecha, format, options
 
 
 Handlebars.registerHelper("tienePermisos", function(userRoles, options) {
+
   var context = (options.contexts && options.contexts[0]) || this;
-  var userRoles = getPath(context, userRoles, options.fn);
+  var userRoles = getPath(context, userRoles, options.fn); 
+
+  // Recorro los roles del Usuario logeado y los guardo
   userRoles = $.map(userRoles, function (value, key) { return value; });
+
+  var _self = this;
   var tienePermisos = true;
-  this.roles.forEach(function (rolRequiered) {
-	 if (!userRoles.contains(rolRequiered))
-		tienePermisos = false;
+  var arraysNoValidos = Array();
+
+	if(this.titulo == 'Dictámenes sin OD')
+	{
+
+		console.log('Menu - Dictamenes sin OD');
+		console.log("Arrays Roles: "+ _self.roles.length);
+
+		this.roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
+            //if(rolesRequiered.constructor == Array){
+			if(Ember.isArray(rolesRequiered_value)){
+				// Si tiene arrays es OR (Ej.: "A y B" o "A y B")
+				//console.log('tiene arrays');
+				rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){						
+					if (!userRoles.contains(rolRequiered_value))
+					{				
+						// Agrego a la lista "arraysNoValidos" un 'true' por cada array
+						// que contenga roles no requeridos
+						//console.log("Roles Index: "+ rolesRequiered_index);
+						arraysNoValidos[rolesRequiered_index] = true;
+						//tienePermisos = false;
+					}					
+//					console.log(rolRequiered);
+				});
+
+   //             console.log("arraysNoValidos: "+ arraysNoValidos.length);
+                console.log("arraysNoValidos: " + arraysNoValidos.length +' / '+ _self.roles.length);
+
+                if(arraysNoValidos.length == _self.roles.length)
+                {
+						tienePermisos = false;
+                }
+
+			}
+			else{
+				// Si no tiene Arrays es AND (Ej. "A y B y C")
+				  this.roles.forEach(function (rolRequiered){    
+					// Si el Usuario no contiene uno de los roles asignado, setea tienePermisos a false 
+					if (!userRoles.contains(rolRequiered))
+					{
+					  tienePermisos = false;    
+					}
+				  });
+			}
+		});
+	}
+
+/*
+  // Recorro todos los Roles
+  this.roles.forEach(function (rolRequiered){    
+	// Si el Usuario no contiene uno de los roles asignado, setea tienePermisos a false 
+
+	if (!userRoles.contains(rolRequiered))
+	{
+	  tienePermisos = false;    
+	}
   });
-  
+*/
+
   if (tienePermisos)
+  {    
 	return options.fn(this);
+  }
 });
