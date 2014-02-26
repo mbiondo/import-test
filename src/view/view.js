@@ -6277,7 +6277,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				$("#nav-tabs-"+ value).trigger("click");
 			});			
 		});
-
 	},
 	willDestroyElement: function(){
 		// remove shorcut
@@ -6286,7 +6285,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		if(firmante.apellido)
 		{
+			// Agrego item al bloque derecho (Que usa content.firmantes)
+
+			// Guardo la variable "item" 
 			var item 		= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
+			console.log(item);
 			var itemNumero 	= this.get('content.firmantes').length + 1;
 			var itemDatos 	= {orden: itemNumero, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
 			
@@ -6308,12 +6311,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			if (filtered)
 			{
 				console.log(this.get('firmantesSeleccionados'));
-				console.log(filtered);
-				
-				this.get('firmantesSeleccionados').forEach(function(){
-			    	
-				});
-				
+				console.log(filtered);				
 				
 				// probar hacer un foreach para remover cada elemento de firmantesSeleccionados
 			    //this.get('firmantesSeleccionados').removeObjects(filtered);
