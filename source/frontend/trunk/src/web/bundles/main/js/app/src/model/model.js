@@ -475,14 +475,17 @@ App.Giro = Em.Object.extend({
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	auditable: true,
-	useApi: true,
+	useApi: false,
 	seleccionado: false,
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
-	comisiones: [],
+	giro: [],
 	firmantes: [],
+	absolutURL: true,
 
 	url: 'exp/proyecto',	
+	urlAbsolut: 'http://10.185.204.6:9090/rest/ME/exp/proyecto',
+
 
 	documentURL: function () {
 		return App.get('apiController.existURL') + "db/proyectos/proyecto.xql" + "?exp=" + this.get('expdip') + "&as=html1";
@@ -578,7 +581,7 @@ App.Expediente = Em.Object.extend({
     	"pubtipo",
     	"pubnro",
     	"pubFecha",
-    	"comisiones",
+    	"giro",
     	"firmantes"
 	],
 });
