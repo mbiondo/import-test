@@ -1,5 +1,9 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:9090/sparl/rest/',
+//	url: 'http://10.185.204.12:9090/sparl/rest/',
+
+	productionURL: 'http://10.185.204.12:9090/sparl/rest/',
+	url: 'http://10.185.204.6:9090/sparl/rest/',
+
 	//url: 'http://10.185.204.13:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	// url: 'http://201.250.82.9:9009/sparl/rest/',
@@ -79,7 +83,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 1,
-			roles: ['ROLE_USER'],
+			roles: ['ROLE_USER'], 
 			titulo: 'Expedientes',
 			url: '#/expedientes',
 			icono: 'ic ic-expedientes',
@@ -204,6 +208,7 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							titulo: 'Listado de OD',
 							url: '#/OD/listado',
+//							roles: ['ROLE_USER'],
 							roles: ['ROLE_USER'],
 						}),	
 						App.MenuItem.create({
@@ -211,6 +216,8 @@ App.menuController = App.MenuController.create({
 							titulo: 'Dictámenes sin OD',
 							url: '#/OD/dictamenes',
 							roles: ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'],
+//							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_USER' ,'ROLE_SEC_PARL_VIEW']]
+//							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER' ,'ROLE_SEC_PARL_VIEW']]
 						}),							
 					],
 				}),				
@@ -361,7 +368,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 7,
-			roles: ['ROLE_LABOR_PARLAMENTARIA'],
+			roles: ['ROLE_LABOR_PARLAMENTARIA', 'ROLE_SEC_PARL_VIEW'],
 			titulo: 'Estadisticas',
 			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
@@ -371,7 +378,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Estadisticas',
 					url: '#/estadisticas/oradores',
-					roles: ['ROLE_LABOR_PARLAMENTARIA'],
+					roles: ['ROLE_LABOR_PARLAMENTARIA', 'ROLE_SEC_PARL_VIEW'],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,

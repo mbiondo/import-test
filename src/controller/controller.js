@@ -8,6 +8,10 @@ App.Savable = Ember.Mixin.create({
 
 		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + this.get('url');	
+		} else {
+			if (this.get('absolutURL')) {
+				url = this.get('urlAbsolut');
+			}
 		}
 
 		$.ajax({
@@ -24,7 +28,7 @@ App.Savable = Ember.Mixin.create({
 	},
 
 	createSucceded: function (data) {
-		if (this.get('useApi') && data.id) {
+		if ((this.get('useApi') || this.get('absolutURL')) && data.id) {
 			this.set('id', data.id);
 			this.set('createSuccess', true);
 		}
@@ -1677,7 +1681,7 @@ App.ParteEstadosController = App.RestController.extend({
 
 App.FirmantesController = App.RestController.extend({
 	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
-        type: App.FirmanteTextoDictamen,
+    type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
 	sortProperties: ['sortOrden'],
@@ -1687,8 +1691,21 @@ App.FirmantesController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
+	load: function () {		
+		_self = this;
+		this.set('loaded', false);
+		$.ajax({
+			url: (App.get('apiController').get('productionURL') + this.get('url')),
 
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},	
 
+/*
 	load: function () {
 		if (this.get('comision_id')) {
 			this.set('url', this.get('url').fmt(encodeURIComponent(this.get('comision_id'))));
@@ -1696,7 +1713,7 @@ App.FirmantesController = App.RestController.extend({
 		
 		this._super();
 	},
-
+*/
 	loadSucceeded: function(data){
 		this._super(data);
 		this.set('loaded', true);
@@ -1795,7 +1812,19 @@ App.ComisionesController = App.RestController.extend({
 	// 	this.set('loaded', false);
 	// 	this.loadSucceeded(localStorage.getObject('comisiones'));
 	// },
-
+	//
+	load: function () {
+		_self = this;
+		this.set('loaded', false);
+		$.ajax({
+			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},	
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Comision.create(data);
