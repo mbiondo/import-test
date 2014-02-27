@@ -1119,7 +1119,6 @@ App.Router =  Em.Router.extend({
 									
 					return deferred.promise();
 
-					return null;
 				},	
 					
 				connectOutlets: function(router, context) {
@@ -1139,6 +1138,51 @@ App.Router =  Em.Router.extend({
 				},
 			}),
 
+			biografia: Ember.Route.extend({
+				route: '/biografia',
+
+
+				deserialize: function(router, params) {					
+					var deferred = $.Deferred();
+					
+					App.bloquesController = App.BloquesController.create();
+					App.interBloquesController = App.InterBloquesController.create();
+
+
+					fn = function() {
+						if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded'))
+						{
+							App.get('bloquesController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						}
+					};
+
+					App.get('bloquesController').addObserver('loaded', this, fn);
+					App.get('interBloquesController').addObserver('loaded', this, fn);
+
+					App.get('bloquesController').load();
+					App.get('interBloquesController').load();
+
+									
+					return deferred.promise();
+
+				},	
+					
+
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
+					appController.connectOutlet('main', 'ExpedientesBiography');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Biografia', url: '#/expedientes/biografia'}
+					]);					
+					App.get('menuController').seleccionar(10, 0, 0);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				},
+
+			}),
 
 			expedienteConsulta: Ember.Route.extend({
 
@@ -1149,6 +1193,8 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params) {
 						App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
+						App.bloquesController = App.BloquesController.create();
+						App.interBloquesController = App.InterBloquesController.create();
 						
 						var deferred = $.Deferred(),
 						fn = function() {
@@ -1160,7 +1206,16 @@ App.Router =  Em.Router.extend({
 						};
 						
 						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
-						App.get('expedienteConsultaController').load();				
+						App.get('expedienteConsultaController').load();		
+
+
+
+						App.get('bloquesController').addObserver('loaded', this, fn);
+						App.get('interBloquesController').addObserver('loaded', this, fn);
+
+						App.get('bloquesController').load();
+						App.get('interBloquesController').load();
+
 						return deferred.promise();
 					},
 

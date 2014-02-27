@@ -73,6 +73,11 @@ App.Savable = Ember.Mixin.create({
 	
 		this.set('saveSuccess', '');
 		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
+
+		if (this.get('noConcatURL') == true)
+		{
+			url = this.get('url');
+		}
 		
 		if (this.get('useApi')) {
 			url = App.get('apiController').get('url') + this.get('url');
@@ -4159,4 +4164,41 @@ App.SearchController = App.RestController.extend({
 	hasContent: function () {
 		return this.get('content.length') > 0;
 	}.property('content.@each')
+});
+
+
+
+App.BiographyController = Ember.ObjectController.extend({
+	expediente: null,
+});
+
+App.BloquesController = App.RestController.extend({
+	url: 'bloques',
+	useApi: false,
+	loaded: false,
+	type: App.Bloque,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Bloque.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},		
+});
+
+
+App.InterBloquesController = App.RestController.extend({
+	url: 'interbloques',
+	useApi: false,
+	loaded: false,
+	type: App.Bloque,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Bloque.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},		
 });
