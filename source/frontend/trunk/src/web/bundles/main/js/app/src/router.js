@@ -1521,7 +1521,7 @@ App.Router =  Em.Router.extend({
 							}
 
 							cargarDictamenSuccess = function () {
-								if (App.get('dictamenController.loaded') && App.get('expedientesArchivablesController.loaded')) {
+								if (App.get('dictamenController.loaded')) {
 									var dictamen = App.get('dictamenController.content');
 
 									App.get('reunionConsultaController').set('content', App.Reunion.create({id: dictamen.get('id_reunion')}));
@@ -1531,9 +1531,9 @@ App.Router =  Em.Router.extend({
 							}
 
 	 						App.get('dictamenController').addObserver('loaded', this, cargarDictamenSuccess);
-							App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
+							//App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
 							App.get('dictamenController').load();
-							App.get('expedientesArchivablesController').load();
+							//App.get('expedientesArchivablesController').load();
 							return deferred.promise();
 						},
 
