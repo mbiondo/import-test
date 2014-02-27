@@ -483,6 +483,11 @@ App.Biography = Em.Object.extend({
 	titulo: '',
 	url: 'biographys/biography/',	
 
+	auditable: true,
+	notificationType : 'Biography',
+	notificationRoom: 'biographys',	
+
+
 	serializable: [
 		'id',
 		'expNro',

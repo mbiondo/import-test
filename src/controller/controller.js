@@ -344,6 +344,14 @@ App.IoController = Em.Object.extend({
 
 	crear : function (type, options) {
 		switch (type) {
+			case 'Biography': 
+				if (App.get('expedientesController')) {
+					var exp = App.get('expedientesController').findProperty('id', options.idPoryecto);
+					if (exp) {
+						exp.biografia = App.Biography.extend(App.Savable).create(options);
+					}
+				}
+				break;
 			case 'Turno' :
 				var turno = App.Turno.extend(App.Savable).create(options);
 				turno.set('tema', App.get('temasController').findProperty('id', options.temaId));
