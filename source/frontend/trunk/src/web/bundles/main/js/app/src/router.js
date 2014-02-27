@@ -1141,6 +1141,13 @@ App.Router =  Em.Router.extend({
 			biografia: Ember.Route.extend({
 				route: '/biografia',
 
+				enter: function () {
+					App.get('ioController').joinRoom('biographys');
+				},
+
+				exit: function () {
+					App.get('ioController').leaveRoom('biographys');
+				},
 
 				deserialize: function(router, params) {					
 					var deferred = $.Deferred();
