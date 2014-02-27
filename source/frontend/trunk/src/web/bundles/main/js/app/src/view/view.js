@@ -2084,6 +2084,24 @@ App.ExpedienteConsultaView = Em.View.extend({
 //        console.log(this.getPath('App.expedienteConsultaController.content.url'));
 	},
 
+	createBiography: function () {
+		App.biographyController = App.BiographyController.create({
+			content: App.Biography.extend(App.Savable).create(
+				{expNro: App.get('expedienteConsultaController.content.expdip'), idProyecto: App.get('expedienteConsultaController.content.id')
+			}),
+			expediente: App.get('expedienteConsultaController.content')
+		});
+
+		App.CreateBiographyView.popup();
+	},
+
+	didInsertElement: function () {
+		this._super();
+		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+			App.get('expedienteConsultaController.content').loadBiography();
+		}
+	}
+
 });
 
 App.CitacionConsultaView = Em.View.extend({
@@ -6487,4 +6505,166 @@ App.GirosListView = App.ListFilterView.extend({
 
 App.HelpView = Ember.View.extend({
 	templateName: 'help',
+});
+
+
+
+//Biography
+
+App.BiographyView = Ember.View.extend({
+	templateName: 'biography',
+
+	edit: function () {
+		
+		var biography;
+			biography = App.Biography.extend(App.Savable).create(this.get('content'));
+			biography.set('bloque', App.bloquesController.findProperty('nombre', this.get('content').get('bloque.nombre')));
+			biography.set('interBloque', App.interBloquesController.findProperty('nombre', this.get('content').get('interBloque.nombre')));
+			biography.set('url', 'biographys/biography/' + this.get('content').get('id') + '/');
+			biography.set('noConcatURL', true);
+
+		App.biographyController = App.BiographyController.create({
+			content: biography,
+			expediente: App.get('expedienteConsultaController.content'),
+		});
+
+		App.CreateBiographyView.popup();
+	},
+});
+
+App.CreateBiographyView = App.ModalView.extend({
+	templateName: 'biography-create',
+	observaciones: '',
+	prioridades: ['ALTA', 'MEDIA', 'BAJA'],
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			_self = this;
+			if (this.get('content.id')) {
+				this.get('content').addObserver('saveSuccess', function () {
+					if (this.get('saveSuccess')) {
+						if (_self.get('expediente'))
+							_self.get('expediente').set('biografia', this);
+					}
+				});
+				this.get('content').save();
+			} else {
+				this.get('content').addObserver('createSuccess', function () {
+					if (this.get('createSuccess')) {
+						if (_self.get('expediente'))
+							_self.get('expediente').set('biografia', this);
+					}
+				});
+				this.get('content').create();
+			}
+			return true;
+		} else if (opts.secondary) {
+			//alert('cancel')
+		} else {
+			//alert('close')
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.get('biographyController.content'));
+		this.set('expediente', App.get('biographyController.expediente'))
+	}, 
+});
+
+
+
+App.ExpedientesBiographyView = Ember.View.extend({
+	templateName: 'expedientes-biography',
+});
+
+
+App.ExpedienteBiographyItemView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'expediente-biography-item',
+	biographyRoleRequire: 'ROLE_LABOR_PARLAMENTARIA_EDIT', 
+
+	createBiography: function () {
+		var biography;
+		if (this.get('content').get('biografia')) {
+			biography = App.Biography.extend(App.Savable).create(this.get('content').get('biografia'));
+			biography.set('bloque', App.bloquesController.findProperty('nombre', biography.get('bloque.nombre')));
+			biography.set('interBloque', App.interBloquesController.findProperty('nombre', biography.get('interBloque.nombre')));
+			biography.set('url', 'biographys/biography/' + biography.get('id') + '/');
+			biography.set('noConcatURL', true);
+		}
+		else {
+			biography = App.Biography.extend(App.Savable).create({
+				expNro: this.get('content').expdip, 
+				idProyecto: this.get('content').id
+			});
+		}
+		App.biographyController = App.BiographyController.create({
+			content: biography,
+			expediente: this.get('content'),
+		});
+
+		App.CreateBiographyView.popup();
+	},
+
+
+	didInsertElement: function () {
+		this._super();
+		if (App.get('userController').hasRole(this.get('biographyRoleRequire'))) {
+			this.get('content').loadBiography();
+		}
+	}
+
+});
+
+
+App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
+	templateName: 'expedientes-sortable-list',
+	itemViewClass: App.ExpedienteBiographyItemView,
+	loading: false,
+
+	mostrarMas: function () {
+		this.set('scroll', $(document).scrollTop());
+		App.get('expedientesController').set('loaded', false);
+		App.get('expedientesController').nextPage();
+		this.set('loading', true);
+	},
+
+	expedientesLoaded: function () {
+		if (App.get('expedientesController.loaded')) {
+			this.set('loading', false);
+		}
+		else
+		{
+			this.set('loading', true);
+		}
+	},
+
+	columnas: [
+		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
+		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Biografia'}),
+		App.SortableColumn.create({nombre: 'Incluir en el informe'}),
+	],	
+
+
+	didInsertElement: function(){
+		this._super();
+		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
+		App.get('expedientesController').set('pageSize', 250);
+		this.set('mostrarMasEnabled', false);
+	},
+
+	lista: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
+			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
+		});
+		
+		this.set('mostrarMasEnabled', true);
+		return filtered;
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });

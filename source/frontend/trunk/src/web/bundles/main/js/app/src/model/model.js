@@ -472,6 +472,29 @@ App.Giro = Em.Object.extend({
 
 });
 
+
+App.Biography = Em.Object.extend({
+	expNro: '',
+	idProyecto: '',
+	bloque: '',
+	interBloque: '',
+	observaciones: '',
+	prioridad: '',
+	titulo: '',
+	url: 'biographys/biography/',	
+
+	serializable: [
+		'id',
+		'expNro',
+		'idProyecto',	
+		'bloque',
+		'interBloque',
+		'observaciones',
+		'prioridad',
+		'titulo'
+	],
+});
+
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	auditable: true,
@@ -482,10 +505,29 @@ App.Expediente = Em.Object.extend({
 	giro: [],
 	firmantes: [],
 	absolutURL: true,
+	biografia: null,
+
 
 	url: 'exp/proyecto',	
 	urlAbsolut: 'http://10.185.204.6:9090/rest/ME/exp/proyecto',
 
+
+	loadBiography: function () {
+		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+			$.ajax({
+				url: 'biographys/biography/' + this.get('id'),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.biographyLoaded,
+			});			
+		}
+	},
+
+	biographyLoaded: function (data) {
+		if (data) 
+			this.set('biografia', App.Biography.create(data));
+	},
 
 	documentURL: function () {
 		return App.get('apiController.existURL') + "db/proyectos/proyecto.xql" + "?exp=" + this.get('expdip') + "&as=html1";
@@ -1605,3 +1647,8 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	this.set('dictamenes', d); 	
     },
 });
+
+
+App.Bloque = Ember.Object.extend({
+
+})
