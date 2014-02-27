@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate'],
 });
 
 
@@ -6260,6 +6260,27 @@ App.CrearExpedienteView = Ember.View.extend({
 	}
 });
 
+App.InputSearchWidget = Ember.TextField.extend({
+	insertNewline: function(){		
+		var _self = this.get('parentView');
+
+		if(this.get('search-widget') == 'firmantes' && $(".searchWidgetFirmantes").is(':focus'))
+		{
+			// 1) Chequeo si tiene el atributo 'search-widget'
+			// 2) Chequeo si el campo de texto tiene el cursor de texto
+			firmante = _self.get('listaFirmantes.firstObject');
+			_self.clickFirmante(firmante);
+		}
+
+		if(this.get('search-widget') == 'giros' && $(".searchWidgetGiros").is(':focus'))
+		{
+			comision = _self.get('listaComisiones.firstObject');
+			_self.clickComision(comision);
+		}
+	},
+});
+
+
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 	camaras: ["Diputados", "Senadores"],
@@ -6271,64 +6292,74 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 
+		var _self = this;
 		shortcut_list = ['proyecto', 'firmantes', 'giros'];
 		shortcut_list.forEach(function(value, index){
+			//value = value.toLowerCase();
+
 			shortcut("F" + (index+1),function() {
 				$("#nav-tabs-"+ value).trigger("click");
-			});			
+			});
 		});
+
+		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 	},
 	willDestroyElement: function(){
 		// remove shorcut
+		shorcuts = ['F1','F2','F3','enter']
+		shorcuts.forEach(function(item){
+			shortcut.remove(item);
+		});
 	},
+	uploadFolder: function () {
+		return "uploads/expediente/" + this.get('content.expdip') + "/";
+	}.property('content.expdip'),
 	clickFirmante: function (firmante) {
-
+		// Si elijen un firmante pasa por aca
 		if(firmante.apellido)
 		{
-			// Agrego item al bloque derecho (Que usa content.firmantes)
-
-			// Guardo la variable "item" 
 			var item 		= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
-			console.log(item);
+			// Genero un incremental, como si fuese el id
 			var itemNumero 	= this.get('content.firmantes').length + 1;
+			// Guardo en itemDatos, la información que quiero que se envie por 'POST'
 			var itemDatos 	= {orden: itemNumero, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-			
+			// Inserto un Object en 'content.firmantes'		
 			this.get('content.firmantes').pushObject(itemDatos);
+			// Inserto un Ember.Object a 'firmantesSeleccionados'
 			this.get('firmantesSeleccionados').pushObject(firmante);
 		}
+		// Si remueven un firmate pasa por aca
 		else
 		{			
 			//var item = this.get('firmantesSeleccionados').findProperty("nombre", firmante.nombre);
-
 			var filtered = [];
 
+			// Si los datos del Firmante removido, coinciden con los que estan en la lista 'firmantesSeleccionados'
+			// entonces lo almaceno en filtered
 			filtered = this.get('firmantesSeleccionados').filter(function(f){
+				// Funciona similar a la variable 'item' de 'Giros'
+				// Se hace de esta manera porque no puedo buscar recorriendo sobre un objeto con findProperty
 				var n = f.diputado.datosPersonales.apellido + ", " + f.diputado.datosPersonales.nombre;
 			    return n == firmante.nombre;
 			});
+			// Esto se relaciona con el "if(this.get('firmantesSeleccionados'))" de "listaFIrmantes"
 
+			this.get('firmantesSeleccionados').removeObjects(filtered);
 
-			if (filtered)
-			{
-				console.log(this.get('firmantesSeleccionados'));
-				console.log(filtered);				
-				
-				// probar hacer un foreach para remover cada elemento de firmantesSeleccionados
-			    //this.get('firmantesSeleccionados').removeObjects(filtered);
-			}
-
-			this.get('content.firmantes').removeObject(firmante);
-
-			//this.get('firmantesSeleccionados').removeObject(item);
-			//this.get('content.firmantes').removeObject(firmante);
+//			this.get('firmantesSeleccionados').removeObject(item);
+			this.get('content.firmantes').removeObject(firmante);			
 		}	
 	},
+
+
 	listaFirmantes: function () {
 
 		var filtered; 
 
+		// Si escriben en el filtro de busqueda
+		// Entonces filtro el contenido a mostrar
 		if(this.get('filterFirmantes') != '')
-		{			
+		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
 
 			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
@@ -6336,21 +6367,34 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});	
 
 		}
+		// Si el filtro de busqueda esta vacío
+		// Entonces muestro todo
 		else
 		{
 			filtered = App.get('firmantesController.arrangedContent');
 		}
 
+		// Si hay firmantes seleccionados
+		// Entonces muestro todos, menos los que ya elijieron
+
 		if(this.get('firmantesSeleccionados'))
 		{
-			return filtered.removeObjects(this.get('firmantesSeleccionados'));	
+			if(filtered)
+			{
+				// Muestro todos los firmantes
+				// Excepto los firmantes ya seleccionados
+				//return filtered.removeObjects(this.get('firmantesSeleccionados'));
+				return filtered;
+			}
 		}
+		// Si no hay firmantes seleccionados
+		// Entonces muestro lo que tenga "filtered"
 		else
 		{
 			return filtered;
 		}
 
-	}.property('firmantesSeleccionados.@each', 'filterFirmantes', 'firmantesController.arrangedContent.@each'),
+	}.property('firmantesController.content.@each', 'filterFirmantes'),
 
 	clickComision: function (comision) {
 		if (comision.id)
@@ -6364,6 +6408,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 		else {
 			var item = this.get('comisionesSeleccionadas').findProperty("nombre", comision.comision);
+			console.log(item);
 
 			this.get('comisionesSeleccionadas').removeObject(item);
 			this.get('content.giro').removeObject(comision);
