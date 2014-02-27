@@ -285,6 +285,15 @@ App.IoController = Em.Object.extend({
 
 	modificar : function (type, options) {
 		switch (type) {
+			case 'Biography': 
+				if (App.get('expedientesController')) {
+					var exp = App.get('expedientesController.content').findProperty('id', options.idPoryecto);
+					if (exp) {
+						exp.biografia = App.Biography.extend(App.Savable).create(options);
+					}
+				}
+				break;
+
 			case 'Turno' :
 				var turno = App.get('turnosController').findProperty('id', options.id);
 				if (turno)
@@ -345,11 +354,10 @@ App.IoController = Em.Object.extend({
 	crear : function (type, options) {
 		switch (type) {
 			case 'Biography': 
-				if (App.get('expedientesController')) {
-					var exp = App.get('expedientesController').findProperty('id', options.idPoryecto);
-					if (exp) {
-						exp.biografia = App.Biography.extend(App.Savable).create(options);
-					}
+				var bio = App.Biography.extend(App.Savable).create(options);
+				var exp = App.get('expedientesController.content').findProperty('id', bio.get('idPoryecto'));
+				if (exp) {
+					exp.set('biografia', bio);
 				}
 				break;
 			case 'Turno' :
