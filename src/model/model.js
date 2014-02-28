@@ -905,7 +905,7 @@ App.Dictamen = Em.Object.extend({
 	comisionesLabel: function () {
 		var comisiones = this.comisiones;
 
-		if(comisiones.length > 0) {
+		if(comisiones && comisiones.length > 0) {
 			if (comisiones.length ==1)
 				return comisiones.objectAt(0).nombre;
 			else
