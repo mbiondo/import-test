@@ -238,7 +238,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Tentativos',
 							url: '#/laborparlamentaria/planesdelabor/tentativos',
 							// url: '#/plan/de/labor/listado/0',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 						}),						
 						App.MenuItem.create({
 							id: 1,
@@ -253,7 +253,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER'], ['ROLE_SEC_PARL_VIEW']],
 						}),							
 						App.MenuItem.create({
 							id: 3,
