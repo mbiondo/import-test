@@ -79,13 +79,11 @@ App.Router =  Em.Router.extend({
 			this.transitionTo("page404");
 		  }
 	   }
-/*	   
-	  roles.forEach(function (rolRequiered) {
-		 if (!userRoles.contains(rolRequiered)){
-			_self.transitionTo("page403");
-		 }
-	  });
-*/	 
+	  // roles.forEach(function (rolRequiered) {
+	//	 if (!userRoles.contains(rolRequiered)){
+	//		_self.transitionTo("page403");
+	//	 }
+	  //});
 	},	
 	
 	root: Em.Route.extend({

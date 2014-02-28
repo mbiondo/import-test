@@ -115,67 +115,29 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options){
 	var context = (options.contexts && options.contexts[0]) || this;
 	var userRoles = getPath(context, userRoles, options.fn); 
 
-	// Recorro los roles del Usuario logeado y los guardo
 	userRoles = $.map(userRoles, function (value, key) { return value; });
 
 	var _self = this;
-	var tienePermisos = true;
-	var arraysNoValidos = Array();
+	var tienePermisos = false;
+	var arraysNoValidos = [];
 
-	console.group(this.titulo);
-	//console.log("Arrays Roles: "+ _self.roles.length);
-	
-	// Recorro el campo "roles"
 	this.roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
-		// Chequeo que tenga arrays
-		if(Ember.isArray(rolesRequiered_value))
-		{
+      var groupIsValid = true;
 
-			// Recorro cada Array del campo "roles"
 			rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){
-
-				// Chequeo cuantos Arrays tienen roles que no dispone el Usuario
 				if (!userRoles.contains(rolRequiered_value))
 				{
-					// Agrego un valor "true" a la lista por cada Array de Roles que no tenga el Usuario
-					arraysNoValidos[rolesRequiered_index] = true;					
-					// Retorno que rol no es valido
-					console.log('Rol Faltante: ' + rolRequiered_value)
+					groupIsValid = false;
 				}
-
 			});
 
-	        console.log("arraysNoValidos: " + arraysNoValidos.length +' / '+ _self.roles.length);
-
-	        if(arraysNoValidos.length == _self.roles.length)
-	        {
-	        	// Comparo la cantidad de Arrays de Roles que no posee el Usuario
-	        	// con el total de Arrays de Roles
-	        	// (Ej.: Hay 3 Arrays de Roles, el Usuario cumple con un Array de Roles, entonces le doy permiso)
-				tienePermisos = false;
-	        	console.log('tienePermisos: '+ tienePermisos);
-	        }
-		}
+      if (groupIsValid) {
+        tienePermisos = true;
+      }
 	});
-
-	console.groupEnd();	
-
-/*
-  // Recorro todos los Roles
-  this.roles.forEach(function (rolRequiered){    
-	// Si el Usuario no contiene uno de los roles asignado, setea tienePermisos a false 
-
-	if (!userRoles.contains(rolRequiered))
-	{
-	  tienePermisos = false;    
-	}
-  });
-*/
-//  console.log(tienePermisos);
 
   if (tienePermisos)
   { 
-	return options.fn(this);
+  	return options.fn(this);
   }
-
 });
