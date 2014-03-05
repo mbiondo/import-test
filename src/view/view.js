@@ -6598,10 +6598,76 @@ App.CreateBiographyView = App.ModalView.extend({
 });
 
 
+App.CreateBiographyInfoView = App.ModalView.extend({
+	templateName: 'biography-info-create',
+
+	callback: function(opts, event){
+		if (opts.primary) {
+
+			this.get('content.bloques').forEach(function (bloque) {
+				bloque.resumen = this.$('#' + bloque.id).val();
+			})
+
+			$.download('exportar', "&type=informebio&data=" + JSON.stringify(this.get('content')));
+		} else if (opts.secondary) {
+
+		} else {
+
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.get('biographyInfoController').get('content'));
+	}, 
+});
 
 App.ExpedientesBiographyView = Ember.View.extend({
 	templateName: 'expedientes-biography',
+
+	generarInforme: function () {
+		var expedientes = App.get('expedientesController.content').filterProperty('seleccionado', true);
+		var bloquesInfo = [];
+		var bloques = [];
+
+		expedientes.forEach(function ( expediente ) {
+			var bio = expediente.get('biografia');
+
+			if (bio) {
+				bloque = bloques.findProperty('id', bio.get('interBloque.id'));
+
+				if (!bloque) {
+					bloque = Ember.copy(bio.get('interBloque'));
+					bloque.resumen = "";
+					bloque.proyectos = [];
+					bloques.pushObject(bloque);
+				}
+
+				var proyectoTipo = bloque.proyectos.findProperty('nombre', expediente.get('tipo'));
+
+				if (!proyectoTipo) {
+					proyectoTipo = {nombre: expediente.get('tipo'), total: 0}
+					bloque.proyectos.pushObject(proyectoTipo);
+				}
+
+				proyectoTipo.total += 1;
+			}
+
+		});
+
+		App.biographyInfoController = Ember.ObjectController.create({
+			content: {
+				bloques: bloques,
+				expedientes: expedientes,
+			}
+		});
+
+
+		App.CreateBiographyInfoView.popup();
+	},
 });
+
 
 
 App.ExpedienteBiographyItemView = Ember.View.extend({
@@ -6693,5 +6759,5 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 		
 		this.set('mostrarMasEnabled', true);
 		return filtered;
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+	}.property('filterText', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });
