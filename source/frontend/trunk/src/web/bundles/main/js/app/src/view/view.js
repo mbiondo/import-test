@@ -6346,7 +6346,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		// remove shorcut
 		shorcuts = ['F1','F2','F3','enter']
 		shorcuts.forEach(function(item){
-			shortcut.remove(item);
+//			shortcut.remove(item);
 		});
 	},
 	uploadFolder: function () {
