@@ -214,7 +214,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Dictámenes sin OD',
 							url: '#/OD/dictamenes',
 //							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
-							roles: [['ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']]
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']]
 						}),							
 					],
 				}),				
@@ -238,14 +238,14 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Tentativos',
 							url: '#/laborparlamentaria/planesdelabor/tentativos',
 							// url: '#/plan/de/labor/listado/0',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
 						}),						
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Planes de Labor Confirmados',
 							url: '#/laborparlamentaria/planesdelabor/confirmados',
 							// url: '#/plan/de/labor/listado/1',
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
 						}),	
 
 						App.MenuItem.create({
@@ -253,7 +253,7 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: [['ROLE_USER'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_USER']],
 						}),							
 						App.MenuItem.create({
 							id: 3,
@@ -334,7 +334,7 @@ App.menuController = App.MenuController.create({
                 
 		App.MenuItem.create({
 			id: 6,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Envíos a Archivo',
 			url: '#/envios',
 			icono: 'ic ic-archivados',
@@ -344,11 +344,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Envíos a Archivo',
 					url: '#/envios',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Envios a Archivo',
 							url: '#/envios',
 						}),
@@ -365,7 +365,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 7,
-			roles: [['ROLE_LABOR_PARLAMENTARIA', 'ROLE_SEC_PARL_VIEW']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Estadisticas',
 			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
@@ -375,11 +375,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Estadisticas',
 					url: '#/estadisticas/oradores',
-					roles: [['ROLE_LABOR_PARLAMENTARIA', 'ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Oradores',
 							url: '#/estadisticas/oradores',
 						}),
@@ -390,7 +390,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 9,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Dirección Secretaría',
 			url: '#/direccion/secretaria/diputados/listado',
 			icono: 'ic ic-pen',
@@ -435,7 +435,7 @@ App.menuController = App.MenuController.create({
 					id: 2,
 					titulo: 'Giros',
 					url: '',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -445,7 +445,7 @@ App.menuController = App.MenuController.create({
 						}),					
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 							titulo: 'Girar proyecto',
 							url: '#/mesa/de/entrada/proyecto/girar',
 						}),
@@ -457,7 +457,7 @@ App.menuController = App.MenuController.create({
 
 		App.MenuItem.create({
 			id: 10,
-			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Biografia',
 			url: '#/expedientes/biograofia',
 			icono: 'ic ic-biografia',
@@ -467,11 +467,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Biografia',
 					url: '#/expedientes/biografia',
-					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Biografia',
 							url: '#/expedientes/biografia',
 						}),
