@@ -621,9 +621,14 @@ App.ListFilterView = Ember.View.extend({
 	
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		var filtered = this.get('content').filter(function(item){
-			return regex.test(item.get('label').toLowerCase());
-		});
+		var filtered;
+
+		if(this.get('content'))
+		{
+			filtered = this.get('content').filter(function(item){
+				return regex.test(item.get('label').toLowerCase());
+			});
+		}
 
 		if (!filtered)
 			filtered = [];
@@ -1145,6 +1150,10 @@ App.DictamenesListView = App.ListFilterView.extend({
 App.DictamenSinODItemView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'dictamen-sin-od-item',
+
+	puedeCrearOD: function () {
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user'),
 
 	crearOD: function (){
 		 if (!App.get('dictamenController'))
@@ -1831,6 +1840,9 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	isExpanded: false,
 	isPendiente: false,
 	
+	puedeConfirmarEnvio: function(){
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user'),
 	cambiaEstado: function(){
 		if (this.get('content.estado')=="Pendiente") {
 			this.set('isPendiente', true);
@@ -2004,6 +2016,7 @@ App.AttachFileView = Em.View.extend({
 		this.set('content', App.get('uploaderController.content'));
 	},
 
+
 	fileWithOutFolder: function () {
 		if (this.get('content')) {
 			return this.get('content').replace(this.get('folder'), '');
@@ -2055,6 +2068,10 @@ App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
 	loading: false,
 
+	puedeCrear: function(){
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user'),
+
 	openDocument: function () {
 		this.set('loading', true);
 		$.ajax({
@@ -2101,7 +2118,6 @@ App.ExpedienteConsultaView = Em.View.extend({
 			App.get('expedienteConsultaController.content').loadBiography();
 		}
 	}
-
 });
 
 App.CitacionConsultaView = Em.View.extend({
@@ -2188,13 +2204,14 @@ App.CitacionConsultaView = Em.View.extend({
 		this._super();
 
 		if((App.citacionConsultaController.content.estado.id == 2) 
+			&& (this.get('hasPermission'))
 			&& (!App.citacionConsultaController.content.reunion) 
 			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
 			this.set('puedeCrearReunion', true);
 
 		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
 		if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
-		if(App.citacionConsultaController.content.estado.id == 1) 	this.set('puedeEditar', true);	
+		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
 
 	},
 
@@ -3212,7 +3229,10 @@ App.ReunionConsultaView = Em.View.extend({
 		return ((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0))
 	}.property('App.userController.user', 'App.reunionConsultaController'),
 	puedeCrearParteyPuedeEditarTemario:function(){
-		if((App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0) || (App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == ''))
+		if(
+			(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) 
+			&& (App.get('reunionConsultaController.content.nota') == '' && App.get('reunionConsultaController.content.parte').length == 0) 
+			&& (App.get('reunionConsultaController.content.parte').length == 0 && App.get('reunionConsultaController.content.nota') == ''))
 			return true;
 	}.property('App.userController.user', 'App.reunionConsultaController'),
 	cancelarEdicion: function () {
@@ -6514,6 +6534,10 @@ App.HelpView = Ember.View.extend({
 App.BiographyView = Ember.View.extend({
 	templateName: 'biography',
 
+	puedeEditar: function(){
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user'),
+
 	edit: function () {
 		
 		var biography;
@@ -6586,6 +6610,9 @@ App.ExpedienteBiographyItemView = Ember.View.extend({
 	templateName: 'expediente-biography-item',
 	biographyRoleRequire: 'ROLE_LABOR_PARLAMENTARIA_EDIT', 
 
+	puedeEditar: function(){
+		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+	}.property('App.userController.user'),
 	createBiography: function () {
 		var biography;
 		if (this.get('content').get('biografia')) {
