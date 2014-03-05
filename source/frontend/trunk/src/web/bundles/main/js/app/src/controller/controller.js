@@ -983,7 +983,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: 'dic/dictamenes/pendientes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/pendientes/01/01/2014/31/12/2014',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -1586,7 +1586,7 @@ App.CitacionesController = App.RestController.extend({
 		var citaciones = [];
 		var comsiones = App.get('userController.user.comisiones');
 
-		if (roles.contains('ROLE_DIPUTADO') && !roles.contains('ROLE_DIRECCION_COMISIONES')) {
+		if(roles.contains('ROLE_DIPUTADO') && !roles.contains('ROLE_DIRECCION_COMISIONES')) {
 			this.get('arrangedContent').forEach(function (citacion) {
 				if (citacion.get('estado.id') != 1) {
 					comsiones.forEach(function (comision) {
@@ -1601,7 +1601,7 @@ App.CitacionesController = App.RestController.extend({
 				}
 			});
 		} else {
-			if (roles.contains('ROLE_DIRECCION_COMISIONES')) {
+			if (roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW')) {
 				citaciones = this.get('arrangedContent');
 			} else {
 
@@ -1717,7 +1717,6 @@ App.FirmantesController = App.RestController.extend({
 		this.set('loaded', false);
 		$.ajax({
 			url: (App.get('apiController').get('productionURL') + this.get('url')),
-
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -1838,7 +1837,8 @@ App.ComisionesController = App.RestController.extend({
 		_self = this;
 		this.set('loaded', false);
 		$.ajax({
-			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+//			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			url: this.get('url').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -2024,7 +2024,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 });
 
 App.DictamenesController = App.RestController.extend({
-	url: 'dic/dictamenes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/01/01/2014/31/12/2014',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -2061,7 +2061,7 @@ App.DictamenesController = App.RestController.extend({
 });
 
 App.DictamenesSinOdController = App.RestController.extend({
-	url: 'dic/dictamenes/01/01/2013/31/12/2013',
+	url: 'dic/dictamenes/01/01/2014/31/12/2014',
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -2184,7 +2184,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 	
 	reuniones: function () {
 		var reuniones = [];
-		if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES')) {
+		if (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SEC_PARL_VIEW')) {
 			reuniones = this.get('content');
 		} else {
 			
