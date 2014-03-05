@@ -84,26 +84,25 @@ App.Router =  Em.Router.extend({
 	//		_self.transitionTo("page403");
 	//	 }
 	  //});
-		var tienePermisos = false;
+		var tienePermisos = roles.length > 0 ? false : true;
 
 		roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
-	      var groupIsValid = true;
-				rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){
-					if (!userRoles.contains(rolRequiered_value))
-					{
-						groupIsValid = false;
-					}
-				});
-
-	      if (groupIsValid) {
-	        tienePermisos = true;
-	      }
+		    var groupIsValid = true;
+			rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){
+				if (!userRoles.contains(rolRequiered_value))
+				{
+					groupIsValid = false;
+				}
+			});
+	    	if (groupIsValid) {
+	        	tienePermisos = true;
+	      	}
 		});
 
-	  if (!tienePermisos)
-	  {
-	  	_self.transitionTo("page403");
-	  }
+		if (!tienePermisos)
+		{
+			_self.transitionTo("page403");
+		}
 	},	
 	
 	root: Em.Route.extend({
