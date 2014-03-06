@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			 // this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -6621,6 +6621,17 @@ App.CreateBiographyInfoView = App.ModalView.extend({
 		this._super();
 		this.set('content', App.get('biographyInfoController').get('content'));
 	}, 
+});
+
+// Visitas Guiadas
+App.VisitasGuiadasView = Ember.View.extend({
+	templateName: 'visitas-guiadas',
+	content: '',
+
+	willInsertElement: function(){
+		this.set('content', App.get('visitasGuiadasController.content'));
+	}
+
 });
 
 App.ExpedientesBiographyView = Ember.View.extend({
