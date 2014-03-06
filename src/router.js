@@ -1092,7 +1092,48 @@ App.Router =  Em.Router.extend({
 				}),
 			}),
 		}),
-		
+
+		visitasGuiadas: Ember.Route.extend({
+			route: '/visitas-guiadas',
+
+				index: Ember.Route.extend({
+					route: '/listado',
+
+					deserialize: function(router, params){
+						var deferred = $.Deferred();				
+						
+						App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+						fn = function() {
+							if(App.get('visitasGuiadasController.loaded'))
+							{
+								App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+						App.get('visitasGuiadasController').load();	
+
+						return deferred.promise();	
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'VisitasGuiadas');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Visitas Guiadas'},
+							{titulo: 'Listado', url: '#/visitas-guiadas/listado'}
+						]);					
+						App.get('menuController').seleccionar(11, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+		}),	
+
 		expedientes: Em.Route.extend({
 			route: "/expedientes",
 			
