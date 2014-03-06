@@ -1657,3 +1657,7 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
 App.Bloque = Ember.Object.extend({
 
 })
+
+App.VisitaGuiada = Ember.Object.extend({
+//	id: '',
+});
