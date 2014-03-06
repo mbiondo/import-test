@@ -487,6 +487,10 @@ App.notificationController = App.NotificationController.create({
 	estado: '',
 });
 
+App.notificacionesController = App.NotificacionesController.create({
+	estado: '',
+});
+
 App.listaController = App.ListaController.create({
 	content: [],
 });
