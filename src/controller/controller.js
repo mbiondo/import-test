@@ -942,18 +942,18 @@ App.PlanDeLaborController = Ember.Object.extend({
 	plEsPaquete: function () {
 		var tema = App.get('temaController.content');
 		return tema.get('plTipo') == 'p';
- 	}.property('App.temaController.content', 'App.planDeLaborController.content'),
+	}.property('App.temaController.content', 'App.planDeLaborController.content'),
 
 	plEsDictamen: function () {
 		var tema = App.get('temaController.content');
 		return tema.get('plTipo') == 'd';
- 	}.property('App.temaController.content', 'App.planDeLaborController.content'),
+	}.property('App.temaController.content', 'App.planDeLaborController.content'),
 
 
 	plEsProyecto: function () {
 		var tema = App.get('temaController.content');
 		return tema.get('plTipo') == 'e';
- 	}.property('App.temaController.content', 'App.planDeLaborController.content'),	
+	}.property('App.temaController.content', 'App.planDeLaborController.content'),	
 });
 
 App.PlanDeLaborListadoController = App.RestController.extend({
@@ -1011,6 +1011,23 @@ App.DictamenesPendientesController = App.RestController.extend({
 
 //OD
 
+
+// Visitas GUiadas
+
+App.VisitasGuiadasController = App.RestController.extend({
+	url: 'visitas-guiadas',
+	useApi: false,
+	loaded: false,
+	type: App.VisitaGuiada,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.VisitaGuiada.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},		
+});
 
 //Notificaciones
 
@@ -1246,7 +1263,7 @@ App.NotificacionTipoController = Ember.Object.extend({
 			complete: this.loadCompleted
 		});
 	},
-                
+				
 	loadSucceeded: function(data) {
 		item = App.NotificacionTipo.extend(App.Savable).create();		
 		item.setProperties(data);
@@ -1343,7 +1360,7 @@ App.DiputadosPartidosController = App.RestController.extend({
 });
 
 App.ExpedientesArchivablesController = App.RestController.extend({
-    url: 'exp/proyectos/archivables',
+	url: 'exp/proyectos/archivables',
 	type: App.ExpedienteArchivable,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1452,7 +1469,7 @@ App.ExpedientesController = App.RestController.extend({
 });
 
 App.ExpedientesArchivadosController = App.RestController.extend({
-    url: 'exp/proyectos/archivables',
+	url: 'exp/proyectos/archivables',
 	type: App.ExpedienteBase,
 	useApi: true,
 	sortProperties: ['fechaPub'],
@@ -1480,7 +1497,7 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 
 // Envios a archivo
 App.EnvioArchivoController = App.RestController.extend({
-        url: 'com/env/envios',
+		url: 'com/env/envios',
 	type: App.Envio,
 	useApi: true,
 	sortProperties: ['fechaUltimaModificacion'],
@@ -1499,8 +1516,8 @@ App.EnvioArchivoController = App.RestController.extend({
 });
 
 App.EnvioArchivoConsultaController = Ember.Object.extend({
-        content: '',
-        url: 'com/env/envio/%@',
+		content: '',
+		url: 'com/env/envio/%@',
 	loaded : false,
 	useApi: true,
 	
@@ -1520,8 +1537,8 @@ App.EnvioArchivoConsultaController = Ember.Object.extend({
 			complete: this.loadCompleted
 		});
 	},
-                
-        loadSucceeded: function(data) {
+				
+		loadSucceeded: function(data) {
 		item = App.Envio.create();
 		item.setProperties(data);
 		this.set('content', item);
@@ -1702,7 +1719,7 @@ App.ParteEstadosController = App.RestController.extend({
 
 App.FirmantesController = App.RestController.extend({
 	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
-    type: App.FirmanteTextoDictamen,
+	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
 	sortProperties: ['sortOrden'],
@@ -1958,9 +1975,9 @@ App.DictamenCrearController = Ember.Object.extend({
 	loaded : false,
 	useApi: false,
 	
-        load: function () {
-            this.set('loaded', true); 
-        },
+		load: function () {
+			this.set('loaded', true); 
+		},
 });
 
 
@@ -3894,7 +3911,7 @@ App.EstadisticasController = Ember.Object.extend({
 	  var data = JSON.parse(payload);
 	  if (data.success == true)
 	  {
-	  	this.set('content', data.estadisticaSesion);
+		this.set('content', data.estadisticaSesion);
 	  }		
 	  this.set('loaded', true);
 	},
@@ -3904,26 +3921,26 @@ App.EstadisticasController = Ember.Object.extend({
 	}.property('content.@each'),
 
 	estadisticaBloques: function() { 
-	  	var data = [];
-	  	if (this.get('content.estadisticasBloque')) {
+		var data = [];
+		if (this.get('content.estadisticasBloque')) {
 
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
 				numDiputados = 'Orador';				
 				if(bloque.diputadosAsignados>1){ numDiputados = 'Oradores'; }
 				data.push([bloque.titulo + " (" + bloque.diputadosAsignados+" "+numDiputados+")", bloque.diputadosAsignados])
 			}); 
-	  	}
+		}
 		return data;
 	}.property('content.@each'),
 
 	estadisticaBloquesPorOradores: function() { 
-	  	var data = [];
-	  	if (this.get('content.estadisticasBloque')) {
+		var data = [];
+		if (this.get('content.estadisticasBloque')) {
 
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
 				data.push([bloque.titulo + " " + (bloque.tiempoAsignado / 60).toFixed(2) + "'", (bloque.tiempoAsignado).toFixed(2)])
 			}); 
-	  	}
+		}
 		return data;
 	}.property('content.@each'),	
 
@@ -3931,7 +3948,7 @@ App.EstadisticasController = Ember.Object.extend({
 	estadisticaBloquesForTable: function () {
 		var data= [];
 		_self = this;
-	  	if (this.get('content.estadisticasBloque')) {
+		if (this.get('content.estadisticasBloque')) {
 			this.get('content.estadisticasBloque').forEach(function (bloque) {
 				var b = Ember.Object.create(bloque);
 				b.set('label', b.get('titulo'));
@@ -3940,8 +3957,8 @@ App.EstadisticasController = Ember.Object.extend({
 				b.set('diputadosP', (b.get('diputadosAsignados') / b.get('totalDiputados') * 100).toFixed(2));
 				data.pushObject(b);
 			});
-	  		
-	  	}
+			
+		}
 
 
 		return data;
@@ -3949,25 +3966,25 @@ App.EstadisticasController = Ember.Object.extend({
 	}.property('content.@each'),
 	
 	estadisticaInterBloques: function() { 
-	  	var data = [];
-	  	if (this.get('content.estadisticasInterBloque')){
+		var data = [];
+		if (this.get('content.estadisticasInterBloque')){
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				if(bloque.diputadosAsignados>1){ numDiputados = 'Oradores'; }
 				data.push([bloque.titulo + " (" + bloque.diputadosAsignados+" "+numDiputados+")", bloque.diputadosAsignados])
 			}); 
-	  	}
+		}
 
 		return data;
 	}.property('content.@each'),
 
 	estadisticaInterBloquesPorOradores: function() { 
-	  	var data = [];
-	  	if (this.get('content.estadisticasInterBloque')) {
+		var data = [];
+		if (this.get('content.estadisticasInterBloque')) {
 
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				data.push([bloque.titulo + " (Tiempo Asignado: " + moment.duration(bloque.tiempoAsignado*1000).humanize()+")", (bloque.tiempoAsignado)]);
 			}); 
-	  	}
+		}
 		return data;
 	}.property('content.@each'),	
 	
@@ -3975,8 +3992,8 @@ App.EstadisticasController = Ember.Object.extend({
 		var data= [];
 		_self = this;
 
-	  	if (this.get('content.estadisticasInterBloque')) {
-	  		
+		if (this.get('content.estadisticasInterBloque')) {
+			
 			this.get('content.estadisticasInterBloque').forEach(function (bloque) {
 				var b = Ember.Object.create(bloque);
 				b.set('label', b.get('titulo'));
@@ -3985,7 +4002,7 @@ App.EstadisticasController = Ember.Object.extend({
 				b.set('diputadosP', (b.get('diputadosAsignados') / b.get('totalDiputados') * 100).toFixed(2));
 				data.pushObject(b);
 			});
-	  	}
+		}
 
 		return data;
 	}.property('content.@each'),
@@ -3993,11 +4010,11 @@ App.EstadisticasController = Ember.Object.extend({
 	temas: function() { 
 		var data = [App.EstadisticaTema.create({titulo: 'Todos los temas', id: -1})];
 
-	  	if (this.get('content.sesion')) {
+		if (this.get('content.sesion')) {
 			this.get('content.sesion.temas').forEach(function(tema) {
 				data.pushObject(App.EstadisticaTema.create(tema));
 			}); 
-	  	}
+		}
 		return data;
 	}.property('content.@each'),
 });
