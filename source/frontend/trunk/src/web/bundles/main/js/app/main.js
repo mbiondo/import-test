@@ -480,6 +480,31 @@ App.menuController = App.MenuController.create({
 			]
 		}),
 
+		App.MenuItem.create({
+			id: 11,
+			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			titulo: 'Visitas Guiadas',
+			url: '#/visitas-guiadas',
+			icono: 'ic ic-visitas-guiadas',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Visitas Guiadas',
+					url: '',
+					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							titulo: 'Listado',
+							url: '#/visitas-guiadas/listado',
+						}),
+					],
+				}),
+			]
+		}),
+
 	]
 });
 
