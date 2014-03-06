@@ -1833,9 +1833,12 @@ App.ComisionesController = App.RestController.extend({
 	// 	this.loadSucceeded(localStorage.getObject('comisiones'));
 	// },
 	//
+/*
 	load: function () {
+		this._super();
 		_self = this;
 		this.set('loaded', false);
+
 		$.ajax({
 //			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
 			url: this.get('url').fmt(encodeURIComponent(this.get('content').get('id'))),
@@ -1846,6 +1849,7 @@ App.ComisionesController = App.RestController.extend({
 			complete: this.loadCompleted
 		});
 	},	
+*/
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Comision.create(data);
