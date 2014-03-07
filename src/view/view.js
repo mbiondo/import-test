@@ -626,7 +626,8 @@ App.ListFilterView = Ember.View.extend({
 		if(this.get('content'))
 		{
 			filtered = this.get('content').filter(function(item){
-				return regex.test(item.get('label').toLowerCase());
+//				return regex.test(item.get('label').toLowerCase());
+				return regex.test(item.get('label'));
 			});
 		}
 
@@ -6624,6 +6625,17 @@ App.CreateBiographyInfoView = App.ModalView.extend({
 });
 
 // Visitas Guiadas
+App.VisitasGuiadasListItemView = Ember.View.extend({
+	templateName: 'visitas-guiadas-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+});
+
+App.VisitasGuiadasListView = App.ListFilterView.extend({
+	itemViewClass: App.VisitasGuiadasListItemView,
+	columnas: ['ID', 'Ver'],
+});
+
 App.VisitasGuiadasView = Ember.View.extend({
 	templateName: 'visitas-guiadas',
 	content: '',
@@ -6631,7 +6643,15 @@ App.VisitasGuiadasView = Ember.View.extend({
 	willInsertElement: function(){
 		this.set('content', App.get('visitasGuiadasController.content'));
 	}
+});
 
+App.VisitaGuiadaConsultaView = Ember.View.extend({
+	templateName: 'visita-guiada-consulta',
+	content: '',
+
+	willInsertElement: function(){
+		this.set('content', App.get('visitaGuiadaConsultaController.content'));
+	}	
 });
 
 App.ExpedientesBiographyView = Ember.View.extend({
