@@ -1660,6 +1660,7 @@ App.Bloque = Ember.Object.extend({
 
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
+        useApi: false,
 
 	id: '',
 	visitaPara: '',
@@ -1682,9 +1683,24 @@ App.VisitaGuiada = Ember.Object.extend({
 	correo: '',
 	cantPersonas: '',
 	alumnosConocimiento: '',
+        
+        contactado: false,
+        visitantes: null,
+        guia: null,
+        encuestaPosterior: false,
+        envioFoto: false,
+        observaciones: '',
+                     
 
 	serializable: [
-		'id'
+		'id',
+                'contactado',
+                'visitantes',
+                'guia',
+                'encuestaPosterior',
+                'envioFoto',
+                'observaciones',
+             
 	],
 
 	label: function (){
