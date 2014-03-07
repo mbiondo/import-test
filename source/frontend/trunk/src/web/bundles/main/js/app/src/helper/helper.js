@@ -84,6 +84,12 @@ Handlebars.registerHelper("linkCrearParte", function(id, options) {
   return "#/comisiones/reuniones/reunion/" + id + "/parte/crear";
 });
 
+Handlebars.registerHelper("linkVisitaGuiada", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/visitas-guiadas/visita/"+id+"/ver";
+});
 
 Handlebars.registerHelper("linkCrearOD", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
@@ -123,7 +129,6 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options){
 
 	this.roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
       var groupIsValid = true;
-
 			rolesRequiered_value.forEach(function(rolRequiered_value, rolRequiered_index){
 				if (!userRoles.contains(rolRequiered_value))
 				{
