@@ -1029,6 +1029,45 @@ App.VisitasGuiadasController = App.RestController.extend({
 	},		
 });
 
+App.VisitaGuiadaConsultaController = Ember.Object.extend({
+	url: 'visitas-guiadas/visita/%@',
+	type: App.VisitaGuiada,
+	useApi: false,
+
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+
+		$.ajax({
+			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+				
+	loadSucceeded: function(data) {
+		item = App.VisitaGuiada.extend(App.Savable).create();		
+		item.setProperties(data);
+		this.set('content', item);
+/*
+		var roles = []
+		this.get('content.roles').forEach(function(rol){
+			roles.addObject(App.Rol.extend(App.Savable).create(rol));
+		});
+		this.set('content.roles', roles);
+*/
+		this.set('loaded', true);
+	},	
+});
+
+
 //Notificaciones
 
 App.NotificacionesController = App.RestController.extend({
