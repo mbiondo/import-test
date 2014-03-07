@@ -1684,13 +1684,13 @@ App.VisitaGuiada = Ember.Object.extend({
 	cantPersonas: '',
 	alumnosConocimiento: '',
         
-        contactado: false,
-        visitantes: null,
-        guia: null,
-        encuestaPosterior: false,
-        envioFoto: false,
-        observaciones: '',
-                     
+    contactado: false,
+    visitantes: null,
+    guia: null,
+    encuestaPosterior: false,
+    envioFoto: false,
+    observaciones: '',
+                 
 
 	serializable: [
             'id',
