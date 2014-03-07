@@ -6651,7 +6651,11 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 
 	willInsertElement: function(){
 		this.set('content', App.get('visitaGuiadaConsultaController.content'));
-	}	
+	},
+	guardar: function(){
+		//App.get('visitaGuiadaConsultaController').save();
+		this.get('content').save();
+	}
 });
 
 App.ExpedientesBiographyView = Ember.View.extend({
