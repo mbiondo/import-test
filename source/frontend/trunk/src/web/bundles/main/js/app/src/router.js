@@ -1132,6 +1132,50 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
+				
+				visitaConsulta: Ember.Route.extend({
+					route: '/visita/:visita/ver',
+
+					deserialize: function(router, params){
+						App.visitaGuiadaConsultaController = App.VisitaGuiadaConsultaController.create();
+
+						App.set('visitaGuiadaConsultaController.content', App.VisitaGuiada.create({id: params.visita}));
+
+						var deferred = $.Deferred(),
+
+						fn = function() {
+							var visita = App.get('visitaGuiadaConsultaController.content');
+
+							if(App.get('visitaGuiadaConsultaController.loaded'))
+							{							
+								App.get('visitaGuiadaConsultaController').removeObserver('loaded', this, fn);
+								deferred.resolve(visita);
+							}
+						};
+
+						App.get('visitaGuiadaConsultaController').addObserver('loaded', this, fn);
+
+						App.get('visitaGuiadaConsultaController').load();
+						
+						return deferred.promise();
+					},
+					serialize: function(router, context){
+						return {visita: context.get('id')}
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'VisitaGuiadaConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Visitas Guiadas'},
+							{titulo: 'Visita', url: '#/visitas-guiada/visita/'}
+						]);					
+						App.get('menuController').seleccionar(11, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
 		}),	
 
 		expedientes: Em.Route.extend({
