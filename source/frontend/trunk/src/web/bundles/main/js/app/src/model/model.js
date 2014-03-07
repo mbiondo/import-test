@@ -1703,6 +1703,6 @@ App.VisitaGuiada = Ember.Object.extend({
 	],
 
 	label: function (){
-		return this.get('id');
+		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas");
 	}.property('id'),
 });
