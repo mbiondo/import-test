@@ -1693,14 +1693,13 @@ App.VisitaGuiada = Ember.Object.extend({
                      
 
 	serializable: [
-		'id',
-                'contactado',
-                'visitantes',
-                'guia',
-                'encuestaPosterior',
-                'envioFoto',
-                'observaciones',
-             
+            'id',
+            'contactado',
+            'visitantes',
+            'guia',
+            'encuestaPosterior',
+            'envioFoto',
+            'observaciones',
 	],
 
 	label: function (){
