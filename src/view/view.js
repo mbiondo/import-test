@@ -2017,7 +2017,19 @@ App.AttachFileView = Em.View.extend({
 		this.set('content', App.get('uploaderController.content'));
 	},
 
-
+        deleteFile: function () {
+            $.ajax({
+                    url: 'delete.php',  //server script to process data
+                    type: 'POST',
+                    data: {file: this.get('content')},
+                    success: function(payload)
+                    {
+                            App.set('uploaderController.content', '');
+                            this.set('content', App.get('uploaderController.content'));
+                    }
+            });            
+        },
+        
 	fileWithOutFolder: function () {
 		if (this.get('content')) {
 			return this.get('content').replace(this.get('folder'), '');
