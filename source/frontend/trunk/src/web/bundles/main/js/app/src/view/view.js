@@ -6670,6 +6670,11 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	}
 });
 
+App.VisitasGuiadasEstadisticasView = Ember.View.extend({
+	templateName: 'visitas-guiadas-estadisticas'
+});
+
+
 App.ExpedientesBiographyView = Ember.View.extend({
 	templateName: 'expedientes-biography',
 
