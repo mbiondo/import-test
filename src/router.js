@@ -384,9 +384,11 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred(),
 
 						fn2 = function() {
-							App.get('firmantesController').removeObserver('loaded', this, fn2);
-							App.get('comisionesController').removeObserver('loaded', this, fn2);
-							deferred.resolve(null);	
+                                                        if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
+                                                            App.get('firmantesController').removeObserver('loaded', this, fn2);
+                                                            App.get('comisionesController').removeObserver('loaded', this, fn2);
+                                                            deferred.resolve(null);	
+                                                        }
 						}
 
 						App.get('comisionesController').addObserver('loaded', this, fn2);
