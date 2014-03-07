@@ -626,8 +626,8 @@ App.ListFilterView = Ember.View.extend({
 		if(this.get('content'))
 		{
 			filtered = this.get('content').filter(function(item){
-//				return regex.test(item.get('label').toLowerCase());
-				return regex.test(item.get('label'));
+				return regex.test(item.get('label').toLowerCase());
+//				return regex.test(item.get('label'));
 			});
 		}
 
