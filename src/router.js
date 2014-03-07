@@ -1139,7 +1139,7 @@ App.Router =  Em.Router.extend({
 					deserialize: function(router, params){
 						App.visitaGuiadaConsultaController = App.VisitaGuiadaConsultaController.create();
 
-						App.set('visitaGuiadaConsultaController.content', App.VisitaGuiada.create({id: params.visita}));
+						App.set('visitaGuiadaConsultaController.content', App.VisitaGuiada.extend(App.Savable).create({id: params.visita}));
 
 						var deferred = $.Deferred(),
 
@@ -1156,7 +1156,7 @@ App.Router =  Em.Router.extend({
 						App.get('visitaGuiadaConsultaController').addObserver('loaded', this, fn);
 
 						App.get('visitaGuiadaConsultaController').load();
-						
+
 						return deferred.promise();
 					},
 					serialize: function(router, context){
