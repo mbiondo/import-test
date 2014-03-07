@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus'],
 });
 
 
@@ -6645,7 +6645,7 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 
 App.VisitasGuiadasListView = App.ListFilterView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
-	columnas: ['ID', 'Ver'],
+	columnas: ['ID', 'Tipo de visita', 'Provincia','Establecimiento', 'Contacto', 'Fecha', 'Visitantes', 'Detalles'],
 });
 
 App.VisitasGuiadasView = Ember.View.extend({
