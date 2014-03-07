@@ -1659,5 +1659,29 @@ App.Bloque = Ember.Object.extend({
 })
 
 App.VisitaGuiada = Ember.Object.extend({
-//	id: '',
+	id: '',
+	visitaPara: '',
+	tipoInstitucion: '',
+	telefono: '',
+	razonSocial: '',
+	provincia: '',
+	otrosCongreso: '',
+	nivelAlumnos: '',
+	movilidadReducida: '',
+	mesPreferencia: '',
+	localidad: '',
+	leyesCongreso: '',
+	horarioGral: '',
+	horario: '',
+	historiaCongreso: '',
+	funcionesCongreso: '',
+	diaPreferencia: '',
+	democraciaCongreso: '',
+	correo: '',
+	cantPersonas: '',
+	alumnosConocimiento: '',
+
+	label: function (){
+		return this.get('id');
+	}.property('id'),
 });
