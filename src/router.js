@@ -1132,6 +1132,26 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
+
+				estadisticas: Ember.Route.extend({
+					route: '/estadisticas',
+
+					deserialize: function(){
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'VisitasGuiadasEstadisticas');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Visitas Guiadas'},
+							{titulo: 'Visita', url: '#/visitas-guiadas/estadisticas'}
+						]);					
+						App.get('menuController').seleccionar(11, 0, 1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},					
+				}),
 				
 				visitaConsulta: Ember.Route.extend({
 					route: '/visita/:visita/ver',
