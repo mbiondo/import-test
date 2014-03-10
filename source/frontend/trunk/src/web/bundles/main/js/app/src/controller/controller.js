@@ -6,24 +6,19 @@ App.Savable = Ember.Mixin.create({
 		this.set('createSuccess', '');
 		var url = this.get('url');
 
-		if (this.get('useApi')) {
-			url = App.get('apiController').get('url') + this.get('url');	
-		} else {
-			if (this.get('absolutURL')) {
-				url = this.get('urlAbsolut');
-			}
-		}
+		if (this.get('useApi')) 
+                    url = App.get('apiController').get('url') + this.get('url');	
 
 		$.ajax({
-			url:  url,
-			dataType: 'JSON',
-			type: 'POST',
-			context: this,
-			contentType: 'text/plain',
-			crossDomain: 'true',			
-			data : this.getJson(),
-			success: this.createSucceded,
-			complete: this.createCompleted,
+                    url:  url,
+                    dataType: 'JSON',
+                    type: 'POST',
+                    context: this,
+                    contentType: 'text/plain',
+                    crossDomain: 'true',			
+                    data : this.getJson(),
+                    success: this.createSucceded,
+                    complete: this.createCompleted,
 		});
 	},
 

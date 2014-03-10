@@ -6226,6 +6226,7 @@ App.DiputadosListView = App.ListFilterView.extend({
 App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
 	clickGuardar: false,
+        expTipo: '',
 
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -6261,6 +6262,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	guardar: function (){
+            
 		if(!this.get('clickGuardar'))
 		{
 			this.set('clickGuardar', true);
@@ -6270,6 +6272,11 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			if($("#formCrearExpediente").parsley('validate'))
 			{
+                                if (this.get('expTipo')) {
+                                    this.set('tipo', this.get('content.tipo'));
+                                    this.get('content').set('tipo', this.get('expTipo'));
+                                }
+                                
 				this.get('content').normalize();
 				//this.get('content').desNormalize();
 				
@@ -6281,6 +6288,10 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	createSucceeded: function () {
 		this.get('content').desNormalize();
+                if (this.get('tipo')) {
+                    this.get('content').set('tipo', this.get('tipo'));
+                }
+                
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
 			App.set('expedienteConsultaController.content', App.Expediente.create(this.get('content')));
@@ -6347,6 +6358,9 @@ App.InputSearchWidget = Ember.TextField.extend({
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 	camaras: ["Diputados", "Senadores"],
+        tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
+        tipoPub: ['TP', 'BAE', 'BAT'],
+        
 	filterTextComisiones: '',
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
@@ -6492,7 +6506,15 @@ App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
-    templateName: 'expediente-form-ley'
+    templateName: 'expediente-form-mensaje',
+    msgNro: '',
+    msgFecha: null,
+    msgTipo: '',
+    
+    msgValueChange: function () {
+        this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + " Y PROYECTO " + this.get('content.expdip'));
+        this.get('parentView').set('expTipo', this.get('msgTipo'));
+    }.observes('msgNro'),
 });
 
 App.CrearGiroView = Ember.View.extend({
