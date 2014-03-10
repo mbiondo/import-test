@@ -503,7 +503,7 @@ App.Biography = Em.Object.extend({
 App.Expediente = Em.Object.extend({
 	sortValue: '',
 	auditable: true,
-	useApi: false,
+	useApi: true,
 	seleccionado: false,
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
