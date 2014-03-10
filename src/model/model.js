@@ -1658,6 +1658,15 @@ App.Bloque = Ember.Object.extend({
 
 })
 
+App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
+	provincia: '',
+	visitantes: '',
+
+	label: function(){
+		return this.get('provincia') + " " + this.get('visitantes');
+	}.property('provincia')
+});
+
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
         useApi: false,
@@ -1690,7 +1699,6 @@ App.VisitaGuiada = Ember.Object.extend({
     encuestaPosterior: false,
     envioFoto: false,
     observaciones: '',
-                 
 
 	serializable: [
             'id',
