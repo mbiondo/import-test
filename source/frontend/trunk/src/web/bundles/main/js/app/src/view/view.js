@@ -6658,6 +6658,7 @@ App.CreateBiographyInfoView = App.ModalView.extend({
 });
 
 // Visitas Guiadas
+
 App.VisitasGuiadasListItemView = Ember.View.extend({
 	templateName: 'visitas-guiadas-list-item',
 	tagName: 'tr',
@@ -6693,6 +6694,15 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 
 App.VisitasGuiadasEstadisticasView = Ember.View.extend({
 	templateName: 'visitas-guiadas-estadisticas'
+});
+
+App.VisitasGuiadasEstadisticasTableItemView = Ember.View.extend({
+	templateName: 'visitas-guiadas-estadisticas-table-item'
+});
+
+App.VisitasGuiadasEstadisticasTableView = App.ListFilterView.extend({
+	columnas: ["Provincias", "Visitantes"],
+	itemViewClass: App.VisitasGuiadasEstadisticasTableItemView,
 });
 
 
