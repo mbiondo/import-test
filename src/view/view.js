@@ -631,6 +631,7 @@ App.ListFilterView = Ember.View.extend({
 			});
 		}
 
+
 		if (!filtered)
 			filtered = [];
 
@@ -5445,6 +5446,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 
 App.PieGraphView = Ember.View.extend({
 	attributeBindings: ['title', 'name', 'content'],
+	pointFormat: '{point.y}',
 	type: 'pie',
 
 	redrawChart: function () {
@@ -5458,8 +5460,8 @@ App.PieGraphView = Ember.View.extend({
 				text: this.get('title')
 			},
 			tooltip: {
-				pointFormat: '',
-				//pointFormat: "Value: {point.percentage:.2f}%" , 
+				//pointFormat: '',
+				pointFormat: this.get('pointFormat') , 
 			},
 			plotOptions: {
 				pie: {
