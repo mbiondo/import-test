@@ -1023,6 +1023,26 @@ App.VisitasGuiadasController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},
+	estadisticasPorProvinciaTable: function(){
+		var data = [];
+		var provincias;
+		var _self = this;
+
+		if (this.get('content'))
+		{
+			provincias = $.map(this.get('content'), function(key){ return key.provincia; }).sort(); // Recorro cada item
+			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
+
+			provincias_unique.forEach(function(item){
+			    provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);
+
+			    var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, visitantes: provincia_list.length});
+				data.push(fila);
+		    });
+		}
+
+	    return data;		
+	}.property('content.@each'),
 	estadisticasPorProvincia: function(){
 		var data = [];
 		var provincias;
