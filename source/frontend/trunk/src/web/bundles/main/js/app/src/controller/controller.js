@@ -1023,6 +1023,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},
+	estadisticasPorDiaHorario: function(){
+
+	},
 	estadisticasPorProvinciaTable: function(){
 		var data = [];
 		var provincias;
@@ -1034,9 +1037,13 @@ App.VisitasGuiadasController = App.RestController.extend({
 			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
 
 			provincias_unique.forEach(function(item){
-			    provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);
+				var cant = 0;
+			    provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
+			    provincia_list.forEach(function(item){
+			    	cant+=parseInt(item.cantPersonas);
+			    });
 
-			    var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, visitantes: provincia_list.length});
+			    var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, cantPersonas: cant});
 				data.push(fila);
 		    });
 		}
