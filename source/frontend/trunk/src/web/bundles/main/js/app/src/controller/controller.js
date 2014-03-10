@@ -1019,6 +1019,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 	useApi: false,
 	loaded: false,
 	type: App.VisitaGuiada,
+	content: null,
 
 	createObject: function (data, save) {
 		save = save || false;
@@ -1026,7 +1027,26 @@ App.VisitasGuiadasController = App.RestController.extend({
 		item = App.VisitaGuiada.create(data);
 		item.setProperties(data);
 		this.addObject(item);
-	},		
+	},
+	estadisticasPorProvincia: function(){
+		var data = [];
+		var provincias;
+		var _self = this;
+
+		if (this.get('content'))
+		{
+			provincias = $.map(this.get('content'), function(key){ return key.provincia; }).sort(); // Recorro cada item
+			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
+
+			provincias_unique.forEach(function(item){
+			    provincias_list = _self.get('content').filterProperty('provincia', item);
+			    data.push({name: item, y: provincias_list.length});
+		    });
+		}
+
+	    return data;
+
+	}.property('content.@each')
 });
 
 App.VisitaGuiadaConsultaController = Ember.Object.extend({
@@ -3982,8 +4002,6 @@ App.EstadisticasController = Ember.Object.extend({
 		}
 		return data;
 	}.property('content.@each'),	
-
-
 	estadisticaBloquesForTable: function () {
 		var data= [];
 		_self = this;
