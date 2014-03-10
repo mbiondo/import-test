@@ -2023,6 +2023,7 @@ App.AttachFileView = Em.View.extend({
             App.set('uploaderController.content', '');
             this.set('content', App.get('uploaderController.content'));
             
+           /*
             $.ajax({
                     url: 'delete.php',  //server script to process data
                     type: 'POST',
@@ -2030,7 +2031,8 @@ App.AttachFileView = Em.View.extend({
                     success: function(payload)
                     {
                     }
-            });            
+            });
+            */
         },
         
 	fileWithOutFolder: function () {
