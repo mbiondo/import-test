@@ -2018,14 +2018,16 @@ App.AttachFileView = Em.View.extend({
 	},
 
         deleteFile: function () {
+            _self = this;
+            App.set('uploaderController.content', '');
+            this.set('content', App.get('uploaderController.content'));
+            
             $.ajax({
                     url: 'delete.php',  //server script to process data
                     type: 'POST',
                     data: {file: this.get('content')},
                     success: function(payload)
                     {
-                            App.set('uploaderController.content', '');
-                            this.set('content', App.get('uploaderController.content'));
                     }
             });            
         },
@@ -6223,7 +6225,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
 	clickGuardar: false,
 
-	tipos: ['LEY', 'RESOLUCION', 'DECLARACION'],
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
@@ -6236,6 +6238,14 @@ App.CrearExpedienteView = Ember.View.extend({
 	esResolucion: function () {
 		return this.get('content.tipo') == "RESOLUCION";
 	}.property('content.tipo'),
+        
+        esMensaje: function () {
+                var regex = new RegExp('mensaje');
+                if (this.get('content.tipo'))
+                    return regex.test(this.get('content.tipo').toLowerCase());
+                else
+                    return false;
+        }.property('content.tipo'),
 
 	noHayTipo: function(){
 		if(this.get('content.tipo') == null)
@@ -6307,7 +6317,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: ''}));
+		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));
 	}
 });
 
@@ -6367,6 +6377,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('content.expdip'),
 	clickFirmante: function (firmante) {
 		// Si elijen un firmante pasa por aca
+                this.set('filterFirmantes', '');
 		if(firmante.apellido)
 		{
 			var item 		= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
@@ -6409,14 +6420,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		// Si escriben en el filtro de busqueda
 		// Entonces filtro el contenido a mostrar
-		if(this.get('filterFirmantes') != '')
+		if(this.get('filterFirmantes') != '' && this.get('filterFirmantes').length > 3)
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-
 			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
 				return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
 			});	
-
 		}
 		// Si el filtro de busqueda esta vacío
 		// Entonces muestro todo
@@ -6424,30 +6433,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		{
 			filtered = App.get('firmantesController.arrangedContent');
 		}
-
-		// Si hay firmantes seleccionados
-		// Entonces muestro todos, menos los que ya elijieron
-
-		if(this.get('firmantesSeleccionados'))
-		{
-			if(filtered)
-			{
-				// Muestro todos los firmantes
-				// Excepto los firmantes ya seleccionados
-				//return filtered.removeObjects(this.get('firmantesSeleccionados'));
-				return filtered;
-			}
-		}
-		// Si no hay firmantes seleccionados
-		// Entonces muestro lo que tenga "filtered"
-		else
-		{
-			return filtered;
-		}
-
+                return filtered;
+                
 	}.property('firmantesController.content.@each', 'filterFirmantes'),
 
 	clickComision: function (comision) {
+                this.set('filterTextComisiones', '');
 		if (comision.id)
 		{
 			var item 		= this.get('content.giro').findProperty("comision", comision.get('comision'));
@@ -6491,11 +6482,15 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
-	templateName: 'expediente-form-ley'
+    templateName: 'expediente-form-ley'
 });
 
 App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
-	templateName: 'expediente-form-ley'
+    templateName: 'expediente-form-ley'
+});
+
+App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
+    templateName: 'expediente-form-ley'
 });
 
 App.CrearGiroView = Ember.View.extend({
