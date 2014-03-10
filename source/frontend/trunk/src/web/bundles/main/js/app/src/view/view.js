@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -6296,32 +6296,20 @@ App.CrearExpedienteView = Ember.View.extend({
                 
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
-			App.set('expedienteConsultaController.content', App.Expediente.create(this.get('content')));
+			App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
-				if (App.get('expedienteConsultaController.loaded')) {
-					App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
-					var expediente = App.get('expedienteConsultaController.content');
-
-					//CREATE NOTIFICATION TEST 
-					var notification = App.Notificacion.extend(App.Savable).create();
-					//ACA TITULO DE LA NOTIFICACION
-					notification.set('tipo', 'expedienteCreado');	
-					//Si hace falta ID del objeto modificado
-					notification.set('objectId', expediente.id);
-					//Link del objeto
-					notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
-					//CreateAt
-					notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-					//Custom message
-					notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
-
-					//notification.set('firmantes', expediente.firmantes);
-					//Crear
-					notification.create();
-
-
-					App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
-				}
+                            if (App.get('expedienteConsultaController.loaded')) {
+                                App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+                                var expediente = App.get('expedienteConsultaController.content');
+                                var notification = App.Notificacion.extend(App.Savable).create();
+                                notification.set('tipo', 'expedienteCreado');	
+                                notification.set('objectId', expediente.id);
+                                notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
+                                notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+                                notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
+                                notification.create();
+                                App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
+                            }
 			};
 			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 			App.get('expedienteConsultaController').load();			
@@ -6342,8 +6330,6 @@ App.InputSearchWidget = Ember.TextField.extend({
 
 		if(this.get('search-widget') == 'firmantes' && $(".searchWidgetFirmantes").is(':focus'))
 		{
-			// 1) Chequeo si tiene el atributo 'search-widget'
-			// 2) Chequeo si el campo de texto tiene el cursor de texto
 			firmante = _self.get('listaFirmantes.firstObject');
 			_self.clickFirmante(firmante);
 		}

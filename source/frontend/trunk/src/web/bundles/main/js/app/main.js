@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.185.204.12:9090/sparl/rest/',
+	url: 'http://10.105.5.63:9090/sparl/rest/',
 
 	productionURL: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://10.185.204.6:9090/sparl/rest/',
