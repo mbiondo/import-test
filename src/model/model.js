@@ -513,8 +513,8 @@ App.Expediente = Em.Object.extend({
 	biografia: null,
 
 
-	url: 'exp/proyecto',	
-	urlAbsolut: 'http://10.185.204.6:9090/rest/ME/exp/proyecto',
+	url: 'ME/exp/proyecto'
+	//urlAbsolut: 'http://10.185.204.6:9090/rest/ME/exp/proyecto',
 
 
 	loadBiography: function () {
