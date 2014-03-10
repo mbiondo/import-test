@@ -6327,7 +6327,6 @@ App.CrearExpedienteView = Ember.View.extend({
 App.InputSearchWidget = Ember.TextField.extend({
 	insertNewline: function(){		
 		var _self = this.get('parentView');
-
 		if(this.get('search-widget') == 'firmantes' && $(".searchWidgetFirmantes").is(':focus'))
 		{
 			firmante = _self.get('listaFirmantes.firstObject');
