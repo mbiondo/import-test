@@ -1139,6 +1139,23 @@ App.Router =  Em.Router.extend({
 					route: '/estadisticas',
 
 					deserialize: function(){
+						var deferred = $.Deferred();				
+						
+						App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+						fn = function() {
+							if(App.get('visitasGuiadasController.loaded'))
+							{
+								App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+						App.get('visitasGuiadasController').load();	
+
+						return deferred.promise();	
 					},
 					connectOutlets: function(router, context){
 						var appController = router.get('applicationController');
