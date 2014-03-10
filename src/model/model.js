@@ -1660,10 +1660,10 @@ App.Bloque = Ember.Object.extend({
 
 App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 	provincia: '',
-	visitantes: '',
+	cantPersonas: '',
 
 	label: function(){
-		return this.get('provincia') + " " + this.get('visitantes');
+		return this.get('provincia') + " " + this.get('cantPersonas');
 	}.property('provincia')
 });
 
