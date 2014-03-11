@@ -6344,9 +6344,9 @@ App.InputSearchWidget = Ember.TextField.extend({
 
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
-	camaras: ["Diputados", "Senadores"],
+	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
         tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
-        tipoPub: ['TP', 'BAE', 'BAT'],
+        tipoPub: ['TP'],
         
 	filterTextComisiones: '',
 	filterFirmantes: '',
@@ -6378,67 +6378,49 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	uploadFolder: function () {
 		return "uploads/expediente/" + this.get('content.expdip') + "/";
 	}.property('content.expdip'),
-	clickFirmante: function (firmante) {
-		// Si elijen un firmante pasa por aca
-                this.set('filterFirmantes', '');
+	clickFirmante: function (firmante) {                
 		if(firmante.apellido)
 		{
-			var item 		= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
-			// Genero un incremental, como si fuese el id
+			var item 	= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
 			var itemNumero 	= this.get('content.firmantes').length + 1;
-			// Guardo en itemDatos, la información que quiero que se envie por 'POST'
 			var itemDatos 	= {orden: itemNumero, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-			// Inserto un Object en 'content.firmantes'		
 			this.get('content.firmantes').pushObject(itemDatos);
-			// Inserto un Ember.Object a 'firmantesSeleccionados'
 			this.get('firmantesSeleccionados').pushObject(firmante);
 		}
-		// Si remueven un firmate pasa por aca
 		else
 		{			
-			//var item = this.get('firmantesSeleccionados').findProperty("nombre", firmante.nombre);
 			var filtered = [];
 
-			// Si los datos del Firmante removido, coinciden con los que estan en la lista 'firmantesSeleccionados'
-			// entonces lo almaceno en filtered
 			filtered = this.get('firmantesSeleccionados').filter(function(f){
-				// Funciona similar a la variable 'item' de 'Giros'
-				// Se hace de esta manera porque no puedo buscar recorriendo sobre un objeto con findProperty
 				var n = f.diputado.datosPersonales.apellido + ", " + f.diputado.datosPersonales.nombre;
 			    return n == firmante.nombre;
 			});
-			// Esto se relaciona con el "if(this.get('firmantesSeleccionados'))" de "listaFIrmantes"
 
 			this.get('firmantesSeleccionados').removeObjects(filtered);
-
-//			this.get('firmantesSeleccionados').removeObject(item);
 			this.get('content.firmantes').removeObject(firmante);			
-		}	
+		}
+                this.set('filterFirmantes', '');
 	},
 
 
 	listaFirmantes: function () {
+		var filtered = []; 
 
-		var filtered; 
-
-		// Si escriben en el filtro de busqueda
-		// Entonces filtro el contenido a mostrar
 		if(this.get('filterFirmantes') != '' && this.get('filterFirmantes').length > 3)
 		{
-			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
-				return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
-			});	
+                    var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
+                    filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
+                            return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
+                    });	
 		}
-		// Si el filtro de busqueda esta vacío
-		// Entonces muestro todo
 		else
 		{
-			filtered = App.get('firmantesController.arrangedContent');
+                    filtered = App.get('firmantesController.arrangedContent');
 		}
+                
                 return filtered;
                 
-	}.property('firmantesController.content.@each', 'filterFirmantes'),
+	}.property('filterFirmantes').cacheable(),
 
 	clickComision: function (comision) {
                 this.set('filterTextComisiones', '');
@@ -6471,11 +6453,20 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('content.giro.@each', 'filterTextComisiones', 'comisionesController.arrangedContent.@each'),
 
 	camaraChange: function () {
-		if (this.get('content.iniciado') == "Diputados") {
-			this.get('content').set('expdipT', 'D');
-		} else {
-			this.get('content').set('expdipT', 'S');
-		}
+                switch (this.get('content.iniciado')) {
+                    case "Diputados":
+                        this.get('content').set('expdipT', 'D');
+                        break;
+                    case "Senadores":
+                        this.get('content').set('expdipT', 'S');
+                        break;
+                    case "Poder Ejecutivo":
+                        this.get('content').set('expdipT', 'PE');
+                        break;
+                    case "JGM":
+                        this.get('content').set('expdipT', 'JGM');
+                        break;
+                }
 	}.observes('content.iniciado'),
 
 	numeroChange: function () {
@@ -6494,14 +6485,24 @@ App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
     templateName: 'expediente-form-mensaje',
+    camaras: ["Poder Ejecutivo", "JGM"],
     msgNro: '',
     msgFecha: null,
     msgTipo: '',
     
     msgValueChange: function () {
-        this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + " Y PROYECTO " + this.get('content.expdip'));
+        var add = '';
+        if (this.get('conLey')) {
+            add = " Y PROYECTO DE LEY";
+        }
+        this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + add);
         this.get('parentView').set('expTipo', this.get('msgTipo'));
-    }.observes('msgNro'),
+    }.observes('msgNro', 'conLey'),
+    
+    didInsertElement: function () {
+        this._super();
+        this.get('content').set('iniciado', "Poder Ejecutivo");
+    },
 });
 
 App.CrearGiroView = Ember.View.extend({
