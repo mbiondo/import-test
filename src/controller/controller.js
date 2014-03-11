@@ -7,18 +7,18 @@ App.Savable = Ember.Mixin.create({
 		var url = this.get('url');
 
 		if (this.get('useApi')) 
-                    url = App.get('apiController').get('url') + this.get('url');	
+					url = App.get('apiController').get('url') + this.get('url');	
 
 		$.ajax({
-                    url:  url,
-                    dataType: 'JSON',
-                    type: 'POST',
-                    context: this,
-                    contentType: 'text/plain',
-                    crossDomain: 'true',			
-                    data : this.getJson(),
-                    success: this.createSucceded,
-                    complete: this.createCompleted,
+					url:  url,
+					dataType: 'JSON',
+					type: 'POST',
+					context: this,
+					contentType: 'text/plain',
+					crossDomain: 'true',			
+					data : this.getJson(),
+					success: this.createSucceded,
+					complete: this.createCompleted,
 		});
 	},
 
@@ -1008,6 +1008,51 @@ App.DictamenesPendientesController = App.RestController.extend({
 
 
 // Visitas GUiadas
+App.VisitasGuiadasEstadisticasController = App.RestController.extend({
+	url: 'visitas-guiadas/estadisticas',
+	useApi: false,
+	loaded: false,
+	type: App.VisitaGuiadaEstadistica,
+	content: null,
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.VisitaGuiadaEstadistica.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+	estadisticasPorDiaHorario: function(){
+		var _self = this;
+		var data = [];
+		var dias = {'LUNES':[], 'MARTES':[], 'MIERCOLES':[], 'JUEVES':[], 'VIERNES':[]};
+		var lista_dias = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
+		var lista_horarios = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'];
+
+		if(this.get('content'))
+		{		
+			lista_dias.forEach(function(dia){
+				lista_horarios.forEach(function(horario){
+					var encontrado = false;
+					
+					_self.get('content').forEach(function(item){
+						 if(dia == item.diaPreferencia && item.horario == horario)
+						 {
+							encontrado = true;
+							dias[dia].push(parseInt(item.cantPersonas));						
+						}
+					});
+				
+					if(!encontrado) dias[dia].push(0);            
+				});
+			});
+
+			$.map(dias, function(value, key){ data.push({"name":key, "data":value}); });
+		}
+
+		return data;
+	}.property('content.@each'),
+
+});
 
 App.VisitasGuiadasController = App.RestController.extend({
 	url: 'visitas-guiadas',
@@ -1016,15 +1061,13 @@ App.VisitasGuiadasController = App.RestController.extend({
 	type: App.VisitaGuiada,
 	content: null,
 
+
 	createObject: function (data, save) {
 		save = save || false;
 		
 		item = App.VisitaGuiada.create(data);
 		item.setProperties(data);
 		this.addObject(item);
-	},
-	estadisticasPorDiaHorario: function(){
-
 	},
 	estadisticasPorProvinciaTable: function(){
 		var data = [];
@@ -1038,17 +1081,17 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 			provincias_unique.forEach(function(item){
 				var cant = 0;
-			    provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
-			    provincia_list.forEach(function(item){
-			    	cant+=parseInt(item.cantPersonas);
-			    });
+				provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
+				provincia_list.forEach(function(item){
+					cant+=parseInt(item.cantPersonas);
+				});
 
-			    var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, cantPersonas: cant});
+				var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, cantPersonas: cant});
 				data.push(fila);
-		    });
+			});
 		}
 
-	    return data;		
+		return data;		
 	}.property('content.@each'),
 	estadisticasPorProvincia: function(){
 		var data = [];
@@ -1061,12 +1104,17 @@ App.VisitasGuiadasController = App.RestController.extend({
 			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
 
 			provincias_unique.forEach(function(item){
-			    provincias_list = _self.get('content').filterProperty('provincia', item);
-			    data.push({name: item, y: provincias_list.length});
-		    });
+				var cant = 0;
+				provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
+				provincia_list.forEach(function(item){
+					cant+=parseInt(item.cantPersonas);
+				});
+
+				data.push({name: item, y: cant});
+			});
 		}
 
-	    return data;
+		return data;
 
 	}.property('content.@each')
 });
@@ -1098,13 +1146,6 @@ App.VisitaGuiadaConsultaController = Ember.Object.extend({
 		item = App.VisitaGuiada.extend(App.Savable).create();		
 		item.setProperties(data);
 		this.set('content', item);
-/*
-		var roles = []
-		this.get('content.roles').forEach(function(rol){
-			roles.addObject(App.Rol.extend(App.Savable).create(rol));
-		});
-		this.set('content.roles', roles);
-*/
 		this.set('loaded', true);
 	},	
 });
