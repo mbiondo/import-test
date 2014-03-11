@@ -1142,18 +1142,22 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred();				
 						
 						App.visitasGuiadasController = App.VisitasGuiadasController.create();
+						App.visitasGuiadasEstadisticasController = App.VisitasGuiadasEstadisticasController.create();
 
 						fn = function() {
 							if(App.get('visitasGuiadasController.loaded'))
 							{
 								App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+								App.get('visitasGuiadasEstadisticasController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);
 							}
 						};
 						
 						App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+						App.get('visitasGuiadasEstadisticasController').addObserver('loaded', this, fn);
 
 						App.get('visitasGuiadasController').load();	
+						App.get('visitasGuiadasEstadisticasController').load();	
 
 						return deferred.promise();	
 					},
