@@ -6674,8 +6674,18 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	},
 	guardar: function(){
 		//App.get('visitaGuiadaConsultaController').save();
+                this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
-	}
+	},
+        saveSuccessed: function () {
+		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('content.saveSuccess')) {
+                        App.get('router').transitionTo('visitasGuiadas.index')
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	}      
 });
 
 App.VisitasGuiadasEstadisticasView = Ember.View.extend({
