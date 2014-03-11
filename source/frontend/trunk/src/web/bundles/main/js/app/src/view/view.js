@@ -6655,11 +6655,16 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 	templateName: 'visitas-guiadas-list-item',
 	tagName: 'tr',
 	classNames: ['gradeX'],
+
+	didInsertElement: function () {
+		this._super();
+		this.$('span').tooltip();
+	},
 });
 
 App.VisitasGuiadasListView = App.ListFilterView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
-	columnas: ['ID', 'Tipo de visita', 'Provincia','Establecimiento', 'Contacto', 'Fecha', 'Visitantes', 'Detalles'],
+	columnas: ['ID', 'Tipo de visita', 'Provincia', 'Contacto', 'Fecha', 'Visitantes', 'Detalles'],
 });
 
 App.VisitasGuiadasView = Ember.View.extend({
