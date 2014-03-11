@@ -6664,7 +6664,7 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 
 App.VisitasGuiadasListView = App.ListFilterView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
-	columnas: ['ID', 'Tipo de visita', 'Provincia', 'Contacto', 'Fecha', 'Visitantes', 'Detalles'],
+	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita', 'Visitantes', 'Detalles'],
 });
 
 App.VisitasGuiadasView = Ember.View.extend({
