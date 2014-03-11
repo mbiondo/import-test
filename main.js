@@ -400,7 +400,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Movimiento Diputados',
 					url: '',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_ADMIN']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -435,7 +435,7 @@ App.menuController = App.MenuController.create({
 					id: 2,
 					titulo: 'Giros',
 					url: '',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_ADMIN']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -510,6 +510,31 @@ App.menuController = App.MenuController.create({
 				}),
 			]
 		}),
+                App.MenuItem.create({
+			id: 12,
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Publicaciones',
+			url: '#/publicaciones/TP/crear',
+			icono: 'ic ic-publicaciones',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'TP',
+					url: '#/publicaciones/TP/crear',
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Confeccionar TP',
+							url: '#/publicaciones/TP/crear',
+						}),
+					],
+				}),
+			]
+		}),
+                
 
 	]
 });
