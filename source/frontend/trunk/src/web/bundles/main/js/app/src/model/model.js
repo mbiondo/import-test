@@ -1658,6 +1658,12 @@ App.Bloque = Ember.Object.extend({
 
 })
 
+App.VisitaGuiadaEstadistica = Ember.Object.extend({
+	cantPersonas: '',
+	diaPreferencia: '',
+	horario: '',
+});
+
 App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 	provincia: '',
 	cantPersonas: '',
