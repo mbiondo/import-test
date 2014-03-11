@@ -2018,23 +2018,23 @@ App.AttachFileView = Em.View.extend({
 		this.set('content', App.get('uploaderController.content'));
 	},
 
-        deleteFile: function () {
-            _self = this;
-            App.set('uploaderController.content', '');
-            this.set('content', App.get('uploaderController.content'));
-            
-           /*
-            $.ajax({
-                    url: 'delete.php',  //server script to process data
-                    type: 'POST',
-                    data: {file: this.get('content')},
-                    success: function(payload)
-                    {
-                    }
-            });
-            */
-        },
-        
+		deleteFile: function () {
+			_self = this;
+			App.set('uploaderController.content', '');
+			this.set('content', App.get('uploaderController.content'));
+			
+		   /*
+			$.ajax({
+					url: 'delete.php',  //server script to process data
+					type: 'POST',
+					data: {file: this.get('content')},
+					success: function(payload)
+					{
+					}
+			});
+			*/
+		},
+		
 	fileWithOutFolder: function () {
 		if (this.get('content')) {
 			return this.get('content').replace(this.get('folder'), '');
@@ -5443,11 +5443,8 @@ App.CrearTurnoInlineView = Em.View.extend({
 	},
 });
 
-/* Estadisticas */
-
-
 App.PieGraphView = Ember.View.extend({
-	attributeBindings: ['title', 'name', 'content'],
+	attributeBindings: ['title', 'name', 'content', 'categories'],
 	pointFormat: '{point.y}',
 	type: 'pie',
 
@@ -6228,7 +6225,7 @@ App.DiputadosListView = App.ListFilterView.extend({
 App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
 	clickGuardar: false,
-        expTipo: '',
+		expTipo: '',
 
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -6243,14 +6240,14 @@ App.CrearExpedienteView = Ember.View.extend({
 	esResolucion: function () {
 		return this.get('content.tipo') == "RESOLUCION";
 	}.property('content.tipo'),
-        
-        esMensaje: function () {
-                var regex = new RegExp('mensaje');
-                if (this.get('content.tipo'))
-                    return regex.test(this.get('content.tipo').toLowerCase());
-                else
-                    return false;
-        }.property('content.tipo'),
+		
+		esMensaje: function () {
+				var regex = new RegExp('mensaje');
+				if (this.get('content.tipo'))
+					return regex.test(this.get('content.tipo').toLowerCase());
+				else
+					return false;
+		}.property('content.tipo'),
 
 	noHayTipo: function(){
 		if(this.get('content.tipo') == null)
@@ -6264,7 +6261,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	guardar: function (){
-            
+			
 		if(!this.get('clickGuardar'))
 		{
 			this.set('clickGuardar', true);
@@ -6274,11 +6271,11 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			if($("#formCrearExpediente").parsley('validate'))
 			{
-                                if (this.get('expTipo')) {
-                                    this.set('tipo', this.get('content.tipo'));
-                                    this.get('content').set('tipo', this.get('expTipo'));
-                                }
-                                
+								if (this.get('expTipo')) {
+									this.set('tipo', this.get('content.tipo'));
+									this.get('content').set('tipo', this.get('expTipo'));
+								}
+								
 				this.get('content').normalize();
 				//this.get('content').desNormalize();
 				
@@ -6290,10 +6287,10 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	createSucceeded: function () {
 		this.get('content').desNormalize();
-                if (this.get('tipo')) {
-                    this.get('content').set('tipo', this.get('tipo'));
-                }
-                
+				if (this.get('tipo')) {
+					this.get('content').set('tipo', this.get('tipo'));
+				}
+				
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
 			App.set('expedienteConsultaController.content', this.get('content'));
@@ -6393,7 +6390,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 			filtered = this.get('firmantesSeleccionados').filter(function(f){
 				var n = f.diputado.datosPersonales.apellido + ", " + f.diputado.datosPersonales.nombre;
-			    return n == firmante.nombre;
+				return n == firmante.nombre;
 			});
 
 			this.get('firmantesSeleccionados').removeObjects(filtered);
@@ -6423,7 +6420,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('filterFirmantes').cacheable(),
 
 	clickComision: function (comision) {
-                this.set('filterTextComisiones', '');
+				this.set('filterTextComisiones', '');
 		if (comision.id)
 		{
 			var item 		= this.get('content.giro').findProperty("comision", comision.get('comision'));
@@ -6476,11 +6473,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
-    templateName: 'expediente-form-ley'
+	templateName: 'expediente-form-ley'
 });
 
 App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
-    templateName: 'expediente-form-ley'
+	templateName: 'expediente-form-ley'
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
@@ -6689,7 +6686,12 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 });
 
 App.VisitasGuiadasEstadisticasView = Ember.View.extend({
-	templateName: 'visitas-guiadas-estadisticas'
+	templateName: 'visitas-guiadas-estadisticas',
+	categories: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'],
+
+	didInsertElement: function(){
+		this._super();
+	}
 });
 
 App.VisitasGuiadasEstadisticasTableItemView = Ember.View.extend({
@@ -6839,4 +6841,50 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 		this.set('mostrarMasEnabled', true);
 		return filtered;
 	}.property('filterText', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+});
+
+
+App.LineSeriesChartView = Ember.View.extend({
+	attributeBindings: ['title', 'name', 'categories', 'content', 'tooltip'],
+
+	didInsertElement: function(){
+		this._super();
+		Ember.run.next(this, this.redrawChart);
+	},
+	redrawChart: function(){
+		this.$().highcharts({
+			title: {
+				text: this.get('title'),
+				x: -20 //center
+			},
+			subtitle: {
+				text: '',
+				x: -20
+			},
+			xAxis: {
+	            categories: this.get('categories')
+			},
+			yAxis: {
+				title: {
+					text: ''
+				},
+				plotLines: [{
+					value: 0,
+					width: 1,
+					color: '#808080'
+				}]
+			},
+			tooltip: {
+	        	valueSuffix: " " + this.get('tooltip')
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'middle',
+				borderWidth: 0
+			},
+
+			series: this.get('content'),
+		});
+	}.observes('content.@each'),
 });
