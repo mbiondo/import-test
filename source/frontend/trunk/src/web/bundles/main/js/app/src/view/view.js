@@ -6287,31 +6287,40 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	createSucceeded: function () {
 		this.get('content').desNormalize();
-				if (this.get('tipo')) {
-					this.get('content').set('tipo', this.get('tipo'));
-				}
-				
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+                
+                if (this.get('tipo')) {
+                        this.get('content').set('tipo', this.get('tipo'));
+                }
+
+
+                
 		if (this.get('content.createSuccess')) {
-			App.set('expedienteConsultaController.content', this.get('content'));
+                        var expediente = this.get('content');
+                        
+                        $.jGrowl('Se ha creado el expediente!', { life: 5000 });
+                        
+                        var notification = App.Notificacion.extend(App.Savable).create();
+                        notification.set('tipo', 'expedienteCreado');	
+                        notification.set('objectId', expediente.id);
+                        notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
+                        notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+                        notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
+                        notification.create();      
+                        
+                        this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY', tipoPub: this.get('content.tipoPub'), pubnro: this.get('content.pubnro'), pubFecha: this.get('content.pubFecha'), periodo: this.get('content.periodo')}));
+			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
                             if (App.get('expedienteConsultaController.loaded')) {
                                 App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-                                var expediente = App.get('expedienteConsultaController.content');
-                                var notification = App.Notificacion.extend(App.Savable).create();
-                                notification.set('tipo', 'expedienteCreado');	
-                                notification.set('objectId', expediente.id);
-                                notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
-                                notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-                                notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
-                                notification.create();
                                 App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
                             }
 			};
 			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 			App.get('expedienteConsultaController').load();			
+                        */
 		} else {
-
+                    $.jGrowl('No se ha creado el expediente!', { life: 5000 });
 		}
 	},
 
@@ -6677,7 +6686,21 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
         saveSuccessed: function () {
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess')) {
-                        App.get('router').transitionTo('visitasGuiadas.index')
+                        App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+                        fn = function() {
+                                if(App.get('visitasGuiadasController.loaded'))
+                                {
+                                        App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+                                        App.get('router').transitionTo('visitasGuiadas.index')
+                                }
+                        };
+
+                        App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+                        App.get('visitasGuiadasController').load();                      
+                        
+                        
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
 		} else {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
