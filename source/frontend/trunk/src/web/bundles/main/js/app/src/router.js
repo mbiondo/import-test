@@ -163,18 +163,6 @@ App.Router =  Em.Router.extend({
 					var deferred = $.Deferred(),
 
 					fn = function() {
-						if (App.get('diputadosVigentesController.loaded')) {
-							App.get('diputadosVigentesController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);	
-						}
-					};
-
-
-					App.get('diputadosVigentesController').addObserver('loaded', this, fn);
-					App.get('diputadosVigentesController').load();
-					
-/*
-					fn = function() {
 						if (App.get('notificacionesController.loaded')) {
 							App.get('notificacionesController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);	
@@ -184,7 +172,7 @@ App.Router =  Em.Router.extend({
 
 					App.get('notificacionesController').addObserver('loaded', this, fn);
 					App.get('notificacionesController').load();		
-*/					
+					
 					return deferred.promise();				
 				} else {
 					return null;
@@ -197,13 +185,11 @@ App.Router =  Em.Router.extend({
 				appController.connectOutlet('menu', 'subMenu');
 
 				Ember.run.next(function () {
-					//appController.connectOutlet('main', 'inicio');
-					appController.connectOutlet('main', 'ListaDiputados');
+					appController.connectOutlet('main', 'inicio');
 				});
 				
 				// App.get('menuController').seleccionar(0);
-				//App.get('menuController').seleccionar(0,0,0);
-				App.get('menuController').seleccionar(9,0,0);
+				App.get('menuController').seleccionar(0,0,0);
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
