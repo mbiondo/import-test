@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-range'],
 });
 
 
