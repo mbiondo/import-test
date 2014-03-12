@@ -7,7 +7,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -1172,7 +1172,14 @@ App.DictamenSinODItemView = Ember.View.extend({
 
 App.DictamenesSinOrdenDelDiaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenSinODItemView, 	
-	columnas: ['Fecha Dictamen', 'Temario', 'Crear OD'],
+	//columnas: ['Fecha Dictamen', 'Temario', 'Crear OD'],
+        columnas: function(){
+            if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
+                return ['Fecha Dictamen', 'Temario', 'Crear OD']
+            }else{
+                return ['Fecha Dictamen', 'Temario']
+            }
+        }.property('columnas'),
 });
 
 App.OrdenDelDiaView = Ember.View.extend({
@@ -3020,8 +3027,17 @@ App.DictamenPendienteView = Ember.View.extend({
 });
 
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
-	itemViewClass: App.DictamenPendienteView, 	
-	columnas: ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen'],
+	itemViewClass: App.DictamenPendienteView, 	        
+	//columnas: ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen'],
+        
+        columnas: function(){
+            if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
+                return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen']
+            }else{
+                return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas']
+            }
+        }.property('columnas'),
+        
 });
 
 App.DictamenConsultaView = Em.View.extend({
