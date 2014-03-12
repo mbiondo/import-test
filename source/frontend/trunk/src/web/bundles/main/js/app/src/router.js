@@ -1006,21 +1006,22 @@ App.Router =  Em.Router.extend({
 						route: '/:notificacion/ver',
 
 						deserialize: function(router, params){
-							App.notificacionTipoController = App.NotificacionTipoController.create();
-							App.set('notificacionTipoController.loaded', false);
-							App.set('notificacionTipoController.content', App.NotificacionTipo.create({id: params.notificacion}));
+							
+							//App.notificacionTipoController = App.NotificacionTipoController.create();
+							//App.set('notificacionTipoController.loaded', false);
+							//App.set('notificacionTipoController.content', App.NotificacionTipo.create({id: params.notificacion}));
+							var notificacionTipo = App.NotificacionTipo.extend(App.Savable).create({id: params.notificacion});
 
 							var deferred = $.Deferred(),
 							fn = function() {
-								if (App.get('notificacionTipoController.loaded')) {
-									var notificacion = App.get('notificacionTipoController.content');
-									deferred.resolve(notificacion);
-									App.get('notificacionTipoController').removeObserver('loaded', this, fn);							
+								if (notificacionTipo.get('loaded')) {
+									notificacionTipo.removeObserver('loaded', this, fn);							
+									deferred.resolve(notificacionTipo);
 								}
 							};
 							
-							App.get('notificacionTipoController').addObserver('loaded', this, fn);
-							App.get('notificacionTipoController').load();	
+							notificacionTipo.addObserver('loaded', this, fn);
+							notificacionTipo.load();	
 
 							return deferred.promise();
 						},
@@ -1031,7 +1032,7 @@ App.Router =  Em.Router.extend({
 							var appController = router.get('applicationController');
 							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('menu', 'subMenu');
-							appController.connectOutlet('main', 'notificacionTipoConsulta');
+							appController.connectOutlet('main', 'notificacionTipoConsulta', context);
 							
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Administrar', url: '#/admin/notificaciones'},
@@ -2812,15 +2813,11 @@ App.Router =  Em.Router.extend({
 						 return deferred.promise();
 					},	
 
-					serialize: function (router, context) {
-						return {orden: context.get('id')};
-					},
-
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'TP');
+						appController.connectOutlet('main', 'TPConsulta', context);
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'OD', url: '#/OD/listado'},
