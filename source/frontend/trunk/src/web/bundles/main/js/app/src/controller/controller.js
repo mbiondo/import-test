@@ -4389,7 +4389,7 @@ App.InterBloquesController = App.RestController.extend({
 
 
 App.TPsController = App.RestController.extend({
-	url: 'ME/tp/listado',
+	url: 'ME/tps',
 	useApi: true,
 	loaded: false,
 	type: App.TP,
