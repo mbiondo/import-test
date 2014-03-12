@@ -6294,7 +6294,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			return false;
 		} 
-	}.property('content.firmantes.@each'),
+	}.property('content.giro.@each'),
 	guardar: function (){
 
 		if(!this.get('clickGuardar'))
@@ -6305,8 +6305,9 @@ App.CrearExpedienteView = Ember.View.extend({
 
 		if(this.get('noHayTipo') == false)
 		{
-			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == true && this.get('faltanGiros') == true )
+			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == false && this.get('faltanGiros') == false )
 			{
+
 								if (this.get('expTipo')) {
 									this.set('tipo', this.get('content.tipo'));
 									this.get('content').set('tipo', this.get('expTipo'));
