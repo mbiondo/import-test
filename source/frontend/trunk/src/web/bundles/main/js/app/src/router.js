@@ -2745,6 +2745,108 @@ App.Router =  Em.Router.extend({
 					}),
 				}),					
 			}),
-		}),		
+		}),	
+
+		publicaciones: Em.Route.extend({
+			route: "/publicaciones",
+
+			tp: Em.Route.extend({
+				route: "/TP",
+
+				listado: Ember.Route.extend({
+					route: "/listado",
+					
+					deserialize: function(router, params) {
+						 if (!App.get('tpsController'))
+						 	App.tpsController = App.TPsController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('tpsController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('tpsController').addObserver('loaded', this, fn);
+						 App.get('tpsController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');					
+						appController.connectOutlet('main', 'TPs');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'TP', url: '#/publicaciones/TP/listado'},
+							{titulo: 'Listado'},
+						]);			
+
+						App.get('menuController').seleccionar(12, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},						
+				}),	
+
+				crear: Ember.Route.extend({
+					route: '/crear',
+
+					connectOutlets: function(router, context) {							
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'CrearTP');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'TP', url: '#/publicaciones/TP/listado'},
+							{titulo: 'Crear'},
+						]);			
+
+						App.get('menuController').seleccionar(12, 0, 1);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						
+					},				
+				}),		
+				ver: Ember.Route.extend({
+					route: '/:id/ver',
+
+					deserialize: function(router, params) {
+
+						var tp = App.TP.extend(App.Savable).create({id: params.id})
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							tp.removeObserver('loaded', this, fn);
+							deferred.resolve(tp);				
+						 };
+
+						 tp.addObserver('loaded', this, fn);
+						 tp.load();
+						
+						 return deferred.promise();
+					},	
+
+					serialize: function (router, context) {
+						return {orden: context.get('id')};
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'TP');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'OD', url: '#/OD/listado'},
+							{titulo: 'Orden Del Día Nro '+ App.get('ordenDelDiaController.content').get('numero')},
+							{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
+						]);				
+
+						App.get('menuController').seleccionar(8);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},
+				}),	
+			}),
+		}),			
 	}),	
 });

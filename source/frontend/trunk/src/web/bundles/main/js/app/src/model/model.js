@@ -1675,7 +1675,7 @@ App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
-        useApi: false,
+    useApi: false,
 
 	id: '',
 	visitaPara: '',
@@ -1720,3 +1720,33 @@ App.VisitaGuiada = Ember.Object.extend({
 		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas");
 	}.property('id'),
 });
+
+
+App.TP = Ember.Object.extend({
+	url: 'ME/tp',
+    useApi: true,
+    id: '',
+    numero: '',
+    periodo: '',
+    fecha: '',
+
+	serializable: [
+        'id',
+        'numero',
+        'periodo',
+        'fecha'
+	],    
+
+   normalize: function () {
+    	this.set('fecha', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm'));
+    }, 
+
+    desNormalize: function () {
+    		this.set('fecha', moment(this.get('fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+    },
+
+    label: function () {
+    	return moment(this.get('fecha'), 'YYYY-MM-DD').format('LL') + this.get('numero') + this.get('periodo');
+    }.property('observaciones'),
+
+})
