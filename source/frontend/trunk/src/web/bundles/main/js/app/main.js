@@ -15,72 +15,6 @@ App.apiController = App.ApiController.create({
 App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
-			id: 0,
-			roles: [['ROLE_USER']],
-			titulo: 'Inicio',
-			url: '#',
-			icono: 'ic ic-novedades',
-
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Filtrar Novedades Por',
-					url: '#',
-					roles: [['ROLE_USER']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Todas las Novedades',
-							url: '#',
-						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_SITE_ADMIN']],
-							titulo: 'Movimientos de Expedientes',
-							url: '#/novedades/1',
-						}),
-						App.MenuItem.create({
-							id: 2,
-							roles: [['ROLE_USER']],
-							titulo: 'Agenda Comisiones',
-							url: '#/novedades/2',
-						}),
-						App.MenuItem.create({
-							id: 3,
-							roles: [['ROLE_SITE_ADMIN']],
-							titulo: 'Dictámenes',
-							url: '#/novedades/3',
-						}),								
-						App.MenuItem.create({
-							id: 4,
-							roles: [['ROLE_USER']],
-							titulo: 'OD',
-							url: '#/novedades/4',
-						}),									
-						App.MenuItem.create({
-							id: 5,
-							roles: [['ROLE_SITE_ADMIN']],
-							titulo: 'Publicaciones',
-							url: '#/novedades/5',
-						}),													
-						App.MenuItem.create({
-							id: 7,
-							roles: [['ROLE_USER']],
-							titulo: 'Plan de Labor',
-							url: '#/novedades/7',
-						}),
-						App.MenuItem.create({
-							id: 6,
-							roles: [['ROLE_USER']],
-							titulo: 'Sesiones',
-							url: '#/novedades/6',
-						}),														
-					],
-				}),
-			]
-		}),		
-		App.MenuItem.create({
 			id: 9,
 			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Dirección Secretaría',
@@ -194,35 +128,70 @@ App.menuController = App.MenuController.create({
 			]
 		}),
 		App.MenuItem.create({
-			id: 12,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Publicaciones',
-			url: '#/publicaciones/TP/listado',
-			icono: 'ic ic-publicaciones',
-			
+			id: 0,
+			roles: [['ROLE_USER']],
+			titulo: 'Inicio',
+			url: '#',
+			icono: 'ic ic-novedades',
+
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'TP',
-					url: '#/publicaciones/TP/listado',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					titulo: 'Filtrar Novedades Por',
+					url: '#',
+					roles: [['ROLE_USER']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Listado',
-							url: '#/publicaciones/TP/listado',
+							roles: [['ROLE_USER']],
+							titulo: 'Todas las Novedades',
+							url: '#',
 						}),
-
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Confeccionar TP',
-							url: '#/publicaciones/TP/crear',
+							roles: [['ROLE_SITE_ADMIN']],
+							titulo: 'Movimientos de Expedientes',
+							url: '#/novedades/1',
 						}),
+						App.MenuItem.create({
+							id: 2,
+							roles: [['ROLE_USER']],
+							titulo: 'Agenda Comisiones',
+							url: '#/novedades/2',
+						}),
+						App.MenuItem.create({
+							id: 3,
+							roles: [['ROLE_SITE_ADMIN']],
+							titulo: 'Dictámenes',
+							url: '#/novedades/3',
+						}),								
+						App.MenuItem.create({
+							id: 4,
+							roles: [['ROLE_USER']],
+							titulo: 'OD',
+							url: '#/novedades/4',
+						}),									
+						App.MenuItem.create({
+							id: 5,
+							roles: [['ROLE_SITE_ADMIN']],
+							titulo: 'Publicaciones',
+							url: '#/novedades/5',
+						}),													
+						App.MenuItem.create({
+							id: 7,
+							roles: [['ROLE_USER']],
+							titulo: 'Plan de Labor',
+							url: '#/novedades/7',
+						}),
+						App.MenuItem.create({
+							id: 6,
+							roles: [['ROLE_USER']],
+							titulo: 'Sesiones',
+							url: '#/novedades/6',
+						}),														
 					],
 				}),
-			]			
+			]
 		}),
 		App.MenuItem.create({
 			id: 2,
@@ -466,7 +435,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 11,
-			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
 			titulo: 'Visitas Guiadas',
 			url: '#/visitas-guiadas',
 			icono: 'ic ic-visitas-guiadas',
@@ -476,17 +445,17 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Visitas Guiadas',
 					url: '',
-					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
 							titulo: 'Listado',
 							url: '#/visitas-guiadas/listado',
 						}),
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
 							titulo: 'Estadisticas',
 							url: '#/visitas-guiadas/estadisticas',
 						}),		
@@ -531,6 +500,37 @@ App.menuController = App.MenuController.create({
 							url: '#/admin/notificaciones/tipo/crear',
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 						}),	
+					],
+				}),
+			]			
+		}),
+		App.MenuItem.create({
+			id: 12,
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Publicaciones',
+			url: '#/publicaciones/TP/listado',
+			icono: 'ic ic-publicaciones',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'TP',
+					url: '#/publicaciones/TP/listado',
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Listado',
+							url: '#/publicaciones/TP/listado',
+						}),
+
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Confeccionar TP',
+							url: '#/publicaciones/TP/crear',
+						}),
 					],
 				}),
 			]			
