@@ -132,7 +132,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength'],
 });
 
 
@@ -6275,17 +6275,37 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
-
+	faltanFirmantes: function(){
+		if(this.get('content.firmantes').length < 1)
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		} 
+	}.property('content.firmantes.@each'),
+	faltanGiros: function(){
+		if(this.get('content.giro').length < 1)
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		} 
+	}.property('content.firmantes.@each'),
 	guardar: function (){
-			
+
 		if(!this.get('clickGuardar'))
 		{
 			this.set('clickGuardar', true);
 		}
 
+
 		if(this.get('noHayTipo') == false)
 		{
-			if($("#formCrearExpediente").parsley('validate'))
+			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == true && this.get('faltanGiros') == true )
 			{
 								if (this.get('expTipo')) {
 									this.set('tipo', this.get('content.tipo'));
@@ -6942,7 +6962,7 @@ App.TPListItemView = Ember.View.extend({
 });
 
 App.TPListView = App.ListFilterView.extend({
-	columnas: ["Fecha", "Numero", "Periodo"],
+	columnas: ["Fecha", "Numero", "Periodo", "Ver TP"],
 	itemViewClass: App.TPListItemView,
 });
 
