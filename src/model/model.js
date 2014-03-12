@@ -190,7 +190,7 @@ App.Notificacion = Em.Object.extend({
 });
 
 App.NotificacionTipo = Em.Object.extend({
-	url: 'notification/createType',
+	url: 'notification/types',
 	icono: '',
 	nombre: '',
 	titulo: '',

@@ -7,15 +7,17 @@ App.Savable = Ember.Mixin.create({
 		if(xhr.status == 400 || xhr.status == 420) {
 		}
 		this.set('loaded', true);
+		this.set('loading', false);
 	},
 	
 	load: function () {
 		this.set('loaded', false);
+		this.set('loading', true);
 		var url = this.get('url');
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
 		$.ajax({
-			url:  (url+ '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			url:  (url+ '/%@').fmt(encodeURIComponent(this.get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -26,6 +28,7 @@ App.Savable = Ember.Mixin.create({
 	
 	loadSucceeded: function(data) {
 		this.setProperties(data);
+		this.set('loading', false);
 	},
 
 	create: function () {
@@ -1389,6 +1392,10 @@ App.RolesController = App.RestController.extend({
 		this.set('loaded', true);
 	},	
 });
+
+App.NotificacionTipoConsultaController = Ember.ObjectController.extend({
+
+})
 
 App.NotificacionTipoController = Ember.Object.extend({
 	url: 'notification/types/%@',
@@ -4419,4 +4426,9 @@ App.TPsController = App.RestController.extend({
 	periodoChange: function () {
 		this.load();
 	}.observes('periodo'),
+});
+
+
+App.TPConsultaController = Ember.ObjectController.extend({
+
 });
