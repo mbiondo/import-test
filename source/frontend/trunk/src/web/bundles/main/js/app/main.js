@@ -15,6 +15,119 @@ App.apiController = App.ApiController.create({
 App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
+			id: 9,
+			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Dirección Secretaría',
+			url: '#/direccion/secretaria/diputados/listado',
+			icono: 'ic ic-pen',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Movimiento Diputados',
+					url: '',
+					roles: [['ROLE_USER']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER']],
+							titulo: 'Consulta',
+							url: '#/direccion/secretaria/diputados/listado',
+						}),
+
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							titulo: 'Alta',
+							url: '#/direccion/secretaria/diputados/alta',
+						}),	
+					],
+				}),
+				App.MenuItem.create({
+					id: 1,
+					titulo: 'Expedientes',
+					url: '',
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER']],
+							titulo: 'Crear proyecto',
+							url: '#/mesa/de/entrada/proyecto/crear',
+						}),
+					],
+				}),
+				App.MenuItem.create({
+					id: 2,
+					titulo: 'Giros',
+					url: '',
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER']],
+							titulo: 'Listado',
+							url: '#/mesa/de/entrada/giros/listado',
+						}),					
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							titulo: 'Girar proyecto',
+							url: '#/mesa/de/entrada/proyecto/girar',
+						}),
+					],
+				}),											
+			]
+		}),
+		App.MenuItem.create({
+			id: 1,
+			roles: [['ROLE_USER']], 
+			titulo: 'Expedientes',
+			url: '#/expedientes',
+			icono: 'ic ic-expedientes',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Expedientes',
+					url: '#/expedientes',
+					roles: [['ROLE_USER']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER']],
+							titulo: 'Buscador de expedientes',
+							url: '#/expedientes',
+						}),													
+					],
+				}),
+			]
+		}),
+		App.MenuItem.create({
+			id: 10,
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Biografia',
+			url: '#/expedientes/biograofia',
+			icono: 'ic ic-biografia',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Biografia',
+					url: '#/expedientes/biografia',
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Biografia',
+							url: '#/expedientes/biografia',
+						}),
+					],
+				}),
+			]
+		}),
+		App.MenuItem.create({
 			id: 0,
 			roles: [['ROLE_USER']],
 			titulo: 'Inicio',
@@ -76,30 +189,6 @@ App.menuController = App.MenuController.create({
 							titulo: 'Sesiones',
 							url: '#/novedades/6',
 						}),														
-					],
-				}),
-			]
-		}),
-		App.MenuItem.create({
-			id: 1,
-			roles: [['ROLE_USER']], 
-			titulo: 'Expedientes',
-			url: '#/expedientes',
-			icono: 'ic ic-expedientes',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Expedientes',
-					url: '#/expedientes',
-					roles: [['ROLE_USER']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Buscador de expedientes',
-							url: '#/expedientes',
-						}),													
 					],
 				}),
 			]
@@ -220,6 +309,37 @@ App.menuController = App.MenuController.create({
 				}),				
 			]			
 		}),	
+                
+		App.MenuItem.create({
+			id: 6,
+			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Envíos a Archivo',
+			url: '#/envios',
+			icono: 'ic ic-archivados',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Envíos a Archivo',
+					url: '#/envios',
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Envios a Archivo',
+							url: '#/envios',
+						}),
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							titulo: 'Crear Envío a Archivo',
+							url: '#/envios/envio/crear',
+						}),
+					],
+				}),
+			]
+		}),
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
@@ -289,7 +409,60 @@ App.menuController = App.MenuController.create({
 				}),
 			]			
 		}),
-
+		App.MenuItem.create({
+			id: 7,
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Estadisticas',
+			url: '#/estadisticas/oradores',
+			icono: 'ic ic-estadisticas',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Estadisticas',
+					url: '#/estadisticas/oradores',
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Oradores',
+							url: '#/estadisticas/oradores',
+						}),
+					],
+				}),
+			]
+		}),
+		App.MenuItem.create({
+			id: 11,
+			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			titulo: 'Visitas Guiadas',
+			url: '#/visitas-guiadas',
+			icono: 'ic ic-visitas-guiadas',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Visitas Guiadas',
+					url: '',
+					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							titulo: 'Listado',
+							url: '#/visitas-guiadas/listado',
+						}),
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							titulo: 'Estadisticas',
+							url: '#/visitas-guiadas/estadisticas',
+						}),		
+					],
+				}),
+			]
+		}),
 		App.MenuItem.create({
 			id: 5,
 			titulo: 'Administrar Accesos',
@@ -331,210 +504,6 @@ App.menuController = App.MenuController.create({
 				}),
 			]			
 		}),
-                
-		App.MenuItem.create({
-			id: 6,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Envíos a Archivo',
-			url: '#/envios',
-			icono: 'ic ic-archivados',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Envíos a Archivo',
-					url: '#/envios',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Envios a Archivo',
-							url: '#/envios',
-						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Crear Envío a Archivo',
-							url: '#/envios/envio/crear',
-						}),
-					],
-				}),
-			]
-		}),
-
-		App.MenuItem.create({
-			id: 7,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Estadisticas',
-			url: '#/estadisticas/oradores',
-			icono: 'ic ic-estadisticas',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Estadisticas',
-					url: '#/estadisticas/oradores',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Oradores',
-							url: '#/estadisticas/oradores',
-						}),
-					],
-				}),
-			]
-		}),
-
-		App.MenuItem.create({
-			id: 9,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Dirección Secretaría',
-			url: '#/direccion/secretaria/diputados/listado',
-			icono: 'ic ic-pen',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Movimiento Diputados',
-					url: '',
-					roles: [['ROLE_ADMIN']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Consulta',
-							url: '#/direccion/secretaria/diputados/listado',
-						}),
-
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Alta',
-							url: '#/direccion/secretaria/diputados/alta',
-						}),	
-					],
-				}),
-				App.MenuItem.create({
-					id: 1,
-					titulo: 'Expedientes',
-					url: '',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Crear proyecto',
-							url: '#/mesa/de/entrada/proyecto/crear',
-						}),
-					],
-				}),
-				App.MenuItem.create({
-					id: 2,
-					titulo: 'Giros',
-					url: '',
-					roles: [['ROLE_ADMIN']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Listado',
-							url: '#/mesa/de/entrada/giros/listado',
-						}),					
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Girar proyecto',
-							url: '#/mesa/de/entrada/proyecto/girar',
-						}),
-					],
-				}),											
-			]
-		}),
-
-
-		App.MenuItem.create({
-			id: 10,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Biografia',
-			url: '#/expedientes/biograofia',
-			icono: 'ic ic-biografia',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Biografia',
-					url: '#/expedientes/biografia',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Biografia',
-							url: '#/expedientes/biografia',
-						}),
-					],
-				}),
-			]
-		}),
-
-		App.MenuItem.create({
-			id: 11,
-			roles: [['ROLE_LABOR_PARLAMENTARIA']],
-			titulo: 'Visitas Guiadas',
-			url: '#/visitas-guiadas',
-			icono: 'ic ic-visitas-guiadas',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Visitas Guiadas',
-					url: '',
-					roles: [['ROLE_LABOR_PARLAMENTARIA']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Listado',
-							url: '#/visitas-guiadas/listado',
-						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Estadisticas',
-							url: '#/visitas-guiadas/estadisticas',
-						}),
-					],
-				}),
-			]
-		}),
-                App.MenuItem.create({
-			id: 12,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Publicaciones',
-			url: '#/publicaciones/TP/crear',
-			icono: 'ic ic-publicaciones',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'TP',
-					url: '#/publicaciones/TP/crear',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Confeccionar TP',
-							url: '#/publicaciones/TP/crear',
-						}),
-					],
-				}),
-			]
-		}),
-                
 
 	]
 });
