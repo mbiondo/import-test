@@ -2,6 +2,32 @@ App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
 	createSuccess: '',
 	
+
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420) {
+		}
+		this.set('loaded', true);
+	},
+	
+	load: function () {
+		this.set('loaded', false);
+		var url = this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		$.ajax({
+			url:  (url+ '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	
+	loadSucceeded: function(data) {
+		this.setProperties(data);
+	},
+
 	create: function () {
 		this.set('createSuccess', '');
 		var url = this.get('url');
@@ -4358,4 +4384,39 @@ App.InterBloquesController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},		
+});
+
+
+
+App.TPsController = App.RestController.extend({
+	url: 'ME/tp/listado',
+	useApi: true,
+	loaded: false,
+	type: App.TP,
+	periodo: 132,
+
+	load: function () {
+		this.set('loaded', false);
+		var url =  this.get('url') + '/' + this.get('periodo');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		$.ajax({
+			url: url,
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted,
+		});
+	},
+
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.TP.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+
+	periodoChange: function () {
+		this.load();
+	}.observes('periodo'),
 });

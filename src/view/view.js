@@ -6691,19 +6691,19 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
         saveSuccessed: function () {
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess')) {
-                        App.visitasGuiadasController = App.VisitasGuiadasController.create();
+            App.visitasGuiadasController = App.VisitasGuiadasController.create();
 
-                        fn = function() {
-                                if(App.get('visitasGuiadasController.loaded'))
-                                {
-                                        App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
-                                        App.get('router').transitionTo('visitasGuiadas.index')
-                                }
-                        };
+            fn = function() {
+                    if(App.get('visitasGuiadasController.loaded'))
+                    {
+                            App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+                            App.get('router').transitionTo('visitasGuiadas.index')
+                    }
+            };
 
-                        App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+            App.get('visitasGuiadasController').addObserver('loaded', this, fn);
 
-                        App.get('visitasGuiadasController').load();                      
+            App.get('visitasGuiadasController').load();                      
                         
                         
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
@@ -6915,4 +6915,68 @@ App.LineSeriesChartView = Ember.View.extend({
 			series: this.get('content'),
 		});
 	}.observes('content.@each'),
+});
+
+
+//Publicaciones
+// -> TP
+
+App.TPListItemView = Ember.View.extend({
+	templateName: 'tp-list-item'
+});
+
+App.TPListView = App.ListFilterView.extend({
+	columnas: ["Fecha", "Numero", "Periodo"],
+	itemViewClass: App.TPListItemView,
+});
+
+App.TPsView = Ember.View.extend({
+	templateName: 'tps',
+	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132],
+});
+
+App.CrearTPView = Ember.View.extend({
+	templateName: 'crear-tp',
+
+	crear: function (){
+		this.get('content').normalize();
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('content').create();
+		this.set('loading', true);
+	},
+
+	createSucceeded: function () {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		this.set('loading', false);
+		if (this.get('content.createSuccess')) {
+            $.jGrowl('Se ha creado el TP!', { life: 5000 });
+
+            App.tpsController = App.TPsController.create();
+
+            fn = function() {
+                if(App.get('tpsController.loaded'))
+                {
+                    App.get('tpsController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('publicaciones.tp.listado')
+                }
+            };
+
+            App.get('tpsController').addObserver('loaded', this, fn);
+
+            App.get('tpsController').load();                
+		} else {
+            $.jGrowl('No se ha creado el TP!', { life: 5000 });
+		}
+	},	
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.TP.extend(App.Savable).create());
+	}
+
+})
+
+App.TPConsultaView = Ember.View.extend({
+	templateName: 'tp-consulta',
 });
