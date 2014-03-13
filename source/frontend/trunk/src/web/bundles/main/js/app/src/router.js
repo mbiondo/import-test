@@ -2820,15 +2820,15 @@ App.Router =  Em.Router.extend({
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'TPConsulta', context);
-						
-						App.get('breadCumbController').set('content', [
-							{titulo: 'OD', url: '#/OD/listado'},
-							{titulo: 'Orden Del Día Nro '+ App.get('ordenDelDiaController.content').get('numero')},
-							{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
-						]);				
+						appController.connectOutlet('main', 'tPConsulta', context);
 
-						App.get('menuController').seleccionar(8);	
+						App.get('breadCumbController').set('content', [
+							{titulo: 'TP'},
+							{titulo: 'Listado', url: '#/publicaciones/TP/listado'},
+							{titulo: 'Ver'},
+						]);		
+
+						App.get('menuController').seleccionar(12, 0, 0);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},
 				}),	
