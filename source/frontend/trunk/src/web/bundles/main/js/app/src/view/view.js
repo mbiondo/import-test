@@ -6994,5 +6994,16 @@ App.TPCrearView = Ember.View.extend({
 })
 
 App.TPConsultaView = Ember.View.extend({
-	templateName: 'tp-consulta',
+    templateName: 'tp-consulta',
+    
+    documentURL: function () {
+        var url = this.get('controller.content.url');
+
+        if (this.get('controller.content').get('useApi'))
+        {
+            url = App.get('apiController.url') + url;
+        }
+
+        return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
+    }.property('controller.content'),
 });

@@ -1676,7 +1676,7 @@ App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
     useApi: false,
-
+        auditable: true,
 	id: '',
 	visitaPara: '',
 	tipoInstitucion: '',
