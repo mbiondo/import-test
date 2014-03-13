@@ -6975,8 +6975,13 @@ App.TPCrearView = Ember.View.extend({
 	
 	didInsertElement: function (){
 		this._super();
-		console.log(this.get('controller.content'));
 	},
+	crear: function(){
+		if($('#formCrearTP').parsley('validate'))
+		{
+			this.get('controller').crear();
+		} 
+	}
 })
 
 App.TPConsultaView = Ember.View.extend({
