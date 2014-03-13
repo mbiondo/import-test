@@ -6970,46 +6970,13 @@ App.TPsView = Ember.View.extend({
 	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132],
 });
 
-App.CrearTPView = Ember.View.extend({
-	templateName: 'crear-tp',
-
-	crear: function (){
-		this.get('content').normalize();
-		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('content').create();
-		this.set('loading', true);
-	},
-
-	createSucceeded: function () {
-		this.get('content').desNormalize();
-		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
-		this.set('loading', false);
-		if (this.get('content.createSuccess')) {
-            $.jGrowl('Se ha creado el TP!', { life: 5000 });
-
-            App.tpsController = App.TPsController.create();
-
-            fn = function() {
-                if(App.get('tpsController.loaded'))
-                {
-                    App.get('tpsController').removeObserver('loaded', this, fn);	
-                    App.get('router').transitionTo('publicaciones.tp.listado')
-                }
-            };
-
-            App.get('tpsController').addObserver('loaded', this, fn);
-
-            App.get('tpsController').load();                
-		} else {
-            $.jGrowl('No se ha creado el TP!', { life: 5000 });
-		}
-	},	
-
-	didInsertElement: function () {
+App.TPCrearView = Ember.View.extend({
+	templateName: 'crear-tp',	
+	
+	didInsertElement: function (){
 		this._super();
-		this.set('content', App.TP.extend(App.Savable).create());
-	}
-
+		console.log(this.get('controller.content'));
+	},
 })
 
 App.TPConsultaView = Ember.View.extend({
