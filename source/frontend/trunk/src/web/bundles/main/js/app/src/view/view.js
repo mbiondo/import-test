@@ -135,6 +135,10 @@ Ember.TextField.reopen({
 	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-range'],
 });
 
+Ember.Select.reopen({
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-range'],
+});
+
 
 Ember.TextArea.reopen({
 	attributeBindings: ['accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'maxlength'],
@@ -6362,6 +6366,10 @@ App.CrearExpedienteView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));
+
+   		Ember.run.next(this, function (){
+   			$("#selector-tipo-proyecto").focus();
+   		});
 	}
 });
 
@@ -6393,6 +6401,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
 	firmantesSeleccionados: [],
+
 
 	didInsertElement: function(){
 		this._super();
