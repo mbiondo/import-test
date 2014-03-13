@@ -4432,3 +4432,39 @@ App.TPsController = App.RestController.extend({
 App.TPConsultaController = Ember.ObjectController.extend({
 
 });
+
+App.TPCrearController = Ember.ObjectController.extend({
+
+	crear: function (){
+		console.log(this.get('content'));
+		this.get('content').normalize();
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('content').create();
+		this.set('loading', true);
+	},
+
+	createSucceeded: function () {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		this.set('loading', false);
+		if (this.get('content.createSuccess')) {
+            $.jGrowl('Se ha creado el TP!', { life: 5000 });
+
+            App.tpsController = App.TPsController.create();
+
+            fn = function() {
+                if(App.get('tpsController.loaded'))
+                {
+                    App.get('tpsController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('publicaciones.tp.listado')
+                }
+            };
+
+            App.get('tpsController').addObserver('loaded', this, fn);
+
+            App.get('tpsController').load();                
+		} else {
+            $.jGrowl('No se ha creado el TP!', { life: 5000 });
+		}
+	},
+});

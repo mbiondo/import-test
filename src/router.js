@@ -2777,12 +2777,15 @@ App.Router =  Em.Router.extend({
 
 				crear: Ember.Route.extend({
 					route: '/crear',
+					model: null,
 
-					connectOutlets: function(router, context) {							
+
+					connectOutlets: function(router, context) {		
+						var tp = App.TP.extend(App.Savable).create();				
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'CrearTP');
+						appController.connectOutlet('main', 'tPCrear', tp);
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'TP', url: '#/publicaciones/TP/listado'},
