@@ -70,6 +70,14 @@ Handlebars.registerHelper("linkParte", function(id, options) {
   return "#/comisiones/citaciones/reunion/" + id + "/parte";
 });
 
+Handlebars.registerHelper("linkTP", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/publicaciones/TP/" + id + "/ver";
+});
+
+
 Handlebars.registerHelper("linkCargarDictamen", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
