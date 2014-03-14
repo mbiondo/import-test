@@ -6029,8 +6029,14 @@ App.SugestView = Ember.View.extend({
 	placeHolder: "Expediente N°",
 	itemViewClass: 'App.SugestListItemView',
 	desactivar: false,
+	controller: null,
 
 	sugestTextChanged: function () {
+		if (!this.get('controller')) {
+			var controller = App.get(this.get('controllerName')).create({ content: [] });
+			this.set('controller',  controller);
+		}
+		
 		if (this.get('sugestText').length >= this.get('threshold')) {
 			this.get('controller').filter(this.get('sugestText'));
 		} else {
@@ -6039,10 +6045,12 @@ App.SugestView = Ember.View.extend({
 	}.observes('sugestText'),
 
 	sugestList: function () {
-		if (this.get('controller.content') == App.get(this.get('controllerName')).get('content'))
-			return this.get('controller.content');
-		else
+		if (this.get('controller')) {
+			if (this.get('controller.content'))
+				return this.get('controller.content');
+		} else {
 			return [];
+		}
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
@@ -6054,15 +6062,16 @@ App.SugestView = Ember.View.extend({
 		else {
 			this.set('selection', item);
 		}
+              
                 this.clear();
 	},
-        clear: function () {
-            this.set('sugestText', '');
-        },
+
+    clear: function () {
+        this.set('sugestText', '');
+    },
         
 	didInsertElement: function () {
 		this._super();
-		this.set('controller',  App.get(this.get('controllerName')));
 	},
 });
 
