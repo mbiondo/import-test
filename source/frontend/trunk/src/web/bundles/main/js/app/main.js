@@ -194,6 +194,37 @@ App.menuController = App.MenuController.create({
 			]
 		}),
 		App.MenuItem.create({
+			id: 12,
+			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			titulo: 'Publicaciones',
+			url: '#/publicaciones/TP/listado',
+			icono: 'ic ic-publicaciones',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'TP',
+					url: '#/publicaciones/TP/listado',
+					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							titulo: 'Listado',
+							url: '#/publicaciones/TP/listado',
+						}),
+
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							titulo: 'Confeccionar TP',
+							url: '#/publicaciones/TP/crear',
+						}),
+					],
+				}),
+			]			
+		}),
+		App.MenuItem.create({
 			id: 2,
 			titulo: 'Comisiones',
 			url: '#/comisiones/citaciones',
@@ -500,37 +531,6 @@ App.menuController = App.MenuController.create({
 							url: '#/admin/notificaciones/tipo/crear',
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 						}),	
-					],
-				}),
-			]			
-		}),
-		App.MenuItem.create({
-			id: 12,
-			roles: [['ROLE_LABOR_PARLAMENTARIA']],
-			titulo: 'Publicaciones',
-			url: '#/publicaciones/TP/listado',
-			icono: 'ic ic-publicaciones',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'TP',
-					url: '#/publicaciones/TP/listado',
-					roles: [['ROLE_LABOR_PARLAMENTARIA']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Listado',
-							url: '#/publicaciones/TP/listado',
-						}),
-
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Confeccionar TP',
-							url: '#/publicaciones/TP/crear',
-						}),
 					],
 				}),
 			]			
