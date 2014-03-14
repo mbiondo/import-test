@@ -3310,12 +3310,14 @@ App.ReunionConsultaView = Em.View.extend({
 	},
 
 	cargarExpedientesSucceeded: function (data) {
-		var exp = [];
+		
+		/*var exp = [];
 		data.forEach(function(i){
 			exp.addObject(App.Expediente.extend(App.Savable).create(i));
 		}, this);
 		this.set('expedientes', exp);
 		this.set('loaded', true);
+		*/
 
 		citacion = this.get('citacion');
 		var temas = [];
@@ -3325,17 +3327,21 @@ App.ReunionConsultaView = Em.View.extend({
 			t.setProperties(tema);
 			temas.addObject(t);
 			//console.log(t);
-			t.set('proyectos', mapObjectsInArrays(_self.get('expedientes'), t.get('proyectos')));
 			var proyectos = t.get('proyectos');
-			proyectos.forEach(function (proyecto) {
+			var ps = [];
+			proyectos.forEach(function (p) {
+				var proyecto = App.Expediente.extend(App.Savable).create(p);
 				if (t.get('grupo')) {
 					proyecto.set('tema', t.get('descripcion'));
 				}
 				proyecto.set('bloqueado', true);
+				ps.pushObject(proyecto);
 			});									
+			t.set('proyectos', ps);
 		});
 
 		citacion.set('temas', temas);
+		
 	},
 
 	listaExpedientes: function () {
