@@ -506,7 +506,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 12,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA']],
 			titulo: 'Publicaciones',
 			url: '#/publicaciones/TP/listado',
 			icono: 'ic ic-publicaciones',
@@ -516,18 +516,18 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'TP',
 					url: '#/publicaciones/TP/listado',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
 							titulo: 'Listado',
 							url: '#/publicaciones/TP/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
 							titulo: 'Confeccionar TP',
 							url: '#/publicaciones/TP/crear',
 						}),
