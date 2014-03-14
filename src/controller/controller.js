@@ -1888,7 +1888,7 @@ App.FirmantesController = App.RestController.extend({
 		_self = this;
 		this.set('loaded', false);
 		$.ajax({
-			url: (App.get('apiController').get('productionURL') + this.get('url')),
+			url: (App.get('apiController').get('url') + this.get('url')),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
