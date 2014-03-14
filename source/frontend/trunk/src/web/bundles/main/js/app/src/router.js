@@ -1612,18 +1612,19 @@ App.Router =  Em.Router.extend({
                         }
 
                         cargarDictamenSuccess = function () {
-                                if (App.get('dictamenCrearController.loaded') && App.get('expedientesArchivablesController.loaded')) {
+                                if (App.get('dictamenCrearController.loaded')) {
+//                                if (App.get('dictamenCrearController.loaded') && App.get('expedientesArchivablesController.loaded')) {
                                         App.get('firmantesController').addObserver('loaded', this, cargarFirmantesSuccess);
                                         App.get('firmantesController').load();			
                                 }
                         }
 
                         App.get('dictamenCrearController').addObserver('loaded', this, cargarDictamenSuccess);
-                        App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
+  //                      App.get('expedientesArchivablesController').addObserver('loaded', this, cargarDictamenSuccess);
 
                         App.get('dictamenCrearController').load();
 
-						App.get('expedientesArchivablesController').load();
+//						App.get('expedientesArchivablesController').load();
 
                         return deferred.promise();
                      },
