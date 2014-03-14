@@ -199,7 +199,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 12,
-			roles: [['ROLE_LABOR_PARLAMENTARIA']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Publicaciones',
 			url: '#/publicaciones/TP/listado',
 			icono: 'ic ic-publicaciones',
@@ -209,11 +209,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'TP',
 					url: '#/publicaciones/TP/listado',
-					roles: [['ROLE_LABOR_PARLAMENTARIA']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], , ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], , ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Listado',
 							url: '#/publicaciones/TP/listado',
 						}),
