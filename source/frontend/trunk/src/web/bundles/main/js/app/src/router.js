@@ -1897,6 +1897,9 @@ App.Router =  Em.Router.extend({
 						route: '/:reunion/ver',
 
 						deserialize: function(router, params) {
+							if (!App.get('expedientesArchivablesController'))
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
+							
 
 							App.eventosParteController = App.EventosParteController.create();
 							App.reunionConsultaController = App.ReunionConsultaController.create();
