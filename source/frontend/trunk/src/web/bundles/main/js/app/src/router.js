@@ -1303,9 +1303,10 @@ App.Router =  Em.Router.extend({
 					App.bloquesController = App.BloquesController.create();
 					App.interBloquesController = App.InterBloquesController.create();
 
+					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
 					fn = function() {
-						if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded'))
+						if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
 						{
 							App.get('bloquesController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);					
@@ -1314,8 +1315,10 @@ App.Router =  Em.Router.extend({
 
 					App.get('bloquesController').addObserver('loaded', this, fn);
 					App.get('interBloquesController').addObserver('loaded', this, fn);
+					App.get('comisionesController').addObserver('loaded', this, fn);
 
 					App.get('bloquesController').load();
+					App.get('comisionesController').load();
 					App.get('interBloquesController').load();
 
 									
@@ -1899,7 +1902,7 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 							if (!App.get('expedientesArchivablesController'))
 						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
-							
+
 
 							App.eventosParteController = App.EventosParteController.create();
 							App.reunionConsultaController = App.ReunionConsultaController.create();
