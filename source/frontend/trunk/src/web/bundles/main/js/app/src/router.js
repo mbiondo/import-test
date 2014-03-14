@@ -2815,7 +2815,7 @@ App.Router =  Em.Router.extend({
 					deserialize: function(router, params) {
 
 						var tp = App.TP.extend(App.Savable).create({id: params.id})
-
+						tp.set('loaded', false);
 						 var deferred = $.Deferred(),
 						 fn = function() {
 							tp.removeObserver('loaded', this, fn);
