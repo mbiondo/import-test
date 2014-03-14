@@ -2483,11 +2483,12 @@ App.CitacionCrearView = Em.View.extend({
 		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
 		
-		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		//var fo = App.get('citacionCrearController.content.comisiones.firstObject');
 		
-		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
+		//App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
 		//$('#crear-citacion-form').validationEngine('attach');
+                
 		fo = null;
 
 		if (!App.get('citacionCrearController.content.id')) {
@@ -2535,7 +2536,7 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('adding'),
 	
 	cargarExpedientes: function () {
-		App.get('citacionCrearController').cargarExpedientes();
+		//App.get('citacionCrearController').cargarExpedientes();
 	},
 	
 	guardar: function () {
@@ -6047,9 +6048,12 @@ App.SugestView = Ember.View.extend({
 		else {
 			this.set('selection', item);
 		}
-		this.set('sugestText', '');
+                this.clear();
 	},
-
+        clear: function () {
+            this.set('sugestText', '');
+        },
+        
 	didInsertElement: function () {
 		this._super();
 		this.set('controller',  App.get(this.get('controllerName')));
@@ -6072,6 +6076,14 @@ App.SugestListItemView = Ember.View.extend({
 
 App.ExpedienteSugestListItemView = App.SugestListItemView.extend({
 	templateName: 'expediente-sugest-item',
+});
+
+App.ExpedienteCitacionSugestListItemView = App.SugestListItemView.extend({
+	templateName: 'expediente-sugest-item',
+	click: function () {
+		this.get('parentView').get('parentView').get('parentView').clickExpediente(this.get('content'));
+                this.get('parentView').get('parentView').clear();
+	},        
 });
 
 
