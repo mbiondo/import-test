@@ -2093,6 +2093,9 @@ App.Router =  Em.Router.extend({
 					crearCitacion: Ember.Route.extend({
 						route: '/crear',
 						deserialize: function(router, params) {
+							if (!App.get('expedientesArchivablesController'))
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
+
 							var deferred = $.Deferred(),		
 							fn = function() {
 								App.get('citacionSalasController').removeObserver('loaded', this, fn);
@@ -2190,7 +2193,9 @@ App.Router =  Em.Router.extend({
 						route: '/:citacion/editar',
 						
 						deserialize: function(router, params) {
-						
+							if (!App.get('expedientesArchivablesController'))
+						 		App.expedientesArchivablesController = App.ExpedientesArchivablesController.create({content: []});
+
 							App.set('citacionConsultaController.loaded', false);
 							App.set('citacionCrearController.loaded', false);
 							App.set('comisionesController.loaded', false);
