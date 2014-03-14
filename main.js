@@ -88,6 +88,7 @@ App.menuController = App.MenuController.create({
 			icono: 'ic ic-pen',
 			
 			subMenu: [
+/*
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Movimiento Diputados',
@@ -109,6 +110,7 @@ App.menuController = App.MenuController.create({
 						}),	
 					],
 				}),
+*/				
 				App.MenuItem.create({
 					id: 1,
 					titulo: 'Expedientes',
@@ -123,6 +125,7 @@ App.menuController = App.MenuController.create({
 						}),
 					],
 				}),
+/*
 				App.MenuItem.create({
 					id: 2,
 					titulo: 'Giros',
@@ -141,8 +144,9 @@ App.menuController = App.MenuController.create({
 							titulo: 'Girar proyecto',
 							url: '#/mesa/de/entrada/proyecto/girar',
 						}),
-					],
-				}),											
+					],					
+				}),
+*/										
 			]
 		}),
 		App.MenuItem.create({
