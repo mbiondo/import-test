@@ -117,6 +117,22 @@ App.Router =  Em.Router.extend({
 				appController.set('loading', false);
 			},
 		}),
+
+		//WIDGETS
+		widgets: Em.Route.extend({
+			route: '/widgets/test',
+			
+			connectOutlets: function(router, context) {
+				var appController = router.get('applicationController');
+				appController.connectOutlet('help', 'Help');
+				appController.connectOutlet('main', 'Test', context);
+				appController.connectOutlet('menu', 'subMenu');
+				
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Página no encontrada', url: '#'}
+				]);				
+			},			
+		}),		
 		//
 		page404: Em.Route.extend({
 			route: '/404',

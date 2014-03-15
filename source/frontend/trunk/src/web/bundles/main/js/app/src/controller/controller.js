@@ -730,12 +730,15 @@ App.RestController = Em.ArrayController.extend({
 	type: null,
 	loaded : false,
 	useAPi: true,
+	sortProperties: ['id'],
 
 	filter: function (filterText) {
 		this.set('loaded', false);
+		this.set('loading', true);
 		var url =  this.get('url');
 		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url + "/" + filterText;
+			url = App.get('apiController').get('url') + url;
+		url += "?filter=" + filterText;
 
 		var async = true;
 		if (this.get('async'))
@@ -758,6 +761,7 @@ App.RestController = Em.ArrayController.extend({
 		if(xhr.status == 400 || xhr.status == 420) {
 		}
 		this.set('loaded', true);
+		this.set('loading', false);
 	},
 
 	loadSucceeded: function(data){
@@ -774,10 +778,12 @@ App.RestController = Em.ArrayController.extend({
 		}, this);
 		
 		this.set('loaded', true);
+		this.set('loading', false);
 	},
 
 	load: function() {
 		this.set('loaded', false);
+		this.set('loading', true);
 		var url =  this.get('url');
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
@@ -4446,23 +4452,24 @@ App.TPCrearController = Ember.ObjectController.extend({
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		this.set('loading', false);
 		if (this.get('content.createSuccess')) {
-                    $.jGrowl('Se ha creado el TP!', { life: 5000 });
+            $.jGrowl('Se ha creado el TP!', { life: 5000 });
 
-                    App.tpsController = App.TPsController.create();
+            App.tpsController = App.TPsController.create();
 
-                    fn = function() {
-                        if(App.get('tpsController.loaded'))
-                        {
-                            App.get('tpsController').removeObserver('loaded', this, fn);	
-                            App.get('router').transitionTo('publicaciones.tp.listado')
-                        }
-                    };
+            fn = function() {
+                if(App.get('tpsController.loaded'))
+                {
+                    App.get('tpsController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('publicaciones.tp.listado')
+                }
+            };
 
-                    App.get('tpsController').addObserver('loaded', this, fn);
+            App.get('tpsController').addObserver('loaded', this, fn);
 
-                    App.get('tpsController').load();                
-                        } else {
-                    $.jGrowl('No se ha creado el TP!', { life: 5000 });
+            App.get('tpsController').load();                
+                } else {
+            $.jGrowl('No se ha creado el TP!', { life: 5000 });
 		}
 	},
 });
+
