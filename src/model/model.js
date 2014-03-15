@@ -157,6 +157,10 @@ App.Rol = Em.Object.extend({
 	toString: function () {
 		return this.get('nombre');
 	},
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),
 });
 
 App.Notificacion = Em.Object.extend({

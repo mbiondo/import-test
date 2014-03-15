@@ -1,5 +1,6 @@
 JQ = Ember.Namespace.create();
 
+
 Ember.View.reopen({
 	didInsertElement: function () {
 		this._super();
@@ -98,10 +99,7 @@ JQ.ChosenMultipleSelect = Em.Select.extend({
 	attributeBindings: [ 'multiple' ],
 	placeholder: '',
 
-	didInsertElement: function(){
-		this._super();
-		//this.$().data("placeholder", this.get('placeholder')).chosen();
-	},
+
  
 	selectionChanged: function() {
 		this.$().trigger('liszt:updated');
@@ -7009,9 +7007,6 @@ App.TPsView = Ember.View.extend({
 App.TPCrearView = Ember.View.extend({
 	templateName: 'crear-tp',	
 	
-	didInsertElement: function (){
-		this._super();
-	},
 	crear: function(){
 		if($('#formCrearTP').parsley('validate'))
 		{
@@ -7033,4 +7028,106 @@ App.TPConsultaView = Ember.View.extend({
 
         return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
     }.property('controller.content'),
+});
+
+
+
+//WIDGETS
+
+App.TestView = Ember.View.extend({
+	templateName: 'wg-test',
+});
+
+
+App.LoaderView = Ember.View.extend({
+	templateName: 'wg-loader',
+
+})
+
+App.SelectListItemView = Ember.View.extend({
+	tagName: "li",
+	templateName: 'wg-multiselect-select-list-item',
+	click: function () {
+		this.get('parentView').clickItem(this.get('content'));
+	},
+
+});
+
+App.SelectListItemVSelectediew = App.SelectListItemView.extend({
+	classNames: ['selected'],
+});
+
+App.SelectListView = Ember.CollectionView.extend({
+	tagName: "ul",
+
+	clickItem: function (item) {
+		this.get('parentView').selectedItem(item);
+	},
+});
+
+
+App.MultiSelectListView = Ember.View.extend({
+	templateName: 'wg-multiselect',
+	itemViewClass: 'App.SelectListItemView',
+	itemSelectedViewClass: 'App.SelectListItemVSelectediew',
+	selection: [],
+	threshold: 3,
+	interval: null,
+	filter_filed: 'nombre',
+
+
+	content: [{label: 'pepe', id: 0}, {label: 'pepe 2', id: 1}, {label: 'pepe 3', id: 0}],
+
+	filterTextChanged: function () {
+		_self = this;
+		if (this.get('interval'))
+			clearInterval(this.get('interval'));		
+
+		this.set('interval', setInterval(function () {
+			if (_self.get('filterText').length >= _self.get('threshold')) {
+				_self.get('contentController').addObserver('loaded', _self, _self.controllerContentChanged);
+				_self.get('contentController').filter(_self.get('filterText'));
+			} else if (_self.get('filterText').length == 0) {
+				_self.get('contentController').addObserver('loaded', _self, _self.controllerContentChanged);
+				_self.get('contentController').filter(_self.get('filterText'));
+			}
+			clearInterval(_self.get('interval'));
+		}, 1000));
+	}.observes('filterText'),
+
+	controllerContentChanged: function () {
+		if (this.get('contentController').get('loaded')) {
+			var selectionNews = [];
+			this.get('selection').forEach(function(i) {
+				var item = this.get('contentController').get('content').findProperty('id', i.get('id'));
+				selectionNews.addObject(item);
+			}, this);
+			this.get('contentController').get('content').removeObjects(selectionNews);
+			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
+		}
+	},
+
+	selectedItem: function (i) {
+		var item = this.get('selection').findProperty('id', i.get('id'));
+		if (item) {
+			var regex = new RegExp(this.get('filterText'));
+			if (regex.test(item.get(this.get('filter_filed'))))
+				this.get('contentController').get('content').addObject(item);
+			this.get('selection').removeObject(item);
+		} else {
+			item = this.get('contentController').get('content').findProperty('id', i.get('id'));
+			this.get('selection').addObject(item);
+			this.get('contentController').get('content').removeObject(item);
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
+		if (this.get('filterText')) {
+			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
+			this.get('contentController').filter(this.get('filterText'));
+		}
+	},
+
 });
