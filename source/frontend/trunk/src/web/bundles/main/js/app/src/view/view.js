@@ -7036,6 +7036,8 @@ App.TPConsultaView = Ember.View.extend({
 
 App.TestView = Ember.View.extend({
 	templateName: 'wg-test',
+	roles: [],
+	funciones: [],
 });
 
 
@@ -7047,6 +7049,11 @@ App.LoaderView = Ember.View.extend({
 App.SelectListItemView = Ember.View.extend({
 	tagName: "li",
 	templateName: 'wg-multiselect-select-list-item',
+
+	label: function () {
+		return this.get('content').get(this.get('labelPath'));
+	}.property('content'),
+
 	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
 	},
@@ -7063,6 +7070,17 @@ App.SelectListView = Ember.CollectionView.extend({
 	clickItem: function (item) {
 		this.get('parentView').selectedItem(item);
 	},
+
+	emptyView: Ember.View.extend({
+	    template: Ember.Handlebars.compile("The collection is empty")
+	}),
+
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			attrs['labelPath'] = this.get('labelPath');
+		}
+	    return this._super(viewClass, attrs);
+	},
 });
 
 
@@ -7073,7 +7091,8 @@ App.MultiSelectListView = Ember.View.extend({
 	selection: [],
 	threshold: 3,
 	interval: null,
-	filter_filed: 'nombre',
+	filterPath: 'nombre',
+	labelPath: 'nombre',
 
 
 	content: [{label: 'pepe', id: 0}, {label: 'pepe 2', id: 1}, {label: 'pepe 3', id: 0}],
@@ -7111,7 +7130,7 @@ App.MultiSelectListView = Ember.View.extend({
 		var item = this.get('selection').findProperty('id', i.get('id'));
 		if (item) {
 			var regex = new RegExp(this.get('filterText'));
-			if (regex.test(item.get(this.get('filter_filed'))))
+			if (regex.test(item.get(this.get('filterPath'))))
 				this.get('contentController').get('content').addObject(item);
 			this.get('selection').removeObject(item);
 		} else {
@@ -7123,6 +7142,7 @@ App.MultiSelectListView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		console.log(this.get('labelPath'));
 		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
 		if (this.get('filterText')) {
 			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
