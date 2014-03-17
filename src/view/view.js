@@ -7106,9 +7106,8 @@ App.MultiSelectListView = Ember.View.extend({
 			if (_self.get('filterText').length >= _self.get('threshold')) {
 				_self.get('contentController').addObserver('loaded', _self, _self.controllerContentChanged);
 				_self.get('contentController').filter(_self.get('filterText'));
-			} else if (_self.get('filterText').length == 0) {
-				_self.get('contentController').addObserver('loaded', _self, _self.controllerContentChanged);
-				_self.get('contentController').filter(_self.get('filterText'));
+			} else {
+				_self.get('contentController').set('content', []);
 			}
 			clearInterval(_self.get('interval'));
 		}, 1000));
