@@ -7072,7 +7072,7 @@ App.SelectListView = Ember.CollectionView.extend({
 	},
 
 	emptyView: Ember.View.extend({
-	    template: Ember.Handlebars.compile("The collection is empty")
+	    template: Ember.Handlebars.compile('<label class="empty-view">The collection is empty</label>')
 	}),
 
 	createChildView: function(viewClass, attrs) {
