@@ -2910,7 +2910,7 @@ App.ProyectosComisionesView = Ember.CollectionView.extend({
 });
 
 App.InvitadoView = Em.View.extend({
-	tagName: 'div',
+	tagName: 'tr',
 	templateName: 'invitado',
 	
 	clickInvitado: function () {
@@ -7072,7 +7072,7 @@ App.SelectListView = Ember.CollectionView.extend({
 	},
 
 	emptyView: Ember.View.extend({
-	    template: Ember.Handlebars.compile('<label class="empty-view">The collection is empty</label>')
+	    template: Ember.Handlebars.compile('<label class="empty-view">No hay elementos para mostrar.</label>')
 	}),
 
 	createChildView: function(viewClass, attrs) {
