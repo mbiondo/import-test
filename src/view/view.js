@@ -1175,13 +1175,13 @@ App.DictamenSinODItemView = Ember.View.extend({
 App.DictamenesSinOrdenDelDiaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenSinODItemView, 	
 	//columnas: ['Fecha Dictamen', 'Temario', 'Crear OD'],
-        columnas: function(){
-            if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
-                return ['Fecha Dictamen', 'Temario', 'Crear OD']
-            }else{
-                return ['Fecha Dictamen', 'Temario']
-            }
-        }.property('columnas'),
+		columnas: function(){
+			if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
+				return ['Fecha Dictamen', 'Temario', 'Crear OD']
+			}else{
+				return ['Fecha Dictamen', 'Temario']
+			}
+		}.property('columnas'),
 });
 
 App.OrdenDelDiaView = Ember.View.extend({
@@ -2486,7 +2486,7 @@ App.CitacionCrearView = Em.View.extend({
 		//App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
 		//$('#crear-citacion-form').validationEngine('attach');
-                
+				
 		fo = null;
 
 		if (!App.get('citacionCrearController.content.id')) {
@@ -3030,15 +3030,15 @@ App.DictamenPendienteView = Ember.View.extend({
 App.DictamenesPendientesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenPendienteView, 	        
 	//columnas: ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen'],
-        
-        columnas: function(){
-            if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
-                return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen']
-            }else{
-                return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas']
-            }
-        }.property('columnas'),
-        
+		
+		columnas: function(){
+			if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
+				return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen']
+			}else{
+				return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas']
+			}
+		}.property('columnas'),
+		
 });
 
 App.DictamenConsultaView = Em.View.extend({
@@ -5686,7 +5686,6 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 			this.get('item.dictamenes').removeObject(dictamen);
 		}
 	},
-
 	guardar: function (){
 		var itemsSeleccionadosPorDictamenesProyectos = (parseInt(this.get('item.dictamenes').length) + parseInt(this.get('item.proyectos').length));
 
@@ -5717,8 +5716,10 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 
 		if(this.get('formularioNoValido') == false)
 		{
+			console.log(this.get('item'));
 			this.get('parentView').addItem(this.get('item'));
 			this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));			
+			console.log(this.get('item'));
 		}
 	},
 });
@@ -5751,6 +5752,10 @@ App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
 
+	borrar: function(){
+		this.get('parentView').borrarItem(this.get('context'));
+	},
+
 });
 
 App.PlanDeLaborEfectivoView = Ember.View.extend({
@@ -5775,22 +5780,25 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 	addItem: function (item) {
 		item.set('orden', this.get('content.items').length);
 		this.get('content.items').pushObject(item);
+		this.guardar();
+	},
+
+	borrarItem: function (item) {
+		this.get('content.items').removeObject(item);
+		this.guardar();
+	},
+
+	guardar: function(){
 
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
 		//var clone = this.get('content').copy(true);
-
 
 		clone.normalize();
 		clone.set('estado', 0);
 		clone.addObserver('saveSuccess', this, this.itemAddedSuccess);
 		clone.save();
 	},
-
-	borrarItem: function () {
-		this.get('content.items').removeObject(item);
-	},
-
-	guardar: function () {
+	cerrarPlan: function () { 
 		this.get('content').normalize();
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.set('content.estado', 1);
@@ -6060,14 +6068,14 @@ App.SugestView = Ember.View.extend({
 		else {
 			this.set('selection', item);
 		}
-              
-                this.clear();
+			  
+				this.clear();
 	},
 
-    clear: function () {
-        this.set('sugestText', '');
-    },
-        
+	clear: function () {
+		this.set('sugestText', '');
+	},
+		
 	didInsertElement: function () {
 		this._super();
 	},
@@ -6095,7 +6103,7 @@ App.ExpedienteCitacionSugestListItemView = App.SugestListItemView.extend({
 	templateName: 'expediente-sugest-item',
 	click: function () {
 		this.get('parentView').get('parentView').get('parentView').clickExpediente(this.get('content'));
-                this.get('parentView').get('parentView').clear();
+				this.get('parentView').get('parentView').clear();
 	},        
 });
 
@@ -6352,39 +6360,39 @@ App.CrearExpedienteView = Ember.View.extend({
 	createSucceeded: function () {
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
-                
-                if (this.get('tipo')) {
-                        this.get('content').set('tipo', this.get('tipo'));
-                }
+				
+				if (this.get('tipo')) {
+						this.get('content').set('tipo', this.get('tipo'));
+				}
 
 
-                
+				
 		if (this.get('content.createSuccess')) {
-                        var expediente = this.get('content');
-                        
-                        $.jGrowl('Se ha creado el expediente!', { life: 5000 });
-                        
-                        var notification = App.Notificacion.extend(App.Savable).create();
-                        notification.set('tipo', 'expedienteCreado');	
-                        notification.set('objectId', expediente.id);
-                        notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
-                        notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-                        notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
-                        notification.create();      
-                        
-                        this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY', tipoPub: this.get('content.tipoPub'), pubnro: this.get('content.pubnro'), pubFecha: this.get('content.pubFecha'), periodo: this.get('content.periodo')}));
+						var expediente = this.get('content');
+						
+						$.jGrowl('Se ha creado el expediente!', { life: 5000 });
+						
+						var notification = App.Notificacion.extend(App.Savable).create();
+						notification.set('tipo', 'expedienteCreado');	
+						notification.set('objectId', expediente.id);
+						notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
+						notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+						notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
+						notification.create();      
+						
+						this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY', tipoPub: this.get('content.tipoPub'), pubnro: this.get('content.pubnro'), pubFecha: this.get('content.pubFecha'), periodo: this.get('content.periodo')}));
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
-                            if (App.get('expedienteConsultaController.loaded')) {
-                                App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-                                App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
-                            }
+							if (App.get('expedienteConsultaController.loaded')) {
+								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+								App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
+							}
 			};
 			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 			App.get('expedienteConsultaController').load();			
-                        */
+						*/
 		} else {
-                    $.jGrowl('No se ha creado el expediente!', { life: 5000 });
+					$.jGrowl('No se ha creado el expediente!', { life: 5000 });
 		}
 	},
 
@@ -6392,9 +6400,9 @@ App.CrearExpedienteView = Ember.View.extend({
 		this._super();
 		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));
 
-   		Ember.run.next(this, function (){
-   			$("#selector-tipo-proyecto").focus();
-   		});
+		Ember.run.next(this, function (){
+			$("#selector-tipo-proyecto").focus();
+		});
 	}
 });
 
@@ -6419,9 +6427,9 @@ App.InputSearchWidget = Ember.TextField.extend({
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
-        tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
-        tipoPub: ['TP'],
-        
+		tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
+		tipoPub: ['TP'],
+		
 	filterTextComisiones: '',
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
@@ -6459,8 +6467,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			var item 	= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
 			var itemNumero 	= this.get('content.firmantes').length + 1;
 			var itemDatos 	= {orden: itemNumero, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-			this.get('content.firmantes').pushObject(itemDatos);
+
 			this.get('firmantesSeleccionados').pushObject(firmante);
+			this.get('content.firmantes').pushObject(itemDatos);
 		}
 		else
 		{			
@@ -6473,32 +6482,60 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 			this.get('firmantesSeleccionados').removeObjects(filtered);
 			this.get('content.firmantes').removeObject(firmante);			
+//			this.get('content.firmantes').pushObject(firmante);			
 		}
-                this.set('filterFirmantes', '');
+
+		this.set('filterFirmantes', '');
 	},
 
 
 	listaFirmantes: function () {
+		var _self = this;
 		var filtered = []; 
 
 		if(this.get('filterFirmantes') != '' && this.get('filterFirmantes').length > 3)
 		{
-                    var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-                    filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
-                            return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
-                    });	
+			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
+			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
+				return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
+			});	
 		}
 		else
 		{
-                    filtered = App.get('firmantesController.arrangedContent');
+			filtered = App.get('firmantesController.arrangedContent');
+			console.log("filtered.length: " + filtered.length);
 		}
-                
-                return filtered;
-                
-	}.property('filterFirmantes').cacheable(),
+		
+		console.log("this.get('content.firmantes').length "+ this.get('content.firmantes').length);
+
+		this.get('content.firmantes').forEach(function(getfirmanteDerecho){					
+			filtered.forEach(function(getfirmanteIzquierdo){
+				var getfirmanteIzquierdoNombreYApellido = getfirmanteIzquierdo.get('diputado.datosPersonales.apellido') + ", " + getfirmanteIzquierdo.get('diputado.datosPersonales.nombre');
+
+				if(getfirmanteIzquierdoNombreYApellido == getfirmanteDerecho.nombre)
+				{
+					filtered.removeObject(getfirmanteIzquierdo);
+				}
+			});
+		});
+
+		/*
+			this.get('firmantesSeleccionados').forEach(function(firmante){
+				var firmanteNombreApellido = firmante.get('diputado.datosPersonales.apellido') + ", " + getfirmanteIzquierdo.get('diputado.datosPersonales.nombre');
+
+				console.log(firmante);
+			});
+		*/
+
+		console.log(filtered.length);
+
+		return filtered;
+				
+	}.property('filterFirmantes', 'content.firmantes.@each', 'firmantesSeleccionados.@each').cacheable(),
 
 	clickComision: function (comision) {
-				this.set('filterTextComisiones', '');
+		this.set('filterTextComisiones', '');
+
 		if (comision.id)
 		{
 			var item 		= this.get('content.giro').findProperty("comision", comision.get('comision'));
@@ -6528,20 +6565,20 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('content.giro.@each', 'filterTextComisiones', 'comisionesController.arrangedContent.@each'),
 
 	camaraChange: function () {
-                switch (this.get('content.iniciado')) {
-                    case "Diputados":
-                        this.get('content').set('expdipT', 'D');
-                        break;
-                    case "Senadores":
-                        this.get('content').set('expdipT', 'S');
-                        break;
-                    case "Poder Ejecutivo":
-                        this.get('content').set('expdipT', 'PE');
-                        break;
-                    case "JGM":
-                        this.get('content').set('expdipT', 'JGM');
-                        break;
-                }
+				switch (this.get('content.iniciado')) {
+					case "Diputados":
+						this.get('content').set('expdipT', 'D');
+						break;
+					case "Senadores":
+						this.get('content').set('expdipT', 'S');
+						break;
+					case "Poder Ejecutivo":
+						this.get('content').set('expdipT', 'PE');
+						break;
+					case "JGM":
+						this.get('content').set('expdipT', 'JGM');
+						break;
+				}
 	}.observes('content.iniciado'),
 
 	numeroChange: function () {
@@ -6559,25 +6596,25 @@ App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
-    templateName: 'expediente-form-mensaje',
-    camaras: ["Poder Ejecutivo", "JGM"],
-    msgNro: '',
-    msgFecha: null,
-    msgTipo: '',
-    
-    msgValueChange: function () {
-        var add = '';
-        if (this.get('conLey')) {
-            add = " Y PROYECTO DE LEY";
-        }
-        this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + add);
-        this.get('parentView').set('expTipo', this.get('msgTipo'));
-    }.observes('msgNro', 'conLey'),
-    
-    didInsertElement: function () {
-        this._super();
-        this.get('content').set('iniciado', "Poder Ejecutivo");
-    },
+	templateName: 'expediente-form-mensaje',
+	camaras: ["Poder Ejecutivo", "JGM"],
+	msgNro: '',
+	msgFecha: null,
+	msgTipo: '',
+	
+	msgValueChange: function () {
+		var add = '';
+		if (this.get('conLey')) {
+			add = " Y PROYECTO DE LEY";
+		}
+		this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + add);
+		this.get('parentView').set('expTipo', this.get('msgTipo'));
+	}.observes('msgNro', 'conLey'),
+	
+	didInsertElement: function () {
+		this._super();
+		this.get('content').set('iniciado', "Poder Ejecutivo");
+	},
 });
 
 App.CrearGiroView = Ember.View.extend({
@@ -6754,27 +6791,27 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	},
 	guardar: function(){
 		//App.get('visitaGuiadaConsultaController').save();
-                this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+				this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
 	},
-        saveSuccessed: function () {
+		saveSuccessed: function () {
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess')) {
-            App.visitasGuiadasController = App.VisitasGuiadasController.create();
+			App.visitasGuiadasController = App.VisitasGuiadasController.create();
 
-            fn = function() {
-                    if(App.get('visitasGuiadasController.loaded'))
-                    {
-                            App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
-                            App.get('router').transitionTo('visitasGuiadas.index')
-                    }
-            };
+			fn = function() {
+					if(App.get('visitasGuiadasController.loaded'))
+					{
+							App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+							App.get('router').transitionTo('visitasGuiadas.index')
+					}
+			};
 
-            App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+			App.get('visitasGuiadasController').addObserver('loaded', this, fn);
 
-            App.get('visitasGuiadasController').load();                      
-                        
-                        
+			App.get('visitasGuiadasController').load();                      
+						
+						
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
 		} else {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
@@ -6959,7 +6996,7 @@ App.LineSeriesChartView = Ember.View.extend({
 				x: -20
 			},
 			xAxis: {
-	            categories: this.get('categories')
+				categories: this.get('categories')
 			},
 			yAxis: {
 				title: {
@@ -6972,7 +7009,7 @@ App.LineSeriesChartView = Ember.View.extend({
 				}]
 			},
 			tooltip: {
-	        	valueSuffix: " " + this.get('tooltip')
+				valueSuffix: " " + this.get('tooltip')
 			},
 			legend: {
 				layout: 'vertical',
@@ -7016,18 +7053,18 @@ App.TPCrearView = Ember.View.extend({
 })
 
 App.TPConsultaView = Ember.View.extend({
-    templateName: 'tp-consulta',
-    
-    documentURL: function () {
-        var url = this.get('controller.content.url');
+	templateName: 'tp-consulta',
+	
+	documentURL: function () {
+		var url = this.get('controller.content.url');
 
-        if (this.get('controller.content').get('useApi'))
-        {
-            url = App.get('apiController.url') + url;
-        }
+		if (this.get('controller.content').get('useApi'))
+		{
+			url = App.get('apiController.url') + url;
+		}
 
-        return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
-    }.property('controller.content'),
+		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
+	}.property('controller.content'),
 });
 
 
@@ -7149,4 +7186,14 @@ App.MultiSelectListView = Ember.View.extend({
 		}
 	},
 
+});
+
+App.PLMiniListView = App.JQuerySortableView.extend({
+	classNames: [],
+	itemViewClass: App.PLMiniView,
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+		this.get('parentView').guardar();
+	}
 });
