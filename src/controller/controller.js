@@ -732,6 +732,7 @@ App.RestController = Em.ArrayController.extend({
 	useAPi: true,
 	sortProperties: ['id'],
 
+
 	buildURL: function (filterText) {
 		var url =  this.get('url');
 		if (this.get('useApi'))
@@ -739,7 +740,6 @@ App.RestController = Em.ArrayController.extend({
 		url += "?filter=" + filterText;
 		return url;		
 	},
-
 
 	filter: function (filterText) {
 		this.set('loaded', false);
@@ -1535,6 +1535,14 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	sortAscending: true,
 	loaded: false,
 	async: false,
+
+	buildURL: function (filterText) {
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		url += "/" + filterText;
+		return url;		
+	},	
 
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);
