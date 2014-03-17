@@ -6789,12 +6789,29 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	willInsertElement: function(){
 		this.set('content', App.get('visitaGuiadaConsultaController.content'));
 	},
+
+	aprobar: function () {
+		this.get('content').set('aprobado', true);
+		this.get('content').addObserver('aproveSuccess', this, this.aproveSuccessed);
+		this.get('content').aprove();		
+	},
+
 	guardar: function(){
 		//App.get('visitaGuiadaConsultaController').save();
-				this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
 	},
-		saveSuccessed: function () {
+
+	aproveSuccessed: function () {
+		this.get('content').removeObserver('aproveSuccess', this, this.createSucceeded);
+		if (this.get('content.aproveSuccess')) {
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('aproveSuccess') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	},
+
+	saveSuccessed: function () {
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess')) {
 			App.visitasGuiadasController = App.VisitasGuiadasController.create();
@@ -6802,8 +6819,8 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 			fn = function() {
 					if(App.get('visitasGuiadasController.loaded'))
 					{
-							App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
-							App.get('router').transitionTo('visitasGuiadas.index')
+						App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+						App.get('router').transitionTo('visitasGuiadas.index')
 					}
 			};
 
@@ -6813,7 +6830,7 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 						
 						
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
-		} else {
+		} else if (this.get('saveSuccess') == false) {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 		}
 	}      
@@ -7165,9 +7182,11 @@ App.MultiSelectListView = Ember.View.extend({
 	selectedItem: function (i) {
 		var item = this.get('selection').findProperty('id', i.get('id'));
 		if (item) {
-			var regex = new RegExp(this.get('filterText'));
-			if (regex.test(item.get(this.get('filterPath'))))
-				this.get('contentController').get('content').addObject(item);
+			if (this.get('filterText').length >= this.get('threshold')){
+				var regex = new RegExp(this.get('filterText'));
+				if (regex.test(item.get(this.get('filterPath'))))
+					this.get('contentController').get('content').addObject(item);
+			}
 			this.get('selection').removeObject(item);
 		} else {
 			item = this.get('contentController').get('content').findProperty('id', i.get('id'));

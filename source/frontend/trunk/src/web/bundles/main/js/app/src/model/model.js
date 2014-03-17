@@ -1680,7 +1680,7 @@ App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
     useApi: false,
-        auditable: true,
+    auditable: true,
 	id: '',
 	visitaPara: '',
 	tipoInstitucion: '',
@@ -1718,11 +1718,70 @@ App.VisitaGuiada = Ember.Object.extend({
             'encuestaPosterior',
             'envioFoto',
             'observaciones',
+            'aprobado'
 	],
 
 	label: function (){
 		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas");
 	}.property('id'),
+
+	aprove: function () {
+		this.set('aproveSuccess', undefined);
+		var url = 'visitas-guiadas/visita/' + this.get('id') + '/aprove'
+		$.ajax({
+			url:  url,
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			data : this.getJson(),
+			success: this.aproveSuccess,
+			complete: this.aproveCompleted,
+		});			
+	},
+
+	aproveError: function (data) {
+		this.set('aproveSuccess', false);
+	},
+
+	aproveSuccess: function (data) {
+		if (this.get('useApi') && data.id) {
+			this.set('aproveSuccess', true);
+		}
+
+		if (data.success == true) {
+			this.set('aproveSuccess', true);
+		}		
+
+		if (this.get('aproveSuccess') == true) 
+		{
+			if (this.get('notificationType'))
+			{
+				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson(), this.get('notificationRoom'));
+			}
+
+			if (this.get('auditable')) 
+			{
+				var audit = App.Audit.extend(App.Savable).create();
+				audit.set('tipo', 'Test');
+				audit.set('accion', 'Modificado');
+				audit.set('usuario', App.get('userController.user.cuil'));
+				audit.set('objeto', this.constructor.toString());
+				audit.set('objetoId', this.get('id'));
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.create();				
+			}
+		}			
+	},
+	
+	aproveCompleted: function(xhr){
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('aproveSuccess', true);
+		} 
+		else
+		{
+			this.set('aproveSuccess', false);
+		}
+	},		
 });
 
 
