@@ -7197,3 +7197,25 @@ App.PLMiniListView = App.JQuerySortableView.extend({
 		this.get('parentView').guardar();
 	}
 });
+
+App.ODListView = App.JQuerySortableView.extend({
+	classNames: [],
+	itemViewClass: App.ODMiniView,
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+		this.get('parentView').get('parentView').get('parentView').guardar();
+	}
+});
+
+
+App.ExpedientesListMiniView = App.JQuerySortableView.extend({
+	classNames: [],
+	itemViewClass: App.ExpedienteMiniView,
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+		this.get('parentView').get('parentView').get('parentView').guardar();
+	}
+});
+
