@@ -909,7 +909,9 @@ App.ODMiniView = Ember.View.extend({
 	hasDocument: true,
 	loading: false,
 
-
+	borrar: function(item){
+		this.get('parentView').get('parentView').borrarOD(this.get('content'));
+	},
 	dictamen: function () {
 		if (this.get('content.dictamen'))
 			return App.Dictamen.create(this.get('content.dictamen'));
@@ -951,6 +953,10 @@ App.ODMiniView = Ember.View.extend({
 
 App.ExpedienteMiniView = Ember.View.extend({
 	templateName: 'expediente-mini',	
+
+	borrar: function(item){
+		this.get('parentView').get('parentView').borrarExpediente(this.get('content'));
+	},
 	texto: function () {
 		if (this.get('content.texto')) {
 			return this.get('content.texto').htmlSafe();
@@ -5755,6 +5761,14 @@ App.PLMiniView = Ember.View.extend({
 	borrar: function(){
 		this.get('parentView').borrarItem(this.get('context'));
 	},
+	borrarExpediente: function(item){
+		this.get('content.proyectos').removeObject(item);
+		this.get('parentView').get('parentView').guardar();
+	},
+	borrarOD: function(item){
+		this.get('content.dictamenes').removeObject(item);
+		this.get('parentView').get('parentView').guardar();
+	}
 
 });
 
@@ -5787,7 +5801,6 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		this.get('content.items').removeObject(item);
 		this.guardar();
 	},
-
 	guardar: function(){
 
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
