@@ -7174,12 +7174,13 @@ App.MultiSelectListView = Ember.View.extend({
 	itemSelectedViewClass: 'App.SelectListItemVSelectediew',
 	selection: [],
 	threshold: 3,
+	delayFilter: 700,
 	interval: null,
 	filterPath: 'nombre',
 	labelPath: 'nombre',
+	suggestable: false,
 
-
-	content: [{label: 'pepe', id: 0}, {label: 'pepe 2', id: 1}, {label: 'pepe 3', id: 0}],
+	content: [],
 
 	filterTextChanged: function () {
 		_self = this;
@@ -7187,15 +7188,33 @@ App.MultiSelectListView = Ember.View.extend({
 			clearInterval(this.get('interval'));		
 
 		this.set('interval', setInterval(function () {
-			if (_self.get('filterText').length >= _self.get('threshold')) {
-				_self.get('contentController').addObserver('loaded', _self, _self.controllerContentChanged);
-				_self.get('contentController').filter(_self.get('filterText'));
-			} else {
-				_self.get('contentController').set('content', []);
-			}
+			_self.filterData();
 			clearInterval(_self.get('interval'));
-		}, 1000));
+		}, this.get('delayFilter')));
 	}.observes('filterText'),
+
+
+	filterData: function () {
+		if (this.get('suggestable'))
+		{
+			if (this.get('filterText').length >= this.get('threshold')) {
+				this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
+				this.get('contentController').filter(this.get('filterText'));
+			} else {
+				this.get('contentController').set('content', []);
+			}
+		} else {
+			if (this.get('filterText').length >= this.get('threshold')) {
+				var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+				filtered = this.get('contentController').get('content').filter(function(c){
+					return regex.test(c.get(this.get('labelPath')).toString().toLowerCase());
+				}, this);
+				this.set('content', filtered);
+			} else {
+				this.set('content', this.get('contentController').get('content'));
+			}
+		}
+	},
 
 	controllerContentChanged: function () {
 		if (this.get('contentController').get('loaded')) {
@@ -7206,6 +7225,7 @@ App.MultiSelectListView = Ember.View.extend({
 			}, this);
 			this.get('contentController').get('content').removeObjects(selectionNews);
 			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
+			this.set('content', this.get('contentController').get('content'));
 		}
 	},
 
@@ -7215,23 +7235,25 @@ App.MultiSelectListView = Ember.View.extend({
 			if (this.get('filterText').length >= this.get('threshold')){
 				var regex = new RegExp(this.get('filterText'));
 				if (regex.test(item.get(this.get('filterPath'))))
-					this.get('contentController').get('content').addObject(item);
+					this.get('content').addObject(item);
 			}
 			this.get('selection').removeObject(item);
 		} else {
-			item = this.get('contentController').get('content').findProperty('id', i.get('id'));
+			item = this.get('content').findProperty('id', i.get('id'));
 			this.get('selection').addObject(item);
-			this.get('contentController').get('content').removeObject(item);
+			this.get('content').removeObject(item);
 		}
 	},
 
 	didInsertElement: function () {
 		this._super();
-		console.log(this.get('labelPath'));
 		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
-		if (this.get('filterText')) {
+		if (this.get('filterText') && this.get('suggestable')) {
 			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').filter(this.get('filterText'));
+		} else if (!this.get('suggestable')) {
+			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
+			this.get('contentController').load();
 		}
 	},
 
