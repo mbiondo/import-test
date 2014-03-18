@@ -1154,7 +1154,7 @@ App.DictamenesView = Em.View.extend({
 
 App.DictamenesListView = App.ListFilterView.extend({ 
 	itemViewClass: App.DictamenView, 	
-	columnas: ['Fecha Dictamen', 'Expedientes', 'Comisión cabecera', 'Ver Dictamen'],
+	columnas: ['Fecha Dictamen', 'Expedientes dictaminados', 'Comisión cabecera', 'Ver Dictamen'],
 });
 
 App.DictamenSinODItemView = Ember.View.extend({
@@ -2557,7 +2557,9 @@ App.CitacionCrearView = Em.View.extend({
 	cargarExpedientes: function () {
 		//App.get('citacionCrearController').cargarExpedientes();
 	},
-	
+	cancelarEdicion: function(){
+		App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+	},
 	guardar: function () {
 		
 		this.$('#crear-citacion-form').parsley('validate');
@@ -3054,9 +3056,9 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 		
 		columnas: function(){
 			if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
-				return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas', 'Cargar Dictamen']
+				return ['Fecha Reunión','Expedientes pendientes de dictamen', 'Comisiones Convocadas', 'Cargar Dictamen']
 			}else{
-				return ['Fecha Reunión','Expedientes', 'Comisiones Convocadas']
+				return ['Fecha Reunión','Expedientes pendientes de dictamen', 'Comisiones Convocadas']
 			}
 		}.property('columnas'),
 		
@@ -6086,7 +6088,6 @@ App.SugestView = Ember.View.extend({
 			return [];
 		}
 	}.property('controller.content'),
-
 	itemSelect: function(item) {
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
@@ -7285,3 +7286,12 @@ App.ExpedientesListMiniView = App.JQuerySortableView.extend({
 	},
 });
 
+App.SugestTextSearch = Ember.TextField.extend({
+	insertNewline: function(){		
+		var _self = this.get('parentView');
+
+		element = _self.get('sugestList.firstObject');
+
+		_self.itemSelect(element);
+	},
+});
