@@ -2384,6 +2384,10 @@ App.MenuItemView = Em.View.extend({
 		this.get('parentView').clickItem(this.get('content'));
 	},
 	*/
+	didInsertElement: function () {
+		this._super();
+		this.$('a').tooltip();
+	},	
 });
 
 App.MenuItemTintView = App.MenuItemView.extend({
@@ -2393,6 +2397,17 @@ App.MenuItemTintView = App.MenuItemView.extend({
 		if (this.get('parentView.clickMenu'))
 			this.get('parentView').clickMenu();
 	},
+
+	seleccionadoChange: function () {
+		Ember.run.next(function () {
+			this.$('a').tooltip();
+		});
+	}.observes('content.seleccionado'),	
+
+	didInsertElement: function () {
+		this._super();
+		this.$('a').tooltip();
+	}	
 });
 
 App.MenuItemThumbView = App.MenuItemView.extend({
