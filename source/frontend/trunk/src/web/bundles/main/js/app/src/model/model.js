@@ -610,12 +610,13 @@ App.Expediente = Em.Object.extend({
 		var giros = this.get('giro').sort(function (a, b) {
 			return a.orden - b.orden;
 		});
-		
+
 		if (giros.length > 0)
 			if (giros.length == 1)
 				return giros.objectAt(0).comision;
 			else
 				return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
+
 	}.property('giro'),
 
 	serializable: [
@@ -907,14 +908,22 @@ App.Dictamen = Em.Object.extend({
 		return st.htmlSafe();
 	}.property('proyectos'),
 	comisionesLabel: function () {
+		var st = "";
 		var comisiones = this.comisiones;
+			this.get('comisiones').forEach(function (comision) {
+				st += "<li>" + comision.comision.nombre + "</li>";
+			})
 
+			return st.htmlSafe();
+
+		/*
 		if(comisiones && comisiones.length > 0) {
 			if (comisiones.length ==1)
 				return comisiones.objectAt(0).nombre;
 			else
 				return comisiones.objectAt(0).nombre + " y otras (" + (comisiones.length - 1 ) + ")"; 		
 		}
+		*/
 	}.property('comisiones'),
 	comisionesLabel2: function () {
 		var st = "";
