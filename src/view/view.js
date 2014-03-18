@@ -7228,7 +7228,13 @@ App.PLMiniListView = App.JQuerySortableView.extend({
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
 		this.get('parentView').guardar();
-	}
+	},
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			attrs['editable'] = this.get('editable');
+		}
+	    return this._super(viewClass, attrs);
+	},	
 });
 
 App.ODListView = App.JQuerySortableView.extend({
@@ -7238,7 +7244,13 @@ App.ODListView = App.JQuerySortableView.extend({
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
 		this.get('parentView').get('parentView').get('parentView').guardar();
-	}
+	},
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			attrs['editable'] = this.get('editable');
+		}
+	    return this._super(viewClass, attrs);
+	},	
 });
 
 
@@ -7249,6 +7261,12 @@ App.ExpedientesListMiniView = App.JQuerySortableView.extend({
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
 		this.get('parentView').get('parentView').get('parentView').guardar();
-	}
+	},
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			attrs['editable'] = this.get('editable');
+		}
+	    return this._super(viewClass, attrs);
+	},
 });
 
