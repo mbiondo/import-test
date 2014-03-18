@@ -158,7 +158,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
 App.DatePicker = JQ.DatePicker.extend({
   dateFormat: 'dd/mm/yy', //ISO 8601
-   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'parsley-regex', 'data-americandate', 'data-trigger', 'parsley-trigger'],
+   attributeBindings: ['data-required', 'data-error-message', 'data-validation-minlength', 'parsley-regex', 'data-americandate', 'data-trigger', 'parsley-trigger', 'tabindex' ],
  
   beforeShowDay: function(date) {
 	  return [true, ""];
@@ -7116,6 +7116,7 @@ App.LoaderView = Ember.View.extend({
 App.SelectListItemView = Ember.View.extend({
 	tagName: "li",
 	templateName: 'wg-multiselect-select-list-item',
+	classNames: ['selectable'],
 
 	label: function () {
 		return this.get('content').get(this.get('labelPath'));
