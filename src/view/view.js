@@ -2303,6 +2303,7 @@ App.CalendarTool = Em.View.extend({
 				week: "ddd dd/MM",
 				day: 'dddd dd/MM'
 			},
+			minTime: 6,
 			allDayText: 'Todo el día',
 			events: function(start, end, callback) {
 				
