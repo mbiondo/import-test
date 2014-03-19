@@ -1628,13 +1628,13 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     	var d = [];
 
     	this.get('proyectos').forEach(function (proyecto) {
-    		p.addObject({proyecto: proyecto, id: proyecto.pseudoId});
+    		p.addObject({proyecto: proyecto, id: proyecto.pseudoId, orden: proyecto.orden});
     	});
 
     	this.set('proyectos', p);
 
     	this.get('dictamenes').forEach(function (dictamen) {
-    		d.addObject({dictamen: dictamen, id: dictamen.pseudoId});
+    		d.addObject({dictamen: dictamen, id: dictamen.pseudoId, orden: dictamen.orden});
     	});
 
     	this.set('dictamenes', d); 	
@@ -1648,6 +1648,7 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     		if (proyecto.proyecto) {
     			var proy = App.Expediente.create(proyecto.proyecto);
     			proy.set('pseudoId', proyecto.id);
+    			proy.set('orden', proyecto.orden);
     			p.addObject(proy);
     		}
     	});
@@ -1658,6 +1659,7 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
     		if (dictamen.dictamen){
     			var dic = App.OrdeDelDia.create(dictamen.dictamen);
     			dic.set('pseudoId', dictamen.id);
+    			dic.set('orden', dictamen.orden);
     			d.addObject(dic);
     		}
     	});
