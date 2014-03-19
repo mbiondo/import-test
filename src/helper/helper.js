@@ -156,9 +156,12 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options){
 });
 
 
-Handlebars.registerHelper("excerp", function(text, limit, options) {
+Handlebars.registerHelper("excerpt", function(text, limit, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var text = getPath(context, text, options.fn);
-  
-  return text.subStr(limit) + "...";
+  var limit = parseInt(limit);
+  if (text.length > limit)
+    return text.substr(0, limit) + "...";
+  else
+    return text;
 });
