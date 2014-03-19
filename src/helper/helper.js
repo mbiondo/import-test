@@ -154,3 +154,11 @@ Handlebars.registerHelper("tienePermisos", function(userRoles, options){
   	return options.fn(this);
   }
 });
+
+
+Handlebars.registerHelper("excerp", function(text, limit, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var text = getPath(context, text, options.fn);
+  
+  return text.subStr(limit) + "...";
+});
