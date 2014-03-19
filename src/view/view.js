@@ -6523,11 +6523,31 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
 	firmantesSeleccionados: [],
+	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132],
 
+	numeros: function(){
+		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
+	}.property('tpsController.content.@each'),
+
+	numerosChanged: function(){
+		if (this.get('pubnro')) {
+			this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+			this.set('content.pubnro', this.get('pubnro.numero'));
+		}
+		else 
+		{
+			this.set('content.pubFecha', null);
+			this.set('content.pubnro', null);
+		}
+	}.observes('pubnro'),
+
+	periodoChanged: function () {
+		App.set('tpsController.periodo', this.get('content.periodo'));
+		this.set('pubnro', null);
+	}.observes('content.periodo'),
 
 	didInsertElement: function(){
 		this._super();
-
 		var _self = this;
 		shortcut_list = ['proyecto', 'firmantes', 'giros'];
 		shortcut_list.forEach(function(value, index){
