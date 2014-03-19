@@ -398,23 +398,29 @@ App.Router =  Em.Router.extend({
 					
 					deserialize: function(router, params) {
 						App.firmantesController = App.FirmantesController.create();
+						 if (!App.get('tpsController'))
+						 	App.tpsController = App.TPsController.create();
 
 						var deferred = $.Deferred(),
 
+
 						fn2 = function() {
-                                                        if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
-                                                            App.get('firmantesController').removeObserver('loaded', this, fn2);
-                                                            App.get('comisionesController').removeObserver('loaded', this, fn2);
-                                                            deferred.resolve(null);	
-                                                        }
+                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
+                                App.get('firmantesController').removeObserver('loaded', this, fn2);
+                                App.get('comisionesController').removeObserver('loaded', this, fn2);
+								 App.get('tpsController').removeObserver('loaded', this, fn2);	
+                                deferred.resolve(null);	
+                            }
 						}
 
 						App.get('comisionesController').addObserver('loaded', this, fn2);
 						App.get('comisionesController').load();				
 
-
 						App.get('firmantesController').addObserver('loaded', this, fn2);
 						App.get('firmantesController').load();		
+
+						App.get('tpsController').addObserver('loaded', this, fn2);
+						App.get('tpsController').load();
 
 					
 						return deferred.promise();
