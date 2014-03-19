@@ -4670,6 +4670,7 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 			tolerance: 'pointer',
 			containment: 'parent',
 			placeholder: 'ui-state-highlight',
+			forcePlaceholderSize: true,
 			start: function(event, ui) {
 				ui.item.previousIndex = ui.item.index();                      
 			},
