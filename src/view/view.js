@@ -5776,6 +5776,20 @@ App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
 
+	mergedContent: function () {
+		var data = [];
+		data.addObjects(this.get('content.dictamenes'));
+		data.addObjects(this.get('content.proyectos'));
+
+		var mergedContentController = Ember.ArrayController.create({
+		  content: data,
+		  sortProperties: ['orden'],
+		  sortAscending: true,
+		});
+
+		return mergedContentController;
+	}.property('content.proyectos.@each, content.dictamenes.@each'),
+
 	borrar: function(){
 		this.get('parentView').borrarItem(this.get('context'));
 	},
@@ -5819,6 +5833,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		this.get('content.items').removeObject(item);
 		this.guardar();
 	},
+
 	guardar: function(){
 
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
@@ -5826,9 +5841,13 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 		clone.normalize();
 		clone.set('estado', 0);
+
+		console.log(clone);
+
 		clone.addObserver('saveSuccess', this, this.itemAddedSuccess);
 		clone.save();
 	},
+
 	cerrarPlan: function () { 
 		this.get('content').normalize();
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
@@ -7260,6 +7279,8 @@ App.MultiSelectListView = Ember.View.extend({
 
 });
 
+
+//PL
 App.PLMiniListView = App.JQuerySortableView.extend({
 	classNames: [],
 	itemViewClass: App.PLMiniView,
@@ -7316,5 +7337,28 @@ App.SugestTextSearch = Ember.TextField.extend({
 		element = _self.get('sugestList.firstObject');
 
 		_self.itemSelect(element);
+	},
+});
+
+
+App.PLItemContentCollectionView = App.JQuerySortableView.extend({
+	classNames: [],
+	itemViewClass: App.ODMiniView,
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+		this.get('parentView').get('parentView').get('parentView').guardar();
+	},
+
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			if (attrs.content.constructor.toString() == 'App.Expediente') {
+      			viewClass = App.ExpedienteMiniView;
+    		} else if (attrs.content.constructor.toString() == 'App.OrdeDelDia') {
+      			viewClass = App.ODMiniView;
+    		}
+			attrs['editable'] = this.get('editable');
+		}
+	    return this._super(viewClass, attrs);
 	},
 });
