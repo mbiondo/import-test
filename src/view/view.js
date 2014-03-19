@@ -4563,7 +4563,6 @@ App.FirmanteView = Em.View.extend({
 	tagName: 'li',
 	templateName: 'dictamen-firmante-item',
 
-
 	clickItem: function () {
 		this.get('parentView').get('parentView').clickFirmante(this.get('content'));
 	}	
@@ -6570,6 +6569,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	uploadFolder: function () {
 		return "uploads/expediente/" + this.get('content.expdip') + "/";
 	}.property('content.expdip'),
+
 	clickFirmante: function (firmante) {                
 		if(firmante.apellido)
 		{
@@ -6591,7 +6591,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 			this.get('firmantesSeleccionados').removeObjects(filtered);
 			this.get('content.firmantes').removeObject(firmante);			
-//			this.get('content.firmantes').pushObject(firmante);			
+//			this.get('content.firmantes').pushObject(firmante);	
 		}
 
 		this.set('filterFirmantes', '');
@@ -6611,8 +6611,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 		else
 		{
-			filtered = App.get('firmantesController.arrangedContent');
+			filtered = App.get('firmantesController.content');
 		}
+		
 
 		this.get('content.firmantes').forEach(function(getfirmanteDerecho){					
 			filtered.forEach(function(getfirmanteIzquierdo){
@@ -6632,10 +6633,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				console.log(firmante);
 			});
 		*/
-
-		return filtered;
+		return filtered.slice(0, 20);
 				
-	}.property('filterFirmantes', 'content.firmantes.@each', 'firmantesSeleccionados.@each').cacheable(),
+	}.property('filterFirmantes', 'firmantesSeleccionados.@each'),
 
 	clickComision: function (comision) {
 		this.set('filterTextComisiones', '');
