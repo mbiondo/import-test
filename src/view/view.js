@@ -795,6 +795,7 @@ App.PlanDeLaborView = Ember.View.extend({
 
 			orden = orden + 1;
 
+			/*
 			if (item.get('dictamenes')) {
 				item.get('dictamenes').forEach(function (dictamen){
 					var tema = App.Tema.create();
@@ -826,8 +827,47 @@ App.PlanDeLaborView = Ember.View.extend({
 					orden = orden + 1;
 				});				
 			}
-		})
+		
+		*/
 
+			var data = [];
+			data.addObjects(this.get('content.dictamenes'));
+			data.addObjects(this.get('content.proyectos'));
+
+			var mergedContentController = Ember.ArrayController.create({
+			  content: data,
+			  sortProperties: ['orden'],
+			  sortAscending: true,
+			});
+
+			data.get('arrangedContent').forEach(function (item) {
+				if (item.constructor.toString() == 'App.Expediente') {
+					temas.addObject(
+						App.Tema.create({
+							titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+							orden: orden,
+							plId: expediente.id,
+							plTipo: 'e',
+							plGrupo: '',
+							plItemId: item.get('id'),
+						})
+					);
+					orden = orden + 1      			
+	    		} else if (item.constructor.toString() == 'App.OrdeDelDia') {
+					var tema = App.Tema.create();
+					tema.setProperties({
+							titulo: "Dictamen: " + dictamen.sumario,
+							orden: orden,
+							plId: dictamen.id,
+							plTipo: 'd',
+							plGrupo: '',
+							plItemId: item.get('id'),
+					});
+					temas.addObject(tema);
+					orden = orden + 1;      			
+	    		}
+			}, this);
+		});
 		sesion.set('temas', temas);
 
 		var url = "crearSesion/planDeLabor";
@@ -5949,6 +5989,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 				orden = orden + 1;
 
+				/*
 				if (item.get('dictamenes')) {
 					item.get('dictamenes').forEach(function (dictamen){
 						var tema = App.Tema.create();
@@ -5980,7 +6021,46 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 						orden = orden + 1;
 					});				
 				}
-			})
+				*/
+
+				var data = [];
+				data.addObjects(this.get('content.dictamenes'));
+				data.addObjects(this.get('content.proyectos'));
+
+				var mergedContentController = Ember.ArrayController.create({
+				  content: data,
+				  sortProperties: ['orden'],
+				  sortAscending: true,
+				});
+
+				data.get('arrangedContent').forEach(function (item) {
+					if (item.constructor.toString() == 'App.Expediente') {
+						temas.addObject(
+							App.Tema.create({
+								titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+								orden: orden,
+								plId: expediente.id,
+								plTipo: 'e',
+								plGrupo: '',
+								plItemId: item.get('id'),
+							})
+						);
+						orden = orden + 1      			
+		    		} else if (item.constructor.toString() == 'App.OrdeDelDia') {
+						var tema = App.Tema.create();
+						tema.setProperties({
+								titulo: "Dictamen: " + dictamen.sumario,
+								orden: orden,
+								plId: dictamen.id,
+								plTipo: 'd',
+								plGrupo: '',
+								plItemId: item.get('id'),
+						});
+						temas.addObject(tema);
+						orden = orden + 1;      			
+		    		}
+				}, this);		
+			});
 
 			sesion.set('temas', temas);
 
