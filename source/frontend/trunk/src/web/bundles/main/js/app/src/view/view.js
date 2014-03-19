@@ -831,8 +831,8 @@ App.PlanDeLaborView = Ember.View.extend({
 		*/
 
 			var data = [];
-			data.addObjects(this.get('content.dictamenes'));
-			data.addObjects(this.get('content.proyectos'));
+			data.addObjects(this.get('item.dictamenes'));
+			data.addObjects(this.get('item.proyectos'));
 
 			var mergedContentController = Ember.ArrayController.create({
 			  content: data,
@@ -840,7 +840,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			  sortAscending: true,
 			});
 
-			data.get('arrangedContent').forEach(function (item) {
+			mergedContentController.get('arrangedContent').forEach(function (item) {
 				if (item.constructor.toString() == 'App.Expediente') {
 					temas.addObject(
 						App.Tema.create({
@@ -5990,43 +5990,9 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 				orden = orden + 1;
 
-				/*
-				if (item.get('dictamenes')) {
-					item.get('dictamenes').forEach(function (dictamen){
-						var tema = App.Tema.create();
-						tema.setProperties({
-								titulo: "Dictamen: " + dictamen.sumario,
-								orden: orden,
-								plId: dictamen.id,
-								plTipo: 'd',
-								plGrupo: '',
-								plItemId: item.get('id'),
-						});
-						temas.addObject(tema);
-						orden = orden + 1;
-					});
-				}
-
-				if (item.get('proyectos')) {
-					item.get('proyectos').forEach(function (expediente){
-						temas.addObject(
-							App.Tema.create({
-								titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
-								orden: orden,
-								plId: expediente.id,
-								plTipo: 'e',
-								plGrupo: '',
-								plItemId: item.get('id'),
-							})
-						);
-						orden = orden + 1;
-					});				
-				}
-				*/
-
 				var data = [];
-				data.addObjects(this.get('content.dictamenes'));
-				data.addObjects(this.get('content.proyectos'));
+				data.addObjects(item.get('dictamenes'));
+				data.addObjects(item.get('proyectos'));
 
 				var mergedContentController = Ember.ArrayController.create({
 				  content: data,
@@ -6034,37 +6000,36 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 				  sortAscending: true,
 				});
 
-				data.get('arrangedContent').forEach(function (item) {
+				mergedContentController.get('arrangedContent').forEach(function (object) {
 					if (item.constructor.toString() == 'App.Expediente') {
 						temas.addObject(
 							App.Tema.create({
-								titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
+								titulo: "Expediente " + object.expdip + " " + object.tipo,
 								orden: orden,
-								plId: expediente.id,
+								plId: object.id,
 								plTipo: 'e',
 								plGrupo: '',
 								plItemId: item.get('id'),
 							})
 						);
-						orden = orden + 1      			
+						orden = orden + 1;
 		    		} else if (item.constructor.toString() == 'App.OrdeDelDia') {
 						var tema = App.Tema.create();
 						tema.setProperties({
-								titulo: "Dictamen: " + dictamen.sumario,
+								titulo: "Dictamen: " + object.sumario,
 								orden: orden,
-								plId: dictamen.id,
+								plId: object.id,
 								plTipo: 'd',
 								plGrupo: '',
 								plItemId: item.get('id'),
 						});
 						temas.addObject(tema);
+
 						orden = orden + 1;      			
 		    		}
 				}, this);		
 			});
-
-			sesion.set('temas', temas);
-
+			
 			var url = "crearSesion/planDeLabor";
 
 			$.ajax({
@@ -6076,7 +6041,6 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 				data : sesion.getJson(),
 				success: this.createSucceeded,
 			});
-
 		}
 	},
 
