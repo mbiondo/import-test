@@ -834,37 +834,29 @@ App.PlanDeLaborView = Ember.View.extend({
 			data.addObjects(this.get('item.dictamenes'));
 			data.addObjects(this.get('item.proyectos'));
 
-			var mergedContentController = Ember.ArrayController.create({
-			  content: data,
-			  sortProperties: ['orden'],
-			  sortAscending: true,
-			});
-
-			mergedContentController.get('arrangedContent').forEach(function (item) {
-				if (item.constructor.toString() == 'App.Expediente') {
+			data.get('content').forEach(function (object) {
+				if (object.constructor.toString() == 'App.Expediente') {
 					temas.addObject(
 						App.Tema.create({
-							titulo: "Expediente " + expediente.expdip + " " + expediente.tipo,
-							orden: orden,
-							plId: expediente.id,
+							titulo: "Expediente " + object.expdip + " " + object.tipo,
+							orden: object.orden,
+							plId: object.id,
 							plTipo: 'e',
 							plGrupo: '',
 							plItemId: item.get('id'),
 						})
 					);
-					orden = orden + 1      			
-	    		} else if (item.constructor.toString() == 'App.OrdeDelDia') {
+	    		} else if (object.constructor.toString() == 'App.OrdeDelDia') {
 					var tema = App.Tema.create();
 					tema.setProperties({
-							titulo: "Dictamen: " + dictamen.sumario,
-							orden: orden,
-							plId: dictamen.id,
+							titulo: "Dictamen: " + object.sumario,
+							orden: object.orden,
+							plId: object.id,
 							plTipo: 'd',
 							plGrupo: '',
 							plItemId: item.get('id'),
 					});
 					temas.addObject(tema);
-					orden = orden + 1;      			
 	    		}
 			}, this);
 		});
@@ -6001,11 +5993,11 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 				});
 
 				mergedContentController.get('arrangedContent').forEach(function (object) {
-					if (item.constructor.toString() == 'App.Expediente') {
+					if (object.constructor.toString() == 'App.Expediente') {
 						temas.addObject(
 							App.Tema.create({
 								titulo: "Expediente " + object.expdip + " " + object.tipo,
-								orden: orden,
+								orden: object.orden,
 								plId: object.id,
 								plTipo: 'e',
 								plGrupo: '',
@@ -6013,11 +6005,11 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 							})
 						);
 						orden = orden + 1;
-		    		} else if (item.constructor.toString() == 'App.OrdeDelDia') {
+		    		} else if (object.constructor.toString() == 'App.OrdeDelDia') {
 						var tema = App.Tema.create();
 						tema.setProperties({
 								titulo: "Dictamen: " + object.sumario,
-								orden: orden,
+								orden: object.orden,
 								plId: object.id,
 								plTipo: 'd',
 								plGrupo: '',
@@ -6029,6 +6021,8 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 		    		}
 				}, this);		
 			});
+			
+			sesion.set('temas', temas);
 			
 			var url = "crearSesion/planDeLabor";
 
