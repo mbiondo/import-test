@@ -6612,10 +6612,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		else
 		{
 			filtered = App.get('firmantesController.arrangedContent');
-			console.log("filtered.length: " + filtered.length);
 		}
-		
-		console.log("this.get('content.firmantes').length "+ this.get('content.firmantes').length);
 
 		this.get('content.firmantes').forEach(function(getfirmanteDerecho){					
 			filtered.forEach(function(getfirmanteIzquierdo){
@@ -6635,8 +6632,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				console.log(firmante);
 			});
 		*/
-
-		console.log(filtered.length);
 
 		return filtered;
 				
