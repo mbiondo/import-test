@@ -7430,12 +7430,19 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 
 	createChildView: function(viewClass, attrs) {
 		if (attrs) {
+			
 			if (attrs.content.constructor.toString() == 'App.Expediente') {
-   				viewClass = App.ExpedienteMiniEditableView;
+				if (this.get('editable'))
+   					viewClass = App.ExpedienteMiniEditableView;
+   				else
+   					viewClass = App.ExpedienteMiniView;
     		} else if (attrs.content.constructor.toString() == 'App.OrdeDelDia') {
-   				viewClass = App.ODMiniEditableView;
+				if (this.get('editable'))
+   					viewClass = App.ODMiniEditableView;
+   				else
+   					viewClass = App.ODMiniView;
     		}
-			attrs['editable'] = this.get('editable');
+			
 		}
 	    return this._super(viewClass, attrs);
 	},
