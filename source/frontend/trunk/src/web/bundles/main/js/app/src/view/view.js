@@ -996,7 +996,8 @@ App.ExpedienteMiniView = Ember.View.extend({
 		else {
 			return "";
 		}
-	}.property('content.texto'),});
+	}.property('content.texto'),
+});
 
 //OD
 
@@ -7402,6 +7403,21 @@ App.SugestTextSearch = Ember.TextField.extend({
 	},
 });
 
+App.ExpedienteMiniEditableView = Ember.View.extend({
+	templateName: 'expediente-mini-editable',	
+
+	borrar: function(item){
+		this.get('parentView').get('parentView').borrarExpediente(this.get('content'));
+	},
+});
+
+App.ODMiniEditableView = Ember.View.extend({
+	templateName: 'od-mini-editable',
+	borrar: function(item){
+		this.get('parentView').get('parentView').borrarOD(this.get('content'));
+	},
+});
+
 
 App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 	classNames: [],
@@ -7415,9 +7431,9 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 	createChildView: function(viewClass, attrs) {
 		if (attrs) {
 			if (attrs.content.constructor.toString() == 'App.Expediente') {
-      			viewClass = App.ExpedienteMiniView;
+   				viewClass = App.ExpedienteMiniEditableView;
     		} else if (attrs.content.constructor.toString() == 'App.OrdeDelDia') {
-      			viewClass = App.ODMiniView;
+   				viewClass = App.ODMiniEditableView;
     		}
 			attrs['editable'] = this.get('editable');
 		}
