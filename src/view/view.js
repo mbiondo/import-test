@@ -8,7 +8,7 @@ Ember.View.reopen({
 		if (this.$()){
 			this.$().fadeIn(500);
 			// Use debugTemplates() # params: true/false
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -146,6 +146,10 @@ Ember.Checkbox.reopen({
 	attributeBindings: ['data-group', 'name'],
 });
 
+Ember.Select.reopen({
+	attributeBindings: ['autofocus'],
+});
+
 JQ.DatePicker = Em.View.extend(JQ.Widget, {
 	uiType: 'datepicker',
 	uiOptions: ['disabled', 'altField', 'altFormat', 'appendText', 'autoSize', 'buttonImage', 'buttonImageOnly', 'buttonText', 'calculateWeek', 'changeMonth', 'changeYear', 'closeText', 'constrainInput', 'currentText', 'dateFormat', 'dayNames', 'dayNamesMin', 'dayNamesShort', 'defaultDate', 'duration', 'firstDay', 'gotoCurrent', 'hideIfNoPrevNext', 'isRTL', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'navigationAsDateFormat', 'nextText', 'numberOfMonths', 'prevText', 'selectOtherMonths', 'shortYearCutoff', 'showAnim', 'showButtonPanel', 'showCurrentAtPos', 'showMonthAfterYear', 'showOn', 'showOptions', 'showOtherMonths', 'showWeek', 'stepMonths', 'weekHeader', 'yearRange', 'yearSuffix'],
@@ -153,7 +157,7 @@ JQ.DatePicker = Em.View.extend(JQ.Widget, {
 
 	tagName: 'input',
 	type: "text",
-	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message', 'readonly', 'data-americandate', 'data-trigger', 'parsley-trigger'],
+	attributeBindings: ['type', 'value', 'placeholder', 'data-validation-minlength', 'data-required', 'data-error-message', 'readonly', 'data-americandate', 'data-trigger', 'parsley-trigger','tabindex'],
 });
 
 App.DatePicker = JQ.DatePicker.extend({
@@ -6497,7 +6501,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));
+		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));              
 
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
@@ -6700,7 +6704,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	numeroChange: function () {
 		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT') + "-" + this.get('content.expdipA'));
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
-
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
@@ -7198,6 +7201,38 @@ App.TPConsultaView = Ember.View.extend({
 
 		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
 	}.property('controller.content'),
+});
+
+App.ComisionesListItemView = Ember.View.extend({
+	templateName: 'comisiones-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+});
+
+App.ComisionesListadoView = Ember.View.extend({
+	templateName: 'comisiones',
+	content: '',
+});
+
+App.ComisionesListView = App.ListFilterView.extend({
+	itemViewClass: App.ComisionesListItemView,
+	columnas: ['Id','Nombre','Ver Comision'],
+});
+
+App.ComisionesConsultaView = Ember.View.extend({
+    templateName: 'comisiones-consulta',
+});
+
+
+App.ComisionesConsultaListItemView = Ember.View.extend({
+	templateName: 'comisiones-consulta-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+});
+
+App.ComisionesConsultaListView = App.ListFilterView.extend({
+	itemViewClass: App.ComisionesConsultaListItemView,
+	columnas: ['Cargo','Tipo','Diputado /a','Bloque','Fecha Inicio Mandato','Fecha Fin Mandato'],
 });
 
 

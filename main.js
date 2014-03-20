@@ -539,6 +539,30 @@ App.menuController = App.MenuController.create({
 				}),
 			]			
 		}),
+                App.MenuItem.create({
+			id: 13,
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			titulo: 'Ver Comisiones',
+			url: '#/comisiones-listado',
+			icono: 'ic ic-visitas-guiadas',
+			
+			subMenu: [
+				App.MenuItem.create({
+					id: 0,
+					titulo: 'Comisiones',
+					url: '',
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							titulo: 'Listado',
+							url: '#/comisiones-listado/listado',
+						}),		
+					],
+				}),
+			]
+		}),
 	]
 });
 

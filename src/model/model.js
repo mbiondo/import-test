@@ -1046,10 +1046,8 @@ App.CitacionEstado = Em.Object.extend({
 App.Comision = Em.Object.extend({
 	toString: function () {
 		return this.get('nombre');
-	},	
+	},
 });
-
-
 
 App.Reunion = Em.Object.extend({
 	url: 'com/reun/reunion',
@@ -1693,7 +1691,7 @@ App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 
 App.VisitaGuiada = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
-    useApi: false,
+        useApi: false,
     auditable: true,
 	id: '',
 	visitaPara: '',
@@ -1826,4 +1824,34 @@ App.TP = Ember.Object.extend({
     	return moment(this.get('fecha'), 'YYYY-MM-DD').format('LL') + this.get('numero') + this.get('periodo');
     }.property('observaciones'),
 
-})
+});
+
+App.ComisionListado = Em.Object.extend({
+        url: 'com/comision',
+        useApi: true,
+        id: '',
+        nombre: '',
+        integrantes: '',
+	toString: function () {
+		return this.get('nombre');
+	},	
+        label: function(){
+            return this.get('nombre');
+        }.property('nombre'),
+});
+
+App.ComisionIntegrante = Em.Object.extend({
+        nombre:'',
+        apellido: '',
+        orden: '',
+        cargo: '',
+        fechaInicioMandato: '',
+        fechaFinMandato: '',
+        nombreBloque: '',
+       	tipo: '',
+        
+        label: function(){
+            return this.get('nombre') + " " + this.get("apellido") + " " + this.get("orden") + " " + this.get("cargo") + " " + this.get("nombreBloque") + " " + this.get("tipo");
+        }.property('nombre'),
+});
+

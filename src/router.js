@@ -2869,6 +2869,82 @@ App.Router =  Em.Router.extend({
 					},
 				}),	
 			}),
-		}),			
+		}),
+                
+                comisionesListado: Ember.Route.extend({
+			route: '/comisiones-listado',
+
+				index: Ember.Route.extend({
+					route: '/listado',
+
+					deserialize: function(router, params){
+						var deferred = $.Deferred();				
+						
+						App.comisionesListadoController = App.ComisionesListadoController.create();
+
+						fn = function() {
+							if(App.get('comisionesListadoController.loaded'))
+							{
+								App.get('comisionesListadoController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('comisionesListadoController').addObserver('loaded', this, fn);
+
+						App.get('comisionesListadoController').load();	
+
+						return deferred.promise();	
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'ComisionesListado');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
+							{titulo: 'Listado', url: '#/comisiones-listado/listado'}
+						]);					
+						App.get('menuController').seleccionar(13, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+                                ver: Ember.Route.extend({
+					route: '/:id/ver',
+
+					deserialize: function(router, params) {
+
+						var comision = App.ComisionListado.extend(App.Savable).create({id: params.id})
+						comision.set('loaded', false);
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							comision.removeObserver('loaded', this, fn);
+							deferred.resolve(comision);				
+						 };
+
+						 comision.addObserver('loaded', this, fn);
+						 comision.load();
+						
+						 return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'comisionesConsulta', context);
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
+							{titulo: 'Listado', url: '#/comisiones-listado/listado'},
+							{titulo: 'Ver'},
+						]);		
+
+						App.get('menuController').seleccionar(13, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},
+				}),		
+		}),
 	}),	
 });
