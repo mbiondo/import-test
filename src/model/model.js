@@ -910,9 +910,12 @@ App.Dictamen = Em.Object.extend({
 	comisionesLabel: function () {
 		var st = "";
 		var comisiones = this.comisiones;
+		if(comisiones)
+		{			
 			this.get('comisiones').forEach(function (comision) {
 				st += "<li>" + comision.comision.nombre + "</li>";
 			})
+		}
 
 			return st.htmlSafe();
 
