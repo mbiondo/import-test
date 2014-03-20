@@ -5808,6 +5808,7 @@ App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 
 App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
+	isEdited: false,
 
 	mergedContent: function () {
 		var data = [];
@@ -5826,15 +5827,20 @@ App.PLMiniView = Ember.View.extend({
 	borrar: function(){
 		this.get('parentView').borrarItem(this.get('context'));
 	},
+
 	borrarExpediente: function(item){
 		this.get('content.proyectos').removeObject(item);
-		this.get('parentView').get('parentView').guardar();
+		this.guardar();
 	},
+
 	borrarOD: function(item){
 		this.get('content.dictamenes').removeObject(item);
-		this.get('parentView').get('parentView').guardar();
-	}
+		this.guardar();
+	},
 
+	guardar: function () {
+		this.get('parentView').get('parentView').guardar();
+	},	
 });
 
 App.PlanDeLaborEfectivoView = Ember.View.extend({
@@ -6636,7 +6642,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		*/
 		return filtered.slice(0, 20);
 				
-	}.property('filterFirmantes', 'firmantesSeleccionados.@each'),
+	}.property('filterFirmantes', 'firmantesSeleccionados.@each', 'firmantesController.arrangedContent'),
 
 	clickComision: function (comision) {
 		this.set('filterTextComisiones', '');
@@ -7400,10 +7406,10 @@ App.SugestTextSearch = Ember.TextField.extend({
 App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 	classNames: [],
 	itemViewClass: App.ODMiniView,
-
-	updateSort : function (idArray){
+	
+	updateSort : function (idArray) {
 		var sortArr = this._super(idArray);
-		this.get('parentView').get('parentView').get('parentView').guardar();
+		this.get('parentView').set('isEdited', true);
 	},
 
 	createChildView: function(viewClass, attrs) {
