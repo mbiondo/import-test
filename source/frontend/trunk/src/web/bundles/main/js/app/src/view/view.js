@@ -5813,7 +5813,7 @@ App.PLMiniView = Ember.View.extend({
 
 	mergedContent: function () {
 		var data = [];
-		
+
 		if (this.get('content.dictamenes'))
 			data.addObjects(this.get('content.dictamenes'));
 
@@ -7417,6 +7417,7 @@ App.ExpedienteMiniEditableView = Ember.View.extend({
 
 App.ODMiniEditableView = Ember.View.extend({
 	templateName: 'od-mini-editable',
+	
 	borrar: function(item){
 		this.get('parentView').get('parentView').borrarOD(this.get('content'));
 	},
