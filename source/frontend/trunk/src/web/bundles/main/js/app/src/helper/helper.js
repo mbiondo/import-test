@@ -165,3 +165,10 @@ Handlebars.registerHelper("excerpt", function(text, limit, options) {
   else
     return text;
 });
+
+Handlebars.registerHelper("linkComisionesListado", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/comisiones-listado/"+id+"/ver";
+});

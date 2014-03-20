@@ -4503,3 +4503,102 @@ App.TPCrearController = Ember.ObjectController.extend({
 	},
 });
 
+
+App.ComisionesListadoController = App.RestController.extend({
+	url: 'com/comisiones/CD/P/detalle',
+	type: App.ComisionListado,
+	selected: '',
+	sortProperties: ['nombre'],
+	sortAscending: true,	
+	useApi: true,
+	
+	init : function () {
+		this._super();
+	},
+
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.ComisionListado.create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: this.get('url'),
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}		
+	},
+        estadisticasBloquesPresidentes:function(){
+            var bloques = [];
+            var data = [];
+            var hist = {};
+            if(this.get('content')){
+                this.get('content').forEach(function(item){
+                    bloques.push(item.integrantes[0].diputado.datosPersonales.bloques[0].nombre)
+                });
+
+                bloques.map( function (a) { 
+                    if (a in hist) { 
+                        hist[a] ++;
+                    } else  {
+                        hist[a] = 1; 
+                    }
+                });
+
+                $.each( hist, function( key, value ) {
+                    data.push({name: key, y: value})
+                });
+
+                data.sort(function(a,b){return b.y-a.y});
+            }
+            return data;
+        }.property('content.@each'),
+});
+
+App.ComisionesConsultaController = Ember.ObjectController.extend({
+    integrantesComision: function(){
+        var data = [];
+        var _self = this;
+
+        if (this.get('integrantes'))
+        {
+            integrantes = this.get('integrantes')            
+            integrantes.forEach(function(item){
+                var fila = App.ComisionIntegrante.create({nombre: item.diputado.datosPersonales.nombre, apellido: item.diputado.datosPersonales.apellido, fechaInicioMandato: moment(item.diputado.fechaInicioMandato, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY') ,fechaFinMandato: moment(item.diputado.fechaFinMandato, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY'), nombreBloque:item.diputado.datosPersonales.bloques[0].nombre, cargo:item.cargo.descripcion, orden: item.cargo.orden, tipo: item.diputado.cargo});
+                data.push(fila);
+            });
+        }        
+        return data;		
+    }.property('content.@each'),
+    
+    estadisticasPorBloque: function(){
+        var bloques = [];
+        var data = [];
+        var hist = {};
+        
+        if(integrantes){
+            integrantes.forEach(function(item){
+                bloques.push(item.diputado.datosPersonales.bloques[0].nombre)    
+            });
+
+            bloques.map( function (a) { 
+                if (a in hist) { 
+                    hist[a] ++;
+                } else  {
+                    hist[a] = 1; 
+                }
+             });
+
+            $.each( hist, function( key, value ) {
+                data.push({name: key, y: value})
+            });
+        }
+        return data;
+    }.property('content.@each')
+});
