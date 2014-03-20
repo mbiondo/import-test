@@ -6491,6 +6491,19 @@ App.CrearExpedienteView = Ember.View.extend({
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
 		});
+
+		$("#crearProyecto").on('focus', function(event){
+			event.preventDefault();
+			var _self = $(this);
+
+			shortcut.add("enter" ,function() {
+				if($("#crearProyecto").is(":focus")){			
+					_self.trigger('click');
+					
+					shortcut.remove("enter");
+				}
+			});
+		});
 	}
 });
 
@@ -6552,18 +6565,19 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		shortcut_list.forEach(function(value, index){
 			//value = value.toLowerCase();
 
-			shortcut("F" + (index+1),function() {
+			shortcut.add("F" + (index+1),function() {
 				$("#nav-tabs-"+ value).trigger("click");
 			});
 		});
 
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
+		this.set('content.expdipA', moment().format("YYYY"));
 	},
 	willDestroyElement: function(){
 		// remove shorcut
 		shorcuts = ['F1','F2','F3','enter']
 		shorcuts.forEach(function(item){
-//			shortcut.remove(item);
+			shortcut.remove(item);
 		});
 	},
 	uploadFolder: function () {
