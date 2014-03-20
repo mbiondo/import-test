@@ -5813,8 +5813,12 @@ App.PLMiniView = Ember.View.extend({
 
 	mergedContent: function () {
 		var data = [];
-		data.addObjects(this.get('content.dictamenes'));
-		data.addObjects(this.get('content.proyectos'));
+		
+		if (this.get('content.dictamenes'))
+			data.addObjects(this.get('content.dictamenes'));
+
+		if (this.get('content.proyectos'))
+			data.addObjects(this.get('content.proyectos'));
 
 		var mergedContentController = Ember.ArrayController.create({
 		  content: data,
