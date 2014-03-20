@@ -82,7 +82,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 9,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 			titulo: 'Mesa de Entrada',
 			url: '#/direccion/secretaria/diputados/listado',
 			icono: 'ic ic-pen',
@@ -207,7 +207,7 @@ App.menuController = App.MenuController.create({
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'TP',
+					titulo: 'Trámite Parlamentario',
 					url: '#/publicaciones/TP/listado',
 					roles: [['ROLE_LABOR_PARLAMENTARIA'], , ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
