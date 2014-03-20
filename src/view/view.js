@@ -7160,7 +7160,7 @@ App.TPListItemView = Ember.View.extend({
 });
 
 App.TPListView = App.ListFilterView.extend({
-	columnas: ["Fecha", "Numero", "Periodo", "Ver TP"],
+	columnas: ["Número", "Periodo", "Fecha", "Ver TP"],
 	itemViewClass: App.TPListItemView,
 });
 
