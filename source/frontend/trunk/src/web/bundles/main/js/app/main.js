@@ -446,7 +446,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 7,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
 			titulo: 'Estadisticas',
 			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
@@ -456,7 +456,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Estadisticas',
 					url: '#/estadisticas/oradores',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -464,6 +464,12 @@ App.menuController = App.MenuController.create({
 							titulo: 'Oradores',
 							url: '#/estadisticas/oradores',
 						}),
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
+							titulo: 'Visitas Guiadas',
+							url: '#/estadisticas/visitasguiadas',
+						}),		
 					],
 				}),
 			]
@@ -488,12 +494,6 @@ App.menuController = App.MenuController.create({
 							titulo: 'Listado',
 							url: '#/visitas-guiadas/listado',
 						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
-							titulo: 'Estadisticas',
-							url: '#/visitas-guiadas/estadisticas',
-						}),		
 					],
 				}),
 			]
