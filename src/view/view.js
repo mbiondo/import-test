@@ -6165,6 +6165,7 @@ App.SugestView = Ember.View.extend({
 			return [];
 		}
 	}.property('controller.content'),
+	
 	itemSelect: function(item) {
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
