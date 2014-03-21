@@ -4574,7 +4574,14 @@ App.ComisionesConsultaController = Ember.ObjectController.extend({
                 data.push(fila);
             });
         }        
-        return data;		
+
+		var dataController = Ember.ArrayController.create({
+		  content: data,
+		  sortProperties: ['orden'],
+		  sortAscending: true,
+		});
+
+        return dataController.get('arrangedContent');		
     }.property('content.@each'),
     
     estadisticasPorBloque: function(){

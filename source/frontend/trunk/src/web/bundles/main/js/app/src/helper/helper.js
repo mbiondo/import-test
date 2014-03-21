@@ -170,5 +170,5 @@ Handlebars.registerHelper("linkComisionesListado", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
 
-  return "#/comisiones-listado/"+id+"/ver";
+  return "#/comisiones/comision/"+id+"/ver";
 });
