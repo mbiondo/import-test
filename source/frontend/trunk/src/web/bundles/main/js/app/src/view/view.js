@@ -7452,7 +7452,7 @@ App.ExpedienteMiniEditableView = Ember.View.extend({
 
 App.ODMiniEditableView = Ember.View.extend({
 	templateName: 'od-mini-editable',
-	
+
 	borrar: function(item){
 		this.get('parentView').get('parentView').borrarOD(this.get('content'));
 	},
@@ -7482,6 +7482,7 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
    				else
    					viewClass = App.ODMiniView;
     		}
+    		attrs['editable'] = this.get('editable');
 			
 		}
 	    return this._super(viewClass, attrs);
