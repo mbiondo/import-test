@@ -5691,6 +5691,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		this._super();
 		this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));
 	},
+
 	proyectosList: function () {
 		var filtered;
 
@@ -5748,6 +5749,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 			this.get('item.dictamenes').removeObject(dictamen);
 		}
 	},
+
 	guardar: function (){
 		var itemsSeleccionadosPorDictamenesProyectos = (parseInt(this.get('item.dictamenes').length) + parseInt(this.get('item.proyectos').length));
 
@@ -5813,7 +5815,7 @@ App.PlanDeLaborTentativoListView = App.JQuerySortableView.extend({
 
 App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
-	isEdited: false,
+	edited: false,
 
 	mergedContent: function () {
 		var data = [];
@@ -5831,25 +5833,26 @@ App.PLMiniView = Ember.View.extend({
 		});
 
 		return mergedContentController;
-	}.property('content.proyectos.@each, content.dictamenes.@each'),
+	}.property('content.proyectos.@each, content.dictamenes.@each', 'edited'),
 
 	borrar: function(){
-		this.get('parentView').borrarItem(this.get('context'));
+		this.get('parentView.parentView').borrarItem(this.get('content'));
+		this.get('parentView.parentView').set('isEdited', true);
 	},
 
-	borrarExpediente: function(item){
+	borrarExpediente: function(item) {
 		this.get('content.proyectos').removeObject(item);
-		this.guardar();
+		this.set('edited', !this.get('edited'))
+		this.get('parentView.parentView').set('isEdited', true);
 	},
 
 	borrarOD: function(item){
 		this.get('content.dictamenes').removeObject(item);
-		this.guardar();
+		this.set('edited', !this.get('edited'))
+		this.get('parentView.parentView').set('isEdited', true);
 	},
 
-	guardar: function () {
-		this.get('parentView').get('parentView').guardar();
-	},	
+		
 });
 
 App.PlanDeLaborEfectivoView = Ember.View.extend({
@@ -5874,26 +5877,37 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 	addItem: function (item) {
 		item.set('orden', this.get('content.items').length);
 		this.get('content.items').pushObject(item);
-		this.guardar();
+		this.set('isEdited', true);
 	},
 
 	borrarItem: function (item) {
+		console.log(item);
 		this.get('content.items').removeObject(item);
-		this.guardar();
+		this.set('isEdited', true);
 	},
 
 	guardar: function(){
 
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
-		//var clone = this.get('content').copy(true);
-
+		
 		clone.normalize();
 		clone.set('estado', 0);
 
-		console.log(clone);
-
 		clone.addObserver('saveSuccess', this, this.itemAddedSuccess);
 		clone.save();
+	},
+
+	cancelar: function () {
+		this.get('content').addObserver('loaded', this, this.plLoadedSuccess);
+		this.get('content').load();
+		this.set('isEdited', false);
+	},
+
+	plLoadedSuccess: function () {
+		if (this.get('content.loaded')) {
+			this.get('content').removeObserver('loaded', this, this.plLoadedSuccess);
+			this.get('content').desNormalize();
+		}
 	},
 
 	cerrarPlan: function () { 
@@ -5924,23 +5938,13 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
 
-			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
-			//ACA TITULO DE LA NOTIFICACION
 			notification.set('tipo', 'confirmarLaborParlamentaria');	
-			//Si hace falta ID del objeto modificado
 			notification.set('objectId', this.get('content.id'));
-			//Link del objeto
 			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
-			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			//Custom message
 			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del dia " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
 
-			//notification.set('comisiones', this.get('content.comisiones'));
-			//Crear
-
-			// Pendiente de confirmacion. Por ahora solamente se usa el confirmar plan de labor
 			notification.create();
 
 
@@ -5950,7 +5954,6 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
 		}
 	},
-
 });
 
 App.PlanDeLaborTentativoView = Ember.View.extend({
@@ -7405,8 +7408,9 @@ App.PLMiniListView = App.JQuerySortableView.extend({
 
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
-		this.get('parentView').guardar();
+		this.get('parentView').set('isEdited', true);
 	},
+
 	createChildView: function(viewClass, attrs) {
 		if (attrs) {
 			attrs['editable'] = this.get('editable');
@@ -7481,7 +7485,7 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 	
 	updateSort : function (idArray) {
 		var sortArr = this._super(idArray);
-		this.get('parentView').set('isEdited', true);
+		this.get('parentView.parentView.parentView').set('isEdited', true);
 	},
 
 	createChildView: function(viewClass, attrs) {
