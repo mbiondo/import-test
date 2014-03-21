@@ -84,7 +84,8 @@ App.menuController = App.MenuController.create({
 			id: 9,
 			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 			titulo: 'Mesa de Entrada',
-			url: '#/direccion/secretaria/diputados/listado',
+//			url: '#/direccion/secretaria/diputados/listado',
+			url: '#/mesa/de/entrada/proyecto/crear',
 			icono: 'ic ic-pen',
 			
 			subMenu: [
