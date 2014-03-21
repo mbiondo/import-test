@@ -6976,7 +6976,21 @@ App.VisitasGuiadasEstadisticasTableView = App.ListFilterView.extend({
 
 App.ExpedientesBiographyView = Ember.View.extend({
 	templateName: 'expedientes-biography',
+	/*
+	hayExpedientesSeleccionados: function(){
+		var expedientes = App.get('expedientesController.content').filterProperty('seleccionado', true);
 
+		if(expedientes.length > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}.property('App.expedientesController.content.@each'),
+	*/
 	generarInforme: function () {
 		var expedientes = App.get('expedientesController.content').filterProperty('seleccionado', true);
 		var bloquesInfo = [];
@@ -7201,6 +7215,9 @@ App.TPConsultaView = Ember.View.extend({
 
 		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
 	}.property('controller.content'),
+	exportar: function () {
+		$.download('exportar/tp', "&type=tp&data=" + JSON.stringify(this.get('controller.content')));
+	},
 });
 
 App.ComisionesListItemView = Ember.View.extend({
@@ -7381,7 +7398,6 @@ App.MultiSelectListView = Ember.View.extend({
 
 });
 
-
 //PL
 App.PLMiniListView = App.JQuerySortableView.extend({
 	classNames: [],
@@ -7486,5 +7502,13 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 			
 		}
 	    return this._super(viewClass, attrs);
+	},
+});
+
+App.MultiSelectTextSearch = Ember.TextField.extend({
+	insertNewline: function(){		
+		var _self = this.get('parentView');
+		element = _self.get('content.firstObject');
+		_self.selectedItem(element);
 	},
 });
