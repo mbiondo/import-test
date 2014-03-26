@@ -6587,9 +6587,24 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 		var _self = this;
+
 		shortcut_list = ['proyecto', 'firmantes', 'giros'];
 		shortcut_list.forEach(function(value, index){
-			//value = value.toLowerCase();
+			/*
+			$("#nav-tabs-"+ value).on("click", function(){
+				inputClass =  ".searchWidget";
+				inputClass += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+				if(value == 'firmantes' || value == 'giros')
+				{
+						if($("#"+ value).is(":visible")){
+							console.log('ok')
+						}
+							console.log($(inputClass));
+							$(inputClass).focus();
+				}
+			});
+			*/
 
 			shortcut.add("F" + (index+1),function() {
 				$("#nav-tabs-"+ value).trigger("click");
