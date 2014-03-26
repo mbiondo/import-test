@@ -7,7 +7,10 @@ Ember.View.reopen({
 
 		if (this.$()){
 			this.$().fadeIn(500);
-			// Use debugTemplates() # params: true/false
+			/*
+				// Use debugTemplates() # params: true/false
+				// NOTA: Recordar comentar linea al comitear
+			*/
 			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
