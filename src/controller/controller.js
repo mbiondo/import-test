@@ -1102,7 +1102,8 @@ App.VisitasGuiadasController = App.RestController.extend({
 	loaded: false,
 	type: App.VisitaGuiada,
 	content: null,
-
+	sortProperties: ['id'],
+	sortAscending: false,
 
 	createObject: function (data, save) {
 		save = save || false;
