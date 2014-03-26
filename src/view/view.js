@@ -421,7 +421,7 @@ App.ContentView = Ember.View.extend({
 	clickHelp: function () {
 
 		if (this.get('toggleHelp')) {
-			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , this.get('columns').objectAt(2));
+			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , truehis.get('columns').objectAt(2));
 			Ember.run.next(function () {
 				$('.support').fadeIn('slow'); 
 			});
@@ -6168,7 +6168,7 @@ App.SugestView = Ember.View.extend({
 			return [];
 		}
 	}.property('controller.content'),
-	
+
 	itemSelect: function(item) {
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
@@ -6656,7 +6656,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				console.log(firmante);
 			});
 		*/
-		return filtered.slice(0, 20);
+		if (filtered)
+			return filtered.slice(0, 20);
+		else
+			return filtered;
 				
 	}.property('filterFirmantes', 'firmantesSeleccionados.@each', 'firmantesController.arrangedContent'),
 
@@ -7382,6 +7385,8 @@ App.MultiSelectListView = Ember.View.extend({
 				var regex = new RegExp(this.get('filterText'));
 				if (regex.test(item.get(this.get('filterPath'))))
 					this.get('content').addObject(item);
+			} else {
+				this.get('content').addObject(item);
 			}
 			this.get('selection').removeObject(item);
 		} else {
