@@ -6904,7 +6904,7 @@ App.VisitasGuiadasView = Ember.View.extend({
 	content: '',
 
 	willInsertElement: function(){
-		this.set('content', App.get('visitasGuiadasController.content'));
+		this.set('content', App.get('visitasGuiadasController.arrangedContent'));
 	}
 });
 
