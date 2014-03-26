@@ -1910,7 +1910,8 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/detalle',
+	tipo: 'dip/diputados',
+	url: moment().format('DD/MM/YYYY') + '/detalle',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
@@ -1925,7 +1926,7 @@ App.FirmantesController = App.RestController.extend({
 		_self = this;
 		this.set('loaded', false);
 		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('url')),
+			url: (App.get('apiController').get('url') + 'pap/' + this.get('tipo') + '/' + this.get('url')),
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
@@ -2026,7 +2027,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'com/comisiones/CD/P/resumen',
+	url: 'pap/com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
