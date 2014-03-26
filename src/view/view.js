@@ -6590,11 +6590,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		shortcut_list = ['proyecto', 'firmantes', 'giros'];
 		shortcut_list.forEach(function(value, index){
-			/*
+			
 			$("#nav-tabs-"+ value).on("click", function(){
-				inputClass =  ".searchWidget";
-				inputClass += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+				//inputClass =  ".searchWidget";
+				//inputClass += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 
+				/*
 				if(value == 'firmantes' || value == 'giros')
 				{
 						if($("#"+ value).is(":visible")){
@@ -6603,8 +6604,17 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 							console.log($(inputClass));
 							$(inputClass).focus();
 				}
+				*/
+				/*
+				Ember.run.next(function(){
+					//.next().focus();
+					var panel = $($("#nav-tabs-"+ value).attr('href'));
+					panel.find("input").eq(0).focus();
+					//$("#firmantes").find("input").eq(0);
+				});
+				*/
 			});
-			*/
+			
 
 			shortcut.add("F" + (index+1),function() {
 				$("#nav-tabs-"+ value).trigger("click");
