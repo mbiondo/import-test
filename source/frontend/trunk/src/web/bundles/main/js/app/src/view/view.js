@@ -6453,11 +6453,12 @@ App.CrearExpedienteView = Ember.View.extend({
 			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == false && this.get('faltanGiros') == false )
 			{
 
-								if (this.get('expTipo')) {
-									this.set('tipo', this.get('content.tipo'));
-									this.get('content').set('tipo', this.get('expTipo'));
-								}
-								
+				if (this.get('expTipo')) {
+					this.set('tipo', this.get('content.tipo'));
+					this.get('content').set('tipo', this.get('expTipo'));
+				}
+				
+				this.set('loading', true);
 				this.get('content').normalize();
 				//this.get('content').desNormalize();
 				
@@ -6471,26 +6472,42 @@ App.CrearExpedienteView = Ember.View.extend({
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 				
-				if (this.get('tipo')) {
-						this.get('content').set('tipo', this.get('tipo'));
-				}
+		if (this.get('tipo')) {
+				this.get('content').set('tipo', this.get('tipo'));
+		}
 
 
 				
 		if (this.get('content.createSuccess')) {
-						var expediente = this.get('content');
-						
-						$.jGrowl('Se ha creado el expediente!', { life: 5000 });
-						
-						var notification = App.Notificacion.extend(App.Savable).create();
-						notification.set('tipo', 'expedienteCreado');	
-						notification.set('objectId', expediente.id);
-						notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
-						notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-						notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
-						notification.create();      
-						
-						this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY', tipoPub: this.get('content.tipoPub'), pubnro: this.get('content.pubnro'), pubFecha: this.get('content.pubFecha'), periodo: this.get('content.periodo')}));
+			var expediente = this.get('content');
+			
+			$.jGrowl('Se ha creado el expediente!', { life: 5000 });
+			
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'expedienteCreado');	
+			notification.set('objectId', expediente.id);
+			notification.set('link', "/#/expedientes/expediente/" + expediente.id + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha creado el expediente " + expediente.id);
+			notification.create();      
+			
+			this.set('content', App.Expediente.extend(App.Savable).create({
+				expdipA: '', 
+				expdipN: '', 
+				tipo: 'LEY', 
+				pubtipo: expediente.get('pubtipo'), 
+				pubnro: expediente.get('pubnro'), 
+				pubFecha: expediente.get('pubFecha'), 
+				periodo: expediente.get('periodo'),
+				expdipA: expediente.get('expdipA'),
+				iniciado: expediente.get('iniciado'),
+				sesion: expediente.get('sesion'),
+				
+				firmantes: [],
+				giro: [],
+			}));
+			this.set('loading', false);
+			this.set('clickGuardar', false);
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
 							if (App.get('expedienteConsultaController.loaded')) {
@@ -6537,9 +6554,9 @@ App.InputSearchWidget = Ember.TextField.extend({
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
-		tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
-		tipoPub: ['TP'],
-		
+	tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
+	tipoPub: ['TP'],
+	
 	filterTextComisiones: '',
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
@@ -6625,7 +6642,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		var _self = this;
 		var filtered = []; 
 		
-		if(this.get('filterFirmantes') != '' && this.get('filterFirmantes').length > 3)
+		if(this.get('filterFirmantes') != '')
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
 			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
