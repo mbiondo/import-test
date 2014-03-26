@@ -6624,7 +6624,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	listaFirmantes: function () {
 		var _self = this;
 		var filtered = []; 
-
+		
 		if(this.get('filterFirmantes') != '' && this.get('filterFirmantes').length > 3)
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
@@ -6661,7 +6661,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		else
 			return filtered;
 				
-	}.property('filterFirmantes', 'firmantesSeleccionados.@each', 'firmantesController.arrangedContent'),
+	}.property('filterFirmantes', 'firmantesSeleccionados.@each', 'App.firmantesController.content.@each'),
 
 	clickComision: function (comision) {
 		this.set('filterTextComisiones', '');
@@ -6709,6 +6709,31 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 						this.get('content').set('expdipT', 'JGM');
 						break;
 				}
+
+				var tipo = '';
+
+				if(this.get('content.iniciado') == 'JGM')
+				{
+					tipo = 'func/funcionarios';
+				}
+				else
+				{
+					tipo = 'dip/diputados';			
+				}
+
+				if(App.get('firmantesController.tipo') != tipo)
+				{
+					fn = function() {
+						App.get('firmantesController').removeObserver('loaded', this, fn);
+					};
+
+					App.get('firmantesController').set('tipo', tipo);
+					App.get('firmantesController').set('loaded', false);
+					App.get('firmantesController').addObserver('loaded', this, fn);
+					App.get('firmantesController').load();					
+				}
+
+
 	}.observes('content.iniciado'),
 
 	numeroChange: function () {
