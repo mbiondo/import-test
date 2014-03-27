@@ -2327,7 +2327,7 @@ App.CalendarTool = Em.View.extend({
 			monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
 			dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
 			dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
-//			hiddenDays: [1],
+			hiddenDays: [0,1,5,6], // Oculto los dias "Domingo, Lunes, Viernes, Sábado"
 			buttonText: {
 			 today: 'Hoy',
 			 month: 'Mes',
