@@ -6689,7 +6689,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
 			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
-				return regex.test((firmante.diputado.datosPersonales.apellido + firmante.diputado.datosPersonales.nombre).toLowerCase());
+				return regex.test((firmante.diputado.datosPersonales.apellido + ", " + firmante.diputado.datosPersonales.nombre).toLowerCase());
 			});	
 		}
 		else
