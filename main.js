@@ -1,7 +1,7 @@
 App.apiController = App.ApiController.create({
-	url: 'http://10.105.5.63:9090/sparl/rest/',
+	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
 
-	productionURL: 'http://10.185.204.12:9090/sparl/rest/',
+	//url: 'http://10.185.204.12:9090/sparl/rest/',
 	//url: 'http://10.185.204.6:9090/sparl/rest/',
 	//url: 'http://10.185.204.12:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
@@ -222,7 +222,7 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Confeccionar TP',
+							titulo: 'Crear',
 							url: '#/publicaciones/TP/crear',
 						}),
 					],
