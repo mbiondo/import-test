@@ -6561,7 +6561,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	filterFirmantes: '',
 	comisionesSeleccionadas: [],
 	firmantesSeleccionados: [],
-	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132],
+	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 
 	numeros: function(){
 		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
@@ -6583,7 +6583,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		App.set('tpsController.periodo', this.get('content.periodo'));
 		this.set('pubnro', null);
 	}.observes('content.periodo'),
-
 	didInsertElement: function(){
 		this._super();
 		var _self = this;
