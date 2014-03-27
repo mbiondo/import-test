@@ -6508,6 +6508,11 @@ App.CrearExpedienteView = Ember.View.extend({
 			}));
 			this.set('loading', false);
 			this.set('clickGuardar', false);
+
+			$("#formCrearExpediente").parsley('reset')
+			$("#nav-tabs-proyecto").click();
+			$("#selector-tipo-proyecto").focus();
+
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
 							if (App.get('expedienteConsultaController.loaded')) {
