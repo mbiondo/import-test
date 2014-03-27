@@ -4477,7 +4477,6 @@ App.TPConsultaController = Ember.ObjectController.extend({
 
 App.TPCrearController = Ember.ObjectController.extend({
 	crear: function (){
-		console.log(this.get('content'));
 		this.get('content').normalize();
 		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
