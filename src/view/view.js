@@ -6606,16 +6606,14 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this._super();
 		var _self = this;
 		var chequearContent = [];
-		
-		navtab_list = ['proyecto', 'firmantes', 'giros'];
-
 		var navtab_list_InputFocus = [];
-		navtab_list_InputFocus['proyecto'] = '.camaraIniciadora';
+		
+		navtab_list_InputFocus['proyecto'] 	= '.camaraIniciadora';
 		navtab_list_InputFocus['firmantes'] = '.searchWidgetFirmantes';
-		navtab_list_InputFocus['giros'] = '.searchWidgetGiros';
+		navtab_list_InputFocus['giros'] 	= '.searchWidgetGiros';
 
+		navtab_list = ['proyecto', 'firmantes', 'giros'];
 		navtab_list.forEach(function(value, index){
-			
 			$("#nav-tabs-"+ value).on("click", function(){
 				chequearContent[value] = setInterval(function(){
 					if($("#" + value).is(":visible"))
@@ -6627,7 +6625,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					}
 				}, 1000);
 			});
-			
 
 			shortcut.add("F" + (index+1),function() {
 				$("#nav-tabs-"+ value).trigger("click");
