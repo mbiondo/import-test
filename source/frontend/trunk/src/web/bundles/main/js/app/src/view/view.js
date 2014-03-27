@@ -7278,11 +7278,12 @@ App.TPListView = App.ListFilterView.extend({
 
 App.TPsView = Ember.View.extend({
 	templateName: 'tps',
-	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132],
+	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132].reverse(),
 });
 
 App.TPCrearView = Ember.View.extend({
 	templateName: 'crear-tp',	
+	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132].reverse(),
 	
 	crear: function(){
 		if($('#formCrearTP').parsley('validate'))
