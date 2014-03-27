@@ -52,18 +52,22 @@ App.Savable = Ember.Mixin.create({
 	},
 
 	createSucceded: function (data) {
-		if ((this.get('useApi') || this.get('absolutURL')) && data.id) {
-			this.set('id', data.id);
-			this.set('createSuccess', true);
-		}
-
-		if (data.success == true) {
-			this.set('id', data.id);
-			if (this.get('notificationType'))
-			{
-				App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson(), this.get('notificationRoom'));
+		if (data) {
+			if ((this.get('useApi') || this.get('absolutURL')) && data.id) {
+				this.set('id', data.id);
+				this.set('createSuccess', true);
 			}
-			this.set('createSuccess', true);
+
+			if (data.success == true) {
+				this.set('id', data.id);
+				if (this.get('notificationType'))
+				{
+					App.get('ioController').sendMessage(this.get('notificationType'), "creado", this.getJson(), this.get('notificationRoom'));
+				}
+				this.set('createSuccess', true);
+			}
+		} else {
+			this.set('createSuccess', false);
 		}
 
 		if (this.get('createSuccess') == true) 
@@ -84,6 +88,7 @@ App.Savable = Ember.Mixin.create({
 	},
 
 	createCompleted: function(xhr){
+
 		if (this.get('useApi') && xhr.status == 200) {
 			this.set('createSuccess', true);
 		} 
@@ -4482,7 +4487,6 @@ App.TPCrearController = Ember.ObjectController.extend({
 	createSucceeded: function () {
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
-		this.set('loading', false);
 		if (this.get('content.createSuccess')) {
             $.jGrowl('Se ha creado el TP!', { life: 5000 });
 
@@ -4497,10 +4501,12 @@ App.TPCrearController = Ember.ObjectController.extend({
             };
 
             App.get('tpsController').addObserver('loaded', this, fn);
-
             App.get('tpsController').load();                
-                } else {
+            this.set('loading', false);
+
+        } else if (this.get('content.createSuccess') == false) {
             $.jGrowl('No se ha creado el TP!', { life: 5000 });
+            this.set('loading', false);
 		}
 	},
 });
