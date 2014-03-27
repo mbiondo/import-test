@@ -345,51 +345,6 @@ App.Router =  Em.Router.extend({
 		mesaDeEntrada: Em.Route.extend({
 			route: '/mesa/de/entrada',
 
-			giros: Em.Route.extend({
-				route: '/giros',
-
-				listado: Em.Route.extend({
-					route: '/listado',
-
-					deserialize: function(router, params) {
-
-						App.girosController = App.GirosController.create({content: []});
-						
-						var deferred = $.Deferred(),
-						
-						fn = function() {
-							if (App.get('girosController.loaded')) {
-								App.get('girosController').removeObserver('loaded', this, fn);	
-								deferred.resolve(params);	
-							}
-						};
-
-						App.get('girosController').addObserver('loaded', this, fn);
-						App.get('girosController').load();
-						
-						return deferred.promise();
-					},	
-
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');
-
-						Ember.run.next(function () {
-							appController.connectOutlet('main', 'Giros');
-						});
-						
-						App.get('menuController').seleccionar(9, 2, 0);
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Mesa de entrada'},
-							{titulo: 'Giros'}
-						]);								
-					},
-				}),			
-			}),
-
 			proyecto: Em.Route.extend({
 				route: '/proyecto',
 
@@ -445,25 +400,110 @@ App.Router =  Em.Router.extend({
 				}),
 
 				girar: Em.Route.extend({
-					route: '/girar',
+					route: '/:id/girar',
+
+					deserialize: function(router, params) {
+
+						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+						ex.set('loaded', false);
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							ex.removeObserver('loaded', this, fn);
+							deferred.resolve(ex);				
+						 };
+
+						 ex.addObserver('loaded', this, fn);
+						 ex.load();
+						
+						 return deferred.promise();
+					},	
 
 					connectOutlets: function(router, context) {
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
 						appController.connectOutlet('menu', 'subMenu');
 
-						Ember.run.next(function () {
-							appController.connectOutlet('main', 'CrearGiro');
-						});
+						appController.connectOutlet('main', 'mEExpedienteGirar', context);
 						
-						App.get('menuController').seleccionar(9, 2, 1);
+						App.get('menuController').seleccionar(9, 1, 0);	
+
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Mesa de entrada'},
 							{titulo: 'Giros'},
 							{titulo: 'Girar expediente'}
 						]);								
+					},						
+				}),
+
+				ver: Em.Route.extend({
+					route: '/:id/ver',
+					deserialize: function(router, params) {
+
+						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+						ex.set('loaded', false);
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							ex.removeObserver('loaded', this, fn);
+							deferred.resolve(ex);				
+						 };
+
+						 ex.addObserver('loaded', this, fn);
+						 ex.load();
+						
+						 return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'mEExpedienteConsulta', context);
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Mesa de entrada'},
+							{titulo: 'Ver'},
+						]);		
+
+						App.get('menuController').seleccionar(9, 1, 0);	
+
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},					
+				}),
+
+				editar: Em.Route.extend({
+					route: '/:id/editar',
+					deserialize: function(router, params) {
+
+						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+						ex.set('loaded', false);
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							ex.removeObserver('loaded', this, fn);
+							deferred.resolve(ex);				
+						 };
+
+						 ex.addObserver('loaded', this, fn);
+						 ex.load();
+						
+						 return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'mEExpedienteEditar', context);
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Mesa de entrada'},
+							{titulo: 'Ver'},
+						]);		
+
+						App.get('menuController').seleccionar(9, 1, 0);	
+						
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},						
 				}),
 			}),

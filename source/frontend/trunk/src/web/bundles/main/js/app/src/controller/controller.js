@@ -4611,3 +4611,12 @@ App.ComisionesConsultaController = Ember.ObjectController.extend({
         return data;
     }.property('content.@each')
 });
+
+App.MEExpedienteConsultaController = Ember.ObjectController.extend({
+});
+
+App.MEExpedienteEditarController = Ember.ObjectController.extend({
+});
+
+App.MEExpedienteGirarController = Ember.ObjectController.extend({
+});
