@@ -6502,7 +6502,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				expdipA: expediente.get('expdipA'),
 				iniciado: expediente.get('iniciado'),
 				sesion: expediente.get('sesion'),
-				
+
 				firmantes: [],
 				giro: [],
 			}));
@@ -7595,4 +7595,19 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 		element = _self.get('content.firstObject');
 		_self.selectedItem(element);
 	},
+});
+
+
+//ME EXP
+
+App.MEExpedienteConsultaView = Ember.View.extend({
+	templateName: 'me-expediente-consulta',
+});
+
+App.MEExpedienteEditarView = Ember.View.extend({
+	templateName: 'me-expediente-editar',
+});
+
+App.MEExpedienteGirarView = Ember.View.extend({
+	templateName: 'me-expediente-girar',
 });
