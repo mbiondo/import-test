@@ -6605,32 +6605,27 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 		var _self = this;
+		var chequearContent = [];
+		
+		navtab_list = ['proyecto', 'firmantes', 'giros'];
 
-		shortcut_list = ['proyecto', 'firmantes', 'giros'];
-		shortcut_list.forEach(function(value, index){
+		var navtab_list_InputFocus = [];
+		navtab_list_InputFocus['proyecto'] = '.camaraIniciadora';
+		navtab_list_InputFocus['firmantes'] = '.searchWidgetFirmantes';
+		navtab_list_InputFocus['giros'] = '.searchWidgetGiros';
+
+		navtab_list.forEach(function(value, index){
 			
 			$("#nav-tabs-"+ value).on("click", function(){
-				//inputClass =  ".searchWidget";
-				//inputClass += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-
-				/*
-				if(value == 'firmantes' || value == 'giros')
-				{
-						if($("#"+ value).is(":visible")){
-							console.log('ok')
-						}
-							console.log($(inputClass));
-							$(inputClass).focus();
-				}
-				*/
-				/*
-				Ember.run.next(function(){
-					//.next().focus();
-					var panel = $($("#nav-tabs-"+ value).attr('href'));
-					panel.find("input").eq(0).focus();
-					//$("#firmantes").find("input").eq(0);
-				});
-				*/
+				chequearContent[value] = setInterval(function(){
+					if($("#" + value).is(":visible"))
+					{
+						inputClass = navtab_list_InputFocus[value];
+						$(inputClass).focus();
+						clearInterval(chequearContent[value]);
+						//console.log(value);
+					}
+				}, 1000);
 			});
 			
 
