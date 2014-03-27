@@ -6389,7 +6389,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	clickGuardar: false,
 		expTipo: '',
 
-	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
+	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
@@ -6403,13 +6403,17 @@ App.CrearExpedienteView = Ember.View.extend({
 		return this.get('content.tipo') == "RESOLUCION";
 	}.property('content.tipo'),
 		
-		esMensaje: function () {
-				var regex = new RegExp('mensaje');
-				if (this.get('content.tipo'))
-					return regex.test(this.get('content.tipo').toLowerCase());
-				else
-					return false;
-		}.property('content.tipo'),
+	esLeyRevision: function () {
+		return this.get('content.tipo') == "LEY EN REVISION";
+	}.property('content.tipo'),
+
+	esMensaje: function () {
+			var regex = new RegExp('mensaje');
+			if (this.get('content.tipo'))
+				return regex.test(this.get('content.tipo').toLowerCase());
+			else
+				return false;
+	}.property('content.tipo'),
 
 	noHayTipo: function(){
 		if(this.get('content.tipo') == null)
@@ -6799,6 +6803,19 @@ App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
 
 App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-ley'
+});
+
+App.ExpedienteFormLeyRevisionView = App.ExpedienteFormLeyView.extend({
+	templateName: 'expediente-form-ley-revision',
+	camaras: ["Senadores"],
+	msgNro: '',
+	msgFecha: null,
+	msgTipo: '',
+	
+	didInsertElement: function () {
+		this._super();
+		this.get('content').set('iniciado', "Senadores");
+	},
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({

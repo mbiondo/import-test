@@ -634,7 +634,9 @@ App.Expediente = Em.Object.extend({
     	"pubnro",
     	"pubFecha",
     	"giro",
-    	"firmantes"
+    	"firmantes",
+    	'mjeNum',
+    	'url',
 	],
 });
 
