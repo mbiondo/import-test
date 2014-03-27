@@ -6608,9 +6608,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		var chequearContent = [];
 		var navtab_list_InputFocus = [];
 		
-		navtab_list_InputFocus['proyecto'] 	= '.camaraIniciadora';
-		navtab_list_InputFocus['firmantes'] = '.searchWidgetFirmantes';
-		navtab_list_InputFocus['giros'] 	= '.searchWidgetGiros';
+		navtab_list_InputFocus['proyecto'] 	= 'camaraIniciadora';
+		navtab_list_InputFocus['firmantes'] = 'searchWidgetFirmantes';
+		navtab_list_InputFocus['giros'] 	= 'searchWidgetGiros';
 
 		navtab_list = ['proyecto', 'firmantes', 'giros'];
 		navtab_list.forEach(function(value, index){
@@ -6618,7 +6618,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				chequearContent[value] = setInterval(function(){
 					if($("#" + value).is(":visible"))
 					{
-						inputClass = navtab_list_InputFocus[value];
+						inputClass = "." + navtab_list_InputFocus[value];
 						$(inputClass).focus();
 						clearInterval(chequearContent[value]);
 						//console.log(value);
