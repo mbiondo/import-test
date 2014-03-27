@@ -2327,6 +2327,7 @@ App.CalendarTool = Em.View.extend({
 			monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
 			dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
 			dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+//			hiddenDays: [1],
 			buttonText: {
 			 today: 'Hoy',
 			 month: 'Mes',
@@ -6441,30 +6442,43 @@ App.CrearExpedienteView = Ember.View.extend({
 		} 
 	}.property('content.giro.@each'),
 	guardar: function (){
-
 		if(!this.get('clickGuardar'))
 		{
 			this.set('clickGuardar', true);
 		}
 
-
 		if(this.get('noHayTipo') == false)
 		{
 			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == false && this.get('faltanGiros') == false )
-			{
-
-				if (this.get('expTipo')) {
-					this.set('tipo', this.get('content.tipo'));
-					this.get('content').set('tipo', this.get('expTipo'));
-				}
+			{				
+				App.confirmActionController.setProperties({
+					title: 'Confirmar Crear Proyecto',
+					message: '¿ Esta seguro que desea crear el proyecto ?',
+					success: null,
+				});
 				
-				this.set('loading', true);
-				this.get('content').normalize();
-				//this.get('content').desNormalize();
-				
-				this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-				this.get('content').create();
+				App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+				App.confirmActionController.show();
 			}
+		}
+	},
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
+		if(App.get('confirmActionController.success'))
+		{
+			if (this.get('expTipo'))
+			{
+				this.set('tipo', this.get('content.tipo'));
+				this.get('content').set('tipo', this.get('expTipo'));
+			}
+			
+			this.set('loading', true);
+			this.get('content').normalize();
+			//this.get('content').desNormalize();
+			
+			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('content').create();
 		}
 	},
 
