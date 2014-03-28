@@ -931,12 +931,11 @@ App.Dictamen = Em.Object.extend({
 				agregarBorde = '';				
 			}
 
-			st += '<div class="grid12" style="padding-bottom: 10px;margin-bottom:10px;'+ agregarBorde +'">';
+			st += '<div>';
 			st += '<div>'
 			st += '<b>'+proyecto.proyecto.expdip+'</b>'
 			st += '</div>'
 			st += '<div>'+proyecto.proyecto.titulo+'</div>'
-			st += "<div class='clear'></div>";
 			st += '</div>';
 		})
 
