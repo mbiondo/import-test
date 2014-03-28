@@ -546,9 +546,9 @@ App.Expediente = Em.Object.extend({
     normalize: function () {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
     	var giros = [];
-    	
-    	this.set('comisiones', this.get('giro'));
 
+    	this.set('comisiones', this.get('giro'));
+    	var orden = 0;
     	this.get('giro').forEach(function (comision) {
     		var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, id: comision.id};
     		orden++;
