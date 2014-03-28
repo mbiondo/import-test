@@ -516,6 +516,7 @@ App.Expediente = Em.Object.extend({
 	absolutURL: true,
 	biografia: null,
 	comisiones: [],
+	autoridades: [],
 
 
 	url: 'ME/exp/proyecto',
@@ -550,6 +551,7 @@ App.Expediente = Em.Object.extend({
 
     	//this.set('comisiones', this.get('giro'));
     	var orden = 0;
+
     	this.get('comisiones').forEach(function (comision) {
     		var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, id: comision.id};
     		orden++;
@@ -557,6 +559,16 @@ App.Expediente = Em.Object.extend({
     	}, this);
 
     	this.set('giro', giros);
+    	
+    	orden = 0;
+    	var fs = [];
+    	this.get('autoridades').forEach(function (firmante) {
+			var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
+    		orden++;
+    		fs.pushObject(itemDatos);
+    	}, this);
+
+    	this.set('firmantes', fs);
     },
 
     desNormalize: function ()  {
@@ -567,6 +579,11 @@ App.Expediente = Em.Object.extend({
     			this.get('comisiones').pushObject(App.Comision.create({id: item.id, nombre: item.comision.nombre}));
     		}, this);
     	}
+
+    	if (this.get('firmantes') && !this.get('autoridades'))
+    	{
+    		//TO-DO Transform objetc to Firmante.
+    	}    	
     },
 
 	tipolabel: function () {
@@ -998,6 +1015,10 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 				return "";
 		}
 	}.property('disidencia'),
+
+	label: function() {
+		return (this.get('diputado.datosPersonales.apellido') + "," + this.get('diputado.datosPersonales.nombre'));
+	}.property('diputado.datosPersonales.apellido'),
 });
 
 

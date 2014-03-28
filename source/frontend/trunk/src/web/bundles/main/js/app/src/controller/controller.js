@@ -1956,10 +1956,14 @@ App.FirmantesController = App.RestController.extend({
 	
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.FirmanteTextoDictamen.create({diputado: data, apellido: data.datosPersonales.apellido});
+		item = App.FirmanteTextoDictamen.create({diputado: data, apellido: data.datosPersonales.apellido, id: data.id});
 		this.addObject(item);
 	},	
 });
+
+
+
+
 
 App.CitacionEstadosController = App.RestController.extend({
 	url: 'citEst/estados',
