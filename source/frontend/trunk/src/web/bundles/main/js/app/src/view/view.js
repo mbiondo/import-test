@@ -6460,7 +6460,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		} 
 	}.property('content.firmantes.@each'),
 	faltanGiros: function(){
-		if(this.get('content.giro').length < 1)
+		if(this.get('content.comisiones').length < 1)
 		{
 			return true;
 		} 
@@ -6468,7 +6468,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			return false;
 		} 
-	}.property('content.giro.@each'),
+	}.property('content.comisiones.@each'),
 	guardar: function (){
 		if(!this.get('clickGuardar'))
 		{
@@ -6544,9 +6544,9 @@ App.CrearExpedienteView = Ember.View.extend({
 				expdipA: expediente.get('expdipA'),
 				iniciado: expediente.get('iniciado'),
 				sesion: expediente.get('sesion'),
-
 				firmantes: [],
 				giro: [],
+				comisiones: [],
 			}));
 			this.set('loading', false);
 			this.set('clickGuardar', false);
