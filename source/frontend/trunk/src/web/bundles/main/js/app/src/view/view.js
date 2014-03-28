@@ -6470,25 +6470,26 @@ App.CrearExpedienteView = Ember.View.extend({
 		} 
 	}.property('content.comisiones.@each'),
 	guardar: function (){
-		if(!this.get('clickGuardar'))
-		{
-			this.set('clickGuardar', true);
-		}
+		var _self = this;
 
-		if(this.get('noHayTipo') == false)
+		if(this.get('clickGuardar') == true)
 		{
-			if($("#formCrearExpediente").parsley('validate') && this.get('faltanFirmantes') == false && this.get('faltanGiros') == false )
-			{				
-				App.confirmActionController.setProperties({
-					title: 'Confirmar Crear Proyecto',
-					message: '¿ Esta seguro que desea crear el proyecto ?',
-					success: null,
-				});
-				
-				App.confirmActionController.addObserver('success', this, this.confirmActionDone);
-				App.confirmActionController.show();
+			if(_self.get('noHayTipo') == false)
+			{
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false )
+				{				
+					App.confirmActionController.setProperties({
+						title: 'Confirmar Crear Proyecto',
+						message: '¿ Esta seguro que desea crear el proyecto ?',
+						success: null,
+					});
+					
+					App.confirmActionController.addObserver('success', _self, _self.confirmActionDone);
+					App.confirmActionController.show();
+				}
 			}
 		}
+
 	},
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
@@ -6570,10 +6571,24 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		var _self = this;
 		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));              
 
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
+		});
+
+		$("#crearProyecto").on('click', function(){
+			// console.log('click');				
+
+			if($(this).is(':focus'))
+			{
+				// console.log('focus + click');
+				if(!_self.get('clickGuardar'))
+				{
+					_self.set('clickGuardar', true);
+				}
+			}
 		});
 	}
 });
@@ -6647,24 +6662,15 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					{
 						inputClass = "." + navtab_list_InputFocus[value];
 						$(inputClass + ' :input').focus();
+						$(inputClass).keydown();
 						clearInterval(chequearContent[value]);
-						//console.log(value);
 					}
-				}, 1000);
+				}, 500);
 			});
 
 			shortcut.add("F" + (index+1),function() {
-				$("#nav-tabs-"+ value).trigger("click");
+				$("#nav-tabs-"+ value).click();
 			});
-		});
-
-		$(".searchWidgetFirmantes, .searchWidgetGiros").on({
-		    focusin: function(){
-		        $("#crearProyecto").prop('disabled', 'disabled');
-		    },
-		    focusout: function(){
-		        $("#crearProyecto").removeProp('disabled');
-		    }
 		});
 
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
@@ -7355,7 +7361,7 @@ App.MultiSelectListView = Ember.View.extend({
 	filterPath: 'nombre',
 	labelPath: 'nombre',
 	suggestable: false,
-
+	tabindex: 0,
 	content: [],
 
 	filterTextChanged: function () {
