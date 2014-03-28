@@ -545,19 +545,23 @@ App.Expediente = Em.Object.extend({
 
     normalize: function () {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    	var giros = [];
+    	
+    	this.set('comisiones', this.get('giro'));
+
     	this.get('giro').forEach(function (comision) {
-    		comision.set('ordenCarga', orden);
-    		comision.set('idProyecto', this.get('id'));
+    		var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, id: comision.id};
+    		orden++;
+    		giros.pushObject(itemDatos);
     	}, this);
+
+    	this.set('giro', giros);
     },
 
     desNormalize: function ()  {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
-    	var orden = 0;
-    	this.get('giro').forEach(function (comision) {
-    		delete comision.ordenCarga;
-    		delete comision.idProyecto;
-    	}, this);
+    	if (this.get('comisiones'))
+    		this.set('giro', this.get('comisiones'));
     },
 
 	tipolabel: function () {
