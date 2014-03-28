@@ -545,10 +545,19 @@ App.Expediente = Em.Object.extend({
 
     normalize: function () {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    	this.get('giro').forEach(function (comision) {
+    		comision.set('ordenCarga', orden);
+    		comision.set('idProyecto', this.get('id'));
+    	}, this);
     },
 
     desNormalize: function ()  {
     	this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+    	var orden = 0;
+    	this.get('giro').forEach(function (comision) {
+    		delete comision.ordenCarga;
+    		delete comision.idProyecto;
+    	}, this);
     },
 
 	tipolabel: function () {
@@ -620,6 +629,7 @@ App.Expediente = Em.Object.extend({
 	}.property('giro'),
 
 	serializable: [
+		"id",
     	"tipo",
     	"titulo",
     	"sumario",
