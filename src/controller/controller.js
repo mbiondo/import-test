@@ -1956,14 +1956,10 @@ App.FirmantesController = App.RestController.extend({
 	
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.FirmanteTextoDictamen.create({diputado: data, apellido: data.datosPersonales.apellido, id: data.id});
+		item = App.FirmanteTextoDictamen.create({diputado: data, apellido: data.datosPersonales.apellido});
 		this.addObject(item);
 	},	
 });
-
-
-
-
 
 App.CitacionEstadosController = App.RestController.extend({
 	url: 'citEst/estados',
@@ -4494,7 +4490,17 @@ App.TPCrearController = Ember.ObjectController.extend({
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
+
             $.jGrowl('Trámite Parlamentario creado éxito!', { life: 5000 });
+			var tp = this.get('content');
+
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'crearTP');	
+			notification.set('objectId', tp.id);
+			notification.set('link', "/#/publicaciones/TP/" + tp.id + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha creado el Tramite Parlamentario n°" + tp.numero);
+			notification.create();  
 
             App.tpsController = App.TPsController.create();
 
