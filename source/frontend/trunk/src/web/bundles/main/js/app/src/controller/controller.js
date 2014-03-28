@@ -4592,7 +4592,10 @@ App.ComisionesConsultaController = Ember.ObjectController.extend({
             integrantes.forEach(function(item){
                 var fila = App.ComisionIntegrante.create({nombre: item.diputado.datosPersonales.nombre, apellido: item.diputado.datosPersonales.apellido, fechaInicioMandato: moment(item.diputado.fechaInicioMandato, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY') ,fechaFinMandato: moment(item.diputado.fechaFinMandato, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY'), nombreBloque:item.diputado.datosPersonales.bloques[0].nombre, cargo:item.cargo.descripcion, orden: item.cargo.orden, tipo: item.diputado.cargo});
                 data.push(fila);
+                
             });
+            
+            data.sort(function(a,b){return a.orden-b.orden});
         }        
 
 		var dataController = Ember.ArrayController.create({

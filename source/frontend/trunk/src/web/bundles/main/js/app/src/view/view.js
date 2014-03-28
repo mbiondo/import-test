@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -7585,8 +7585,38 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 
 App.MEExpedienteEditarView = Ember.View.extend({
 	templateName: 'me-expediente-editar',
+        
+	guardar: function(){
+                this.get('controller.content').normalize();
+		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.get('controller.content').save();
+	},
+	saveSuccessed: function () {
+		this.get('controller.content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('controller.content.saveSuccess')) {                                    
+                        App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('saveSuccess') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	} 
 });
 
 App.MEExpedienteGirarView = Ember.View.extend({
 	templateName: 'me-expediente-girar',
+        
+        guardar: function(){
+                this.get('controller.content').normalize();
+		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.get('controller.content').save();
+	},
+	saveSuccessed: function () {
+		this.get('controller.content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('controller.content.saveSuccess')) {                                    
+                        App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('saveSuccess') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	} 
 });

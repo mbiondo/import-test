@@ -408,6 +408,7 @@ App.Router =  Em.Router.extend({
 						ex.set('loaded', false);
 						 var deferred = $.Deferred(),
 						 fn = function() {
+                                                        ex.desNormalize(); 
 							ex.removeObserver('loaded', this, fn);
 							deferred.resolve(ex);				
 						 };
@@ -475,19 +476,22 @@ App.Router =  Em.Router.extend({
 				editar: Em.Route.extend({
 					route: '/:id/editar',
 					deserialize: function(router, params) {
-
+                                           
 						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
 						ex.set('loaded', false);
-						 var deferred = $.Deferred(),
-						 fn = function() {
-							ex.removeObserver('loaded', this, fn);
-							deferred.resolve(ex);				
-						 };
+                                                var deferred = $.Deferred(),
+                                                fn = function() {
+                                                       ex.desNormalize(); 
+                                                       ex.removeObserver('loaded', this, fn);
+                                                       deferred.resolve(ex);				
+                                                };                                                                             
 
-						 ex.addObserver('loaded', this, fn);
-						 ex.load();
+                                                ex.addObserver('loaded', this, fn);
+                                                ex.load();
+                                                 
+	
 						
-						 return deferred.promise();
+                                                return deferred.promise();
 					},	
 
 					connectOutlets: function(router, context) {
@@ -498,7 +502,7 @@ App.Router =  Em.Router.extend({
 
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Mesa de entrada'},
-							{titulo: 'Ver'},
+							{titulo: 'Editar'},
 						]);		
 
 						App.get('menuController').seleccionar(9, 1, 0);	
