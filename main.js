@@ -82,7 +82,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 9,
-			roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA'], ['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+			roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA']],
 			titulo: 'Mesa de Entrada',
 //			url: '#/direccion/secretaria/diputados/listado',
 			url: '#/mesa/de/entrada/proyecto/crear',
@@ -116,7 +116,7 @@ App.menuController = App.MenuController.create({
 					id: 1,
 					titulo: 'Expedientes',
 					url: '',
-					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA'], ['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -200,7 +200,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 12,
-			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES'], ['ROLE_PUBLICACIONES', 'ROLE_PUBLICACIONES_EDIT']],
+			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES']],
 			titulo: 'Publicaciones',
 			url: '#/publicaciones/TP/listado',
 			icono: 'ic ic-publicaciones',
@@ -210,18 +210,18 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Trámite Parlamentario',
 					url: '#/publicaciones/TP/listado',
-					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES'], ['ROLE_PUBLICACIONES', 'ROLE_PUBLICACIONES_EDIT']],
+					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES'], ['ROLE_PUBLICACIONES', 'ROLE_PUBLICACIONES_EDIT']],
+							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES']],
 							titulo: 'Listado',
 							url: '#/publicaciones/TP/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_PUBLICACIONES', 'ROLE_PUBLICACIONES_EDIT']],
+							roles: [['ROLE_PUBLICACIONES_EDIT']],
 							titulo: 'Crear',
 							url: '#/publicaciones/TP/crear',
 						}),
