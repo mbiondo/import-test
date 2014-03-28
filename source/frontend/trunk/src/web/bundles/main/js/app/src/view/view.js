@@ -6659,6 +6659,15 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});
 		});
 
+		$(".searchWidgetFirmantes .searchWidgetGiros").on({
+		    focusin: function(){
+		        $("#crearProyecto").prop('disabled', 'disabled');
+		    },
+		    focusout: function(){
+		        $("#crearProyecto").removeProp('disabled');
+		    }
+		});
+
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 	},
