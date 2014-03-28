@@ -6646,7 +6646,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					if($("#" + value).is(":visible"))
 					{
 						inputClass = "." + navtab_list_InputFocus[value];
-						$(inputClass).focus();
+						$(inputClass + ' :input').focus();
 						clearInterval(chequearContent[value]);
 						//console.log(value);
 					}
