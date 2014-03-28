@@ -698,7 +698,31 @@ App.ConfirmActionPopupView = App.ModalView.extend({
 	
 	didInsertElement: function(){	
 		this._super();
-	}, 
+
+		// add shortcut
+		var shortcuts = ["enter"];
+		var shortcuts_buttonFocus = [];
+			shortcuts_buttonFocus["enter"] = ["ventanaModalConfirmar"];
+
+			shortcuts.forEach(function(getShortcut){
+				shortcut.add(getShortcut, function(){
+					if($(".modal").is(":visible"))
+					{
+						inputClass = "." + shortcuts_buttonFocus[getShortcut];
+
+						$(inputClass).click();
+					}
+				});
+			});		
+	},
+	willDestroyElement: function(){
+		this._super();
+		// remove shorcut
+		var shortcuts = ["enter"];
+		shortcuts.forEach(function(item){
+			shortcut.remove(item);
+		});
+	},
 });
 
 
@@ -6557,7 +6581,7 @@ App.CrearExpedienteView = Ember.View.extend({
 });
 
 App.InputSearchWidget = Ember.TextField.extend({
-	insertNewline: function(){		
+	insertNewline: function(){
 		var _self = this.get('parentView');
 		if(this.get('search-widget') == 'firmantes' && $(".searchWidgetFirmantes").is(':focus'))
 		{
