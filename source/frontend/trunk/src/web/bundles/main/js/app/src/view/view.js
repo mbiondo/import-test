@@ -6664,7 +6664,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	},
 	willDestroyElement: function(){
 		// remove shorcut
-		shorcuts = ['F1','F2','F3','enter']
+		shorcuts = ['F1','F2','F3']
 		shorcuts.forEach(function(item){
 			shortcut.remove(item);
 		});
