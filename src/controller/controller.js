@@ -4490,7 +4490,7 @@ App.TPCrearController = Ember.ObjectController.extend({
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
-            $.jGrowl('Se ha creado el TP!', { life: 5000 });
+            $.jGrowl('Trámite Parlamentario creado éxito!', { life: 5000 });
 
             App.tpsController = App.TPsController.create();
 
@@ -4507,7 +4507,7 @@ App.TPCrearController = Ember.ObjectController.extend({
             this.set('loading', false);
 
         } else if (this.get('content.createSuccess') == false) {
-            $.jGrowl('No se ha creado el TP!', { life: 5000 });
+            $.jGrowl('No se ha creado el Trámite Parlamentario!', { life: 5000 });
             this.set('loading', false);
 		}
 	},
