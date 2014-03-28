@@ -6450,7 +6450,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		}
 	}.property('content.tipo'),
 	faltanFirmantes: function(){
-		if(this.get('content.firmantes').length < 1)
+		if(this.get('content.autoridades').length < 1)
 		{
 			return true;
 		} 
@@ -6458,7 +6458,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			return false;
 		} 
-	}.property('content.firmantes.@each'),
+	}.property('content.autoridades.@each'),
 	faltanGiros: function(){
 		if(this.get('content.comisiones').length < 1)
 		{
@@ -6630,6 +6630,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		App.set('tpsController.periodo', this.get('content.periodo'));
 		this.set('pubnro', null);
 	}.observes('content.periodo'),
+
 	didInsertElement: function(){
 		this._super();
 		var _self = this;
@@ -6671,6 +6672,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 	},
+
 	willDestroyElement: function(){
 		// remove shorcut
 		shorcuts = ['F1','F2','F3']
@@ -6678,110 +6680,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			shortcut.remove(item);
 		});
 	},
+
 	uploadFolder: function () {
 		return "uploads/expediente/" + this.get('content.expdip') + "/";
 	}.property('content.expdip'),
-
-	clickFirmante: function (firmante) {                
-		if(firmante.apellido)
-		{
-			var item 	= this.get('content.firmantes').findProperty("nombre", firmante.get('diputado.datosPersonales.nombre'));
-			var itemNumero 	= this.get('content.firmantes').length + 1;
-			var itemDatos 	= {orden: itemNumero, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-
-			this.get('firmantesSeleccionados').pushObject(firmante);
-			this.get('content.firmantes').pushObject(itemDatos);
-		}
-		else
-		{			
-			var filtered = [];
-
-			filtered = this.get('firmantesSeleccionados').filter(function(f){
-				var n = f.diputado.datosPersonales.apellido + ", " + f.diputado.datosPersonales.nombre;
-				return n == firmante.nombre;
-			});
-
-			this.get('firmantesSeleccionados').removeObjects(filtered);
-			this.get('content.firmantes').removeObject(firmante);			
-//			this.get('content.firmantes').pushObject(firmante);	
-		}
-
-		this.set('filterFirmantes', '');
-	},
-
-
-	listaFirmantes: function () {
-		var _self = this;
-		var filtered = []; 
-		
-		if(this.get('filterFirmantes') != '')
-		{
-			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
-			filtered = App.get('firmantesController.arrangedContent').filter(function(firmante) {
-				return regex.test((firmante.diputado.datosPersonales.apellido + "," + firmante.diputado.datosPersonales.nombre).toLowerCase());
-			});	
-		}
-		else
-		{
-			filtered = App.get('firmantesController.content');
-		}
-		
-
-		this.get('content.firmantes').forEach(function(getfirmanteDerecho){					
-			filtered.forEach(function(getfirmanteIzquierdo){
-				var getfirmanteIzquierdoNombreYApellido = getfirmanteIzquierdo.get('diputado.datosPersonales.apellido') + ", " + getfirmanteIzquierdo.get('diputado.datosPersonales.nombre');
-
-				if(getfirmanteIzquierdoNombreYApellido == getfirmanteDerecho.nombre)
-				{
-					filtered.removeObject(getfirmanteIzquierdo);
-				}
-			});
-		});
-
-		/*
-			this.get('firmantesSeleccionados').forEach(function(firmante){
-				var firmanteNombreApellido = firmante.get('diputado.datosPersonales.apellido') + ", " + getfirmanteIzquierdo.get('diputado.datosPersonales.nombre');
-
-				console.log(firmante);
-			});
-		*/
-		if (filtered)
-			return filtered.slice(0, 20);
-		else
-			return filtered;
-				
-	}.property('filterFirmantes', 'firmantesSeleccionados.@each', 'App.firmantesController.content.@each'),
-
-	clickComision: function (comision) {
-		this.set('filterTextComisiones', '');
-
-		if (comision.id)
-		{
-			var item 		= this.get('content.giro').findProperty("comision", comision.get('comision'));
-			var itemNumero 	= this.get('content.giro').length + 1;
-			var itemDatos 	= {camara: 'Diputados', comision: comision.nombre, ordenCarga: itemNumero, nroGiro: 1};
-
-			this.get('content.giro').pushObject(itemDatos);
-			this.get('comisionesSeleccionadas').pushObject(comision);
-		}
-		else {
-			var item = this.get('comisionesSeleccionadas').findProperty("nombre", comision.comision);
-			console.log(item);
-
-			this.get('comisionesSeleccionadas').removeObject(item);
-			this.get('content.giro').removeObject(comision);
-		}
-	},
-
-	listaComisiones: function () {
-		var regex = new RegExp(this.get('filterTextComisiones').toString().toLowerCase());
-
-		var filtered = App.get('comisionesController').get('arrangedContent').filter(function(comision) {
-			return regex.test((comision.nombre).toLowerCase());
-		});
-
-		return filtered.removeObjects(this.get('comisionesSeleccionadas'));;		
-	}.property('content.giro.@each', 'filterTextComisiones', 'comisionesController.arrangedContent.@each'),
 
 	camaraChange: function () {
 				switch (this.get('content.iniciado')) {
@@ -7491,6 +7393,9 @@ App.MultiSelectListView = Ember.View.extend({
 				this.set('content', this.get('contentController').get('content'));
 			}
 		}
+
+		if (this.get('content'))
+			this.set('content', this.get('content').slice(0, 20));		
 	},
 
 	controllerContentChanged: function () {
@@ -7503,6 +7408,8 @@ App.MultiSelectListView = Ember.View.extend({
 			this.get('contentController').get('content').removeObjects(selectionNews);
 			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
 			this.set('content', this.get('contentController').get('content'));
+			if (this.get('content'))
+				this.set('content', this.get('content').slice(0, 20));
 		}
 	},
 
