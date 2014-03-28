@@ -421,7 +421,7 @@ App.ContentView = Ember.View.extend({
 	clickHelp: function () {
 
 		if (this.get('toggleHelp')) {
-			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , truehis.get('columns').objectAt(2));
+			this.setupColumns(this.get('oldColumns').objectAt(0), this.get('oldColumns').objectAt(1) - this.get('columns').objectAt(2) , this.get('columns').objectAt(2));
 			Ember.run.next(function () {
 				$('.support').fadeIn('slow'); 
 			});
