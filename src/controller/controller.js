@@ -4445,6 +4445,9 @@ App.TPsController = App.RestController.extend({
 	type: App.TP,
 	periodo: 132,
 
+	sortProperties: ['numero'],
+	sortAscending: false,	
+
 	load: function () {
 		this.set('loaded', false);
 		var url =  this.get('url') + '/' + this.get('periodo');
