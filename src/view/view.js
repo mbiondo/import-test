@@ -6659,7 +6659,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});
 		});
 
-		$(".searchWidgetFirmantes .searchWidgetGiros").on({
+		$(".searchWidgetFirmantes, .searchWidgetGiros").on({
 		    focusin: function(){
 		        $("#crearProyecto").prop('disabled', 'disabled');
 		    },
