@@ -6411,7 +6411,7 @@ App.DiputadosListView = App.ListFilterView.extend({
 App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
 	clickGuardar: false,
-		expTipo: '',
+	expTipo: '',
 
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -6517,8 +6517,6 @@ App.CrearExpedienteView = Ember.View.extend({
 		if (this.get('tipo')) {
 				this.get('content').set('tipo', this.get('tipo'));
 		}
-
-
 				
 		if (this.get('content.createSuccess')) {
 			var expediente = this.get('content');
@@ -6551,7 +6549,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', false);
 			this.set('clickGuardar', false);
 
-			$("#formCrearExpediente").parsley('reset')
+			$("#formCrearExpediente").parsley('reset');
 			$("#nav-tabs-proyecto").click();
 			$("#selector-tipo-proyecto").focus();
 
@@ -6566,7 +6564,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			App.get('expedienteConsultaController').load();			
 						*/
 		} else {
-					$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
 		}
 	},
 
@@ -6686,44 +6684,43 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('content.expdip'),
 
 	camaraChange: function () {
-				switch (this.get('content.iniciado')) {
-					case "Diputados":
-						this.get('content').set('expdipT', 'D');
-						break;
-					case "Senadores":
-						this.get('content').set('expdipT', 'S');
-						break;
-					case "Poder Ejecutivo":
-						this.get('content').set('expdipT', 'PE');
-						break;
-					case "JGM":
-						this.get('content').set('expdipT', 'JGM');
-						break;
-				}
+		switch (this.get('content.iniciado')) {
+			case "Diputados":
+				this.get('content').set('expdipT', 'D');
+				break;
+			case "Senadores":
+				this.get('content').set('expdipT', 'S');
+				break;
+			case "Poder Ejecutivo":
+				this.get('content').set('expdipT', 'PE');
+				break;
+			case "JGM":
+				this.get('content').set('expdipT', 'JGM');
+				break;
+		}
 
-				var tipo = '';
+		var tipo = '';
 
-				if(this.get('content.iniciado') == 'JGM')
-				{
-					tipo = 'func/funcionarios';
-				}
-				else
-				{
-					tipo = 'dip/diputados';			
-				}
+		if(this.get('content.iniciado') == 'JGM')
+		{
+			tipo = 'func/funcionarios';
+		}
+		else
+		{
+			tipo = 'dip/diputados';			
+		}
 
-				if(App.get('firmantesController.tipo') != tipo)
-				{
-					fn = function() {
-						App.get('firmantesController').removeObserver('loaded', this, fn);
-					};
+		if(App.get('firmantesController.tipo') != tipo)
+		{
+			fn = function() {
+				App.get('firmantesController').removeObserver('loaded', this, fn);
+			};
 
-					App.get('firmantesController').set('tipo', tipo);
-					App.get('firmantesController').set('loaded', false);
-					App.get('firmantesController').addObserver('loaded', this, fn);
-					App.get('firmantesController').load();					
-				}
-
+			App.get('firmantesController').set('tipo', tipo);
+			App.get('firmantesController').set('loaded', false);
+			App.get('firmantesController').addObserver('loaded', this, fn);
+			App.get('firmantesController').load();					
+		}
 
 	}.observes('content.iniciado'),
 
