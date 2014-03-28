@@ -6512,6 +6512,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	},
 
 	createSucceeded: function () {
+		var _self = this;
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 				
@@ -6547,6 +6548,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				giro: [],
 				comisiones: [],
 			}));
+			this.setupEnter();
 			this.set('loading', false);
 			this.set('clickGuardar', false);
 
@@ -6568,6 +6570,26 @@ App.CrearExpedienteView = Ember.View.extend({
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
 		}
 	},
+	setupEnter: function(){
+		var _self = this;
+		// console.log('setupEnter');
+
+		$("#crearProyecto").on('click', function(){
+			 // console.log('click');				
+
+			if($(this).is(':focus'))
+			{
+				// console.log('focus + click');
+
+				if(_self.get('clickGuardar') == false)
+				{
+					_self.set('clickGuardar', true);
+				}
+
+				// console.log("clickGuardar: " + _self.get('clickGuardar'));
+			}
+		});
+	},
 
 	didInsertElement: function () {
 		this._super();
@@ -6578,18 +6600,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			$("#selector-tipo-proyecto").focus();
 		});
 
-		$("#crearProyecto").on('click', function(){
-			// console.log('click');				
+		this.setupEnter();
 
-			if($(this).is(':focus'))
-			{
-				// console.log('focus + click');
-				if(!_self.get('clickGuardar'))
-				{
-					_self.set('clickGuardar', true);
-				}
-			}
-		});
 	}
 });
 
