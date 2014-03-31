@@ -917,6 +917,291 @@ App.Router =  Em.Router.extend({
 					},
 				}),						
 			}),
+
+			recinto: Em.Route.extend({
+				route: "/recinto",
+				
+				index: Em.Route.extend({
+					route: "/",		
+				}),
+					
+				oradores: Em.Route.extend({
+					route: "/oradores",
+					
+					index: Em.Route.extend({
+						route: '/',
+						
+						enter: function () {
+							App.get('ioController').joinRoom('oradores');
+							App.get('menuController').seleccionar(4);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						},
+
+						exit: function () {
+							App.get('ioController').leaveRoom('oradores');
+						},
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+
+							appController.connectOutlet('main', 'OradoresIndex');
+							
+							appController.connectOutlet('menu', 'SubMenu');
+							
+							App.get('temaController').set('content', null);						
+							appController.cargarSesiones(true);
+
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Labor Parlamentaria'},
+								{titulo: 'Recinto', url: '#/laborparlamentaria/recinto/oradores'},	
+								{titulo: 'Oradores', url: '#/laborparlamentaria/recinto/oradores'},	
+							]);					
+							App.get('menuController').seleccionar(4, 1, 0);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						},
+					}),
+					
+					sesionConsulta: Ember.Route.extend({
+
+						route: '/sesion',
+
+						indexSubRoute: Ember.Route.extend({
+							route: '/:sesion/ver',
+
+							enter: function () {
+								App.get('ioController').joinRoom('oradores');
+								App.get('menuController').seleccionar(4, 1, 0);
+								App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+							},
+
+							exit: function () {
+								App.get('ioController').leaveRoom('oradores');
+							},
+
+							deserialize: function(router, params) {
+
+								if (!App.get('planDeLaborController'))
+									App.planDeLaborController = App.PlanDeLaborController.create();
+								
+								var sesion;
+								var deferred = $.Deferred(),
+								fn = function() {
+									if (App.get('sesionesController.loaded')) {
+										sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
+										App.get('sesionesController').removeObserver('loaded', this, fn);
+										App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+										App.get('planDeLaborController').addObserver('loaded', this, fn2);
+										App.get('planDeLaborController').load();									
+									}
+								};
+								var fn2 = function () {
+									if (App.get('planDeLaborController.loaded')) {
+										deferred.resolve(sesion);
+									}
+								}
+
+								App.get('sesionesController').addObserver('loaded', this, fn);
+								App.get('sesionesController').load();
+								App.get('diputadosController').load();
+
+								return deferred.promise();
+							},
+
+							serialize: function(router, context) {
+								var sesionId = context.get('id');
+								return {sesion: sesionId}
+							},
+
+							connectOutlets: function(router, context) {
+								var sesion = App.get('sesionesController.content').findProperty('id', parseInt(context.get('id')));
+
+								if (!App.get('planDeLaborController')) {
+									App.planDeLaborController = App.PlanDeLaborController.create();
+								}
+								
+								if (!App.get('diputadosController.loaded')) {
+									App.get('diputadosController').load();
+								}
+
+								App.set('planDeLaborController.content', App.PlanDeLabor.create({id: context.get('idPl')}));
+								App.get('planDeLaborController').load();							
+															
+								var appController = router.get('applicationController');
+								
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
+									//appController.connectOutlet('menu', 'subMenu');
+									if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+										appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+										//appController.connectOutlet('help', 'crearTurnoInline');
+									}
+								 	else
+										appController.connectOutlet('main', 'sesionConsulta');
+								}
+								else 
+								{
+									appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
+								}
+								
+								appController.connectOutlet('menu', 'subMenuOradores');
+								
+
+								App.get('sesionController').set('content', context);
+								App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
+								App.get('temasController').load();
+								
+								//appController.cargarSesiones(true);
+								
+								var sesion = App.get('sesionController.content');
+								App.get('breadCumbController').set('content', [
+									{titulo: 'Oradores', url: '#/laborparlamentaria/recinto/oradores'},	
+									{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
+								]);					
+								App.get('menuController').seleccionar(4);	
+								App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+							},
+						}),
+						
+						tema: Em.Route.extend({
+							route: "/:sesion/tema/:tema",
+
+							enter: function () {
+								this._super();
+								App.get('ioController').joinRoom('oradores');
+								var appController = App.get('router.applicationController');
+								appController.setLayout(3, 6, 3);
+								App.get('menuController').seleccionar(4, 1, 0);
+								App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+							},
+
+							exit: function () {
+								this._super();
+								App.get('ioController').leaveRoom('oradores');
+								var appController = App.get('router.applicationController');
+								appController.setLayout(3, 7, 2);							
+							},
+							
+							deserialize: function(router, params) {
+								if (!App.get('planDeLaborController'))
+									App.planDeLaborController = App.PlanDeLaborController.create();
+									
+								
+
+								deferred = $.Deferred();
+
+								var tema, sesion,
+								fnTema = function() {
+									if (App.get('temasController.loaded') && App.get('turnosController.loaded') && App.get('planDeLaborController.loaded')) {
+										tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
+										if(tema){
+											deferred.resolve(tema);
+										}
+										App.get('temasController').removeObserver('loaded', this, fnTema);
+									}
+								},
+
+								fnSesion = function() {
+									if (App.get('sesionesController.loaded') && App.get('diputadosController.loaded')) {
+										sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
+										App.get('sesionController').set('content', sesion);
+										
+										App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(params.sesion)));
+										App.get('temasController').addObserver('loaded', this, fnTema);
+										App.get('temasController').load();
+
+										App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
+										App.get('turnosController').addObserver('loaded', this, fnTema);
+										App.get('turnosController').load();		
+										
+										App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+										App.get('planDeLaborController').addObserver('loaded', this, fnTema);
+										App.get('planDeLaborController').load();
+										
+										App.get('sesionesController').removeObserver('loaded', this, fnSesion);
+										
+									}
+								}
+
+
+								App.get('sesionesController').addObserver('loaded', this, fnSesion);
+								App.get('diputadosController').addObserver('loaded', this, fnSesion);
+								
+								App.get('sesionesController').load();
+								App.get('diputadosController').load();
+
+								return deferred.promise();
+							},
+
+							serialize: function(router, context) {
+								var id = context.get('id');
+								var sesionId = context.get('sesionId');
+								return {
+									sesion: sesionId,
+									tema: id,
+								}
+							},
+
+							connectOutlets: function(router, context) {
+								var sesion = App.get('sesionController.content');
+								
+								if (!App.get('planDeLaborController')) {
+									App.planDeLaborController = App.PlanDeLaborController.create();
+								}
+								App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
+								App.get('planDeLaborController').load();
+								
+
+								App.get('sesionController').set('content', App.get('sesionesController.content').findProperty('id', parseInt(context.get('sesionId'))));
+
+								if(App.get('temaController.content.sesionId') != context.get('sesionId')){
+									App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(context.get('sesionId'))));
+									App.get('turnosController').load();
+								}
+
+								if (!App.get('diputadosController.loaded')) {
+									App.get('diputadosController').load();
+								}
+
+								App.get('temaController').set('content', context);
+
+								var appController = router.get('applicationController');
+
+								var tema = App.get('temaController.content');
+								
+
+								if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
+									//appController.connectOutlet('menu', 'subMenu');
+									if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+										appController.connectOutlet('help', 'crearTurnoInline');
+										appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+									}
+								 	else
+										appController.connectOutlet('main', 'sesionConsulta');
+								}
+								else {
+									
+									appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
+								}							
+								
+								appController.connectOutlet('sesion', 'sesionTurnos');
+								appController.connectOutlet('menu', 'subMenuOradores');
+
+								//appController.cargarSesiones(true);
+								
+								
+								App.get('breadCumbController').set('content', [
+									{titulo: 'Labor Parlamentaria'},
+									{titulo: 'Recinto', url: '#/laborparlamentaria/recinto/oradores'},	
+									{titulo: 'Oradores', url: '#/laborparlamentaria/recinto/oradores'},	
+									{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
+									{titulo: tema.get('titulo')}
+								]);					
+							},
+						}),
+					}),					
+				}),
+			}),	
+
 		}),
 
 		admin: Em.Route.extend({
@@ -1402,7 +1687,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Biografia', url: '#/expedientes/biografia'}
+						{titulo: 'Alerta Temprana', url: '#/expedientes/biografia'}
 					]);					
 					App.get('menuController').seleccionar(10, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
@@ -2595,7 +2880,7 @@ App.Router =  Em.Router.extend({
 				}),							
 			}),
 		}),
-
+/*
 		recinto: Em.Route.extend({
 			route: "/recinto",
 			
@@ -2879,7 +3164,7 @@ App.Router =  Em.Router.extend({
 				}),					
 			}),
 		}),	
-
+*/
 		publicaciones: Em.Route.extend({
 			route: "/publicaciones",
 
