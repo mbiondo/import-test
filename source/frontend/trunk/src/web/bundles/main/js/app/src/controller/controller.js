@@ -2994,8 +2994,18 @@ App.CitacionCrearController = Em.Object.extend({
 * Oradores
 */
 
+
+App.DiputadoConsultaController = Ember.ObjectController.extend({
+	
+});
+
+App.DiputadoEditController = Ember.ObjectController.extend({
+
+});
+
+
 App.DiputadosController  = App.RestController.extend({
-	url: 'lista-diputados',
+	url: 'diputados',
 	type: App.User,
 	useAPi: false,
 	filtro : true,
@@ -4641,3 +4651,5 @@ App.MEExpedienteEditarController = Ember.ObjectController.extend({
 
 App.MEExpedienteGirarController = Ember.ObjectController.extend({
 });
+
+

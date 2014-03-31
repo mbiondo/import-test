@@ -1153,6 +1153,27 @@ App.Reunion = Em.Object.extend({
 // User
 
 App.User = Em.Object.extend({
+	url: 'diputados',
+    useApi: false,
+    id: '',
+    numero: '',
+    periodo: '',
+    fecha: '',
+
+	serializable: [
+        'id',
+        'interBloque',
+        'bloque',
+        'nombre',
+        'apellido',
+	],
+
+    normalize: function () {
+    }, 
+
+    desNormalize: function () {
+    },
+
 	sortValue: function () {
 		return this.get('nombreCompleto');
 	}.property('nombreCompleto'),
@@ -1160,6 +1181,10 @@ App.User = Em.Object.extend({
 	nombreCompleto: function () {
 		return this.get('apellido') + " " + this.get('nombre');
 	}.property('nombre', 'apellido'),
+
+	label: function () {
+		return this.get('nombreCompleto');
+	}.property('nombreCompleto'),
 });
 
 // SESION

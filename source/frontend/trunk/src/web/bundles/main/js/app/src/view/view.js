@@ -5477,6 +5477,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 		  orden: this.get('oradores').get('length'),
 		  user: {
 			id: user.get('id'),
+			id_user: user.get('id_user'),
 			nombre: user.get('nombre'),
 			apellido: user.get('apellido'),
 			avatar: user.get('avatar'),
@@ -7619,4 +7620,31 @@ App.MEExpedienteGirarView = Ember.View.extend({
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 		}
 	} 
+});
+
+
+App.DiputadoConsultaView = Ember.View.extend({
+	templateName: 'diputado-consulta',
+});
+
+
+App.DiputadoEditView = Ember.View.extend({
+	templateName: 'diputado-edit',
+});
+
+
+App.DiputadosListaView = Ember.View.extend({
+	templateName: 'diputados',
+});
+
+App.DiputadoListItemView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'diputado-item',
+});
+
+App.DiputadosListView = App.ListFilterView.extend({
+	itemViewClass: App.DiputadoListItemView,
+//	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
+	columnas: ['Imagen', 'Nombre', 'Partido', 'Inter Bloque', ''],
 });

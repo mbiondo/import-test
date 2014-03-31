@@ -165,6 +165,9 @@ App.Router =  Em.Router.extend({
 			},			
 		}),		
 		
+
+
+
 		index: Em.Route.extend({
 			route: "/",
 			roles: ['pepe'],
@@ -243,7 +246,118 @@ App.Router =  Em.Router.extend({
 			route: '/direccion/secretaria',
 
 			diputados: Em.Route.extend({
-				route: '/diputados',
+				route: "/diputados",
+
+				index: Ember.Route.extend({
+					route: "/listado",
+					
+					deserialize: function(router, params) {
+						 if (!App.get('diputadosController'))
+						 	App.diputadosController = App.DiputadosController.create();
+
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							 App.get('diputadosController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);					
+						 };
+
+						 App.get('diputadosController').addObserver('loaded', this, fn);
+						 App.get('diputadosController').load();
+						
+						 return deferred.promise();
+					},
+					
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');					
+						appController.connectOutlet('main', 'diputadosLista');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
+							{titulo: 'Listado'},
+						]);			
+
+						App.get('menuController').seleccionar(12, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},						
+				}),	
+
+				ver: Ember.Route.extend({
+					route: '/:id/ver',
+
+					deserialize: function(router, params) {
+
+						var diputado = App.User.extend(App.Savable).create({id: params.id})
+						diputado.set('loaded', false);
+
+						var deferred = $.Deferred(),
+						fn = function() {
+							diputado.removeObserver('loaded', this, fn);
+							deferred.resolve(diputado);				
+						};
+						diputado.addObserver('loaded', this, fn);
+						diputado.load();
+
+					 	return deferred.promise();
+
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'diputadoConsulta', context);
+						appController.connectOutlet('help', 'Help');
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
+							{titulo: 'Ver'},
+						]);		
+
+						App.get('menuController').seleccionar(12, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},
+				}),
+
+				editar: Ember.Route.extend({
+					route: '/:id/editar',
+
+					deserialize: function(router, params) {
+
+						var diputado = App.User.extend(App.Savable).create({id: params.id})
+						diputado.set('loaded', false);
+
+						var deferred = $.Deferred(),
+						fn = function() {
+							diputado.removeObserver('loaded', this, fn);
+							deferred.resolve(diputado);				
+						};
+						diputado.addObserver('loaded', this, fn);
+						diputado.load();
+
+					 	return deferred.promise();
+
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'diputadoEdit', context);
+						appController.connectOutlet('help', 'Help');
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
+							{titulo: 'Editar'},
+						]);		
+
+						App.get('menuController').seleccionar(12, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},
+				}),							
+			}),	
+
+			autoridades: Em.Route.extend({
+				route: '/autoridades',
 
 				alta: Em.Route.extend({
 					route: '/alta',
