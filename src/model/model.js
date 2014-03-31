@@ -1019,7 +1019,7 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 	}.property('disidencia'),
 
 	label: function() {
-		return (this.get('diputado.datosPersonales.apellido') + "," + this.get('diputado.datosPersonales.nombre'));
+		return (this.get('diputado.datosPersonales.apellido') + ", " + this.get('diputado.datosPersonales.nombre'));
 	}.property('diputado.datosPersonales.apellido'),
 });
 
@@ -1640,7 +1640,7 @@ App.PlanDeLaborTentativo = Ember.Object.extend({
     }, 
 
     desNormalize: function (withDate) {
-    	if (withDate != false) 
+    	if (withDate != false && this.get('fechaEstimada')) 
     		this.set('fechaEstimada', moment(this.get('fechaEstimada'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
     	if (this.get('items')) {
     		var items = [];
