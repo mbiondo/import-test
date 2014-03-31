@@ -307,7 +307,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//Si hace falta ID del objeto modificado
 		notification.set('objectId', sesionId);
 		//Link del objeto
-		notification.set('link', "/#/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
+		notification.set('link', "/#/laborparlamentaria/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
@@ -333,7 +333,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//Si hace falta ID del objeto modificado
 		notification.set('objectId', sesionId);
 		//Link del objeto
-		notification.set('link', "/#/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
+		notification.set('link', "/#/laborparlamentaria/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
@@ -920,7 +920,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			//Si hace falta ID del objeto modificado
 			notification.set('objectId', data.id);
 			//Link del objeto
-			notification.set('link', "#/recinto/oradores/sesion/" + data.id + "/ver");
+			notification.set('link', "#/laborparlamentaria/recinto/oradores/sesion/" + data.id + "/ver");
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
@@ -928,7 +928,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			//Crear
 			notification.create();		
 
-			App.get('router').transitionTo('recinto.oradores.sesionConsulta.indexSubRoute', this.model);
+			App.get('router').transitionTo('planDeLabor.recinto.oradores.sesionConsulta.indexSubRoute', this.model);
 		}		
 	}
 

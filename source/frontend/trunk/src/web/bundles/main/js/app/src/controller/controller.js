@@ -2619,7 +2619,7 @@ App.MenuController = Em.ArrayController.extend({
 	},
 
 	esOradores: function () {
-		if (this.get('seleccionado').get('id') == 3)
+		if (this.get('seleccionado').get('id') == 4) // antes era 3
 			return true;
 		else
 			return false;
