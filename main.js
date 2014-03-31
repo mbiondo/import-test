@@ -83,7 +83,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 9,
 			roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA']],
-			titulo: 'Mesa de Entrada',
+			titulo: 'Dirección Secretaría',
 //			url: '#/direccion/secretaria/diputados/listado',
 			url: '#/mesa/de/entrada/proyecto/crear',
 			icono: 'ic ic-pen',
@@ -177,22 +177,22 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 10,
 			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Biografia',
-			url: '#/expedientes/biograofia',
+			titulo: 'Alerta Temprana',
+			url: '#/expedientes/alerta-temprana',
 			icono: 'ic ic-biografia',
 			
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Biografia',
-					url: '#/expedientes/biografia',
+					titulo: 'Alerta Temprana',
+					url: '#/expedientes/alerta-temprana',
 					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Biografia',
-							url: '#/expedientes/biografia',
+							titulo: 'Alerta Temprana',
+							url: '#/expedientes/alerta-temprana',
 						}),
 					],
 				}),
@@ -433,9 +433,25 @@ App.menuController = App.MenuController.create({
 						}),							
 					],
 				}),				
+				App.MenuItem.create({
+					id: 1,
+					titulo: 'Recinto',
+					url: '#/laborparlamentaria/recinto/oradores',
+					icono: 'ic ic-recinto',
+					roles: [['ROLE_USER']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							titulo: 'Oradores',
+							url: '#/laborparlamentaria/recinto/oradores',
+							roles: [['ROLE_USER']],
+						}),					
+					]			
+				}),
+
 			]			
 		}),		
-		
+		/*
 		App.MenuItem.create({
 			id: 3,
 			titulo: 'Recinto',
@@ -459,6 +475,7 @@ App.menuController = App.MenuController.create({
 				}),
 			]			
 		}),
+		*/
 		App.MenuItem.create({
 			id: 7,
 			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
