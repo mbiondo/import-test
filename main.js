@@ -131,6 +131,13 @@ App.menuController = App.MenuController.create({
 							titulo: 'Diputados Vigentes',
 							url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
 						}),
+
+						App.MenuItem.create({
+							id: 2,
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							titulo: 'Bloques',
+							url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado',
+						}),						
 					],
 				}),
 /*

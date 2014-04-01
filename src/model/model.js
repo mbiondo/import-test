@@ -1146,7 +1146,7 @@ App.Reunion = Em.Object.extend({
 	}.property('nota'),	
 
 });
-
+	
 
 /* Oradores */
 
@@ -1750,8 +1750,16 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
 
 
 App.Bloque = Ember.Object.extend({
+	url: 'bloques',
+	auditable: true,
+	serializable: ['id', 'nombre'],
+});
 
-})
+App.InterBloque = Ember.Object.extend({
+	url: 'interBloque',
+	auditable: true,
+	serializable: ['id', 'nombre'],
+});
 
 App.VisitaGuiadaEstadistica = Ember.Object.extend({
 	cantPersonas: '',
