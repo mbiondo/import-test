@@ -446,8 +446,10 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'diputadosLista');
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados'},
-								{titulo: 'Listado'},
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de Entrada'},
+								{titulo: 'Diputados'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
 							]);			
 
 							App.get('menuController').seleccionar(9, 0, 1);	
@@ -482,7 +484,10 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('help', 'Help');
 
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de Entrada'},
+								{titulo: 'Diputados'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
 								{titulo: 'Ver'},
 							]);		
 
@@ -518,7 +523,10 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('help', 'Help');
 
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de Entrada'},
+								{titulo: 'Diputados'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
 								{titulo: 'Editar'},
 							]);		
 
