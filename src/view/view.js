@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -2144,6 +2144,7 @@ App.InicioView = Em.View.extend({
 		});
 		*/
 	},
+              
 });
 
 
@@ -7616,7 +7617,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		this.get('controller.content').save();
 	},
 	saveSuccessed: function () {
-		this.get('controller.content').removeObserver('saveSuccess', this, this.createSucceeded);
+		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('controller.content.saveSuccess')) {                                    
                         App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
@@ -7635,7 +7636,7 @@ App.MEExpedienteGirarView = Ember.View.extend({
 		this.get('controller.content').save();
 	},
 	saveSuccessed: function () {
-		this.get('controller.content').removeObserver('saveSuccess', this, this.createSucceeded);
+		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('controller.content.saveSuccess')) {                                    
                         App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
@@ -7726,3 +7727,33 @@ App.InterBloqueCrearView = App.BloqueCrearView.extend({
 		this.set('content', App.InterBloque.extend(App.Savable).create());
 	},
 });
+
+
+App.NotificacionItemView = Ember.View.extend({
+        marcarLeido: function(){
+                var idNotificacion = this.templateData.keywords.notificacion.id;
+                this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion:idNotificacion, cuil:App.userController.user.cuil}));
+                var notificacionLeida = this.get('notificacionLeida');
+                notificacionLeida.addObserver('createSuccess', this, this.createSuccessed);
+                notificacionLeida.create(); 
+	/*	$.ajax({
+			url: notificacionLeida.url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'POST',
+			data : notificacionLeida.getJson(),
+			success: this.createSucceeded,
+		});
+            */
+        },
+        
+        createSuccessed: function () {
+		
+		if (this.get('notificacionLeida.createSucceeded')) {                                                            
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('notificacionLeida.createSucceeded') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	}
+});
+
