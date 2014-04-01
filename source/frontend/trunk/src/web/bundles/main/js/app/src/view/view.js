@@ -7730,30 +7730,24 @@ App.InterBloqueCrearView = App.BloqueCrearView.extend({
 
 
 App.NotificacionItemView = Ember.View.extend({
-        marcarLeido: function(){
-                var idNotificacion = this.templateData.keywords.notificacion.id;
-                this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion:idNotificacion, cuil:App.userController.user.cuil}));
-                var notificacionLeida = this.get('notificacionLeida');
-                notificacionLeida.addObserver('createSuccess', this, this.createSuccessed);
-                notificacionLeida.create(); 
-	/*	$.ajax({
-			url: notificacionLeida.url,
-			contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'POST',
-			data : notificacionLeida.getJson(),
-			success: this.createSucceeded,
-		});
-            */
-        },
+	templateName: 'notificacion-item',
+	tagName: 'li',
+
+    marcarLeido: function(){
+        this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion: this.get('content.id'), cuil:App.userController.user.cuil}));
+        this.get('notificacionLeida').addObserver('createSuccess', this, this.createSuccessed);
+        this.get('notificacionLeida').create();
+    },
         
-        createSuccessed: function () {
-		
-		if (this.get('notificacionLeida.createSucceeded')) {                                                            
+    createSuccessed: function () {
+		if (this.get('notificacionLeida.createSuccess')) {                                                            
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
-		} else if (this.get('notificacionLeida.createSucceeded') == false) {
+			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
+			this.get('content').set('leida', true);
+		} else if (this.get('notificacionLeida.createSuccess') == false) {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
 		}
-	}
+	},
 });
 
