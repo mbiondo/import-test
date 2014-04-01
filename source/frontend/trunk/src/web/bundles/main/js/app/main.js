@@ -112,9 +112,10 @@ App.menuController = App.MenuController.create({
 					],
 				}),
 */				
+
 				App.MenuItem.create({
-					id: 1,
-					titulo: 'Expedientes',
+					id: 0,
+					titulo: 'Mesa de Entrada',
 					url: '',
 					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 					subMenu: [
@@ -122,7 +123,13 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Crear proyecto',
-							url: '#/mesa/de/entrada/proyecto/crear',
+							url: '#/direccion/secretaria/mesa/de/entrada/proyecto/crear',
+						}),
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							titulo: 'Diputados Vigentes',
+							url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
 						}),
 					],
 				}),
