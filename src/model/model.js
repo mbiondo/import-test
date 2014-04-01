@@ -1156,9 +1156,9 @@ App.User = Em.Object.extend({
 	url: 'diputados',
     useApi: false,
     id: '',
-    numero: '',
-    periodo: '',
-    fecha: '',
+    interBloque: '',
+    bloque: '',
+
 
 	serializable: [
         'id',
@@ -1166,7 +1166,16 @@ App.User = Em.Object.extend({
         'bloque',
         'nombre',
         'apellido',
+        'habilitado',
 	],
+
+	avatarChanged: function () {
+		if (this.get('oldAvatar')) {
+			this.get('serializable').pushObject('avatar');
+		} else {
+			this.set('oldAvatar', this.get('avatar'));
+		}
+	}.observes('avatar'),
 
     normalize: function () {
     }, 

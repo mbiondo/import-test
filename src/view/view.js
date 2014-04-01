@@ -2095,23 +2095,28 @@ App.AttachFileView = Em.View.extend({
 		this.set('content', App.get('uploaderController.content'));
 	},
 
-		deleteFile: function () {
-			_self = this;
+	deleteFile: function () {
+		_self = this;
+		if (App.get('uploaderController')) {
 			App.set('uploaderController.content', '');
 			this.set('content', App.get('uploaderController.content'));
-			
-		   /*
-			$.ajax({
-					url: 'delete.php',  //server script to process data
-					type: 'POST',
-					data: {file: this.get('content')},
-					success: function(payload)
-					{
-					}
-			});
-			*/
-		},
+		} else {
+			this.set('content', '');
+		}
+
 		
+	   /*
+		$.ajax({
+				url: 'delete.php',  //server script to process data
+				type: 'POST',
+				data: {file: this.get('content')},
+				success: function(payload)
+				{
+				}
+		});
+		*/
+	},
+	
 	fileWithOutFolder: function () {
 		if (this.get('content')) {
 			return this.get('content').replace(this.get('folder'), '');
@@ -7310,7 +7315,25 @@ App.ComisionesConsultaListView = App.ListFilterView.extend({
 
 
 
-//WIDGETS
+
+App.SelectableView = Ember.View.extend({
+	templateName: 'wg-select',
+
+	controllerContentChanged: function () {
+		if (this.get('contentController').get('loaded')) {
+			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
+		this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
+		this.get('contentController').load();
+	},
+
+});
+
 
 App.TestView = Ember.View.extend({
 	templateName: 'wg-test',
@@ -7646,5 +7669,7 @@ App.DiputadoListItemView = Ember.View.extend({
 App.DiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.DiputadoListItemView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['Imagen', 'Nombre', 'Partido', 'Inter Bloque', ''],
+	columnas: ['Imagen', 'Nombre', 'Provincia', 'Partido', 'Inter Bloque', ''],
 });
+
+

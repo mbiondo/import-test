@@ -506,12 +506,27 @@ App.Router =  Em.Router.extend({
 
 							var deferred = $.Deferred(),
 							fn = function() {
-								diputado.removeObserver('loaded', this, fn);
-								deferred.resolve(diputado);				
+								if (App.interBloquesController.get('loaded') && App.bloquesController.get('loaded') && diputado.get('loaded')) {
+									diputado.removeObserver('loaded', this, fn);
+									var bloque = App.bloquesController.findProperty('id', diputado.get('bloque.id'));
+									var interBloque = App.interBloquesController.findProperty('id', diputado.get('interBloque.id'));
+									diputado.set('bloque', bloque);
+									diputado.set('interBloque', interBloque);
+									
+									deferred.resolve(diputado);				
+								}
 							};
+							
 							diputado.addObserver('loaded', this, fn);
 							diputado.load();
 
+							App.bloquesController = App.BloquesController.create();
+							App.interBloquesController = App.InterBloquesController.create();
+							App.bloquesController.load();
+							App.bloquesController.addObserver('loaded', this, fn);
+							App.interBloquesController.load();
+							App.interBloquesController.addObserver('loaded', this, fn);
+							
 						 	return deferred.promise();
 
 						},	

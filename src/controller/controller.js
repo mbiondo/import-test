@@ -3000,7 +3000,36 @@ App.DiputadoConsultaController = Ember.ObjectController.extend({
 });
 
 App.DiputadoEditController = Ember.ObjectController.extend({
+	guardar: function (){
+		this.get('content').normalize();
+		this.get('content').addObserver('saveSuccess', this, this.saveSucceeded);
+		this.get('content').save();
+		this.set('loading', true);
+	},
 
+	saveSucceeded: function () {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('saveSuccess', this, this.saveSucceeded);
+		if (this.get('content.saveSuccess')) {
+            this.set('loading', false);
+			 if (!App.get('diputadosController'))
+			 	 App.diputadosController = App.DiputadosController.create();
+				 var deferred = $.Deferred(),
+
+				 fn = function() {
+				 	if (App.get('diputadosController.loaded')) {
+				 		App.get('diputadosController').removeObserver('loaded', this, fn);
+						App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
+				 	}
+					deferred.resolve(null);					
+				 };
+
+				 App.get('diputadosController').addObserver('loaded', this, fn);
+				 App.get('diputadosController').load();            
+        } else if (this.get('content.saveSuccess') == false) {
+            this.set('loading', false);
+		}
+	},
 });
 
 
