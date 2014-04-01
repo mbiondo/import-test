@@ -1757,7 +1757,7 @@ App.Router =  Em.Router.extend({
 			}),
 
 			biografia: Ember.Route.extend({
-				route: '/biografia',
+				route: '/alerta-temprana',
 
 				enter: function () {
 					App.get('ioController').joinRoom('biographys');
@@ -1804,7 +1804,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Alerta Temprana', url: '#/expedientes/biografia'}
+						{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'}
 					]);					
 					App.get('menuController').seleccionar(10, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
