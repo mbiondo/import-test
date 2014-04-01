@@ -453,7 +453,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado'},
 							]);			
 
-							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('menuController').seleccionar(9, 0, 2);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 					}),						
@@ -587,7 +587,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Editar'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 2);	
+							App.get('menuController').seleccionar(9, 0, 1);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),							
