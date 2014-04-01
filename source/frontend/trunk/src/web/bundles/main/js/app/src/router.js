@@ -2868,10 +2868,11 @@ App.Router =  Em.Router.extend({
 		                        appController.connectOutlet('main', 'enviosArchivados');
 		                        appController.connectOutlet('menu', 'subMenu');
 
-		                        App.get('menuController').seleccionar(6, 0, 0);
+		                        App.get('menuController').seleccionar(2, 5, 0);
 		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 		                        App.get('breadCumbController').set('content', [
+									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 	                                {titulo: 'Envíos a Archivo', url: '#/comisiones/envios'},
 		                        ]);				
 		                },
@@ -2916,10 +2917,11 @@ App.Router =  Em.Router.extend({
 								appController.connectOutlet('menu', 'subMenu');
 								
 								App.get('breadCumbController').set('content', [
+									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 									{titulo: 'Envíos a Archivo', url: '#/comisiones/envios'},
 									{titulo: 'Envío del ' + moment(App.get('envioArchivoConsultaController.content.fecha'), 'YYYY-MM-DD').format('LL'), url: '#/envios/envio/'+App.get('envioArchivoConsultaController.content').get('id')+'/ver'}
 								]);
-								App.get('menuController').seleccionar(6);
+		                        App.get('menuController').seleccionar(2, 5, 0);
 								App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 							},
 						}),
@@ -2934,11 +2936,12 @@ App.Router =  Em.Router.extend({
 			                    appController.connectOutlet('main', 'expedientesArchivados');
 			                    appController.connectOutlet('menu', 'subMenu');
 
-			                    App.get('menuController').seleccionar(6, 0, 1);
+		                        App.get('menuController').seleccionar(2, 5, 1);
 			                    App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 			                    App.get('breadCumbController').set('content', [
-			                        {titulo: 'Envíos a Archivo', url: '#/comisiones/envios'},
+									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
+				                        {titulo: 'Envíos a Archivo', url: '#/comisiones/envios'},
 			                        {titulo: 'Crear Envío a Archivo', url: '#/comisiones/envios/envio/crear'},
 			                    ]);	
 			                    			
