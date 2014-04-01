@@ -245,116 +245,290 @@ App.Router =  Em.Router.extend({
 		direccionSecretaria: Em.Route.extend({
 			route: '/direccion/secretaria',
 
-			diputados: Em.Route.extend({
-				route: "/diputados",
+			mesaDeEntrada: Em.Route.extend({
+				route: '/mesa/de/entrada',
 
-				index: Ember.Route.extend({
-					route: "/listado",
-					
-					deserialize: function(router, params) {
-						 if (!App.get('diputadosController'))
-						 	App.diputadosController = App.DiputadosController.create();
+				proyecto: Em.Route.extend({
+					route: '/proyecto',
 
-						 var deferred = $.Deferred(),
-						 fn = function() {
-							 App.get('diputadosController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);					
-						 };
-
-						 App.get('diputadosController').addObserver('loaded', this, fn);
-						 App.get('diputadosController').load();
+					crear: Em.Route.extend({
+						route: '/crear',
 						
-						 return deferred.promise();
-					},
-					
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');					
-						appController.connectOutlet('main', 'diputadosLista');
+						deserialize: function(router, params) {
+							App.firmantesController = App.FirmantesController.create();
+							 if (!App.get('tpsController'))
+							 	App.tpsController = App.TPsController.create();
+
+							var deferred = $.Deferred(),
+
+
+							fn2 = function() {
+	                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
+	                                App.get('firmantesController').removeObserver('loaded', this, fn2);
+	                                App.get('comisionesController').removeObserver('loaded', this, fn2);
+									 App.get('tpsController').removeObserver('loaded', this, fn2);	
+	                                deferred.resolve(null);	
+	                            }
+							}
+
+							App.get('comisionesController').addObserver('loaded', this, fn2);
+							App.get('comisionesController').load();				
+
+							App.get('firmantesController').addObserver('loaded', this, fn2);
+							App.get('firmantesController').load();		
+
+							App.get('tpsController').addObserver('loaded', this, fn2);
+							App.get('tpsController').load();
+
 						
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
-							{titulo: 'Listado'},
-						]);			
+							return deferred.promise();
+						},
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');
 
-						App.get('menuController').seleccionar(12, 0, 0);	
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
-					},						
-				}),	
+							Ember.run.next(function () {
+								appController.connectOutlet('main', 'CrearExpediente');
+							});
+							
+							App.get('menuController').seleccionar(9, 0, 0);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de entrada'},
+								{titulo: 'Crear Proyecto'}
+							]);								
+						},
+					}),
 
-				ver: Ember.Route.extend({
-					route: '/:id/ver',
+					girar: Em.Route.extend({
+						route: '/:id/girar',
 
-					deserialize: function(router, params) {
+						deserialize: function(router, params) {
 
-						var diputado = App.User.extend(App.Savable).create({id: params.id})
-						diputado.set('loaded', false);
+							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+							ex.set('loaded', false);
+							 var deferred = $.Deferred(),
+							 fn = function() {
+	                                                        ex.desNormalize(); 
+								ex.removeObserver('loaded', this, fn);
+								deferred.resolve(ex);				
+							 };
 
-						var deferred = $.Deferred(),
-						fn = function() {
-							diputado.removeObserver('loaded', this, fn);
-							deferred.resolve(diputado);				
-						};
-						diputado.addObserver('loaded', this, fn);
-						diputado.load();
+							 ex.addObserver('loaded', this, fn);
+							 ex.load();
+							
+							 return deferred.promise();
+						},	
 
-					 	return deferred.promise();
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');
 
-					},	
+							appController.connectOutlet('main', 'mEExpedienteGirar', context);
+							
+							App.get('menuController').seleccionar(9, 0, 0);	
 
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'diputadoConsulta', context);
-						appController.connectOutlet('help', 'Help');
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
-							{titulo: 'Ver'},
-						]);		
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de entrada'},
+								{titulo: 'Giros'},
+								{titulo: 'Girar expediente'}
+							]);								
+						},						
+					}),
 
-						App.get('menuController').seleccionar(12, 0, 0);	
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
-					},
+					ver: Em.Route.extend({
+						route: '/:id/ver',
+						deserialize: function(router, params) {
+
+							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+							ex.set('loaded', false);
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								ex.removeObserver('loaded', this, fn);
+								deferred.resolve(ex);				
+							 };
+
+							 ex.addObserver('loaded', this, fn);
+							 ex.load();
+							
+							 return deferred.promise();
+						},	
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');
+							appController.connectOutlet('main', 'mEExpedienteConsulta', context);
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Mesa de entrada'},
+								{titulo: 'Ver'},
+							]);		
+
+							App.get('menuController').seleccionar(9, 0, 0);	
+
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},					
+					}),
+
+					editar: Em.Route.extend({
+						route: '/:id/editar',
+						deserialize: function(router, params) {
+	                                           
+							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+							ex.set('loaded', false);
+	                                                var deferred = $.Deferred(),
+	                                                fn = function() {
+	                                                       ex.desNormalize(); 
+	                                                       ex.removeObserver('loaded', this, fn);
+	                                                       deferred.resolve(ex);				
+	                                                };                                                                             
+
+	                                                ex.addObserver('loaded', this, fn);
+	                                                ex.load();
+	                                                 
+		
+							
+	                                                return deferred.promise();
+						},	
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');
+							appController.connectOutlet('main', 'mEExpedienteEditar', context);
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Mesa de entrada'},
+								{titulo: 'Editar'},
+							]);		
+
+							App.get('menuController').seleccionar(9, 0, 0);	
+							
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},						
+					}),
 				}),
 
-				editar: Ember.Route.extend({
-					route: '/:id/editar',
+				diputados: Em.Route.extend({
+					route: "/diputados",
 
-					deserialize: function(router, params) {
+					index: Ember.Route.extend({
+						route: "/listado",
+						
+						deserialize: function(router, params) {
+							 if (!App.get('diputadosController'))
+							 	App.diputadosController = App.DiputadosController.create();
 
-						var diputado = App.User.extend(App.Savable).create({id: params.id})
-						diputado.set('loaded', false);
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								 App.get('diputadosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							 };
 
-						var deferred = $.Deferred(),
-						fn = function() {
-							diputado.removeObserver('loaded', this, fn);
-							deferred.resolve(diputado);				
-						};
-						diputado.addObserver('loaded', this, fn);
-						diputado.load();
+							 App.get('diputadosController').addObserver('loaded', this, fn);
+							 App.get('diputadosController').load();
+							
+							 return deferred.promise();
+						},
+						
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');					
+							appController.connectOutlet('main', 'diputadosLista');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados'},
+								{titulo: 'Listado'},
+							]);			
 
-					 	return deferred.promise();
+							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},						
+					}),	
 
-					},	
+					ver: Ember.Route.extend({
+						route: '/:id/ver',
 
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'diputadoEdit', context);
-						appController.connectOutlet('help', 'Help');
+						deserialize: function(router, params) {
 
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Diputados', url: '#/direccion/secretaria/diputados'},
-							{titulo: 'Editar'},
-						]);		
+							var diputado = App.User.extend(App.Savable).create({id: params.id})
+							diputado.set('loaded', false);
 
-						App.get('menuController').seleccionar(12, 0, 0);	
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
-					},
-				}),							
-			}),	
+							var deferred = $.Deferred(),
+							fn = function() {
+								diputado.removeObserver('loaded', this, fn);
+								deferred.resolve(diputado);				
+							};
+							diputado.addObserver('loaded', this, fn);
+							diputado.load();
+
+						 	return deferred.promise();
+
+						},	
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('menu', 'subMenu');
+							appController.connectOutlet('main', 'diputadoConsulta', context);
+							appController.connectOutlet('help', 'Help');
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados'},
+								{titulo: 'Ver'},
+							]);		
+
+							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},
+					}),
+
+					editar: Ember.Route.extend({
+						route: '/:id/editar',
+
+						deserialize: function(router, params) {
+
+							var diputado = App.User.extend(App.Savable).create({id: params.id})
+							diputado.set('loaded', false);
+
+							var deferred = $.Deferred(),
+							fn = function() {
+								diputado.removeObserver('loaded', this, fn);
+								deferred.resolve(diputado);				
+							};
+							diputado.addObserver('loaded', this, fn);
+							diputado.load();
+
+						 	return deferred.promise();
+
+						},	
+
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('menu', 'subMenu');
+							appController.connectOutlet('main', 'diputadoEdit', context);
+							appController.connectOutlet('help', 'Help');
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Diputados', url: '#/direccion/secretaria/mesa/de/entrada/diputados'},
+								{titulo: 'Editar'},
+							]);		
+
+							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},
+					}),							
+				}),	
+			}),
+
 
 			autoridades: Em.Route.extend({
 				route: '/autoridades',
@@ -453,177 +627,6 @@ App.Router =  Em.Router.extend({
 					},
 				}),			
 
-			}),
-		}),
-
-		mesaDeEntrada: Em.Route.extend({
-			route: '/mesa/de/entrada',
-
-			proyecto: Em.Route.extend({
-				route: '/proyecto',
-
-				crear: Em.Route.extend({
-					route: '/crear',
-					
-					deserialize: function(router, params) {
-						App.firmantesController = App.FirmantesController.create();
-						 if (!App.get('tpsController'))
-						 	App.tpsController = App.TPsController.create();
-
-						var deferred = $.Deferred(),
-
-
-						fn2 = function() {
-                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
-                                App.get('firmantesController').removeObserver('loaded', this, fn2);
-                                App.get('comisionesController').removeObserver('loaded', this, fn2);
-								 App.get('tpsController').removeObserver('loaded', this, fn2);	
-                                deferred.resolve(null);	
-                            }
-						}
-
-						App.get('comisionesController').addObserver('loaded', this, fn2);
-						App.get('comisionesController').load();				
-
-						App.get('firmantesController').addObserver('loaded', this, fn2);
-						App.get('firmantesController').load();		
-
-						App.get('tpsController').addObserver('loaded', this, fn2);
-						App.get('tpsController').load();
-
-					
-						return deferred.promise();
-					},
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');
-
-						Ember.run.next(function () {
-							appController.connectOutlet('main', 'CrearExpediente');
-						});
-						
-						App.get('menuController').seleccionar(9, 1, 0);
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Mesa de entrada'},
-							{titulo: 'Crear Proyecto'}
-						]);								
-					},
-				}),
-
-				girar: Em.Route.extend({
-					route: '/:id/girar',
-
-					deserialize: function(router, params) {
-
-						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
-						ex.set('loaded', false);
-						 var deferred = $.Deferred(),
-						 fn = function() {
-                                                        ex.desNormalize(); 
-							ex.removeObserver('loaded', this, fn);
-							deferred.resolve(ex);				
-						 };
-
-						 ex.addObserver('loaded', this, fn);
-						 ex.load();
-						
-						 return deferred.promise();
-					},	
-
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');
-
-						appController.connectOutlet('main', 'mEExpedienteGirar', context);
-						
-						App.get('menuController').seleccionar(9, 1, 0);	
-
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Mesa de entrada'},
-							{titulo: 'Giros'},
-							{titulo: 'Girar expediente'}
-						]);								
-					},						
-				}),
-
-				ver: Em.Route.extend({
-					route: '/:id/ver',
-					deserialize: function(router, params) {
-
-						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
-						ex.set('loaded', false);
-						 var deferred = $.Deferred(),
-						 fn = function() {
-							ex.removeObserver('loaded', this, fn);
-							deferred.resolve(ex);				
-						 };
-
-						 ex.addObserver('loaded', this, fn);
-						 ex.load();
-						
-						 return deferred.promise();
-					},	
-
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'mEExpedienteConsulta', context);
-
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Mesa de entrada'},
-							{titulo: 'Ver'},
-						]);		
-
-						App.get('menuController').seleccionar(9, 1, 0);	
-
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
-					},					
-				}),
-
-				editar: Em.Route.extend({
-					route: '/:id/editar',
-					deserialize: function(router, params) {
-                                           
-						var ex = App.Expediente.extend(App.Savable).create({id: params.id})
-						ex.set('loaded', false);
-                                                var deferred = $.Deferred(),
-                                                fn = function() {
-                                                       ex.desNormalize(); 
-                                                       ex.removeObserver('loaded', this, fn);
-                                                       deferred.resolve(ex);				
-                                                };                                                                             
-
-                                                ex.addObserver('loaded', this, fn);
-                                                ex.load();
-                                                 
-	
-						
-                                                return deferred.promise();
-					},	
-
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('menu', 'subMenu');
-						appController.connectOutlet('main', 'mEExpedienteEditar', context);
-
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Mesa de entrada'},
-							{titulo: 'Editar'},
-						]);		
-
-						App.get('menuController').seleccionar(9, 1, 0);	
-						
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
-					},						
-				}),
 			}),
 		}),
 
@@ -1307,7 +1310,7 @@ App.Router =  Em.Router.extend({
 									{titulo: 'Labor Parlamentaria'},
 									{titulo: 'Recinto', url: '#/laborparlamentaria/recinto/oradores'},	
 									{titulo: 'Oradores', url: '#/laborparlamentaria/recinto/oradores'},	
-									{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
+									{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion'), url: '#/laborparlamentaria/recinto/oradores/sesion/' +sesion.get('id') + '/ver'},
 									{titulo: tema.get('titulo')}
 								]);					
 							},
