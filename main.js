@@ -334,6 +334,36 @@ App.menuController = App.MenuController.create({
 						}),		
 					],
 				}),				
+				App.MenuItem.create({
+					id: 5,
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					titulo: 'Envíos a Archivo',
+					url: '#/comisiones/envios',
+					icono: 'ic ic-archivados',
+					
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							titulo: 'Envíos a Archivo',
+							url: '#/comisiones/envios',
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+							subMenu: [
+								App.MenuItem.create({
+									id: 0,
+									roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+									titulo: 'Envios a Archivo',
+									url: '#/comisiones/envios',
+								}),
+								App.MenuItem.create({
+									id: 1,
+									roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+									titulo: 'Crear Envío a Archivo',
+									url: '#/comisiones/envios/envio/crear',
+								}),
+							],
+						}),
+					]
+				}),
 			]			
 		}),	
 		App.MenuItem.create({
@@ -366,7 +396,7 @@ App.menuController = App.MenuController.create({
 				}),				
 			]			
 		}),	
-                
+        /*        
 		App.MenuItem.create({
 			id: 6,
 			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
@@ -397,6 +427,7 @@ App.menuController = App.MenuController.create({
 				}),
 			]
 		}),
+		*/
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
