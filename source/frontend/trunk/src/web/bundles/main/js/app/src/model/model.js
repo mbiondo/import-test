@@ -193,6 +193,24 @@ App.Notificacion = Em.Object.extend({
 	],	
 });
 
+
+App.NotificacionLeida = Em.Object.extend({
+	
+	url: 'notificaciones-leida/crear',
+	id: '',
+	cuil: '',
+	idNotificacion: '',
+
+
+	serializable: [
+		"id",
+		"cuil",
+		"idNotificacion"
+	],	
+});
+
+
+
 App.NotificacionTipo = Em.Object.extend({
 	url: 'notification/types',
 	icono: '',
