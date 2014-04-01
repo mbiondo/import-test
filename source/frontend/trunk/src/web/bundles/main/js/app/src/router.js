@@ -416,6 +416,48 @@ App.Router =  Em.Router.extend({
 						},						
 					}),
 				}),
+				bloques: Em.Route.extend({
+					route: "/bloques",
+					index: Ember.Route.extend({
+						route: "/listado",
+						
+						deserialize: function(router, params) {
+
+							var deferred = $.Deferred(),
+							fn = function() {
+								if (App.interBloquesController.get('loaded') && App.bloquesController.get('loaded')) {
+									deferred.resolve(null);				
+								}
+							};
+							
+							App.bloquesController = App.BloquesController.create();
+							App.interBloquesController = App.InterBloquesController.create();
+							App.bloquesController.load();
+							App.bloquesController.addObserver('loaded', this, fn);
+							App.interBloquesController.load();
+							App.interBloquesController.addObserver('loaded', this, fn);
+							
+						 	return deferred.promise();							
+						},
+						
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+							appController.connectOutlet('help', 'Help');
+							appController.connectOutlet('menu', 'subMenu');					
+							appController.connectOutlet('main', 'bloquesList');
+							
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Mesa de Entrada'},
+								{titulo: 'Bloques'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado'},
+							]);			
+
+							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+						},						
+					}),						
+				}),
 
 				diputados: Em.Route.extend({
 					route: "/diputados",
@@ -545,7 +587,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Editar'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('menuController').seleccionar(9, 0, 2);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),							

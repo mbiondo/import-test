@@ -7673,3 +7673,56 @@ App.DiputadosListView = App.ListFilterView.extend({
 });
 
 
+
+App.BloquesListView = Ember.View.extend({
+	templateName: 'bloques-list',
+});
+
+
+App.BloqueCrearView = Ember.View.extend({
+	templateName: 'bloque-crear',
+
+	crear: function (){
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('content').create();
+		this.set('loading', true);
+	},
+
+	createSucceeded: function () {
+		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		if (this.get('content.createSuccess')) {
+			var b = this.get('content');
+            this.set('loading', false);
+			this.objectCreate(b);
+        } else if (this.get('content.createSuccess') == false) {
+            this.set('loading', false);
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.Bloque.extend(App.Savable).create());
+	},
+
+	objectCreate: function (b) {
+		if (App.bloquesController) {
+			App.bloquesController.addObject(b);
+		}
+		this.set('content', App.Bloque.extend(App.Savable).create());
+	},
+});
+
+
+App.InterBloqueCrearView = App.BloqueCrearView.extend({
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.InterBloque.extend(App.Savable).create());
+	},
+
+	objectCreate: function (b) {
+		if (App.interBloquesController) {
+			App.interBloquesController.addObject(b);
+		}
+		this.set('content', App.InterBloque.extend(App.Savable).create());
+	},
+});

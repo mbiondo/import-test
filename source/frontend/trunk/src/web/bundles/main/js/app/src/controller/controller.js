@@ -3011,7 +3011,7 @@ App.DiputadoEditController = Ember.ObjectController.extend({
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('content.saveSuccess')) {
-            this.set('loading', false);
+	        this.set('loading', false);
 			 if (!App.get('diputadosController'))
 			 	 App.diputadosController = App.DiputadosController.create();
 				 var deferred = $.Deferred(),
@@ -3026,8 +3026,8 @@ App.DiputadoEditController = Ember.ObjectController.extend({
 
 				 App.get('diputadosController').addObserver('loaded', this, fn);
 				 App.get('diputadosController').load();            
-        } else if (this.get('content.saveSuccess') == false) {
-            this.set('loading', false);
+	    } else if (this.get('content.saveSuccess') == false) {
+	        this.set('loading', false);
 		}
 	},
 });
@@ -4449,6 +4449,7 @@ App.BloquesController = App.RestController.extend({
 	useApi: false,
 	loaded: false,
 	type: App.Bloque,
+	sortProperties: ['nombre'],
 
 	createObject: function (data, save) {
 		save = save || false;
@@ -4464,7 +4465,8 @@ App.InterBloquesController = App.RestController.extend({
 	url: 'interbloques',
 	useApi: false,
 	loaded: false,
-	type: App.Bloque,
+	type: App.InterBloque,
+	sortProperties: ['nombre'],
 
 	createObject: function (data, save) {
 		save = save || false;
