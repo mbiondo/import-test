@@ -616,7 +616,7 @@ App.notificationController = App.NotificationController.create({
 });
 
 App.notificacionesController = App.NotificacionesController.create({
-	estado: '',
+	content: [],
 });
 
 App.listaController = App.ListaController.create({
