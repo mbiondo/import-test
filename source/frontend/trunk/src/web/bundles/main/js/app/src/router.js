@@ -174,8 +174,9 @@ App.Router =  Em.Router.extend({
 
 			deserialize: function () {
 
-				App.notificacionesController = App.NotificacionesController.create({content: []});
+				//App.notificacionesController = App.NotificacionesController.create({content: []});
 				App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
+				App.notificacionesController.set('url', "notification/all");
 
 				if (App.get('userController').get('isLogin'))
 				{
@@ -698,7 +699,8 @@ App.Router =  Em.Router.extend({
 		novedades: Em.Route.extend({
 			route: '/novedades/:id',
 			deserialize: function(router, params) {
-				App.notificacionesController = App.NotificacionesController.create({content: [], url: "/notification/grupo/" + params.id});
+				//App.notificacionesController = App.NotificacionesController.create({content: [], url: "/notification/grupo/" + params.id});
+				App.notificacionesController.set('url', "notification/grupo/" + params.id);
 
 				if (App.get('userController').get('isLogin'))
 				{

@@ -537,8 +537,6 @@ App.LoginView = Ember.View.extend({
 
 			localStorage.setObject('user', JSON.stringify(tmpUser));
 
-			if (!App.get('notificacionesController'))
-				App.notificacionesController = App.NotificacionesController.create();
 			App.get('notificacionesController').load();		
 						
 			App.get('router').transitionTo('loading');

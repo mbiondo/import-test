@@ -1209,6 +1209,7 @@ App.NotificacionesController = App.RestController.extend({
 	sortAscending: false,
 
 	load: function() {
+
 		this.set('loaded', false);
 		var url =  this.get('url');
 
@@ -1225,6 +1226,7 @@ App.NotificacionesController = App.RestController.extend({
 
 		}
 	},
+	
 	parse : function (data) {
 		return data.notificaciones;
 	},
@@ -1240,23 +1242,23 @@ App.NotificacionesController = App.RestController.extend({
 
 	},	
 
-	latest: function () {
-		if (this.get('content'))
-			return this.get('content').slice(0, 15);
-		else 
-			return [];
-	}.property('content.@each', 'unreads'),
 
 	unreadCount: function () {
 		var count = 0;
+		console.log('pepepepe');
 		if (this.get('content')) {
 			var unreads = this.get('content').filterProperty('leida', false);
 			if (unreads) {
 				count = unreads.length;
 			}
+			this.set('latest', this.get('content').slice(0, 10));
+		} else {
+			this.set('latest', []);
 		}
-		return count;
-	}.property('content.@each.leida'),
+		this.set('unreads', count);
+	}.observes('content.@each.leida'),
+
+	unreads: 0,
 });
 
 
