@@ -1239,6 +1239,24 @@ App.NotificacionesController = App.RestController.extend({
 		this.addObject(item);
 
 	},	
+
+	latest: function () {
+		if (this.get('content'))
+			return this.get('content').slice(0, 10);
+		else 
+			return [];
+	}.property('content.@each'),
+
+	unreadCount: function () {
+		var count = 0;
+		if (this.get('content')) {
+			var unreads = this.get('content').filterProperty('leida', false);
+			if (unreads) {
+				count = unreads.length;
+			}
+		}
+		return count;
+	}.property('content.@each.leida'),
 });
 
 

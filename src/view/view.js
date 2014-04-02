@@ -7741,13 +7741,16 @@ App.NotificacionItemView = Ember.View.extend({
         
     createSuccessed: function () {
 		if (this.get('notificacionLeida.createSuccess')) {                                                            
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
 			this.get('content').set('leida', true);
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
 		} else if (this.get('notificacionLeida.createSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 		}
 	},
 });
 
+App.NotificacionItemMiniView = App.NotificacionItemView.extend({
+	templateName: 'notificacion-item-mini',
+});
