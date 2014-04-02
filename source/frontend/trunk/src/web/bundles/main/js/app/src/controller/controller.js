@@ -1226,7 +1226,7 @@ App.NotificacionesController = App.RestController.extend({
 
 		}
 	},
-	
+
 	parse : function (data) {
 		return data.notificaciones;
 	},
@@ -1245,7 +1245,6 @@ App.NotificacionesController = App.RestController.extend({
 
 	unreadCount: function () {
 		var count = 0;
-		console.log('pepepepe');
 		if (this.get('content')) {
 			var unreads = this.get('content').filterProperty('leida', false);
 			if (unreads) {
