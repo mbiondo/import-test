@@ -1242,7 +1242,7 @@ App.NotificacionesController = App.RestController.extend({
 
 	latest: function () {
 		if (this.get('content'))
-			return this.get('content').slice(0, 10);
+			return this.get('content').slice(0, this.get('unreads') - 1);
 		else 
 			return [];
 	}.property('content.@each'),
