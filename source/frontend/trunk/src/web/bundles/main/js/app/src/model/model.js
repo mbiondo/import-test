@@ -173,6 +173,7 @@ App.Notificacion = Em.Object.extend({
 	fecha: '',
 	comisiones: [],
 	icono: '',
+	leida: false,
 
 	dia: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm:ss').format('DD');
