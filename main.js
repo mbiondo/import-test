@@ -343,7 +343,7 @@ App.menuController = App.MenuController.create({
 				}),				
 				App.MenuItem.create({
 					id: 5,
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
 					titulo: 'Envíos a Archivo',
 					url: '#/comisiones/envios',
 					icono: 'ic ic-archivados',
@@ -351,13 +351,19 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
 							titulo: 'Envios a Archivo',
 							url: '#/comisiones/envios',
 						}),
 						App.MenuItem.create({
+							id: 2,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
+							titulo: 'Listado',
+							url: '#/comisiones/envios/listado',
+						}),
+						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Crear Envío a Archivo',
 							url: '#/comisiones/envios/envio/crear',
 						}),
