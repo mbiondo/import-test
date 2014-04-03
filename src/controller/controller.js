@@ -1250,6 +1250,9 @@ App.NotificacionesController = App.RestController.extend({
 			if (unreads) {
 				count = unreads.length;
 			}
+			this.set('latest', this.get('arrangedContent').slice(0, 10));
+		} else {
+			this.set('latest', []);
 		}
 		this.set('unreads', count);
 	}.observes('content.@each.leida'),
