@@ -5456,6 +5456,8 @@ App.CrearTurnoInlineView = Em.View.extend({
 		var filtered = App.get('diputadosController').get('arrangedContent').filter(function(user) {
 			return regex.test((user.nombre + " " + user.apellido).toLowerCase()) || regex.test((user.apellido + " " + user.nombre).toLowerCase());
 		});
+		if (filtered)
+			return filtered.slice(0, 20);
 		return filtered;
 	}.property('filterText', 'App.diputadosController.content.@each'),
 	
