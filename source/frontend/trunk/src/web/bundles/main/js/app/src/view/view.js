@@ -1918,7 +1918,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 	isPendiente: false,
 	
 	puedeConfirmarEnvio: function(){
-		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+		return (App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES')) && App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT') 
 	}.property('App.userController.user'),
 	cambiaEstado: function(){
 		if (this.get('content.estado')=="Pendiente") {
