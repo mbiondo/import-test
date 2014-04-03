@@ -759,6 +759,7 @@ if (user) {
 	App.userController.set('user', usuario);
 	
 	App.get('searchController').load();
+	App.get('notificacionesController').load();
 }
 
 $('#loadingScreen').remove();
