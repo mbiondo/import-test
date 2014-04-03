@@ -7280,6 +7280,9 @@ App.TPConsultaView = Ember.View.extend({
 	exportar: function () {
 		$.download('exportar/tp', "&type=tp&data=" + JSON.stringify(this.get('controller.content')));
 	},
+	confeccionarTP: function () {
+		return App.get('userController').hasRole('ROLE_PUBLICACIONES_EDIT') 
+	}.property('App.userController.user')
 });
 
 App.ComisionesListItemView = Ember.View.extend({
