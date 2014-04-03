@@ -7733,7 +7733,11 @@ App.NotificacionItemView = Ember.View.extend({
 	templateName: 'notificacion-item',
 	tagName: 'li',
 	loading: false,
+	classNameBindings: ['leida:read:unread'],
 
+	leida: function () {
+		return this.get('content.leida');
+	}.property('content.leida'),
 
     marcarLeido: function(){
         this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion: this.get('content.id'), cuil:App.userController.user.cuil}));
