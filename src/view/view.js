@@ -7730,10 +7730,13 @@ App.InterBloqueCrearView = App.BloqueCrearView.extend({
 App.NotificacionItemView = Ember.View.extend({
 	templateName: 'notificacion-item',
 	tagName: 'li',
+	loading: false,
+
 
     marcarLeido: function(){
         this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion: this.get('content.id'), cuil:App.userController.user.cuil}));
         this.get('notificacionLeida').addObserver('createSuccess', this, this.createSuccessed);
+        this.set('loading', true);
         this.get('notificacionLeida').create();
     },
         
@@ -7741,10 +7744,10 @@ App.NotificacionItemView = Ember.View.extend({
 		if (this.get('notificacionLeida.createSuccess')) {                                                            
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
 			this.get('content').set('leida', true);
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			this.set('loading', false);
 		} else if (this.get('notificacionLeida.createSuccess') == false) {
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			this.set('loading', false);
 		}
 	},
 });
