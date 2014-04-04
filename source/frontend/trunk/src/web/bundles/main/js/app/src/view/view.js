@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -7378,7 +7378,7 @@ App.SelectListView = Ember.CollectionView.extend({
 	},
 
 	emptyView: Ember.View.extend({
-	    template: Ember.Handlebars.compile('<label class="empty-view">No hay elementos para mostrar.</label>')
+	    template: Ember.Handlebars.compile('<label class="empty-view pull-left w75-real">No hay elementos para mostrar.</label>')
 	}),
 
 	createChildView: function(viewClass, attrs) {
@@ -7673,7 +7673,7 @@ App.DiputadoListItemView = Ember.View.extend({
 App.DiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.DiputadoListItemView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Inter Bloque', ''],
+	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', ''],
 });
 
 
