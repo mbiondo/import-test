@@ -694,6 +694,44 @@ App.Router =  Em.Router.extend({
 				}),			
 
 			}),
+
+
+			enviosArchivados: Em.Route.extend({
+				route: "/envios",
+
+					listado: Em.Route.extend({
+						route: '/listado',
+
+		                deserialize: function(router, params) {
+	                        var deferred = $.Deferred(),
+
+	                        fn = function() {
+	                            App.get('envioArchivoController').removeObserver('loaded', this, fn);	
+	                            deferred.resolve(null);					
+	                        };
+
+	                        App.get('envioArchivoController').addObserver('loaded', this, fn);
+	                        App.get('envioArchivoController').loadByComisionesUser();
+
+	                        return deferred.promise();
+		                },	
+
+		                connectOutlets: function(router, context) {
+		                        var appController = router.get('applicationController');
+		                        appController.connectOutlet('help', 'Help');	
+		                        appController.connectOutlet('main', 'enviosArchivados');
+		                        appController.connectOutlet('menu', 'subMenu');
+
+		                        App.get('menuController').seleccionar(9, 1, 0);
+		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+		                        App.get('breadCumbController').set('content', [
+									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
+	                                {titulo: 'Envíos a Archivo', url: '#/comisiones/envios/listado'},
+		                        ]);				
+		                },
+		        	}),
+				}),
 		}),
 
 		novedades: Em.Route.extend({
@@ -2933,39 +2971,6 @@ App.Router =  Em.Router.extend({
 		                        App.get('breadCumbController').set('content', [
 									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 	                                {titulo: 'Envíos a Archivo', url: '#/comisiones/envios'},
-		                        ]);				
-		                },
-		        	}),
-
-					listado: Em.Route.extend({
-						route: '/listado',
-
-		                deserialize: function(router, params) {
-	                        var deferred = $.Deferred(),
-
-	                        fn = function() {
-	                            App.get('envioArchivoController').removeObserver('loaded', this, fn);	
-	                            deferred.resolve(null);					
-	                        };
-
-	                        App.get('envioArchivoController').addObserver('loaded', this, fn);
-	                        App.get('envioArchivoController').load();
-
-	                        return deferred.promise();
-		                },	
-
-		                connectOutlets: function(router, context) {
-		                        var appController = router.get('applicationController');
-		                        appController.connectOutlet('help', 'Help');	
-		                        appController.connectOutlet('main', 'enviosArchivados');
-		                        appController.connectOutlet('menu', 'subMenu');
-
-		                        App.get('menuController').seleccionar(2, 5, 2);
-		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-
-		                        App.get('breadCumbController').set('content', [
-									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
-	                                {titulo: 'Envíos a Archivo', url: '#/comisiones/envios/listado'},
 		                        ]);				
 		                },
 		        	}),
