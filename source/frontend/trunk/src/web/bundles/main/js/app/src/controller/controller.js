@@ -632,7 +632,8 @@ App.UserController = Em.Controller.extend({
 
 	hasRole: function (role) {
 		return this.get('roles').contains(role);
-	}
+	},
+
 });
 
 App.ApiController = Em.Controller.extend({
@@ -1713,7 +1714,7 @@ App.ExpedientesArchivadosController = App.RestController.extend({
 
 // Envios a archivo
 App.EnvioArchivoController = App.RestController.extend({
-		url: 'com/env/envios',
+	url: 'com/env/envios',
 	type: App.Envio,
 	useApi: true,
 	sortProperties: ['fechaUltimaModificacion'],
@@ -1728,7 +1729,32 @@ App.EnvioArchivoController = App.RestController.extend({
 		item.setProperties(data);
 		
 		App.get('envioArchivoController').addObject(item);
-	},	
+	},
+	loadByComisionesUser: function () {
+		this.set('loaded', false);
+
+		var roles = App.get('userController.roles').join();
+
+		$.ajax({
+			url:  (App.get('apiController').get('url') + this.get('url')),
+//			url:  (App.get('apiController').get('url') + this.get('url') + '/' + roles),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+	},
+	loadCompleted: function(xhr) {
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
+	},
+
+	loadSucceeded: function(data){
+		this._super(data);
+		this.set('loaded', true);
+	},
+
 });
 
 App.EnvioArchivoConsultaController = Ember.Object.extend({
