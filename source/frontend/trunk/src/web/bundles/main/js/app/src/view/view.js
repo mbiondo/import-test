@@ -7916,10 +7916,12 @@ App.BloqueItemView = Ember.View.extend({
 	isEdit: false,
 	classNames: ['wg-li-eliminar'],
 	contentController: null,
+	oldContent: null,
 
 	templateName: 'bloque-list-item',
 
 	editar: function () {
+		this.set('oldContent', this.get('content.nombre'));
 		this.set('isEdit', true);
 	},
 
@@ -7935,6 +7937,9 @@ App.BloqueItemView = Ember.View.extend({
 		this.set('isEdit', false);
 	},
 
-
+	cancelar: function () {
+		this.set('isEdit', false);
+		this.set('content.nombre', oldContent);
+	},
 });
 
