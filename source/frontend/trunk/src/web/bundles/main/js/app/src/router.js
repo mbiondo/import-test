@@ -604,12 +604,16 @@ App.Router =  Em.Router.extend({
 						fn = function() {
 							if (App.get('proyectosController.loaded'))
 							{
+								App.get('comisionesController').removeObserver('loaded', this, fn);	
 								App.get('proyectosController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);					
 							}
 						};
 
+						App.get('comisionesController').addObserver('loaded', this, fn);
 						App.get('proyectosController').addObserver('loaded', this, fn);
+
+						App.get('comisionesController').load();
 						App.get('proyectosController').load();
 										
 						return deferred.promise();
