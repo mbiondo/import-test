@@ -2,6 +2,85 @@ App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
 	createSuccess: '',
 	
+	delete: function () {
+		this.set('saveSuccess', '');
+		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
+
+		if (this.get('noConcatURL') == true)
+		{
+			url = this.get('url');
+		}
+		
+		if (this.get('useApi')) {
+			url = App.get('apiController').get('url') + this.get('url');
+			$.ajax({
+				url:  url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'DELETE',
+				crossDomain: 'true',
+				context: this,
+				data : this.getJson(),
+				success: this.deleteSucceeded,
+				complete: this.deleteCompleted,
+			});			
+		}
+		else 
+		{
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'DELETE',
+				context: this,
+				data : this.getJson(),
+				success: this.deleteSucceeded,
+				complete: this.deleteCompleted,
+			});			
+		}		
+	},
+
+	deleteSucceeded: function () {
+		if (this.get('useApi') && data.id) {
+			this.set('deleteSuccess', true);
+		}
+
+		if (data.success == true) {
+			this.set('deleteSuccess', true);
+		}		
+
+		if (this.get('deleteSuccess') == true) 
+		{
+			if (this.get('notificationType'))
+			{
+				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson(), this.get('notificationRoom'));
+			}
+
+			if (this.get('auditable')) 
+			{
+				var audit = App.Audit.extend(App.Savable).create();
+				audit.set('tipo', 'Test');
+				audit.set('accion', 'BORRADO');
+				audit.set('usuario', App.get('userController.user.cuil'));
+				audit.set('objeto', this.constructor.toString());
+				audit.set('objetoId', this.get('id'));
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.create();				
+			}
+		}
+	},
+
+	deleteCompleted: function () {
+
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('deleteSuccess', true);
+		} 
+		else
+		{
+			this.set('deleteSuccess', false);
+		}
+	},
+
+
 
 	loadCompleted: function(xhr){
 		if(xhr.status == 400 || xhr.status == 420) {
@@ -4499,7 +4578,7 @@ App.BloquesController = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.Bloque.create(data);
+		item = App.Bloque.extend(App.Savable).create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},		
@@ -4516,7 +4595,7 @@ App.InterBloquesController = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.Bloque.create(data);
+		item = App.Bloque.extend(App.Savable).create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},		

@@ -7909,3 +7909,32 @@ App.ProyectoSearchView = Em.View.extend({
 		}
 	},
 });
+
+
+App.BloqueItemView = Ember.View.extend({
+	tagName: 'li',
+	isEdit: false,
+	classNames: ['wg-li-eliminar'],
+	contentController: null,
+
+	templateName: 'bloque-list-item',
+
+	editar: function () {
+		this.set('isEdit', true);
+	},
+
+	borrar: function () {
+		this.get('content').delete();
+		if (this.get('contentController')) {
+			this.get('contentController').removeObject(this.get('content'));
+		}
+	},
+
+	guardar: function () {
+		this.get('content').save();
+		this.set('isEdit', false);
+	},
+
+
+});
+
