@@ -7764,3 +7764,56 @@ App.NotificacionItemView = Ember.View.extend({
 App.NotificacionItemMiniView = App.NotificacionItemView.extend({
 	templateName: 'notificacion-item-mini',
 });
+
+
+App.ProyectosView = Ember.View.extend({
+	templateName: 'proyectos',
+});
+
+App.ProyectoListItemView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'proyectos-list-item',
+});
+
+App.ProyectosListView = App.ListFilterWithSortView.extend({
+	templateName: 'proyectos-sortable-list',
+	itemViewClass: App.ProyectoListItemView,
+
+	mostrarMas: function () {
+		this.set('scroll', $(document).scrollTop());
+		App.get('proyectosController').set('loaded', false);
+		App.get('proyectosController').nextPage();
+		this.set('loading', true);
+	},
+	proyectosLoaded: function () {
+		if (App.get('proyectosController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
+	},	
+	columnas: [
+		App.SortableColumn.create({nombre: 'Número de Proyecto', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
+		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
+		App.SortableColumn.create({nombre: 'Comisiones convocadas', campo: 'girosLabel'}),
+	],	
+	didInsertElement: function(){
+		this._super();
+		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
+	},
+
+	lista: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
+//			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
+			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip));
+		});
+
+		this.set('mostrarMasEnabled', true);
+		return filtered;
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+
+});
+
