@@ -120,6 +120,12 @@ App.menuController = App.MenuController.create({
 					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 					subMenu: [
 						App.MenuItem.create({
+							id: 3,
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							titulo: 'Buscador de proyectos',
+							url: '#/direccion/secretaria/mesa/de/entrada/proyectos',
+						}),						
+						App.MenuItem.create({
 							id: 0,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Crear proyecto',
