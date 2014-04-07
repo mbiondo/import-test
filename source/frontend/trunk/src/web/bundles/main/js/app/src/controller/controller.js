@@ -4728,4 +4728,74 @@ App.MEExpedienteEditarController = Ember.ObjectController.extend({
 App.MEExpedienteGirarController = Ember.ObjectController.extend({
 });
 
+App.ProyectosController = App.RestController.extend({
+	url: 'ME/exp/proyectos/search',
 
+	type: App.Proyecto,
+	useApi: true,
+//	sortProperties: ['expdipA', 'expdipN'],
+//	sortAscending: false,
+	loaded: false,
+	pageSize: 25,
+	pageNumber: 1,
+
+	query: null,
+	
+	buildURL: function (filterText) {
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		url += "/" + filterText;
+		return url;		
+	},
+
+	init : function(){
+		this._super();
+	},
+
+	nextPage: function () {
+		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.load();
+	},
+
+	load: function() {
+		this.set('loaded', false);
+
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+
+		if ( url ) {
+			$.ajax({
+					url:  url,
+					dataType: 'JSON',
+					type: 'POST',
+					context: this,
+					contentType: 'text/plain',
+					crossDomain: 'true',			
+					data : JSON.stringify({}),
+					success: this.loadSucceeded,
+					complete: this.loadCompleted,
+			});
+
+		}
+	},
+
+	loadSucceeded: function(data){
+		var items = this.parse(data);
+		var lista = [];
+
+		if(!data || !items){
+			App.get('proyectosController').set('loaded', true);
+			return;
+		}
+
+		items.proyectos.forEach(function(i){
+			lista.pushObject(App.Proyecto.create(i));
+		});
+
+		App.set('proyectosController.content', lista);
+		App.get('proyectosController').set('loading', false);
+		App.get('proyectosController').set('loaded', true);
+	},
+});
