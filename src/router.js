@@ -593,6 +593,44 @@ App.Router =  Em.Router.extend({
 						},
 					}),							
 				}),	
+				proyectos: Em.Route.extend({
+					route: '/proyectos',
+
+	                deserialize: function(router, params) {
+						var deferred = $.Deferred();
+						
+						App.proyectosController = App.ProyectosController.create();
+
+						fn = function() {
+							if (App.get('proyectosController.loaded'))
+							{
+								App.get('proyectosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							}
+						};
+
+						App.get('proyectosController').addObserver('loaded', this, fn);
+						App.get('proyectosController').load();
+										
+						return deferred.promise();
+	                },
+
+	                connectOutlets: function(router, context) {
+                        var appController = router.get('applicationController');
+                        appController.connectOutlet('help', 'Help');	
+                        appController.connectOutlet('main', 'proyectos');
+                        appController.connectOutlet('menu', 'subMenu');
+
+                        App.get('menuController').seleccionar(9, 0, 3);
+                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Dirección Secretaría'},
+							{titulo: 'Mesa de Entrada'},
+							{titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
+						]);			
+	                },
+				}),
 			}),
 
 
