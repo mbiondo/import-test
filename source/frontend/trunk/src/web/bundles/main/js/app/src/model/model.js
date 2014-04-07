@@ -1961,3 +1961,62 @@ App.ComisionIntegrante = Em.Object.extend({
         }.property('nombre'),
 });
 
+App.Proyecto = Em.Object.extend({
+	id:	'',
+	tipo: '',
+	titulo:	'',
+	expdip: '',
+	iniciado: '',
+	pubFecha: '',
+	firmantes: [],
+	giro: [],
+	tramite: [],
+	mjeNum: '',
+	mjeFecha: '',
+
+	label: function(){
+		return this.get('titulo') + " " + this.get('tipo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
+	}.property('titulo'),
+
+	firmantesLabel: function() {
+		var strFirmantes = [];
+
+		if (this.get('firmantes')) {
+			var firmantes = this.get('firmantes').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
+			
+			var regex = new RegExp('-PE-');
+			var regex2 = new RegExp('-JGM-');
+			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
+				return firmantes.objectAt(0).nombre;
+			} else {
+				if (firmantes.length < 3) {
+					firmantes.forEach(function (firmante) {
+						strFirmantes.addObject(firmante.nombre);
+					});
+					return strFirmantes.join(' y ');
+				}
+				else {
+					return firmantes.objectAt(0).nombre + " y otros (" + (firmantes.length - 1 ) + ")"; 
+				}		
+			}
+		}
+	}.property('firmantes'),	
+
+	girosLabel: function () {
+		var field = "orden";
+		var giros = this.get('giro').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+
+		if (giros.length > 0)
+		{			
+			if (giros.length == 1)
+				return giros.objectAt(0).comision;
+			else
+				return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
+		}
+
+	}.property('giro'),
+});
