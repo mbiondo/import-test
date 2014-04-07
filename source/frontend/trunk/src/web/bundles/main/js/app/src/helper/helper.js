@@ -7,6 +7,7 @@ Handlebars.registerHelper("linkExpediente", function(id, options) {
   return "#/expedientes/expediente/" + id + "/ver";
 });
 
+
 Handlebars.registerHelper("linkEnvio", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
@@ -186,3 +187,11 @@ Handlebars.registerHelper("linkExpedienteGirar", function(id, options) {
 
   return "#/direccion/secretaria/mesa/de/entrada/proyecto/"+id+"/girar";
 });
+
+Handlebars.registerHelper("linkProyecto", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/direccion/secretaria/mesa/de/entrada/proyecto/" + id + "/ver";
+});
+
