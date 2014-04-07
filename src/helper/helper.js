@@ -172,3 +172,17 @@ Handlebars.registerHelper("linkComisionesListado", function(id, options) {
 
   return "#/comisiones/comision/"+id+"/ver";
 });
+
+Handlebars.registerHelper("linkExpedienteEditar", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/direccion/secretaria/mesa/de/entrada/proyecto/"+id+"/editar";
+});
+
+Handlebars.registerHelper("linkExpedienteGirar", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/direccion/secretaria/mesa/de/entrada/proyecto/"+id+"/girar";
+});
