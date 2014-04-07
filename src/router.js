@@ -2920,12 +2920,15 @@ App.Router =  Em.Router.extend({
 										var t = App.CitacionTema.create(tema);
 										temas.addObject(t);
 										//t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
-										var proyectos = t.get('proyectos');
-										proyectos.forEach(function (proyecto) {
+										var proyectos = [];
+										t.get('proyectos').forEach(function (p) {
+											var proyecto = App.Expediente.create(p);
 											if (t.get('grupo')) {
 												proyecto.tema = t.get('descripcion');
 											}
+											proyectos.addObject(proyecto);
 										});									
+										t.set('proyectos', proyectos)
 									});
 									
 									citacion.set('estado', App.CitacionEstado.create(citacion.get('estado')));

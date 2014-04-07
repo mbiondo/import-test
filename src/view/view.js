@@ -4559,7 +4559,7 @@ App.DictamenTextoCrearView = Ember.View.extend({
 
 
 	listaFirmantes: function () {
-		var filtered;
+		var filtered = [];
 		if (this.get('filterFirmantes') != '')
 		{
 			var regex = new RegExp(this.get('filterFirmantes').toString().toLowerCase());
@@ -4577,10 +4577,10 @@ App.DictamenTextoCrearView = Ember.View.extend({
 			this.get('content.firmantes').forEach(function (firmante) {
 				filtered = filtered.without(firmante)
 			});
-			return filtered;
+			return filtered.slice(0, 20);
 		}
 		else
-			return filtered;
+			return filtered.slice(0, 20);
 	}.property('filterFirmantes', 'content.firmantes', 'adding', 'App.firmantesController.content.@each'),
 
 	willInsertElement: function(){
