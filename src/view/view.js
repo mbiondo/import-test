@@ -7817,3 +7817,95 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 
 });
 
+App.ProyectoSearchView = Em.View.extend({
+	templateName: 'proyecto-search',
+	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
+	collapse: true,
+	loading: false,
+
+	collapseToggle: function(){
+		this.set('collapse', !this.get('collapse'));
+	},
+
+	comisiones: function () {
+		var comisiones = [];
+		if (App.get('comisionesController.content')) {
+			App.get('comisionesController.content').forEach(function (comision) {
+				comisiones.pushObject(comision.nombre);
+			});
+		}
+		return comisiones;
+	}.property('App.comisionesController.content.@each'),
+
+	limpiar: function () {
+		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	didInsertElement: function () {
+		this._super();
+		_self = this;
+		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
+		Ember.run.next(function () { 
+			if (App.get('proyectosController.query.dirty')) {
+				_self.limpiar(); 
+			}
+		});
+	},
+
+	buscar: function () {
+		App.get('proyectosController').set('loaded', false);
+		App.proyectosController.set('pageNumber', 1);
+		App.proyectosController.set('content', []);
+
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+/*
+			if ( url ) {
+				$.ajax({
+						url:  url,
+						dataType: 'JSON',
+						type: 'POST',
+						context: this,
+						contentType: 'text/plain',
+						crossDomain: 'true',			
+						data : JSON.stringify({}),
+						success: this.loadSucceeded,
+						complete: this.loadCompleted,
+				});
+
+			}
+*/
+
+		App.proyectosController.load();
+		this.set('loading', true);
+	},
+
+	proyectosLoaded: function () {
+		if (App.get('proyectosController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
+	},
+
+	borrar: function () {
+		App.searchController.deleteObject(App.proyectosController.get('query'));
+		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	guardar: function () {
+		if (App.proyectosController.get('query.id'))
+		{
+			App.proyectosController.get('query').save();	
+		} 
+		else 
+		{
+			App.proyectosController.get('query').set('usuario', App.userController.get('user.cuil'));
+			App.proyectosController.get('query').create();
+			if (App.searchController.content)
+			{
+				App.searchController.content.pushObject(App.proyectosController.get('query'));
+			}
+		}
+	},
+});
