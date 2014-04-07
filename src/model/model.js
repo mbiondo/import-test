@@ -1775,7 +1775,7 @@ App.Bloque = Ember.Object.extend({
 });
 
 App.InterBloque = Ember.Object.extend({
-	url: 'interBloque',
+	url: 'interBloques',
 	auditable: true,
 	serializable: ['id', 'nombre'],
 });
