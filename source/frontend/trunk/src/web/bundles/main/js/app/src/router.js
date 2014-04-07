@@ -2915,11 +2915,11 @@ App.Router =  Em.Router.extend({
 									citacion.get('temas').forEach(function (tema) {
 										var t = App.CitacionTema.create(tema);
 										temas.addObject(t);
-										t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
+										//t.set('proyectos', mapObjectsInArrays(App.get('citacionCrearController.expedientes'), t.get('proyectos')));
 										var proyectos = t.get('proyectos');
 										proyectos.forEach(function (proyecto) {
 											if (t.get('grupo')) {
-												proyecto.set('tema', t.get('descripcion'));
+												proyecto.tema = t.get('descripcion');
 											}
 										});									
 									});
