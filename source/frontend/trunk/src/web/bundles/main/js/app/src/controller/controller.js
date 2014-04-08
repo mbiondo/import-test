@@ -1688,7 +1688,7 @@ App.ExpedientesController = App.RestController.extend({
 	pageNumber: 1,
 
 	query: null,
-	
+
 	buildURL: function (filterText) {
 		var url =  this.get('url');
 		if (this.get('useApi'))
@@ -1713,6 +1713,7 @@ App.ExpedientesController = App.RestController.extend({
 			url = App.get('apiController').get('url') + url;
 
 		url = url + "?pageNumber=" + this.get('pageNumber') + "&pageSize=" + this.get('pageSize');
+
 
 		if (this.get('query')) 
 		{
@@ -4836,13 +4837,25 @@ App.ProyectosController = App.RestController.extend({
 		this.set('pageNumber', this.get('pageNumber') + 1);
 		this.load();
 	},
-
 	load: function() {
 		this.set('loaded', false);
+
+		var getJSON = {};
+
+		if(this.get('query'))
+		{
+			getJSON = this.get('query');
+		}
+
+		getJSON = JSON.stringify(getJSON);
+
+
+
 
 		var url =  this.get('url');
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
+
 
 		if ( url ) {
 			$.ajax({
@@ -4852,7 +4865,7 @@ App.ProyectosController = App.RestController.extend({
 					context: this,
 					contentType: 'text/plain',
 					crossDomain: 'true',			
-					data : JSON.stringify({}),
+					data : getJSON,
 					success: this.loadSucceeded,
 					complete: this.loadCompleted,
 			});
