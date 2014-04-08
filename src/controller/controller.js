@@ -1205,7 +1205,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 		if (this.get('content'))
 		{
 			provincias = $.map(this.get('content'), function(key){ return key.provincia; }).sort(); // Recorro cada item
-			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
+			provincias_unique = provincias.uniq(); // Elimino repetidos
 
 			provincias_unique.forEach(function(item){
 				var cant = 0;
@@ -1229,7 +1229,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 		if (this.get('content'))
 		{
 			provincias = $.map(this.get('content'), function(key){ return key.provincia; }).sort(); // Recorro cada item
-			provincias_unique = $.unique($.unique(provincias)); // Elimino repetidos
+			provincias_unique = provincias.uniq(); // Elimino repetidos
 
 			provincias_unique.forEach(function(item){
 				var cant = 0;
