@@ -7808,8 +7808,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
-//			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
-			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip));
+			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
 		});
 
 		this.set('mostrarMasEnabled', true);
