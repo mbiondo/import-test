@@ -1656,7 +1656,10 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	},
 	appendURLforComision: function () {
 		var comision = App.get('expedientesArchivablesController.comision');
-		return "&comision=" + comision.nombre;				
+		if (comision)
+			return "&comision=" + comision.nombre;				
+		else
+			return "";
 	},
 	prueba : function(){
 		console.log(this.get('comision.nombre'));
