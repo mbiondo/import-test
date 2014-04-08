@@ -7762,6 +7762,11 @@ App.NotificacionItemView = Ember.View.extend({
 		if (this.get('notificacionLeida.createSuccess')) {                                                            
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);
 			this.get('content').set('leida', true);
+			if (App.get('notificacionesController'))
+			{
+				var n  = App.get('notificacionesController.content').findProperty('id', this.get('content.id'));
+				n.set('leida', true);
+			}
 			this.set('loading', false);
 		} else if (this.get('notificacionLeida.createSuccess') == false) {
 			this.get('notificacionLeida').removeObserver('createSuccess', this, this.createSuccessed);

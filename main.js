@@ -778,12 +778,19 @@ if (user) {
 		});
 	}
 
+
+
 	usuario.set('rolesmerged', rolesmerged);
 	usuario.set('roles', roles);
+
 	App.userController.set('user', usuario);
 	
+	App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+	App.get('notificacionesFiltradasController').load();
+
 	App.get('searchController').load();
 	App.get('notificacionesController').load();
+	
 }
 
 $('#loadingScreen').remove();

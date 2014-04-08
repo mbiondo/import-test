@@ -671,6 +671,9 @@ App.UserController = Em.Controller.extend({
 										
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
+					
+					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+					App.get('notificacionesFiltradasController').load();
 
 
 					App.get('router').transitionTo('loading');
