@@ -338,7 +338,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
-								{titulo: 'Giros'},
+                                                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
 								{titulo: 'Girar expediente'}
 							]);								
 						},						
@@ -370,6 +370,7 @@ App.Router =  Em.Router.extend({
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Mesa de entrada'},
+                                                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
 								{titulo: 'Ver'},
 							]);		
 
@@ -408,6 +409,7 @@ App.Router =  Em.Router.extend({
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Mesa de entrada'},
+                                                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
 								{titulo: 'Editar'},
 							]);		
 
