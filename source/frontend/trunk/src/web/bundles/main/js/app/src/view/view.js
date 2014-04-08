@@ -4380,8 +4380,14 @@ App.DictamenCargarView = Ember.View.extend({
 				  content: texto.get('firmantes'),
 				  sortProperties: ['orden'],
 				  sortAscending: true
-				});		
-				texto.set('firmantes', fController.get('arrangedContent'));				
+				});	
+
+				fController.get('content').forEach(function (firmante) {
+					delete firmante.id;
+				});
+
+				texto.set('firmantes', fController.get('arrangedContent'));
+				
 				orden++;
 			});
 
