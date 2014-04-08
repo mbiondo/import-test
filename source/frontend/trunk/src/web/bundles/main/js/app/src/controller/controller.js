@@ -1808,7 +1808,11 @@ App.EnvioArchivoController = App.RestController.extend({
 		item = App.Envio.extend(App.Savable).create(data);
 		item.setProperties(data);
 		
-		App.get('envioArchivoController').addObject(item);
+		App.get('userController.user.comisiones').forEach(function(comision){
+			if (item.comision.id == comision.id){
+				App.get('envioArchivoController').addObject(item);
+			}
+		});	
 	},
 	loadByComisionesUser: function () {
 		this.set('loaded', false);
