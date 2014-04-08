@@ -1646,14 +1646,13 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-
-		url += "/?expdip=" + filterText;
+		url += "/" + filterText;
+		//url += "/?expdip=" + filterText;
 
 		url += this.appendURLforComision();
 
 		return url;		
 	},
-	
 	appendURLforComision: function () {
 		var comision = App.get('expedientesArchivablesController.comision');
 		if (comision)
