@@ -1641,13 +1641,26 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	loaded: false,
 	async: false,
 
-	buildURL: function (filterText) {
+	buildURL: function (filterText) {	
+	console.log(this.get('comision.nombre'));	
 		var url =  this.get('url');
+
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-		url += "/" + filterText;
+//		url += "/" + filterText;
+		url += "/?expdip=" + filterText;
+
+		url += this.appendURLforComision();
+
 		return url;		
-	},	
+	},
+	appendURLforComision: function () {
+		var comision = App.get('expedientesArchivablesController.comision');
+		return "&comision=" + comision.nombre;				
+	},
+	prueba : function(){
+		console.log(this.get('comision.nombre'));
+	}.observes('comision'),
 
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);
