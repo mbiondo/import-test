@@ -175,8 +175,8 @@ App.Router =  Em.Router.extend({
 			deserialize: function () {
 
 				App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
-				App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
 				App.notificacionesFiltradasController.set('url', "notification/all");
+				App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
 
 				if (App.get('userController').get('isLogin'))
 				{
