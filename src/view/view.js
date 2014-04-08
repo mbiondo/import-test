@@ -1717,6 +1717,7 @@ App.ExpedienteSearchView = Em.View.extend({
 		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 		Ember.run.next(function () { 
 			if (App.get('expedientesController.query.dirty')) {
+				console.log(App.get('expedientesController.query.dirty'));
 				_self.limpiar(); 
 			}
 		});
@@ -7838,7 +7839,7 @@ App.ProyectoSearchView = Em.View.extend({
 	}.property('App.comisionesController.content.@each'),
 
 	limpiar: function () {
-		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({}));
 	},
 
 	didInsertElement: function () {
@@ -7855,27 +7856,6 @@ App.ProyectoSearchView = Em.View.extend({
 		App.get('proyectosController').set('loaded', false);
 		App.proyectosController.set('pageNumber', 1);
 		App.proyectosController.set('content', []);
-/*
-		var url =  'ME/exp/proyectos/search';
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
-
-			if ( url ) {
-				$.ajax({
-						url:  url,
-						dataType: 'JSON',
-						type: 'POST',
-						context: this,
-						contentType: 'text/plain',
-						crossDomain: 'true',			
-						data : JSON.stringify({}),
-						success: this.loadSucceeded,
-						complete: this.loadCompleted,
-				});
-
-			}
-*/
-
 		App.proyectosController.load();
 		this.set('loading', true);
 	},
