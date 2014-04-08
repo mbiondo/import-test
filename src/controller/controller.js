@@ -39,7 +39,7 @@ App.Savable = Ember.Mixin.create({
 		}		
 	},
 
-	deleteSucceeded: function () {
+	deleteSucceeded: function (data) {
 		if (this.get('useApi') && data.id) {
 			this.set('deleteSuccess', true);
 		}
@@ -69,7 +69,7 @@ App.Savable = Ember.Mixin.create({
 		}
 	},
 
-	deleteCompleted: function () {
+	deleteCompleted: function (xhr) {
 
 		if (this.get('useApi') && xhr.status == 200) {
 			this.set('deleteSuccess', true);
@@ -1646,8 +1646,8 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-		url += "/" + filterText;
-		//url += "/?expdip=" + filterText;
+		//url += "/" + filterText;
+		url += "/?expdip=" + filterText;
 
 		url += this.appendURLforComision();
 

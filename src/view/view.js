@@ -7902,30 +7902,30 @@ App.BloqueItemView = Ember.View.extend({
 	isEdit: false,
 	classNames: ['wg-li-eliminar'],
 	contentController: null,
-	oldContent: null,
+	newName: '',
 
 	templateName: 'bloque-list-item',
 
 	editar: function () {
-		this.set('oldContent', this.get('content.nombre'));
+		this.set('newName', Ember.copy(this.get('content.nombre')));
 		this.set('isEdit', true);
 	},
 
 	borrar: function () {
 		this.get('content').delete();
-		if (this.get('contentController')) {
-			this.get('contentController').removeObject(this.get('content'));
+		if (App.get(this.get('contentController'))) {
+			App.get(this.get('contentController')).removeObject(this.get('content'));
 		}
 	},
 
 	guardar: function () {
+		this.get('content').set('nombre', this.get('newName'));
 		this.get('content').save();
 		this.set('isEdit', false);
 	},
 
 	cancelar: function () {
 		this.set('isEdit', false);
-		this.set('content.nombre', oldContent);
 	},
 });
 
