@@ -1844,7 +1844,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 			listaEnvioArchivo.set('fecha', moment(fecha, 'DD/MM/YYYY').format("YYYY-MM-DD  HH:mm"));
 			listaEnvioArchivo.set('autor', usuario.get('nombre') + " " + usuario.get('apellido') );
 			listaEnvioArchivo.set('expedientes', seleccionados);
-			listaEnvioArchivo.set('comision', this.usuarios);
+			listaEnvioArchivo.set('comision', App.get('expedientesArchivablesController.comision'));
 			
 			var listaJSON = JSON.stringify(listaEnvioArchivo);
 			
@@ -1858,6 +1858,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 					data : listaJSON,
 					success: this.createSucceeded,
 			});
+			
 		}
 	},
 	createSucceeded: function (data) {
