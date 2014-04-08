@@ -708,7 +708,7 @@ App.Envio = Em.Object.extend({
 	seleccionado: false,
 
 	label: function () {
-		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('autor') + this.get('estado');
+		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('autor') + this.get('comision.nombre') + this.get('estado');
 	}.property('autor'),
 
 });
