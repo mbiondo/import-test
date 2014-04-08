@@ -1891,7 +1891,7 @@ App.EnvioArchivoItemListView = Ember.View.extend({
 
 App.EnvioArchivoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.EnvioArchivoItemListView, 	
-	columnas: ['Ver Env&iacute;o', 'Fecha Archivado', 'Autor', 'Estado'],
+	columnas: ['Ver Env&iacute;o', 'Fecha Archivado', 'Autor', 'Comisiones', 'Estado'],
 });
 
 App.EnviosArchivadosView = App.ListFilterView.extend({
@@ -7851,16 +7851,15 @@ App.ProyectoSearchView = Em.View.extend({
 			}
 		});
 	},
-
 	buscar: function () {
 		App.get('proyectosController').set('loaded', false);
 		App.proyectosController.set('pageNumber', 1);
 		App.proyectosController.set('content', []);
-
-		var url =  this.get('url');
+/*
+		var url =  'ME/exp/proyectos/search';
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-/*
+
 			if ( url ) {
 				$.ajax({
 						url:  url,
