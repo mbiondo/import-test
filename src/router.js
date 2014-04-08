@@ -600,6 +600,8 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred();
 						
 						App.proyectosController = App.ProyectosController.create();
+						App.get('proyectosController').set('loaded', false);
+						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
 						fn = function() {
 							if (App.get('proyectosController.loaded'))
