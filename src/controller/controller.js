@@ -671,7 +671,7 @@ App.UserController = Em.Controller.extend({
 										
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
-					
+
 					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
@@ -1290,6 +1290,7 @@ App.NotificacionesController = App.RestController.extend({
 	useApi: false,
 	sortProperties: ['fecha'],
 	sortAscending: false,
+	oldUnreads: 0,
 
 	load: function() {
 
@@ -1341,6 +1342,21 @@ App.NotificacionesController = App.RestController.extend({
 	}.observes('content.@each.leida'),
 
 	unreads: 0,
+
+	checkUnreads: function () {
+		this.set('oldUnreads', this.get('unreads'));
+	},
+
+	haveNews: function () {
+		if (this.get('oldUnreads') == this.get('unreads'))
+			return false;
+		else
+			if (this.get('unreads') >= this.get('oldUnreads'))
+				return true;
+			else
+				return false;
+	}.property('unreads', 'oldUnreads'),
+
 });
 
 
