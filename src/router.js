@@ -1910,57 +1910,115 @@ App.Router =  Em.Router.extend({
 			biografia: Ember.Route.extend({
 				route: '/alerta-temprana',
 
-				enter: function () {
-					App.get('ioController').joinRoom('biographys');
-				},
+				index: Em.Route.extend({	
+					route : '/', 				
+					enter: function () {
+						App.get('ioController').joinRoom('biographys');
+					},
 
-				exit: function () {
-					App.get('ioController').leaveRoom('biographys');
-				},
+					exit: function () {
+						App.get('ioController').leaveRoom('biographys');
+					},
 
-				deserialize: function(router, params) {					
-					var deferred = $.Deferred();
-					
-					App.bloquesController = App.BloquesController.create();
-					App.interBloquesController = App.InterBloquesController.create();
+					deserialize: function(router, params) {					
+						var deferred = $.Deferred();
+						
+						App.bloquesController = App.BloquesController.create();
+						App.interBloquesController = App.InterBloquesController.create();
 
-					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
-					fn = function() {
-						if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
-						{
-							App.get('bloquesController').removeObserver('loaded', this, fn);	
-							deferred.resolve(null);					
-						}
-					};
+						fn = function() {
+							if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
+							{
+								App.get('bloquesController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							}
+						};
 
-					App.get('bloquesController').addObserver('loaded', this, fn);
-					App.get('interBloquesController').addObserver('loaded', this, fn);
-					App.get('comisionesController').addObserver('loaded', this, fn);
+						App.get('bloquesController').addObserver('loaded', this, fn);
+						App.get('interBloquesController').addObserver('loaded', this, fn);
+						App.get('comisionesController').addObserver('loaded', this, fn);
 
-					App.get('bloquesController').load();
-					App.get('comisionesController').load();
-					App.get('interBloquesController').load();
+						App.get('bloquesController').load();
+						App.get('comisionesController').load();
+						App.get('interBloquesController').load();
 
-									
-					return deferred.promise();
+										
+						return deferred.promise();
 
-				},	
-					
+					},	
+						
 
-				connectOutlets: function(router, context) {
-					var appController = router.get('applicationController');
-					appController.connectOutlet('help', 'Help');
-					appController.connectOutlet('main', 'ExpedientesBiography');
-					appController.connectOutlet('menu', 'subMenu');
-					
-					App.get('breadCumbController').set('content', [
-						{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'}
-					]);					
-					App.get('menuController').seleccionar(10, 0, 0);
-					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-				},
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'ExpedientesBiography');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'}
+						]);					
+						App.get('menuController').seleccionar(10, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+				expedienteConsulta: Ember.Route.extend({
+					route: '/expediente/:expediente/ver',
 
+					deserialize: function(router, params) {
+						App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
+						App.bloquesController = App.BloquesController.create();
+						App.interBloquesController = App.InterBloquesController.create();
+						
+						var deferred = $.Deferred(),
+						fn = function() {
+							if (App.get('expedienteConsultaController.loaded')) {
+								var expediente = App.get('expedienteConsultaController.content');
+								deferred.resolve(expediente);
+								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
+							}
+						};
+						
+						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
+						App.get('expedienteConsultaController').load();		
+
+
+
+						App.get('bloquesController').addObserver('loaded', this, fn);
+						App.get('interBloquesController').addObserver('loaded', this, fn);
+
+						App.get('bloquesController').load();
+						App.get('interBloquesController').load();
+
+						return deferred.promise();
+					},
+
+					serialize: function(router, context) {
+						// console.log('serialize');
+						var expedienteId = context.get('id');
+						return {expediente: expedienteId}
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'expedienteConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Expedientes', url: '#/expedientes'},
+							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
+						]);					
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'},
+							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
+						]);					
+						App.get('menuController').seleccionar(10, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
+					},
+				}),
 			}),
 
 			expedienteConsulta: Ember.Route.extend({
