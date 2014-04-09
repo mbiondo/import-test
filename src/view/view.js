@@ -7694,21 +7694,30 @@ App.BloquesListView = Ember.View.extend({
 
 App.BloqueCrearView = Ember.View.extend({
 	templateName: 'bloque-crear',
+	existeItem: false,
 
 	crear: function (){
 		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
 		this.set('loading', true);
-	},
 
+		App.get('bloquesController').load();
+	},
 	createSucceeded: function () {
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
 			var b = this.get('content');
+//        	this.set('existBloque', false);
             this.set('loading', false);
 			this.objectCreate(b);
+
+			this.set('existeItem', false);
+			$.jGrowl('Se ha creado con éxito!', { life: 5000 });
         } else if (this.get('content.createSuccess') == false) {
+//        	this.set('existBloque', true);
             this.set('loading', false);
+            this.set('existeItem', true);
+            $.jGrowl('Ya está creado!', { life: 5000 });
 		}
 	},
 
