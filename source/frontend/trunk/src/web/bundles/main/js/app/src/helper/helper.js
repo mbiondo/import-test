@@ -7,6 +7,13 @@ Handlebars.registerHelper("linkExpediente", function(id, options) {
   return "#/expedientes/expediente/" + id + "/ver";
 });
 
+Handlebars.registerHelper("linkAlertaTemprana", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/expedientes/alerta-temprana/expediente/" + id + "/ver";
+});
+
 
 Handlebars.registerHelper("linkEnvio", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
