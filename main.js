@@ -339,6 +339,7 @@ App.menuController = App.MenuController.create({
 						}),
 					],
 				}),
+				/*
 				App.MenuItem.create({
 					id: 3,
 					titulo: 'Análisis de Competencia Mixta',
@@ -352,6 +353,7 @@ App.menuController = App.MenuController.create({
 						}),			
 					],
 				}),
+				*/
 				App.MenuItem.create({
 					id: 4,
 					titulo: 'Comisiones',
