@@ -1665,10 +1665,11 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
-		//url += "/" + filterText;
-		url += "/?expdip=" + filterText;
+		url += "/" + filterText;
 
-		url += this.appendURLforComision();
+//		url += "?expdip=" + filterText;
+
+//		url += this.appendURLforComision();
 
 		return url;		
 	},
@@ -4925,4 +4926,61 @@ App.ProyectosController = App.RestController.extend({
 		App.get('proyectosController').set('loading', false);
 		App.get('proyectosController').set('loaded', true);
 	},
+});
+
+App.EnviosArchivadosExpedientesArchivablesController = App.RestController.extend({
+	url: 'exp/proyectos/archivables',
+	type: App.ExpedienteArchivable,
+	useApi: true,
+	sortProperties: ['fechaPub'],
+	sortAscending: true,
+	loaded: false,
+	async: false,
+
+	buildURL: function (filterText) {	
+		var url =  this.get('url');
+
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+//		url += "/" + filterText;
+
+		url += "?expdip=" + filterText;
+
+		url += this.appendURLforComision();
+
+		return url;		
+	},
+	appendURLforComision: function () {
+		var comision = App.get('expedientesArchivablesController.comision');
+		if (comision)
+			return "&comision=" + comision.nombre;				
+		else
+			return "";
+	},
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);
+		
+		this.set('content', []);
+
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+		
+		this.set('loaded', true);
+	},
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		var item = App.ExpedienteArchivable.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.addObject(item);	
+	},	
 });
