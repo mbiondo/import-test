@@ -694,7 +694,7 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Dirección de Secretaría'},
-							{titulo: 'Diputados'},
+							{titulo: 'Autoridades'},
 							{titulo: 'Alta'}
 						]);									
 					},
@@ -736,7 +736,8 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Dirección de Secretaría'},
-							{titulo: 'Diputados'}
+							{titulo: 'Autoridades'},
+							{titulo: 'Listado'}
 						]);								
 					},
 				}),			

@@ -819,10 +819,11 @@ App.RestController = Em.ArrayController.extend({
 	loaded : false,
 	useAPi: true,
 	sortProperties: ['id'],
-
+	oldFilterText: '',
 
 	buildURL: function (filterText) {
 		var url =  this.get('url');
+		this.set('oldFilterText', filterText);
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
 		url += "?filter=" + filterText;
@@ -1660,6 +1661,10 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 	loaded: false,
 	async: false,
 
+	comisionChange: function () {
+		this.set('content', []);
+	}.observes('App.expedientesArchivablesController.comision'),
+
 	buildURL: function (filterText) {	
 		var url =  this.get('url');
 
@@ -1667,9 +1672,9 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 			url = App.get('apiController').get('url') + url;
 		url += "/" + filterText;
 
-//		url += "?expdip=" + filterText;
+		url += "?expdip=" + filterText;
 
-//		url += this.appendURLforComision();
+		url += this.appendURLforComision();
 
 		return url;		
 	},
@@ -4529,6 +4534,8 @@ App.AutoridadesController = App.RestController.extend({
 
 App.DiputadosVigentesController = App.RestController.extend({
 	url: 'dip/diputados/' + moment().format('DD/MM/YYYY') + '/resumen',
+	sortProperties: ['fechaJuramento'],
+	sortAscending: false,
 	useApi: true,
 	loaded: false,
 	type: App.Mandato,

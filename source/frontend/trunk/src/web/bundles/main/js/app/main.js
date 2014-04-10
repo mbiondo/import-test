@@ -90,10 +90,10 @@ App.menuController = App.MenuController.create({
 			icono: 'ic ic-pen',
 			
 			subMenu: [
-/*
+
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Movimiento Diputados',
+					titulo: 'Movimiento Autoridades',
 					url: '',
 					roles: [['ROLE_USER']],
 					subMenu: [
@@ -101,18 +101,18 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							roles: [['ROLE_USER']],
 							titulo: 'Consulta',
-							url: '#/direccion/secretaria/diputados/listado',
+							url: '#/direccion/secretaria/autoridades/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 							titulo: 'Alta',
-							url: '#/direccion/secretaria/diputados/alta',
+							url: '#/direccion/secretaria/autoridades/alta',
 						}),	
 					],
 				}),
-*/				
+			
 
 				App.MenuItem.create({
 					id: 0,

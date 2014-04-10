@@ -2575,9 +2575,9 @@ App.CitacionCrearView = Em.View.extend({
 		
 		$('.timepicker').timeEntry('setTime', this.get('startHora'));
 		
-		//var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
 		
-		//App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
+		App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 		
 		//$('#crear-citacion-form').validationEngine('attach');
 				
@@ -2660,10 +2660,6 @@ App.CitacionCrearView = Em.View.extend({
 			App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
 			App.get('citacionCrearController').create();		
 		}
-
-		
-		
-		
 	},
 	
 	crearInvitado: function () {
@@ -2830,11 +2826,7 @@ App.CitacionCrearView = Em.View.extend({
 		App.set('citacionCrearController.expedientes', []);
 
 		var fo = App.get('citacionCrearController.content.comisiones.firstObject');
-		if (fo)
-		{
-			App.get('citacionCrearController').addObserver('loaded', this, this.cargarExpedientesSuccess);
-			App.get('citacionCrearController').cargarExpedientes();
-		}
+		App.get('expedientesArchivablesController').set('comision', fo);
 
 		fo = null;
 		
@@ -6408,17 +6400,17 @@ App.CrearDiputadoView = Ember.View.extend({
 
 
 App.ListaDiputadosView = Ember.View.extend({
-	templateName: 'diputados',
+	templateName: 'autoridades',
 });
 
-App.DiputadoListItemView = Ember.View.extend({
+App.AutoridadListItemView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
 	templateName: 'mandato',
 });
 
-App.DiputadosListView = App.ListFilterView.extend({
-	itemViewClass: App.DiputadoListItemView,
+App.AutoridadesListView = App.ListFilterView.extend({
+	itemViewClass: App.AutoridadListItemView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
 	columnas: ['Fecha Juramento', 'Nombre', 'Partido', 'Distrito'],
 });
