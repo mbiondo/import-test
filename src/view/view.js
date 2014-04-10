@@ -7917,6 +7917,7 @@ App.BloqueItemView = Ember.View.extend({
 	classNames: ['wg-li-eliminar'],
 	contentController: null,
 	newName: '',
+	isEnable: true,
 
 	templateName: 'bloque-list-item',
 
@@ -7924,14 +7925,18 @@ App.BloqueItemView = Ember.View.extend({
 		this.set('newName', Ember.copy(this.get('content.nombre')));
 		this.set('isEdit', true);
 	},
-
+	enableToggle: function(){
+		this.set('isEnable', !this.get(('isEnable')));
+	},
+/*
 	borrar: function () {
+
 		this.get('content').delete();
 		if (App.get(this.get('contentController'))) {
 			App.get(this.get('contentController')).removeObject(this.get('content'));
 		}
 	},
-
+*/
 	guardar: function () {
 		this.get('content').set('nombre', this.get('newName'));
 		this.get('content').save();
