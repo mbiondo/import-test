@@ -495,10 +495,11 @@ App.LoginView = Ember.View.extend({
 		this._super();
 		this.$('#user_username'	).focus();
 	},
+
 	loginError: function(){
 		return App.get('userController.loginError');
 	}.property('App.userController.loginError'),
-	
+
 	falseLogin: function (){
 		var tmpUser = App.Usuario.extend(App.Savable).create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
 		var url = 'user/access';
@@ -548,6 +549,11 @@ App.LoginView = Ember.View.extend({
 	login: function () {
 		if(!$('#login').parsley('validate')) return false;
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
 	}
 });
 
