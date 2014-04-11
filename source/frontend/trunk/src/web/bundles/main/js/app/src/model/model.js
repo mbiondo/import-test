@@ -174,6 +174,7 @@ App.Notificacion = Em.Object.extend({
 	comisiones: [],
 	icono: '',
 	leida: false,
+	firmantes: [],
 
 	dia: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm:ss').format('DD');
@@ -190,7 +191,8 @@ App.Notificacion = Em.Object.extend({
 		"objectId",
 		"fecha",
 		"mensaje",
-		"comisiones"
+		"comisiones",
+		"firmantes"
 	],	
 });
 
@@ -2096,51 +2098,19 @@ App.ProyectoQuery = Em.Object.extend({
 
 App.Firmantesarha = Ember.Object.extend({
 	url: 'firmantesarha',
+	useApi: false,
+	auditable: true,
 	id: '',
-	userSara: [],
+	cuil: '',
+	nombre: '',
 
-	label: function(){
-//		return '';
-		return this.get('userSara.id') + " " + this.get('datosLabel') + " " + this.get('rolesLabel') + " " + this.get('comisionesLabel');
-	}.property('id'),
+	serializable: ['id', 'cuil', 'nombre'],
 
-
-	datosLabel: function () {
-		var str = this.get('userSara').cuil;
-
-		return str.htmlSafe();
-	}.property('userSara'),
-
-	rolesLabel: function () {
-		var str = "";
-		this.get('userSara.roles').forEach(function(rol){
-			str += rol.nombre;
-		});
-		return str.htmlSafe();
-	}.property('roles'),
-
-	rolesLabel2: function () {
-		var str = "";
-
-		if(this.get('userSara.roles'))
-		{		
-			this.get('userSara.roles').forEach(function(rol){
-				str += "<p>" + rol.nombre + "</p>";
-			});
-		}
-
-		return str.htmlSafe();
-	}.property('roles'),
-
-	comisionesLabel: function () {
-		var str = "";
+	normalize: function () {
 		
-		if(this.get('comisiones'))
-		{		
-			this.get('comisiones').forEach(function(comision){
-				str += comision.nombre;
-			});
-		}
-		return str.htmlSafe();
-	}.property('userSara.comisiones'),
+	},
+
+	desNormalize: function () {
+
+	},
 });

@@ -6182,6 +6182,8 @@ App.SugestView = Ember.View.extend({
 	itemViewClass: 'App.SugestListItemView',
 	desactivar: false,
 	controller: null,
+	optionLabelPath: 'content.label',
+	optionValuePath: 'content',
 
 	sugestTextChanged: function () {
 		if (!this.get('controller')) {
@@ -6224,6 +6226,7 @@ App.SugestView = Ember.View.extend({
 		
 	didInsertElement: function () {
 		this._super();
+
 	},
 });
 
@@ -6232,8 +6235,12 @@ App.SugestListItemView = Ember.View.extend({
 	templateName: 'sugest-item',
 	classNames: ['list-group-item'],
 
+	label: function () {
+		return this.get(this.get('optionLabelPath'))
+	}.property('content'),
+
 	click: function () {
-		this.get('parentView').itemSelect(this.get('content'));
+		this.get('parentView').itemSelect(this.get(this.get('optionValuePath')));
 	},
 
 	didInsertElement: function () {
@@ -6262,6 +6269,19 @@ App.SugestListView = Ember.CollectionView.extend({
 
 	itemSelect: function (item) {
 		this.get('parentView').itemSelect(item);
+	},
+
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			attrs['optionLabelPath'] = this.get('optionLabelPath');
+			attrs['optionValuePath'] = this.get('optionValuePath');
+		}
+	    return this._super(viewClass, attrs);
+	},
+
+	didInsertElement: function () {
+		this._super();
+		console.log(this.get('optionValuePath'));
 	},
 });
 
@@ -7952,18 +7972,70 @@ App.FirmantesarhaView = Ember.View.extend({
 	templateName: 'firmantesarha',
 });
 
+App.VinculateFirmanteView = Ember.View.extend({
+	tagName: 'td',
+	templateName: 'firmante-sarha-vinculo',
+	vinculo: null,
+	user: null,
+
+	didInsertElement: function () {
+		this._super();
+		var vinculo = App.Firmantesarha.extend(App.Savable).create({id: this.get('content.id')});
+		this.set('vinculo', vinculo);
+		this.get('vinculo').addObserver('loaded', this, this.vinculoLoaded);
+		this.get('vinculo').load();
+	},	
+
+	vinculoLoaded: function () {
+		if (this.get('vinculo.loaded')) {
+			if (this.get('vinculo.cuil'))  {
+				this.set('isEdit', true);
+			} else {
+				this.set('isEdit', false);
+			}
+		}
+		this.set('edited', false);
+	},
+
+	cuilChange: function () {
+		this.set('edited', true);
+	}.observes('vinculo.cuil'),
+
+	guardar: function () {
+		this.get('vinculo').set('nombre', this.get('content.label'));
+
+		if (this.get('isEdit'))
+			this.get('vinculo').save();
+		else
+			this.get('vinculo').create();
+
+		this.set('edited', false);
+	},
+
+	cancelar: function () {
+		this.get('vinculo').load();
+		this.set('edited', false);
+	},
+
+	cambiar: function () {
+		this.set('vinculo.cuil', '');
+	},
+
+})
+
 App.FirmantesarhaListItemView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'firmantesarha-list-item',
 
 	crearVinculo: function () {
-		// App.VincularFirmanteView.popup();
+		//App.VincularFirmanteView.popup();
 	},
 });
 
+
 App.FirmantesarhaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.FirmantesarhaListItemView, 	
-	columnas: ['Datos'],
+	columnas: ['Diputado', 'Vinculo'],
 });
 
 App.VincularFirmanteView = App.ModalView.extend({
