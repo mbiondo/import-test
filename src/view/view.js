@@ -7953,9 +7953,13 @@ App.FirmantesarhaView = Ember.View.extend({
 App.FirmantesarhaListItemView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'firmantesarha-list-item',
+
+	crearVinculo: function(){
+
+	}
 });
 
 App.FirmantesarhaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.FirmantesarhaListItemView, 	
-	columnas: ['ID', 'Datos', 'Avatar', 'Roles', 'Comisiones', 'Ver Firmante'],
+	columnas: ['Datos'],
 });
