@@ -7954,12 +7954,49 @@ App.FirmantesarhaListItemView = Ember.View.extend({
 	tagName: 'tr',
 	templateName: 'firmantesarha-list-item',
 
-	crearVinculo: function(){
-
-	}
+	crearVinculo: function () {
+		// App.VincularFirmanteView.popup();
+	},
 });
 
 App.FirmantesarhaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.FirmantesarhaListItemView, 	
 	columnas: ['Datos'],
+});
+
+App.VincularFirmanteView = App.ModalView.extend({
+	templateName: 'vincular-firmante',
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			_self = this;
+			if (this.get('content.id')) {
+				this.get('content').addObserver('saveSuccess', function () {
+					if (this.get('saveSuccess')) {
+						//
+					}
+				});
+				this.get('content').save();
+			} else {
+				this.get('content').addObserver('createSuccess', function () {
+					if (this.get('createSuccess')) {
+						//
+					}
+				});
+				this.get('content').create();
+			}
+			return true;
+		} else if (opts.secondary) {
+			//alert('cancel')
+		} else {
+			//alert('close')
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.get('biographyController.content'));
+		this.set('expediente', App.get('biographyController.expediente'))
+	}, 
 });
