@@ -2092,3 +2092,55 @@ App.ProyectoQuery = Em.Object.extend({
 	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo', 'archivado', 'expdip'),
 
 });
+
+
+App.Firmantesarha = Ember.Object.extend({
+	url: 'firmantesarha',
+	id: '',
+	userSara: [],
+
+	label: function(){
+//		return '';
+		return this.get('userSara.id') + " " + this.get('datosLabel') + " " + this.get('rolesLabel') + " " + this.get('comisionesLabel');
+	}.property('id'),
+
+
+	datosLabel: function () {
+		var str = this.get('userSara').cuil;
+
+		return str.htmlSafe();
+	}.property('userSara'),
+
+	rolesLabel: function () {
+		var str = "";
+		this.get('userSara.roles').forEach(function(rol){
+			str += rol.nombre;
+		});
+		return str.htmlSafe();
+	}.property('roles'),
+
+	rolesLabel2: function () {
+		var str = "";
+
+		if(this.get('userSara.roles'))
+		{		
+			this.get('userSara.roles').forEach(function(rol){
+				str += "<p>" + rol.nombre + "</p>";
+			});
+		}
+
+		return str.htmlSafe();
+	}.property('roles'),
+
+	comisionesLabel: function () {
+		var str = "";
+		
+		if(this.get('comisiones'))
+		{		
+			this.get('comisiones').forEach(function(comision){
+				str += comision.nombre;
+			});
+		}
+		return str.htmlSafe();
+	}.property('userSara.comisiones'),
+});
