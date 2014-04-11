@@ -293,7 +293,7 @@ App.Router =  Em.Router.extend({
 								appController.connectOutlet('main', 'CrearExpediente');
 							});
 							
-							App.get('menuController').seleccionar(9, 0, 0);
+							App.get('menuController').seleccionar(9, 2, 0);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.get('breadCumbController').set('content', [
@@ -331,7 +331,7 @@ App.Router =  Em.Router.extend({
 
 							appController.connectOutlet('main', 'mEExpedienteGirar', context);
 							
-							App.get('menuController').seleccionar(9, 0, 0);	
+							App.get('menuController').seleccionar(9, 2, 0);	
 
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
@@ -375,7 +375,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Ver'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 0);	
+							App.get('menuController').seleccionar(9, 2, 0);	
 
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},					
@@ -415,7 +415,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Editar'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 0);	
+							App.get('menuController').seleccionar(9, 2, 0);	
 							
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
@@ -458,7 +458,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado'},
 							]);			
 
-							App.get('menuController').seleccionar(9, 0, 2);	
+							App.get('menuController').seleccionar(9, 2, 2);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 					}),						
@@ -499,7 +499,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
 							]);			
 
-							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('menuController').seleccionar(9, 2, 1);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 					}),	
@@ -538,7 +538,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Ver'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('menuController').seleccionar(9, 2, 1);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),
@@ -592,7 +592,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Editar'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 0, 1);	
+							App.get('menuController').seleccionar(9, 2, 1);	
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},
 					}),							
@@ -631,7 +631,7 @@ App.Router =  Em.Router.extend({
                         appController.connectOutlet('main', 'proyectos');
                         appController.connectOutlet('menu', 'subMenu');
 
-                        App.get('menuController').seleccionar(9, 0, 3);
+                        App.get('menuController').seleccionar(9, 2, 3);
                         App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 						App.get('breadCumbController').set('content', [
@@ -780,7 +780,49 @@ App.Router =  Em.Router.extend({
 		                        ]);				
 		                },
 		        	}),
-				}),
+			}),
+
+			vinculos: Em.Route.extend({
+				route: "/vinculos",
+
+					listado: Em.Route.extend({
+						route: '/firmantes',
+
+		                deserialize: function(router, params) {
+							App.firmantesarhaController = App.FirmantesarhaController.create();
+
+	                        var deferred = $.Deferred(),
+
+
+	                        fn = function() {
+	                            App.get('firmantesarhaController').removeObserver('loaded', this, fn);	
+	                            deferred.resolve(null);					
+	                        };
+
+	                        App.get('firmantesarhaController').addObserver('loaded', this, fn);
+	                        App.get('firmantesarhaController').load();
+
+	                        return deferred.promise();
+		                },	
+
+		                connectOutlets: function(router, context) {
+		                        var appController = router.get('applicationController');
+		                        appController.connectOutlet('help', 'Help');	
+		                        appController.connectOutlet('main', 'Firmantesarha');
+		                        appController.connectOutlet('menu', 'subMenu');
+
+		                        App.get('menuController').seleccionar(9, 3, 0);
+		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Dirección Secretaría'},
+								{titulo: 'Vinculos'},
+								{titulo: 'Firmantes'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/vinculos/firmantes/listado'},
+							]);			
+		                },
+		        	}),
+			}),
 		}),
 
 		novedades: Em.Route.extend({
