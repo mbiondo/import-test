@@ -1771,12 +1771,14 @@ App.PlanDeLaborTentativoItem = Ember.Object.extend({
 App.Bloque = Ember.Object.extend({
 	url: 'bloques',
 	auditable: true,
-	serializable: ['id', 'nombre'],
+	enabled: true,
+	serializable: ['id', 'nombre', 'enabled'],
 });
 
 App.InterBloque = Ember.Object.extend({
 	url: 'interBloques',
 	auditable: true,
+	enabled: true,
 	serializable: ['id', 'nombre'],
 });
 
