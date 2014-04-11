@@ -7946,3 +7946,16 @@ App.BloqueItemView = Ember.View.extend({
 	},
 });
 
+App.FirmantesarhaView = Ember.View.extend({
+	templateName: 'firmantesarha',
+});
+
+App.FirmantesarhaListItemView = Ember.View.extend({
+	tagName: 'tr',
+	templateName: 'firmantesarha-list-item',
+});
+
+App.FirmantesarhaListView = App.ListFilterView.extend({ 
+	itemViewClass: App.FirmantesarhaListItemView, 	
+	columnas: ['ID', 'Datos', 'Avatar', 'Roles', 'Comisiones', 'Ver Firmante'],
+});
