@@ -5666,7 +5666,7 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 		if($('#formCrearPlanDeLabor').parsley('validate')){
 			this.get('content').normalize();
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-			this.get('content').create();			
+			this.get('content').create();		
 		}
 	},
 
@@ -5822,10 +5822,8 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 
 		if(this.get('formularioNoValido') == false)
 		{
-			console.log(this.get('item'));
 			this.get('parentView').addItem(this.get('item'));
 			this.set('item', App.PlanDeLaborTentativoItem.create({proyectos: [], dictamenes: []}));			
-			console.log(this.get('item'));
 		}
 	},
 });
@@ -5919,11 +5917,10 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 	addItem: function (item) {
 		item.set('orden', this.get('content.items').length);
 		this.get('content.items').pushObject(item);
-		this.set('isEdited', true);
+		this.guardar();
 	},
 
 	borrarItem: function (item) {
-		console.log(item);
 		this.get('content.items').removeObject(item);
 		this.set('isEdited', true);
 	},
