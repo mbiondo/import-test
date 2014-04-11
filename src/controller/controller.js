@@ -2963,6 +2963,7 @@ App.CitacionCrearController = Em.Object.extend({
 		//Crear
 		notification.create();
 
+
 	},
 	
 	confirmarCompleted: function (xhr) {
@@ -3099,6 +3100,33 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').load();
 			
 			$.jGrowl('Citación creada con éxito!', { life: 5000 });
+
+			
+			var firmantes = [
+				{id:1853, nombre: "ABRAHAM, ALEJANDRO"}
+			];
+
+					
+			
+			
+			var notiTest = App.Notificacion.extend(App.Savable).create();
+
+			//ACA TITULO DE LA NOTIFICACION
+			notiTest.set('tipo', 'firmanteTest');	
+			//Si hace falta ID del objeto modificado
+			notiTest.set('objectId', data.id);
+			//Link del objeto
+			notiTest.set('link', "#/comisiones/citaciones/citacion/" + data.id + "/ver");
+			//CreateAt
+			notiTest.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+
+			notiTest.set('mensaje', "Probando notficiacion para firmantes");
+
+			notiTest.set('firmantes', firmantes);
+			//Crear
+			notiTest.create();		
+
+
 		}
 	},
 	
