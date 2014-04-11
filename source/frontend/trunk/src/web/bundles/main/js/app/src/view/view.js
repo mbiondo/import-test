@@ -7751,6 +7751,11 @@ App.NotificacionItemView = Ember.View.extend({
 	loading: false,
 	classNameBindings: ['leida:read:unread'],
 
+	click: function () {
+		if (this.get('leida'))
+			this.marcarLeido();
+	},
+
 	leida: function () {
 		return this.get('content.leida');
 	}.property('content.leida'),
