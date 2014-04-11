@@ -790,17 +790,22 @@ App.Router =  Em.Router.extend({
 
 		                deserialize: function(router, params) {
 							App.firmantesarhaController = App.FirmantesarhaController.create();
+							App.firmantesController = App.FirmantesController.create();
 
 	                        var deferred = $.Deferred(),
 
 
 	                        fn = function() {
+	                            App.get('firmantesController').removeObserver('loaded', this, fn);	
 	                            App.get('firmantesarhaController').removeObserver('loaded', this, fn);	
 	                            deferred.resolve(null);					
 	                        };
 
 	                        App.get('firmantesarhaController').addObserver('loaded', this, fn);
 	                        App.get('firmantesarhaController').load();
+
+	                        App.get('firmantesController').addObserver('loaded', this, fn);
+	                        App.get('firmantesController').load();
 
 	                        return deferred.promise();
 		                },	
