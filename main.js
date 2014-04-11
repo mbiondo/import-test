@@ -115,7 +115,7 @@ App.menuController = App.MenuController.create({
 			
 
 				App.MenuItem.create({
-					id: 0,
+					id: 2,
 					titulo: 'Mesa de Entrada',
 					url: '',
 					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
@@ -160,6 +160,22 @@ App.menuController = App.MenuController.create({
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
 							titulo: 'Listado',
 							url: '#/direccion/secretaria/envios/listado',
+						}),
+					]
+				}),
+				App.MenuItem.create({
+					id: 3,
+					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
+					titulo: 'Vinculos',
+					url: '#/direccion/secretaria/vinculos/firmantes',
+					icono: 'ic ic-archivados',
+					
+					subMenu: [
+						App.MenuItem.create({
+							id: 0,
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
+							titulo: 'Firmantes',
+							url: '#/direccion/secretaria/vinculos/firmantes',
 						}),
 					]
 				}),
