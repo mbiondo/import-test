@@ -4991,3 +4991,19 @@ App.EnviosArchivadosExpedientesArchivablesController = App.RestController.extend
 		this.addObject(item);	
 	},	
 });
+
+App.FirmantesarhaController = App.RestController.extend({
+	url: 'firmantesarha',
+	useApi: false,
+	loaded: false,
+	type: App.Firmantesarha,
+//	sortProperties: ['nombre'],
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Firmantesarha.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},		
+});
