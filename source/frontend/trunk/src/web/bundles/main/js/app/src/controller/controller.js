@@ -1335,9 +1335,6 @@ App.NotificacionesController = App.RestController.extend({
 			if (unreads) {
 				count = unreads.length;
 			}
-			this.set('latest', this.get('arrangedContent').slice(0, 10));
-		} else {
-			this.set('latest', []);
 		}
 		this.set('unreads', count);
 	}.observes('content.@each.leida'),
@@ -3099,32 +3096,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();
 			
-			$.jGrowl('Citación creada con éxito!', { life: 5000 });
-
-			
-			var firmantes = [
-				{id:1853, nombre: "ABRAHAM, ALEJANDRO"}
-			];
-
-					
-			
-			
-			var notiTest = App.Notificacion.extend(App.Savable).create();
-
-			//ACA TITULO DE LA NOTIFICACION
-			notiTest.set('tipo', 'firmanteTest');	
-			//Si hace falta ID del objeto modificado
-			notiTest.set('objectId', data.id);
-			//Link del objeto
-			notiTest.set('link', "#/comisiones/citaciones/citacion/" + data.id + "/ver");
-			//CreateAt
-			notiTest.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-
-			notiTest.set('mensaje', "Probando notficiacion para firmantes");
-
-			notiTest.set('firmantes', firmantes);
-			//Crear
-			notiTest.create();		
+			$.jGrowl('Citación creada con éxito!', { life: 5000 });	
 
 
 		}
