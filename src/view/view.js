@@ -476,6 +476,30 @@ App.ContentView = Ember.View.extend({
 			$(".toggleHelp").trigger("click");
 		});
 */
+
+		/*
+		var firmantes = [
+			{id:1853, nombre: "ABRAHAM, ALEJANDRO"}
+		];
+
+						
+		var notiTest = App.Notificacion.extend(App.Savable).create();
+
+		//ACA TITULO DE LA NOTIFICACION
+		notiTest.set('tipo', 'firmanteTest');	
+		//Si hace falta ID del objeto modificado
+		notiTest.set('objectId', 29);
+		//Link del objeto
+		notiTest.set('link', "#/visitas-guiadas/visita/29/ver");
+		//CreateAt
+		notiTest.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+
+		notiTest.set('mensaje', "Probando notficiacion para firmantes");
+
+		notiTest.set('firmantes', firmantes);
+		//Crear
+		notiTest.create();	
+		*/
 	},	
 });
 
