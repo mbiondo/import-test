@@ -4847,7 +4847,7 @@ App.SesionTurnosView = Em.View.extend({
 	},
 	
 	toggleForm: function () {
-		this.get('collapse').toggleProperty();
+		this.set('collapse', !this.get('collapse'));
 	},
 
 	imprimir : function() {
