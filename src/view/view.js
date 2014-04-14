@@ -4845,6 +4845,10 @@ App.SesionTurnosView = Em.View.extend({
 		App.get('listaController').set('content', null);
 	},
 	
+	toggleForm: function () {
+		this.get('collapse').toggleProperty();
+	},
+
 	imprimir : function() {
 		var sesion = App.get('sesionController.content').serialize();
 		var tema = App.get('temaController.content').serialize();
