@@ -8108,3 +8108,12 @@ App.VincularFirmanteView = App.ModalView.extend({
 		this.set('expediente', App.get('biographyController.expediente'))
 	}, 
 });
+
+App.addWordsInput = Ember.TextField.extend({
+	insertNewline: function(){
+		var palabra = App.get('proyectosController.query.palabra');
+		var palabras = App.get('proyectosController.query.palabras');
+
+		palabras.pushObject(palabra);
+	},
+});
