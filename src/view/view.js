@@ -5453,11 +5453,7 @@ App.SesionResumenView = Em.View.extend({
 
 App.OradoresEditorSesionConsultaView = Ember.View.extend({
 	templateName: 'oradores-editor-sesion-consulta',
-	collapse: true,
 
-	toggleForm: function () {
-		this.set('collapse', !this.get('collapse'));
-	},
 
 	crearLista: function () {
 		var temaController = App.get('temaController');
@@ -5475,7 +5471,11 @@ App.CrearTurnoInlineView = Em.View.extend({
 	filterText: '',
 	selectedFilterText: '',
 	clickGuardar: null,
+	collapse: true,
 
+	toggleForm: function () {
+		this.set('collapse', !this.get('collapse'));
+	},
 	tags: [
 			{id: "Dictamen de Mayoria", titulo: "Dictamen de Mayoria"},
 			{id: "Dictamen de Minoria", titulo: "Dictamen de Minoria"},
