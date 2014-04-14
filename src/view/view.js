@@ -477,7 +477,7 @@ App.ContentView = Ember.View.extend({
 		});
 */
 
-		/*
+/*
 		var firmantes = [
 			{id:1853, nombre: "ABRAHAM, ALEJANDRO"}
 		];
@@ -488,9 +488,9 @@ App.ContentView = Ember.View.extend({
 		//ACA TITULO DE LA NOTIFICACION
 		notiTest.set('tipo', 'firmanteTest');	
 		//Si hace falta ID del objeto modificado
-		notiTest.set('objectId', 29);
+		notiTest.set('objectId', 54);
 		//Link del objeto
-		notiTest.set('link', "#/visitas-guiadas/visita/29/ver");
+		notiTest.set('link', "#/visitas-guiadas/visita/54/ver");
 		//CreateAt
 		notiTest.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 
@@ -499,7 +499,7 @@ App.ContentView = Ember.View.extend({
 		notiTest.set('firmantes', firmantes);
 		//Crear
 		notiTest.create();	
-		*/
+*/
 	},	
 });
 
@@ -2201,7 +2201,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 	loading: false,
 
 	puedeCrear: function(){
-		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
 
 	openDocument: function () {
@@ -6895,7 +6895,7 @@ App.BiographyView = Ember.View.extend({
 	templateName: 'biography',
 
 	puedeEditar: function(){
-		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
 
 	edit: function () {
@@ -7140,6 +7140,9 @@ App.ExpedientesBiographyView = Ember.View.extend({
 
 		App.CreateBiographyInfoView.popup();
 	},
+	puedeEditar: function(){
+		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
+	}.property('App.userController.user'),
 });
 
 
@@ -7148,10 +7151,10 @@ App.ExpedienteBiographyItemView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
 	templateName: 'expediente-biography-item',
-	biographyRoleRequire: 'ROLE_LABOR_PARLAMENTARIA_EDIT', 
+	biographyRoleRequire: 'ROLE_ALERTA_TEMPRANA', 
 
 	puedeEditar: function(){
-		return App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') 
+		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
 	createBiography: function () {
 		var biography;
