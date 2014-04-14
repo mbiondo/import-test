@@ -435,8 +435,8 @@ App.Router =  Em.Router.extend({
 								}
 							};
 							
-							App.bloquesController = App.BloquesController.create();
-							App.interBloquesController = App.InterBloquesController.create();
+							App.bloquesController = App.BloquesController.create({url:'bloques/all'});
+							App.interBloquesController = App.InterBloquesController.create({url:'interbloques/all'});
 							App.bloquesController.load();
 							App.bloquesController.addObserver('loaded', this, fn);
 							App.interBloquesController.load();
