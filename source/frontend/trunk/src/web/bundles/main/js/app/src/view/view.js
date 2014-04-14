@@ -395,11 +395,13 @@ App.ContentView = Ember.View.extend({
 		$rightColumn.removeClass('col-md-' + this.get('oldColumns').objectAt(2)).addClass('col-md-' + r);
 		this.set('oldColumns', [l, m, r]);
 	},
+
 	changetoggleMenu: function () {
 		Ember.run.next(function () {
 			this.$('.toggleMainMenu').tooltip();
 		});
 	}.observes('toggleMenu'),
+
 	clickMenu: function () {
 		var $menuWrapper =  this.$('#mainMenu');
 		var $menuWrapperTiny =  this.$('#mainMenuTiny');
@@ -4832,7 +4834,6 @@ App.ListasView = Ember.CollectionView.extend({
 
 App.SesionTurnosView = Em.View.extend({
 	templateName: 'sesion-turnos',
-	collapse: false,
 	
 	mostrarTodosActivado : function () {
 		return (App.get('listaController').get('content') == null)
@@ -4844,10 +4845,6 @@ App.SesionTurnosView = Em.View.extend({
 
 	mostrarTodosClick : function () {
 		App.get('listaController').set('content', null);
-	},
-	
-	toggleForm: function () {
-		this.set('collapse', !this.get('collapse'));
 	},
 
 	imprimir : function() {
@@ -5456,6 +5453,11 @@ App.SesionResumenView = Em.View.extend({
 
 App.OradoresEditorSesionConsultaView = Ember.View.extend({
 	templateName: 'oradores-editor-sesion-consulta',
+	collapse: false,
+	
+	toggleForm: function () {
+		this.set('collapse', !this.get('collapse'));
+	},
 
 	crearLista: function () {
 		var temaController = App.get('temaController');

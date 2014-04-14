@@ -1490,7 +1490,7 @@ App.Router =  Em.Router.extend({
 								if (hasRole('ROLE_LABOR_PARLAMENTARIA')) {
 									//appController.connectOutlet('menu', 'subMenu');
 									if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
-										appController.connectOutlet('help', 'crearTurnoInline');
+										//appController.connectOutlet('help', 'crearTurnoInline');
 										appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
 									}
 								 	else
