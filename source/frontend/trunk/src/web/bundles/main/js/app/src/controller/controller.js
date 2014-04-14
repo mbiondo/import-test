@@ -4639,7 +4639,7 @@ App.InterBloquesController = App.RestController.extend({
 	createObject: function (data, save) {
 		save = save || false;
 		
-		item = App.Bloque.extend(App.Savable).create(data);
+		item = App.InterBloque.extend(App.Savable).create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},		
