@@ -769,7 +769,8 @@ App.Citacion = Em.Object.extend({
 				return firmantes.objectAt(0).nombre + " y otros (" + (firmantes.length - 1 ) + ")"; 
 			}		
 		}
-	}.property('firmantes'),	
+	}.property('firmantes'),
+
 });
 
 
@@ -1113,6 +1114,7 @@ App.Comision = Em.Object.extend({
 	toString: function () {
 		return this.get('nombre');
 	},
+
 });
 
 App.Reunion = Em.Object.extend({
@@ -2032,8 +2034,6 @@ App.ProyectoQuery = Em.Object.extend({
 
 	firmante: '',
 	comision: '',
-	fechaPublicacionHasta: '',
-	fechaPublicacionDesde: '',
 	expdip: '',
 	tipo: '',
 	nombre: '',
@@ -2041,6 +2041,9 @@ App.ProyectoQuery = Em.Object.extend({
 	archivado: false,
 	editable: true,
 	dirty: false,
+	palabra: '',
+	palabras: [],
+	comisionesObject: [],
 
 	parametizable: [
 		'firmante',
@@ -2050,12 +2053,13 @@ App.ProyectoQuery = Em.Object.extend({
 		'expdip',
 		'tipo',
 		'archivado',
+		'palabras',
 	],
 
 	serializable: [
 		'id',
 		'firmante',
-		'comision',
+		'comisiones',
 		'fechaPublicacionHasta',
 		'fechaPublicacionDesde',
 		'expdip',
@@ -2063,6 +2067,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'nombre',
 		'usuario',
 		'archivado',
+		'palabras',
 	],
 
 	normalize: function () {
@@ -2091,7 +2096,11 @@ App.ProyectoQuery = Em.Object.extend({
 		this.desNormalize();
 		return queryParameters;
 
-	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo', 'archivado', 'expdip'),
+	}.property('firmante', 'comision', 'fechaPublicacionDesde', 'fechaPublicacionHasta', 'expdip', 'tipo', 'archivado', 'expdip', 'palabras'),
+
+	comisiones: function () {
+		return $.map(this.get('comisionesObject'), function(value, key){ return value.get('nombre') });
+	}.property('comisionesObject.@each'),
 
 });
 
