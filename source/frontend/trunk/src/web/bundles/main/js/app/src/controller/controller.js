@@ -2586,6 +2586,21 @@ App.ReunionesSinParteController = App.RestController.extend({
 		}
 		return reuniones;
 	}.property('content'),	
+	comisionChange: function(){
+		var _self = this;
+//		var reuniones = App.get('reunionesSinParteController.reuniones');
+		var filtered = [];
+		var reuniones = $.map(_self.get('reuniones'), function(value){ return value.comisiones.filterProperty('nombre', 'ECONOMIA'); });
+		filtered.pushObjects(reuniones);
+
+/*
+		var filtered = [];
+		reuniones.forEach(function(reunion){
+		  var filter = reunion.comisiones.filterProperty('nombre', 'ECONOMIA');
+		  reuniones.push(filter);
+		});
+*/
+	}.observes('comision')
 });
 
 App.ReunionesConParteController = App.ReunionesSinParteController.extend({
@@ -4887,13 +4902,8 @@ App.ProyectosController = App.RestController.extend({
 
 		if(this.get('query'))
 		{
-			getJSON = this.get('query');
+			getJSON = this.get('query').getJson();
 		}
-
-		getJSON = JSON.stringify(getJSON);
-
-
-
 
 		var url =  this.get('url');
 		if (this.get('useApi'))
