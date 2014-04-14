@@ -4832,6 +4832,7 @@ App.ListasView = Ember.CollectionView.extend({
 
 App.SesionTurnosView = Em.View.extend({
 	templateName: 'sesion-turnos',
+	collapse: false,
 	
 	mostrarTodosActivado : function () {
 		return (App.get('listaController').get('content') == null)
