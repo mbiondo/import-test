@@ -231,7 +231,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 10,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+			roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Alerta Temprana',
 			url: '#/expedientes/alerta-temprana',
 			icono: 'ic ic-biografia',
@@ -241,11 +241,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Alerta Temprana',
 					url: '#/expedientes/alerta-temprana',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Alerta Temprana',
 							url: '#/expedientes/alerta-temprana',
 						}),
