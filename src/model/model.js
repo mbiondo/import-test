@@ -1781,7 +1781,7 @@ App.InterBloque = Ember.Object.extend({
 	url: 'interBloques',
 	auditable: true,
 	enabled: true,
-	serializable: ['id', 'nombre'],
+	serializable: ['id', 'nombre', 'enabled'],
 });
 
 App.VisitaGuiadaEstadistica = Ember.Object.extend({
