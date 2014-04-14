@@ -5453,8 +5453,8 @@ App.SesionResumenView = Em.View.extend({
 
 App.OradoresEditorSesionConsultaView = Ember.View.extend({
 	templateName: 'oradores-editor-sesion-consulta',
-	collapse: false,
-	
+	collapse: true,
+
 	toggleForm: function () {
 		this.set('collapse', !this.get('collapse'));
 	},
