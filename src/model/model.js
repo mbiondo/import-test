@@ -2094,6 +2094,7 @@ App.TimeLineEvent = Ember.Object.extend({
 	icono: '',
 	objectID: '',
 	fecha: '',
+	duplicados: [],
 
 	serializable: [
 		'id',
@@ -2103,6 +2104,7 @@ App.TimeLineEvent = Ember.Object.extend({
 		'icono',
 		'objectID',
 		'fecha',
+		'duplicados',
 	],
 
 });

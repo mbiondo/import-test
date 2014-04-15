@@ -5808,6 +5808,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 	clickExpediente: function (proyecto) {
 		var item = this.get('item.proyectos').findProperty('id', proyecto.id);
 		if (!item) {
+			proyecto.set('orden', this.get('item.proyectos.length'));
 			this.get('item.proyectos').pushObject(proyecto);
 		} else {
 			this.get('item.proyectos').removeObject(proyecto);
@@ -5817,6 +5818,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 	itemClicked: function (dictamen) {
 		var item = this.get('item.dictamenes').findProperty('id', dictamen.id);
 		if (!item) {
+			dictamen.set('orden', this.get('item.dictamenes.length'));
 			this.get('item.dictamenes').pushObject(dictamen);
 		} else {
 			this.get('item.dictamenes').removeObject(dictamen);
@@ -6248,7 +6250,7 @@ App.SugestView = Ember.View.extend({
 			this.set('selection', item);
 		}
 			  
-				this.clear();
+		this.clear();
 	},
 
 	clear: function () {
@@ -7401,20 +7403,27 @@ App.TestView = Ember.View.extend({
 	templateName: 'wg-test',
 	roles: [],
 	funciones: [],
-	items: [{titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}, {titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}, {titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}],
+
+	crearTest: function () {
+		App.TimeLineEventCreateView.popup();
+	},
 
 	didInsertElement: function () {
 		this._super();
+		
 		/*
 		var evento = App.TimeLineEvent.extend(App.Savable).create({
 	        objectID: 1, 
-	        titulo: 'Titulo cualquiera',
-	        fecha:  '2014-03-21 19:00:00',
-	        mensaje: 'aca el mensaje',
+	        titulo: 'Probando duplicados',
+	        fecha:  moment().format('YYYY-MM-DD HH:mm'),
+	        mensaje: 'Nunc at dolor at augue posuere tincidunt molestie a odio. Aenean sit amet nisl quis nunc vulputate tristique. Integer feugiat eros ut dapibus dignissim',
 	        icono: 'creado',
+	        link: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
+	        duplicados: ['158751', '158640', '158902'],
 		});
 		evento.create();
 		*/
+		
 
 		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
 		this.get('timeLineController').load();
@@ -7568,14 +7577,18 @@ App.MultiSelectListView = Ember.View.extend({
 App.TimeLineView = Ember.View.extend({
 	classNames: ['timeline-container'],
 	templateName: 'wg-time-line',
-
-	
 });
 
 
 App.TimteLineListItemView = Ember.View.extend({
 	templateName: 'wg-time-line-list-item',
 	tagName:'li',
+
+	gotoLink: function () {
+		if (this.get('content.link')) {
+			window.location = this.get('content.link');
+		}
+	},
 });
 
 App.TimeLineListView = Ember.CollectionView.extend({
@@ -7593,6 +7606,31 @@ App.TimeLineListView = Ember.CollectionView.extend({
 });
 
 
+App.TimeLineEventCreateView = App.ModalView.extend({
+	templateName: 'wg-time-line-event-create',
+	iconos: ['ingresado', 'convocado', 'dictaminado', 'otros'],
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			this.get('content').set('fecha', moment(this.get('content.fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm:ss'));
+			this.get('content').create();
+		} else if (opts.secondary) {
+
+		} else {
+
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.TimeLineEvent.extend(App.Savable).create({objectID: 1}));
+	},
+
+	willDestroyElement: function(){
+		this._super();
+	},
+});
 
 //PL
 App.PLMiniListView = App.JQuerySortableView.extend({
