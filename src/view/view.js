@@ -7946,6 +7946,8 @@ App.ProyectoSearchView = Em.View.extend({
 	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
 	collapse: true,
 	loading: false,
+	palabra: '',
+	palabras: [],
 
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
@@ -7979,6 +7981,10 @@ App.ProyectoSearchView = Em.View.extend({
 		App.get('proyectosController').set('loaded', false);
 		App.proyectosController.set('pageNumber', 1);
 		App.proyectosController.set('content', []);
+
+		var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
+		App.set('proyectosController.query.palabras', lista_palabras);
+
 		App.proyectosController.load();
 		this.set('loading', true);
 	},
@@ -7995,20 +8001,8 @@ App.ProyectoSearchView = Em.View.extend({
 		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
 	},
 
-	guardar: function () {
-		if (App.proyectosController.get('query.id'))
-		{
-			App.proyectosController.get('query').save();	
-		} 
-		else 
-		{
-			App.proyectosController.get('query').set('usuario', App.userController.get('user.cuil'));
-			App.proyectosController.get('query').create();
-			if (App.searchController.content)
-			{
-				App.searchController.content.pushObject(App.proyectosController.get('query'));
-			}
-		}
+	removerPalabra: function(){
+		console.log(this.get('content'));
 	},
 });
 
@@ -8159,11 +8153,38 @@ App.VincularFirmanteView = App.ModalView.extend({
 
 App.addWordsInput = Ember.TextField.extend({
 	insertNewline: function(){
+		/*
+		var query = App.get('proyectosController.query');
 		var palabra = App.get('proyectosController.query.palabra');
 		var palabras = App.get('proyectosController.query.palabras');
+		*/
+		var query = this.get('parentView');
+		var palabra = this.get('parentView').get('palabra');
+		var palabras = this.get('parentView').get('palabras');
 
-		palabras.pushObject(palabra);
+		palabras.pushObject({nombre: palabra});
+		query.set('palabra', '');
 	},
 });
 
+App.ListTags = Ember.View.extend({
+	templateName: 'list-tags',
+	itemViewClass: App.ListItemTags,
 
+	didInsertElement: function(){
+		this._super();
+	},
+});
+
+App.ListItemTags = Ember.View.extend({
+	templateName: 'list-item-tags',
+	tagName: 'span',
+	classNames: ['tag'],
+
+	didInsertElement: function(){
+		this._super();
+	},
+	borrar: function(){
+		this.get('parentView').get('content').removeObject(this.get('content'));
+	}
+});
