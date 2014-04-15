@@ -7401,6 +7401,24 @@ App.TestView = Ember.View.extend({
 	templateName: 'wg-test',
 	roles: [],
 	funciones: [],
+	items: [{titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}, {titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}, {titulo: 'Probando timeline', mensaje: 'Probando timeline mensaje lero lero', fecha: 'Hace 3 minutos.'}],
+
+	didInsertElement: function () {
+		this._super();
+		/*
+		var evento = App.TimeLineEvent.extend(App.Savable).create({
+	        objectID: 1, 
+	        titulo: 'Titulo cualquiera',
+	        fecha:  '2014-03-21 19:00:00',
+	        mensaje: 'aca el mensaje',
+	        icono: 'creado',
+		});
+		evento.create();
+		*/
+
+		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
+		this.get('timeLineController').load();
+	},	
 });
 
 
@@ -7545,6 +7563,36 @@ App.MultiSelectListView = Ember.View.extend({
 	},
 
 });
+
+
+App.TimeLineView = Ember.View.extend({
+	classNames: ['timeline-container'],
+	templateName: 'wg-time-line',
+
+	
+});
+
+
+App.TimteLineListItemView = Ember.View.extend({
+	templateName: 'wg-time-line-list-item',
+	tagName:'li',
+});
+
+App.TimeLineListView = Ember.CollectionView.extend({
+	classNames: ['timeline'],
+	tagName:'ul',
+	itemViewClass: App.TimteLineListItemView,
+
+	createChildView: function(viewClass, attrs) {
+		if (attrs) {
+			if (attrs['contentIndex'] % 2)
+				attrs['odd'] = true;
+		}
+	    return this._super(viewClass, attrs);
+	},	
+});
+
+
 
 //PL
 App.PLMiniListView = App.JQuerySortableView.extend({
@@ -8117,3 +8165,5 @@ App.addWordsInput = Ember.TextField.extend({
 		palabras.pushObject(palabra);
 	},
 });
+
+
