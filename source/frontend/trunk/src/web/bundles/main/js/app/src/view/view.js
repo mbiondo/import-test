@@ -2251,6 +2251,9 @@ App.ExpedienteConsultaView = Em.View.extend({
 		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 			App.get('expedienteConsultaController.content').loadBiography();
 		}
+
+		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
+		this.get('timeLineController').load();		
 	}
 });
 
@@ -6630,6 +6633,21 @@ App.CrearExpedienteView = Ember.View.extend({
 			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 			App.get('expedienteConsultaController').load();			
 						*/
+
+		
+			/*
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+		        objectID: 1, 
+		        titulo: 'Probando duplicados',
+		        fecha:  moment().format('YYYY-MM-DD HH:mm'),
+		        mensaje: 'Nunc at dolor at augue posuere tincidunt molestie a odio. Aenean sit amet nisl quis nunc vulputate tristique. Integer feugiat eros ut dapibus dignissim',
+		        icono: 'creado',
+		        link: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
+		        duplicados: ['158751', '158640', '158902'],
+			});
+			evento.create();
+			*/
+
 		} else {
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
 		}
