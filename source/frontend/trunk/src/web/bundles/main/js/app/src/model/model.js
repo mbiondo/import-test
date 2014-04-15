@@ -2123,3 +2123,28 @@ App.Firmantesarha = Ember.Object.extend({
 
 	},
 });
+
+
+App.TimeLineEvent = Ember.Object.extend({
+	url: 'timeline/',
+	useApi: false,
+
+	id: '',
+	titulo: '',
+	mensaje: '',
+	link: '',
+	icono: '',
+	objectID: '',
+	fecha: '',
+
+	serializable: [
+		'id',
+		'titulo',
+		'mensaje',
+		'link',
+		'icono',
+		'objectID',
+		'fecha',
+	],
+
+});

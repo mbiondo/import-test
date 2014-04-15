@@ -5017,3 +5017,18 @@ App.FirmantesarhaController = App.RestController.extend({
 		this.addObject(item);
 	},		
 });
+
+
+App.ExpedienteTimelineController = App.RestController.extend({
+	url: 'timeline/',
+	sortProperties: ['fecha'],
+	sortAscending: false,
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.TimeLineEvent.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},	
+})
