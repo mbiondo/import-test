@@ -7593,13 +7593,13 @@ App.MultiSelectListView = Ember.View.extend({
 
 
 App.TimeLineView = Ember.View.extend({
-	classNames: ['timeline-container'],
+	classNames: [],
 	templateName: 'wg-time-line',
 });
 
 
 App.TimteLineListItemView = Ember.View.extend({
-	templateName: 'wg-time-line-list-item',
+	templateName: 'wg-time-line-list-item-new',
 	tagName:'li',
 
 	gotoLink: function () {
@@ -7610,7 +7610,7 @@ App.TimteLineListItemView = Ember.View.extend({
 });
 
 App.TimeLineListView = Ember.CollectionView.extend({
-	classNames: ['timeline'],
+	classNames: ['cbp_tmtimeline'],
 	tagName:'ul',
 	itemViewClass: App.TimteLineListItemView,
 
