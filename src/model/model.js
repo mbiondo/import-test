@@ -1142,30 +1142,38 @@ App.Reunion = Em.Object.extend({
 	
 	comisionesLabel: function () {
 		var st = "";
-		this.get('comisiones').forEach(function (comision) {
-			st += "<li>"+comision.comision.nombre+"</li>";
-		})
+		if(this.get('comisiones')){		
+			this.get('comisiones').forEach(function (comision) {
+				st += "<li>"+comision.comision.nombre+"</li>";
+			})
+		}
 		return st.htmlSafe();
 	}.property('comisiones'),
 	comisionesLabel2: function () {
 		var st = "";
-		this.get('comisiones').forEach(function (comision) {
-			st += comision.comision.nombre;
-		})
+		if(this.get('comisiones')){		
+			this.get('comisiones').forEach(function (comision) {
+				st += comision.comision.nombre;
+			})
+		}
 		return st.htmlSafe();
 	}.property('comisiones'),
 	temarioLabel: function(){
 		var st = "";
+		if(this.get('citacion.temas')){			
 			this.get('citacion.temas').forEach(function(tema){
 				if(tema)
 				{
 					st += tema.descripcion;				
 				}
 			});			
+		}
 		return st.htmlSafe();
 	}.property('citacion'),
 	notaHTML: function () {
-		return this.get('nota').replace(/\n/g, "<br/>").htmlSafe();
+		if(this.get('nota')){
+			return this.get('nota').replace(/\n/g, "<br/>").htmlSafe();
+		}
 	}.property('nota'),	
 
 });
