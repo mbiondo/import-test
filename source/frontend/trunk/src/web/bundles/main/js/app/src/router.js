@@ -465,7 +465,7 @@ App.Router =  Em.Router.extend({
 				}),
 
 				diputados: Em.Route.extend({
-					route: "/diputados",
+					route: "/legisladores",
 
 					index: Ember.Route.extend({
 						route: "/listado",
@@ -495,8 +495,8 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
-								{titulo: 'Diputados'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
+								{titulo: 'Legisladores'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
 							]);			
 
 							App.get('menuController').seleccionar(9, 2, 1);	
@@ -534,7 +534,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
 								{titulo: 'Diputados'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
+								{titulo: 'Legisladores', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
 								{titulo: 'Ver'},
 							]);		
 
@@ -587,8 +587,8 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
-								{titulo: 'Diputados'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/diputados/listado'},
+								{titulo: 'Legisladores'},
+								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
 								{titulo: 'Editar'},
 							]);		
 
@@ -778,53 +778,6 @@ App.Router =  Em.Router.extend({
 									{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 	                                {titulo: 'Envíos a Archivo', url: '#/comisiones/envios/listado'},
 		                        ]);				
-		                },
-		        	}),
-			}),
-
-			vinculos: Em.Route.extend({
-				route: "/vinculos",
-
-					listado: Em.Route.extend({
-						route: '/firmantes',
-
-		                deserialize: function(router, params) {
-							App.firmantesarhaController = App.FirmantesarhaController.create();
-							App.firmantesController = App.FirmantesController.create();
-
-	                        var deferred = $.Deferred(),
-
-
-	                        fn = function() {
-	                            App.get('firmantesController').removeObserver('loaded', this, fn);	
-	                            App.get('firmantesarhaController').removeObserver('loaded', this, fn);	
-	                            deferred.resolve(null);					
-	                        };
-
-	                        App.get('firmantesarhaController').addObserver('loaded', this, fn);
-	                        App.get('firmantesarhaController').load();
-
-	                        App.get('firmantesController').addObserver('loaded', this, fn);
-	                        App.get('firmantesController').load();
-
-	                        return deferred.promise();
-		                },	
-
-		                connectOutlets: function(router, context) {
-		                        var appController = router.get('applicationController');
-		                        appController.connectOutlet('help', 'Help');	
-		                        appController.connectOutlet('main', 'Firmantesarha');
-		                        appController.connectOutlet('menu', 'subMenu');
-
-		                        App.get('menuController').seleccionar(9, 3, 0);
-		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-
-							App.get('breadCumbController').set('content', [
-								{titulo: 'Dirección Secretaría'},
-								{titulo: 'Vinculos'},
-								{titulo: 'Firmantes'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/vinculos/firmantes/listado'},
-							]);			
 		                },
 		        	}),
 			}),
@@ -1808,6 +1761,50 @@ App.Router =  Em.Router.extend({
 					})
 				}),
 			}),
+			usuariosLegisladores: Em.Route.extend({
+				route: "/usuarios-legisladores",
+
+//					listado: Em.Route.extend({
+//						route: '/firmantes',
+
+		                deserialize: function(router, params) {
+							App.firmantesarhaController = App.FirmantesarhaController.create();
+							App.firmantesController = App.FirmantesController.create();
+
+	                        var deferred = $.Deferred(),
+
+
+	                        fn = function() {
+	                            App.get('firmantesController').removeObserver('loaded', this, fn);	
+	                            App.get('firmantesarhaController').removeObserver('loaded', this, fn);	
+	                            deferred.resolve(null);					
+	                        };
+
+	                        App.get('firmantesarhaController').addObserver('loaded', this, fn);
+	                        App.get('firmantesarhaController').load();
+
+	                        App.get('firmantesController').addObserver('loaded', this, fn);
+	                        App.get('firmantesController').load();
+
+	                        return deferred.promise();
+		                },	
+
+		                connectOutlets: function(router, context) {
+		                        var appController = router.get('applicationController');
+		                        appController.connectOutlet('help', 'Help');	
+		                        appController.connectOutlet('main', 'Firmantesarha');
+		                        appController.connectOutlet('menu', 'subMenu');
+
+		                        App.get('menuController').seleccionar(5, 0, 4);
+		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Administrar'},
+								{titulo: 'Usuarios y Legisladores', url: '#/admin/usuarios-legisladores'},
+							]);			
+		                },
+//		        	}),
+			}),
 		}),
 
 		visitasGuiadas: Ember.Route.extend({
@@ -2635,6 +2632,7 @@ App.Router =  Em.Router.extend({
 						 };
 
 						 App.get('reunionesSinParteController').addObserver('loaded', this, fn);
+
 						 App.get('reunionesSinParteController').load();
 						
 						 return deferred.promise();
