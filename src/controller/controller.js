@@ -2547,15 +2547,13 @@ App.ReunionesSinParteController = App.RestController.extend({
 	type: App.Reunion,
 	useApi: true,
 	loaded : false,
-	
+
 	init : function () {
 		this._super();
 	},
-
 	loadSucceeded: function(data){
 		this._super(data);
-	},
-	
+	},	
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Reunion.create(data);
@@ -2586,21 +2584,48 @@ App.ReunionesSinParteController = App.RestController.extend({
 		}
 		return reuniones;
 	}.property('content'),	
-	comisionChange: function(){
-		var _self = this;
-//		var reuniones = App.get('reunionesSinParteController.reuniones');
-		var filtered = [];
-		var reuniones = $.map(_self.get('reuniones'), function(value){ return value.comisiones.filterProperty('nombre', 'ECONOMIA'); });
-		filtered.pushObjects(reuniones);
+	reunionesFilterByComisiones: function(data){
+		var reuniones = [];
+		var comisiones_input = [];
 
-/*
-		var filtered = [];
-		reuniones.forEach(function(reunion){
-		  var filter = reunion.comisiones.filterProperty('nombre', 'ECONOMIA');
-		  reuniones.push(filter);
+		if(data)
+		{
+			comisiones_input.push(data);
+		}
+		else
+		{
+			comisiones = $.map(App.get('userController.user.comisiones'), function(comision){ return comision; });			
+			comisiones_input.push(comisiones);
+		}
+
+		this.get('reuniones').forEach(function (reunion){
+			comisiones_input.forEach(function (comision_input){
+				reunion.citacion.comisiones.forEach(function (comision){
+					if(comision.id == comision_input.id)
+					{
+						reuniones.pushObject(reunion);	
+						return true;
+					}					
+
+					return false;
+				});
+			});
 		});
-*/
-	}.observes('comision')
+
+		return reuniones;
+	},
+	comisionChange: function(){
+		var comision 	= this.get('comision');
+		var reuniones 	= this.reunionesFilterByComisiones(comision);
+		
+		console.log(this.get('content'));
+
+		console.log(reuniones);
+		this.set('listado', reuniones);
+		console.log(reuniones);
+
+  
+	}.observes('comision'),
 });
 
 App.ReunionesConParteController = App.ReunionesSinParteController.extend({
