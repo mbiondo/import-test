@@ -5022,7 +5022,7 @@ App.TurnosView = App.JQuerySortableView.extend({
 	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
 
-	isCollapse: true,
+	isCollapse: false,
 	isCollapsable: false,
 
 	click: function() {
@@ -5049,7 +5049,7 @@ App.TurnosPorListaView = App.JQuerySortableView.extend({
 	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
 
-	isCollapse: true,
+	isCollapse: false,
 	isCollapsable: false,
 
 	click: function() {
