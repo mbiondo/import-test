@@ -2618,13 +2618,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 		var comision 	= this.get('comision');
 		var reuniones 	= this.reunionesFilterByComisiones(comision);
 		
-		console.log(this.get('content'));
-
-		console.log(reuniones);
-		this.set('listado', reuniones);
-		console.log(reuniones);
-
-  
+		this.set('listado', reuniones);  
 	}.observes('comision'),
 });
 
@@ -2649,6 +2643,7 @@ App.ReunionesConParteController = App.ReunionesSinParteController.extend({
 		
 		this.addObject(item);	
 	},	
+
 });
 
 
