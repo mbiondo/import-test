@@ -3369,6 +3369,10 @@ App.ReunionConsultaView = Em.View.extend({
 	citacion: null,
 	isEdit: false,
 
+	expSobreTabla: false,
+	expArt109: false,
+	expediente: null,
+
 	didInsertElement: function () {
 		this._super();
 		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
@@ -3572,16 +3576,42 @@ App.ReunionConsultaView = Em.View.extend({
 			$.jGrowl('Ocurrió un error al intentar guardar los cambios en la reunion!', { life: 5000 });
 		}		
 	},
-
 	
-	clickExpediente: function (expediente) {
+	clickExpediente: function (expediente) {		
 		if (!this.get('listaExpedientesSeleccionados').findProperty('id', expediente.get('id'))) {
-			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: [], sobreTablas: true, art109: false});
-			this.get('citacion.temas').addObject(tema);
-			tema.get('proyectos').addObject(expediente);
+
+			App.ExpedienteSobreTablasFueraDeTemarioView.popup();
+			App.reunionConsultaController.addObserver('sobretablas', this, this.sobreTablasConfirm);
+			this.set('expediente', expediente);
+
+//			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: [], sobreTablas: true, art109: false});
+//			this.get('citacion.temas').addObject(tema);
+//			tema.get('proyectos').addObject(expediente);			
 		}
 	},
-	
+	sobreTablasConfirm: function () {
+		App.reunionConsultaController.removeObserver('sobretablas', this, this.sobreTablasConfirm);
+		var expediente = this.get('expediente');
+
+		if(App.get('reunionConsultaController.sobretablas'))
+		{
+			this.set('expSobreTabla', true);
+			this.set('expArt109', false);
+		}
+		else
+		{
+			this.set('expSobreTabla', false);
+			this.set('expArt109', true);
+		}
+
+		var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: [], sobreTablas: this.get('expSobreTabla'), art109: this.get('expArt109')});
+//		console.log(tema);
+
+		this.get('citacion.temas').addObject(tema);
+		tema.get('proyectos').addObject(expediente);	
+
+//		console.log('sobretablas: ' + App.get('reunionConsultaController.sobretablas'));
+	},	
 	clickBorrar: function (expediente) {
 		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));		
 		if (tema)
@@ -6317,7 +6347,7 @@ App.SugestListView = Ember.CollectionView.extend({
 
 	didInsertElement: function () {
 		this._super();
-		console.log(this.get('optionValuePath'));
+//		console.log(this.get('optionValuePath'));
 	},
 });
 
@@ -8244,3 +8274,54 @@ App.ListItemTags = Ember.View.extend({
 		this.get('parentView').get('content').removeObject(this.get('content'));
 	}
 });
+
+App.ExpedienteSobreTablasFueraDeTemarioView = App.ModalView.extend({
+	templateName: 'expediente-sobretablas-fueradetemario',
+	buttonRadioCheck: false,
+	attributeBindings: ['required'],
+	clickGuardar: null,
+	art109: null,
+	sobretablas: null,
+	seleccionoOpcion: null,
+
+//	opciones: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
+
+	callback: function(opts, event) {
+
+			if (opts.primary)
+			{
+				this.set('clickGuardar', true);
+/*
+				console.group('popup');
+				console.log('art109: ' + this.get('art109'));
+				console.log('sobretablas: ' + this.get('sobretablas'));
+				console.groupEnd();
+*/
+				if(this.get('art109') || this.get('sobretablas'))
+				{					
+					this.set('seleccionoOpcion', true);
+
+					if(this.get('sobretablas'))
+					{
+						App.get('reunionConsultaController').set('sobretablas', true);
+					}
+					else
+					{
+						App.get('reunionConsultaController').set('sobretablas', false);					
+					}
+				}
+				else
+				{
+					this.set('seleccionoOpcion', false);
+					return false;
+				}
+			} else if (opts.secondary) {
+//				App.get('reunionConsultaController').set('sobretablas', false);
+				//alert('cancel')
+			} else {
+				//alert('close')
+			}
+			event.preventDefault();
+		},     
+});
+
