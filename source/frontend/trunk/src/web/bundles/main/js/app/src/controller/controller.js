@@ -416,7 +416,7 @@ App.IoController = Em.Object.extend({
 						}
 					} else {
 						if(App.get('turnosController').turnoHablando == turno)
-							App.get('turnosController').cancelarTimer(turno, false);
+							App.get('turnosController').cancelTimer(turno, false);
 					}
 
 					App.get('turnosController').actualizarHora();
