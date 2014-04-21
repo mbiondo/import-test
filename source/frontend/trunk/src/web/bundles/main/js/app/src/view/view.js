@@ -4967,6 +4967,10 @@ App.TurnoView = Ember.View.extend({
 		App.CrearTurnoView.popup();
 	},
 	
+	cancelTimer: function () {
+		App.get('turnosController').cancelTimer(this.get('content'));
+	},
+
 	index : function () {
 		return this.get('contentIndex') + 1;
 	}.property('contentIndex'),
