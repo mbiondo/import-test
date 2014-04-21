@@ -3525,7 +3525,6 @@ App.TurnosController = App.RestController.extend({
 		this.get('timer').stop();
 		turno.set('horaFin', null);
 		turno.set('horaInicio', null);
-		turno.set('hora', null);
 		turno.set('timer', null);
 		turno.save();
 		this.set('turnoHablando', null);
