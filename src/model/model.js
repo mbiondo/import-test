@@ -1570,11 +1570,11 @@ App.Turno = Em.Object.extend({
 	}.property('turnoHablando'),
 
 	bloqueado : function () {
-		if(this.get('horaInicio'))
+		if(this.get('horaInicio') && this.get('horaFin'))
 			return true;
 		else
-		 return false;
-	}.property('horaInicio'),
+		 	return false;
+	}.property('horaInicio', 'horaFin'),
 
 	propietario: function(){
 		var oradores = this.get('oradores');
