@@ -5022,6 +5022,21 @@ App.TurnosView = App.JQuerySortableView.extend({
 	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
 
+	isCollapse: true,
+	isCollapsable: false,
+
+	click: function() {
+		if (this.get('isCollapsable')) {
+			if (this.get('isCollapse')) {
+				this.$().removeClass('collapse');
+				this.set('isCollapse', false);
+			} else {
+				this.$().addClass('collapse');
+				this.set('isCollapse', true);
+			}
+		}
+	},
+	
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
 
@@ -5033,6 +5048,22 @@ App.TurnosView = App.JQuerySortableView.extend({
 App.TurnosPorListaView = App.JQuerySortableView.extend({
 	classNames: [ 'turnos'],
 	itemViewClass: App.TurnoView, 
+
+	isCollapse: true,
+	isCollapsable: false,
+
+	click: function() {
+		if (this.get('isCollapsable')) {
+			if (this.get('isCollapse')) {
+				this.$().removeClass('collapse');
+				this.set('isCollapse', false);
+			} else {
+				this.$().addClass('collapse');
+				this.set('isCollapse', true);
+			}
+		}
+	},
+
 
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
