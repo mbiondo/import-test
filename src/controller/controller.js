@@ -414,6 +414,9 @@ App.IoController = Em.Object.extend({
 							if(App.get('turnosController').turnoHablando == turno)
 								App.get('turnosController').stopTimer(turno, false);
 						}
+					} else {
+						if(App.get('turnosController').turnoHablando == turno)
+							App.get('turnosController').cancelarTimer(turno, false);
 					}
 
 					App.get('turnosController').actualizarHora();
@@ -3517,6 +3520,17 @@ App.TurnosController = App.RestController.extend({
 
 		this.actualizarHora();
 	},
+
+	cancelTimer : function (turno, save) {
+		this.get('timer').stop();
+		turno.set('horaFin', null);
+		turno.set('horaInicio', null);
+		turno.set('hora', null);
+		turno.set('timer', null);
+		turno.save();
+		this.set('turnoHablando', null);
+		this.actualizarHora();
+	},	
 
 	parse : function (data) {
 		var turnos = data.turnos;
