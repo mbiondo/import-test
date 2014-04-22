@@ -1193,6 +1193,48 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 App.OrdenDelDiaDetalleView = Ember.View.extend({
 	templateName: 'orden-del-dia-detalle',
 	nombreArchivo: null,
+	hasDocument: true,
+	loading: false,
+
+	borrar: function(item){
+		this.get('parentView').get('parentView').borrarOD(App.get('ordenDelDiaController.content'));
+	},
+	dictamen: function () {
+		if (this.get('content.dictamen'))
+			return App.Dictamen.create(App.get('ordenDelDiaController.content.dictamen'));
+		else
+			return null;
+	}.property('content'),
+
+
+	openDocument: function () {
+		this.set('loading', true);
+		$.ajax({
+			url: App.get('ordenDelDiaController.content.documentURL'),
+			type: 'GET',
+			success: this.loadSucceeded,
+			complete: this.loadCompleted,
+			contentType: 'text/plain',
+			crossDomain: true,
+			context: this,
+		});			
+	},
+
+	loadCompleted: function (data) {
+
+	},
+
+	loadSucceeded: function (data) {
+		this.set('loading', false);
+		if (data == "")
+		{
+			this.set('hasDocument', false);
+		} 
+		else
+		{
+			window.open(App.get('ordenDelDiaController.content.documentURL'), '_blank');
+		}
+	},
 
 	didInsertElement: function(){
 		this._super();
