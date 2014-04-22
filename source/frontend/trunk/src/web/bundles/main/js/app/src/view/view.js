@@ -3138,6 +3138,14 @@ App.CitacionExpedienteSeleccionado = Em.View.extend({
 		this.get('parentView').get('parentView').clickDesagrupar(this.get('content'));
 	},
 	
+	willInsertElement: function(){
+//		console.log(this.get('content'));
+/*
+		this.set('content', this.get('content.proyecto'));
+		this.set('content.art109', this.get('content.art109'));
+		this.set('content.sobreTabla', this.get('content.sobreTabla'));
+*/
+	},
 	didInsertElement: function () {
 		this._super();
 		$('.tipS').tipsy({gravity: 's',fade: true, html:true});
@@ -3443,7 +3451,7 @@ App.ReunionConsultaView = Em.View.extend({
 
 	expSobreTabla: false,
 	expArt109: false,
-	expediente: null,
+	expedienteSeleccionado: null,
 
 	didInsertElement: function () {
 		this._super();
@@ -3654,7 +3662,7 @@ App.ReunionConsultaView = Em.View.extend({
 
 			App.ExpedienteSobreTablasFueraDeTemarioView.popup();
 			App.reunionConsultaController.addObserver('sobretablas', this, this.sobreTablasConfirm);
-			this.set('expediente', expediente);
+			this.set('expedienteSeleccionado', expediente);
 
 //			var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: [], sobreTablas: true, art109: false});
 //			this.get('citacion.temas').addObject(tema);
@@ -3663,7 +3671,7 @@ App.ReunionConsultaView = Em.View.extend({
 	},
 	sobreTablasConfirm: function () {
 		App.reunionConsultaController.removeObserver('sobretablas', this, this.sobreTablasConfirm);
-		var expediente = this.get('expediente');
+		var expedienteSeleccionado = this.get('expedienteSeleccionado');
 
 		if(App.get('reunionConsultaController.sobretablas'))
 		{
@@ -3676,13 +3684,9 @@ App.ReunionConsultaView = Em.View.extend({
 			this.set('expArt109', true);
 		}
 
-		var tema = App.CitacionTema.create({descripcion: expediente.get('expdip'), grupo: false, proyectos: [], sobreTablas: this.get('expSobreTabla'), art109: this.get('expArt109')});
-//		console.log(tema);
-
+		var tema = App.CitacionTema.create({descripcion: expedienteSeleccionado.get('expdip'), grupo: false, proyectos: [], sobreTablas: this.get('expSobreTabla'), art109: this.get('expArt109')});
 		this.get('citacion.temas').addObject(tema);
-		tema.get('proyectos').addObject(expediente);	
-
-//		console.log('sobretablas: ' + App.get('reunionConsultaController.sobretablas'));
+		tema.get('proyectos').addObject(expedienteSeleccionado);	
 	},	
 	clickBorrar: function (expediente) {
 		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));		
@@ -3755,14 +3759,20 @@ App.ReunionConsultaView = Em.View.extend({
 		var temas = this.get('citacion.temas');
 		if (!temas)
 			return expedientesSeleccionados;
-		//console.log(temas);
+
 		temas.forEach(function (tema) {
-			//console.log(tema);
+
 			var proyectos = tema.get('proyectos');
 			proyectos.forEach(function (expediente) {
+
+				expediente.art109 = tema.art109;
+				expediente.sobreTablas = tema.sobreTablas;
+
 				expedientesSeleccionados.addObject(expediente);
+
 			});
 		});
+
 		return expedientesSeleccionados.reverse();
 	}.property('citacion.temas', 'citacion.temas.@each.proyectos'),
 	/*
