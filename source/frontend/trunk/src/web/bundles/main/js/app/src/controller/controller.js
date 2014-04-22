@@ -2198,7 +2198,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisiones/CD/P/resumen',
+	url: 'com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
