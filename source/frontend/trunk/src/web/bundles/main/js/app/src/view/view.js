@@ -2274,7 +2274,11 @@ App.ExpedienteConsultaView = Em.View.extend({
 		} 
 		else
 		{
-			window.open(App.get('expedienteConsultaController.content.documentURL'), '_blank');
+			var url = App.get('expedienteConsultaController.content.documentURL');
+			if (App.get('expedienteConsultaController.content.id') == 160126) {
+				url = 'uploads/exp/PE247_13PL.pdf';
+			}
+			window.open(url, '_blank');
 		}
 	},
 
