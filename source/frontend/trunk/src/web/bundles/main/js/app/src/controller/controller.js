@@ -558,7 +558,10 @@ App.IoController = Em.Object.extend({
 					}
 				});
 
+				App.get('turnosController').set('isUpdated', !App.get('turnosController').get('isUpdated'));
+
 				App.get('turnosController').actualizarHora();
+				
 				break;
 
 			case 'Tema' :
@@ -3427,11 +3430,11 @@ App.SesionController = Ember.Object.extend({
 	
 	contentChange : function () {
 		var lista, listas = this.get('content.listas');
-		if(listas){
+		if(listas) {
 			lista = listas.objectAt(0)
 			App.get('listaController').set('content', lista);
 		}
-	}.observes('content')
+	}.observes('content'),
 }),
 
 App.TurnosController = App.RestController.extend({
@@ -3607,6 +3610,8 @@ App.TurnosController = App.RestController.extend({
 				sesionFecha = parseInt(App.get('sesionController.content.fecha'));
 
 		turnoAnterior = this.objectAt(fromIndex-1);
+		
+		var numero = fromIndex + 1;
 
 		if(turnoAnterior === undefined){
 			turno = this.get('arrangedContent').objectAt(fromIndex);
@@ -3621,6 +3626,8 @@ App.TurnosController = App.RestController.extend({
 				}
 			}
 			turnoAnterior = turno;
+			turnoAnterior.set('numero', numero);
+			numero++;
 			fromIndex++;
 		}
 
@@ -3637,7 +3644,9 @@ App.TurnosController = App.RestController.extend({
 				ultimaHora.add('milliseconds', tiempo);
 				hora = ultimaHora.unix();
 			}
+
 			turno = this.get('arrangedContent').objectAt(fromIndex);
+			turno.set('numero', numero);
 
 			if(turno.get('horaInicio')){
 				turno.set('hora', turno.get('horaInicio'));
@@ -3649,6 +3658,7 @@ App.TurnosController = App.RestController.extend({
 
 			turnoAnterior = turno;
 			fromIndex++;
+			numero++;
 		}
 	},
 
@@ -4006,6 +4016,7 @@ App.ListaController = Em.Object.extend({
 	}.property('content', 'App.turnosController.turnoHablando'),
 	
 	turnosDesbloqueados : function () {
+		console.log('turnosDesbloqueados');
 		var temaController = App.get('temaController');
 
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
@@ -4021,9 +4032,10 @@ App.ListaController = Em.Object.extend({
 		}, this);
 
 		return turnos;
-	}.property('content', 'App.temaController.content.@each', 'App.turnosController.arrangedContent.@each.bloqueado').cacheable(),
+	}.property('content', 'App.temaController.content.@each', 'App.turnosController.content.@each.bloqueado', 'App.turnosController.isUpdated').cacheable(),
 
 	turnosBloqueados : function () {
+		console.log('turnosBloqueados');
 		var temaController = App.get('temaController');
 
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
@@ -4039,7 +4051,7 @@ App.ListaController = Em.Object.extend({
 		}, this);
 
 		return turnos;
-	}.property('content', 'App.temaController.content', 'App.turnosController.arrangedContent.@each.bloqueado').cacheable(),
+	}.property('content', 'App.temaController.content', 'App.turnosController.content.@each.bloqueado').cacheable(),
 
 	turnosHablando : function () {
 		var temaController = App.get('temaController');
@@ -4124,7 +4136,7 @@ App.ListaController = Em.Object.extend({
 		listas = [lista];
 		sesion['listas'] = listas;
 		sesion['tema'] = tema;
-
+		delete sesion.temas;
 		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
 	},
 	
@@ -4147,6 +4159,7 @@ App.ListaController = Em.Object.extend({
 		
 		sesion['listas'] = listasSerialized;
 		sesion['tema'] = tema;
+		delete sesion.temas;
 		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
 	},	
 

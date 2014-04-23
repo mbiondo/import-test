@@ -5018,6 +5018,7 @@ App.SesionTurnosView = Em.View.extend({
 		
 		sesion['listas'] = listasSerialized;
 		sesion['tema'] = tema;
+		delete sesion.temas;
 		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
 	},
 	
@@ -5041,6 +5042,7 @@ App.SesionTurnosView = Em.View.extend({
 		
 		sesion['listas'] = listasSerialized;
 		sesion['tema'] = tema;
+		delete sesion.temas;
 		$.download('listas-imprimir', "&data=" + JSON.stringify(sesion));
 	},	
 
