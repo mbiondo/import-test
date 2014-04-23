@@ -2803,60 +2803,34 @@ App.CitacionCrearView = Em.View.extend({
 	},
 
 	clickMoverArribaInTema: function (expediente) {	
-		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));		
-		if (tema){
-			App.set('citacionCrearController.content.proyectos', tema.get('proyectos'));
-			var proyectos = App.get('citacionCrearController.content.proyectos');
-			console.log("arriba");
-			console.log(proyectos);
-			var posicion = -1;
-			for (var i = 0; i < proyectos.length  ; i++) {
-				if(proyectos[i].id == expediente.id){
-					posicion = i;
-				}
-			};
-
-			if(posicion > 0){
-				var aux = proyectos[posicion];
-				var posicionAnterior = posicion - 1;
-				proyectos[posicion] = proyectos[posicionAnterior];
-				proyectos[posicionAnterior] = aux;
-
-				var lastProy = proyectos.pop();	
-				proyectos.addObject(lastProy);
-			}
-			
-		}
-
-		this.set('adding', !this.get('adding'));
+		this.clickMoverInTema(expediente, -1);
 	},
 
 	clickMoverAbajoInTema: function (expediente) {
+		this.clickMoverInTema(expediente, 1);
+	},
+
+	clickMoverInTema: function (expediente, haciaPosicion) {
 		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));
 		if (tema){
 			App.set('citacionCrearController.content.proyectos', tema.get('proyectos'));
 			var proyectos = App.get('citacionCrearController.content.proyectos');
-			console.log("abajo");
-			console.log(proyectos);
 			var posicion = -1;
-			for (var i = 0; i < proyectos.length  ; i++) {
-				if(proyectos[i].id == expediente.id){
-					posicion = i;
-				}
-			};
 
-			if(posicion > -1 && posicion < proyectos.length-1){
+			posicion = proyectos.indexOf(expediente);
+
+			if(posicion > -1){
 				var aux = proyectos[posicion];
-				var posicionAnterior = posicion + 1;
-				proyectos[posicion] = proyectos[posicionAnterior];
-				proyectos[posicionAnterior] = aux;
-
-				var lastProy = proyectos.pop();	
-				proyectos.addObject(lastProy);
+				var posicionAnterior = posicion + haciaPosicion;
+				if(posicionAnterior > -1 && posicionAnterior < proyectos.length){
+					proyectos[posicion] = proyectos[posicionAnterior];
+					proyectos[posicionAnterior] = aux;
+					var lastProy = proyectos.pop();	
+					proyectos.addObject(lastProy);
+				}
 			}
 			
 		}
-
 		this.set('adding', !this.get('adding'));
 	},	
 	
