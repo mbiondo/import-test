@@ -2250,9 +2250,10 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 	openDocument: function () {
 		this.set('loading', true);
-		var url = App.get('expedienteConsultaController.content.documentURL').
+		var url = App.get('expedienteConsultaController.content.documentURL');
+
 		if (App.get('expedienteConsultaController.content.id') == 160126) {
-			url = 'uploads/exp/PE247_13PL.pdf'
+			url = 'uploads/exp/PE247_13PL.pdf';
 		}
 		$.ajax({
 			url: url,
