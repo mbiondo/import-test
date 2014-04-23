@@ -4011,7 +4011,7 @@ App.ListaController = Em.Object.extend({
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
 			if(item.get('temaId') == temaController.get('content.id')){
 				if(item.get('listaId') == this.get('content.id')){
-					return !item.get('bloqueado') && !item.get('hablando');
+					return !item.get('bloqueado');
 				}else{
 					return false;
 				}
@@ -4021,7 +4021,7 @@ App.ListaController = Em.Object.extend({
 		}, this);
 
 		return turnos;
-	}.property('content', 'App.temaController.content', 'App.turnosController.arrangedContent.@each.bloqueado', 'App.turnosController.arrangedContent.@each.hablando').cacheable(),
+	}.property('content', 'App.temaController.content.@each', 'App.turnosController.arrangedContent.@each.bloqueado').cacheable(),
 
 	turnosBloqueados : function () {
 		var temaController = App.get('temaController');
@@ -4039,25 +4039,17 @@ App.ListaController = Em.Object.extend({
 		}, this);
 
 		return turnos;
-	}.property('content', 'App.temaController.content', 'App.turnosController.arrangedContent.@each.bloqueado', 'App.turnosController.arrangedContent.@each.hablando').cacheable(),
+	}.property('content', 'App.temaController.content', 'App.turnosController.arrangedContent.@each.bloqueado').cacheable(),
 
 	turnosHablando : function () {
 		var temaController = App.get('temaController');
 
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
-			if(item.get('temaId') == temaController.get('content.id')){
-				if(item.get('listaId') == this.get('content.id')){
-					return item.get('hablando');
-				}else{
-					return false;
-				}
-			}else{
-				return false;
-			}
+			return false;
 		}, this);
 
 		return turnos;
-	}.property('content', 'App.temaController.content', 'App.turnosController.arrangedContent.@each.hablando').cacheable(),
+	}.property('content', 'App.temaController.content').cacheable(),
 
 	ordenarPorBloque : function (sortAscending) {
 		sortAscending = sortAscending | false;

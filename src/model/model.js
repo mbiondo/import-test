@@ -1514,7 +1514,7 @@ App.Turno = Em.Object.extend({
 
 		return orden;
 
-	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin', 'timer', 'hablando'),
+	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin'),
 
 	cuantoFalta: function () {
 		var b = moment();
@@ -1562,7 +1562,7 @@ App.Turno = Em.Object.extend({
 	}.property('horaFin'),
 
 	yaHablo : function () {
-		return (this.get('horaInicio') !=null) || (this.get('horaFin') != null);
+		return (this.get('horaInicio') !=null) && (this.get('horaFin') != null);
 	}.property('horaInicio', 'horaFin'),
 
 	hablando : function () {
