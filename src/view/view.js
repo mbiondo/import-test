@@ -6317,7 +6317,9 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
-			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
+//			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
+			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('dddd, LL'));
+
 			//Crear
 			notification.create();
 
