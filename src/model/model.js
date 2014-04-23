@@ -1562,7 +1562,7 @@ App.Turno = Em.Object.extend({
 	}.property('horaFin'),
 
 	yaHablo : function () {
-		return (this.get('horaInicio') !=null) && (this.get('horaFin') != null);
+		return (this.get('horaInicio') !=null) || (this.get('horaFin') != null);
 	}.property('horaInicio', 'horaFin'),
 
 	hablando : function () {
@@ -1570,7 +1570,7 @@ App.Turno = Em.Object.extend({
 	}.property('turnoHablando'),
 
 	bloqueado : function () {
-		if(this.get('horaInicio') && this.get('horaFin'))
+		if(this.get('horaInicio'))
 			return true;
 		else
 		 	return false;
