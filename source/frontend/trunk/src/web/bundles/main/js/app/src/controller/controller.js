@@ -2555,7 +2555,10 @@ App.ReunionesSinParteController = App.RestController.extend({
 		this._super();
 	},
 	loadSucceeded: function(data){
-		this._super(data);
+		if(data.length > 1)
+		{
+			this._super(data);
+		}
 	},	
 	createObject: function (data, save) {
 		save = save || false;
@@ -2622,6 +2625,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 		var reuniones 	= this.reunionesFilterByComisiones(comision);
 		
 		this.set('listado', reuniones);  
+
 	}.observes('comision'),
 });
 
