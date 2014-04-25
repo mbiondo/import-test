@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -3668,6 +3668,7 @@ App.ReunionConsultaView = Em.View.extend({
 			fn = function() {
 				App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 				App.set('citacionConsultaController.content', App.Citacion.create(Ember.copy(this.get('citacion'))));
+//				App.set('citacionConsultaController.content', App.Citacion.extend(App.Savable).create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 				$.jGrowl('Temario editado exitosamente!', { life: 5000 });
@@ -7997,6 +7998,9 @@ App.DiputadoConsultaView = Ember.View.extend({
 
 App.DiputadoEditView = Ember.View.extend({
 	templateName: 'diputado-edit',
+	cancelarEdicion: function(){
+		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
+	},
 });
 
 
@@ -8286,6 +8290,7 @@ App.VinculateFirmanteView = Ember.View.extend({
 	tagName: 'td',
 	templateName: 'firmante-sarha-vinculo',
 	vinculo: null,
+	vinculos: [],
 	user: null,
 
 	didInsertElement: function () {
@@ -8299,6 +8304,7 @@ App.VinculateFirmanteView = Ember.View.extend({
 	vinculoLoaded: function () {
 		if (this.get('vinculo.loaded')) {
 			if (this.get('vinculo.cuil'))  {
+				this.get('vinculos').push(this.get('vinculo.cuil'));
 				this.set('isEdit', true);
 			} else {
 				this.set('isEdit', false);
@@ -8309,21 +8315,51 @@ App.VinculateFirmanteView = Ember.View.extend({
 
 	cuilChange: function () {
 		this.set('edited', true);
+
+		if(this.get('vinculo.loaded'))
+		{			
+			if(this.get('vinculos').contains(this.get('vinculo.cuil')))
+			{
+				this.set('content.existeVinculo', true);
+
+				this.set('vinculo.cuil', '');
+			}
+			else
+			{
+//				this.get('vinculos').push(this.get('vinculo.cuil'));
+			}
+		}
 	}.observes('vinculo.cuil'),
 
+	//Si el cuil no está en this.get('vinculos') hago this.set('edited', false)
 	guardar: function () {
 		this.get('vinculo').set('nombre', this.get('content.label'));
+/*
+		console.log(this.get('vinculo'));
+		console.log(this.get('vinculos'));
+		console.log(this.get('vinculos').contains(this.get('vinculo.cuil')));
+*/
+		if(!this.get('vinculos').contains(this.get('vinculo.cuil')))
+		{
+			if (this.get('isEdit'))
+			{
+				this.get('vinculo').save();
+			}
+			else
+			{
+				this.get('vinculo').create();
+			}
 
-		if (this.get('isEdit'))
-			this.get('vinculo').save();
-		else
-			this.get('vinculo').create();
+			this.set('edited', false);
+			this.get('vinculos').push(this.get('vinculo.cuil'));
+		}
 
-		this.set('edited', false);
 	},
 
 	cancelar: function () {
-		this.get('vinculo').load();
+		this.set('content.existeVinculo', false);
+		this.set('vinculo.cuil', '');
+//		this.get('vinculo').load();
 		this.set('edited', false);
 	},
 
