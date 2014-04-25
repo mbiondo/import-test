@@ -2084,7 +2084,7 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	tipo: 'dip/diputados',
+	tipo: 'pap/dip/diputados',
 	url: moment().format('DD/MM/YYYY') + '/detalle',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
@@ -2201,7 +2201,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'com/comisiones/CD/P/resumen',
+	url: 'pap/com/comisiones/CD/P/resumen',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
