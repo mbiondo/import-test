@@ -566,6 +566,7 @@ App.IoController = Em.Object.extend({
 
 			case 'Tema' :
 				var turno, ap;
+				
 				ap = Ember.ArrayProxy.create({
 					content: Ember.A(options)
 				});

@@ -5086,6 +5086,7 @@ App.TurnoView = Ember.View.extend({
 	index : function () {
 		return this.get('contentIndex') + 1;
 	}.property('contentIndex'),
+	
 	didInsertElement: function(){
 		this._super();
 
@@ -8006,6 +8007,7 @@ App.DiputadoEditView = Ember.View.extend({
 
 App.DiputadosListaView = Ember.View.extend({
 	templateName: 'diputados',
+
 });
 
 App.DiputadoListItemView = Ember.View.extend({
@@ -8017,7 +8019,7 @@ App.DiputadoListItemView = Ember.View.extend({
 App.DiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.DiputadoListItemView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', ''],
+	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato',''],
 });
 
 
