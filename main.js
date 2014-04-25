@@ -594,7 +594,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
 							titulo: 'Estadisticas',
-							url: '#/estadisticas/visitasguiadas',
+							url: '#/visitas-guiadas/estadisticas',
 						}),		
 					],
 				}),

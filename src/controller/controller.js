@@ -1231,6 +1231,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 		return data;		
 	}.property('content.@each'),
+
 	estadisticasPorProvincia: function(){
 		var data = [];
 		var provincias;
@@ -1254,7 +1255,56 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 		return data;
 
-	}.property('content.@each')
+	}.property('content.@each'),
+
+	estadisticasPorTipoInstitucion: function(){
+		var data = [];		
+		var tipoInstituciones;
+		var _self = this;
+
+		if (this.get('content'))
+		{
+			tipoInstituciones = $.map(this.get('content'), function(key){ return key.tipoInstitucion; }).sort(); // Recorro cada item
+			tipoInstituciones_unique = tipoInstituciones.uniq(); // Elimino repetidos
+
+			tipoInstituciones_unique.forEach(function(item){
+				var cant = 0;
+				tipoInstituciones_list = _self.get('arrangedContent').filterProperty('tipoInstitucion', item);			    
+				tipoInstituciones_list.forEach(function(item){
+					cant+=parseInt(item.cantPersonas);
+				});
+
+				data.push({name: item, y: cant});
+			});
+		}
+
+		return data;
+	}.property('content.@each'),
+
+	estadisticasPorNivelAlumnos: function(){
+		var data = [];				
+		var nivelesAlumnos;
+		var _self = this;
+
+		if (this.get('content'))
+		{
+			nivelesAlumnos = $.map(this.get('content'), function(key){ return key.nivelAlumnos; }).sort(); // Recorro cada item
+			nivelesAlumnos_unique = nivelesAlumnos.uniq(); // Elimino repetidos
+
+			nivelesAlumnos_unique.forEach(function(item){
+				var cant = 0;
+				nivelesAlumnos_list = _self.get('arrangedContent').filterProperty('nivelAlumnos', item);			    
+				nivelesAlumnos_list.forEach(function(item){
+					cant+=parseInt(item.cantPersonas);
+				});
+
+				data.push({name: item, y: cant});
+			});
+		}
+
+		return data;
+	}.property('content.@each'),
+
 });
 
 App.VisitaGuiadaConsultaController = Ember.Object.extend({

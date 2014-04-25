@@ -1883,13 +1883,56 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Visitas Guiadas'},
+							{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/listado'},
 							{titulo: 'Visita', url: '#/visitas-guiada/visita/'}
 						]);					
 						App.get('menuController').seleccionar(11, 0, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
+				
+				estadisticas: Ember.Route.extend({
+				route: '/estadisticas',
+
+				deserialize: function(){
+					var deferred = $.Deferred();				
+					
+					App.visitasGuiadasController = App.VisitasGuiadasController.create();
+					App.visitasGuiadasEstadisticasController = App.VisitasGuiadasEstadisticasController.create();
+
+					fn = function() {
+						if(App.get('visitasGuiadasController.loaded'))
+						{
+							App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+							App.get('visitasGuiadasEstadisticasController').removeObserver('loaded', this, fn);	
+							deferred.resolve(null);
+						}
+					};
+					
+					App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+					App.get('visitasGuiadasEstadisticasController').addObserver('loaded', this, fn);
+
+					App.get('visitasGuiadasController').load();	
+					App.get('visitasGuiadasEstadisticasController').load();	
+
+					return deferred.promise();	
+				},
+				connectOutlets: function(router, context){
+					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
+					appController.connectOutlet('main', 'VisitasGuiadasEstadisticas');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/listado'},
+						{titulo: 'Estadisticas', url: '#/visitas-guiadas/estadisticas'}
+					]);				
+
+					App.get('menuController').seleccionar(11, 0, 1);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
+				},					
+			}),
 		}),	
 
 		expedientes: Em.Route.extend({
