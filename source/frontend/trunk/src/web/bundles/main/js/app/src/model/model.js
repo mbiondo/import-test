@@ -1126,6 +1126,7 @@ App.Reunion = Em.Object.extend({
 	fecha: '',
 	parte: null,
 	useApi: true,
+	auditable: true,
 	serializable : [
 		'id',
 		'nota', 
@@ -1219,7 +1220,7 @@ App.User = Em.Object.extend({
 	}.property('nombreCompleto'),
 	
 	nombreCompleto: function () {
-		return this.get('apellido') + " " + this.get('nombre');
+		return this.get('apellido') + ", " + this.get('nombre');
 	}.property('nombre', 'apellido'),
 
 	label: function () {
@@ -1924,6 +1925,7 @@ App.TP = Ember.Object.extend({
     numero: '',
     periodo: '',
     fecha: '',
+//	auditable: true,
 
 	serializable: [
         'id',
