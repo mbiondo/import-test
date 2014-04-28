@@ -547,6 +547,7 @@ App.Router =  Em.Router.extend({
 
 						deserialize: function(router, params) {
 
+							App.diputadoEditController = App.DiputadoEditController.create({content: []});
 							var diputado = App.User.extend(App.Savable).create({id: params.id})
 							diputado.set('loaded', false);
 
@@ -559,6 +560,8 @@ App.Router =  Em.Router.extend({
 									diputado.set('bloque', bloque);
 									diputado.set('interBloque', interBloque);
 									
+									App.set('diputadoEditController.content', diputado);
+
 									deferred.resolve(diputado);				
 								}
 							};
