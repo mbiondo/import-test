@@ -8118,9 +8118,18 @@ App.DiputadoConsultaView = Ember.View.extend({
 
 App.DiputadoEditView = Ember.View.extend({
 	templateName: 'diputado-edit',
+	content: '',
+
+	didInsertElement: function(){
+		this._super();
+		this.set('content', App.get('diputadoEditController.content'));
+	},
 	cancelarEdicion: function(){
 		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
 	},
+	guardar: function(){		
+		this.get('controller').guardar();
+	}
 });
 
 
@@ -8445,21 +8454,13 @@ App.VinculateFirmanteView = Ember.View.extend({
 
 				this.set('vinculo.cuil', '');
 			}
-			else
-			{
-//				this.get('vinculos').push(this.get('vinculo.cuil'));
-			}
 		}
 	}.observes('vinculo.cuil'),
 
 	//Si el cuil no está en this.get('vinculos') hago this.set('edited', false)
 	guardar: function () {
 		this.get('vinculo').set('nombre', this.get('content.label'));
-/*
-		console.log(this.get('vinculo'));
-		console.log(this.get('vinculos'));
-		console.log(this.get('vinculos').contains(this.get('vinculo.cuil')));
-*/
+
 		if(!this.get('vinculos').contains(this.get('vinculo.cuil')))
 		{
 			if (this.get('isEdit'))
@@ -8480,7 +8481,7 @@ App.VinculateFirmanteView = Ember.View.extend({
 	cancelar: function () {
 		this.set('content.existeVinculo', false);
 		this.set('vinculo.cuil', '');
-//		this.get('vinculo').load();
+		this.get('vinculo').load();
 		this.set('edited', false);
 	},
 
