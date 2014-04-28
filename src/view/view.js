@@ -7192,6 +7192,69 @@ App.CreateBiographyInfoView = App.ModalView.extend({
 
 // Visitas Guiadas
 
+App.VisitasGuiadasASearchView = Em.View.extend({
+	templateName: 'visitas-guiadas-asearch',
+	collapse: true,
+	loading: false,
+
+	collapseToggle: function(){
+		this.set('collapse', !this.get('collapse'));
+	},
+
+	limpiar: function () {
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	didInsertElement: function () {
+		this._super();
+		_self = this;
+		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
+		Ember.run.next(function () { 
+			if (App.get('expedientesController.query.dirty')) {
+				console.log(App.get('expedientesController.query.dirty'));
+				_self.limpiar(); 
+			}
+		});
+	},
+
+	buscar: function () {
+		App.get('expedientesController').set('loaded', false);
+		App.expedientesController.set('pageNumber', 1);
+		App.expedientesController.set('content', []);
+		App.expedientesController.load();
+		this.set('loading', true);
+
+	},
+
+	expedientesLoaded: function () {
+		if (App.get('expedientesController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
+	},
+
+	borrar: function () {
+		App.searchController.deleteObject(App.expedientesController.get('query'));
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+	},
+
+	guardar: function () {
+		if (App.expedientesController.get('query.id'))
+		{
+			App.expedientesController.get('query').save();	
+		} 
+		else 
+		{
+			App.expedientesController.get('query').set('usuario', App.userController.get('user.cuil'));
+			App.expedientesController.get('query').create();
+			if (App.searchController.content)
+			{
+				App.searchController.content.pushObject(App.expedientesController.get('query'));
+			}
+		}
+	},
+});
+
 App.VisitasGuiadasListItemView = Ember.View.extend({
 	templateName: 'visitas-guiadas-list-item',
 	tagName: 'tr',
@@ -7206,15 +7269,65 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 App.VisitasGuiadasListView = App.ListFilterView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
 	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita', 'Visitantes', 'Detalles'],
+	templateName: 'simple-list-whit-date-range',
+	fechaDesde: '',
+	fechaHasta: '',
+
+	lista: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered;
+
+		var fechaDesde = this.get('fechaDesde');
+		var fechaHasta = this.get('fechaHasta');
+
+		if(this.get('content'))
+		{
+			filtered = this.get('content').filter(function(item){				
+				if(fechaDesde && fechaHasta){
+					var itemFecha = item.get('fechaPreferencia');
+					if(itemFecha){
+						var fechaDesdeFormat = fechaDesde.substring(6,10) + "-" + fechaDesde.substring(3,5) + "-" + fechaDesde.substring(0,2);
+						var fechaHastaFormat = fechaHasta.substring(6,10) + "-" + fechaHasta.substring(3,5) + "-" + fechaHasta.substring(0,2);
+						return regex.test(item.get('label').toLowerCase()) && itemFecha.date >= fechaDesdeFormat && itemFecha.date <= fechaHastaFormat;
+					}										
+				}else{
+					return regex.test(item.get('label').toLowerCase());
+				}
+				
+//				return regex.test(item.get('label'));
+			});
+
+
+		}
+
+
+		if (!filtered)
+			filtered = [];
+
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+		this.set('count', filtered.length);		
+		return filtered.slice(0, this.get('totalRecords'));
+	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each', 'fechaDesde', 'fechaHasta'),
+
+
+
 });
 
 App.VisitasGuiadasView = Ember.View.extend({
 	templateName: 'visitas-guiadas',
 	content: '',
+	contentCount: 0,
 
 	willInsertElement: function(){
 		this.set('content', App.get('visitasGuiadasController.arrangedContent'));
-	}
+	},
+
 });
 
 App.VisitaGuiadaConsultaView = Ember.View.extend({

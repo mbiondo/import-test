@@ -1836,6 +1836,7 @@ App.VisitaGuiada = Ember.Object.extend({
 	cantPersonas: '',
 	alumnosConocimiento: '',
 	visitaEspecial:'',
+	fechaPreferencia:'',
         
     contactado: false,
     visitantes: null,
@@ -1856,7 +1857,7 @@ App.VisitaGuiada = Ember.Object.extend({
 	],
 
 	label: function (){
-		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas");
+		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia");
 	}.property('id'),
 
 	aprove: function () {
