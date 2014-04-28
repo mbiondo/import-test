@@ -7315,6 +7315,12 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 		return filtered.slice(0, this.get('totalRecords'));
 	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each', 'fechaDesde', 'fechaHasta'),
 
+	limpiar: function (){
+		this.set('fechaDesde','');
+		this.set('fechaHasta','');
+		this.set('filterText','');
+		
+	}
 
 
 });
