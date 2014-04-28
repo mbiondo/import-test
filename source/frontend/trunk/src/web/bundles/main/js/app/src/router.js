@@ -533,7 +533,6 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
-								{titulo: 'Diputados'},
 								{titulo: 'Legisladores', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
 								{titulo: 'Ver'},
 							]);		

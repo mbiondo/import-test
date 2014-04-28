@@ -8019,7 +8019,7 @@ App.DiputadoListItemView = Ember.View.extend({
 App.DiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.DiputadoListItemView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
-	columnas: ['', 'Fechas de Mandato', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato',''],
+	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato',''],
 });
 
 
