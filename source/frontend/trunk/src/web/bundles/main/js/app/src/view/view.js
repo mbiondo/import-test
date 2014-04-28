@@ -8006,6 +8006,12 @@ App.SugestTextSearch = Ember.TextField.extend({
 
 		element = _self.get('sugestList.firstObject');
 
+		console.log(this.get('optionValuePath'));
+
+		if (this.get('optionValuePath')) {
+			element = element.get(this.get('optionValuePath').replace('content.', ''));
+		}
+
 		_self.itemSelect(element);
 	},
 });
@@ -8561,6 +8567,7 @@ App.addWordsInput = Ember.TextField.extend({
 
 App.ListTags = Ember.View.extend({
 	templateName: 'list-tags',
+	classNames: ['pull-left'],
 	itemViewClass: App.ListItemTags,
 
 	didInsertElement: function(){

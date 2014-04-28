@@ -517,6 +517,7 @@ App.Router =  Em.Router.extend({
 								diputado.removeObserver('loaded', this, fn);
 								deferred.resolve(diputado);				
 							};
+							
 							diputado.addObserver('loaded', this, fn);
 							diputado.load();
 
