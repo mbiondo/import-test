@@ -1190,6 +1190,9 @@ App.User = Em.Object.extend({
     id: '',
     interBloque: '',
     bloque: '',
+    periodoInicio: '',
+    periodoFin: '',
+    provincia: '',
 
 
 	serializable: [
@@ -1199,6 +1202,9 @@ App.User = Em.Object.extend({
         'nombre',
         'apellido',
         'habilitado',
+        'periodoInicio',
+        'periodoFin',
+        'provincia'
 	],
 
 	avatarChanged: function () {
