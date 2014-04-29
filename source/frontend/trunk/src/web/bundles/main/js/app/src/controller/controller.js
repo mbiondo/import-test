@@ -5159,6 +5159,13 @@ App.AuditController =  App.RestController.extend({
 		this.load();
 	},
 
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Audit.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
 
 
 
