@@ -5142,4 +5142,24 @@ App.ExpedienteTimelineController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},	
-})
+});
+
+App.AuditController =  App.RestController.extend({
+	url: 'audit/',
+	useApi: false,
+	loaded: false,
+
+	loadByIdNameObject: function (id,name) {
+		this.url = "audit/get-by-id-object/" + id + "/" + name;
+		this.load();
+	},
+
+	loadByObjectName: function (name) {
+		this.url = "audit/get-by-object-name/" + name;
+		this.load();
+	},
+
+
+
+
+});
