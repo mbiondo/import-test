@@ -8129,12 +8129,16 @@ App.DiputadoEditView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 		this.set('content', App.get('diputadoEditController.content'));
+		
+		this.get('content').desNormalize();
 	},
 	cancelarEdicion: function(){
 		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
 	},
 	guardar: function(){		
 		this.get('controller').guardar();
+
+		this.get('content').normalize();
 	}
 });
 

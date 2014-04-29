@@ -1216,9 +1216,13 @@ App.User = Em.Object.extend({
 	}.observes('avatar'),
 
     normalize: function () {
+    	this.set('periodoFin.date', moment(this.get('periodoFin.date'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    	this.set('periodoInicio.date', moment(this.get('periodoInicio.date'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
     }, 
 
     desNormalize: function () {
+    	this.set('periodoFin.date', moment(this.get('periodoFin.date'), 'YYYY-MM-DD hh:mm:ss').format('DD/MM/YYYY'));
+    	this.set('periodoInicio.date', moment(this.get('periodoFin.date'), 'YYYY-MM-DD hh:mm:ss').format('DD/MM/YYYY'));
     },
 
 	sortValue: function () {
