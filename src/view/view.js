@@ -7352,7 +7352,6 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 		this._super();
 		App.auditController = App.AuditController.create();
 		App.auditController.loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
-
 	}      
 });
 
