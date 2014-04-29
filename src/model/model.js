@@ -547,7 +547,8 @@ App.Expediente = Em.Object.extend({
 	loadBiography: function () {
 		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 			$.ajax({
-				url: 'biographys/biography/' + this.get('id'),
+//				url: 'biographys/biography/' + this.get('id'),
+				url: 'biographys/biography/' + this.get('expdip'),
 				type: 'GET',
 				dataType: 'JSON',
 				context: this,
