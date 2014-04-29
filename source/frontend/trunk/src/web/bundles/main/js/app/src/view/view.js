@@ -7127,28 +7127,41 @@ App.CreateBiographyView = App.ModalView.extend({
 	templateName: 'biography-create',
 	observaciones: '',
 	prioridades: ['ALTA', 'MEDIA', 'BAJA'],
+	formValid: false,
 
 	callback: function(opts, event){
 		if (opts.primary) {
 			_self = this;
-			if (this.get('content.id')) {
-				this.get('content').addObserver('saveSuccess', function () {
-					if (this.get('saveSuccess')) {
-						if (_self.get('expediente'))
-							_self.get('expediente').set('biografia', this);
-					}
-				});
-				this.get('content').save();
-			} else {
-				this.get('content').addObserver('createSuccess', function () {
-					if (this.get('createSuccess')) {
-						if (_self.get('expediente'))
-							_self.get('expediente').set('biografia', this);
-					}
-				});
-				this.get('content').create();
+
+			if($('#formCrearAlertaTemprana').parsley('validate'))
+				this.set('formValid', true);
+			else
+				this.set('formValid', false);			
+
+			if(this.get('formValid'))
+			{					
+				if (this.get('content.id')) {
+					this.get('content').addObserver('saveSuccess', function () {
+						if (this.get('saveSuccess')) {
+							if (_self.get('expediente'))
+								_self.get('expediente').set('biografia', this);
+						}
+					});
+					this.get('content').save();
+				} else {
+					this.get('content').addObserver('createSuccess', function () {
+						if (this.get('createSuccess')) {
+							if (_self.get('expediente'))
+								_self.get('expediente').set('biografia', this);
+						}
+					});
+					this.get('content').create();
+				}
+				return true;
+			}else{
+				return false;
 			}
-			return true;
+			
 		} else if (opts.secondary) {
 			//alert('cancel')
 		} else {
