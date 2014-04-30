@@ -546,9 +546,18 @@ App.Expediente = Em.Object.extend({
 
 	loadBiography: function () {
 		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+
+/*			
+			var expediente;
+			if(this.get('expdip'))
+				expediente = this.get('expdip');
+			else
+				expediente = this.get('expsen');
+*/
 			$.ajax({
 //				url: 'biographys/biography/' + this.get('id'),
 				url: 'biographys/biography/' + this.get('expdip'),
+//				url: 'biographys/biography/' + expediente,
 				type: 'GET',
 				dataType: 'JSON',
 				context: this,
@@ -2006,6 +2015,26 @@ App.Proyecto = Em.Object.extend({
 	label: function(){
 		return this.get('titulo') + " " + this.get('tipo') + this.get('expdip') + this.get('girosLabel') + this.get('firmantesLabel');
 	}.property('titulo'),
+
+	loadBiography: function () {
+
+		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+			$.ajax({
+//				url: 'biographys/biography/' + this.get('id'),
+				url: 'biographys/biography/' + this.get('expdip'),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.biographyLoaded,
+			});			
+		}
+	},
+
+	biographyLoaded: function (data) {
+		if (data) 
+			this.set('biografia', App.Biography.create(data));
+	},
+
 
 	firmantesLabel: function() {
 		var strFirmantes = [];
