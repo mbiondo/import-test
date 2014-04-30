@@ -7293,6 +7293,16 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 
 	willInsertElement: function(){
 		this.set('content', App.get('visitaGuiadaConsultaController.content'));
+
+		App.auditController = App.AuditController.create();
+
+        fn = function() {
+            App.get('auditController').removeObserver('loaded', this, fn);    				
+        };
+
+        App.get('auditController').addObserver('loaded', this, fn);
+		App.auditController.loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
+		this.get('content').audits = App.get('auditController.content');
 	},
 
 	aprobar: function () {
@@ -7314,6 +7324,16 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 		//App.get('visitaGuiadaConsultaController').save();
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
+		if(this.get('content').contactado){
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Test');
+			audit.set('accion', 'Contactado');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', this.get('content').constructor.toString());
+			audit.set('objetoId', this.get('content').id);
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.create();
+		}
 	},
 
 	aproveSuccessed: function () {
@@ -7347,13 +7367,13 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 		} else if (this.get('saveSuccess') == false) {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 		}
-	},
+	},   
 
-	didInsertElement: function(){
-		this._super();
-		App.auditController = App.AuditController.create();
-		App.auditController.loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
-	}      
+	audits: function(){
+		console.log(App.get('auditController'));
+		return App.get('auditController');
+	}.property('App.auditController.content')
+
 });
 
 App.VisitasGuiadasEstadisticasView = Ember.View.extend({
