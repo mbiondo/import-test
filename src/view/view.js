@@ -7293,16 +7293,6 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 
 	willInsertElement: function(){
 		this.set('content', App.get('visitaGuiadaConsultaController.content'));
-
-		App.auditController = App.AuditController.create();
-
-        fn = function() {
-            App.get('auditController').removeObserver('loaded', this, fn);    				
-        };
-
-        App.get('auditController').addObserver('loaded', this, fn);
-		App.auditController.loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
-		this.get('content').audits = App.get('auditController.content');
 	},
 
 	aprobar: function () {
