@@ -1791,7 +1791,7 @@ App.ExpedienteSearchView = Em.View.extend({
 		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 		Ember.run.next(function () { 
 			if (App.get('expedientesController.query.dirty')) {
-				console.log(App.get('expedientesController.query.dirty'));
+//				console.log(App.get('expedientesController.query.dirty'));
 				_self.limpiar(); 
 			}
 		});
@@ -2286,7 +2286,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 //        console.log(this.getPath('App.expedienteConsultaController.content.url'));
 	},
 
-	createBiography: function () {
+	createBiography: function () {		
 		App.biographyController = App.BiographyController.create({
 			content: App.Biography.extend(App.Savable).create(
 				{expNro: App.get('expedienteConsultaController.content.expdip'), idProyecto: App.get('expedienteConsultaController.content.id')
@@ -2304,6 +2304,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 		}
 
 		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
+//		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip')}));
 		this.get('timeLineController').load();		
 	}
 });
@@ -7447,8 +7448,9 @@ App.ExpedienteBiographyItemView = Ember.View.extend({
 	puedeEditar: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
-	createBiography: function () {
+	createBiography: function () {		
 		var biography;
+
 		if (this.get('content').get('biografia')) {
 			biography = App.Biography.extend(App.Savable).create(this.get('content').get('biografia'));
 			biography.set('bloque', App.bloquesController.findProperty('nombre', biography.get('bloque.nombre')));
@@ -7459,8 +7461,10 @@ App.ExpedienteBiographyItemView = Ember.View.extend({
 		else {
 			biography = App.Biography.extend(App.Savable).create({
 				expNro: this.get('content').expdip, 
+//				expsen: this.get('content').expsen, 
 				idProyecto: this.get('content').id
 			});
+
 		}
 		App.biographyController = App.BiographyController.create({
 			content: biography,
@@ -7518,7 +7522,7 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 		App.get('expedientesController').set('pageSize', 250);
 		this.set('mostrarMasEnabled', false);
 	},
-
+/*
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
@@ -7528,6 +7532,17 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 		this.set('mostrarMasEnabled', true);
 		return filtered;
 	}.property('filterText', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+*/	
+	lista: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
+			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
+		});
+
+		this.set('mostrarMasEnabled', true);
+		return filtered;
+	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+
 });
 
 
@@ -7859,6 +7874,12 @@ App.MultiSelectListView = Ember.View.extend({
 App.TimeLineView = Ember.View.extend({
 	classNames: [],
 	templateName: 'wg-time-line',
+/*
+	didInsertElement: function(){
+		this._super();
+		console.log(this.get('content'));
+	}
+*/
 });
 
 
@@ -8345,7 +8366,7 @@ App.ProyectoSearchView = Em.View.extend({
 	},
 
 	removerPalabra: function(){
-		console.log(this.get('content'));
+//		console.log(this.get('content'));
 	},
 });
 
