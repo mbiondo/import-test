@@ -2086,6 +2086,7 @@ App.ProyectoQuery = Em.Object.extend({
 
 	comision: '',
 	expdip: '',
+	expediente: '',
 	tipo: '',
 	editable: true,
 	dirty: false,
@@ -2096,6 +2097,7 @@ App.ProyectoQuery = Em.Object.extend({
 	parametizable: [
 		'comision',
 		'expdip',
+		'expediente',
 		'tipo',
 		'palabras',
 	],
@@ -2104,6 +2106,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'id',
 		'comisiones',
 		'expdip',
+		'expediente',
 		'tipo',
 		'palabras',
 	],
