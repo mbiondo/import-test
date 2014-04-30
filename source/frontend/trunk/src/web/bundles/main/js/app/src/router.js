@@ -2082,7 +2082,7 @@ App.Router =  Em.Router.extend({
 						};
 
 						
-						App.set('expedienteConsultaController.url', 'ME/' + App.get('expedienteConsultaController.url'));		
+						App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');		
 						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 						App.get('expedienteConsultaController').load();		
 
