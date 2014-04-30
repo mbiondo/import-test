@@ -606,6 +606,7 @@ App.Router =  Em.Router.extend({
 	                deserialize: function(router, params) {
 						var deferred = $.Deferred();
 						
+						App.tpsController = App.TPsController.create();		
 						App.proyectosController = App.ProyectosController.create();
 						App.get('proyectosController').set('loaded', false);
 						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
@@ -613,15 +614,18 @@ App.Router =  Em.Router.extend({
 						fn = function() {
 							if (App.get('proyectosController.loaded'))
 							{
+								App.get('tpsController').removeObserver('loaded', this, fn);	
 								App.get('comisionesController').removeObserver('loaded', this, fn);	
 								App.get('proyectosController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);					
 							}
 						};
 
+						App.get('tpsController').addObserver('loaded', this, fn);
 						App.get('comisionesController').addObserver('loaded', this, fn);
 						App.get('proyectosController').addObserver('loaded', this, fn);
 
+						App.get('tpsController').load();
 						App.get('comisionesController').load();
 						App.get('proyectosController').load();
 										
@@ -2015,22 +2019,23 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params) {					
 						var deferred = $.Deferred();
-						
+
+					 	App.tpsController = App.TPsController.create();						
 						App.bloquesController = App.BloquesController.create();
 						App.interBloquesController = App.InterBloquesController.create();
 						App.proyectosController = App.ProyectosController.create();
 
 						App.get('proyectosController').set('loaded', false);
-						App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
-//						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						//App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 //						App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
 						fn = function() {
-							if (App.get('bloquesController.loaded') && App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
+							if (App.get('proyectosController.loaded') && App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('tpsController.loaded'))
 							{
 								App.get('proyectosController').removeObserver('loaded', this, fn);	
 								App.get('bloquesController').removeObserver('loaded', this, fn);	
-								App.get('comisionesController').removeObserver('loaded', this, fn);	
+								App.get('tpsController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);					
 							}
 						};
@@ -2038,12 +2043,12 @@ App.Router =  Em.Router.extend({
 						App.get('proyectosController').addObserver('loaded', this, fn);
 						App.get('bloquesController').addObserver('loaded', this, fn);
 						App.get('interBloquesController').addObserver('loaded', this, fn);
-						App.get('comisionesController').addObserver('loaded', this, fn);
+						App.get('tpsController').addObserver('loaded', this, fn);
 
 						App.get('proyectosController').load();
 						App.get('bloquesController').load();
-						App.get('comisionesController').load();
 						App.get('interBloquesController').load();
+						App.get('tpsController').load();
 
 										
 						return deferred.promise();
