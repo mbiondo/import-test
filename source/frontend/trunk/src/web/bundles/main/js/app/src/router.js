@@ -2018,21 +2018,29 @@ App.Router =  Em.Router.extend({
 						
 						App.bloquesController = App.BloquesController.create();
 						App.interBloquesController = App.InterBloquesController.create();
+						App.proyectosController = App.ProyectosController.create();
 
-						App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						App.get('proyectosController').set('loaded', false);
+						App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+//						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+//						App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
 						fn = function() {
-							if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
+							if (App.get('bloquesController.loaded') && App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('comisionesController.loaded'))
 							{
+								App.get('proyectosController').removeObserver('loaded', this, fn);	
 								App.get('bloquesController').removeObserver('loaded', this, fn);	
+								App.get('comisionesController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);					
 							}
 						};
 
+						App.get('proyectosController').addObserver('loaded', this, fn);
 						App.get('bloquesController').addObserver('loaded', this, fn);
 						App.get('interBloquesController').addObserver('loaded', this, fn);
 						App.get('comisionesController').addObserver('loaded', this, fn);
 
+						App.get('proyectosController').load();
 						App.get('bloquesController').load();
 						App.get('comisionesController').load();
 						App.get('interBloquesController').load();
@@ -2072,7 +2080,9 @@ App.Router =  Em.Router.extend({
 								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
 							}
 						};
+
 						
+						App.set('expedienteConsultaController.url', 'ME/' + App.get('expedienteConsultaController.url'));		
 						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 						App.get('expedienteConsultaController').load();		
 
@@ -2088,7 +2098,6 @@ App.Router =  Em.Router.extend({
 					},
 
 					serialize: function(router, context) {
-						// console.log('serialize');
 						var expedienteId = context.get('id');
 						return {expediente: expedienteId}
 					},
