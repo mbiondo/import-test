@@ -526,6 +526,11 @@ App.LoginView = Ember.View.extend({
 		return App.get('userController.loginError');
 	}.property('App.userController.loginError'),
 
+	loginMessage: function () {
+		return App.get('userController.loginMessage');
+	}.property('App.userController.loginMessage'),		
+
+	/*
 	falseLogin: function (){
 		var tmpUser = App.Usuario.extend(App.Savable).create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
 		var url = 'user/access';
@@ -571,6 +576,7 @@ App.LoginView = Ember.View.extend({
 			
 		});
 	},	
+	*/
 
 	login: function () {
 		if(!$('#login').parsley('validate')) return false;
@@ -7403,7 +7409,7 @@ App.ExpedientesBiographyView = Ember.View.extend({
 	}.property('App.expedientesController.content.@each'),
 	*/
 	generarInforme: function () {
-		var expedientes = App.get('expedientesController.content').filterProperty('seleccionado', true);
+		var expedientes = App.get('proyectosController.content').filterProperty('seleccionado', true);
 		var bloquesInfo = [];
 		var bloques = [];
 
@@ -8557,6 +8563,7 @@ App.addWordsInput = Ember.TextField.extend({
 		var palabra = App.get('proyectosController.query.palabra');
 		var palabras = App.get('proyectosController.query.palabras');
 		*/
+
 		var query = this.get('parentView');
 		var palabra = this.get('parentView').get('palabra');
 		var palabras = this.get('parentView').get('palabras');
