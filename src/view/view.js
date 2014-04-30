@@ -8322,6 +8322,7 @@ App.ProyectoSearchView = Em.View.extend({
 	loading: false,
 	palabra: '',
 	palabras: [],
+	tipoPub: ['TP'],
 
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
