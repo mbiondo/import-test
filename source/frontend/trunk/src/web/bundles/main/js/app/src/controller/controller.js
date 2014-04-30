@@ -5167,6 +5167,4 @@ App.AuditController =  App.RestController.extend({
 		this.addObject(item);
 	},
 
-
-
 });
