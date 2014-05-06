@@ -6768,6 +6768,8 @@ App.CrearExpedienteView = Ember.View.extend({
 				this.get('content').set('tipo', this.get('expTipo'));
 			}
 			
+			this.set('content.iniciado', this.get('content.iniciado').id);
+
 			this.set('loading', true);
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
@@ -6798,7 +6800,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
 			notification.create();      
-			
+
 			this.set('content', App.Expediente.extend(App.Savable).create({
 				expdipA: '', 
 				expdipN: '', 
@@ -6906,7 +6908,13 @@ App.InputSearchWidget = Ember.TextField.extend({
 
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
-	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
+//	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
+	camaras: [
+		{id: "Diputados", nombre: "Diputados"}, 
+		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
+	],
 	tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
 	tipoPub: ['TP'],
 	
@@ -6966,8 +6974,15 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});
 		});
 
+		this.get('content').set('iniciado', this.get('camaras.firstObject'));
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
+
+		Ember.run.next(function(){
+			console.log(_self.get('camaras'));
+			console.log(_self.get('camaras.firstObject'));
+			_self.set('camaras', _self.get('camaras'));
+		});
 	},
 
 	willDestroyElement: function(){
@@ -6983,7 +6998,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('content.expdip'),
 
 	camaraChange: function () {
-		switch (this.get('content.iniciado')) {
+
+		switch (this.get('content.iniciado.id')) {
 			case "Diputados":
 				this.get('content').set('expdipT', 'D');
 				break;
@@ -7000,7 +7016,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		var tipo = '';
 
-		if(this.get('content.iniciado') == 'JGM')
+		if(this.get('content.iniciado.id') == 'JGM')
 		{
 			tipo = 'func/funcionarios';
 		}
@@ -7038,20 +7054,26 @@ App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 
 App.ExpedienteFormLeyRevisionView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-ley-revision',
-	camaras: ["Senadores"],
+	camaras: [
+		{id: "Senadores", nombre: "Senadores"}
+	],
 	msgNro: '',
 	msgFecha: null,
 	msgTipo: '',
 	
 	didInsertElement: function () {
 		this._super();
-		this.get('content').set('iniciado', "Senadores");
+//		this.get('content').set('iniciado', this.get('camaras'));
+		this.get('content').set('iniciado', this.get('camaras.firstObject'));
 	},
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-mensaje',
-	camaras: ["Poder Ejecutivo", "JGM"],
+	camaras: [
+		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"},
+		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
+	],
 	msgNro: '',
 	msgFecha: null,
 	msgTipo: '',
@@ -7067,7 +7089,8 @@ App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	
 	didInsertElement: function () {
 		this._super();
-		this.get('content').set('iniciado', "Poder Ejecutivo");
+		this.get('content').set('iniciado', this.get('camaras.firstObject'));
+//		this.get('content').set('iniciado', "Poder Ejecutivo");
 	},
 });
 
