@@ -7032,6 +7032,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
+		if (this.get('parentView.oldTP')) {
+			_self = this;
+			Ember.run.next(function () { 
+				_self.set('pubnro', _self.get('parentView.oldTP'));
+			});	
+		}
+
 		/*
 		Ember.run.next(function(){
 			_self.set('camaras', _self.get('camaras'));
