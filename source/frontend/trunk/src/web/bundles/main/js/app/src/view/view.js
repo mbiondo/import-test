@@ -6746,7 +6746,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				{				
 					App.confirmActionController.setProperties({
 						title: 'Confirmar Crear Proyecto',
-						message: '¿ Esta seguro que desea crear el proyecto ?',
+						message: '¿ Confirma que desea crear el proyecto LEY ' +_self.get('content.expdip')+ ' ?',
 						success: null,
 					});
 					
