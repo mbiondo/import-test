@@ -6729,6 +6729,13 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
+	camaras: [
+		{id: "Diputados", nombre: "Diputados"}, 
+		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
+	],	
+
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
 	}.property('content.tipo'),
@@ -6849,21 +6856,24 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
 			notification.create();      
 
+			var iniciado = this.get('camaras').findProperty('id', expediente.get('iniciado'));
+			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
+
 			this.set('content', App.Expediente.extend(App.Savable).create({
 				expdipA: '', 
 				expdipN: '', 
 				tipo: 'LEY', 
 				pubtipo: expediente.get('pubtipo'), 
-				pubnro: expediente.get('pubnro'), 
-				pubFecha: expediente.get('pubFecha'), 
 				periodo: expediente.get('periodo'),
 				expdipA: expediente.get('expdipA'),
-				iniciado: expediente.get('iniciado'),
+				iniciado: iniciado,
 				sesion: expediente.get('sesion'),
 				firmantes: [],
 				giro: [],
 				comisiones: [],
+				autoridades: [],
 			}));
+
 			this.setupEnter();
 			this.set('loading', false);
 			this.set('clickGuardar', false);
@@ -6871,6 +6881,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			$("#formCrearExpediente").parsley('reset');
 			$("#nav-tabs-proyecto").click();
 			$("#selector-tipo-proyecto").focus();
+
+			this.set('oldTP', tp);
 
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
@@ -6956,13 +6968,7 @@ App.InputSearchWidget = Ember.TextField.extend({
 
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
-//	camaras: ["Diputados", "Senadores", "Poder Ejecutivo", "JGM"],
-	camaras: [
-		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senadores", nombre: "Senadores"}, 
-		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
-		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
-	],
+
 	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PROROGA'],
 	tipoPub: ['TP'],
 	
@@ -7026,11 +7032,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
+		/*
 		Ember.run.next(function(){
-			console.log(_self.get('camaras'));
-			console.log(_self.get('camaras.firstObject'));
 			_self.set('camaras', _self.get('camaras'));
 		});
+		*/
 	},
 
 	willDestroyElement: function(){
@@ -7044,6 +7050,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	uploadFolder: function () {
 		return "uploads/expediente/" + this.get('content.expdip') + "/";
 	}.property('content.expdip'),
+
+	parentViewChangeTP: function () {
+		_self = this;
+		Ember.run.next(function () { 
+			_self.set('pubnro', _self.get('parentView.oldTP'));
+		});
+	}.observes('parentView.oldTP'),
 
 	camaraChange: function () {
 
