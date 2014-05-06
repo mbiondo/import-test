@@ -578,6 +578,9 @@ App.Expediente = Em.Object.extend({
 
         normalize: function () {
             this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+            
+            this.set('titulo', this.get('titulo').toUpperCase());
+            this.set('sumario', this.get('sumario').toUpperCase());
             var giros = [];
 
             //this.set('comisiones', this.get('giro'));
@@ -592,11 +595,10 @@ App.Expediente = Em.Object.extend({
             this.set('giro', giros);
 
             if(this.get('autoridades').length > 0){
-                console.log(this.get('autoridades'));
                 orden = 1;       
                 var fs = [];
                 this.get('autoridades').forEach(function (firmante) {
-                                var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
+                        var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloques: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
                         orden++;
                         fs.pushObject(itemDatos);
                 }, this);
