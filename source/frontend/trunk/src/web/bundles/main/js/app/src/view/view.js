@@ -7889,7 +7889,7 @@ App.MultiSelectListView = Ember.View.extend({
 		}
 	},
 
-	selectedItem: function (i) {
+	selectedItem: function (i) {		
 		var item = this.get('selection').findProperty('id', i.get('id'));
 		if (item) {
 			if (this.get('filterText').length >= this.get('threshold')){
@@ -8105,6 +8105,8 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 		var _self = this.get('parentView');
 		element = _self.get('content.firstObject');
 		_self.selectedItem(element);
+
+		this.set('value', '');
 	},
 });
 
