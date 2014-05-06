@@ -1793,7 +1793,7 @@ App.ExpedienteSearchView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		_self = this;
+		var _self = this;
 		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 		Ember.run.next(function () { 
 			if (App.get('expedientesController.query.dirty')) {
@@ -1801,8 +1801,16 @@ App.ExpedienteSearchView = Em.View.extend({
 				_self.limpiar(); 
 			}
 		});
-	},
 
+		// Escucho el enter en cualquier input text del search
+		shortcut.add('enter', function() {
+		  if($('input[type="text"]').is(':focus'))
+		  {
+		    _self.buscar();
+		  }
+		});
+
+	},
 	buscar: function () {
 		App.get('expedientesController').set('loaded', false);
 		App.expedientesController.set('pageNumber', 1);
@@ -1838,6 +1846,10 @@ App.ExpedienteSearchView = Em.View.extend({
 				App.searchController.content.pushObject(App.expedientesController.get('query'));
 			}
 		}
+	},
+	willDestroyElement: function(){
+		// remuevo la escucha del 'enter'
+		shortcut.remove('enter');
 	},
 });
 
