@@ -465,6 +465,13 @@ App.ContentView = Ember.View.extend({
 		App.get('router').transitionTo('index');
 	},
 
+	changePassword: function () {
+		App.get('router').transitionTo('loading');
+		App.get('userController').set('user.first_login', true);
+		App.get('userController').set('changePassword', true);
+		App.get('router').transitionTo('index');
+	},
+
 	didInsertElement: function () {
 		this._super();
 		var $menuWrapperTiny =  this.$('#mainMenuTiny');
@@ -511,6 +518,47 @@ App.LoginInput = Ember.TextField.extend({
 	},
 });
 
+
+App.ChangePasswordView = Ember.View.extend({
+	templateName: 'change-password',
+	password: '',
+
+	changePassword: function () {
+		if(!$('#login').parsley('validate')) return false;
+
+		$.ajax({
+			url: App.get('apiController.authURL') + 'change_password/',
+			dataType: 'JSON',
+			type: 'PUT',
+			context : {controller: this},
+			data : {password: this.get('password') },
+			success: this.changeSucceeded,
+		});
+
+	},
+
+	cancel: function () {
+		App.get('userController').set('user.first_login', false);
+		App.get('userController').set('changePassword', false);
+		App.get('router').transitionTo('loading');
+		App.get('router').transitionTo('index');
+	},
+
+	changeSucceeded: function (data) {
+		if (data.is_valid == true)
+		{
+			App.get('userController.user').set('first_login', false);
+			localStorage.setObject('user', JSON.stringify(App.userController.user));
+			App.get('router').transitionTo('loading');
+			App.get('router').transitionTo('index');
+		}
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
+	}	
+});
 
 App.LoginView = Ember.View.extend({
 	templateName: 'login',
@@ -6915,7 +6963,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
-	tipoSesion: ['Ordinaria', 'Especial', 'Informativa'],
+	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PROROGA'],
 	tipoPub: ['TP'],
 	
 	filterTextComisiones: '',
