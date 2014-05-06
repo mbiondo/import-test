@@ -1707,12 +1707,12 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	},
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
 		// App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
-		App.SortableColumn.create({nombre: 'Comisiones convocadas', campo: 'girosLabel'}),
+		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
 	],	
 
 
