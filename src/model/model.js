@@ -578,9 +578,10 @@ App.Expediente = Em.Object.extend({
 
         normalize: function () {
             this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+
+            if (this.get('titulo')) this.set('titulo', this.get('titulo').toUpperCase());
+            if (this.get('sumario')) this.set('sumario', this.get('sumario').toUpperCase());
             
-            this.set('titulo', this.get('titulo').toUpperCase());
-            this.set('sumario', this.get('sumario').toUpperCase());
             var giros = [];
 
             //this.set('comisiones', this.get('giro'));
