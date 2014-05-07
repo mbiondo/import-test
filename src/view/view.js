@@ -8420,6 +8420,8 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
 		});
 
+		this.set('content.count', filtered.length);		
+
 		this.set('mostrarMasEnabled', true);
 		return filtered;
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
