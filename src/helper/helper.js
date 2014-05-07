@@ -185,20 +185,20 @@ Handlebars.registerHelper("linkExpedienteEditar", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
 
-  return "#/direccion/secretaria/mesa/de/entrada/proyecto/"+id+"/editar";
+  return "#/direccionsecretaria/mesadeentrada/proyecto/"+id+"/editar";
 });
 
 Handlebars.registerHelper("linkExpedienteGirar", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
 
-  return "#/direccion/secretaria/mesa/de/entrada/proyecto/"+id+"/girar";
+  return "#/direccionsecretaria/mesadeentrada/proyecto/"+id+"/girar";
 });
 
 Handlebars.registerHelper("linkProyecto", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
   
-  return "#/direccion/secretaria/mesa/de/entrada/proyecto/" + id + "/ver";
+  return "#/direccionsecretaria/mesadeentrada/proyecto/" + id + "/ver";
 });
 
