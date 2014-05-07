@@ -5069,6 +5069,7 @@ App.ProyectosController = App.RestController.extend({
 			lista.pushObject(App.Proyecto.create(i));
 		});
 
+		App.set('proyectosController.recordcount', items.recordcount);
 		App.set('proyectosController.content', lista);
 		App.get('proyectosController').set('loading', false);
 		App.get('proyectosController').set('loaded', true);
