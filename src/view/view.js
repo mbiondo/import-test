@@ -2890,6 +2890,7 @@ App.CitacionCrearView = Em.View.extend({
 
 			posicion = proyectos.indexOf(expediente);
 
+
 			if(posicion > -1){
 				var aux = proyectos[posicion];
 				var posicionAnterior = posicion + haciaPosicion;
@@ -7861,8 +7862,16 @@ App.SelectListItemView = Ember.View.extend({
 		return this.get('content').get(this.get('labelPath'));
 	}.property('content'),
 
-	click: function () {
+	clickItem: function () {
 		this.get('parentView').clickItem(this.get('content'));
+	},
+
+	clickMoverArribaInTema: function (){
+		this.get('parentView').get('parentView').clickMoverArribaInTema(this.get('content'));
+	},
+
+	clickMoverAbajoInTema: function (){
+		this.get('parentView').get('parentView').clickMoverAbajoInTema(this.get('content'));
 	},
 
 });
@@ -7951,7 +7960,7 @@ App.MultiSelectListView = Ember.View.extend({
 			}, this);
 			this.get('contentController').get('content').removeObjects(selectionNews);
 			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
-			this.set('content', this.get('contentController').get('content'));
+			this.set('content', this.get('contentController').get('arrangedContent'));
 			if (this.get('content'))
 				this.set('content', this.get('content').slice(0, 20));
 		}
@@ -7984,6 +7993,42 @@ App.MultiSelectListView = Ember.View.extend({
 		} else if (!this.get('suggestable')) {
 			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').load();
+		}
+	},
+
+	clickMoverArribaInTema: function (item) {	
+		this.clickMoverInTema(item, -1);
+	},
+
+	clickMoverAbajoInTema: function (item) {
+		this.clickMoverInTema(item, 1);
+	},
+
+	selectionList: function () {
+		return this.get('selection');
+	}.property('selection.@each', 'selection.@each.orden', 'selection'),
+
+	clickMoverInTema: function (item, haciaPosicion) {
+		var item = this.get('selection').findProperty('id', item.get('id'));
+		if (item) {
+			var selection = this.get('selection');
+			var posicion = -1;
+
+			posicion = selection.indexOf(item);
+
+			if(posicion > -1){
+				var aux = selection[posicion];
+				var posicionAnterior = posicion + haciaPosicion;
+				if(posicionAnterior > -1 && posicionAnterior < selection.length){
+					selection[posicion] = selection[posicionAnterior];
+					selection[posicionAnterior] = aux;					
+					this.set('selection',[]);			
+				}
+			}
+			var self = this;
+			selection.forEach(function (itemSelection) {
+				self.get('selection').addObject(itemSelection);
+			});
 		}
 	},
 
@@ -8189,7 +8234,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	templateName: 'me-expediente-editar',
         
 	guardar: function(){
-                this.get('controller.content').normalize();
+        this.get('controller.content').normalize();
 		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('controller.content').save();
 	},
@@ -8207,10 +8252,14 @@ App.MEExpedienteEditarView = Ember.View.extend({
 App.MEExpedienteGirarView = Ember.View.extend({
 	templateName: 'me-expediente-girar',
         
-        guardar: function(){
-                this.get('controller.content').normalize();
-		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
-		this.get('controller.content').save();
+    guardar: function(){
+    	if (this.get('controller.content.comisiones').length > 0){
+	        this.get('controller.content').normalize();
+			this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
+			this.get('controller.content').save();
+		}else{
+			$.jGrowl('Debe haber como minimo una comision', { life: 5000 });
+		}
 	},
 	saveSuccessed: function () {
 		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
