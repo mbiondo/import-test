@@ -313,7 +313,7 @@ App.Router =  Em.Router.extend({
 							ex.set('loaded', false);
 							 var deferred = $.Deferred(),
 							 fn = function() {
-	                                                        ex.desNormalize(); 
+	                            ex.desNormalize(); 
 								ex.removeObserver('loaded', this, fn);
 								deferred.resolve(ex);				
 							 };

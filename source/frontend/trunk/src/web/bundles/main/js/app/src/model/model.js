@@ -576,52 +576,52 @@ App.Expediente = Em.Object.extend({
 	}.property('expdip'),
 
 
-        normalize: function () {
-            this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+    normalize: function () {
+        this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
 
-            if (this.get('titulo')) this.set('titulo', this.get('titulo').toUpperCase());
-            if (this.get('sumario')) this.set('sumario', this.get('sumario').toUpperCase());
-            
-            var giros = [];
+        if (this.get('titulo')) this.set('titulo', this.get('titulo').toUpperCase());
+        if (this.get('sumario')) this.set('sumario', this.get('sumario').toUpperCase());
+        
+        var giros = [];
 
-            //this.set('comisiones', this.get('giro'));
-            var orden = 1;
+        //this.set('comisiones', this.get('giro'));
+        var orden = 1;
 
-            this.get('comisiones').forEach(function (comision) {
-                    var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, idComision: comision.id};
+        this.get('comisiones').forEach(function (comision) {
+                var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, idComision: comision.id};
+                orden++;
+                giros.pushObject(itemDatos);
+        }, this);
+
+        this.set('giro', giros);
+
+        if(this.get('autoridades').length > 0){
+            orden = 1;       
+            var fs = [];
+            this.get('autoridades').forEach(function (firmante) {
+                    var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
                     orden++;
-                    giros.pushObject(itemDatos);
+                    fs.pushObject(itemDatos);
             }, this);
 
-            this.set('giro', giros);
+            this.set('firmantes', fs);
+        }
+    },
 
-            if(this.get('autoridades').length > 0){
-                orden = 1;       
-                var fs = [];
-                this.get('autoridades').forEach(function (firmante) {
-                        var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-                        orden++;
-                        fs.pushObject(itemDatos);
+    desNormalize: function ()  {
+        this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+        if (this.get('giro'))
+        {
+                this.get('giro').forEach(function (item) {
+                    this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision}));
                 }, this);
+        }
 
-                this.set('firmantes', fs);
-            }
-        },
-
-        desNormalize: function ()  {
-            this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
-            if (this.get('giro') && !this.get('comisiones').length > 0)
-            {
-                    this.get('giro').forEach(function (item) {
-                        this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision}));
-                    }, this);
-            }
-
-            if (this.get('firmantes') && !this.get('autoridades'))
-            {
-                    //TO-DO Transform objetc to Firmante.
-            }    	
-        },
+        if (this.get('firmantes') && !this.get('autoridades'))
+        {
+                //TO-DO Transform objetc to Firmante.
+        }    	
+    },
 
 	tipolabel: function () {
 		var regex = new RegExp('MENSAJE');
