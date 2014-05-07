@@ -244,10 +244,10 @@ App.Router =  Em.Router.extend({
 		}),
 
 		direccionSecretaria: Em.Route.extend({
-			route: '/direccion/secretaria',
+			route: '/direccionsecretaria',
 
 			mesaDeEntrada: Em.Route.extend({
-				route: '/mesa/de/entrada',
+				route: '/mesadeentrada',
 
 				proyecto: Em.Route.extend({
 					route: '/proyecto',
@@ -338,7 +338,8 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
-                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
+                                {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
+								{titulo: 'LEY ' + context.expdip},
 								{titulo: 'Girar expediente'}
 							]);								
 						},						
@@ -371,11 +372,12 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
-                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
+                                {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
+								{titulo: 'LEY ' + context.expdip},
 								{titulo: 'Ver'},
 							]);		
 
-							App.get('menuController').seleccionar(9, 2, 0);	
+							App.get('menuController').seleccionar(9, 2, 3);	
 
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},					
@@ -411,7 +413,8 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
-                                {titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
+                                {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
+								{titulo: 'LEY ' + context.expdip},
 								{titulo: 'Editar'},
 							]);		
 
@@ -455,7 +458,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
 								{titulo: 'Bloques'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado'},
+								{titulo: 'Listado', url: '#/direccionsecretaria/mesadeentrada/bloques/listado'},
 							]);			
 
 							App.get('menuController').seleccionar(9, 2, 2);	
@@ -496,7 +499,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
 								{titulo: 'Legisladores'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
+								{titulo: 'Listado', url: '#/direccionsecretaria/mesadeentrada/legisladores/listado'},
 							]);			
 
 							App.get('menuController').seleccionar(9, 2, 1);	
@@ -534,7 +537,7 @@ App.Router =  Em.Router.extend({
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
-								{titulo: 'Legisladores', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
+								{titulo: 'Legisladores', url: '#/direccionsecretaria/mesadeentrada/legisladores/listado'},
 								{titulo: 'Ver'},
 							]);		
 
@@ -591,8 +594,8 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de Entrada'},
 								{titulo: 'Legisladores'},
-								{titulo: 'Listado', url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado'},
-								{titulo: 'Editar'},
+								{titulo: 'Listado', url: '#/direccionsecretaria/mesadeentrada/legisladores/listado'},
+								{titulo: 'Editar'}
 							]);		
 
 							App.get('menuController').seleccionar(9, 2, 1);	
@@ -644,7 +647,7 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Dirección Secretaría'},
 							{titulo: 'Mesa de Entrada'},
-							{titulo: 'Proyectos', url: '#/direccion/secretaria/mesa/de/entrada/proyectos'},
+							{titulo: 'Buscador de Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
 						]);			
 	                },
 				}),
