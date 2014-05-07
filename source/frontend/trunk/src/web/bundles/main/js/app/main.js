@@ -85,8 +85,7 @@ App.menuController = App.MenuController.create({
 			id: 9,
 			roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA']],
 			titulo: 'Dirección Secretaría',
-//			url: '#/direccion/secretaria/diputados/listado',
-			url: '#/direccion/secretaria/mesa/de/entrada/proyecto/crear',
+			url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 			icono: 'ic ic-pen',
 			
 			subMenu: [
@@ -101,14 +100,14 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 							titulo: 'Consulta',
-							url: '#/direccion/secretaria/autoridades/listado',
+							url: '#/direccionsecretaria/autoridades/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 							titulo: 'Alta',
-							url: '#/direccion/secretaria/autoridades/alta',
+							url: '#/direccionsecretaria/autoridades/alta',
 						}),	
 					],
 				}),
@@ -124,26 +123,26 @@ App.menuController = App.MenuController.create({
 							id: 3,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Buscador de proyectos',
-							url: '#/direccion/secretaria/mesa/de/entrada/proyectos',
+							url: '#/direccionsecretaria/mesadeentrada/proyectos',
 						}),						
 						App.MenuItem.create({
 							id: 0,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Crear proyecto',
-							url: '#/direccion/secretaria/mesa/de/entrada/proyecto/crear',
+							url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 						}),
 						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Legisladores Vigentes',
-							url: '#/direccion/secretaria/mesa/de/entrada/legisladores/listado',
+							url: '#/direccionsecretaria/mesadeentrada/legisladores/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 2,
 							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Bloques',
-							url: '#/direccion/secretaria/mesa/de/entrada/bloques/listado',
+							url: '#/direccionsecretaria/mesadeentrada/bloques/listado',
 						}),						
 					],
 				}),
@@ -151,7 +150,7 @@ App.menuController = App.MenuController.create({
 					id: 1,
 					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
 					titulo: 'Envíos a Archivo',
-					url: '#/direccion/secretaria/envios/listado',
+					url: '#/direccionsecretaria/envios/listado',
 					icono: 'ic ic-archivados',
 					
 					subMenu: [
@@ -159,34 +158,10 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
 							titulo: 'Listado',
-							url: '#/direccion/secretaria/envios/listado',
+							url: '#/direccionsecretaria/envios/listado',
 						}),
 					]
-				}),
-
-
-/*
-				App.MenuItem.create({
-					id: 2,
-					titulo: 'Giros',
-					url: '',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER']],
-							titulo: 'Listado',
-							url: '#/mesa/de/entrada/giros/listado',
-						}),					
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Girar proyecto',
-							url: '#/mesa/de/entrada/proyecto/girar',
-						}),
-					],					
-				}),
-*/										
+				}),								
 			]
 		}),
 		App.MenuItem.create({
