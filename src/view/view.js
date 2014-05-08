@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -6470,11 +6470,6 @@ App.SugestView = Ember.View.extend({
 	optionValuePath: 'content',
 
 	sugestTextChanged: function () {
-		if (!this.get('controller')) {
-			var controller = App.get(this.get('controllerName')).create({ content: [] });
-			this.set('controller',  controller);
-		}
-		
 		if (this.get('sugestText').length >= this.get('threshold')) {
 			this.get('controller').filter(this.get('sugestText'));
 		} else {
@@ -6510,6 +6505,11 @@ App.SugestView = Ember.View.extend({
 		
 	didInsertElement: function () {
 		this._super();
+
+		if (!this.get('controller')) {
+			var controller = App.get(this.get('controllerName')).create({ content: [] });
+			this.set('controller',  controller);
+		}
 
 	},
 });
