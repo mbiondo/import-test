@@ -1869,7 +1869,7 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
 		
-		url += "/" + filterText;
+		//url += "/" + filterText;
 
 		url += "?expdip=" + filterText;
 
