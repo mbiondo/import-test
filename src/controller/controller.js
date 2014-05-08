@@ -618,10 +618,9 @@ App.UserController = Em.Controller.extend({
 			{
 				if (data.access_token)
 				{
-					if (App.apiController.get('use_auth'))
-						$.ajaxSetup({
-					    	headers: { 'Authorization': data.token_type + ' ' +  data.access_token }
-						});	
+					$.ajaxSetup({
+				    	headers: { 'Authorization': data.token_type + ' ' +  data.access_token }
+					});	
 
 					this.loginoAuth(cuil, data.access_token, data.token_type);
 				}
@@ -717,7 +716,7 @@ App.UserController = Em.Controller.extend({
 		//var url = 'usr/autenticate';
 
 		if (App.get('apiController.use_auth')) {
-			this.loginCheckoAuth();
+			this.loginCheckoAuth(cuil, password);
 		} else {
 			var url = App.get('apiController.url') + 'usr/autenticate';
 			$.ajax({
@@ -1869,6 +1868,7 @@ App.ExpedientesArchivablesController = App.RestController.extend({
 
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
+		
 		url += "/" + filterText;
 
 		url += "?expdip=" + filterText;

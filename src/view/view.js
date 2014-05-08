@@ -7921,13 +7921,15 @@ App.MultiSelectListView = Ember.View.extend({
 	itemSelectedViewClass: 'App.SelectListItemVSelectediew',
 	selection: [],
 	threshold: 3,
-	delayFilter: 700,
+	delayFilter: 1000,
 	interval: null,
 	filterPath: 'nombre',
 	labelPath: 'nombre',
 	suggestable: false,
 	tabindex: 0,
 	content: [],
+
+	selectionAc: null,
 
 	filterTextChanged: function () {
 		_self = this;
@@ -7994,14 +7996,17 @@ App.MultiSelectListView = Ember.View.extend({
 			this.get('selection').removeObject(item);
 		} else {
 			item = this.get('content').findProperty('id', i.get('id'));
+			item.set('orden', this.get('selection').length);
 			this.get('selection').addObject(item);
 			this.get('content').removeObject(item);
 		}
+		this.get('selectionAc').set('content', this.get('selection'));
 	},
 
 	didInsertElement: function () {
 		this._super();
 		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
+		this.set('selectionAc', Ember.ArrayController.create({ sortProperties: ['orden']}));
 		if (this.get('filterText') && this.get('suggestable')) {
 			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').filter(this.get('filterText'));
@@ -8012,19 +8017,16 @@ App.MultiSelectListView = Ember.View.extend({
 	},
 
 	clickMoverArribaInTema: function (item) {	
-		this.clickMoverInTema(item, -1);
-	},
-
-	clickMoverAbajoInTema: function (item) {
 		this.clickMoverInTema(item, 1);
 	},
 
-	selectionList: function () {
-		return this.get('selection');
-	}.property('selection.@each', 'selection.@each.orden', 'selection'),
+	clickMoverAbajoInTema: function (item) {
+		this.clickMoverInTema(item, -1);
+	},
 
 	clickMoverInTema: function (item, haciaPosicion) {
 		var item = this.get('selection').findProperty('id', item.get('id'));
+
 		if (item) {
 			var selection = this.get('selection');
 			var posicion = -1;
@@ -8040,10 +8042,6 @@ App.MultiSelectListView = Ember.View.extend({
 					this.set('selection',[]);			
 				}
 			}
-			var self = this;
-			selection.forEach(function (itemSelection) {
-				self.get('selection').addObject(itemSelection);
-			});
 		}
 	},
 
@@ -8460,12 +8458,14 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		App.get('proyectosController').nextPage();
 		this.set('loading', true);
 	},
+
 	proyectosLoaded: function () {
 		if (App.get('proyectosController.loaded'))
 			this.set('loading', false);
 		else
 			this.set('loading', true);
 	},	
+
 	columnas: [
 		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
@@ -8473,6 +8473,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
 		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
 	],	
+
 	didInsertElement: function(){
 		this._super();
 		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
