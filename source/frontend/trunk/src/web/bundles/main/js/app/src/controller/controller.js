@@ -5001,8 +5001,8 @@ App.ProyectosController = App.RestController.extend({
 
 	type: App.Proyecto,
 	useApi: true,
-//	sortProperties: ['expdipA', 'expdipN'],
-//	sortAscending: false,
+	sortProperties: ['expdipN', 'expdipA'],
+	sortAscending: false,
 	loaded: false,
 	pageSize: 25,
 	pageNumber: 1,
