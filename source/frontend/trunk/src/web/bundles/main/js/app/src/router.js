@@ -610,7 +610,7 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred();
 						
 						App.tpsController = App.TPsController.create();		
-						App.proyectosController = App.ProyectosController.create();
+						App.proyectosController = App.ProyectosController.create({ content: []});
 						App.get('proyectosController').set('loaded', false);
 						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 
@@ -2026,7 +2026,7 @@ App.Router =  Em.Router.extend({
 					 	App.tpsController = App.TPsController.create();						
 						App.bloquesController = App.BloquesController.create();
 						App.interBloquesController = App.InterBloquesController.create();
-						App.proyectosController = App.ProyectosController.create();
+						App.proyectosController = App.ProyectosController.create({ content: []});
 
 						App.get('proyectosController').set('loaded', false);
 						//App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));

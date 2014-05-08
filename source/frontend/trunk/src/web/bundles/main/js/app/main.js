@@ -1,16 +1,18 @@
 App.apiController = App.ApiController.create({
 	url: 'https://sparl-desa.hcdn.gob.ar/sparl/rest/',
 
-	//url: 'http://10.185.204.12:9090/sparl/rest/',
+	//url: 'http://10.102.13.3:9090/rest/',
 	//url: 'http://10.185.204.6:9090/sparl/rest/',
 	//url: 'http://10.185.204.12:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	// url: 'http://201.250.82.9:9009/sparl/rest/',
 	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
 
-	//url: '',	
-	key: '',
-	secret: '',
+	authURL: 'http://10.105.5.55:9000/o/',
+	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
+	secret: '3KJtUIRd7=SgzpdTA?aeC5r9a8GkoF7rwCWufg5BXYTb9Pwlx_ef6NXbo.A3Fwn.1ok_8L8gSe_WDGJq_ZKn.D5y9MLAr9.T1j.IjT=exFT6q.3ox42g2RAjHle-KrHv',
+	use_auth: false,
+
 });
 
 App.menuController = App.MenuController.create({
@@ -740,6 +742,23 @@ Storage.prototype.getObject = function(key) {
 	return JSON.parse(this.getItem(key));
 }
 
+
+$( document ).ajaxComplete(function( event, xhr, settings ) {
+	if (xhr.status == 401) {
+		if (App.userController.user) {
+			
+			App.userController.set('user', null);
+			localStorage.setObject('user', null);
+
+			App.get('router').transitionTo('loading');
+			App.get('router').transitionTo('index');
+
+			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+		}
+	}
+});
+
+
 App.deferReadiness();
 
 App.puedeEditar = false;
@@ -776,6 +795,13 @@ if (user) {
 
 	App.userController.set('user', usuario);
 	
+
+	if (App.apiController.get('use_auth')) {
+		$.ajaxSetup({
+	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+		});				
+	}
+
 	App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 	App.get('notificacionesFiltradasController').load();
 
