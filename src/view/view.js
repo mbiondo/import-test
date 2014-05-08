@@ -8031,13 +8031,14 @@ App.MultiSelectListView = Ember.View.extend({
 	clickMoverInTema: function (item, gap) {
 		var item = this.get('selection').findProperty('id', item.get('id'));
 		var nextItem = this.get('selection').findProperty('orden', item.get('orden') + gap);
-		var itemOreden = item.get('orden');
 
-		if ((gap < 0 && item.get('orden') > 1) || (gap > 0 && item.get('orden') < this.get('selection').length)) {
-			item.set('orden',  nextItem.get('orden'));
-			nextItem.set('orden', itemOreden);
+		if (nextItem) {
+			var itemOrden = item.get('orden');
+			var nextItemOreden = nextItem.get('orden');
+			item.set('orden', nextItemOreden);
+			nextItem.set('orden', itemOrden);
 		}
-		console.log(this.get('selection'));
+
 	},
 
 });
