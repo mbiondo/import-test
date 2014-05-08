@@ -6737,6 +6737,26 @@ App.CrearExpedienteView = Ember.View.extend({
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],	
 
+	camarasList: function(){
+		switch (this.get('content.tipo'))
+		{
+			case 'LEY':
+				return this.get('camaras');
+				break;
+			case 'LEY EN REVISION':
+				return Array(this.get('camaras')[1]);
+				break;
+			case 'RESOLUCION':
+				return this.get('camaras');
+				break;
+			case 'DECLARACION':
+				return this.get('camaras');
+				break;
+			case 'MENSAJE':
+				return Array(this.get('camaras')[1], this.get('camaras')[3]);
+				break;
+		}
+	}.property('content.tipo'),
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
 	}.property('content.tipo'),
