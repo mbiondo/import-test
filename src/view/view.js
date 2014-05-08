@@ -2743,8 +2743,10 @@ App.CitacionCrearView = Em.View.extend({
 			var cu = App.get('userController.user.comisiones')[0];
 			if (cu) {
 				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
-				if (c)
+				if (c) {
+					c.set('orden', 1);
 					App.get('citacionCrearController.content.comisiones').pushObject(c);
+				}
 			}
 		}
 	}, 
@@ -8028,7 +8030,6 @@ App.MultiSelectListView = Ember.View.extend({
 
 	clickMoverInTema: function (item, gap) {
 		var item = this.get('selection').findProperty('id', item.get('id'));
-
 		var nextItem = this.get('selection').findProperty('orden', item.get('orden') + gap);
 		var itemOreden = item.get('orden');
 
@@ -8036,6 +8037,7 @@ App.MultiSelectListView = Ember.View.extend({
 			item.set('orden',  nextItem.get('orden'));
 			nextItem.set('orden', itemOreden);
 		}
+		console.log(this.get('selection'));
 	},
 
 });
