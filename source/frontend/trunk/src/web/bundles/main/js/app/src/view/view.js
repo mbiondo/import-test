@@ -6737,6 +6737,12 @@ App.CrearExpedienteView = Ember.View.extend({
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],	
 
+	camarasChange: function(){
+		var _self = this;
+		Ember.run.next(function(){		
+			_self.set('content.iniciado', _self.get('camarasList.firstObject'));
+		});
+	}.observes('content.tipo'),
 	camarasList: function(){
 		switch (this.get('content.tipo'))
 		{
@@ -7143,26 +7149,17 @@ App.ExpedienteFormResolucionView = App.ExpedienteFormLeyView.extend({
 
 App.ExpedienteFormLeyRevisionView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-ley-revision',
-	camaras: [
-		{id: "Senadores", nombre: "Senadores"}
-	],
 	msgNro: '',
 	msgFecha: null,
 	msgTipo: '',
 	
 	didInsertElement: function () {
 		this._super();
-//		this.get('content').set('iniciado', this.get('camaras'));
-		this.get('content').set('iniciado', this.get('camaras.firstObject'));
 	},
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-mensaje',
-	camaras: [
-		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"},
-		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
-	],
 	msgNro: '',
 	msgFecha: null,
 	msgTipo: '',
@@ -7178,8 +7175,6 @@ App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	
 	didInsertElement: function () {
 		this._super();
-		this.get('content').set('iniciado', this.get('camaras.firstObject'));
-//		this.get('content').set('iniciado', "Poder Ejecutivo");
 	},
 });
 
