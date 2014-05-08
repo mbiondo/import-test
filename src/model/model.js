@@ -2121,6 +2121,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'pubnro',
 		'tipoPub',
 		'pageNumber',
+		'pageSize',
 	],
 
 	comisiones: function () {

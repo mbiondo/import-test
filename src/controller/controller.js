@@ -597,31 +597,148 @@ App.IoController = Em.Object.extend({
 });
 
 
+
+
 App.UserController = Em.Controller.extend({
 	user : undefined,
 	loginError: false,
 
-	loginCheck: function(cuil, password){
+
+	loginCheckoAuth: function(cuil, password){
 		//var url = 'usr/autenticate';
-		var url = App.get('apiController.url') + 'usr/autenticate';
+		var url = App.get('apiController.authURL') + 'token/';
 		$.ajax({
 			url:  url,
-			contentType: 'text/plain',
 			type: 'POST',
 			context: this,
-			data : cuil + "," + password,
+
+			data : {grant_type: 'password', username: cuil, password: password, client_id: App.get('apiController.client'), client_secret: App.get('apiController.secret')},
+
 			success: function( data ) 
 			{
-				if (data == true || data == "true")
+				if (data.access_token)
 				{
-					this.login(cuil);
+					if (App.apiController.get('use_auth'))
+						$.ajaxSetup({
+					    	headers: { 'Authorization': data.token_type + ' ' +  data.access_token }
+						});	
+
+					this.loginoAuth(cuil, data.access_token, data.token_type);
 				}
 				else
 				{
 					this.set('loginError', true);
 				}
 			},
+			complete: function (xhr) {
+				if (xhr.status == 400) {
+					if (xhr.responseText) {
+						var response = JSON.parse(xhr.responseText);
+						this.set('loginError', true);
+						this.set('loginMessage', response.error_description);
+					}
+				}
+			},
 		});			
+	},
+
+	loginoAuth: function (cuil, access_token, token_type) {
+
+		//var urlUserData = 'usr/userdata';
+		var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		var _self = this;
+
+
+		$.ajax({
+			url:  urlUserData,
+			contentType: 'text/plain',
+			type: 'POST',
+			data: cuil,
+			dataType: 'JSON',
+
+			success: function (data) {
+				var tmpUser = App.Usuario.extend(App.Savable).create(data);
+
+				var url = 'user/access';
+				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
+				posting.done(function( data ){
+					data = JSON.parse(data);
+
+					var userRoles = [];
+					var roles = data.roles;
+					roles.forEach(function (rol){
+						userRoles.addObject(App.Rol.create(rol));
+					});
+
+					var userRolesMerged = [];
+					var rolesmerged = data.rolesmerged;
+					rolesmerged.forEach(function (rol){
+						userRolesMerged.addObject(App.Rol.create(rol));
+					});					
+
+					var userComisiones = [];
+					var comisiones = data.comisiones;
+
+					if (comisiones) {
+						comisiones.forEach(function (comision){
+							userComisiones.addObject(App.Comision.create(comision));
+						});
+					}
+
+					tmpUser.set('roles', userRoles);
+					tmpUser.set('rolesmerged', userRolesMerged);
+					tmpUser.set('comisiones', userComisiones);
+					tmpUser.set('avatar', data.avatar);
+					tmpUser.set('id', data.id);
+					tmpUser.set('access_token', access_token);
+					tmpUser.set('token_type', token_type);
+					tmpUser.set('first_login', data.first_login);
+
+					_self.set('user', tmpUser);				
+
+					localStorage.setObject('user', JSON.stringify(tmpUser));
+										
+					App.get('notificacionesController').load();		
+					App.get('searchController').load();
+
+					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+					App.get('notificacionesFiltradasController').load();
+
+
+					App.get('router').transitionTo('loading');
+					App.get('router').transitionTo('index');
+					
+				});
+			},
+		});			
+	},
+
+	loginCheck: function(cuil, password){
+		//var url = 'usr/autenticate';
+
+		if (App.get('apiController.use_auth')) {
+			this.loginCheckoAuth();
+		} else {
+			var url = App.get('apiController.url') + 'usr/autenticate';
+			$.ajax({
+				url:  url,
+				contentType: 'text/plain',
+				type: 'POST',
+				context: this,
+				data : cuil + "," + password,
+				success: function( data ) 
+				{
+					if (data == true || data == "true")
+					{
+						this.login(cuil);
+					}
+					else
+					{
+						this.set('loginError', true);
+					}
+				},
+			});			
+		}
 	},
 
 	login: function (cuil) {
@@ -701,6 +818,14 @@ App.UserController = Em.Controller.extend({
 	isLogin: function () {
 		return this.get('user') != undefined;
 	}.property('user'),
+
+	isFirstLogin: function () {
+		if (App.get('apiController.use_auth'))
+			return this.get('user.first_login');
+		else
+			return false;
+	}.property('user', 'user.first_login'),
+
 	
 	esDiputado: function () {
 		if (this.get('roles'))
@@ -767,6 +892,7 @@ App.ApplicationController = Em.Controller.extend({
 	socket: null,
 	connected: false,
 	columns: [3, 7, 2],
+	debug: false,
 
 	setLayout: function (left, middle, right) {
 		this.set('columns', [left, middle, right]);
@@ -5006,7 +5132,6 @@ App.ProyectosController = App.RestController.extend({
 	loaded: false,
 	pageSize: 25,
 	pageNumber: 1,
-
 	query: null,
 	
 	buildURL: function (filterText) {
@@ -5025,6 +5150,7 @@ App.ProyectosController = App.RestController.extend({
 		this.set('pageNumber', this.get('pageNumber') + 1);
 		this.load();
 	},
+
 	load: function() {
 		this.set('loaded', false);
 
@@ -5032,6 +5158,8 @@ App.ProyectosController = App.RestController.extend({
 
 		if(this.get('query'))
 		{
+			this.set('query.pageNumber', this.get('pageNumber'));
+			this.set('query.pageSize', this.get('pageSize'));			
 			getJSON = this.get('query').getJson();
 		}
 
@@ -5056,7 +5184,11 @@ App.ProyectosController = App.RestController.extend({
 		}
 	},
 
-	loadSucceeded: function(data){
+	parse: function (data) {
+		return data.proyectos;
+	},
+
+	loadSucceeded: function(data) {
 		var items = this.parse(data);
 		var lista = [];
 
@@ -5065,15 +5197,24 @@ App.ProyectosController = App.RestController.extend({
 			return;
 		}
 
-		items.proyectos.forEach(function(i){
-			lista.pushObject(App.Proyecto.create(i));
-		});
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
 
-		App.set('proyectosController.recordcount', items.recordcount);
-		App.set('proyectosController.content', lista);
+		App.set('proyectosController.recordcount', data.recordcount);
 		App.get('proyectosController').set('loading', false);
 		App.get('proyectosController').set('loaded', true);
 	},
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Expediente.extend(App.Savable).create(data);
+		item.setProperties(data);
+
+		this.addObject(item);
+	},	
 });
 
 App.EnviosArchivadosExpedientesArchivablesController = App.RestController.extend({
