@@ -7980,6 +7980,8 @@ App.MultiSelectListView = Ember.View.extend({
 			this.set('content', this.get('contentController').get('arrangedContent'));
 			if (this.get('content'))
 				this.set('content', this.get('content').slice(0, 20));
+			
+			this.get('selectionAc').set('content', this.get('selection'));			
 		}
 	},
 
@@ -7996,7 +7998,7 @@ App.MultiSelectListView = Ember.View.extend({
 			this.get('selection').removeObject(item);
 		} else {
 			item = this.get('content').findProperty('id', i.get('id'));
-			item.set('orden', this.get('selection').length);
+			item.set('orden', this.get('selection').length + 1);
 			this.get('selection').addObject(item);
 			this.get('content').removeObject(item);
 		}
@@ -8017,31 +8019,22 @@ App.MultiSelectListView = Ember.View.extend({
 	},
 
 	clickMoverArribaInTema: function (item) {	
-		this.clickMoverInTema(item, 1);
-	},
-
-	clickMoverAbajoInTema: function (item) {
 		this.clickMoverInTema(item, -1);
 	},
 
-	clickMoverInTema: function (item, haciaPosicion) {
+	clickMoverAbajoInTema: function (item) {
+		this.clickMoverInTema(item, 1);
+	},
+
+	clickMoverInTema: function (item, gap) {
 		var item = this.get('selection').findProperty('id', item.get('id'));
 
-		if (item) {
-			var selection = this.get('selection');
-			var posicion = -1;
+		var nextItem = this.get('selection').findProperty('orden', item.get('orden') + gap);
+		var itemOreden = item.get('orden');
 
-			posicion = selection.indexOf(item);
-
-			if(posicion > -1){
-				var aux = selection[posicion];
-				var posicionAnterior = posicion + haciaPosicion;
-				if(posicionAnterior > -1 && posicionAnterior < selection.length){
-					selection[posicion] = selection[posicionAnterior];
-					selection[posicionAnterior] = aux;					
-					this.set('selection',[]);			
-				}
-			}
+		if ((gap < 0 && item.get('orden') > 1) || (gap > 0 && item.get('orden') < this.get('selection').length)) {
+			item.set('orden',  nextItem.get('orden'));
+			nextItem.set('orden', itemOreden);
 		}
 	},
 
