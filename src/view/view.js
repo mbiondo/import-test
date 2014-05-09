@@ -8035,12 +8035,15 @@ App.MultiSelectListView = Ember.View.extend({
 		if (nextItem) {
 			var itemOrden = item.get('orden');
 			var nextItemOreden = nextItem.get('orden');
-			item.set('orden', nextItemOreden);
-			nextItem.set('orden', itemOrden);
+			if (gap < 0) {
+				item.set('orden', nextItemOreden);
+				nextItem.set('orden', itemOrden);
+			} else {
+				nextItem.set('orden', itemOrden);
+				item.set('orden', nextItemOreden);
+			}
 		}
-
 	},
-
 });
 
 
