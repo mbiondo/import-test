@@ -6865,7 +6865,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	createSucceeded: function () {
 		var _self = this;
-		this.get('content').desNormalize();
+		//this.get('content').desNormalize();
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 				
 		if (this.get('tipo')) {
@@ -6966,7 +6966,16 @@ App.CrearExpedienteView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		var _self = this;
-		this.set('content', App.Expediente.extend(App.Savable).create({expdipA: '', expdipN: '', tipo: 'LEY'}));              
+
+		this.set('content', App.Expediente.extend(App.Savable).create({
+			expdipA: '', 
+			expdipN: '', 
+			tipo: 'LEY', 
+			firmantes: [],
+			giro: [],
+			comisiones: [],
+			autoridades: []
+		}));              
 
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
@@ -7945,6 +7954,10 @@ App.MultiSelectListView = Ember.View.extend({
 	}.observes('filterText'),
 
 
+	selectionChanged: function () {
+		this.get('selectionAc').set('content', this.get('selection'));
+	}.observes('selection'),
+
 	filterData: function () {
 		if (this.get('suggestable'))
 		{
@@ -7960,6 +7973,15 @@ App.MultiSelectListView = Ember.View.extend({
 				filtered = this.get('contentController').get('content').filter(function(c){
 					return regex.test(c.get(this.get('labelPath')).toString().toLowerCase());
 				}, this);
+
+				var selectionNews = [];
+				this.get('selection').forEach(function(i) {
+					var item = filtered.findProperty('id', i.get('id'));
+					selectionNews.addObject(item);
+				}, this);
+
+				filtered.removeObjects(selectionNews);				
+
 				this.set('content', filtered);
 			} else {
 				this.set('content', this.get('contentController').get('content'));
@@ -7998,13 +8020,17 @@ App.MultiSelectListView = Ember.View.extend({
 				this.get('content').addObject(item);
 			}
 			this.get('selection').removeObject(item);
+			
 		} else {
 			item = this.get('content').findProperty('id', i.get('id'));
 			item.set('orden', this.get('selection').length + 1);
 			this.get('selection').addObject(item);
 			this.get('content').removeObject(item);
+			this.set('filterText', '');
 		}
+
 		this.get('selectionAc').set('content', this.get('selection'));
+
 	},
 
 	didInsertElement: function () {
