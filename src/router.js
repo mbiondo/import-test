@@ -3374,8 +3374,8 @@ App.Router =  Em.Router.extend({
 						App.get('menuController').seleccionar(8);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('breadCumbController').set('content', [
-							{titulo: 'OD', url: '#/OD/listado'},
-							{titulo: 'Crear Orden Del Día'},
+							{titulo: 'Orden del Día', url: '#/OD/listado'},
+							{titulo: 'Crear'},
 						]);					
 						
 					},				
@@ -3416,8 +3416,8 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('main', 'ordenDelDiaDetalle');
 							
 							App.get('breadCumbController').set('content', [
-								{titulo: 'OD', url: '#/OD/listado'},
-								{titulo: 'Orden Del Día Nro '+ App.get('ordenDelDiaController.content').get('numero')},
+								{titulo: 'Orden del Día', url: '#/OD/listado'},
+								{titulo: 'Número '+ App.get('ordenDelDiaController.content').get('numero')},
 								{titulo: moment(App.get('ordenDelDiaController.content').get('fechaImpresion'), 'YYYY-MM-DD').format('LL')},
 							]);				
 
