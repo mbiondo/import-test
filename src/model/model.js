@@ -647,7 +647,8 @@ App.Expediente = Em.Object.extend({
 			var regex = new RegExp('-PE-');
 			var regex2 = new RegExp('-JGM-');
 			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
-				return firmantes.objectAt(0).nombre;
+				if(firmantes.length > 0)
+					return firmantes.objectAt(0).nombre;
 			} else {
 				if (firmantes.length < 3) {
 					firmantes.forEach(function (firmante) {
