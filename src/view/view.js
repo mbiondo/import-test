@@ -3330,9 +3330,9 @@ App.DictamenesPendientesListView = App.ListFilterView.extend({
 		
 		columnas: function(){
 			if(App.get('userController').hasRole('ROLE_DIRECCION_COMISIONES') || App.get('userController').hasRole('ROLE_SECRETARIO_COMISIONES') ){
-				return ['Fecha Reunión','Expedientes pendientes de dictamen', 'Comisiones Convocadas', 'Cargar Dictamen']
+				return ['Fecha Reunión','Expedientes Pendientes de Dictamen', 'Comisiones Convocadas', 'Cargar Dictamen']
 			}else{
-				return ['Fecha Reunión','Expedientes pendientes de dictamen', 'Comisiones Convocadas']
+				return ['Fecha Reunión','Expedientes Pendientes de Dictamen', 'Comisiones Convocadas']
 			}
 		}.property('columnas'),
 		
