@@ -1580,7 +1580,7 @@ App.NotificacionTipoItemView = Em.View.extend({
 
 App.NotificacionTipoListView = App.ListFilterView.extend({ 
 	itemViewClass: App.NotificacionTipoItemView, 	
-	columnas: ['Nombre','Titulo', 'Estado', 'Ver Notificación'],
+	columnas: ['Nombre','Título', 'Estado', 'Ver Notificación'],
 });
 
 
@@ -1757,7 +1757,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	columnas: [
 		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
-		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		// App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
 		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
@@ -7656,7 +7656,7 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 	columnas: [
 		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
-		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Alerta Temprana'}),
 		App.SortableColumn.create({nombre: 'Incluir en el informe'}),
 	],	
@@ -8494,7 +8494,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	columnas: [
 		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
-		App.SortableColumn.create({nombre: 'Titulo', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
 		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
 	],	
