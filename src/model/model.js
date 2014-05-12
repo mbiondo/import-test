@@ -1263,7 +1263,7 @@ App.Sesion = Em.Object.extend({
 	planDeLabor: '',
 
 	toString: function () {
-		return "Sesion: " + this.get('sesion') + " Reunion: " + this.get('reunion') + " Periodo: " + this.get('periodoOrdinario');
+		return "Sesión: " + this.get('sesion') + " Reunión: " + this.get('reunion') + " Período: " + this.get('periodoOrdinario');
 	},
 
 	sortValue: function () {
