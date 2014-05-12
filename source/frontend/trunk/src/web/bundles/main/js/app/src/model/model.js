@@ -536,8 +536,8 @@ App.Expediente = Em.Object.extend({
 	firmantes: [],
 	absolutURL: false,
 	biografia: null,
-	comisiones: [],
-	autoridades: [],
+	comisiones: null,
+	autoridades: null,
 
 
 	url: 'ME/exp/proyecto',
@@ -585,17 +585,15 @@ App.Expediente = Em.Object.extend({
         var giros = [];
 
         //this.set('comisiones', this.get('giro'));
-        var orden = 1;
 
         this.get('comisiones').forEach(function (comision) {
-                var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: orden, nroGiro: 1, idComision: comision.id};
-                orden++;
+                var itemDatos = {camara: 'Diputados', comision: comision.nombre, ordenCarga: comision.orden, nroGiro: 1, idComision: comision.id};
                 giros.pushObject(itemDatos);
         }, this);
 
         this.set('giro', giros);
 
-        if(this.get('autoridades').length > 0){
+        if(this.get('autoridades') && this.get('autoridades').length > 0){
             orden = 1;       
             var fs = [];
             this.get('autoridades').forEach(function (firmante) {
@@ -612,8 +610,10 @@ App.Expediente = Em.Object.extend({
         this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
         if (this.get('giro'))
         {
+        		this.set('comisiones', []);
+
                 this.get('giro').forEach(function (item) {
-                    this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision}));
+                    this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision, orden: item.ordenCarga}));
                 }, this);
         }
 
