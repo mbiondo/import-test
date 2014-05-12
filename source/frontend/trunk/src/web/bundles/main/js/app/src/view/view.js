@@ -1400,7 +1400,7 @@ App.OrdenDelDiaView = Ember.View.extend({
 
 App.OrdenDelDiaListView = App.ListFilterView.extend({ 
 	itemViewClass: App.OrdenDelDiaView, 	
-	columnas: ['Numero', 'Fecha', 'Sumario', 'Ver'],
+	columnas: ['Número', 'Fecha', 'Sumario', 'Ver'],
 });
 
 //ADMIN
