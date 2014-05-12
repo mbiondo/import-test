@@ -520,14 +520,14 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 7,
 			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
-			titulo: 'Estadisticas',
+			titulo: 'Estadísticas',
 			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
 			
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Estadisticas',
+					titulo: 'Estadísticas',
 					url: '#/estadisticas/oradores',
 					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
 					subMenu: [
@@ -570,7 +570,7 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
-							titulo: 'Estadisticas',
+							titulo: 'Estadísticas',
 							url: '#/visitas-guiadas/estadisticas',
 						}),		
 					],
