@@ -893,7 +893,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Estadisticas', url: '#/estadisticas'},
+						{titulo: 'Estadísticas', url: '#/estadisticas'},
 						{titulo: 'Visitas Guiadas', url: '#/estadisticas/visitasguiadas'}
 					]);				
 
@@ -938,7 +938,7 @@ App.Router =  Em.Router.extend({
 					appController.connectOutlet('menu', 'subMenu');
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Estadisticas', url: '#/estadisticas'},
+						{titulo: 'Estadísticas', url: '#/estadisticas'},
 						{titulo: 'Oradores', url: '#/estadisticas/oradores'}
 					]);				
 
