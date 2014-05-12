@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			// this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -7970,7 +7970,7 @@ App.MultiSelectListView = Ember.View.extend({
 		} else {
 			if (this.get('filterText').length >= this.get('threshold')) {
 				var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-				filtered = this.get('contentController').get('content').filter(function(c){
+				filtered = this.get('contentController').get('arrangedContent').filter(function(c){
 					return regex.test(c.get(this.get('labelPath')).toString().toLowerCase());
 				}, this);
 
@@ -7984,7 +7984,7 @@ App.MultiSelectListView = Ember.View.extend({
 
 				this.set('content', filtered);
 			} else {
-				this.set('content', this.get('contentController').get('content'));
+				this.set('content', this.get('contentController').get('arrangedContent'));
 			}
 		}
 
