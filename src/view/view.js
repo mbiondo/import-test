@@ -7801,7 +7801,7 @@ App.ComisionesListadoView = Ember.View.extend({
 
 App.ComisionesListView = App.ListFilterView.extend({
 	itemViewClass: App.ComisionesListItemView,
-	columnas: ['Id','Nombre','Ver Comision'],
+	columnas: ['Id','Nombre','Ver Comisión'],
 });
 
 App.ComisionesConsultaView = Ember.View.extend({
