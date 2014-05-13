@@ -578,6 +578,7 @@ App.Expediente = Em.Object.extend({
 
     normalize: function () {
         this.set('pubFecha', moment(this.get('pubFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));
+        this.set('mjeFecha', moment(this.get('mjeFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD'));
 
         if (this.get('titulo')) this.set('titulo', this.get('titulo').toUpperCase());
         if (this.get('sumario')) this.set('sumario', this.get('sumario').toUpperCase());
@@ -608,6 +609,8 @@ App.Expediente = Em.Object.extend({
 
     desNormalize: function ()  {
         this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+        this.set('mjeFecha', moment(this.get('mjeFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
+
         if (this.get('giro'))
         {
         		this.set('comisiones', []);
