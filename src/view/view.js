@@ -6744,6 +6744,10 @@ App.CrearExpedienteView = Ember.View.extend({
 		Ember.run.next(function(){		
 			_self.set('content.iniciado', _self.get('camarasList.firstObject'));
 		});
+
+		this.set('clickGuardar', false);
+		$("#formCrearExpediente").parsley('destroy');
+
 	}.observes('content.tipo'),
 	camarasList: function(){
 		switch (this.get('content.tipo'))
@@ -6907,7 +6911,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', false);
 			this.set('clickGuardar', false);
 
-			$("#formCrearExpediente").parsley('reset');
+			//$("#formCrearExpediente").parsley('reset');
+			$("#formCrearExpediente").parsley('destroy');
 			$("#nav-tabs-proyecto").click();
 			$("#selector-tipo-proyecto").focus();
 
@@ -6940,6 +6945,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 		} else {
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+			this.set('loading', false);
 		}
 	},
 	setupEnter: function(){
