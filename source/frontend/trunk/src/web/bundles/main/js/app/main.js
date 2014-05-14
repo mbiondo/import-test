@@ -133,19 +133,6 @@ App.menuController = App.MenuController.create({
 							titulo: 'Crear proyecto',
 							url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
-							titulo: 'Legisladores Vigentes',
-							url: '#/direccionsecretaria/mesadeentrada/legisladores/listado',
-						}),
-
-						App.MenuItem.create({
-							id: 2,
-							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
-							titulo: 'Bloques',
-							url: '#/direccionsecretaria/mesadeentrada/bloques/listado',
-						}),						
 					],
 				}),
 				App.MenuItem.create({
@@ -623,6 +610,28 @@ App.menuController = App.MenuController.create({
 
 					],
 				}),
+				
+				App.MenuItem.create({
+					id: 1,
+					titulo: 'Legisladores',
+					url: '#/admin/legisladores/listado',
+					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+					subMenu: [
+						App.MenuItem.create({
+							id: 1,
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							titulo: 'Legisladores Vigentes',
+							url: '#/admin/legisladores/listado',
+						}),
+
+						App.MenuItem.create({
+							id: 2,
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							titulo: 'Bloques',
+							url: '#/admin/bloques/listado',
+						}),						
+					],
+				})
 			]			
 		}),
 	]
