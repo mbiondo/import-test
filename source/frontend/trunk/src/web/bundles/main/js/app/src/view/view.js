@@ -8518,7 +8518,12 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 
 		this.set('content.count', filtered.length);		
 
-		this.set('mostrarMasEnabled', true);
+		if (this.get('content.count') < App.get('proyectosController.recordcount')) {
+			this.set('mostrarMasEnabled', true);
+		} else {
+			this.set('mostrarMasEnabled', false);
+		}
+
 		return filtered;
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 
@@ -8548,7 +8553,8 @@ App.ProyectoSearchView = Em.View.extend({
 	}.property('App.comisionesController.content.@each'),
 
 	limpiar: function () {
-		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({}));
+		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: []}));
+		this.buscar();
 	},
 
 	didInsertElement: function () {
@@ -8561,6 +8567,7 @@ App.ProyectoSearchView = Em.View.extend({
 			}
 		});
 	},
+
 	buscar: function () {
 		App.get('proyectosController').set('loaded', false);
 		App.proyectosController.set('pageNumber', 1);
