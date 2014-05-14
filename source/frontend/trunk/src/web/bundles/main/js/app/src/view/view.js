@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			// this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -1755,7 +1755,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 	},
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		// App.SortableColumn.create({nombre: 'Camara de inicio', campo: 'iniciado'}),
@@ -7660,7 +7660,7 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 	},
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Alerta Temprana'}),
@@ -8498,7 +8498,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	},	
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
