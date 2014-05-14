@@ -311,7 +311,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha iniciado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('HH:mm') + " hs del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
+		notification.set('mensaje', "Ha iniciado la Sesión " + numSesion + ", Reunión " + reunion + " a las " + moment().format('HH:mm') + "h del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
@@ -337,7 +337,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha finalizado la sesión " + numSesion + ", reunión " + reunion + " a las " + moment().format('HH:mm') + " hs del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
+		notification.set('mensaje', "Ha finalizado la Sesión " + numSesion + ", Reunión " + reunion + " a las " + moment().format('HH:mm') + "h del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
@@ -1008,7 +1008,7 @@ App.PlanDeLaborView = Ember.View.extend({
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
-			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
+			notification.set('mensaje', "Se ha creado la Sesión del día " +  moment.unix(this.model.get('fecha')).format('LL'));
 			//Crear
 			notification.create();		
 
@@ -1234,7 +1234,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
-			notification.set('mensaje', "Se ha cargado la Orden del Día Número " + data.dictamen.numero);
+			notification.set('mensaje', "Se ha cargado la Orden del Día " + data.dictamen.numero);
 
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
@@ -6266,7 +6266,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			notification.set('objectId', this.get('content.id'));
 			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del dia " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
+			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del día " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
 
 			notification.create();
 
