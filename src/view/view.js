@@ -7660,7 +7660,7 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 	},
 
 	columnas: [
-		App.SortableColumn.create({nombre: 'Número de Expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de Expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Alerta Temprana'}),
