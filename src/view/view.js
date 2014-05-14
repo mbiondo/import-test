@@ -309,7 +309,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//Link del objeto
 		notification.set('link', "/#/laborparlamentaria/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
 		//CreateAt
-		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm:ss'));
 		//Custom message
 		notification.set('mensaje', "Ha iniciado la Sesión " + numSesion + ", Reunión " + reunion + " a las " + moment().format('HH:mm') + "h del día " + moment().format('dddd d') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
 
@@ -8333,7 +8333,7 @@ App.DiputadoEditView = Ember.View.extend({
 		this.get('content').desNormalize();
 	},
 	cancelarEdicion: function(){
-		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
+		App.get('router').transitionTo('admin.diputados.index');
 	},
 	guardar: function(){		
 		this.get('controller').guardar();

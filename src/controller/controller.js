@@ -3426,7 +3426,7 @@ App.DiputadoEditController = Ember.ObjectController.extend({
 				 fn = function() {
 				 	if (App.get('diputadosController.loaded')) {
 				 		App.get('diputadosController').removeObserver('loaded', this, fn);
-						App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.diputados.index');
+						App.get('router').transitionTo('admin.diputados.index');
 				 	}
 					deferred.resolve(null);					
 				 };
