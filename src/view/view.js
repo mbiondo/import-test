@@ -562,14 +562,16 @@ App.ChangePasswordView = Ember.View.extend({
 
 App.LoginView = Ember.View.extend({
 	templateName: 'login',
+
 	cuil: '',
 	password: '',
 
-	didInsertElement: function(){
+	didInsertElement: function () {
 		this._super();
+		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
 		this.$('#user_username'	).focus();
 	},
-
+	
 	loginError: function(){
 		return App.get('userController.loginError');
 	}.property('App.userController.loginError'),
@@ -631,10 +633,6 @@ App.LoginView = Ember.View.extend({
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
 	},
 
-	didInsertElement: function () {
-		this._super();
-		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
-	}
 });
 
 App.ListHeaderItemView = Em.View.extend({
@@ -7940,7 +7938,7 @@ App.SelectListItemVSelectediew = App.SelectListItemView.extend({
 	classNames: ['selected'],
 });
 
-App.SelectListView = Ember.CollectionView.extend({
+App.SelectListView = App.JQuerySortableView.extend({
 	tagName: "ul",
 
 	clickItem: function (item) {
@@ -7957,6 +7955,10 @@ App.SelectListView = Ember.CollectionView.extend({
 		}
 	    return this._super(viewClass, attrs);
 	},
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+	},	
 });
 
 
