@@ -6144,7 +6144,16 @@ App.PLMiniView = Ember.View.extend({
 	templateName: 'pl-item-mini',
 	edited: false,
 
+	mergedContentController: null,
+
+
 	mergedContent: function () {
+		console.log('pepe');
+		return this.get('mergedContentController');
+	}.property('mergedContentController'),
+
+
+	contentChange: function () {
 		var data = [];
 
 		if (this.get('content.dictamenes'))
@@ -6153,14 +6162,9 @@ App.PLMiniView = Ember.View.extend({
 		if (this.get('content.proyectos'))
 			data.addObjects(this.get('content.proyectos'));
 
-		var mergedContentController = Ember.ArrayController.create({
-		  content: data,
-		  sortProperties: ['orden'],
-		  sortAscending: true,
-		});
+		this.get('mergedContentController').set('content', data);
 
-		return mergedContentController;
-	}.property('content.proyectos.@each, content.dictamenes.@each', 'edited'),
+	}.observes('content.proyectos.@each, content.dictamenes.@each'),
 
 	borrar: function(){
 		this.get('parentView.parentView').borrarItem(this.get('content'));
@@ -6179,7 +6183,25 @@ App.PLMiniView = Ember.View.extend({
 		this.get('parentView.parentView').set('isEdited', true);
 	},
 
-		
+	didInsertElement: function () {
+		this._super();
+
+		var data = [];
+
+		if (this.get('content.dictamenes'))
+			data.addObjects(this.get('content.dictamenes'));
+
+		if (this.get('content.proyectos'))
+			data.addObjects(this.get('content.proyectos'));
+
+		var mergedContentController = Ember.ArrayController.create({
+		  content: data,
+		  sortProperties: ['orden'],
+		  sortAscending: true,
+		});
+
+		this.set('mergedContentController', mergedContentController);
+	}
 });
 
 App.PlanDeLaborEfectivoView = Ember.View.extend({
@@ -6233,7 +6255,9 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 		if (this.get('content.loaded')) {
 			this.get('content').removeObserver('loaded', this, this.plLoadedSuccess);
 			this.get('content').desNormalize();
+			this.set('isEdited', false);
 		}
+
 	},
 
 	cerrarPlan: function () { 
@@ -6245,6 +6269,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 	itemAddedSuccess : function () {
 		this.get('content').desNormalize(false);
+		this.set('isEdited', false);
 	},
 
 
@@ -6272,7 +6297,6 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del día " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
 
 			notification.create();
-
 
 			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
 
@@ -8219,6 +8243,11 @@ App.ExpedienteMiniEditableView = Ember.View.extend({
 	borrar: function(item){
 		this.get('parentView').get('parentView').borrarExpediente(this.get('content'));
 	},
+
+	didInsertElement: function () {
+		this.$().fadeIn(0);
+	}
+	
 });
 
 App.ODMiniEditableView = Ember.View.extend({
@@ -8227,6 +8256,11 @@ App.ODMiniEditableView = Ember.View.extend({
 	borrar: function(item){
 		this.get('parentView').get('parentView').borrarOD(this.get('content'));
 	},
+
+	didInsertElement: function () {
+		this.$().fadeIn(0);
+	}
+
 });
 
 
@@ -8258,6 +8292,7 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 		}
 	    return this._super(viewClass, attrs);
 	},
+
 });
 
 App.MultiSelectTextSearch = Ember.TextField.extend({
