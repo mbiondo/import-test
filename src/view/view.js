@@ -4953,12 +4953,17 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 			containment: 'parent',
 			placeholder: 'ui-state-highlight',
 			forcePlaceholderSize: true,
+
 			start: function(event, ui) {
-				ui.item.previousIndex = ui.item.index();                      
+				ui.item.previousIndex = ui.item.index();    
+				view.$().addClass('dragged');
 			},
+
 			stop: function(event, ui) {
 				view.updateSort(view.$().sortable('toArray'));
+				view.$().removeClass('dragged');
 			},
+
 			helper: function(event, ui) {
 				return $(ui).safeClone();            
 			}
@@ -6146,12 +6151,9 @@ App.PLMiniView = Ember.View.extend({
 
 	mergedContentController: null,
 
-
 	mergedContent: function () {
-		console.log('pepe');
 		return this.get('mergedContentController');
 	}.property('mergedContentController'),
-
 
 	contentChange: function () {
 		var data = [];
@@ -8172,7 +8174,6 @@ App.TimeLineEventCreateView = App.ModalView.extend({
 
 //PL
 App.PLMiniListView = App.JQuerySortableView.extend({
-	classNames: [],
 	itemViewClass: App.PLMiniView,
 
 	updateSort : function (idArray){
@@ -8247,7 +8248,7 @@ App.ExpedienteMiniEditableView = Ember.View.extend({
 	didInsertElement: function () {
 		this.$().fadeIn(0);
 	}
-	
+
 });
 
 App.ODMiniEditableView = Ember.View.extend({
