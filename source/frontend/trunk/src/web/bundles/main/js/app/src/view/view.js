@@ -8540,6 +8540,10 @@ App.ProyectoSearchView = Em.View.extend({
 
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
+		
+		Ember.run.next(function(){
+			$("form").find("[tabindex=1]").focus();
+		});
 	},
 
 	comisiones: function () {
@@ -8559,26 +8563,36 @@ App.ProyectoSearchView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		_self = this;
+		var _self = this;
 		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
 		Ember.run.next(function () { 
 			if (App.get('proyectosController.query.dirty')) {
 				_self.limpiar(); 
 			}
 		});
+
+		shortcut.add('enter', function() {
+		  if($('#buscarProyecto').is(':focus'))
+		  {
+		    _self.buscar();
+		  }
+		});
 	},
 
 	buscar: function () {
-		App.get('proyectosController').set('loaded', false);
-		App.proyectosController.set('pageNumber', 1);
-		App.proyectosController.set('content', []);
+		$('#buscarProyecto').is(':focus')
+		{
+			App.get('proyectosController').set('loaded', false);
+			App.proyectosController.set('pageNumber', 1);
+			App.proyectosController.set('content', []);
 
-		var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
-		App.set('proyectosController.query.palabras', lista_palabras);
-		App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pubnro.numero'));
+			var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
+			App.set('proyectosController.query.palabras', lista_palabras);
+			App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pubnro.numero'));
 
-		App.proyectosController.load();
-		this.set('loading', true);
+			App.proyectosController.load();
+			this.set('loading', true);
+		}
 	},
 
 	proyectosLoaded: function () {
@@ -8595,6 +8609,10 @@ App.ProyectoSearchView = Em.View.extend({
 
 	removerPalabra: function(){
 //		console.log(this.get('content'));
+	},
+	willDestroyElement: function(){
+		// remuevo la escucha del 'enter'
+		shortcut.remove('enter');
 	},
 });
 
