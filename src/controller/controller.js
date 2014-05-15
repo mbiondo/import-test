@@ -450,12 +450,13 @@ App.IoController = Em.Object.extend({
 
 			case "PlanDeLaborTentativo":
 				if (App.get('planDeLaborController')) {
-					console.log(options);
 					if (App.get('planDeLaborController.content'))
 					{
-						var pl = App.PlanDeLaborTentativo.create(options);
-						pl.desNormalize();
-						App.get('planDeLaborController').set('content', pl);
+						if (App.get('planDeLaborController.content.id') == options.id) {
+							var pl = App.PlanDeLaborTentativo.create(options);
+							pl.desNormalize();
+							App.get('planDeLaborController').set('content', pl);
+						}
 					}
 				}
 				break;
