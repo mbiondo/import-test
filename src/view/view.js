@@ -6763,7 +6763,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{id: "Senadores", nombre: "Senadores"}, 
 		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
-	],	
+	],
 
 	camarasChange: function(){
 		var _self = this;
@@ -8310,18 +8310,71 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 
 //ME EXP
 
+
 App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
 });
 
 App.MEExpedienteEditarView = Ember.View.extend({
-	templateName: 'me-expediente-editar',
-        
+	/*templateName: 'me-expediente-editar',
+
+	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PROROGA'],
+	tipoPub: ['TP'],
+
+	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
+    
+    periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
+
+    tieneCamposExtra: false,
+
+	camaras: [
+		{id: "Diputados", nombre: "Diputados"}, 
+		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
+	],
+
+	iniciadoSelect: function(){
+		return this.get('camaras').findProperty('id', this.get('controller.content.iniciado'));
+	}.property('controller.content.iniciado'),
+
+	camarasChange: function(){
+		var _self = this;
+		Ember.run.next(function(){
+			var camaraSelected = this.get('camarasList').findProperty('id', this.get('controller.content.iniciado'));
+			if(!camaraSelected){
+				_self.set('controller.content.iniciado', _self.get('camarasList.firstObject.id'));
+			}
+		});
+	}.observes('controller.content.tipo'),
+	
+	camarasList: function(){
+		switch (this.get('controller.content.tipo'))
+		{
+			case 'LEY':
+				return this.get('camaras');
+				break;
+			case 'LEY EN REVISION':				
+				return Array(this.get('camaras')[1]);
+				break;
+			case 'RESOLUCION':
+				return this.get('camaras');
+				break;
+			case 'DECLARACION':
+				return this.get('camaras');
+				break;
+			case 'MENSAJE':
+				return Array(this.get('camaras')[1], this.get('camaras')[3]);
+				break;
+		}
+	}.property('controller.content.tipo'),
+
 	guardar: function(){
         this.get('controller.content').normalize();
 		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('controller.content').save();
 	},
+
 	saveSuccessed: function () {
 		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('controller.content.saveSuccess')) {                                    
@@ -8330,12 +8383,279 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		} else if (this.get('saveSuccess') == false) {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
 		}
-	} 
+	},*/
+
+	templateName: 'editar-expediente',
+	clickGuardar: false,
+	expTipo: '',
+
+	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
+
+	camaras: [
+		{id: "Diputados", nombre: "Diputados"}, 
+		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
+	],
+
+	camarasChange: function(){
+		var _self = this;
+		Ember.run.next(function(){		
+			var camaraSelected = _self.get('camarasList').findProperty('id', _self.get('content.iniciado'));
+			console.log(camaraSelected);
+			if(!camaraSelected){
+				_self.set('content.iniciado', _self.get('camarasList.firstObject'));
+			}else{
+				_self.set('content.iniciado', camaraSelected);
+			}
+			console.log('content.iniciado');
+			console.log(_self.get('content.iniciado'));
+			console.log('content.iniciado');
+			console.log(_self.get('content.iniciado'));
+		});
+
+		this.set('clickGuardar', false);
+		$("#formCrearExpediente").parsley('destroy');
+
+	}.observes('content.tipo'),
+	camarasList: function(){
+		switch (this.get('content.tipo'))
+		{
+			case 'LEY':
+				return this.get('camaras');
+				break;
+			case 'LEY EN REVISION':
+				return Array(this.get('camaras')[1]);
+				break;
+			case 'RESOLUCION':
+				return this.get('camaras');
+				break;
+			case 'DECLARACION':
+				return this.get('camaras');
+				break;
+			case 'MENSAJE':
+				return Array(this.get('camaras')[1], this.get('camaras')[3]);
+				break;
+		}
+	}.property('content.tipo'),
+	esLey: function () {
+		return this.get('content.tipo') == "LEY";
+	}.property('content.tipo'),
+
+	esDeclaracion: function () {
+		return this.get('content.tipo') == "DECLARACION";
+	}.property('content.tipo'),
+
+	esResolucion: function () {
+		return this.get('content.tipo') == "RESOLUCION";
+	}.property('content.tipo'),
+		
+	esLeyRevision: function () {
+		return this.get('content.tipo') == "LEY EN REVISION";
+	}.property('content.tipo'),
+
+	esMensaje: function () {
+			var regex = new RegExp('mensaje');
+			if (this.get('content.tipo'))
+				return regex.test(this.get('content.tipo').toLowerCase());
+			else
+				return false;
+	}.property('content.tipo'),
+
+	noHayTipo: function(){
+		if(this.get('content.tipo') == null)
+		{
+			return true;
+		}
+		else
+		{	
+			return false;
+		}
+	}.property('content.tipo'),
+	faltanFirmantes: function(){
+		if(this.get('content.autoridades').length < 1)
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		} 
+	}.property('content.autoridades.@each'),
+	faltanGiros: function(){
+		if(this.get('content.comisiones').length < 1)
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		} 
+	}.property('content.comisiones.@each'),
+	guardar: function (){
+		var _self = this;
+
+		if(this.get('clickGuardar') == true)
+		{
+			if(_self.get('noHayTipo') == false)
+			{
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false )
+				{				
+					App.confirmActionController.setProperties({
+						title: 'Confirmar Crear Proyecto',
+						message: '¿ Confirma que desea modificar el proyecto LEY ' +_self.get('content.expdip')+ ' ?',
+						success: null,
+					});
+					
+					App.confirmActionController.addObserver('success', _self, _self.confirmActionDone);
+					App.confirmActionController.show();
+				}
+			}
+		}
+
+	},
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
+		if(App.get('confirmActionController.success'))
+		{
+			if (this.get('expTipo'))
+			{
+				this.set('tipo', this.get('content.tipo'));
+				this.get('content').set('tipo', this.get('expTipo'));
+			}
+			
+			this.set('content.iniciado', this.get('content.iniciado').id);
+
+			this.set('loading', true);
+			this.get('content').normalize();
+			//this.get('content').desNormalize();
+			
+			this.get('content').addObserver('saveSuccess', this, this.createSucceeded);
+			this.get('content').save();
+		}
+	},
+
+	saveSucceeded: function () {
+		var _self = this;
+		//this.get('content').desNormalize();
+		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+				
+		if (this.get('tipo')) {
+				this.get('content').set('tipo', this.get('tipo'));
+		}
+				
+		if (this.get('content.saveSuccess')) {
+			var expediente = this.get('content');
+			
+			$.jGrowl('Se ha modificado el expediente!', { life: 5000 });
+			/*
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'crearProyecto');	
+			notification.set('objectId', expediente.id);
+			notification.set('link', "/#/mesa/de/entrada/proyecto/" + expediente.id + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
+			notification.create();      
+
+			var iniciado = this.get('camaras').findProperty('id', expediente.get('iniciado'));
+			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
+
+			this.set('content', App.Expediente.extend(App.Savable).create({
+				expdipA: '', 
+				expdipN: '', 
+				tipo: 'LEY', 
+				pubtipo: expediente.get('pubtipo'), 
+				periodo: expediente.get('periodo'),
+				expdipA: expediente.get('expdipA'),
+				iniciado: iniciado,
+				sesion: expediente.get('sesion'),
+				firmantes: [],
+				giro: [],
+				comisiones: [],
+				autoridades: [],
+			}));
+			*/
+			this.setupEnter();
+			this.set('loading', false);
+			this.set('clickGuardar', false);
+
+			//$("#formCrearExpediente").parsley('reset');
+			$("#formCrearExpediente").parsley('destroy');
+			$("#nav-tabs-proyecto").click();
+			$("#selector-tipo-proyecto").focus();
+
+			this.set('oldTP', tp);
+
+			/*App.set('expedienteConsultaController.content', this.get('content'));
+			fn = function() {
+							if (App.get('expedienteConsultaController.loaded')) {
+								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+								App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
+							}
+			};
+			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
+			App.get('expedienteConsultaController').load();			
+						*/
+
+		
+			/*
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+		        objectID: 1, 
+		        titulo: 'Probando duplicados',
+		        fecha:  moment().format('YYYY-MM-DD HH:mm'),
+		        mensaje: 'Nunc at dolor at augue posuere tincidunt molestie a odio. Aenean sit amet nisl quis nunc vulputate tristique. Integer feugiat eros ut dapibus dignissim',
+		        icono: 'creado',
+		        link: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
+		        duplicados: ['158751', '158640', '158902'],
+			});
+			evento.create();
+			*/
+
+		} else {
+			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+			this.set('loading', false);
+		}
+	},
+	setupEnter: function(){
+		var _self = this;
+		// console.log('setupEnter');
+
+		$("#crearProyecto").on('click', function(){
+			 // console.log('click');				
+
+			if($(this).is(':focus'))
+			{
+				// console.log('focus + click');
+
+				if(_self.get('clickGuardar') == false)
+				{
+					_self.set('clickGuardar', true);
+				}
+
+				// console.log("clickGuardar: " + _self.get('clickGuardar'));
+			}
+		});
+	},
+
+	didInsertElement: function () {
+		this._super();
+		var _self = this;
+
+		Ember.run.next(this, function (){
+			$("#selector-tipo-proyecto").focus();
+		});
+
+		this.set('content', this.get('controller.content'));
+
+		this.setupEnter();
+
+	}
 });
 
 App.MEExpedienteGirarView = Ember.View.extend({
 	templateName: 'me-expediente-girar',
-        
+	        
     guardar: function(){
     	if (this.get('controller.content.comisiones').length > 0){
 	        this.get('controller.content').normalize();
