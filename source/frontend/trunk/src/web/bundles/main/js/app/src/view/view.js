@@ -4949,8 +4949,6 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 		view.$().sortable({
 			items: '> li:not(.sort-disabled)',
 			axis: 'y',
-			tolerance: 'pointer',
-			containment: 'parent',
 			placeholder: 'ui-state-highlight',
 			forcePlaceholderSize: true,
 
@@ -4967,6 +4965,7 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 			helper: function(event, ui) {
 				return $(ui).safeClone();            
 			}
+			
 		})
 	}
 });
