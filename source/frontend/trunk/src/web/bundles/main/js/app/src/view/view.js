@@ -5073,12 +5073,14 @@ App.SesionTurnosView = Em.View.extend({
 			turnosBloqueados.forEach(function(turno, index){
 				var t = turno.serialize();
 				t['hablando'] = turno.get('hablando');
+				t['numero'] = turno.get('numero');
 				turnosSerialized.push(t);
 			}, item);
 			
 			turnosDesBloqueados.forEach(function(turno, index){
 				var t = turno.serialize();
 				t['hablando'] = turno.get('hablando');
+				t['numero'] = turno.get('numero');
 				turnosSerialized.push(t);
 			}, item);
 			
@@ -5104,6 +5106,7 @@ App.SesionTurnosView = Em.View.extend({
 			turnos.forEach(function(turno, index){
 				var t = turno.serialize();
 				t['hablando'] = turno.get('hablando');
+				t['numero'] = turno.get('numero');
 				turnosSerialized.push(t);
 			}, item);
 			var lista = item.serialize();
