@@ -4313,12 +4313,14 @@ App.ListaController = Em.Object.extend({
 		turnosBloqueados.forEach(function(item, index){
 			var t = item.serialize();
 			t['hablando'] = item.get('hablando');
+			t['numero'] = item.get('numero');
 			turnos.push(t);
 		}, this);
 
 		turnosDesbloqueados.forEach(function(item, index){
 			var t = item.serialize();
 			t['hablando'] = item.get('hablando');
+			t['numero'] = item.get('numero');
 			turnos.push(t);
 		}, this);
 
@@ -4346,6 +4348,7 @@ App.ListaController = Em.Object.extend({
 		turnos.forEach(function(turno, index){
 			var t = turno.serialize();
 			t['hablando'] = turno.get('hablando');
+			t['numero'] = item.get('numero');
 			turnosSerialized.push(t);
 		}, item);
 		
