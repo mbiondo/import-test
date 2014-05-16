@@ -1262,7 +1262,54 @@ App.Router =  Em.Router.extend({
 				index: Em.Route.extend({
 					route: "/",		
 				}),
-					
+				
+				asistencias: Em.Route.extend({
+					route: "/asistencias",
+						enter: function () {
+							App.get('ioController').joinRoom('oradores');
+							App.get('menuController').seleccionar(4);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						},
+
+						exit: function () {
+							App.get('ioController').leaveRoom('oradores');
+						},
+						deserialize: function(router, params){
+							 if (!App.get('diputadosController'))
+							 	App.diputadosController = App.DiputadosController.create();
+
+							 var deferred = $.Deferred(),
+							 fn = function() {
+								 App.get('diputadosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);					
+							 };
+
+							 App.get('diputadosController').addObserver('loaded', this, fn);
+							 App.get('diputadosController').load();
+							
+							 return deferred.promise();
+						},
+						connectOutlets: function(router, context) {
+							var appController = router.get('applicationController');
+
+							appController.connectOutlet('main', 'OradoresAsistencias');
+							
+							appController.connectOutlet('menu', 'SubMenu');
+							
+							App.get('temaController').set('content', null);						
+							appController.cargarSesiones(true);
+
+
+							App.get('breadCumbController').set('content', [
+								{titulo: 'Labor Parlamentaria'},
+								{titulo: 'Recinto', url: '#/laborparlamentaria/recinto/asistencias'},	
+								{titulo: 'Asistencias', url: '#/laborparlamentaria/recinto/asistencias'},	
+							]);					
+							App.get('menuController').seleccionar(4, 1, 1);
+							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						},
+
+				}),
 				oradores: Em.Route.extend({
 					route: "/oradores",
 					
