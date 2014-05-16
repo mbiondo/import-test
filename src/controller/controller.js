@@ -246,6 +246,7 @@ App.Savable = Ember.Mixin.create({
 	},
 	
 	saveSucceeded: function (data) {
+
 		if (this.get('useApi') && data.id) {
 			this.set('saveSuccess', true);
 		}

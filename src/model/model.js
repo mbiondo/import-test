@@ -603,9 +603,9 @@ App.Expediente = Em.Object.extend({
             orden = 1;       
             var fs = [];
             this.get('autoridades').forEach(function (firmante) {
-                    var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
-                    orden++;
-                    fs.pushObject(itemDatos);
+                var itemDatos 	= {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
+                orden++;
+                fs.pushObject(itemDatos);
             }, this);
 
             this.set('firmantes', fs);
@@ -2195,9 +2195,13 @@ App.TimeLineEvent = Ember.Object.extend({
 });
 
 App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
-	url: '',
+	url: 'sesiondiputadoasistencia',
 	useApi: false,
-
 	idSesion: '',
 	idDiputados: [],
+
+	serializable: [
+		'idSesion',
+		'idDiputados',
+	],	
 });
