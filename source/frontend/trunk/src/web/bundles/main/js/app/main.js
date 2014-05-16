@@ -474,6 +474,12 @@ App.menuController = App.MenuController.create({
 							url: '#/laborparlamentaria/recinto/oradores',
 							roles: [['ROLE_USER']],
 						}),					
+						App.MenuItem.create({
+							id: 1,
+							titulo: 'Asistencias',
+							url: '#/laborparlamentaria/recinto/asistencias',
+							roles: [['ROLE_USER']],
+						})
 					]			
 				}),
 
