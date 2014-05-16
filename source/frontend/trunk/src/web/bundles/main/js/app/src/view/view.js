@@ -9271,14 +9271,17 @@ App.OradoresAsistenciasView = Em.View.extend({
 	},
 	selectPrev: function(){
 	},
+
 	exportar: function () {
-		var diputadosPresentes = App.get('diputadosController').filterProperty('seleccionado', true);
-		var diputadosAusentes = App.get('diputadosController').filterProperty('seleccionado', false);
+		var diputadosPresentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		var diputadosAusentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', undefined);
 		
 		var diputados = {
+			sesion: this.get('sesion').serialize(),
 			presentes: diputadosPresentes,			
 			ausentes: diputadosAusentes,
 		};
+		
 		
 		
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
