@@ -9209,6 +9209,22 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 	asistencias: null,
 
+	diputadosPresentes: function () {
+		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		if (seleccionados)
+			return seleccionados.length;
+		else
+			return 0;
+	}.property('App.diputadosController.arrangedContent.@each.seleccionado'),
+
+	diputadosAusentes: function () {
+		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		if (seleccionados)
+			return App.get('diputadosController.arrangedContent.length') - seleccionados.length;
+		else
+			return App.get('diputadosController.arrangedContent.length');
+	}.property('App.diputadosController.arrangedContent.@each.seleccionado'),	
+
 	sesionChanged: function () {
 		this.set('asistencias', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create({
 			idSesion: this.get('sesion.id'),
