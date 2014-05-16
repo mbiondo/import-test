@@ -9266,8 +9266,24 @@ App.OradoresAsistenciasView = Em.View.extend({
 			this.get('asistencias').create();
 		}
 	},
-
-
+	
+	selectNext: function(){
+	},
+	selectPrev: function(){
+	},
+	exportar: function () {
+		var diputadosPresentes = App.get('diputadosController').filterProperty('seleccionado', true);
+		var diputadosAusentes = App.get('diputadosController').filterProperty('seleccionado', false);
+		
+		var diputados = {
+			presentes: diputadosPresentes,			
+			ausentes: diputadosAusentes,
+		};
+		
+		
+		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
+	},
+	
 });
 
 App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
