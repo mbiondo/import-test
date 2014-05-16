@@ -9289,6 +9289,6 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 	columnas: ['Nombre', '', '', 'Información', '', ''],
 	diputadosSeleccionados: [],
 
-	step: 257,
-	totalRecords: 257,
+	step: 20,
+	totalRecords: 20,
 });
