@@ -595,7 +595,7 @@ App.Expediente = Em.Object.extend({
         this.set('comisiones', this.get('comisiones').sort(function(a, b){ return a.orden-b.orden }));
 
         this.get('comisiones').forEach(function (comision) {
-                var itemDatos = {camara: 'Diputados', comision: comision.nombre, nroGiro: 1, idComision: comision.id};
+                var itemDatos = {camara: 'Diputados', comision: comision.nombre, nroGiro: 1, idComision: comision.id, ordenCarga: comision.orden};
                 giros.pushObject(itemDatos);
         }, this);
 
