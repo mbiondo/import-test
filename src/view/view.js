@@ -9272,4 +9272,7 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.OradoresAsistenciasDiputadosListItemView,
 	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato'],
 	diputadosSeleccionados: [],
+
+	step: 257,
+	totalRecords: 257,
 });
