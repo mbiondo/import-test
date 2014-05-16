@@ -16,6 +16,7 @@ App.Usuario = Em.Object.extend({
 	funcion: '',
 	comisiones: '',
 	avatar: '',
+	seleccionado: false,
 
 	serializable: [
 		"cuil",
@@ -1277,6 +1278,10 @@ App.Sesion = Em.Object.extend({
 		return "Sesión: " + this.get('sesion') + " Reunión: " + this.get('reunion') + " Período: " + this.get('periodoOrdinario');
 	},
 
+	label: function(){
+		return "Sesión: " + this.get('sesion') + " Reunión: " + this.get('reunion') + " Período: " + this.get('periodoOrdinario');
+	}.property('sesion'),
+
 	sortValue: function () {
 		return this.get('fecha').toString();
 	}.property('fecha'),
@@ -2187,4 +2192,12 @@ App.TimeLineEvent = Ember.Object.extend({
 		'duplicados',
 	],
 
+});
+
+App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
+	url: '',
+	useApi: false,
+
+	idSesion: '',
+	idDiputados: [],
 });
