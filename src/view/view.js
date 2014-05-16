@@ -9271,9 +9271,9 @@ App.OradoresAsistenciasView = Em.View.extend({
 });
 
 App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
-//	tagName: 'tr',
-//	classNames: ['gradeX'],
+	tagName: 'tr',
 	templateName: 'diputado-asistencia-item',
+	classNameBindings: 'content.seleccionado:asistencia',
 
 	didInsertElement: function(){
 		this._super();
@@ -9286,7 +9286,7 @@ App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
 
 App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 	itemViewClass: App.OradoresAsistenciasDiputadosListItemView,
-	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato'],
+	columnas: ['Nombre', '', '', 'Información', '', ''],
 	diputadosSeleccionados: [],
 
 	step: 257,
