@@ -9235,3 +9235,38 @@ App.ExpedienteSobreTablasFueraDeTemarioView = App.ModalView.extend({
 		},     
 });
 
+App.OradoresAsistenciasView = Em.View.extend({
+	templateName: 'oradores-asistencias',
+		
+	crearSesion: function () {
+		var sesion = App.Sesion.create();
+				App.get('crearSesionController').set('sesion', sesion);
+		App.CrearSesionView.popup();
+	},  
+
+	guardar: function() {
+//		App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+//		console.log(this);
+//		console.log(this.get('content.sesion'));
+//		item = App.AsistenciasDiputadoSeleccionado.create({});
+	}
+});
+
+App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
+//	tagName: 'tr',
+//	classNames: ['gradeX'],
+	templateName: 'diputado-asistencia-item',
+
+	didInsertElement: function(){
+		this._super();
+	},
+	click: function(){
+		this.set('content.seleccionado', !this.get('content.seleccionado'));		
+	}
+});
+
+App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
+	itemViewClass: App.OradoresAsistenciasDiputadosListItemView,
+	columnas: ['', 'Nombre', 'Provincia', 'Partido', 'Interbloque', 'Mandato'],
+	diputadosSeleccionados: [],
+});
