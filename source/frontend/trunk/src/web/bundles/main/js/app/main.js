@@ -1,8 +1,8 @@
 App.apiController = App.ApiController.create({
-	url: 'https://sparl-desa.hcdn.gob.ar/sparl/rest/',
+	//url: 'https://sparl-desa.hcdn.gob.ar/sparl/rest/',
 
 	//url: 'http://10.102.13.3:9090/rest/',
-	//url: 'http://10.185.204.7:9090/rest/',
+	url: 'http://10.185.204.7:9090/rest/',
 	//url: 'http://10.185.204.12:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	// url: 'http://201.250.82.9:9009/sparl/rest/',
@@ -818,8 +818,8 @@ if (user) {
 	}
 
 	App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+	
 	App.get('notificacionesFiltradasController').load();
-
 	App.get('searchController').load();
 	App.get('notificacionesController').load();
 	
