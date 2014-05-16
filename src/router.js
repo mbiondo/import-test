@@ -339,7 +339,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
                                 {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
-								{titulo: context.expdip},
+								{titulo: 'LEY ' + context.expdip},
 								{titulo: 'Girar expediente'}
 							]);								
 						},						
@@ -483,7 +483,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
                                 {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
-								{titulo: 'LEY ' + context.expdip},
+								{titulo: context.expdip},
 								{titulo: 'Editar'},
 							]);		
 
