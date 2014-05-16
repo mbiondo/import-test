@@ -354,6 +354,7 @@ App.Router =  Em.Router.extend({
 							 var deferred = $.Deferred(),
 							 fn = function() {
 								ex.removeObserver('loaded', this, fn);
+
 								deferred.resolve(ex);				
 							 };
 
@@ -434,8 +435,10 @@ App.Router =  Em.Router.extend({
 	                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
 	                                App.get('firmantesController').removeObserver('loaded', this, fn2);
 	                                App.get('comisionesController').removeObserver('loaded', this, fn2);
-									App.get('tpsController').removeObserver('loaded', this, fn2);	
-	                                deferred.resolve(null);	
+									App.get('tpsController').removeObserver('loaded', this, fn2);
+
+ 		                           	ex.addObserver('loaded', this, fn);
+                            		ex.load();
 	                            }
 							}
 
@@ -449,14 +452,23 @@ App.Router =  Em.Router.extend({
 							App.get('tpsController').load();
 
 							fn = function() {
-                                   ex.desNormalize(); 
-                                   ex.removeObserver('loaded', this, fn);
-                                   deferred.resolve(ex);				
+							   if (ex.get('loaded')) {
+	                               ex.removeObserver('loaded', this, fn);
+	                               ex.desNormalize(); 
+	                               ex.set('autoridades', []);
+
+	                               ex.get('firmantes').forEach(function (firmante) {
+	                               		var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+	                               		if (f) {
+	                               			ex.get('autoridades').addObject(f);
+	                               		}
+	                               }, this);
+
+	                               console.log(ex);
+	                               
+	                               deferred.resolve(ex);			
+							   }
                             };                                                                             
-
-                            ex.addObserver('loaded', this, fn);
-                            ex.load();
-
 						
 							return deferred.promise();
 						},	
@@ -2352,6 +2364,7 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
+
 				expedienteConsulta: Ember.Route.extend({
 					route: '/expediente/:expediente/ver',
 
@@ -2370,7 +2383,7 @@ App.Router =  Em.Router.extend({
 						};
 
 						
-						App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');		
+						//App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');		
 						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 						App.get('expedienteConsultaController').load();		
 

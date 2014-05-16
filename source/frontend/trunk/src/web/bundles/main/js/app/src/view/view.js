@@ -8005,7 +8005,7 @@ App.MultiSelectListView = Ember.View.extend({
 			}
 		} else {
 			if (this.get('filterText').length >= this.get('threshold')) {
-				var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+				var regex = new RegExp('^' + this.get('filterText').toString().toLowerCase());
 				filtered = this.get('contentController').get('arrangedContent').filter(function(c){
 					return regex.test(c.get(this.get('labelPath')).toString().toLowerCase());
 				}, this);
@@ -8398,26 +8398,32 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
 
+
+
 	camarasChange: function(){
+		
 		var _self = this;
-		Ember.run.next(function(){		
-			var camaraSelected = _self.get('camarasList').findProperty('id', _self.get('content.iniciado'));
-			console.log(camaraSelected);
+		console.log(this.get('content.iniciado'));
+
+		var camaraSelected = this.get('camarasList').findProperty('id', this.get('content.iniciado'));
+
+		if (!camaraSelected)
+			camaraSelected = this.get('camarasList').findProperty('id', this.get('content.iniciado.id'));
+
+		Ember.run.next(function (){
 			if(!camaraSelected){
 				_self.set('content.iniciado', _self.get('camarasList.firstObject'));
 			}else{
 				_self.set('content.iniciado', camaraSelected);
 			}
-			console.log('content.iniciado');
-			console.log(_self.get('content.iniciado'));
-			console.log('content.iniciado');
-			console.log(_self.get('content.iniciado'));
 		});
+
 
 		this.set('clickGuardar', false);
 		$("#formCrearExpediente").parsley('destroy');
 
 	}.observes('content.tipo'),
+
 	camarasList: function(){
 		switch (this.get('content.tipo'))
 		{
@@ -8472,8 +8478,9 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
+
 	faltanFirmantes: function(){
-		if(this.get('content.autoridades').length < 1)
+		if(this.get('content.autoridades') && this.get('content.autoridades').length < 1)
 		{
 			return true;
 		} 
@@ -8482,6 +8489,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			return false;
 		} 
 	}.property('content.autoridades.@each'),
+
 	faltanGiros: function(){
 		if(this.get('content.comisiones').length < 1)
 		{
@@ -8531,7 +8539,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
 			
-			this.get('content').addObserver('saveSuccess', this, this.createSucceeded);
+			this.get('content').addObserver('saveSuccess', this, this.saveSucceeded);
 			this.get('content').save();
 		}
 	},
@@ -8539,78 +8547,25 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	saveSucceeded: function () {
 		var _self = this;
 		//this.get('content').desNormalize();
-		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+		this.get('content').removeObserver('saveSuccess', this, this.saveSucceeded);
 				
 		if (this.get('tipo')) {
-				this.get('content').set('tipo', this.get('tipo'));
+			this.get('content').set('tipo', this.get('tipo.id'));
 		}
 				
 		if (this.get('content.saveSuccess')) {
-			var expediente = this.get('content');
-			
 			$.jGrowl('Se ha modificado el expediente!', { life: 5000 });
-			/*
-			var notification = App.Notificacion.extend(App.Savable).create();
-			notification.set('tipo', 'crearProyecto');	
-			notification.set('objectId', expediente.id);
-			notification.set('link', "/#/mesa/de/entrada/proyecto/" + expediente.id + "/ver");
-			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-			notification.create();      
 
-			var iniciado = this.get('camaras').findProperty('id', expediente.get('iniciado'));
-			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
-
-			this.set('content', App.Expediente.extend(App.Savable).create({
-				expdipA: '', 
-				expdipN: '', 
-				tipo: 'LEY', 
-				pubtipo: expediente.get('pubtipo'), 
-				periodo: expediente.get('periodo'),
-				expdipA: expediente.get('expdipA'),
-				iniciado: iniciado,
-				sesion: expediente.get('sesion'),
-				firmantes: [],
-				giro: [],
-				comisiones: [],
-				autoridades: [],
-			}));
-			*/
-			this.setupEnter();
-			this.set('loading', false);
-			this.set('clickGuardar', false);
-
-			//$("#formCrearExpediente").parsley('reset');
-			$("#formCrearExpediente").parsley('destroy');
-			$("#nav-tabs-proyecto").click();
-			$("#selector-tipo-proyecto").focus();
-
-			this.set('oldTP', tp);
-
-			/*App.set('expedienteConsultaController.content', this.get('content'));
+			var ex = App.Expediente.extend(App.Savable).create({id: this.get('content.id')});
+			ex.set('loaded', false);
+			var deferred = $.Deferred(),
 			fn = function() {
-							if (App.get('expedienteConsultaController.loaded')) {
-								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-								App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
-							}
+				App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
+				deferred.resolve(ex);				
 			};
-			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
-			App.get('expedienteConsultaController').load();			
-						*/
 
-		
-			/*
-			var evento = App.TimeLineEvent.extend(App.Savable).create({
-		        objectID: 1, 
-		        titulo: 'Probando duplicados',
-		        fecha:  moment().format('YYYY-MM-DD HH:mm'),
-		        mensaje: 'Nunc at dolor at augue posuere tincidunt molestie a odio. Aenean sit amet nisl quis nunc vulputate tristique. Integer feugiat eros ut dapibus dignissim',
-		        icono: 'creado',
-		        link: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
-		        duplicados: ['158751', '158640', '158902'],
-			});
-			evento.create();
-			*/
+			ex.addObserver('loaded', this, fn);
+			ex.load();
 
 		} else {
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
@@ -8636,6 +8591,19 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				// console.log("clickGuardar: " + _self.get('clickGuardar'));
 			}
 		});
+	},
+
+	cancelar: function () {
+		var ex = App.Expediente.extend(App.Savable).create({id: this.get('content.id')});
+		ex.set('loaded', false);
+		var deferred = $.Deferred(),
+		fn = function() {
+			App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
+			deferred.resolve(ex);				
+		};
+
+		ex.addObserver('loaded', this, fn);
+		ex.load();
 	},
 
 	didInsertElement: function () {
@@ -9237,19 +9205,53 @@ App.ExpedienteSobreTablasFueraDeTemarioView = App.ModalView.extend({
 
 App.OradoresAsistenciasView = Em.View.extend({
 	templateName: 'oradores-asistencias',
-		
-	crearSesion: function () {
-		var sesion = App.Sesion.create();
-				App.get('crearSesionController').set('sesion', sesion);
-		App.CrearSesionView.popup();
-	},  
+	sesion: null,
+
+	asistencias: null,
+
+	sesionChanged: function () {
+		this.set('asistencias', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create({
+			idSesion: this.get('sesion.id'),
+			id: this.get('sesion.id'),
+			idDiputados: []
+		}));
+
+		this.get('asistencias').addObserver('loaded', this, this.asistenciasLoadedCompleted);
+		this.get('asistencias').load();
+	}.observes('sesion'),
+
+
+	asistenciasLoadedCompleted: function (data) {
+		if (this.get('asistencias.loaded')) {
+			if (this.get('asistencias.idDiputados').length > 0) {
+				this.set('isEdit', true);
+				this.get('asistencias.idDiputados').forEach(function (diputado) {
+					var d = App.get('diputadosController.content').findProperty('id', diputado.idDiputado);
+					d.set('seleccionado', true);
+				}, this);
+			} else {
+				App.get('diputadosController.content').setEach('seleccionado', false);
+			}
+		}
+	},
 
 	guardar: function() {
-//		App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
-//		console.log(this);
-//		console.log(this.get('content.sesion'));
-//		item = App.AsistenciasDiputadoSeleccionado.create({});
-	}
+		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+
+		var sel = $.map(seleccionados, function (value, key) {  
+			return value.id; 
+		});
+
+		this.set('asistencias.idDiputados', sel)
+
+		if (this.get('isEdit')) {
+			this.get('asistencias').save();
+		} else {
+			this.get('asistencias').create();
+		}
+	},
+
+
 });
 
 App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
@@ -9260,6 +9262,7 @@ App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 	},
+
 	click: function(){
 		this.set('content.seleccionado', !this.get('content.seleccionado'));		
 	}
