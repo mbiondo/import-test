@@ -6795,6 +6795,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				break;
 		}
 	}.property('content.tipo'),
+
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
 	}.property('content.tipo'),
@@ -8426,9 +8427,8 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				_self.set('content.iniciado', camaraSelected);
 			}
 		});
-
-
 		this.set('clickGuardar', false);
+
 		$("#formCrearExpediente").parsley('destroy');
 
 	}.observes('content.tipo'),
@@ -8455,6 +8455,30 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		}
 	}.property('content.tipo'),
 
+	camaraChanged: function () {
+		var tipo = '';
+		if(this.get('content.iniciado.id') == 'Poder Ejecutivo' || this.get('content.iniciado.id') == 'JGM')
+		{
+			tipo = 'func/funcionarios';
+		}
+		else if(this.get('content.iniciado.id') == 'Senadores')
+		{
+			tipo = 'func/senadores';
+		}
+		else
+		{
+			tipo = 'dip/diputados';			
+		}
+
+		if(App.get('firmantesController.tipo') != tipo)
+		{
+			App.get('firmantesController').set('autoridades', []);
+			App.get('firmantesController').set('tipo', 'pap/' + tipo);
+			App.get('firmantesController').load();					
+		}
+		
+	}.observes('content.iniciado'),
+
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
 	}.property('content.tipo'),
@@ -8472,11 +8496,11 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	esMensaje: function () {
-			var regex = new RegExp('mensaje');
-			if (this.get('content.tipo'))
-				return regex.test(this.get('content.tipo').toLowerCase());
-			else
-				return false;
+		var regex = new RegExp('mensaje');
+		if (this.get('content.tipo'))
+			return regex.test(this.get('content.tipo').toLowerCase());
+		else
+			return false;
 	}.property('content.tipo'),
 
 	noHayTipo: function(){
@@ -8511,6 +8535,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			return false;
 		} 
 	}.property('content.comisiones.@each'),
+
 	guardar: function (){
 		var _self = this;
 
@@ -8531,8 +8556,8 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				}
 			}
 		}
-
 	},
+
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 
