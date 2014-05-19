@@ -732,6 +732,7 @@ App.ListFilterView = Ember.View.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
+		
 		return filtered.slice(0, this.get('totalRecords'));
 	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each'),
 	
@@ -8070,8 +8071,16 @@ App.MultiSelectListView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
+
 		this.set('selectionAc', Ember.ArrayController.create({ sortProperties: ['orden']}));
+		
+		if (this.get('useCustomController')) {
+			this.set('contentController', App.get(this.get('controllerName')));
+			this.controllerContentChanged();
+		} else {
+			this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
+		}
+
 		if (this.get('filterText') && this.get('suggestable')) {
 			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').filter(this.get('filterText'));
@@ -9231,6 +9240,8 @@ App.OradoresAsistenciasView = Em.View.extend({
 			idDiputados: []
 		}));
 
+		App.get('diputadosController.content').setEach('seleccionado', false);
+
 		this.get('asistencias').addObserver('loaded', this, this.asistenciasLoadedCompleted);
 		this.get('asistencias').load();
 	}.observes('sesion'),
@@ -9244,9 +9255,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 					var d = App.get('diputadosController.content').findProperty('id', diputado.idDiputado);
 					d.set('seleccionado', true);
 				}, this);
-			} else {
-				App.get('diputadosController.content').setEach('seleccionado', false);
-			}
+			} 
 		}
 	},
 
@@ -9280,9 +9289,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 			presentes: diputadosPresentes,			
 			ausentes: diputadosAusentes,
 		};
-		
-		
-		
+
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
 	},
 	
