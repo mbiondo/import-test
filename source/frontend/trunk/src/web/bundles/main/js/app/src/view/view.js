@@ -7160,7 +7160,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 		else if(this.get('content.iniciado.id') == 'Diputados')
 		{
-			tipo = 'diputados';
+			tipo = 'dip/diputados';
 		} else {
 			this.get('content').set('autoridades', []);	
 			App.get('firmantesController').set('content', []);
