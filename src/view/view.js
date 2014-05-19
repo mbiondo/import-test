@@ -6859,7 +6859,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false )
 				{				
 					App.confirmActionController.setProperties({
-						title: 'Confirmar Crear Proyecto',
+						title: 'Confirmar creación de Proyecto',
 						message: '¿ Confirma que desea crear el proyecto LEY ' +_self.get('content.expdip')+ ' ?',
 						success: null,
 					});
