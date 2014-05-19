@@ -7822,7 +7822,7 @@ App.TPConsultaView = Ember.View.extend({
 		console.log(this.get('documentURL'));
 		$.ajax({
 		    url: this.get('documentURL'),
-		    type: 'POST',
+		    type: 'GET',
 		    success: function(data) {
 		    	console.log(data);
 		        window.open(data);
