@@ -722,7 +722,6 @@ App.ListFilterView = Ember.View.extend({
 			});
 		}
 
-
 		if (!filtered)
 			filtered = [];
 
