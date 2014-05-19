@@ -7136,7 +7136,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('parentView.oldTP'),
 
 	camaraChange: function () {
-		
+
 		switch (this.get('content.iniciado.id')) {
 			case "Diputados":
 				this.get('content').set('expdipT', 'D');
@@ -7153,6 +7153,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 
 		var tipo = '';
+
+		if (this.get('parentView.oldInit') == undefined) {
+			this.set('parentView.oldInit', this.get('content.iniciado.id'));
+			return;
+		}
 
 		if(this.get('content.iniciado.id') == 'Poder Ejecutivo' || this.get('content.iniciado.id') == 'JGM')
 		{
@@ -8406,6 +8411,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
 
+	oldInit: undefined,
 
 
 	camarasChange: function(){
