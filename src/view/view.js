@@ -8628,8 +8628,9 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 		this.set('content', this.get('controller.content'));
 
+		var tp = App.get('tpsController.content').findProperty('numero', this.get('content').get('pubnro'));
+		this.set('oldTP', tp);
 		this.setupEnter();
-
 	}
 });
 
