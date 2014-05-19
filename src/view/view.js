@@ -2185,7 +2185,6 @@ App.UploaderView = Em.View.extend({
 			{
 				data = JSON.parse(payload);
 				if (data.result == "ok") {
-					console.log("HASH: " + data.hash);
 					_self.set('file', data.file);
 				} 
 			}
@@ -7159,13 +7158,14 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		{
 			tipo = 'func/funcionarios';
 		}
-		else if(this.get('content.iniciado.id') == 'Senadores')
+		else if(this.get('content.iniciado.id') == 'Diputados')
 		{
-			tipo = 'func/senadores';
-		}
-		else
-		{
-			tipo = 'dip/diputados';			
+			tipo = 'func/diputados';
+		} else {
+			this.get('content').set('autoridades', []);	
+			App.get('firmantesController').set('content', []);
+			App.get('firmantesController').set('loaded', true);
+
 		}
 
 		if(App.get('firmantesController.tipo') != tipo)
@@ -7528,7 +7528,6 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	},   
 
 	audits: function(){
-		console.log(App.get('auditController'));
 		return App.get('auditController');
 	}.property('App.auditController.content')
 
@@ -8239,9 +8238,6 @@ App.SugestTextSearch = Ember.TextField.extend({
 		var _self = this.get('parentView');
 
 		element = _self.get('sugestList.firstObject');
-
-		console.log(this.get('optionValuePath'));
-
 		if (this.get('optionValuePath')) {
 			element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
