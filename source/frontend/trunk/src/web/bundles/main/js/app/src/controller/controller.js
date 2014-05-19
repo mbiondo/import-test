@@ -4976,7 +4976,7 @@ App.TPCrearController = Ember.ObjectController.extend({
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
 
-            $.jGrowl('Trámite Parlamentario creado éxito!', { life: 5000 });
+            $.jGrowl('Trámite Parlamentario creado con éxito!', { life: 5000 });
 			var tp = this.get('content');
 
 			var notification = App.Notificacion.extend(App.Savable).create();
