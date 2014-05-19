@@ -7170,7 +7170,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		if(App.get('firmantesController.tipo') != tipo)
 		{
-			App.get('firmantesController').set('autoridades', []);
+			this.get('content').set('autoridades', []);
 			App.get('firmantesController').set('tipo', 'pap/' + tipo);
 			App.get('firmantesController').load();					
 		}
@@ -8454,30 +8454,6 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 		}
 	}.property('content.tipo'),
-
-	camaraChanged: function () {
-		var tipo = '';
-		if(this.get('content.iniciado.id') == 'Poder Ejecutivo' || this.get('content.iniciado.id') == 'JGM')
-		{
-			tipo = 'func/funcionarios';
-		}
-		else if(this.get('content.iniciado.id') == 'Senadores')
-		{
-			tipo = 'func/senadores';
-		}
-		else
-		{
-			tipo = 'dip/diputados';			
-		}
-
-		if(App.get('firmantesController.tipo') != tipo)
-		{
-			App.get('firmantesController').set('autoridades', []);
-			App.get('firmantesController').set('tipo', 'pap/' + tipo);
-			App.get('firmantesController').load();					
-		}
-		
-	}.observes('content.iniciado'),
 
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
