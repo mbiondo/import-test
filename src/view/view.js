@@ -7823,8 +7823,10 @@ App.TPConsultaView = Ember.View.extend({
 
 		    url: this.get('documentURL'),
 		    type: 'GET',
+
 		    success: function(data) {
-		    	window.open(data);
+		    	var my = window.open();
+		    	my.document.write(data);
 		    },
 		});
 	},
