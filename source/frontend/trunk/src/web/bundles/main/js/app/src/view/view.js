@@ -6830,7 +6830,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		}
 	}.property('content.tipo'),
 	faltanFirmantes: function(){
-		if(this.get('content.autoridades').length < 1)
+		if(this.get('content.autoridades').length < 1 && this.get('content.iniciado.id') != "Senadores") 
 		{
 			return true;
 		} 
