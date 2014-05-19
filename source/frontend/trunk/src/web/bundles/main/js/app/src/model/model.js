@@ -603,8 +603,11 @@ App.Expediente = Em.Object.extend({
 
         if(this.get('autoridades') && this.get('autoridades').length > 0){
             orden = 1;
+            
             var fs = [];
+
             this.set('autoridades', this.get('autoridades').sort(function(a, b){ return a.orden-b.orden }));
+
             this.get('autoridades').forEach(function (firmante) {
                 var itemDatos = {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
                 orden++;
