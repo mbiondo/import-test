@@ -7169,13 +7169,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		if(App.get('firmantesController.tipo') != tipo)
 		{
-			fn = function() {
-				App.get('firmantesController').removeObserver('loaded', this, fn);
-			};
-
+			App.get('firmantesController').set('autoridades', []);
 			App.get('firmantesController').set('tipo', 'pap/' + tipo);
-			App.get('firmantesController').set('loaded', false);
-			App.get('firmantesController').addObserver('loaded', this, fn);
 			App.get('firmantesController').load();					
 		}
 
@@ -8002,7 +7997,6 @@ App.MultiSelectListView = Ember.View.extend({
 		if (this.get('suggestable'))
 		{
 			if (this.get('filterText').length >= this.get('threshold')) {
-				this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 				this.get('contentController').filter(this.get('filterText'));
 			} else {
 				this.get('contentController').set('content', []);
@@ -8034,14 +8028,18 @@ App.MultiSelectListView = Ember.View.extend({
 
 	controllerContentChanged: function () {
 		if (this.get('contentController').get('loaded')) {
+
 			var selectionNews = [];
 			this.get('selection').forEach(function(i) {
 				var item = this.get('contentController').get('content').findProperty('id', i.get('id'));
 				selectionNews.addObject(item);
 			}, this);
-			this.get('contentController').get('content').removeObjects(selectionNews);
-			this.get('contentController').removeObserver('loaded', this, this.controllerContentChanged);
+
+			if (this.get('contentController').get('content'))
+				this.get('contentController').get('content').removeObjects(selectionNews);
+			
 			this.set('content', this.get('contentController').get('arrangedContent'));
+
 			if (this.get('content'))
 				this.set('content', this.get('content').slice(0, 20));
 			
@@ -8085,11 +8083,11 @@ App.MultiSelectListView = Ember.View.extend({
 			this.set('contentController', App.get(this.get('controllerName')).create({content: []}));
 		}
 
+		this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
+
 		if (this.get('filterText') && this.get('suggestable')) {
-			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').filter(this.get('filterText'));
 		} else if (!this.get('suggestable')) {
-			this.get('contentController').addObserver('loaded', this, this.controllerContentChanged);
 			this.get('contentController').load();
 		}
 	},
