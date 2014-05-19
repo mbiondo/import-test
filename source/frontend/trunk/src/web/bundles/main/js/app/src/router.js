@@ -387,43 +387,10 @@ App.Router =  Em.Router.extend({
 					editar: Em.Route.extend({
 						route: '/:id/editar',
 						deserialize: function(router, params) {
-							/*App.firmantesController = App.FirmantesController.create();
-							 if (!App.get('tpsController'))
-							 	App.tpsController = App.TPsController.create();
 
-
-
-							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
-							ex.set('loaded', false);
-                            var deferred = $.Deferred(),
-
-                            fn2 = function() {
-	                            if (App.get('tpsController.loaded')) {
-									App.get('tpsController').removeObserver('loaded', this, fn2);
-									deferred.resolve(null);	
-	                            }
-							}	
-
-							App.get('tpsController').addObserver('loaded', this, fn2);
-							App.get('tpsController').load();
-
-                            fn = function() {
-                                   ex.desNormalize(); 
-                                   ex.removeObserver('loaded', this, fn);
-                                   deferred.resolve(ex);				
-                            };                                                                             
-
-                            ex.addObserver('loaded', this, fn);
-                            ex.load();
-                             
-
-
-	
-                            return deferred.promise();
-                            */
                             App.firmantesController = App.FirmantesController.create();
-							 if (!App.get('tpsController'))
-							 	App.tpsController = App.TPsController.create();
+
+
 
 							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
 							ex.set('loaded', false);
@@ -435,9 +402,7 @@ App.Router =  Em.Router.extend({
 	                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
 	                                App.get('firmantesController').removeObserver('loaded', this, fn2);
 	                                App.get('comisionesController').removeObserver('loaded', this, fn2);
-									App.get('tpsController').removeObserver('loaded', this, fn2);
-
- 		                           	ex.addObserver('loaded', this, fn);
+		                           	ex.addObserver('loaded', this, fn);
                             		ex.load();
 	                            }
 							}
@@ -448,8 +413,14 @@ App.Router =  Em.Router.extend({
 							App.get('firmantesController').addObserver('loaded', this, fn2);
 							App.get('firmantesController').load();		
 
-							App.get('tpsController').addObserver('loaded', this, fn2);
-							App.get('tpsController').load();
+
+
+							fn3 = function () {
+								if (App.get('tpsController.loaded')) {
+									App.get('tpsController').addObserver('loaded', this, fn3);
+									deferred.resolve(ex);			
+								}
+							};
 
 							fn = function() {
 							   if (ex.get('loaded')) {
@@ -464,9 +435,12 @@ App.Router =  Em.Router.extend({
 	                               		}
 	                               }, this);
 
-	                               console.log(ex);
-	                               
-	                               deferred.resolve(ex);			
+							 	    if (!App.get('tpsController')) {
+							 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
+							 	    }
+
+								    App.get('tpsController').addObserver('loaded', this, fn3);
+								    App.get('tpsController').load();	                               
 							   }
                             };                                                                             
 						
