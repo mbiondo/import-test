@@ -7038,7 +7038,7 @@ App.InputSearchWidget = Ember.TextField.extend({
 App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 
-	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PROROGA'],
+	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PRORROGA'],
 	tipoPub: ['TP'],
 	
 	filterTextComisiones: '',
@@ -8831,10 +8831,12 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	},
 
 	proyectosLoaded: function () {
-		if (App.get('proyectosController.loaded'))
+		if (App.get('proyectosController.loaded')) {
 			this.set('loading', false);
-		else
+		}
+		else {
 			this.set('loading', true);
+		}
 	},	
 
 	columnas: [
@@ -8850,6 +8852,10 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
 	},
 
+	recordcount: function () {
+		return App.get('proyectosController.recordcount');
+	}.property('App.proyectosController.recordcount'),
+
 	lista: function (){
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
@@ -8858,7 +8864,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 
 		this.set('content.count', filtered.length);		
 
-		if (this.get('content.count') < App.get('proyectosController.recordcount')) {
+		if (this.get('content.count') < this.get('recordcount')) {
 			this.set('mostrarMasEnabled', true);
 		} else {
 			this.set('mostrarMasEnabled', false);
@@ -8950,6 +8956,7 @@ App.ProyectoSearchView = Em.View.extend({
 	removerPalabra: function(){
 //		console.log(this.get('content'));
 	},
+
 	willDestroyElement: function(){
 		// remuevo la escucha del 'enter'
 		shortcut.remove('enter');
@@ -9286,7 +9293,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 	exportar: function () {
 		var diputadosPresentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
-		var diputadosAusentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', undefined);
+		var diputadosAusentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
 		
 		var diputados = {
 			sesion: this.get('sesion').serialize(),
