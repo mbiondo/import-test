@@ -7161,18 +7161,20 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		else if(this.get('content.iniciado.id') == 'Diputados')
 		{
 			tipo = 'dip/diputados';
-		} else {
+
+		} 	
+
+		if (tipo) {
 			this.get('content').set('autoridades', []);	
 			App.get('firmantesController').set('content', []);
 			App.get('firmantesController').set('loaded', true);
-
-		}
-
-		if(App.get('firmantesController.tipo') != tipo)
-		{
-			this.get('content').set('autoridades', []);
-			App.get('firmantesController').set('tipo', 'pap/' + tipo);
-			App.get('firmantesController').load();					
+		} else {
+			if(App.get('firmantesController.tipo') != tipo)
+			{
+				this.get('content').set('autoridades', []);
+				App.get('firmantesController').set('tipo', 'pap/' + tipo);
+				App.get('firmantesController').load();					
+			}
 		}
 
 	}.observes('content.iniciado'),
