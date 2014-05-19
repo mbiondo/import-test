@@ -8037,7 +8037,7 @@ App.MultiSelectListView = Ember.View.extend({
 
 			if (this.get('contentController').get('content'))
 				this.get('contentController').get('content').removeObjects(selectionNews);
-			
+
 			this.set('content', this.get('contentController').get('arrangedContent'));
 
 			if (this.get('content'))
@@ -8413,7 +8413,6 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	camarasChange: function(){
 		
 		var _self = this;
-		console.log(this.get('content.iniciado'));
 
 		var camaraSelected = this.get('camarasList').findProperty('id', this.get('content.iniciado'));
 
@@ -8449,11 +8448,13 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			case 'DECLARACION':
 				return this.get('camaras');
 				break;
-			case 'MENSAJE':
+			default: 
 				return Array(this.get('camaras')[1], this.get('camaras')[3]);
 				break;
+
 		}
 	}.property('content.tipo'),
+
 	esLey: function () {
 		return this.get('content.tipo') == "LEY";
 	}.property('content.tipo'),
