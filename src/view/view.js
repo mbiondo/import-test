@@ -7825,7 +7825,7 @@ App.TPConsultaView = Ember.View.extend({
 		    type: 'GET',
 
 		    success: function(data) {
-		    	var my = window.open();
+		    	var my = window.open("");
 		    	my.document.write(data);
 		    },
 		});
