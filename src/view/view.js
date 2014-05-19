@@ -6882,12 +6882,11 @@ App.CrearExpedienteView = Ember.View.extend({
 				this.get('content').set('tipo', this.get('expTipo'));
 			}
 			
-			this.set('content.iniciado', this.get('content.iniciado').id);
 
 			this.set('loading', true);
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
-			
+			this.set('content.iniciado', this.get('content.iniciado').id);
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
 		}
@@ -8548,12 +8547,10 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				this.get('content').set('tipo', this.get('expTipo'));
 			}
 			
-			this.set('content.iniciado', this.get('content.iniciado').id);
 
 			this.set('loading', true);
 			this.get('content').normalize();
-			//this.get('content').desNormalize();
-			
+			this.set('content.iniciado', this.get('content.iniciado').id);
 			this.get('content').addObserver('saveSuccess', this, this.saveSucceeded);
 			this.get('content').save();
 		}
