@@ -7816,9 +7816,12 @@ App.TPConsultaView = Ember.View.extend({
 
 		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
 	}.property('controller.content'),
+
+
 	exportar: function () {
-		$.download('exportar/tp', "&type=tp&data=" + JSON.stringify(this.get('controller.content')));
+		$.download(this.get('documentURL'), null);
 	},
+	
 	confeccionarTP: function () {
 		return App.get('userController').hasRole('ROLE_PUBLICACIONES_EDIT') 
 	}.property('App.userController.user')
