@@ -7136,7 +7136,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('parentView.oldTP'),
 
 	camaraChange: function () {
-
+		
 		switch (this.get('content.iniciado.id')) {
 			case "Diputados":
 				this.get('content').set('expdipT', 'D');
@@ -7154,9 +7154,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		var tipo = '';
 
-		if(this.get('content.iniciado.id') == 'JGM')
+		if(this.get('content.iniciado.id') == 'Poder Ejecutivo' || this.get('content.iniciado.id') == 'JGM')
 		{
 			tipo = 'func/funcionarios';
+		}
+		else if(this.get('content.iniciado.id') == 'Senadores')
+		{
+			tipo = 'func/senadores';
 		}
 		else
 		{
@@ -7169,7 +7173,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				App.get('firmantesController').removeObserver('loaded', this, fn);
 			};
 
-			App.get('firmantesController').set('tipo', tipo);
+			App.get('firmantesController').set('tipo', 'pap/' + tipo);
 			App.get('firmantesController').set('loaded', false);
 			App.get('firmantesController').addObserver('loaded', this, fn);
 			App.get('firmantesController').load();					
