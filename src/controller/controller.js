@@ -5132,7 +5132,7 @@ App.ProyectosController = App.RestController.extend({
 
 	type: App.Proyecto,
 	useApi: true,
-	sortProperties: ['expdipN', 'expdipA'],
+	sortProperties: ['expdipA', 'expdipN'],
 	sortAscending: false,
 	loaded: false,
 	pageSize: 25,
@@ -5175,15 +5175,15 @@ App.ProyectosController = App.RestController.extend({
 
 		if ( url ) {
 			$.ajax({
-					url:  url,
-					dataType: 'JSON',
-					type: 'POST',
-					context: this,
-					contentType: 'text/plain',
-					crossDomain: 'true',			
-					data : getJSON,
-					success: this.loadSucceeded,
-					complete: this.loadCompleted,
+				url:  url,
+				dataType: 'JSON',
+				type: 'POST',
+				context: this,
+				contentType: 'text/plain',
+				crossDomain: 'true',			
+				data : getJSON,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
 			});
 
 		}
