@@ -1,5 +1,5 @@
 App.apiController = App.ApiController.create({
-	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
+	url: 'http://sparl.hcdn.gob.ar:8080/sparl/rest/',
 
 	//url: 'http://10.120.8.67:9090/rest/',
 	//url: 'http://10.185.204.7:8080/sparl/rest/',
