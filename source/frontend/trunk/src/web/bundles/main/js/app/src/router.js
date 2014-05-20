@@ -1251,15 +1251,17 @@ App.Router =  Em.Router.extend({
 				
 				asistencias: Em.Route.extend({
 					route: "/asistencias",
+
 						enter: function () {
-							App.get('ioController').joinRoom('oradores');
+							App.get('ioController').joinRoom('asistencias');
 							App.get('menuController').seleccionar(4);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						},
 
 						exit: function () {
-							App.get('ioController').leaveRoom('oradores');
+							App.get('ioController').leaveRoom('asistencias');
 						},
+
 						deserialize: function(router, params){
 							 if (!App.get('diputadosController'))
 							 	App.diputadosController = App.DiputadosController.create();
@@ -1278,6 +1280,9 @@ App.Router =  Em.Router.extend({
 						connectOutlets: function(router, context) {
 							var appController = router.get('applicationController');
 
+
+							App.asistenciasController = App.AsistenciasController.create();
+							
 							appController.connectOutlet('main', 'OradoresAsistencias');
 							
 							appController.connectOutlet('menu', 'SubMenu');
