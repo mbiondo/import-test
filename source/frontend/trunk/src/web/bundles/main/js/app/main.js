@@ -1,17 +1,17 @@
 App.apiController = App.ApiController.create({
-	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
+	url: 'http://sparl.hcdn.gob.ar:8080/sparl/rest/',
 
-	//url: 'http://10.102.13.2:8080/rest/',
+	//url: 'http://10.120.8.67:9090/rest/',
 	//url: 'http://10.185.204.7:8080/sparl/rest/',
 	//url: 'http://10.185.204.12:8080/sparl/rest/',
 	//url: 'http://186.23.200.128:8080/sparl/rest',
 	// url: 'http://201.250.82.9:9009/sparl/rest/',
-	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
+	existURL: 'http://sparl-desa.hcdn.gob.ar:9090/exist/rest/',
 
 	authURL: 'http://10.105.5.55:9000/o/',
 	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
 	secret: '3KJtUIRd7=SgzpdTA?aeC5r9a8GkoF7rwCWufg5BXYTb9Pwlx_ef6NXbo.A3Fwn.1ok_8L8gSe_WDGJq_ZKn.D5y9MLAr9.T1j.IjT=exFT6q.3ox42g2RAjHle-KrHv',
-	use_auth: true,
+	use_auth: false,
 });
 
 App.menuController = App.MenuController.create({
@@ -477,7 +477,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Asistencias',
 							url: '#/laborparlamentaria/recinto/asistencias',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
 						})
 					]			
 				}),
