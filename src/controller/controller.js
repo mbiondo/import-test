@@ -461,6 +461,13 @@ App.IoController = Em.Object.extend({
 					}
 				}
 				break;
+			case "Asistencia":
+				if (App.get('asistenciaController')) {
+					if (App.get('asistenciaController.sesion.id') == options.id) {
+						App.get('asistenciaController.content', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create(options));
+					}
+				}
+				break;
 		}
 	},
 
@@ -506,7 +513,15 @@ App.IoController = Em.Object.extend({
 						},
 					});
 				}
-				break;				
+				break;		
+
+			case "Asistencia":
+				if (App.get('asistenciaController')) {
+					if (App.get('asistenciaController.sesion.id') == options.id) {
+						App.get('asistenciaController.content', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create(options));
+					}
+				}
+				break;
 		}
 	},
 
@@ -5332,5 +5347,37 @@ App.AuditController =  App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},
+
+});
+
+App.AsistenciasController = Ember.ObjectController.extend({
+	sesion: null,
+	content: null,
+
+	sesionChanged: function () {
+		this.set('content', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create({
+			idSesion: this.get('sesion.id'),
+			id: this.get('sesion.id'),
+			idDiputados: []
+		}));
+
+		App.get('diputadosController.content').setEach('seleccionado', false);
+
+		this.get('content').addObserver('loaded', this, this.asistenciasLoadedCompleted);
+		this.get('content').load();
+
+	}.observes('sesion'),	
+
+	asistenciasLoadedCompleted: function (data) {
+		if (this.get('content.loaded')) {
+			if (this.get('content.idDiputados').length > 0) {
+				this.set('isEdit', true);
+				this.get('content.idDiputados').forEach(function (diputado) {
+					var d = App.get('diputadosController.content').findProperty('id', diputado.idDiputado);
+					d.set('seleccionado', true);
+				}, this);
+			} 
+		}
+	},	
 
 });

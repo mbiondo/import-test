@@ -2206,6 +2206,8 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 	useApi: false,
 	idSesion: '',
 	idDiputados: [],
+	notificationType : 'Asistencia',
+	notificationRoom: 'asistencias',
 
 	serializable: [
 		'idSesion',
