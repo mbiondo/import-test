@@ -9250,6 +9250,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 	asistencias: null,
 	showPresents: false,
+	showAbsent: true,
 
 
 	barClass: function () {
@@ -9271,11 +9272,14 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 	diputados: function () {
 		var arr = [];
-		if (this.get('showPresents')) {
-			arr = App.get('diputadosController.arrangedContent');
-		} else {
-			arr = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
-		}
+		var presentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		var ausentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
+
+		if (this.get('showPresents'))
+			arr.addObjects(presentes);
+		if (this.get('showAbsent'))
+			arr.addObjects(ausentes);
+
 		return arr;
 	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents'),
 
