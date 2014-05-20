@@ -9251,6 +9251,23 @@ App.OradoresAsistenciasView = Em.View.extend({
 	showPresents: false,
 
 
+	barClass: function () {
+		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		if (seleccionados) {
+			if (seleccionados.length > 127) {
+				return "progress-bar-success";
+			} else {
+				if (seleccionados.length < 110) {
+					return "progress-bar-danger";		
+				} else {
+					return "progress-bar-warning";		
+				}
+			}
+		} else {
+			return "progress-bar-danger";
+		}
+	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado'),
+
 	diputados: function () {
 		var arr = [];
 		if (this.get('showPresents')) {
@@ -9269,11 +9286,11 @@ App.OradoresAsistenciasView = Em.View.extend({
 	diputadosPercent: function () {
 		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
 		if (seleccionados) {
-			return "width:" + (seleccionados.length / App.get('diputadosController.arrangedContent.length') * 100) + "%;";
+			return "width:" + Math.round((seleccionados.length / App.get('diputadosController.arrangedContent.length') * 100)) + "%;";
 		} else {
 			return "width: 0%;";
 		}
-	}.property('App.diputadosController.arrangedContent.@each.seleccionado'),
+	}.property('App.diputadosController.content', 'App.diputadosController.arrangedContent.@each.seleccionado'),
 
 	diputadosPresentes: function () {
 		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
