@@ -9271,17 +9271,20 @@ App.OradoresAsistenciasView = Em.View.extend({
 	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado'),
 
 	diputados: function () {
-		var arr = [];
+		var arr = Ember.ArrayController.create({ 
+			sortProperties: ['sortValue'],
+			content: [],
+		});
+
 		var presentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
 		var ausentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
 
 		if (this.get('showPresents'))
-			arr.addObjects(presentes);
+			arr.get('content').addObjects(presentes);
 		if (this.get('showAbsent'))
-			arr.addObjects(ausentes);
-
-		return arr;
-	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents'),
+			arr.get('content').addObjects(ausentes);
+		return arr.get('arrangedContent');
+	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent'),
 
 	asistenciaChange: function () {
 		App.get('diputadosController.content').setEach('seleccionado', false);
