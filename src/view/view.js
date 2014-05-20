@@ -9354,13 +9354,34 @@ App.OradoresAsistenciasView = Em.View.extend({
 	},
 
 	exportar: function () {
-		var diputadosPresentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
-		var diputadosAusentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
 		
+		var bloques = [];
+
+		App.get('asistenciasController.bloques').forEach(function (bloque) {
+			var dip = [];
+
+			App.get('diputadosController.arrangedContent').forEach(function (diputado) {
+				if (diputado.bloque.id == bloque.id)
+				{
+					dip.addObject(diputado);
+				}
+			});
+
+			var diputadosPresentes = dip.filterProperty('seleccionado', true);
+			var diputadosAusentes = dip.filterProperty('seleccionado', false);
+
+			bloques.addObject({
+				bloque: bloque,
+				presentes: diputadosPresentes,			
+				ausentes: diputadosAusentes,				
+			});
+
+		}, this);
+
+			
 		var diputados = {
 			sesion: App.get('asistenciasController').get('sesion').serialize(),
-			presentes: diputadosPresentes,			
-			ausentes: diputadosAusentes,
+			bloques: bloques,
 		};
 
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
