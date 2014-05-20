@@ -462,9 +462,9 @@ App.IoController = Em.Object.extend({
 				}
 				break;
 			case "Asistencia":
-				if (App.get('asistenciaController')) {
-					if (App.get('asistenciaController.sesion.id') == options.id) {
-						App.get('asistenciaController.content', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create(options));
+				if (App.get('asistenciasController')) {
+					if (App.get('asistenciasController.sesion.id') == options.idSesion) {
+						App.get('asistenciasController').refresh(options.idDiputados);
 					}
 				}
 				break;
@@ -516,9 +516,9 @@ App.IoController = Em.Object.extend({
 				break;		
 
 			case "Asistencia":
-				if (App.get('asistenciaController')) {
-					if (App.get('asistenciaController.sesion.id') == options.id) {
-						App.get('asistenciaController.content', App.AsistenciasDiputadoSeleccionado.extend(App.Savable).create(options));
+				if (App.get('asistenciasController')) {
+					if (App.get('asistenciasController.sesion.id') == options.idSesion) {
+						App.get('asistenciasController').refresh(options.idDiputados);
 					}
 				}
 				break;
@@ -5367,6 +5367,19 @@ App.AsistenciasController = Ember.ObjectController.extend({
 		this.get('content').load();
 
 	}.observes('sesion'),	
+
+
+	refresh: function (diputados) {
+		App.get('diputadosController.content').setEach('seleccionado', false);
+
+		if (diputados.length > 0) {
+			this.set('isEdit', true);
+			diputados.forEach(function (diputado) {
+				var d = App.get('diputadosController.content').findProperty('id', diputado);
+				d.set('seleccionado', true);
+			}, this);
+		} 
+	},
 
 	asistenciasLoadedCompleted: function (data) {
 		if (this.get('content.loaded')) {
