@@ -9384,8 +9384,6 @@ App.OradoresAsistenciasView = Em.View.extend({
 			bloques: bloques,
 		};
 
-		console.log(JSON.stringify(diputados));
-
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
 	},
 	
