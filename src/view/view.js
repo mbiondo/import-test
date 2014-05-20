@@ -9256,7 +9256,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 	barClass: function () {
 		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
 		if (seleccionados) {
-			if (seleccionados.length > 127) {
+			if (seleccionados.length > 128) {
 				return "progress-bar-success";
 			} else {
 				if (seleccionados.length < 110) {
@@ -9344,7 +9344,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 		var diputadosAusentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
 		
 		var diputados = {
-			sesion: this.get('sesion').serialize(),
+			sesion: App.get('asistenciasController').get('sesion').serialize(),
 			presentes: diputadosPresentes,			
 			ausentes: diputadosAusentes,
 		};
