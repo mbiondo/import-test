@@ -5381,6 +5381,28 @@ App.AsistenciasController = Ember.ObjectController.extend({
 		} 
 	},
 
+	bloques: function () {
+		var sel = $.map(App.get('diputadosController.content'), function (value, key) {  
+			return value.bloque; 
+		});
+
+		var uniqueNames = [];
+
+		var arr = Ember.ArrayController.create({
+			content: [],
+			sortProperties: ['nombre'],
+		});
+
+		$.each(sel, function(i, el){
+		    if (!uniqueNames.contains(el.id)) {
+		    	uniqueNames.pushObject(el.id);
+		    	arr.get('content').pushObject(el);
+		    }
+		});
+
+		return arr.get('arrangedContent');
+	}.property('App.diputadosController.content'),
+
 	asistenciasLoadedCompleted: function (data) {
 		if (this.get('content.loaded')) {
 			if (this.get('content.idDiputados').length > 0) {
