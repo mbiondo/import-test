@@ -9269,7 +9269,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 	diputadosPercent: function () {
 		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
 		if (seleccionados) {
-			return "width:" + (seleccionados.length * App.get('diputadosController.arrangedContent.length') / 100) + "%;";
+			return "width:" + (seleccionados.length / App.get('diputadosController.arrangedContent.length') * 100) + "%;";
 		} else {
 			return "width: 0%;";
 		}
