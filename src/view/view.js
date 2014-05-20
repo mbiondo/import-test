@@ -6790,7 +6790,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				return this.get('camaras');
 				break;
 			case 'MENSAJE':
-				return Array(this.get('camaras')[1], this.get('camaras')[3]);
+				return Array(this.get('camaras')[2], this.get('camaras')[3]);
 				break;
 		}
 	}.property('content.tipo'),
@@ -8467,7 +8467,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				return this.get('camaras');
 				break;
 			default: 
-				return Array(this.get('camaras')[1], this.get('camaras')[3]);
+				return Array(this.get('camaras')[2], this.get('camaras')[3]);
 				break;
 
 		}
