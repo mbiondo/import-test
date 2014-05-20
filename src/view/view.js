@@ -7817,7 +7817,7 @@ App.TPConsultaView = Ember.View.extend({
 			url = App.get('apiController.url') + url;
 		}
 
-		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docx";
+		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docxpath";
 	}.property('controller.content'),
 
 
@@ -9265,6 +9265,15 @@ App.OradoresAsistenciasView = Em.View.extend({
 		App.get('diputadosController.content').setEach('seleccionado', false);
 		this.set('asistencias', App.get('asistenciasController.content'));
 	}.observes('App.asistenciasController.content'),
+
+	diputadosPercent: function () {
+		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
+		if (seleccionados) {
+			return (seleccionados.length * App.get('diputadosController.arrangedContent.length') / 100) + "%";
+		} else {
+			return "0%";
+		}
+	}.property('App.diputadosController.arrangedContent.@each.seleccionado'),
 
 	diputadosPresentes: function () {
 		var seleccionados = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
