@@ -9373,7 +9373,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 			bloques.addObject({
 				bloque: bloque,
 				presentes: diputadosPresentes,			
-				ausentes: diputadosAusentes,				
+				ausentes: diputadosAusentes,
 			});
 
 		}, this);
@@ -9383,6 +9383,8 @@ App.OradoresAsistenciasView = Em.View.extend({
 			sesion: App.get('asistenciasController').get('sesion').serialize(),
 			bloques: bloques,
 		};
+
+		console.log(JSON.stringify(diputados));
 
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
 	},
