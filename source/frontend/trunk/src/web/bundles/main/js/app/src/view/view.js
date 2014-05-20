@@ -6160,7 +6160,8 @@ App.PLMiniView = Ember.View.extend({
 		if (this.get('content.proyectos'))
 			data.addObjects(this.get('content.proyectos'));
 
-		this.get('mergedContentController').set('content', data);
+		if (this.get('mergedContentController')) 
+			this.get('mergedContentController').set('content', data);
 
 	}.observes('content.proyectos.@each, content.dictamenes.@each'),
 
