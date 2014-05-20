@@ -2205,7 +2205,7 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 	url: 'sesiondiputadoasistencia',
 	useApi: false,
 	idSesion: '',
-	idDiputados: [],
+	idDiputados: null,
 	notificationType : 'Asistencia',
 	notificationRoom: 'asistencias',
 

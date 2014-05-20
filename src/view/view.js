@@ -9248,7 +9248,18 @@ App.OradoresAsistenciasView = Em.View.extend({
 	sesion: null,
 
 	asistencias: null,
+	showPresents: false,
 
+
+	diputados: function () {
+		var arr = [];
+		if (this.get('showPresents')) {
+			arr = App.get('diputadosController.arrangedContent');
+		} else {
+			arr = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
+		}
+		return arr;
+	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents'),
 
 	asistenciaChange: function () {
 		App.get('diputadosController.content').setEach('seleccionado', false);
