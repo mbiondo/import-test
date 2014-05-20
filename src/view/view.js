@@ -9276,15 +9276,29 @@ App.OradoresAsistenciasView = Em.View.extend({
 			content: [],
 		});
 
-		var presentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', true);
-		var ausentes = App.get('diputadosController.arrangedContent').filterProperty('seleccionado', false);
+
+		var dip = [];
+
+		if (this.get('bloque')) {
+			App.get('diputadosController.arrangedContent').forEach(function (diputado) {
+				if (diputado.bloque.id == this.get('bloque.id'))
+				{
+					dip.addObject(diputado);
+				}
+			}, this);
+		} else {
+			dip = App.get('diputadosController.arrangedContent');
+		}
+
+		var presentes = dip.filterProperty('seleccionado', true);
+		var ausentes = dip.filterProperty('seleccionado', false);
 
 		if (this.get('showPresents'))
 			arr.get('content').addObjects(presentes);
 		if (this.get('showAbsent'))
 			arr.get('content').addObjects(ausentes);
 		return arr.get('arrangedContent');
-	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent'),
+	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent', 'bloque'),
 
 	asistenciaChange: function () {
 		App.get('diputadosController.content').setEach('seleccionado', false);
