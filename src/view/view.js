@@ -8967,7 +8967,7 @@ App.ProyectoSearchView = Em.View.extend({
 
 			var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
 			App.set('proyectosController.query.palabras', lista_palabras);
-			App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pub.numero'));
+			App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pub.numero').toString());
 			App.proyectosController.load();
 
 			this.set('loading', true);
