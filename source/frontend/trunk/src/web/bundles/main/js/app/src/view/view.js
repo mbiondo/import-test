@@ -7052,6 +7052,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	comisionesSeleccionadas: [],
 	firmantesSeleccionados: [],
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
+	comisionesBicamerales: false,
+	
 
 	numeros: function(){
 		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
@@ -7068,6 +7070,20 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.set('content.pubnro', null);
 		}
 	}.observes('pubnro'),
+
+
+	comisionesChange: function () {
+		this.get('content').set('autoridades', []);
+		
+		if (this.get('comisionesBicamerales') == true) {
+			App.get('comisionesController').set('tipo', 'pap/com/comisiones/CB/E/resumen');
+		} else {
+			App.get('comisionesController').set('tipo', 'pap/com/comisiones/CD/P/resumen');
+		}
+		App.get('comisionesController').load();
+
+	}.observes('comisionesBicamerales'),
+
 
 	periodoChanged: function () {
 		App.set('tpsController.periodo', this.get('content.periodo'));
