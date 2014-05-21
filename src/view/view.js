@@ -9200,7 +9200,6 @@ App.OradoresAsistenciasView = Em.View.extend({
 			return "progress-bar-danger";
 		}
 	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado'),
-
 	diputados: function () {
 		var arr = Ember.ArrayController.create({ 
 			sortProperties: ['sortValue'],
@@ -9210,14 +9209,26 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 		var dip = [];
 
-		if (this.get('bloque')) {
-			App.get('diputadosController.arrangedContent').forEach(function (diputado) {
-				if (diputado.bloque.id == this.get('bloque.id'))
-				{
-					dip.addObject(diputado);
-				}
-			}, this);
-		} else {
+		if (this.get('bloque') || this.get('interBloque')) {
+			if (this.get('bloque')) {
+				App.get('diputadosController.arrangedContent').forEach(function (diputado) {
+					if (diputado.bloque.id == this.get('bloque.id'))
+					{
+						dip.addObject(diputado);
+					}
+				}, this);
+			}
+			if (this.get('interBloque')) {
+				App.get('diputadosController.arrangedContent').forEach(function (diputado) {
+					if (diputado.interBloque.id == this.get('interBloque.id'))
+					{
+						dip.addObject(diputado);
+					}
+				}, this);
+			}
+		}
+
+		else {
 			dip = App.get('diputadosController.arrangedContent');
 		}
 
@@ -9229,7 +9240,7 @@ App.OradoresAsistenciasView = Em.View.extend({
 		if (this.get('showAbsent'))
 			arr.get('content').addObjects(ausentes);
 		return arr.get('arrangedContent');
-	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent', 'bloque'),
+	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent', 'bloque', 'interBloque'),
 
 	asistenciasPorBloques: function (){
 		var bloquesPresentes = [];
@@ -9348,7 +9359,6 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 		$.download('exportar/asistencias', "&type=asistencias&data=" + JSON.stringify(diputados));
 	},
-	
 });
 
 App.OradoresAsistenciasDiputadosListItemView = Ember.View.extend({
