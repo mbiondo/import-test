@@ -8911,6 +8911,7 @@ App.ProyectoSearchView = Em.View.extend({
 	palabras: [],
 	tipoPub: ['TP'],
 
+
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
 		
@@ -8918,6 +8919,10 @@ App.ProyectoSearchView = Em.View.extend({
 			$("form").find("[tabindex=1]").focus();
 		});
 	},
+
+	periodoChanged: function () {
+		App.set('tpsController.periodo', App.get('proyectosController.query.pubper'));
+	}.observes('App.proyectosController.query.pubper'),
 
 	comisiones: function () {
 		var comisiones = [];
