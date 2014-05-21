@@ -6834,7 +6834,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades').length < 1) 
 		{
-			if(this.get('content.iniciado.id') == "Senadores") {
+			if(this.get('content.iniciado.id') == "Senadores" || this.get('content.iniciado') == "Senadores") {
 				return false;
 			}
 			return true;
@@ -7053,7 +7053,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	firmantesSeleccionados: [],
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	comisionesBicamerales: false,
-	
+
 
 	numeros: function(){
 		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
