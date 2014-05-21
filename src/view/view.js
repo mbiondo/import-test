@@ -8910,6 +8910,7 @@ App.ProyectoSearchView = Em.View.extend({
 	palabra: '',
 	palabras: [],
 	tipoPub: ['TP'],
+	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 
 
 	collapseToggle: function(){
