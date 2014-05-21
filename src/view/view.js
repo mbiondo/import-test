@@ -8367,7 +8367,9 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	deleteSuccess: function () {
 		this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
 
-		if (this.get('controller.content.deleteSuccess')) {
+		console.log(this.get('controller.content.deleteSuccess'));
+		
+		if (this.get('controller.content.deleteSuccess') == true) {
 			App.tpsController = App.TPsController.create();		
 			App.proyectosController = App.ProyectosController.create({ content: []});
 			App.get('proyectosController').set('loaded', false);
