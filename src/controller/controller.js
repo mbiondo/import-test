@@ -40,7 +40,7 @@ App.Savable = Ember.Mixin.create({
 	},
 
 	deleteSucceeded: function (data) {
-		if (this.get('useApi') && data.id) {
+		if (this.get('useApi')) {
 			this.set('deleteSuccess', true);
 		}
 
