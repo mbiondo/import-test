@@ -3,7 +3,7 @@ App.Savable = Ember.Mixin.create({
 	createSuccess: '',
 	
 	delete: function () {
-		this.set('saveSuccess', '');
+		this.set('deleteSuccess', '');
 		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
 
 		if (this.get('noConcatURL') == true)
