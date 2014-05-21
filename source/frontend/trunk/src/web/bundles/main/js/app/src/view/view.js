@@ -9244,7 +9244,8 @@ App.OradoresAsistenciasView = Em.View.extend({
 
 	asistenciasPorBloques: function (){
 		var bloquesPresentes = [];
-		App.bloquesController.get('content').forEach(function (bloque) {
+
+		App.get('asistenciasController.bloques').forEach(function (bloque) {
 			var regex = new RegExp('^' + bloque.nombre + '$');
 			filteredByBloque = App.get('diputadosController.content').filter(function(dip){
 				return regex.test(dip.bloque.nombre);
