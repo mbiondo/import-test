@@ -1272,24 +1272,10 @@ App.Router =  Em.Router.extend({
 							 	App.get('diputadosController').removeObserver('loaded', this, fn);	
 								deferred.resolve(null);					
 							};
-
+							
 							App.get('diputadosController').addObserver('loaded', this, fn);
 							App.get('diputadosController').load();
-
-							fn2 = function() {
-								if (App.interBloquesController.get('loaded') && App.bloquesController.get('loaded')) {
-									deferred.resolve(null);				
-								}
-							};
-						
-							App.bloquesController = App.BloquesController.create({url:'bloques'});
-							App.interBloquesController = App.InterBloquesController.create({url:'interbloques'});
-							App.bloquesController.load();
-							App.bloquesController.addObserver('loaded', this, fn);
-							App.interBloquesController.load();
-							App.interBloquesController.addObserver('loaded', this, fn);
-
-
+			
 							return deferred.promise();
 						},
 						connectOutlets: function(router, context) {
