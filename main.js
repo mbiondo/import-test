@@ -12,6 +12,7 @@ App.apiController = App.ApiController.create({
 	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
 	secret: '3KJtUIRd7=SgzpdTA?aeC5r9a8GkoF7rwCWufg5BXYTb9Pwlx_ef6NXbo.A3Fwn.1ok_8L8gSe_WDGJq_ZKn.D5y9MLAr9.T1j.IjT=exFT6q.3ox42g2RAjHle-KrHv',
 	use_auth: true,
+
 });
 
 App.menuController = App.MenuController.create({
@@ -477,7 +478,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Asistencias',
 							url: '#/laborparlamentaria/recinto/asistencias',
-							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA']],
 						})
 					]			
 				}),
