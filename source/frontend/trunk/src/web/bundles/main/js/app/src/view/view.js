@@ -8342,6 +8342,63 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 
 App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
+
+	borrar: function () {
+		App.confirmActionController.setProperties({
+			title: 'Confirmar eliminar proyecto',
+			message: '¿ Confirma que desea eliminar el proyecto ' + this.get('controller.content').get('expdip') + ' ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
+
+	},
+
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		if(App.get('confirmActionController.success'))
+		{
+			this.get('controller.content').addObserver('deleteSuccess', this, this.deleteSuccess);
+			this.get('controller.content').delete();
+		}
+	},	
+
+	deleteSuccess: function () {
+		this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
+
+		if (this.get('controller.content.deleteSuccess')) {
+			App.tpsController = App.TPsController.create();		
+			App.proyectosController = App.ProyectosController.create({ content: []});
+			App.get('proyectosController').set('loaded', false);
+			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+
+			fn = function() {
+				if (App.get('proyectosController.loaded'))
+				{
+					App.get('tpsController').removeObserver('loaded', this, fn);	
+					App.get('comisionesController').removeObserver('loaded', this, fn);	
+					App.get('proyectosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyectos');
+
+				}
+			};
+
+			App.get('tpsController').addObserver('loaded', this, fn);
+			App.get('comisionesController').addObserver('loaded', this, fn);
+			App.get('proyectosController').addObserver('loaded', this, fn);
+
+			App.get('tpsController').load();
+			App.get('comisionesController').load();
+			App.get('proyectosController').load();
+
+			$.jGrowl('Se ha elimiado el expediente!', { life: 5000 });
+
+		} else {
+			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
+		}
+	},
+
 });
 
 App.MEExpedienteEditarView = Ember.View.extend({
@@ -8520,8 +8577,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			ex.set('loaded', false);
 			var deferred = $.Deferred(),
 			fn = function() {
-				App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
-				deferred.resolve(ex);				
+				App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);
 			};
 
 			ex.addObserver('loaded', this, fn);
