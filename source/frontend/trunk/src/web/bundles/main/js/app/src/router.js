@@ -657,7 +657,7 @@ App.Router =  Em.Router.extend({
 						App.tpsController = App.TPsController.create();		
 						App.proyectosController = App.ProyectosController.create({ content: []});
 						App.get('proyectosController').set('loaded', false);
-						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));
 
 						fn = function() {
 							if (App.get('proyectosController.loaded'))

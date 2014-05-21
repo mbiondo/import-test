@@ -8956,10 +8956,6 @@ App.ProyectoSearchView = Em.View.extend({
 		    _self.buscar();
 		  }
 		});
-
-
-		App.get('proyectosController.query').set('pubper', 132);
-		App.get('proyectosController.query').set('pubTipo', 'TP');
 	},
 
 	buscar: function () {
@@ -8971,9 +8967,9 @@ App.ProyectoSearchView = Em.View.extend({
 
 			var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
 			App.set('proyectosController.query.palabras', lista_palabras);
-			App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pubnro.numero'));
-
+			//App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pubnro.numero'));
 			App.proyectosController.load();
+			
 			this.set('loading', true);
 		}
 	},
@@ -8987,7 +8983,7 @@ App.ProyectoSearchView = Em.View.extend({
 
 	borrar: function () {
 		App.searchController.deleteObject(App.proyectosController.get('query'));
-		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({}));
+		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));
 	},
 
 	removerPalabra: function(){
