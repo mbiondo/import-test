@@ -8357,8 +8357,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		
 		if(App.get('confirmActionController.success'))
 		{
+			this.get('controller.content').set('deleteSuccess', false);
 			this.get('controller.content').addObserver('deleteSuccess', this, this.deleteSuccess);
 			this.get('controller.content').delete();
 		}
@@ -8394,6 +8396,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			$.jGrowl('Se ha elimiado el expediente!', { life: 5000 });
 
 		} else if (this.get('controller.content.deleteSuccess') == false) {
+			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
 			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
 		}
 	},
