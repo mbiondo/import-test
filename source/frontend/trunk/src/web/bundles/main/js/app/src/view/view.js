@@ -6830,10 +6830,11 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
+
 	faltanFirmantes: function(){
-		if(this.get('content.autoridades').length < 1 && this.get('content.iniciado.id') != "Senadores") 
+		if(this.get('content.autoridades').length < 1) 
 		{
-			if(this.get('content.iniciado.id') == "Senadores"){
+			if(this.get('content.iniciado.id') == "Senadores") {
 				return false;
 			}
 			return true;
@@ -6843,6 +6844,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		} 
 	}.property('content.autoridades.@each'),
+
 	faltanGiros: function(){
 		if(this.get('content.comisiones').length < 1)
 		{
