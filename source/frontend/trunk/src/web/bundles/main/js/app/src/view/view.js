@@ -7073,16 +7073,16 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 
 	comisionesChange: function () {
-		this.get('content').set('autoridades', []);
+		this.get('content').set('comisiones', []);
 		
 		if (this.get('comisionesBicamerales') == true) {
-			App.get('comisionesController').set('tipo', 'pap/com/comisiones/CB/E/resumen');
+			App.get('comisionesController').set('url', 'pap/com/comisiones/CB/E/resumen');
 		} else {
-			App.get('comisionesController').set('tipo', 'pap/com/comisiones/CD/P/resumen');
+			App.get('comisionesController').set('url', 'pap/com/comisiones/CD/P/resumen');
 		}
 		App.get('comisionesController').load();
 
-	}.observes('comisionesBicamerales'),
+	}.observes('comisionesBicamerales'),	
 
 
 	periodoChanged: function () {
