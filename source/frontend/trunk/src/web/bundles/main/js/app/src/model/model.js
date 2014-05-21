@@ -2119,6 +2119,7 @@ App.ProyectoQuery = Em.Object.extend({
 	dirty: false,
 	palabra: '',
 	pubnro: '',
+	pubper: '',
 	tipoPub: '',
 	palabras: [],
 	comisionesObject: [],
@@ -2133,6 +2134,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'pubnro',
 		'tipoPub',
 		'pageNumber',
+		'pubper',
 	],
 
 	serializable: [
@@ -2146,6 +2148,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'tipoPub',
 		'pageNumber',
 		'pageSize',
+		'pubper',
 	],
 
 	comisiones: function () {
