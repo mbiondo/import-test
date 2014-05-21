@@ -427,10 +427,12 @@ App.Router =  Em.Router.extend({
 	                               ex.removeObserver('loaded', this, fn);
 	                               ex.desNormalize(); 
 	                               ex.set('autoridades', []);
-
+	                               var orden = 1;
+	                               
 	                               ex.get('firmantes').forEach(function (firmante) {
 	                               		var f = App.get('firmantesController').findProperty('label', firmante.nombre);
 	                               		if (f) {
+	                               			f.set('orden', ++orden);
 	                               			ex.get('autoridades').addObject(f);
 	                               		}
 	                               }, this);
