@@ -8345,75 +8345,6 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 });
 
 App.MEExpedienteEditarView = Ember.View.extend({
-	/*templateName: 'me-expediente-editar',
-
-	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PROROGA'],
-	tipoPub: ['TP'],
-
-	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
-    
-    periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
-
-    tieneCamposExtra: false,
-
-	camaras: [
-		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senadores", nombre: "Senadores"}, 
-		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
-		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
-	],
-
-	iniciadoSelect: function(){
-		return this.get('camaras').findProperty('id', this.get('controller.content.iniciado'));
-	}.property('controller.content.iniciado'),
-
-	camarasChange: function(){
-		var _self = this;
-		Ember.run.next(function(){
-			var camaraSelected = this.get('camarasList').findProperty('id', this.get('controller.content.iniciado'));
-			if(!camaraSelected){
-				_self.set('controller.content.iniciado', _self.get('camarasList.firstObject.id'));
-			}
-		});
-	}.observes('controller.content.tipo'),
-	
-	camarasList: function(){
-		switch (this.get('controller.content.tipo'))
-		{
-			case 'LEY':
-				return this.get('camaras');
-				break;
-			case 'LEY EN REVISION':				
-				return Array(this.get('camaras')[1]);
-				break;
-			case 'RESOLUCION':
-				return this.get('camaras');
-				break;
-			case 'DECLARACION':
-				return this.get('camaras');
-				break;
-			case 'MENSAJE':
-				return Array(this.get('camaras')[1], this.get('camaras')[3]);
-				break;
-		}
-	}.property('controller.content.tipo'),
-
-	guardar: function(){
-        this.get('controller.content').normalize();
-		this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
-		this.get('controller.content').save();
-	},
-
-	saveSuccessed: function () {
-		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
-		if (this.get('controller.content.saveSuccess')) {                                    
-                        App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
-		} else if (this.get('saveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
-		}
-	},*/
-
 	templateName: 'editar-expediente',
 	clickGuardar: false,
 	expTipo: '',
@@ -9299,6 +9230,37 @@ App.OradoresAsistenciasView = Em.View.extend({
 			arr.get('content').addObjects(ausentes);
 		return arr.get('arrangedContent');
 	}.property('App.diputadosController.content', 'App.diputadosController.content.@each.seleccionado', 'showPresents', 'showAbsent', 'bloque'),
+
+	asistenciasPorBloques: function (){
+		var bloquesPresentes = [];
+		App.bloquesController.get('content').forEach(function (bloque) {
+			var regex = new RegExp('^' + bloque.nombre + '$');
+			filteredByBloque = App.get('diputadosController.content').filter(function(dip){
+				return regex.test(dip.bloque.nombre);
+			}, this);
+
+			filteredByBloqueAndSelected = filteredByBloque.filterProperty('seleccionado', true);
+
+			bloquesPresentes.addObject({'bloque': bloque.nombre, asistencias: filteredByBloqueAndSelected.length, cantidad: filteredByBloque.length})
+		});
+
+		bloquesPresentes.sort(function(a, b){return b.asistencias-a.asistencias});
+
+		var otrosBloques = bloquesPresentes.slice(5, bloquesPresentes.length);
+
+		bloquesPresentes = bloquesPresentes.slice(0, 5);
+
+		var asisOtros = 0;
+		var cantOtros = 0;
+		otrosBloques.forEach(function (item) {
+			asisOtros += item.asistencias;
+			cantOtros += item.cantidad;
+		});
+
+		bloquesPresentes.addObject({'bloque': "Otros", asistencias: asisOtros, cantidad: cantOtros})
+
+		return bloquesPresentes;
+	}.property('App.diputadosController.content.@each.seleccionado'),
 
 	asistenciaChange: function () {
 		App.get('diputadosController.content').setEach('seleccionado', false);
