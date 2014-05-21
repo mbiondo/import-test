@@ -44,7 +44,7 @@ App.Savable = Ember.Mixin.create({
 			this.set('deleteSuccess', true);
 		}
 
-		if (data.success == true) {
+		if (data && data.success == true) {
 			this.set('deleteSuccess', true);
 		}		
 
