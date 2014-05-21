@@ -8365,11 +8365,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	},	
 
 	deleteSuccess: function () {
-		this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
-
-		console.log(this.get('controller.content.deleteSuccess'));
-		
 		if (this.get('controller.content.deleteSuccess') == true) {
+			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
 			App.tpsController = App.TPsController.create();		
 			App.proyectosController = App.ProyectosController.create({ content: []});
 			App.get('proyectosController').set('loaded', false);
@@ -8396,7 +8393,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 
 			$.jGrowl('Se ha elimiado el expediente!', { life: 5000 });
 
-		} else {
+		} else if (this.get('controller.content.deleteSuccess') == false) {
 			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
 		}
 	},
