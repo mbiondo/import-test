@@ -8956,6 +8956,10 @@ App.ProyectoSearchView = Em.View.extend({
 		    _self.buscar();
 		  }
 		});
+
+
+		App.get('proyectosController.query').set('pubper', 132);
+		App.get('proyectosController.query').set('pubTipo', 'TP');
 	},
 
 	buscar: function () {
