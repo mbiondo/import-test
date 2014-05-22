@@ -2119,10 +2119,10 @@ App.ProyectoQuery = Em.Object.extend({
 	dirty: false,
 	palabra: '',
 	pubnro: '',
-	pubper: '',
 	pubtipo: '',
 	palabras: [],
 	comisionesObject: [],
+	firmantesObject: [],
 	pageNumber: '',
 
 	parametizable: [
@@ -2132,9 +2132,10 @@ App.ProyectoQuery = Em.Object.extend({
 		'tipo',
 		'palabras',
 		'pubnro',
+		'pubper',
 		'pubtipo',
 		'pageNumber',
-		'pubper',
+		'firmantes',
 	],
 
 	serializable: [
@@ -2145,16 +2146,19 @@ App.ProyectoQuery = Em.Object.extend({
 		'tipo',
 		'palabras',
 		'pubnro',
+		'pubper',
 		'pubtipo',
 		'pageNumber',
 		'pageSize',
-		'pubper',
+		'firmantes',
 	],
 
 	comisiones: function () {
 		return $.map(this.get('comisionesObject'), function(value, key){ return value.get('nombre') });
 	}.property('comisionesObject.@each'),
-
+	firmantes: function () {
+		return $.map(this.get('firmantesObject'), function(value, key){ return value.get('apellido') });
+	}.property('firmantesObject.@each'),
 });
 
 
