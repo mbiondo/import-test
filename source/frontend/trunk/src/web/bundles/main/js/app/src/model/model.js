@@ -2118,7 +2118,7 @@ App.ProyectoQuery = Em.Object.extend({
 	editable: true,
 	dirty: false,
 	palabra: '',
-	pubnro: '',
+//	pubnro: '',
 	pubtipo: '',
 	palabras: [],
 	comisionesObject: [],
@@ -2135,7 +2135,6 @@ App.ProyectoQuery = Em.Object.extend({
 		'pubper',
 		'pubtipo',
 		'pageNumber',
-		'firmantes',
 	],
 
 	serializable: [
