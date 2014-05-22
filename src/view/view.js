@@ -7847,9 +7847,7 @@ App.TPConsultaView = Ember.View.extend({
 		    type: 'GET',
 
 		    success: function(data) {
-		    	var my = window.open("");
-		    	my.document.docType = "docx";
-		    	my.document.write(data);
+		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
 		    },
 		});
 	},
