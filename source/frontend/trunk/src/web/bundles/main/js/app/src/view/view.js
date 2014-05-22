@@ -8936,7 +8936,7 @@ App.ProyectoSearchView = Em.View.extend({
 	}.property('App.comisionesController.content.@each'),
 
 	limpiar: function () {
-		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: []}));
+		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: []}));
 		this.buscar();
 	},
 
