@@ -399,8 +399,7 @@ App.Router =  Em.Router.extend({
 
 
 							fn2 = function() {
-	                            if (App.get('comisionesController.loaded') && App.get('firmantesController.loaded')) {
-	                                App.get('firmantesController').removeObserver('loaded', this, fn2);
+	                            if (App.get('comisionesController.loaded')) {
 	                                App.get('comisionesController').removeObserver('loaded', this, fn2);
 		                           	ex.addObserver('loaded', this, fn);
                             		ex.load();
@@ -410,14 +409,24 @@ App.Router =  Em.Router.extend({
 							App.get('comisionesController').addObserver('loaded', this, fn2);
 							App.get('comisionesController').load();				
 
-							App.get('firmantesController').addObserver('loaded', this, fn2);
-							App.get('firmantesController').load();		
 
 
 
 							fn3 = function () {
-								if (App.get('tpsController.loaded')) {
+								if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) {
 									App.get('tpsController').addObserver('loaded', this, fn3);
+									ex.desNormalize(); 
+									ex.set('autoridades', []);
+									var orden = 1;
+
+									ex.get('firmantes').forEach(function (firmante) {
+										var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+										if (f) {
+											f.set('orden', ++orden);
+											ex.get('autoridades').addObject(f);
+										}
+									}, this);
+
 									deferred.resolve(ex);			
 								}
 							};
@@ -425,24 +434,38 @@ App.Router =  Em.Router.extend({
 							fn = function() {
 							   if (ex.get('loaded')) {
 	                               ex.removeObserver('loaded', this, fn);
-	                               ex.desNormalize(); 
-	                               ex.set('autoridades', []);
-	                               var orden = 1;
-	                               
-	                               ex.get('firmantes').forEach(function (firmante) {
-	                               		var f = App.get('firmantesController').findProperty('label', firmante.nombre);
-	                               		if (f) {
-	                               			f.set('orden', ++orden);
-	                               			ex.get('autoridades').addObject(f);
-	                               		}
-	                               }, this);
 
 							 	    if (!App.get('tpsController')) {
 							 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
 							 	    }
 
+									App.get('firmantesController').addObserver('loaded', this, fn3);
+
+								    var tipo = '';
+
+									if(ex.get('iniciado') == 'Poder Ejecutivo' || ex.get('iniciado') == 'JGM')
+									{
+										tipo = 'func/funcionarios';
+									}
+									else if(ex.get('iniciado') == 'Diputados')
+									{
+										tipo = 'dip/diputados';
+									} 	
+
+									if (tipo == '') {
+										App.get('firmantesController').set('content', []);
+										App.get('firmantesController').set('loaded', true);
+									} else {
+										if(App.get('firmantesController.tipo') != tipo)
+										{
+											App.get('firmantesController').set('tipo', 'pap/' + tipo);
+											App.get('firmantesController').load();					
+										}
+									}
+
 								    App.get('tpsController').addObserver('loaded', this, fn3);
-								    App.get('tpsController').load();	                               
+								    App.get('tpsController').load();	
+
 							   }
                             };                                                                             
 						
