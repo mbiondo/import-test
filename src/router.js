@@ -6,7 +6,7 @@ function checkPath (menuItem){
 		menuItem.get('subMenu').forEach(checkPath);
 	
 	if (menuItem.get('url') == p)
-		rolesRequiered = menuItem.get('roles');
+		rolesRequiered = menuItem.get('roles');	
 }
 
 function getRolesByPath(path) {
@@ -447,6 +447,7 @@ App.Router =  Em.Router.extend({
 									{
 										tipo = 'func/funcionarios';
 									}
+									
 									else if(ex.get('iniciado') == 'Diputados')
 									{
 										tipo = 'dip/diputados';
@@ -461,6 +462,12 @@ App.Router =  Em.Router.extend({
 											App.get('firmantesController').set('tipo', 'pap/' + tipo);
 											App.get('firmantesController').load();					
 										}
+									}
+
+									var regex = new RegExp('MENSAJE');
+
+									if (regex.test(ex.get('tipo'))) {
+										ex.set('tipo', 'MENSAJE');
 									}
 
 								    App.get('tpsController').addObserver('loaded', this, fn3);

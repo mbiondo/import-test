@@ -6760,7 +6760,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	camaras: [
 		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Senado", nombre: "Senado"}, 
 		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
@@ -6834,7 +6834,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades').length < 1) 
 		{
-			if(this.get('content.iniciado.id') == "Senadores" || this.get('content.iniciado') == "Senadores") {
+			if(this.get('content.iniciado.id') == "Senado" || this.get('content.iniciado') == "Senado") {
 				return false;
 			}
 			return true;
@@ -7162,7 +7162,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			case "Diputados":
 				this.get('content').set('expdipT', 'D');
 				break;
-			case "Senadores":
+			case "Senado":
 				this.get('content').set('expdipT', 'S');
 				break;
 			case "Poder Ejecutivo":
@@ -8426,7 +8426,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 	camaras: [
 		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senadores", nombre: "Senadores"}, 
+		{id: "Senado", nombre: "Senado"}, 
 		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
@@ -8650,7 +8650,6 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 
 		var tp = App.get('tpsController.content').findProperty('numero', parseInt(this.get('content').get('pubnro')));
-		console.log(tp);
 
 		this.set('oldTP', tp);
 
