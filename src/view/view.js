@@ -6915,7 +6915,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'crearProyecto');	
 			notification.set('objectId', expediente.id);
-			notification.set('link', "/#/mesa/de/entrada/proyecto/" + expediente.id + "/ver");
+			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
 			notification.create();      
