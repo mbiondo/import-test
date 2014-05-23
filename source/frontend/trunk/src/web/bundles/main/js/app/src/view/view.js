@@ -7229,7 +7229,6 @@ App.ExpedienteFormLeyRevisionView = App.ExpedienteFormLeyView.extend({
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	templateName: 'expediente-form-mensaje',
 	msgNro: '',
-	msgFecha: null,
 	msgTipo: '',
 	
 	msgValueChange: function () {
@@ -7237,9 +7236,9 @@ App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 		if (this.get('conLey')) {
 			add = " Y PROYECTO DE LEY";
 		}
-		this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + add);
+		this.set('msgTipo', 'MENSAJE ' + this.get('content.msjNro') + add);
 		this.get('parentView').set('expTipo', this.get('msgTipo'));
-	}.observes('msgNro', 'conLey'),
+	}.observes('content.msjNro', 'conLey'),
 });
 
 App.CrearGiroView = Ember.View.extend({
