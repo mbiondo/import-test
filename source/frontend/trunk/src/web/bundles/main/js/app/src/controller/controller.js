@@ -5003,7 +5003,7 @@ App.TPCrearController = Ember.ObjectController.extend({
 			notification.set('objectId', tp.id);
 			notification.set('link', "/#/publicaciones/TP/" + tp.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha creado el Tramite Parlamentario N°" + tp.numero + " del período N°" + tp.periodo);
+			notification.set('mensaje', "Se ha creado el Trámite Parlamentario N°" + tp.numero + " del período N°" + tp.periodo);
 			notification.create();  
 
             App.tpsController = App.TPsController.create();

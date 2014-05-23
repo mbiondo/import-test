@@ -635,9 +635,12 @@ App.Expediente = Em.Object.extend({
                 }, this);
         }
 
-        if (this.get('firmantes') && !this.get('autoridades'))
+        if (this.get('firmantes'))
         {
-                //TO-DO Transform objetc to Firmante.
+        	//TODO ver id firmantes
+            /*this.get('firmantes').forEach(function (firmante) {
+                this.get('autoridades').pushObject(App.FirmanteTextoDictamen.create({id: 1, nombre: firmante.nombre }));
+            }, this);*/
         }    	
     },
 
@@ -1905,7 +1908,11 @@ App.VisitaGuiada = Ember.Object.extend({
 	],
 
 	label: function (){
-		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia");
+		var fechaFormat = "";
+		if(this.get('fechaPreferencia')){
+			fechaFormat = moment(this.get('fechaPreferencia.date'), 'YYYY/MM/DD').format('LL')
+		}
+		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia") + " " + fechaFormat;
 	}.property('id'),
 
 	aprove: function () {
