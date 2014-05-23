@@ -2309,17 +2309,21 @@ App.FirmantesController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
+
 	load: function () {		
 		_self = this;
 		this.set('loaded', false);
-		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('tipo') + '/' + this.get('url')),
-			type: 'GET',
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});
+		if (this.get('tipo') != '') {
+			$.ajax({
+				url: (App.get('apiController').get('url') + this.get('tipo') + '/' + this.get('url')),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+		}
+
 	},	
 
 /*

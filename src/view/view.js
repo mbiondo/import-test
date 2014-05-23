@@ -6775,6 +6775,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		$("#formCrearExpediente").parsley('destroy');
 
 	}.observes('content.tipo'),
+
 	camarasList: function(){
 		switch (this.get('content.tipo'))
 		{
@@ -7192,7 +7193,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if (tipo == '') {
 			this.get('content').set('autoridades', []);	
 			App.get('firmantesController').set('content', []);
-			App.get('firmantesController').set('loaded', true);
+			App.get('firmantesController').set('loaded', true);	
 		} else {
 			if(App.get('firmantesController.tipo') != tipo)
 			{
@@ -7202,7 +7203,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			}
 		}
 
-	}.observes('content.iniciado'),
+	}.observes('content.iniciado.id'),
 
 	numeroChange: function () {
 		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT') + "-" + this.get('content.expdipA'));
@@ -7222,10 +7223,7 @@ App.ExpedienteFormLeyRevisionView = App.ExpedienteFormLeyView.extend({
 	msgNro: '',
 	msgFecha: null,
 	msgTipo: '',
-	
-	didInsertElement: function () {
-		this._super();
-	},
+
 });
 
 App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
@@ -7242,10 +7240,6 @@ App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 		this.set('msgTipo', 'MENSAJE ' + this.get('msgNro') + add);
 		this.get('parentView').set('expTipo', this.get('msgTipo'));
 	}.observes('msgNro', 'conLey'),
-	
-	didInsertElement: function () {
-		this._super();
-	},
 });
 
 App.CrearGiroView = Ember.View.extend({
@@ -7854,7 +7848,8 @@ App.TPConsultaView = Ember.View.extend({
 
 	confeccionarTP: function () {
 		return App.get('userController').hasRole('ROLE_PUBLICACIONES_EDIT') 
-	}.property('App.userController.user')
+	}.property('App.userController.user'),
+
 });
 
 App.ComisionesListItemView = Ember.View.extend({
@@ -8126,7 +8121,7 @@ App.MultiSelectListView = Ember.View.extend({
 		if (this.get('filterText') && this.get('suggestable')) {
 			this.get('contentController').filter(this.get('filterText'));
 		} else if (!this.get('suggestable')) {
-			this.get('contentController').load();
+			if (!this.get('contentController.loaded')) this.get('contentController').load();
 		}
 	},
 
