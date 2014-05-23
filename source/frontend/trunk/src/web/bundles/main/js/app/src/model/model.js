@@ -582,7 +582,7 @@ App.Expediente = Em.Object.extend({
 
 		if(this.get('mjeFecha'))
 		{
-	        this.set('mjeFecha', moment(this.get('mjeFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD'));		
+	        this.set('mjeFecha', moment(this.get('mjeFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss'));		
 		}        
 
         if (this.get('titulo')) this.set('titulo', this.get('titulo').toUpperCase());
@@ -730,6 +730,7 @@ App.Expediente = Em.Object.extend({
     	'mjeNum',
     	'mjeFecha',
     	'adjunto',
+    	'sesion',
 	],
 });
 
