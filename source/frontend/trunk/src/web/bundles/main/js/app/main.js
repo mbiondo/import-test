@@ -44,13 +44,13 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_SITE_ADMIN']],
+							roles: [['ROLE_MESA_DE_ENTRADA']],
 							titulo: 'Movimientos de Expedientes',
 							url: '#/novedades/1',
 						}),
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_COMISIONES']],
 							titulo: 'Agenda Comisiones',
 							url: '#/novedades/2',
 						}),
@@ -62,19 +62,19 @@ App.menuController = App.MenuController.create({
 						}),								
 						App.MenuItem.create({
 							id: 4,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_SITE_ADMIN']],
 							titulo: 'Orden del Día',
 							url: '#/novedades/4',
 						}),									
 						App.MenuItem.create({
 							id: 5,
-							roles: [['ROLE_SITE_ADMIN']],
+							roles: [['ROLE_PUBLICACIONES']],
 							titulo: 'Publicaciones',
 							url: '#/novedades/5',
 						}),													
 						App.MenuItem.create({
 							id: 7,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
 							titulo: 'Plan de Labor',
 							url: '#/novedades/7',
 						}),
@@ -90,7 +90,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 9,
-			roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA']],
+			roles: [['ROLE_DIRECCION_SECRETARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Dirección Secretaría',
 			url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 			icono: 'ic ic-pen',
@@ -101,7 +101,8 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Movimiento Autoridades',
 					url: '',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -128,13 +129,13 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 3,
-							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_MESA_DE_ENTRADA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Buscador de proyectos',
 							url: '#/direccionsecretaria/mesadeentrada/proyectos',
 						}),						
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
+							roles: [['ROLE_MESA_DE_ENTRADA_EDIT']],
 							titulo: 'Crear proyecto',
 							url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 						}),
