@@ -1899,6 +1899,7 @@ App.VisitaGuiada = Ember.Object.extend({
     encuestaPosterior: false,
     envioFoto: false,
     observaciones: '',
+    asistio: '',
 
 	serializable: [
             'id',
@@ -1908,7 +1909,8 @@ App.VisitaGuiada = Ember.Object.extend({
             'encuestaPosterior',
             'envioFoto',
             'observaciones',
-            'aprobado'
+            'aprobado',
+            'asistio',
 	],
 
 	label: function (){
