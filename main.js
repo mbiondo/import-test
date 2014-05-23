@@ -24,7 +24,7 @@ App.menuController = App.MenuController.create({
 	content: [
 		App.MenuItem.create({
 			id: 0,
-			roles: [['ROLE_USER']],
+			roles: [[]],
 			titulo: 'Inicio',
 			url: '#',
 			icono: 'ic ic-novedades',
@@ -34,11 +34,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Filtrar Novedades Por',
 					url: '#',
-					roles: [['ROLE_USER']],
+					roles: [[]],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER']],
+							roles: [[]],
 							titulo: 'Todas las Novedades',
 							url: '#',
 						}),
