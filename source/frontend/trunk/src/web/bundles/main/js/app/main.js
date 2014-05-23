@@ -1,6 +1,9 @@
 App.apiController = App.ApiController.create({
 	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
 
+
+
+
 	//url: 'http://10.120.8.67:8080/sparl/rest/',
 	tomcat: 'http://sparl-desa.hcdn.gob.ar:9090',
 
@@ -121,7 +124,7 @@ App.menuController = App.MenuController.create({
 					id: 2,
 					titulo: 'Mesa de Entrada',
 					url: '',
-					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 3,
