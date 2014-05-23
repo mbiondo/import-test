@@ -539,6 +539,8 @@ App.Expediente = Em.Object.extend({
 	biografia: null,
 	comisiones: null,
 	autoridades: null,
+	
+	oringen: null,
 
 
 	url: 'ME/exp/proyecto',
@@ -781,9 +783,11 @@ App.Citacion = Em.Object.extend({
 	label: function () {
 		return moment(this.get('fecha'), 'YYYY-MM-DD HH:mm').format('LLLL') + this.get('title') + this.get('sala.numero') + this.get('observaciones') + this.get('estado.descripcion');
 	}.property('title'),
+
 	observacionesHTML: function () {
 		return this.get('observaciones').replace(/\n/g, "<br/>").htmlSafe();
 	}.property('observaciones'),	
+
 	firmantesLabel: function() {
 		var firmantes = this.get('firmantes').sort(function (a, b) {
 			return a.orden - b.orden;
