@@ -27,7 +27,7 @@ App.Usuario = Em.Object.extend({
 
 	label: function () {
 		// return this.get('id') + ' ' + this.get('datosLabel2') + ' ' + this.get('rolesLabel');
-		return this.get('id') + ' ' + this.get('datosLabel2') + ' ' + this.get('comisionesLabel');
+		return this.get('id') + ' ' + this.get('datosLabel2') + ' ' + this.get('comisionesLabel') + this.get('rolesLabel');
 	}.property('id'),
 	
 	datosLabel: function () {
@@ -43,7 +43,7 @@ App.Usuario = Em.Object.extend({
 	rolesLabel: function () {
 		var str = "";
 		this.get('roles').forEach(function(rol){
-			str += rol.nombre;
+			str += rol.nombre + " ";
 		});
 		return str.htmlSafe();
 	}.property('roles'),
