@@ -5903,6 +5903,76 @@ App.PieGraphView = Ember.View.extend({
 	}
 });
 
+App.ColumnGraphView = Ember.View.extend({
+	attributeBindings: ['title', 'name', 'content', 'categories'],
+	pointFormat: '{point.y}',
+	type: 'column',
+	categorias :[   'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre'
+                ],
+
+	redrawChart: function () {
+		this.$().highcharts({
+			chart: {
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
+			title: {
+				text: this.get('title')
+			},
+			tooltip: {
+				//pointFormat: '',
+				pointFormat: this.get('pointFormat') , 
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true,
+						color: '#000000',
+						connectorColor: '#000000',
+						formatter: function() {
+							return '<b>'+ this.point.name +'</b>';
+						}
+					}
+				}
+			},
+            xAxis: {
+                categories: this.get('categorias')
+            },
+            yAxis: {
+                title: {
+                    text: 'Visitantes'
+                }
+            },
+			series: [{
+				type:  this.get('type'),
+				name: this.get('name'),
+				data: this.get('content')
+			}]
+	   });
+	}.observes('content.@each'),
+
+	didInsertElement: function () {
+		this._super();
+		Ember.run.next(this, this.redrawChart);
+	}
+});
+
+
+
 
 App.EstadisticasView = Ember.View.extend({
 	templateName: 'estadisticas-oradores',

@@ -1382,6 +1382,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 		if (this.get('content'))
 		{
+
+			var total = 0;
+
 			provincias = $.map(this.get('content'), function(key){ return key.provincia; }).sort(); // Recorro cada item
 			provincias_unique = provincias.uniq(); // Elimino repetidos
 
@@ -1393,7 +1396,16 @@ App.VisitasGuiadasController = App.RestController.extend({
 				});
 
 				data.push({name: item, y: cant});
+
+				total += cant;
 			});
+
+
+
+			data.forEach(function(item){
+				item.y = item.y * 100 / total;
+			});
+
 		}
 
 		return data;
@@ -1446,6 +1458,29 @@ App.VisitasGuiadasController = App.RestController.extend({
 		}
 
 		return data;
+	}.property('content.@each'),
+
+	estadisticasPorMes: function(){			
+		var meses = [{name:0,y:0} ,{name:1,y:0} ,{name:2,y:0} ,{name:3,y:0} ,{name:4,y:0} ,{name:5,y:0} ,{name:6,y:0} ,{name:7,y:0} ,{name:8,y:0} ,{name:9,y:0} ,{name:10,y:0} ,{name:11,y:0}];
+		var _self = this;
+		var anioActual = new Date().getUTCFullYear();		
+		if (this.get('content'))
+		{
+			this.get('content').forEach(function(item){
+				if(item.fechaPreferencia){
+					itemDate = new Date(item.fechaPreferencia.date.substring(0,10));
+					if(anioActual == itemDate.getUTCFullYear()){
+						var index = meses.map(function(e) { return e.name; }).indexOf(itemDate.getMonth());
+					
+						if(index >= 0){
+							meses[index].y += parseInt(item.cantPersonas);
+						}
+					}
+				}
+			});
+		}
+
+		return meses;
 	}.property('content.@each'),
 
 });
