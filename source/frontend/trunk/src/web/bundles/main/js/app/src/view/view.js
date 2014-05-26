@@ -7459,8 +7459,14 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 		this.set('fechaHasta','');
 		this.set('filterText','');
 		
+	},
+	exportar: function () {
+		$.download('exportar/visitas-guiadas', "&type=visitas-guiadas&data=" + JSON.stringify(App.get('visitasGuiadasController.arrangedContent')));
+	},	
+	didInsertElement: function(){
+		this._super();
+		this.set('exportarEnabled', true);
 	}
-
 
 });
 
@@ -7471,7 +7477,7 @@ App.VisitasGuiadasView = Ember.View.extend({
 
 	willInsertElement: function(){
 		this.set('content', App.get('visitasGuiadasController.arrangedContent'));
-	},
+	}
 
 });
 
