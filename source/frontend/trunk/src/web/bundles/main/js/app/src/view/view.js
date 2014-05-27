@@ -7923,7 +7923,7 @@ App.TPConsultaView = Ember.View.extend({
 				audit.set('tipo', 'TP');
 				audit.set('accion', 'Confeccionar Documento');
 				audit.set('usuario', App.get('userController.user.cuil'));
-				audit.set('objeto', _self.get('controller.content').toString());
+				audit.set('objeto', _self.get('controller.content').constructor.toString());
 				audit.set('objetoId', _self.get('controller.content.id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 				audit.create();				
