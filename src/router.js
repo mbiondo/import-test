@@ -443,12 +443,12 @@ App.Router =  Em.Router.extend({
 
 								    var tipo = '';
 
-									if(ex.get('iniciado') == 'Poder Ejecutivo' || ex.get('iniciado') == 'JGM')
+									if(ex.get('expdipT') == 'PE' || ex.get('expdipT') == 'JGM')
 									{
 										tipo = 'func/funcionarios';
 									}
 									
-									else if(ex.get('iniciado') == 'Diputados')
+									else if(ex.get('expdipT') == 'D')
 									{
 										tipo = 'dip/diputados';
 									} 	
