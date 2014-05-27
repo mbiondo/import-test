@@ -1988,7 +1988,7 @@ App.TP = Ember.Object.extend({
     numero: '',
     periodo: '',
     fecha: '',
-//	auditable: true,
+	auditable: true,
 
 	serializable: [
         'id',
