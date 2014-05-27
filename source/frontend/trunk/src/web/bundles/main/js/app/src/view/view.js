@@ -7910,6 +7910,7 @@ App.TPConsultaView = Ember.View.extend({
 
 
 	exportar: function () {
+		var _self = this;
 		$.ajax({
 
 		    url: this.get('documentURL'),
@@ -7917,6 +7918,15 @@ App.TPConsultaView = Ember.View.extend({
 
 		    success: function(data) {
 		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
+
+				var audit = App.Audit.extend(App.Savable).create();
+				audit.set('tipo', 'TP');
+				audit.set('accion', 'Confeccionar Documento');
+				audit.set('usuario', App.get('userController.user.cuil'));
+				audit.set('objeto', _self.get('controller.content').toString());
+				audit.set('objetoId', _self.get('controller.content.id'));
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.create();				
 		    },
 		});
 	},
