@@ -7310,12 +7310,23 @@ App.ExpedienteFormMensajeView = App.ExpedienteFormLeyView.extend({
 	
 	msgValueChange: function () {
 		var add = '';
+
 		if (this.get('conLey')) {
 			add = " Y PROYECTO DE LEY";
 		}
-		this.set('msgTipo', 'MENSAJE ' + this.get('content.msjNro') + add);
+
+		this.set('msgTipo', 'MENSAJE ' + this.get('content.mjeNum') + add);
 		this.get('parentView').set('expTipo', this.get('msgTipo'));
-	}.observes('content.msjNro', 'conLey'),
+
+	}.observes('content.mjeNum', 'conLey'),
+
+	didInsertElement: function () {
+		this._super();
+
+		if (this.get('content.conLey')) {
+			this.set('conLey', this.get('content.conLey'));
+		}
+	},
 });
 
 App.CrearGiroView = Ember.View.extend({

@@ -467,6 +467,10 @@ App.Router =  Em.Router.extend({
 									var regex = new RegExp('MENSAJE');
 
 									if (regex.test(ex.get('tipo'))) {
+										regex = new RegExp('LEY');
+										if (regex.test(ex.get('tipo'))) {
+											ex.set('conLey', true);
+										}
 										ex.set('tipo', 'MENSAJE');
 									}
 
