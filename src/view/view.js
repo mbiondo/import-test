@@ -6953,6 +6953,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
 			this.set('content.expdipT', this.get('content.expdipT').id);
+
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
 		}
@@ -7241,16 +7242,24 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		var tipo = '';
 
+		var camara= '';
+
+		if (this.get('content.expdipT.id')) {
+			camara = this.get('content.expdipT.id')
+		} else {
+			return;
+		}
+
 		if (this.get('parentView.oldInit') == undefined) {
 			this.set('parentView.oldInit', this.get('content.expdipT.id'));
 			return;
 		}
 
-		if(this.get('content.expdipT.id') == 'PE' || this.get('content.expdipT.id') == 'JGM')
+		if(camara == 'PE' || camara == 'JGM')
 		{
 			tipo = 'func/funcionarios';
 		}
-		else if(this.get('content.expdipT.id') == 'D')
+		else if(camara == 'D')
 		{
 			tipo = 'dip/diputados';
 		} 	
@@ -7271,6 +7280,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('content.expdipT'),
 
 	numeroChange: function () {
+		if (!this.get('content.expdipT.id')) {
+			return;
+		}
 		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 });
