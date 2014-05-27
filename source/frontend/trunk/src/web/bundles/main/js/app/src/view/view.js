@@ -6829,22 +6829,11 @@ App.CrearExpedienteView = Ember.View.extend({
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
 	camaras: [
-		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senado", nombre: "Senado"}, 
-		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "D", nombre: "Diputados"}, 
+		{id: "S", nombre: "Senado"}, 
+		{id: "PE", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
-
-	camarasChange: function(){
-		var _self = this;
-		Ember.run.next(function(){		
-			_self.set('content.iniciado', _self.get('camarasList.firstObject'));
-		});
-
-		this.set('clickGuardar', false);
-		$("#formCrearExpediente").parsley('destroy');
-
-	}.observes('content.tipo'),
 
 	camarasList: function(){
 		switch (this.get('content.tipo'))
@@ -6905,7 +6894,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades').length < 1) 
 		{
-			if(this.get('content.iniciado.id') == "Senado" || this.get('content.iniciado') == "Senado") {
+			if(this.get('content.iniciado.id') == "S" || this.get('content.iniciado') == "S") {
 				return false;
 			}
 			return true;
@@ -6963,7 +6952,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', true);
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
-			this.set('content.iniciado', this.get('content.iniciado').id);
+			this.set('content.expdipT', this.get('content.expdipT').id);
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
 		}
@@ -6991,7 +6980,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
 			notification.create();      
 
-			var iniciado = this.get('camaras').findProperty('id', expediente.get('iniciado'));
+			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
 
 			this.set('content', App.Expediente.extend(App.Savable).create({
@@ -7001,7 +6990,8 @@ App.CrearExpedienteView = Ember.View.extend({
 				pubtipo: expediente.get('pubtipo'), 
 				periodo: expediente.get('periodo'),
 				expdipA: expediente.get('expdipA'),
-				iniciado: iniciado,
+				iniciad: expediente.get('iniciado'),
+				expdipT: iniciado,
 				sesion: expediente.get('sesion'),
 				firmantes: [],
 				giro: [],
@@ -7010,6 +7000,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			}));
 
 			this.setupEnter();
+
 			this.set('loading', false);
 			this.set('clickGuardar', false);
 
@@ -7082,7 +7073,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			firmantes: [],
 			giro: [],
 			comisiones: [],
-			autoridades: []
+			autoridades: [],
 		}));              
 
 		Ember.run.next(this, function (){
@@ -7116,6 +7107,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	templateName: 'expediente-form-ley',
 
 	tipoSesion: ['ORDINARIAS', 'EXTRAORDINARIAS', 'DE PRORROGA'],
+
+	iniciado: ['Diputados', 'Senado'],
+
 	tipoPub: ['TP'],
 	
 	filterTextComisiones: '',
@@ -7125,6 +7119,17 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	comisionesBicamerales: false,
 
+	camarasChange: function(){
+		var _self = this;
+		
+		Ember.run.next(function(){		
+			_self.set('content.iniciado', _self.get('iniciado.firstObject'));
+		});
+
+		this.set('clickGuardar', false);
+		$("#formCrearExpediente").parsley('destroy');
+
+	}.observes('content.tipo'),
 
 	numeros: function(){
 		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
@@ -7161,7 +7166,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('pubnro', null);
 	}.observes('content.periodo'),
 
-	didInsertElement: function(){
+	didInsertElement: function() {
 		this._super();
 		var _self = this;
 		var chequearContent = [];
@@ -7190,7 +7195,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});
 		});
 
-		this.get('content').set('iniciado', this.get('camaras.firstObject'));
+
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
@@ -7199,6 +7204,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			Ember.run.next(function () { 
 				_self.set('pubnro', _self.get('parentView.oldTP'));
 			});	
+		}
+
+		if (!this.get('content.id')) {
+			var camara = this.get('parentView.camaras').findProperty('id', this.get('content.expdipT'));
+			this.get('content').set('expdipT', camara);
 		}
 
 		/*
@@ -7229,33 +7239,18 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	camaraChange: function () {
 
-		switch (this.get('content.iniciado.id')) {
-			case "Diputados":
-				this.get('content').set('expdipT', 'D');
-				break;
-			case "Senado":
-				this.get('content').set('expdipT', 'S');
-				break;
-			case "Poder Ejecutivo":
-				this.get('content').set('expdipT', 'PE');
-				break;
-			case "JGM":
-				this.get('content').set('expdipT', 'JGM');
-				break;
-		}
-
 		var tipo = '';
 
 		if (this.get('parentView.oldInit') == undefined) {
-			this.set('parentView.oldInit', this.get('content.iniciado.id'));
+			this.set('parentView.oldInit', this.get('content.expdipT.id'));
 			return;
 		}
 
-		if(this.get('content.iniciado.id') == 'Poder Ejecutivo' || this.get('content.iniciado.id') == 'JGM')
+		if(this.get('content.expdipT.id') == 'PE' || this.get('content.expdipT.id') == 'JGM')
 		{
 			tipo = 'func/funcionarios';
 		}
-		else if(this.get('content.iniciado.id') == 'Diputados')
+		else if(this.get('content.expdipT.id') == 'D')
 		{
 			tipo = 'dip/diputados';
 		} 	
@@ -7273,10 +7268,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			}
 		}
 
-	}.observes('content.iniciado.id'),
+	}.observes('content.expdipT'),
 
 	numeroChange: function () {
-		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT') + "-" + this.get('content.expdipA'));
+		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 });
 
@@ -8505,9 +8500,9 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
 	camaras: [
-		{id: "Diputados", nombre: "Diputados"}, 
-		{id: "Senado", nombre: "Senado"}, 
-		{id: "Poder Ejecutivo", nombre: "Poder Ejecutivo"}, 
+		{id: "D", nombre: "Diputados"}, 
+		{id: "S", nombre: "Senado"}, 
+		{id: "PE", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
 
@@ -8518,16 +8513,16 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		
 		var _self = this;
 
-		var camaraSelected = this.get('camarasList').findProperty('id', this.get('content.iniciado'));
+		var camaraSelected = this.get('camarasList').findProperty('id', this.get('content.expdipT'));
 
 		if (!camaraSelected)
-			camaraSelected = this.get('camarasList').findProperty('id', this.get('content.iniciado.id'));
+			camaraSelected = this.get('camarasList').findProperty('id', this.get('content.expdipT.id'));
 
 		Ember.run.next(function (){
 			if(!camaraSelected){
-				_self.set('content.iniciado', _self.get('camarasList.firstObject'));
+				_self.set('content.expdipT', _self.get('camarasList.firstObject'));
 			}else{
-				_self.set('content.iniciado', camaraSelected);
+				_self.set('content.expdipT', camaraSelected);
 			}
 		});
 		this.set('clickGuardar', false);
@@ -8651,7 +8646,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 			this.set('loading', true);
 			this.get('content').normalize();
-			this.set('content.iniciado', this.get('content.iniciado').id);
+			this.set('content.expdipT', this.get('content.expdipT').id);
 			this.get('content').addObserver('saveSuccess', this, this.saveSucceeded);
 			this.get('content').save();
 		}
