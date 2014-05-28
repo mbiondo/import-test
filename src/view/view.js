@@ -6949,6 +6949,10 @@ App.CrearExpedienteView = Ember.View.extend({
 				this.get('content').set('tipo', this.get('expTipo'));
 			}
 			
+			while (this.get('content.expdipN').length < 4)
+			{
+                this.set(('content.expdipN'),  '0' + this.get('content.expdipN'));
+            }
 
 			this.set('loading', true);
 			this.get('content').normalize();
@@ -7067,7 +7071,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		var _self = this;
-
+		
 		this.set('content', App.Expediente.extend(App.Savable).create({
 			expdipA: '', 
 			expdipN: '', 
