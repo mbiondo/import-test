@@ -174,7 +174,8 @@ App.Router =  Em.Router.extend({
 
 			deserialize: function () {
 
-				App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+				if (!App.notificacionesFiltradasController) 
+					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 				App.notificacionesFiltradasController.set('url', "notification/all");
 				App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
 
@@ -184,10 +185,9 @@ App.Router =  Em.Router.extend({
 
 					fn = function() {
 						if (App.get('notificacionesFiltradasController.loaded')) {
-							App.get('notificacionesFiltradasController').removeObserver('loaded', this, fn);	
+							App.get('notificacionesFiltradasController').removeObserver('loaded', this, fn);
 							deferred.resolve(null);	
 						}
-
 					};					
 
 					App.get('notificacionesFiltradasController').addObserver('loaded', this, fn);

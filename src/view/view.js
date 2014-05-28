@@ -6895,7 +6895,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades').length < 1) 
 		{
-			if(this.get('content.iniciado.id') == "S" || this.get('content.iniciado') == "S") {
+			if(this.get('content.expdipT.id') == "S" || this.get('content.expdipT') == "S") {
 				return false;
 			}
 			return true;
@@ -8156,6 +8156,7 @@ App.MultiSelectListView = Ember.View.extend({
 	suggestable: false,
 	tabindex: 0,
 	content: [],
+	matchPosition: 'ANY',
 
 	selectionAc: null,
 
@@ -8185,7 +8186,17 @@ App.MultiSelectListView = Ember.View.extend({
 			}
 		} else {
 			if (this.get('filterText').length >= this.get('threshold')) {
-				var regex = new RegExp('^' + this.get('filterText').toString().toLowerCase());
+				var regex = null;
+
+				switch (this.get('matchPosition')) {
+					case 'LEFT':
+						regex = new RegExp('^' + this.get('filterText').toString().toLowerCase());
+						break;
+					case 'ANY':
+						regex = new RegExp(this.get('filterText').toString().toLowerCase());
+						break;
+				}
+
 				filtered = this.get('contentController').get('arrangedContent').filter(function(c){
 					return regex.test(c.get(this.get('labelPath')).toString().toLowerCase());
 				}, this);
@@ -8660,7 +8671,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades') && this.get('content.autoridades').length < 1)
 		{
-			if(this.get('content.iniciado.id') == "S" || this.get('content.iniciado') == "S") {
+			if(this.get('content.expdipT.id') == "S" || this.get('content.expdipT') == "S") {
 				return false;
 			}
 			return true;
@@ -8692,7 +8703,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false )
 				{				
 					App.confirmActionController.setProperties({
-						title: 'Confirmar Crear Proyecto',
+						title: 'Confirmar modificar Proyecto',
 						message: '¿ Confirma que desea modificar el proyecto LEY ' +_self.get('content.expdip')+ ' ?',
 						success: null,
 					});

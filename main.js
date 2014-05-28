@@ -1,16 +1,8 @@
 App.apiController = App.ApiController.create({
-	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
 
+	url: 'http://10.102.13.4:8080/sparl/rest/',
+	tomcat: 'http://10.102.13.4:8080',
 
-
-
-	//url: 'http://10.120.8.67:8080/sparl/rest/',
-	tomcat: 'http://sparl-desa.hcdn.gob.ar:9090',
-
-	//url: 'http://10.185.204.7:8080/sparl/rest/',
-	//url: 'http://10.185.204.12:8080/sparl/rest/',
-	//url: 'http://186.23.200.128:8080/sparl/rest',
-	// url: 'http://201.250.82.9:9009/sparl/rest/',
 	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
 
 	authURL: 'http://10.105.5.55:9000/o/',
@@ -765,7 +757,7 @@ Storage.prototype.getObject = function(key) {
 
 
 $( document ).ajaxComplete(function( event, xhr, settings ) {
-	if (xhr.status == 401) {
+	if (xhr.status == 401 || xhr.status == 0) {
 		if (App.userController.user) {
 			
 			App.userController.set('user', null);
