@@ -7903,17 +7903,26 @@ App.TPsView = Ember.View.extend({
 App.TPCrearView = Ember.View.extend({
 	templateName: 'crear-tp',	
 	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132].reverse(),
+	fecha: '',
 	
+	didInsertElement: function(){
+		this._super();
+		this.set('fecha', moment().format("DD/MM/YYYY"));
+	},
 	crear: function(){
 		if($('#formCrearTP').parsley('validate'))
 		{
-			while (this.get('controller.content.numero').length < 3){
-				this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
-			}
+			while (this.get('controller.content.numero').length < 3)
+			{
+                this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
+            }
 
+			this.set('controller.content.fecha', this.get('fecha'));
+			
 			this.get('controller').crear();
 		} 
 	}
+
 })
 
 App.TPConsultaView = Ember.View.extend({
