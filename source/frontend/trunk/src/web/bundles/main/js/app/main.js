@@ -483,31 +483,37 @@ App.menuController = App.MenuController.create({
 
 			]			
 		}),		
-		/*
+		
 		App.MenuItem.create({
-			id: 3,
-			titulo: 'Recinto',
-			url: '#/recinto/oradores',
+			id: 13,
+			titulo: 'Informacion Parlamentaria',
+			url: '#/informacionparlamentaria/pedidos/listado',
 			icono: 'ic ic-recinto',
 			roles: [['ROLE_USER']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
-					titulo: 'Recinto',
-					url: '#/recinto/oradores',
+					titulo: 'Pedidos',
+					url: '#/informacionparlamentaria/pedidos/listado',
 					roles: [['ROLE_USER']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							titulo: 'Oradores',
-							url: '#/recinto/oradores',
+							titulo: 'Listado',
+							url: '#/informacionparlamentaria/pedidos/listado',
 							roles: [['ROLE_USER']],
 						}),					
+						App.MenuItem.create({
+							id: 1,
+							titulo: 'Crear',
+							url: '#/informacionparlamentaria/pedidos/crear',
+							roles: [['ROLE_USER']],
+						}),											
 					],
 				}),
 			]			
 		}),
-		*/
+		
 		App.MenuItem.create({
 			id: 7,
 			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],

@@ -9627,3 +9627,41 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 	step: 20,
 	totalRecords: 20,
 });
+
+
+
+
+App.CrearPedidoView = Ember.View.extend({
+	templateName: 'if-pedido-crear',
+})
+
+App.PedidoConsultaView = Ember.View.extend({
+	templateName: 'if-pedido-consulta',
+});
+
+
+App.PedidoListItemView = Ember.View.extend({
+	templateName: 'if-pedido-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+
+	didInsertElement: function () {
+		this._super();
+		this.$('span').tooltip();
+	},
+});
+
+App.PedidosListView = App.ListFilterView.extend({
+	itemViewClass: App.PedidoListItemView,
+	columnas: ['ID', 'Nombre'],
+});
+
+App.PedidosView = Ember.View.extend({
+	templateName: 'if-pedidos',
+	content: '',
+	contentCount: 0,
+
+	willInsertElement: function(){
+		this.set('content', App.get('pedidosController.arrangedContent'));
+	}
+});

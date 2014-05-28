@@ -2237,3 +2237,15 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 		'idDiputados',
 	],	
 });
+
+
+App.Pedido = Ember.Object.extend({
+	serializable: [
+		'id',
+		'nombre',
+	],
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre'),
+});

@@ -1239,7 +1239,6 @@ App.PlanDeLaborController = Ember.Object.extend({
 
 App.PlanDeLaborListadoController = App.RestController.extend({
 	url: 'pdl/planesdelabor/estado/',
-//	url: '/pdl/all'
 	sortProperties: ['fechaEstimada'],
 	sortAscending: false,
 	useApi: true,
@@ -5482,4 +5481,63 @@ App.AsistenciasController = Ember.ObjectController.extend({
 		}
 	},	
 
+});
+
+
+App.PedidosController = App.RestController.extend({
+	url: 'informacion/parlamentaria/pedidos',
+	useApi: false,
+	loaded: false,
+	type: App.Pedido,
+	content: null,
+	sortProperties: ['id'],
+	sortAscending: false,
+
+
+	load: function () {
+		var data = [{id: 1, nombre: 'pepe'}, {id: 1, nombre: 'pepe'}, {id: 1, nombre: 'pepe'}];
+		this.loadSucceeded(data);
+	},
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.Pedido.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+});
+
+App.PedidoConsultaController = Ember.Object.extend({
+	url: 'informacion/parlamentaria/pedidos/%@',
+	type: App.Pedido,
+	useApi: false,
+
+	loadCompleted: function(xhr){
+		if(xhr.status == 400 || xhr.status == 420){ }
+		this.set('loaded', true);		
+	},
+	
+	load: function () {
+		/*
+		this.set('loaded', false);
+		$.ajax({
+			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.loadSucceeded,
+			complete: this.loadCompleted
+		});
+		*/
+		var data = {id: 1, nombre: 'test'};
+		this.loadSucceeded(data);
+	},
+				
+	loadSucceeded: function(data) {
+		item = App.Pedido.extend(App.Savable).create();		
+		item.setProperties(data);
+		this.set('content', item);
+		this.set('loaded', true);
+	},	
 });
