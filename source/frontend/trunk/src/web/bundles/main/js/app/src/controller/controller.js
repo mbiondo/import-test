@@ -506,7 +506,12 @@ App.IoController = Em.Object.extend({
 						success: function (data) {
 							if (data.notificaciones) {
 								data.notificaciones.forEach(function (notificacion) {
-									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));	
+									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));
+
+									if (App.get('notificacionesFiltradasController')) {
+										App.get('notificacionesFiltradasController').addObject(App.Notificacion.create(notificacion));
+									}
+
 									App.get('notificationController').enviarNotificacion(notificacion);
 								});
 							}
@@ -717,7 +722,8 @@ App.UserController = Em.Controller.extend({
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
 
-					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+					if (!App.notificacionesFiltradasController) 
+						App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
 

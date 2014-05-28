@@ -539,6 +539,7 @@ App.Expediente = Em.Object.extend({
 	biografia: null,
 	comisiones: null,
 	autoridades: null,
+	reproduce_exp: null,
 	
 	oringen: null,
 
@@ -736,6 +737,7 @@ App.Expediente = Em.Object.extend({
     	'mjeFecha',
     	'adjunto',
     	'sesion',
+    	'reproduce_exp',
 	],
 });
 
