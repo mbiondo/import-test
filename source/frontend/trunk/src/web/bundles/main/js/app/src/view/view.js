@@ -6825,6 +6825,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	templateName: 'crear-expediente',
 	clickGuardar: false,
 	expTipo: '',
+	expedienteExist: false,
 
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -6922,7 +6923,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			if(_self.get('noHayTipo') == false)
 			{
-				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false )
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false)
 				{				
 					App.confirmActionController.setProperties({
 						title: 'Confirmar creación de Proyecto',
@@ -7262,7 +7263,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		else if(camara == 'D')
 		{
 			tipo = 'dip/diputados';
-		} 	
+		}
 
 		if (tipo == '') {
 			this.get('content').set('autoridades', []);	
@@ -7285,6 +7286,33 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
+
+	changeExdip: function(){
+		if(this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4)
+		{		
+			App.proyectosController = App.ProyectosController.create({ content: []});
+			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: this.get('content.expdip')}));
+
+			fn = function() {
+				if (App.get('proyectosController.loaded'))
+				{
+					if(App.get('proyectosController.recordcount') > 0)
+					{
+						this.set('parentView.expedienteExist', true);
+					}
+					else
+					{
+						this.set('parentView.expedienteExist', false);
+					}
+
+					App.get('proyectosController').removeObserver('loaded', this, fn);									
+				}
+			};
+
+			App.get('proyectosController').addObserver('loaded', this, fn);
+			App.get('proyectosController').load();
+		}
+	}.observes('content.expdipN', 'content.expdipA')
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
