@@ -7266,9 +7266,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 
 		if (tipo == '') {
+			App.get('firmantesController').set('loaded', false);
 			this.get('content').set('autoridades', []);	
 			App.get('firmantesController').set('content', []);
-			App.get('firmantesController').set('loaded', true);	
+			App.get('firmantesController').set('loaded', true);
 		} else {
 			if(App.get('firmantesController.tipo') != tipo)
 			{
@@ -8655,6 +8656,9 @@ App.MEExpedienteEditarView = Ember.View.extend({
 	faltanFirmantes: function(){
 		if(this.get('content.autoridades') && this.get('content.autoridades').length < 1)
 		{
+			if(this.get('content.iniciado.id') == "S" || this.get('content.iniciado') == "S") {
+				return false;
+			}
 			return true;
 		} 
 		else
