@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -9655,7 +9655,7 @@ App.PedidoListItemView = Ember.View.extend({
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['ID', 'Nombre'],
+	columnas: ['Num.', 'Recibido', 'Usuario', 'Departamento', 'Personal DIP', 'Terminado'],
 });
 
 App.PedidosView = Ember.View.extend({

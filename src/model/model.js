@@ -2246,6 +2246,6 @@ App.Pedido = Ember.Object.extend({
 	],
 
 	label: function () {
-		return this.get('nombre');
-	}.property('nombre'),
+		return this.get('usuario');
+	}.property('usuario'),
 });
