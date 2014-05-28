@@ -5496,9 +5496,12 @@ App.PedidosController = App.RestController.extend({
 
 	load: function () {
 		var data = [
-			{id: 1, nombre: 'pepe 1'}, 
-			{id: 2, nombre: 'pepe 2'}, 
-			{id: 3, nombre: 'pepe 3'}
+			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
+			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
+			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
+			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
+			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'}
+
 		];
 		this.loadSucceeded(data);
 	},
