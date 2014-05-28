@@ -5495,7 +5495,11 @@ App.PedidosController = App.RestController.extend({
 
 
 	load: function () {
-		var data = [{id: 1, nombre: 'pepe'}, {id: 1, nombre: 'pepe'}, {id: 1, nombre: 'pepe'}];
+		var data = [
+			{id: 1, nombre: 'pepe 1'}, 
+			{id: 2, nombre: 'pepe 2'}, 
+			{id: 3, nombre: 'pepe 3'}
+		];
 		this.loadSucceeded(data);
 	},
 
@@ -5519,6 +5523,7 @@ App.PedidoConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		this.set('loaded', false);
 		/*
 		this.set('loaded', false);
 		$.ajax({
@@ -5530,7 +5535,7 @@ App.PedidoConsultaController = Ember.Object.extend({
 			complete: this.loadCompleted
 		});
 		*/
-		var data = {id: 1, nombre: 'test'};
+		var data = {id: this.get('content.id'), nombre: 'test'};
 		this.loadSucceeded(data);
 	},
 				

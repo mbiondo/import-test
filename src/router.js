@@ -2302,12 +2302,12 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred(),
 
 						fn = function() {
-							var visita = App.get('pedidoConsultaController.content');
+							var pedido = App.get('pedidoConsultaController.content');
 
 							if(App.get('pedidoConsultaController.loaded'))
 							{							
 								App.get('pedidoConsultaController').removeObserver('loaded', this, fn);
-								deferred.resolve(visita);
+								deferred.resolve(pedido);
 							}
 						};
 
@@ -2317,9 +2317,11 @@ App.Router =  Em.Router.extend({
 
 						return deferred.promise();
 					},
+
 					serialize: function(router, context){
-						return {visita: context.get('id')}
+						return {pedido: context.get('id')}
 					},
+
 					connectOutlets: function(router, context){
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
