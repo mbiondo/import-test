@@ -1999,6 +1999,7 @@ App.TP = Ember.Object.extend({
 
    normalize: function () {
     	this.set('fecha', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm'));
+    	this.set('numero',this.get('numero').toString());
     }, 
 
     desNormalize: function () {
