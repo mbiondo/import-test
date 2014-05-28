@@ -488,7 +488,7 @@ App.menuController = App.MenuController.create({
 			id: 13,
 			titulo: 'Informacion Parlamentaria',
 			url: '#/informacionparlamentaria/pedidos/listado',
-			icono: 'ic ic-recinto',
+			icono: 'ic ic-tickets',
 			roles: [['ROLE_USER']],
 			subMenu: [
 				App.MenuItem.create({
