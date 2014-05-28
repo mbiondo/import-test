@@ -80,10 +80,7 @@ App.Router =  Em.Router.extend({
 		  }
 	   }
 	  // roles.forEach(function (rolRequiered) {
-	//	 if (!userRoles.contains(rolRequiered)){
-	//		_self.transitionTo("page403");
-	//	 }
-	  //});
+
 		var tienePermisos = roles.length > 0 ? false : true;
 
 		roles.forEach(function (rolesRequiered_value, rolesRequiered_index){
@@ -1994,9 +1991,6 @@ App.Router =  Em.Router.extend({
 
 						deserialize: function(router, params){
 							
-							//App.notificacionTipoController = App.NotificacionTipoController.create();
-							//App.set('notificacionTipoController.loaded', false);
-							//App.set('notificacionTipoController.content', App.NotificacionTipo.create({id: params.notificacion}));
 							var notificacionTipo = App.NotificacionTipo.extend(App.Savable).create({id: params.notificacion});
 
 							var deferred = $.Deferred(),
@@ -2086,9 +2080,6 @@ App.Router =  Em.Router.extend({
 			usuariosLegisladores: Em.Route.extend({
 				route: "/usuarios-legisladores",
 
-//					listado: Em.Route.extend({
-//						route: '/firmantes',
-
 		                deserialize: function(router, params) {
 							App.firmantesarhaController = App.FirmantesarhaController.create();
 							App.firmantesController = App.FirmantesController.create();
@@ -2112,20 +2103,19 @@ App.Router =  Em.Router.extend({
 		                },	
 
 		                connectOutlets: function(router, context) {
-		                        var appController = router.get('applicationController');
-		                        appController.connectOutlet('help', 'Help');	
-		                        appController.connectOutlet('main', 'Firmantesarha');
-		                        appController.connectOutlet('menu', 'subMenu');
+	                        var appController = router.get('applicationController');
+	                        appController.connectOutlet('help', 'Help');	
+	                        appController.connectOutlet('main', 'Firmantesarha');
+	                        appController.connectOutlet('menu', 'subMenu');
 
-		                        App.get('menuController').seleccionar(5, 0, 4);
-		                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+	                        App.get('menuController').seleccionar(5, 0, 4);
+	                        App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 							App.get('breadCumbController').set('content', [
 								{titulo: 'Administrar'},
 								{titulo: 'Usuarios y Legisladores', url: '#/admin/usuarios-legisladores'},
 							]);			
 		                },
-//		        	}),
 			}),
 		}),
 
@@ -2257,6 +2247,119 @@ App.Router =  Em.Router.extend({
 			}),
 		}),	
 
+		informacionparlamentaria: Ember.Route.extend({
+			route: '/informacionparlamentaria',
+			pedidos: Ember.Route.extend({
+				route: '/pedidos',
+
+				listado: Ember.Route.extend({
+					route: '/listado',
+
+					deserialize: function(router, params){
+						var deferred = $.Deferred();				
+						
+						App.pedidosController = App.PedidosController.create();
+
+						fn = function() {
+							if(App.get('pedidosController.loaded'))
+							{
+								App.get('pedidosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('pedidosController').addObserver('loaded', this, fn);
+
+						App.get('pedidosController').load();	
+
+						return deferred.promise();	
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'Pedidos');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Pedidos'},
+							{titulo: 'Listado', url: '#/informacionparlamentaria/pedidos/listado'}
+						]);					
+
+						App.get('menuController').seleccionar(13, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+				
+				consulta: Ember.Route.extend({
+					route: '/pedido/:pedido/ver',
+
+					deserialize: function(router, params){
+						App.pedidoConsultaController = App.PedidoConsultaController.create();
+
+						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
+
+						var deferred = $.Deferred(),
+
+						fn = function() {
+							var visita = App.get('pedidoConsultaController.content');
+
+							if(App.get('pedidoConsultaController.loaded'))
+							{							
+								App.get('pedidoConsultaController').removeObserver('loaded', this, fn);
+								deferred.resolve(visita);
+							}
+						};
+
+						App.get('pedidoConsultaController').addObserver('loaded', this, fn);
+
+						App.get('pedidoConsultaController').load();
+
+						return deferred.promise();
+					},
+					serialize: function(router, context){
+						return {visita: context.get('id')}
+					},
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'PedidoConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Pedidos'},
+							{titulo: 'Listado', url: '#/informacionparlamentaria/pedidos/listado'}
+						]);					
+
+						App.get('menuController').seleccionar(13, 0, 0);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+				
+				crear: Ember.Route.extend({
+					route: '/crear',
+
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'CrearPedido');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Pedidos', url: '#/informacionparlamentaria/pedidos/listado'},
+							{titulo: 'Crear'}
+						]);	
+
+						App.get('menuController').seleccionar(13, 0, 1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
+					},					
+				}),				
+			}),
+		}),	
 		expedientes: Em.Route.extend({
 			route: "/expedientes",
 			
@@ -2343,8 +2446,6 @@ App.Router =  Em.Router.extend({
 						App.get('proyectosController').set('loaded', false);
 						//App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
 						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
-//						App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
-
 						fn = function() {
 							if (App.get('proyectosController.loaded') && App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('tpsController.loaded'))
 							{
