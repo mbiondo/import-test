@@ -7907,6 +7907,10 @@ App.TPCrearView = Ember.View.extend({
 	crear: function(){
 		if($('#formCrearTP').parsley('validate'))
 		{
+			while (this.get('controller.content.numero').length < 3){
+				this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
+			}
+
 			this.get('controller').crear();
 		} 
 	}
