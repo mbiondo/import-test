@@ -5496,12 +5496,14 @@ App.PedidosController = App.RestController.extend({
 
 	load: function () {
 		var data = [
-			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
-			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
-			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
-			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'},
-			{id: 1, recibido: '28/04/2014', usuario: 'Secretaria Parlamentaria', departamento: 'LE', personal: 'Pandolfi Miguel', terminado: '29/04/2014'}
-
+			{id: 269, recibido: '28/04/2014', terminado: '14/05/2014',  usuario: 'Secretaria Parlamentaria', departamento: 'EE', personal: 'Valderrama, Maria del Pilar'},
+			{id: 270, recibido: '28/04/2014', terminado: '06/05/2014',  usuario: 'Particular', departamento: 'OP', personal: 'Della Bianca, Alberto César'},
+			{id: 271, recibido: '28/04/2014', terminado: '28/04/2014',  usuario: 'Particular', departamento: 'OP', personal: 'Quirco, Carla'},
+			{id: 274, recibido: '29/04/2014', terminado: '30/04/2014',  usuario: 'Particular', departamento: 'EP', personal: 'Signh, Sher'},
+			{id: 276, recibido: '29/04/2014', terminado: '08/05/2014',  usuario: 'Secretaria Parlamentaria - ARI', departamento: 'LE', personal: 'Cabrera, Carlos'},
+			{id: 278, recibido: '30/04/2014', terminado: '05/05/2014',  usuario: 'Particular', departamento: 'EE', personal: 'Cabrera, Carlos'},
+			{id: 279, recibido: '30/04/2014', terminado: '08/05/2014',  usuario: 'Dip. Cigogna, Luis - Justicialismo', departamento: 'ES', personal: 'Reisin, Ricardo Samuel'},
+			{id: 280, recibido: '30/04/2014', terminado: '30/04/2014',  usuario: 'Secretaria Parlamentaria - HCD', departamento: 'EE', personal: 'Dos Santos, Graciela'}
 		];
 		this.loadSucceeded(data);
 	},
