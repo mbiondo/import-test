@@ -2238,8 +2238,12 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 	],	
 });
 
-
 App.Pedido = Ember.Object.extend({
+	url: 'pedido',
+	useApi: false,
+	auditable: true,
+
+
 	serializable: [
 		'id',
 		'nombre',
