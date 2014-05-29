@@ -1,6 +1,7 @@
 App.apiController = App.ApiController.create({
 
 	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
+	//url: 'http://10.102.13.4:8080/sparl/rest/',
 	tomcat: 'http://sparl-desa.hcdn.gob.ar:9090',
 
 	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
@@ -564,12 +565,6 @@ App.menuController = App.MenuController.create({
 							titulo: 'Listado',
 							url: '#/visitas-guiadas/listado',
 						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
-							titulo: 'Estadísticas',
-							url: '#/visitas-guiadas/estadisticas',
-						}),		
 					],
 				}),
 			]
