@@ -9655,7 +9655,7 @@ App.PedidoListItemView = Ember.View.extend({
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['Num.', 'Recibido', 'Usuario', 'Departamento', 'Personal DIP', 'Terminado'],
+	columnas: ['Núm', 'Recibido', 'Terminado', 'Usuario', 'Departamento', 'Personal DIP', ''],
 });
 
 App.PedidosView = Ember.View.extend({
