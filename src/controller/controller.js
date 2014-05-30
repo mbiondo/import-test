@@ -5501,6 +5501,18 @@ App.PedidosController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},
+
+	estadisticasPorResueltos: function (){
+		var data = [];
+		if(this.get('content')){
+			var resueltos = this.get('content').filterProperty('resuelto', true);
+
+			data.push({name: "Finalizados", y: resueltos.length});
+			data.push({name: "Sin finalizar", y: this.get('content').length - resueltos.length});
+
+		}
+		return data;
+	}.property('content.@each'),
 });
 
 App.PedidoConsultaController = Ember.Object.extend({
