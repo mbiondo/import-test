@@ -9683,3 +9683,11 @@ App.PedidosView = Ember.View.extend({
 		this.set('content', App.get('pedidosController.arrangedContent'));
 	}
 });
+
+App.PedidosEstadisticasView = Ember.View.extend({
+	templateName: 'if-pedidos-estadisticas',
+
+	didInsertElement: function(){
+		this._super();
+	}
+});

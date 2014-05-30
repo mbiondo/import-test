@@ -509,6 +509,12 @@ App.menuController = App.MenuController.create({
 							titulo: 'Crear',
 							url: '#/informacionparlamentaria/pedidos/crear',
 							roles: [['ROLE_USER']],
+						}),
+						App.MenuItem.create({
+							id: 2,
+							titulo: 'Estadísticas',
+							url: '#/informacionparlamentaria/pedidos/estadisticas',
+							roles: [['ROLE_USER']],
 						}),											
 					],
 				}),
