@@ -737,7 +737,7 @@ App.Expediente = Em.Object.extend({
     	'mjeFecha',
     	'adjunto',
     	'sesion',
-    	'reproduce_exp',
+    	'ReproduceExp',
 	],
 });
 
@@ -2250,6 +2250,6 @@ App.Pedido = Ember.Object.extend({
 	],
 
 	label: function () {
-		return this.get('usuario');
-	}.property('usuario'),
+		return this.get('userSaraAsignado.nombre') + this.get('userSaraAsignado.apellido');
+	}.property('userSaraAsignado'),
 });
