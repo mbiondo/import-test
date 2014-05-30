@@ -2458,7 +2458,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisiones/CD/P/resumen',
+	url: 'pap/com/comisiones',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -5014,7 +5014,8 @@ App.TPsController = App.RestController.extend({
 	},
 
 	periodoChange: function () {
-		this.load();
+		if (this.get('periodo'))
+			this.load();
 	}.observes('periodo'),
 });
 
@@ -5485,28 +5486,13 @@ App.AsistenciasController = Ember.ObjectController.extend({
 
 
 App.PedidosController = App.RestController.extend({
-	url: 'informacion/parlamentaria/pedidos',
+	url: 'pedido',
 	useApi: false,
 	loaded: false,
 	type: App.Pedido,
 	content: null,
 	sortProperties: ['id'],
 	sortAscending: false,
-
-
-	load: function () {
-		var data = [
-			{id: 269, recibido: '28/04/2014', terminado: '14/05/2014',  usuario: 'Secretaria Parlamentaria', departamento: 'EE', personal: 'Valderrama, Maria del Pilar'},
-			{id: 270, recibido: '28/04/2014', terminado: '06/05/2014',  usuario: 'Particular', departamento: 'OP', personal: 'Della Bianca, Alberto César'},
-			{id: 271, recibido: '28/04/2014', terminado: '28/04/2014',  usuario: 'Particular', departamento: 'OP', personal: 'Quirco, Carla'},
-			{id: 274, recibido: '29/04/2014', terminado: '30/04/2014',  usuario: 'Particular', departamento: 'EP', personal: 'Signh, Sher'},
-			{id: 276, recibido: '29/04/2014', terminado: '08/05/2014',  usuario: 'Secretaria Parlamentaria - ARI', departamento: 'LE', personal: 'Cabrera, Carlos'},
-			{id: 278, recibido: '30/04/2014', terminado: '05/05/2014',  usuario: 'Particular', departamento: 'EE', personal: 'Cabrera, Carlos'},
-			{id: 279, recibido: '30/04/2014', terminado: '08/05/2014',  usuario: 'Dip. Cigogna, Luis - Justicialismo', departamento: 'ES', personal: 'Reisin, Ricardo Samuel'},
-			{id: 280, recibido: '30/04/2014', terminado: '30/04/2014',  usuario: 'Secretaria Parlamentaria - HCD', departamento: 'EE', personal: 'Dos Santos, Graciela'}
-		];
-		this.loadSucceeded(data);
-	},
 
 	createObject: function (data, save) {
 		save = save || false;
@@ -5518,7 +5504,7 @@ App.PedidosController = App.RestController.extend({
 });
 
 App.PedidoConsultaController = Ember.Object.extend({
-	url: 'informacion/parlamentaria/pedidos/%@',
+	url: 'pedido/%@',
 	type: App.Pedido,
 	useApi: false,
 
@@ -5529,7 +5515,7 @@ App.PedidoConsultaController = Ember.Object.extend({
 	
 	load: function () {
 		this.set('loaded', false);
-		/*
+		
 		this.set('loaded', false);
 		$.ajax({
 			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
@@ -5539,9 +5525,9 @@ App.PedidoConsultaController = Ember.Object.extend({
 			success: this.loadSucceeded,
 			complete: this.loadCompleted
 		});
-		*/
-		var data = {id: this.get('content.id'), nombre: 'test'};
-		this.loadSucceeded(data);
+		
+		//var data = {id: this.get('content.id'), nombre: 'test'};
+		//this.loadSucceeded(data);
 	},
 				
 	loadSucceeded: function(data) {

@@ -255,7 +255,7 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 							App.firmantesController = App.FirmantesController.create();
 							 if (!App.get('tpsController'))
-							 	App.tpsController = App.TPsController.create();
+							 	App.tpsController = App.TPsController.create({periodo: 132});
 
 							var deferred = $.Deferred(),
 
@@ -686,7 +686,7 @@ App.Router =  Em.Router.extend({
 						var deferred = $.Deferred();
 						
 						App.firmantesController = App.FirmantesController.create();		
-						App.tpsController = App.TPsController.create();		
+						App.tpsController = App.TPsController.create({periodo: 132});		
 						App.proyectosController = App.ProyectosController.create({ content: []});
 						App.get('proyectosController').set('loaded', false);
 						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));

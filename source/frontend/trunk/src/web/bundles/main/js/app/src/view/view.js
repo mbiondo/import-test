@@ -6893,6 +6893,8 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	faltanFirmantes: function(){
+		if (!this.get('clickGuardar'))
+			return false;
 		if(this.get('content.autoridades').length < 1) 
 		{
 			if(this.get('content.expdipT.id') == "S" || this.get('content.expdipT') == "S") {
@@ -6904,9 +6906,12 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			return false;
 		} 
-	}.property('content.autoridades.@each'),
+	}.property('content.autoridades.@each', 'clickGuardar'),
 
 	faltanGiros: function(){
+		if (this.get('clickGuardar') == false)
+			return false;
+
 		if(this.get('content.comisiones').length < 1)
 		{
 			return true;
@@ -6915,7 +6920,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		{
 			return false;
 		} 
-	}.property('content.comisiones.@each'),
+	}.property('content.comisiones.@each', 'clickGuardar'),
 	guardar: function (){
 		var _self = this;
 
@@ -7154,6 +7159,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('pubnro'),
 
 
+	/*
 	comisionesChange: function () {
 		this.get('content').set('comisiones', []);
 		
@@ -7165,6 +7171,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		App.get('comisionesController').load();
 
 	}.observes('comisionesBicamerales'),	
+	*/
 
 
 	periodoChanged: function () {
@@ -7205,17 +7212,24 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
+		_self = this;
+
 		if (this.get('parentView.oldTP')) {
-			_self = this;
 			Ember.run.next(function () { 
 				_self.set('pubnro', _self.get('parentView.oldTP'));
 			});	
 		}
 
-		if (!this.get('content.id')) {
-			var camara = this.get('parentView.camaras').findProperty('id', this.get('content.expdipT'));
-			this.get('content').set('expdipT', camara);
-		}
+		//if (!this.get('content.id')) {
+			
+			Ember.run.next(function () {
+				var camara = _self.get('parentView.camarasList').findProperty('id', _self.get('content.expdipT'));
+				if (camara)
+					_self.get('content').set('expdipT', camara);
+				else 
+					_self.get('content').set('expdipT', _self.get('parentView.camarasList').get('firstObject'));
+			});
+		//}
 
 		/*
 		Ember.run.next(function(){
@@ -8173,8 +8187,9 @@ App.MultiSelectListView = Ember.View.extend({
 		}, this.get('delayFilter')));
 	}.observes('filterText'),
 
-
 	selectionChanged: function () {
+		if (!this.get('suggestable'))
+			this.get('contentController').load();		
 		this.get('selectionAc').set('content', this.get('selection'));
 	}.observes('selection'),
 
