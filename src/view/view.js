@@ -7300,10 +7300,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('content.expdipT'),
 
 	numeroChange: function () {
-		if (!this.get('content.expdipT.id')) {
-			return;
+		if (!this.get('content.expdipT.id') || !this.get('content.expdipN')) {
+			this.get('content').set('expdip', '');
+		} else {
+			this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
 		}
-		this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 
 	changeExdip: function(){
