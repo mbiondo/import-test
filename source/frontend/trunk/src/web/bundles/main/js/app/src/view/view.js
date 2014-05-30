@@ -685,18 +685,20 @@ App.ListFilterView = Ember.View.extend({
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
 
+	exportExcel: function () {
+		this.$('table').tableExport({type:'excel',escape:'false'});
+	},
+
+	exportPdf: function () {
+		this.$('table').tableExport({type:'pdf',escape:'false'});
+	},
+
+	exportWord: function () {
+		this.$('table').tableExport({type:'doc',escape:'false'});
+	},	
+
 	didInsertElement: function(){
 		this._super();
-		/*
-		// comentado por si después se quiere hacer scroll automatico
-		var _self = this;
-		$(window).scroll(function(){
-			if($(window).scrollTop() == $(document).height() - $(window).height()){
-				_self.set('totalRecords', _self.get('totalRecords') + _self.get('step'));
-			}
-		 });
-		*/
-		
 	},
 
 	filterTextChanged: function () {
@@ -6921,13 +6923,32 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		} 
 	}.property('content.comisiones.@each', 'clickGuardar'),
+
+
+	errorTab: 1,
+
 	guardar: function (){
 		var _self = this;
+		this.set('errorTab', 0);
 
 		if(this.get('clickGuardar') == true)
 		{
 			if(_self.get('noHayTipo') == false)
 			{
+				
+				if ($("#formCrearExpediente").parsley('validate')) {
+					if (_self.get('faltanFirmantes')) {
+						this.set('errorTab', 2);
+					} else {
+						if (_self.get('faltanGiros')) {
+							this.set('errorTab', 3);
+						}
+					}
+				} else {
+					this.set('errorTab', 1);
+				}
+
+
 				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false)
 				{				
 					App.confirmActionController.setProperties({
@@ -7158,6 +7179,22 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 	}.observes('pubnro'),
 
+
+	errorTabChange: function () {
+		if (this.get('parentView.errorTab') > 0) {
+			switch (this.get('parentView.errorTab')) {
+				case 1:
+					this.$("#nav-tabs-proyecto").click();
+					break;
+				case 2:
+					this.$("#nav-tabs-firmantes").click();
+					break;
+				case 3:
+					this.$("#nav-tabs-giros").click();
+					break;
+			}
+		}
+	}.observes('parentView.errorTab'),
 
 	/*
 	comisionesChange: function () {
@@ -8205,7 +8242,6 @@ App.MultiSelectListView = Ember.View.extend({
 		} else {
 			if (this.get('filterText').length >= this.get('threshold')) {
 				var regex = null;
-
 				switch (this.get('matchPosition')) {
 					case 'LEFT':
 						regex = new RegExp('^' + this.get('filterText').toString().toLowerCase());
@@ -9651,6 +9687,19 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 
 App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
+
+	crear: function () {
+		console.log('crear');
+	},
+
+	limpiar: function () {
+		this.set('content', App.Pedido.extend(App.Savable).create());
+	},
+
+	didInsertElement: function () {
+		this._super();
+		this.limpiar();
+	},
 })
 
 App.PedidoConsultaView = Ember.View.extend({
