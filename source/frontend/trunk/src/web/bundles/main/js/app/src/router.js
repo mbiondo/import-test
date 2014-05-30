@@ -2359,6 +2359,47 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},					
+				}),
+
+				estadisticas: Ember.Route.extend({
+					route: '/estadisticas',
+
+					deserialize: function(router, params){
+						var deferred = $.Deferred();				
+						
+						App.pedidosController = App.PedidosController.create();
+
+						fn = function() {
+							if(App.get('pedidosController.loaded'))
+							{
+								App.get('pedidosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('pedidosController').addObserver('loaded', this, fn);
+
+						App.get('pedidosController').load();	
+
+						return deferred.promise();	
+					},
+
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'PedidosEstadisticas');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Pedidos', url: '#/informacionparlamentaria/pedidos/estadisticas'},
+							{titulo: 'Estadisticas'}
+						]);	
+
+						App.get('menuController').seleccionar(13, 0, 2);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
+					},					
 				}),				
 			}),
 		}),	
