@@ -1424,12 +1424,12 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 		if (this.get('content'))
 		{
-			tipoInstituciones = $.map(this.get('content'), function(key){ return key.tipoInstitucion; }).sort(); // Recorro cada item
+			tipoInstituciones = $.map(this.get('content'), function(key){ return key.visitaPara; }).sort(); // Recorro cada item
 			tipoInstituciones_unique = tipoInstituciones.uniq(); // Elimino repetidos
 
 			tipoInstituciones_unique.forEach(function(item){
 				var cant = 0;
-				tipoInstituciones_list = _self.get('arrangedContent').filterProperty('tipoInstitucion', item);			    
+				tipoInstituciones_list = _self.get('arrangedContent').filterProperty('visitaPara', item);			    
 				tipoInstituciones_list.forEach(function(item){
 					cant+=parseInt(item.cantPersonas);
 				});
@@ -5513,6 +5513,19 @@ App.PedidosController = App.RestController.extend({
 		}
 		return data;
 	}.property('content.@each'),
+
+	estadisticasPorInicio: function (){
+		var data = [];
+		if(this.get('content')){
+			var resueltos = this.get('content').filterProperty('resuelto', true);
+
+			data.push({name: "Finalizados", y: resueltos.length});
+			data.push({name: "Sin finalizar", y: this.get('content').length - resueltos.length});
+
+		}
+		return data;
+	}.property('content.@each'),
+
 });
 
 App.PedidoConsultaController = Ember.Object.extend({
