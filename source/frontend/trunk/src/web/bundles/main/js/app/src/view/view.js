@@ -417,6 +417,7 @@ App.ContentView = Ember.View.extend({
 		}
 
 		this.set('toggleMenu', !this.get('toggleMenu'));
+
 	},
 
 
@@ -7108,6 +7109,16 @@ App.CrearExpedienteView = Ember.View.extend({
 			autoridades: [],
 		}));              
 
+		App.get('proyectoCrearController').set('content', App.Expediente.extend(App.Savable).create({
+			expdipA: '', 
+			expdipN: '', 
+			tipo: 'LEY', 
+			firmantes: [],
+			giro: [],
+			comisiones: [],
+			autoridades: [],
+		}));              
+
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
 		});
@@ -7345,7 +7356,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 
 	changeExdip: function(){
-		if(this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4)
+		var _self = this;
+		if(this.get('content.expdipN') && this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4)
 		{		
 			App.proyectosController = App.ProyectosController.create({ content: []});
 			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: this.get('content.expdip')}));
@@ -7353,23 +7365,140 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			fn = function() {
 				if (App.get('proyectosController.loaded'))
 				{
+					App.get('proyectosController').removeObserver('loaded', this, fn);									
+
 					if(App.get('proyectosController.recordcount') > 0)
 					{
-						this.set('parentView.expedienteExist', true);
+						_self.get('parentView').set('expedienteExist', true);
 					}
 					else
 					{
-						this.set('parentView.expedienteExist', false);
+						_self.get('parentView').set('expedienteExist', false);
 					}
-
-					App.get('proyectosController').removeObserver('loaded', this, fn);									
 				}
 			};
 
 			App.get('proyectosController').addObserver('loaded', this, fn);
 			App.get('proyectosController').load();
 		}
-	}.observes('content.expdipN', 'content.expdipA')
+	}.observes('content.expdipN', 'content.expdipA'),
+
+	duplicar: function(exp){
+		if(App.get('proyectosController.recordcount') == 1)
+		{
+			var getId = App.get('proyectosController.content.firstObject.id');			
+			var ex = App.Expediente.extend(App.Savable).create({id: getId});			
+			var _self = this;
+
+			ex.set('loaded', false);
+
+			var deferred = $.Deferred(),
+
+			fn2 = function() {
+                if (App.get('comisionesController.loaded'))
+                {
+                    App.get('comisionesController').removeObserver('loaded', this, fn2);
+                   	ex.addObserver('loaded', this, fn);
+            		ex.load();
+                }
+			}
+
+			App.get('comisionesController').addObserver('loaded', this, fn2);
+			App.get('comisionesController').load();
+
+			fn3 = function () {
+				if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) 
+				{
+					//App.get('tpsController').removeObserver('loaded', this, fn3);
+					App.get('firmantesController').removeObserver('loaded', this, fn3);
+
+					ex.desNormalize(); 
+					ex.set('autoridades', []);
+
+					var orden = 1;
+
+					ex.get('firmantes').forEach(function (firmante){
+						var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+
+						if (f)
+						{
+							f.set('orden', ++orden);
+							ex.get('autoridades').addObject(f);
+						}
+					}, this);
+
+					deferred.resolve(ex);	
+					
+					if(ex.get('loaded'))
+					{
+						_self.get('parentView').set('expedienteExist', false);
+						_self.set('content.comisiones', ex.comisiones);
+						_self.set('content.autoridades', ex.autoridades);
+						_self.set('content.iniciado', ex.iniciado);
+						
+					}
+				}
+			};
+
+			fn = function() {
+			   if (ex.get('loaded'))
+			   {
+                   ex.removeObserver('loaded', this, fn);
+
+			 	    if (!App.get('tpsController'))
+			 	    {
+			 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
+			 	    }
+
+					App.get('firmantesController').addObserver('loaded', this, fn3);
+
+				    var tipo = '';
+
+					if(ex.get('expdipT') == 'PE' || ex.get('expdipT') == 'JGM')
+					{
+						tipo = 'func/funcionarios';
+					}					
+					else if(ex.get('expdipT') == 'D')
+					{
+						tipo = 'dip/diputados';
+					} 	
+
+					if (tipo == '')
+					{
+						App.get('firmantesController').set('content', []);
+						App.get('firmantesController').set('loaded', true);
+					}
+					else
+					{
+						if(App.get('firmantesController.tipo') != tipo)
+						{
+							App.get('firmantesController').set('tipo', 'pap/' + tipo);
+							App.get('firmantesController').load();					
+						}
+					}
+
+					var regex = new RegExp('MENSAJE');
+
+					if (regex.test(ex.get('tipo')))
+					{
+						regex = new RegExp('LEY');
+
+						if (regex.test(ex.get('tipo')))
+						{
+							ex.set('conLey', true);
+						}
+
+						ex.set('tipo', 'MENSAJE');
+					}
+
+//				    App.get('tpsController').addObserver('loaded', this, fn3);
+//				    App.get('tpsController').load();	
+
+			   }
+            };                                                                             
+
+		}
+	}
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
@@ -8315,7 +8444,6 @@ App.MultiSelectListView = Ember.View.extend({
 		}
 
 		this.get('selectionAc').set('content', this.get('selection'));
-
 	},
 
 	didInsertElement: function () {
