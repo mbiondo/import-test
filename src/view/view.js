@@ -7443,6 +7443,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 						_self.set('content.autoridades', ex.autoridades);
 
  				 		Ember.run.next(function(){		
+ 				 			_self.set('content.titulo', ex.titulo);
  				 			_self.set('content.periodo', ex.periodo);
  				 			_self.set('content.iniciado', ex.iniciado);
  				 			_self.set('content.tipo', ex.tipo);
