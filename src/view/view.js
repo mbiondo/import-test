@@ -7388,7 +7388,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.expdipN', '');
 	},
 	duplicar: function(exp){
-		if(App.get('proyectosController.recordcount') == 1)
+		if(App.get('proyectosController.recordcount') > 0)
 		{
 			var getId = App.get('proyectosController.content.firstObject.id');			
 			var ex = App.Expediente.extend(App.Savable).create({id: getId});			
@@ -7413,7 +7413,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			fn3 = function () {
 				if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) 
 				{
-					//App.get('tpsController').removeObserver('loaded', this, fn3);
 					App.get('firmantesController').removeObserver('loaded', this, fn3);
 
 					ex.desNormalize(); 
@@ -7438,8 +7437,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 						_self.get('parentView').set('expedienteExist', false);
 						_self.set('content.comisiones', ex.comisiones);
 						_self.set('content.autoridades', ex.autoridades);
-						_self.set('content.iniciado', ex.iniciado);
-						
+
+ 				 		Ember.run.next(function(){		
+ 				 			_self.set('content.periodo', ex.periodo);
+ 				 			_self.set('content.iniciado', ex.iniciado);
+ 				 			_self.set('content.tipo', ex.tipo);
+ 				 		});						
 					}
 				}
 			};
@@ -7448,11 +7451,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			   if (ex.get('loaded'))
 			   {
                    ex.removeObserver('loaded', this, fn);
-
-			 	    if (!App.get('tpsController'))
-			 	    {
-			 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
-			 	    }
 
 					App.get('firmantesController').addObserver('loaded', this, fn3);
 
@@ -7494,9 +7492,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 						ex.set('tipo', 'MENSAJE');
 					}
-
-//				    App.get('tpsController').addObserver('loaded', this, fn3);
-//				    App.get('tpsController').load();	
 
 			   }
             };                                                                             
