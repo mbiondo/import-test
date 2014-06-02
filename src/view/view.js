@@ -7386,6 +7386,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	duplicarCancelar: function(){
 		this.get('parentView').set('expedienteExist', false);
 		this.set('content.expdipN', '');
+		$("#expNum").focus();
 	},
 	duplicar: function(exp){
 		if(App.get('proyectosController.recordcount') > 0)
