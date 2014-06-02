@@ -254,6 +254,7 @@ App.Router =  Em.Router.extend({
 						
 						deserialize: function(router, params) {
 							App.firmantesController = App.FirmantesController.create();
+							App.proyectoCrearController = App.ProyectoCrearController.create();
 							 if (!App.get('tpsController'))
 							 	App.tpsController = App.TPsController.create({periodo: 132});
 
