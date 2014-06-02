@@ -3114,7 +3114,6 @@ App.CrearParteController = Em.Object.extend({
 	
 });
 
-
 App.CitacionCrearController = Em.Object.extend({
 	content: '',
 	expedientes: '',	
@@ -5561,4 +5560,8 @@ App.PedidoConsultaController = Ember.Object.extend({
 		this.set('content', item);
 		this.set('loaded', true);
 	},	
+});
+
+App.ProyectoCrearController = Em.Object.extend({
+	content: '',
 });
