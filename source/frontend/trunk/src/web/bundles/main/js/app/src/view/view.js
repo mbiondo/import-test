@@ -7389,13 +7389,14 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		$("#expNum").focus();
 	},
 	duplicar: function(exp){
-		if(App.get('proyectosController.recordcount') > 0)
+		if(App.get('proyectosController.recordcount') == 1)
 		{
 			var getId = App.get('proyectosController.content.firstObject.id');			
 			var ex = App.Expediente.extend(App.Savable).create({id: getId});			
 			var _self = this;
 
 			ex.set('loaded', false);
+			this.set('content.duplicando', true);
 
 			var deferred = $.Deferred(),
 
@@ -7435,6 +7436,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					
 					if(ex.get('loaded'))
 					{
+						this.set('content.duplicando', false);
+
 						_self.get('parentView').set('expedienteExist', false);
 						_self.set('content.comisiones', ex.comisiones);
 						_self.set('content.autoridades', ex.autoridades);
