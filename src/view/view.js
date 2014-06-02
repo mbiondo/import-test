@@ -9816,6 +9816,7 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
 	actividades: ["Sector público","Sector privado", "Particular"],
+	prioridades: ["Alta","Media","Baja"],
 
 	crear: function () {
 		this.get('content').tipoIngreso = "Web Sparl";
@@ -9826,12 +9827,7 @@ App.CrearPedidoView = Ember.View.extend({
 	},
 
 	createSucceeded: function () {
-		if (data.id){
-			$.jGrowl('Se ha creado el pedido de información satisfactoriamente!', { life: 5000 });  
-		}
-		else {
-			$.jGrowl('Ocurrió un error al intentar crear el pedido!', { life: 5000 });
-		}
+		console.log("creado");
 	},
 	
 
