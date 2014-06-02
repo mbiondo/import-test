@@ -9687,10 +9687,25 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 
 App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
+	actividades: ["Sector público","Sector privado", "Particular"],
 
 	crear: function () {
-		console.log('crear');
+		this.get('content').tipoIngreso = "Web Sparl";
+		this.get('content').userSaraCreado = App.get('userController.user.cuil');
+
+		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('content').create();
 	},
+
+	createSucceeded: function () {
+		if (data.id){
+			$.jGrowl('Se ha creado el pedido de información satisfactoriamente!', { life: 5000 });  
+		}
+		else {
+			$.jGrowl('Ocurrió un error al intentar crear el pedido!', { life: 5000 });
+		}
+	},
+	
 
 	limpiar: function () {
 		this.set('content', App.Pedido.extend(App.Savable).create());
@@ -9698,6 +9713,7 @@ App.CrearPedidoView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		this.set('content', App.Pedido.extend(App.Savable).create()); 
 		this.limpiar();
 	},
 })

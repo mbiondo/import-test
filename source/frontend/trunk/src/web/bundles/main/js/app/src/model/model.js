@@ -2246,7 +2246,25 @@ App.Pedido = Ember.Object.extend({
 
 	serializable: [
 		'id',
-		'nombre',
+		'nombreYApellido',
+		'email',
+		'direccion',
+		'localidadYProvincia',
+		'codigoPostal',
+		'fax',
+		'telefono',
+		'actividad',
+		'profesion',
+		'organizacion',
+		'tipoPedido',
+		'prioridad',
+		'tipoIngreso',
+		'tipoRespuesta',
+		'fechaCreacion',
+		'fechaRespuesta',
+		'userSaraAsignado',
+		'userSaraCreado',
+		'informacionSolicitada',
 	],
 
 	label: function () {
