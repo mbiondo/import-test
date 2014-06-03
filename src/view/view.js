@@ -686,18 +686,6 @@ App.ListFilterView = Ember.View.extend({
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
 
-	exportExcel: function () {
-		this.$('table').tableExport({type:'excel',escape:'false'});
-	},
-
-	exportPdf: function () {
-		this.$('table').tableExport({type:'pdf',escape:'false'});
-	},
-
-	exportWord: function () {
-		this.$('table').tableExport({type:'doc',escape:'false'});
-	},	
-
 	didInsertElement: function(){
 		this._super();
 	},
@@ -6946,13 +6934,16 @@ App.CrearExpedienteView = Ember.View.extend({
 	guardar: function (){
 		var _self = this;
 		this.set('errorTab', 0);
+		var formIsValid = $("#formCrearExpediente").parsley('validate');
+
+
 
 		if(this.get('clickGuardar') == true)
 		{
 			if(_self.get('noHayTipo') == false)
 			{
 				
-				if ($("#formCrearExpediente").parsley('validate')) {
+				if (formIsValid) {
 					if (_self.get('faltanFirmantes')) {
 						this.set('errorTab', 2);
 					} else {
@@ -6963,7 +6954,6 @@ App.CrearExpedienteView = Ember.View.extend({
 				} else {
 					this.set('errorTab', 1);
 				}
-
 
 				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && this.get('content.validateFields') == false)
 				{				
