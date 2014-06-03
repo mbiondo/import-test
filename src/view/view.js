@@ -9908,9 +9908,14 @@ App.PedidoConsultaView = Ember.View.extend({
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 
-	save: function () {
+	borrarAsignado: function () {
+		this.get('content').set('userSaraAsignado', null);
+	},
+
+	guardar: function () {
 		this.get('content').normalize();
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.get('content').save();
 	},
 
 	saveSuccessed: function () {
@@ -9918,9 +9923,23 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('content').removeObserver('saveSuccess', this, this.saveSuccessed);	
 
 		if (this.get('content.saveSuccess')) {
-			console.log('save');
+			$.jGrowl('Se ha editado la solicitud!', { life: 5000 });
+
+			App.pedidosController = App.PedidosController.create();
+
+			fn = function() {
+				if(App.get('pedidosController.loaded'))
+				{
+					App.get('pedidosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+				}
+			};
+			
+			App.get('pedidosController').addObserver('loaded', this, fn);
+
+			App.get('pedidosController').load();	
 		} else if (this.get('content.saveSuccess') == false ) {
-			console.log('no save');
+			$.jGrowl('No se ha editado la solicitud!', { life: 5000 });
 		}
 	},
 
