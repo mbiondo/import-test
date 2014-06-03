@@ -8139,13 +8139,18 @@ App.TPCrearView = Ember.View.extend({
 	templateName: 'crear-tp',	
 	periodos: [124, 125, 126, 127, 128, 129, 130, 131, 132].reverse(),
 	fecha: '',
+	clickGuardar: false,
+	validateFields: false,
+	validateNumero: false,
 	
 	didInsertElement: function(){
 		this._super();
 		this.set('fecha', moment().format("DD/MM/YYYY"));
 	},
 	crear: function(){
-		if($('#formCrearTP').parsley('validate'))
+		this.set('clickGuardar', true);
+
+		if($('#formCrearTP').parsley('validate') && this.get('validateFields') == false)
 		{
 			while (this.get('controller.content.numero').length < 3)
 			{
@@ -8156,8 +8161,22 @@ App.TPCrearView = Ember.View.extend({
 			
 			this.get('controller').crear();
 		} 
-	}
+	},
+	checkValidateFields: function(){
+		var validateFields = false;
 
+		if(this.get('clickGuardar') && this.get('controller.content.numero') < 1)
+		{			
+			validateFields = true;
+			this.set('validateNumero', true);
+		}else{
+			validateFields = false;
+			this.set('validateNumero', false);				
+		}
+
+		this.set('validateFields', validateFields);
+
+	}.observes('controller.content.numero', 'clickGuardar'),
 })
 
 App.TPConsultaView = Ember.View.extend({
