@@ -9882,6 +9882,12 @@ App.CrearPedidoView = Ember.View.extend({
 
 App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.get('pedidoConsultaController').get('content'));
+		console.log(this.get('content'));
+	},
 });
 
 
@@ -9898,7 +9904,7 @@ App.PedidoListItemView = Ember.View.extend({
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['Núm', 'Recibido', 'Terminado', 'Usuario', 'Departamento', 'Personal DIP', ''],
+	columnas: ['Núm', 'Recibido', 'Terminado', 'Solicitante', 'Departamento', 'Personal DIP', ''],
 });
 
 App.PedidosView = Ember.View.extend({
