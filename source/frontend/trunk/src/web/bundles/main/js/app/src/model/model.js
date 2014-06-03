@@ -2265,14 +2265,28 @@ App.Pedido = Ember.Object.extend({
 		'userSaraAsignado',
 		'userSaraCreado',
 		'informacionSolicitada',
+		'resuelto'
 	],
 
 	normalize: function () {
+		if (this.get('userSaraAsignado')) {
+			this.set('userSaraAsignadoObject', this.get('userSaraAsignado'));
+			this.set('userSaraAsignado', this.get('userSaraAsignado.cuil'));
+		}
 
+		if (this.get('userSaraCreado')) {
+			this.set('userSaraCreadoObject', this.get('userSaraCreado'));
+			this.set('userSaraCreado', this.get('userSaraCreado.cuil'));
+		}
 	},
 
 	desNormalize: function () {
-
+		if (this.get('userSaraAsignadoObject')) {
+			this.set('userSaraAsignado', this.get('userSaraAsignadoObject'));
+		}
+		if (this.get('userSaraCreadoObject')) {
+			this.set('userSaraCreado', this.get('userSaraCreadoObject'));
+		}
 	},
 
 	label: function () {
