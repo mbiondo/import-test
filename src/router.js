@@ -2251,7 +2251,7 @@ App.Router =  Em.Router.extend({
 		informacionparlamentaria: Ember.Route.extend({
 			route: '/informacionparlamentaria',
 			pedidos: Ember.Route.extend({
-				route: '/pedidos',
+				route: '/solicitudes',
 
 				listado: Ember.Route.extend({
 					route: '/listado',
@@ -2283,8 +2283,8 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Informacion Parlamentaria'},
-							{titulo: 'Pedidos'},
-							{titulo: 'Listado', url: '#/informacionparlamentaria/pedidos/listado'}
+							{titulo: 'Solicitudes'},
+							{titulo: 'Listado', url: '#/informacionparlamentaria/solicitudes/listado'}
 						]);					
 
 						App.get('menuController').seleccionar(13, 0, 0);
@@ -2293,7 +2293,7 @@ App.Router =  Em.Router.extend({
 				}),
 				
 				consulta: Ember.Route.extend({
-					route: '/pedido/:pedido/ver',
+					route: '/solicitud/:pedido/ver',
 
 					deserialize: function(router, params){
 						App.pedidoConsultaController = App.PedidoConsultaController.create();
@@ -2332,8 +2332,8 @@ App.Router =  Em.Router.extend({
 
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Informacion Parlamentaria'},
-							{titulo: 'Pedidos'},
-							{titulo: 'Listado', url: '#/informacionparlamentaria/pedidos/listado'}
+							{titulo: 'Solicitudes' , url: '#/informacionparlamentaria/solicitudes/listado'},
+							{titulo: 'Listado', url: '#/informacionparlamentaria/solicitudes/listado'}
 						]);					
 
 						App.get('menuController').seleccionar(13, 0, 0);
@@ -2342,7 +2342,7 @@ App.Router =  Em.Router.extend({
 				}),
 				
 				crear: Ember.Route.extend({
-					route: '/crear',
+					route: '/nueva',
 
 					connectOutlets: function(router, context){
 						var appController = router.get('applicationController');
@@ -2352,8 +2352,8 @@ App.Router =  Em.Router.extend({
 						
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Informacion Parlamentaria'},
-							{titulo: 'Pedidos', url: '#/informacionparlamentaria/pedidos/listado'},
-							{titulo: 'Crear'}
+							{titulo: 'Solicitudes', url: '#/informacionparlamentaria/solicitudes/listado'},
+							{titulo: 'Nueva'}
 						]);	
 
 						App.get('menuController').seleccionar(13, 0, 1);
