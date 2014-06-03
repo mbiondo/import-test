@@ -429,21 +429,21 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Labor Parlamentaria',
 					url: '',
-					roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Planes de Labor Tentativos',
 							url: '#/laborparlamentaria/planesdelabor/tentativos',
 							// url: '#/plan/de/labor/listado/0',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_LABOR_PARLAMENTARIA']],
 						}),						
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Planes de Labor Confirmados',
 							url: '#/laborparlamentaria/planesdelabor/confirmados',
 							// url: '#/plan/de/labor/listado/1',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_LABOR_PARLAMENTARIA']],
 						}),	
 
 						App.MenuItem.create({
@@ -451,13 +451,13 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
 						}),							
 						App.MenuItem.create({
 							id: 3,
 							titulo: 'Crear Plan de Labor',
 							url: '#/laborparlamentaria/plandelabor/crear',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
 						}),							
 					],
 				}),				
@@ -548,7 +548,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 11,
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
+			roles: [['ROLE_VISITAS_GUIADAS']],
 			titulo: 'Visitas Guiadas',
 			url: '#/visitas-guiadas',
 			icono: 'ic ic-visitas-guiadas',
@@ -558,11 +558,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Visitas Guiadas',
 					url: '',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
+					roles: [['ROLE_VISITAS_GUIADAS']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_VISITAS_GUIADAS']],
+							roles: [['ROLE_VISITAS_GUIADAS']],
 							titulo: 'Listado',
 							url: '#/visitas-guiadas/listado',
 						}),
