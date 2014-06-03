@@ -6998,13 +6998,16 @@ App.CrearExpedienteView = Ember.View.extend({
 
 	createSucceeded: function () {
 		var _self = this;
+
 		//this.get('content').desNormalize();
+
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
-				
+
 		if (this.get('tipo')) {
-				this.get('content').set('tipo', this.get('tipo'));
+			this.get('content').set('tipo', this.get('tipo'));
 		}
 				
+			
 		if (this.get('content.createSuccess')) {
 			var expediente = this.get('content');
 			
@@ -7018,8 +7021,12 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
 			notification.create();      
 
+
+
+
 			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
+
 
 			this.set('content', App.Expediente.extend(App.Savable).create({
 				expdipA: '', 
@@ -7262,7 +7269,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		});
 
 
-		this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
+		//this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
 		_self = this;
@@ -7353,10 +7360,14 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('content.expdipT'),
 
 	numeroChange: function () {
-		if (!this.get('content.expdipT.id') || !this.get('content.expdipN')) {
+		if ((!this.get('content.expdipT.id') && !this.get('content.expdipT')) || !this.get('content.expdipN')) {
 			this.get('content').set('expdip', '');
 		} else {
-			this.get('content').set('expdip', this.get('content.expdipN') + "-" + this.get('content.expdipT.id') + "-" + this.get('content.expdipA'));
+			var expdipT = this.get('content.expdipT.id');
+			if (!expdipT)
+				expdipT = this.get('content.expdipT');
+
+			this.get('content').set('expdip', this.get('content.expdipN') + "-" + expdipT + "-" + this.get('content.expdipA'));
 		}
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 
@@ -7393,6 +7404,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		this.set('content.expdipN', '');
 		$("#expNum").focus();
 	},
+
 	duplicar: function(exp){
 		if(App.get('proyectosController.recordcount') == 1)
 		{
@@ -8383,8 +8395,9 @@ App.MultiSelectListView = Ember.View.extend({
 	}.observes('filterText'),
 
 	selectionChanged: function () {
-		if (!this.get('suggestable'))
-			this.get('contentController').load();		
+		console.log(this.get('selection'));
+		if (!this.get('suggestable') && this.get('selection.length') > 0)
+			this.get('contentController').load();
 		this.get('selectionAc').set('content', this.get('selection'));
 	}.observes('selection'),
 
@@ -9040,7 +9053,7 @@ App.MEExpedienteGirarView = Ember.View.extend({
 	saveSuccessed: function () {
 		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('controller.content.saveSuccess')) {                                    
-                        App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
+            App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
 			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
 		} else if (this.get('saveSuccess') == false) {
 			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
@@ -9843,19 +9856,39 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 
 App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
-	actividades: ["Sector público","Sector privado", "Particular"],
+	actividades: ["Sector público", "Sector privado", "Particular"],
 	prioridades: ["Alta","Media","Baja"],
 
 	crear: function () {
-		this.get('content').tipoIngreso = "Web Sparl";
+		this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
 		this.get('content').userSaraCreado = App.get('userController.user.cuil');
-
 		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
 	},
 
 	createSucceeded: function () {
-		console.log("creado");
+		if (this.get('content.createSuccess')) {
+			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
+
+			App.pedidosController = App.PedidosController.create();
+
+			fn = function() {
+				if(App.get('pedidosController.loaded'))
+				{
+					App.get('pedidosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+				}
+			};
+			
+			App.get('pedidosController').addObserver('loaded', this, fn);
+
+			App.get('pedidosController').load();	
+		} else {
+			if (this.get('content.createSuccess') == false) {
+				$.jGrowl('No se ha creado la solicitud!', { life: 5000 });
+				this.set('loading', false);
+			}
+		}
 	},
 	
 
@@ -9872,11 +9905,28 @@ App.CrearPedidoView = Ember.View.extend({
 
 App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
+	departamentos: ['ES', 'AC', 'LE'],
+	departamento: 'ES',
+
+	save: function () {
+		this.get('content').normalize();
+		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+	},
+
+	saveSuccessed: function () {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('saveSuccess', this, this.saveSuccessed);	
+
+		if (this.get('content.saveSuccess')) {
+			console.log('save');
+		} else if (this.get('content.saveSuccess') == false ) {
+			console.log('no save');
+		}
+	},
 
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.get('pedidoConsultaController').get('content'));
-		console.log(this.get('content'));
 	},
 });
 
@@ -9891,6 +9941,7 @@ App.PedidoListItemView = Ember.View.extend({
 		this.$('span').tooltip();
 	},
 });
+
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,

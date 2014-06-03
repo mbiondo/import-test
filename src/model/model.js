@@ -2267,6 +2267,14 @@ App.Pedido = Ember.Object.extend({
 		'informacionSolicitada',
 	],
 
+	normalize: function () {
+
+	},
+
+	desNormalize: function () {
+
+	},
+
 	label: function () {
 		return this.get('nombreYApellido');
 		//return this.get('userSaraAsignado.nombre') + this.get('userSaraAsignado.apellido');

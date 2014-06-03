@@ -422,14 +422,14 @@ App.menuController = App.MenuController.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
 			url: '#/laborparlamentaria/planesdelabor/definitivos',
-			roles: [['ROLE_USER']],
+			roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 			icono: 'ic ic-labor',
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Labor Parlamentaria',
 					url: '',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -466,13 +466,13 @@ App.menuController = App.MenuController.create({
 					titulo: 'Recinto',
 					url: '#/laborparlamentaria/recinto/oradores',
 					icono: 'ic ic-recinto',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Oradores',
 							url: '#/laborparlamentaria/recinto/oradores',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 						}),					
 						App.MenuItem.create({
 							id: 1,
