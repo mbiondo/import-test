@@ -9308,7 +9308,7 @@ App.ProyectoSearchView = Em.View.extend({
 		$(".nav-tabs > li")
 		.on('click', function(){
 			var tabContent = $($(this).children().attr('href'));
-			setTimeout(function(){ if(tabContent.is(":visible")) tabContent.find("[tabindex=1]").focus(); }, 500);
+			setTimeout(function(){ if($("#myTab").is(":visible") && $("#myTabContent").is(":visible") && tabContent.is(":visible")) tabContent.find("[tabindex=1]").focus(); }, 500);
 		})
 		.each(function(index){
 			var _self = $(this);
@@ -9353,8 +9353,9 @@ App.ProyectoSearchView = Em.View.extend({
 	},
 
 	willDestroyElement: function(){
-		// remuevo la escucha del 'enter'
+		// remove shorcuts
 		shortcut.remove('enter');
+		$(".nav-tabs > li").each(function(index){ shortcut.remove("F" + (index + 1)); });
 	},
 });
 
