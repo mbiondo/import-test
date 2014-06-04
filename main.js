@@ -56,7 +56,7 @@ App.menuController = App.MenuController.create({
 						}),								
 						App.MenuItem.create({
 							id: 4,
-							roles: [['ROLE_SITE_ADMIN']],
+							roles: [['ROLE_OD']],
 							titulo: 'Orden del Día',
 							url: '#/novedades/4',
 						}),									
