@@ -9304,6 +9304,24 @@ App.ProyectoSearchView = Em.View.extend({
 		    _self.buscar();
 		  }
 		});
+
+		$(".nav-tabs > li")
+		.on('click', function(){
+			var tabContent 	= $(this).children().attr('href');
+
+			setTimeout(function(){
+				if($(tabContent).is(":visible")){
+					$(tabContent).find("[tabindex=1]").focus();
+				}
+			}, 500);
+		})
+		.each(function(index){
+			index++; 
+			var _self = $(this);
+			shortcut.add("F" + index,function(){
+				_self.children().click();
+			});
+		});
 	},
 
 	buscar: function () {
