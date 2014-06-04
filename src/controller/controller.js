@@ -2491,6 +2491,29 @@ App.ComisionesController = App.RestController.extend({
 		});
 	},	
 */
+
+	//grupo
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		this.set('content', []);
+		items.forEach(function(i){
+			if (i.grupo && i.grupo != 'CS') {
+				this.createObject(i);
+			}
+		}, this);
+		
+		this.set('loaded', true);
+		this.set('loading', false);
+	},	
+
+
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Comision.create(data);
