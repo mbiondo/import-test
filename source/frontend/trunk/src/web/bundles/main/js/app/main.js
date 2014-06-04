@@ -1,6 +1,6 @@
 App.apiController = App.ApiController.create({
 
-	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl2/rest/',
+	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
 	//url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl/rest/',
 	//url: 'http://10.102.13.4:8080/sparl/rest/',
 	tomcat: 'http://sparl-desa.hcdn.gob.ar:9090',
@@ -360,27 +360,27 @@ App.menuController = App.MenuController.create({
 			id: 8,
 			titulo: 'Orden Del Día',
 			url: '#/OD/listado',
-			roles: [['ROLE_USER']],
+			roles: [['ROLE_OD'],['ROLE_SEC_PARL_VIEW']],
 			icono: 'ic ic-od',
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Orden Del Día',
 					url: '',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_OD'],['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Listado de OD',
 							url: '#/OD/listado',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_OD'],['ROLE_SEC_PARL_VIEW']],
 						}),	
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Dictámenes sin OD',
 							url: '#/OD/dictamenes',
 //							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']]
+							roles: [['ROLE_OD_EDIT'], ['ROLE_SEC_PARL_VIEW']]
 						}),							
 					],
 				}),				
@@ -451,13 +451,13 @@ App.menuController = App.MenuController.create({
 							titulo: 'Planes de Labor Definitivos',
 							url: '#/laborparlamentaria/planesdelabor/definitivos',
 							// url: '#/plan/de/labor/listado/2',
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_LABOR_PARLAMENTARIA']],
 						}),							
 						App.MenuItem.create({
 							id: 3,
 							titulo: 'Crear Plan de Labor',
 							url: '#/laborparlamentaria/plandelabor/crear',
-							roles: [['ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA_EDIT']],
 						}),							
 					],
 				}),				
@@ -478,7 +478,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Asistencias',
 							url: '#/laborparlamentaria/recinto/asistencias',
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA']],
+							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_LABOR_PARLAMENTARIA_EDIT']],
 						})
 					]			
 				}),
@@ -518,7 +518,7 @@ App.menuController = App.MenuController.create({
 		
 		App.MenuItem.create({
 			id: 7,
-			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
+			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS'], ['ROLE_LABOR_PARLAMENTARIA']],
 			titulo: 'Estadísticas',
 			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
@@ -528,7 +528,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Estadísticas',
 					url: '#/estadisticas/oradores',
-					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS']],
+					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS'], ['ROLE_LABOR_PARLAMENTARIA']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
