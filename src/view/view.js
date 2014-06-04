@@ -8152,7 +8152,7 @@ App.TPCrearView = Ember.View.extend({
 	crear: function(){
 		this.set('clickGuardar', true);
 
-		if($('#formCrearTP').parsley('validate') && this.get('validateFields') == false)
+		if($('#formCrearTP').parsley('validate'))
 		{
 			while (this.get('controller.content.numero').length < 3)
 			{
@@ -8164,21 +8164,7 @@ App.TPCrearView = Ember.View.extend({
 			this.get('controller').crear();
 		} 
 	},
-	checkValidateFields: function(){
-		var validateFields = false;
 
-		if(this.get('clickGuardar') && this.get('controller.content.numero') < 1)
-		{			
-			validateFields = true;
-			this.set('validateNumero', true);
-		}else{
-			validateFields = false;
-			this.set('validateNumero', false);				
-		}
-
-		this.set('validateFields', validateFields);
-
-	}.observes('controller.content.numero', 'clickGuardar'),
 })
 
 App.TPConsultaView = Ember.View.extend({
