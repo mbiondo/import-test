@@ -9307,20 +9307,12 @@ App.ProyectoSearchView = Em.View.extend({
 
 		$(".nav-tabs > li")
 		.on('click', function(){
-			var tabContent 	= $(this).children().attr('href');
-
-			setTimeout(function(){
-				if($(tabContent).is(":visible")){
-					$(tabContent).find("[tabindex=1]").focus();
-				}
-			}, 500);
+			var tabContent = $($(this).children().attr('href'));
+			setTimeout(function(){ if(tabContent.is(":visible")) tabContent.find("[tabindex=1]").focus(); }, 500);
 		})
 		.each(function(index){
-			index++; 
 			var _self = $(this);
-			shortcut.add("F" + index,function(){
-				_self.children().click();
-			});
+			shortcut.add("F" + (index + 1), function(){ _self.children().click(); });
 		});
 	},
 
