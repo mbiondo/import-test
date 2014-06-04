@@ -6912,22 +6912,6 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		} 
 	}.property('content.comisiones.@each', 'clickGuardar'),
-	checkValidateFields: function(){
-		var validateFields = false;
-
-		if(this.get('clickGuardar') && this.get('content.expdipN') < 1)
-		{			
-			validateFields = true;
-			this.set('content.validateExpdipN', true);
-		}else{
-			validateFields = false;
-			this.set('content.validateExpdipN', false);				
-		}
-
-		this.set('content.validateFields', validateFields);
-
-	}.observes('content.expdipN', 'clickGuardar'),
-
 
 	errorTab: 1,
 
@@ -6955,7 +6939,7 @@ App.CrearExpedienteView = Ember.View.extend({
 					this.set('errorTab', 1);
 				}
 
-				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && this.get('content.validateFields') == false)
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false)
 				{				
 					App.confirmActionController.setProperties({
 						title: 'Confirmar creación de Proyecto',
