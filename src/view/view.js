@@ -523,19 +523,24 @@ App.LoginInput = Ember.TextField.extend({
 App.ChangePasswordView = Ember.View.extend({
 	templateName: 'change-password',
 	password: '',
+	password_confirm: '',
 
+	comparePasswordisValid: function(){
+		if(this.get('password') == this.get('password_confirm')) return true;
+		else return false;
+	}.property('password', 'password_confirm'),
 	changePassword: function () {
-		if(!$('#login').parsley('validate')) return false;
-
-		$.ajax({
-			url: App.get('apiController.authURL') + 'change_password/',
-			dataType: 'JSON',
-			type: 'PUT',
-			context : {controller: this},
-			data : {password: this.get('password') },
-			success: this.changeSucceeded,
-		});
-
+		if($('#login').parsley('validate') && this.get('comparePasswordisValid'))
+		{
+			$.ajax({
+				url: App.get('apiController.authURL') + 'change_password/',
+				dataType: 'JSON',
+				type: 'PUT',
+				context : {controller: this},
+				data : {password: this.get('password') },
+				success: this.changeSucceeded,
+			});
+		}
 	},
 
 	cancel: function () {
