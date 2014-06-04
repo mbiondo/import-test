@@ -9841,6 +9841,9 @@ App.CrearPedidoView = Ember.View.extend({
 	prioridades: ["Alta","Media","Baja"],
 
 	crear: function () {
+
+		if ( !$("#if-pedido-crear-form").parsley('validate')) return false;
+
 		this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
 		this.get('content').userSaraCreado = App.get('userController.user.cuil');
 		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
