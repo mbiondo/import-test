@@ -9940,6 +9940,10 @@ App.PedidoConsultaView = Ember.View.extend({
  	exportar: function () {
  		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data=" + JSON.stringify(App.pedidoConsultaController.content));
  	},
+
+	audits: function(){
+		return App.get('auditController');
+	}.property('App.auditController.content'),
 });
 
 
