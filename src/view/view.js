@@ -9937,6 +9937,9 @@ App.PedidoConsultaView = Ember.View.extend({
 		this._super();
 		this.set('content', App.get('pedidoConsultaController').get('content'));
 	},
+ 	exportar: function () {
+ 		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data=" + JSON.stringify(App.pedidoConsultaController.content));
+ 	},
 });
 
 
