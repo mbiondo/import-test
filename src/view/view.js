@@ -690,6 +690,7 @@ App.ListFilterView = Ember.View.extend({
 	itemViewClass: App.SimpleListItemView,
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
+	puedeExportar: false,
 
 	didInsertElement: function(){
 		this._super();
