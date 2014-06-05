@@ -2265,7 +2265,8 @@ App.Pedido = Ember.Object.extend({
 		'userSaraAsignado',
 		'userSaraCreado',
 		'informacionSolicitada',
-		'resuelto'
+		'resuelto',
+		'consultaObservacion'
 	],
 
 	normalize: function () {
