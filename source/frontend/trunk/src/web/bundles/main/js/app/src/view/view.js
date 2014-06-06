@@ -9845,6 +9845,7 @@ App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
 	actividades: ["Sector público", "Sector privado", "Particular"],
 	prioridades: ["Alta","Media","Baja"],
+	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 
 	crear: function () {
 
