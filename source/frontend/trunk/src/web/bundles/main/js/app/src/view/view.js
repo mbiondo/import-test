@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -683,6 +683,7 @@ App.SimpleListItemView = Ember.View.extend({
 
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
+	filterListText: '',
 	filterText: '',
 	filterTextComisiones: '',
 	step: 10,
@@ -695,7 +696,9 @@ App.ListFilterView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 	},
-
+	filterList: function(){
+		this.set('filterListText', this.get('parentView.filterList'));
+	}.observes('parentView.filterList'),
 	filterTextChanged: function () {
 		//this.set('scroll', 0);
 		/*if(this.get('filterText').length == 1)*/
@@ -708,16 +711,21 @@ App.ListFilterView = Ember.View.extend({
 	},
 	
 	lista: function (){
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		if(this.get('parentView.filterList')){
+			var regex = new RegExp(this.get('filterListText').toString().toLowerCase());
+		}else{
+			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		}
+
 		var filtered;
 
-		if(this.get('content'))
-		{
-			filtered = this.get('content').filter(function(item){
-				return regex.test(item.get('label').toLowerCase());
-//				return regex.test(item.get('label'));
-			});
-		}
+			if(this.get('content'))
+			{
+				filtered = this.get('content').filter(function(item){
+					return regex.test(item.get('label').toLowerCase());
+	//				return regex.test(item.get('label'));
+				});
+			}
 
 		if (!filtered)
 			filtered = [];
@@ -731,7 +739,7 @@ App.ListFilterView = Ember.View.extend({
 		}
 		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each'),
+	}.property('filterText', 'filterListText', 'content', 'totalRecords', 'step', 'content.@each'),
 	
 	updateScroll: function () {
 		_self = this;
@@ -1414,7 +1422,6 @@ App.RolesAdminView = Ember.View.extend({
 	crearRolHabilitado: function () {
 		return this.get('rolNombre') != '' && this.get('rolNivel') > 0 && this.get('rolNivel') < 6;
 	}.property('rolNombre', 'rolNivel'),
-
 });
 
 
