@@ -712,7 +712,7 @@ App.ListFilterView = Ember.View.extend({
 	
 	lista: function (){
 		if(this.get('parentView.filterList')){
-			var regex = new RegExp(this.get('filterListText').toString().toLowerCase());
+			var regex = new RegExp("role_" + this.get('filterListText').toString().toLowerCase());
 		}else{
 			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		}
