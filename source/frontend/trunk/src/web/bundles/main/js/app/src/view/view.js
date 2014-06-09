@@ -9945,9 +9945,69 @@ App.PedidoConsultaView = Ember.View.extend({
 		this._super();
 		this.set('content', App.get('pedidoConsultaController').get('content'));
 	},
+
  	exportar: function () {
  		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data=" + JSON.stringify(App.pedidoConsultaController.content));
  	},
+
+	revisar: function () {
+		this.set('content.userSaraReviso',App.get('userController.user.cuil'));
+
+		this.addObserver('revisoSuccess', this, this.revisoSuccess);
+
+		var url = 'pedido/revisar/' + this.get('content').id
+		$.ajax({
+			url:  url,
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			data : this.get('content').getJson(),
+			complete: this.revisoCompleted,
+		});		
+
+	},
+
+	revisoError: function (data) {
+		this.set('aproveSuccess', false);
+	},
+
+	revisoSuccess: function (data) {
+		if (this.get('useApi') && data.id) {
+			this.set('revisoSuccess', true);
+		}
+
+		if (data.success == true) {
+			this.set('revisoSuccess', true);
+		}		
+
+		if (this.get('revisoSuccess') == true) 
+		{
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Test');
+			audit.set('accion', 'Revisado');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', this.get('content').constructor.toString());
+			audit.set('objetoId', this.get('content').id);
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.create();	
+
+			$.jGrowl('Se ha revisado la solicitud!', { life: 5000 });
+
+			App.get('auditController').loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
+		}else{
+			$.jGrowl('No se ha revisado la solicitud!', { life: 5000 });
+		}			
+	},
+	
+	revisoCompleted: function(xhr){
+		if (xhr.status == 200) {
+			this.set('revisoSuccess', true);
+		} 
+		else
+		{
+			this.set('revisoSuccess', false);
+		}
+	},
 
 	audits: function(){
 		return App.get('auditController');
