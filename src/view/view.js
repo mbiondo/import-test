@@ -2160,39 +2160,54 @@ App.UploaderView = Em.View.extend({
 	percent: 0,
 	formId: 'upload',
 
+
 	fileChange: function () {
-		_self = this;
-		var formData = new FormData(this.$('#' + this.get('formId'))[0]);
+		if(App.uploaderController.get('useControllerUpload')){		
+			App.uploaderController.set('view', this);
+			App.uploaderController.set('percent', this.get('percent'));
+			App.uploaderController.set('formId', this.get('formId'));
+			App.uploaderController.set('file', this.get('file'));
+			App.uploaderController.set('folder', this.get('folder'));
 
-		$.ajax({
-			url: 'upload.php',  //server script to process data
-			type: 'POST',
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,      
-			xhr: function() {  // custom xhr
-				myXhr = $.ajaxSettings.xhr();
-				if(myXhr.upload){ // if upload property exists
-					myXhr.upload.addEventListener('progress', function(a) { 
-						_self.set('percent', Math.round(a.loaded / a.totalSize * 100));
-						_self.$('#progress').attr('original-title', _self.get('percent') + "%");
-						_self.$('#progress').attr('style', "width: " + _self.get('percent') + "%;");
-					}, false); // progressbar
+			App.uploaderController.set('folder', this.get('folder'));
+
+			App.uploaderController.set('formDataView', new FormData(this.$('#' + this.get('formId'))[0]));
+
+			App.uploaderController.set('url', this.get('url'));
+		}else{	
+			_self = this;
+			var formData = new FormData(this.$('#' + this.get('formId'))[0]);
+
+			$.ajax({
+				url: 'upload.php',  //server script to process data
+				type: 'POST',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,      
+				xhr: function() {  // custom xhr
+					myXhr = $.ajaxSettings.xhr();
+					if(myXhr.upload){ // if upload property exists
+						myXhr.upload.addEventListener('progress', function(a) { 
+							_self.set('percent', Math.round(a.loaded / a.totalSize * 100));
+							_self.$('#progress').attr('original-title', _self.get('percent') + "%");
+							_self.$('#progress').attr('style', "width: " + _self.get('percent') + "%;");
+						}, false); // progressbar
+					}
+					return myXhr;
+				},
+				beforeSend: function(){
+
+				},
+				success: function(payload)
+				{
+					data = JSON.parse(payload);
+					if (data.result == "ok") {
+						_self.set('file', data.file);
+					} 
 				}
-				return myXhr;
-			},
-			beforeSend: function(){
-
-			},
-			success: function(payload)
-			{
-				data = JSON.parse(payload);
-				if (data.result == "ok") {
-					_self.set('file', data.file);
-				} 
-			}
-		});
+			});
+		}
 	}.observes('url'),
 
 	didInsertElement: function () {
@@ -2226,6 +2241,7 @@ App.AttachFileView = Em.View.extend({
 
 		App.uploaderController.set('content', this.get('content'));
 		App.uploaderController.set('folder', this.get('folder'));
+		App.uploaderController.set('useControllerUpload', false);
 
 		App.get('uploaderController').addObserver('content', this, this.attachFile);
 

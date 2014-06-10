@@ -1155,6 +1155,40 @@ App.ConfirmActionController = Ember.Object.extend({
 App.UploaderController = Ember.Object.extend({
 	content: null,
 	folder: '',
+	url: '',
+	file:'',
+	folder:'',
+	view: '',
+	formDataView:'',
+
+	fileChange: function () {
+		_self = this;
+		var formData = this.formDataView;
+
+		$.ajax({
+			url: 'upload.php',  //server script to process data
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,      
+			xhr: function() {  // custom xhr
+				myXhr = $.ajaxSettings.xhr();			
+				return myXhr;
+			},
+			beforeSend: function(){
+
+			},
+			success: function(payload)
+			{
+				data = JSON.parse(payload);
+				if (data.result == "ok") {
+					_self.set('file', data.file);
+				} 
+			}
+		});
+	},
+
 });
 
 App.PlanDeLaborController = Ember.Object.extend({
