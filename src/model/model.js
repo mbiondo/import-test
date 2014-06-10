@@ -2249,7 +2249,7 @@ App.Pedido = Ember.Object.extend({
 		'nombreYApellido',
 		'email',
 		'direccion',
-		'localidadYProvincia',
+		//'localidadYProvincia',
 		'codigoPostal',
 		'fax',
 		'telefono',
@@ -2268,6 +2268,8 @@ App.Pedido = Ember.Object.extend({
 		'resuelto',
 		'observacion',
 		'userSaraReviso',
+		'provincia',
+		'localidad'
 	],
 
 	normalize: function () {
