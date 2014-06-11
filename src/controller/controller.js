@@ -2376,7 +2376,7 @@ App.FirmantesController = App.RestController.extend({
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
-	sortProperties: ['sortOrden'],
+	sortProperties: ['apellido', 'nombre'],
 	sortAscending: true,
 	loaded: false,
 
@@ -2492,7 +2492,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisiones',
+	url: 'pap/com/comisiones/',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -2538,7 +2538,7 @@ App.ComisionesController = App.RestController.extend({
 
 		this.set('content', []);
 		items.forEach(function(i){
-			if (i.grupo && i.grupo != 'CS') {
+			if ((!i.grupo) || (i.grupo != 'CS')) {
 				this.createObject(i);
 			}
 		}, this);

@@ -6851,6 +6851,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	clickGuardar: false,
 	expTipo: '',
 	expedienteExist: false,
+	pubnro: null,
 
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -7017,7 +7018,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	createSucceeded: function () {
 		var _self = this;
 
-		//this.get('content').desNormalize();
+		this.get('content').desNormalize();
 
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 
@@ -7043,7 +7044,8 @@ App.CrearExpedienteView = Ember.View.extend({
 
 
 			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
-			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
+
+			//var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
 
 
 			this.set('content', App.Expediente.extend(App.Savable).create({
@@ -7055,6 +7057,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				expdipA: expediente.get('expdipA'),
 				iniciad: expediente.get('iniciado'),
 				expdipT: iniciado,
+				pubFecha: expediente.get('pubFecha'),
 				sesion: expediente.get('sesion'),
 				firmantes: [],
 				giro: [],
@@ -7072,7 +7075,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			$("#nav-tabs-proyecto").click();
 			$("#selector-tipo-proyecto").focus();
 
-			this.set('oldTP', tp);
+			//this.set('oldTP', tp);
 
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
@@ -7104,6 +7107,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', false);
 		}
 	},
+
 	setupEnter: function(){
 		var _self = this;
 		// console.log('setupEnter');
@@ -7137,14 +7141,16 @@ App.CrearExpedienteView = Ember.View.extend({
 			giro: [],
 			comisiones: [],
 			autoridades: [],
-		}));                          
+		}));                
 
+		var tp = App.get('tpsController.arrangedContent.firstObject');
+		this.set('oldTP', tp);
+          
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
 		});
 
 		this.setupEnter();
-
 	}
 });
 
@@ -7202,6 +7208,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if (this.get('pubnro')) {
 			this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
 			this.set('content.pubnro', this.get('pubnro.numero'));
+			this.set('parentView.oldTP', this.get('pubnro'));
 		}
 		else 
 		{
@@ -7241,10 +7248,18 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('comisionesBicamerales'),	
 	*/
 
+	tpsLoaded: function () {
+		if (App.get('tpsController.loaded')) {
+			App.get('tpsController').removeObserver('loaded', this, this.tpsLoaded);
+			this.set('pubnro', App.get('tpsController.firstObject'));
+		}
+
+	},
+
 
 	periodoChanged: function () {
 		App.set('tpsController.periodo', this.get('content.periodo'));
-		this.set('pubnro', null);
+		App.get('tpsController').addObserver('loaded', this, this.tpsLoaded);
 	}.observes('content.periodo'),
 
 	didInsertElement: function() {
