@@ -1937,6 +1937,16 @@ App.VisitaGuiada = Ember.Object.extend({
 		});			
 	},
 
+	isVisitaEspecial: function(){
+		if(this.get('fechaPreferencia')){
+			var day = moment(this.get('fechaPreferencia.date'), 'YYYY/MM/DD').format('d');
+			if(day == 6){
+				return "SI";
+			}
+		}
+		return this.get('visitaEspecial');
+	}.property('id'),
+
 	aproveError: function (data) {
 		this.set('aproveSuccess', false);
 	},
