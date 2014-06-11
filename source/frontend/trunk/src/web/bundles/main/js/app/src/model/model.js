@@ -533,8 +533,8 @@ App.Expediente = Em.Object.extend({
 	seleccionado: false,
 	notificationType : 'Expediente',
 	notificationRoom: 'mesaDeEntrada',
-	giro: [],
-	firmantes: [],
+	giro: null,
+	firmantes: null,
 	absolutURL: false,
 	biografia: null,
 	comisiones: null,
@@ -704,15 +704,19 @@ App.Expediente = Em.Object.extend({
 	
 	girosLabel: function () {
 		var field = "orden";
-		var giros = this.get('giro').sort(function (a, b) {
-			return a.orden - b.orden;
-		});
+		if (this.get('giro')) {
+			var giros = this.get('giro').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
 
-		if (giros.length > 0)
-			if (giros.length == 1)
-				return giros.objectAt(0).comision;
-			else
-				return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
+			if (giros.length > 0)
+				if (giros.length == 1)
+					return giros.objectAt(0).comision;
+				else
+					return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
+		} else {
+			return "";
+		}
 
 	}.property('giro'),
 
@@ -743,7 +747,7 @@ App.Expediente = Em.Object.extend({
 
 
 App.Envio = Em.Object.extend({
-		id: '',
+	id: '',
 		
 	sortValue: '',
 	
@@ -1157,6 +1161,10 @@ App.Comision = Em.Object.extend({
 	toString: function () {
 		return this.get('nombre');
 	},
+
+	label: function () {
+		return this.get('nombre');
+	}.property('nombre')
 
 });
 
