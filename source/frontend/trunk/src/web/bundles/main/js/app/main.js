@@ -503,7 +503,7 @@ App.menuController = App.MenuController.create({
 							id: 0,
 							titulo: 'Listado',
 							url: '#/informacionparlamentaria/solicitudes/listado',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER', 'IP_SOLICITUDES']],
 						}),					
 						App.MenuItem.create({
 							id: 1,
