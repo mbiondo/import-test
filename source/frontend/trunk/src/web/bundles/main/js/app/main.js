@@ -491,7 +491,7 @@ App.menuController = App.MenuController.create({
 			titulo: 'Informacion Parlamentaria',
 			url: '#/informacionparlamentaria/solicitudes/listado',
 			icono: 'ic ic-tickets',
-			roles: [['ROLE_USER']],
+			roles: [['ROLE_USER', 'INFORMACION_PARLAMENTARIA']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
@@ -509,7 +509,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Nueva solicitud',
 							url: '#/informacionparlamentaria/solicitudes/nueva',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER', 'IP_SOLICITUDES_EDIT']],
 						}),
 					],
 				}),
