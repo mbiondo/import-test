@@ -2234,16 +2234,21 @@ App.UploaderModalView = App.ModalView.extend({
 
 App.AttachFileView = Em.View.extend({
 	templateName: 'attach-file',
-	attributeBindings: ['folder'],
+	attributeBindings: ['folder','useControllerUpload'],
 
 	showUploader: function () {
 		App.uploaderController = App.UploaderController.create();
 
 		App.uploaderController.set('content', this.get('content'));
 		App.uploaderController.set('folder', this.get('folder'));
-		App.uploaderController.set('useControllerUpload', false);
-
+		
+		if(this.get('useControllerUpload')){
+			App.uploaderController.set('useControllerUpload', this.get('useControllerUpload'));			
+		}else{
+			App.uploaderController.set('useControllerUpload', false);
+		}
 		App.get('uploaderController').addObserver('content', this, this.attachFile);
+
 
 		App.UploaderModalView.popup();
 	},
