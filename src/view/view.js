@@ -9874,20 +9874,28 @@ App.CrearPedidoView = Ember.View.extend({
 	actividades: ["Sector público", "Sector privado", "Particular"],
 	prioridades: ["Alta","Media","Baja"],
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+	//uploadFolder: 'uploads/solicitudes/',
 
 	crear: function () {
 
-		if ( !$("#if-pedido-crear-form").parsley('validate')) return false;
-
-		this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
-		this.get('content').userSaraCreado = App.get('userController.user.cuil');
-		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('content').create();
+		if ( !$("#if-pedido-crear-form").parsley('validate')){
+			return false;
+		} 
+		else{		
+			this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
+			this.get('content').userSaraCreado = App.get('userController.user.cuil');
+			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('content').create();
+		}
 	},
 
 	createSucceeded: function () {
 		if (this.get('content.createSuccess')) {
 			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
+
+			App.set('uploaderController.folder', 'uploads/solicitudes/' + this.get('content.id') + "/");
+			//App.set('uploadFolder', 'uploads/solicitudes/' + this.get('content.id') + "/");
+			App.get('uploaderController').fileChange();
 
 			App.pedidosController = App.PedidosController.create();
 
