@@ -7137,17 +7137,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			giro: [],
 			comisiones: [],
 			autoridades: [],
-		}));              
-
-		App.get('proyectoCrearController').set('content', App.Expediente.extend(App.Savable).create({
-			expdipA: '', 
-			expdipN: '', 
-			tipo: 'LEY', 
-			firmantes: [],
-			giro: [],
-			comisiones: [],
-			autoridades: [],
-		}));              
+		}));                          
 
 		Ember.run.next(this, function (){
 			$("#selector-tipo-proyecto").focus();
@@ -8386,6 +8376,8 @@ App.MultiSelectListView = Ember.View.extend({
 	matchPosition: 'ANY',
 
 	selectionAc: null,
+	contentAc: null,
+
 
 	filterTextChanged: function () {
 		_self = this;
@@ -8399,7 +8391,6 @@ App.MultiSelectListView = Ember.View.extend({
 	}.observes('filterText'),
 
 	selectionChanged: function () {
-		console.log(this.get('selection'));
 		if (!this.get('suggestable') && this.get('selection.length') > 0)
 			this.get('contentController').load();
 		this.get('selectionAc').set('content', this.get('selection'));
@@ -8416,6 +8407,7 @@ App.MultiSelectListView = Ember.View.extend({
 		} else {
 			if (this.get('filterText').length >= this.get('threshold')) {
 				var regex = null;
+
 				switch (this.get('matchPosition')) {
 					case 'LEFT':
 						regex = new RegExp('^' + this.get('filterText').toString().toLowerCase());
@@ -8430,6 +8422,7 @@ App.MultiSelectListView = Ember.View.extend({
 				}, this);
 
 				var selectionNews = [];
+
 				this.get('selection').forEach(function(i) {
 					var item = filtered.findProperty('id', i.get('id'));
 					selectionNews.addObject(item);
@@ -8437,20 +8430,24 @@ App.MultiSelectListView = Ember.View.extend({
 
 				filtered.removeObjects(selectionNews);				
 
-				this.set('content', filtered);
+				this.set('contentAc.content', filtered);
 			} else {
-				this.set('content', this.get('contentController').get('arrangedContent'));
+				this.set('contentAc.content', this.get('contentController').get('arrangedContent'));
 			}
 		}
 
-		if (this.get('content'))
-			this.set('content', this.get('content').slice(0, 20));		
+		if (this.get('contentAc.content'))
+			this.set('contentAc.content', this.get('contentAc.content').slice(0, 20));
+			
+
+
 	},
 
 	controllerContentChanged: function () {
 		if (this.get('contentController').get('loaded')) {
 
 			var selectionNews = [];
+
 			this.get('selection').forEach(function(i) {
 				var item = this.get('contentController').get('content').findProperty('id', i.get('id'));
 				selectionNews.addObject(item);
@@ -8459,11 +8456,16 @@ App.MultiSelectListView = Ember.View.extend({
 			if (this.get('contentController').get('content'))
 				this.get('contentController').get('content').removeObjects(selectionNews);
 
-			this.set('content', this.get('contentController').get('arrangedContent'));
+			if (!this.get('contentAc')) {
+				this.set('contentAc', Ember.ArrayController.create({ sortProperties: this.get('contentController').get('sortProperties')}));
+			} 
+			this.set('contentAc.content', this.get('contentController').get('arrangedContent'));
 
-			if (this.get('content'))
-				this.set('content', this.get('content').slice(0, 20));
 			
+			if (this.get('contentAc.content'))
+				this.set('contentAc.content', this.get('contentAc.content').slice(0, 20));
+			
+
 			this.get('selectionAc').set('content', this.get('selection'));			
 		}
 	},
@@ -8474,17 +8476,16 @@ App.MultiSelectListView = Ember.View.extend({
 			if (this.get('filterText').length >= this.get('threshold')){
 				var regex = new RegExp(this.get('filterText'));
 				if (regex.test(item.get(this.get('filterPath'))))
-					this.get('content').addObject(item);
+					this.get('contentAc.content').addObject(item);
 			} else {
-				this.get('content').addObject(item);
+				this.get('contentAc.content').addObject(item);
 			}
 			this.get('selection').removeObject(item);
-			
 		} else {
-			item = this.get('content').findProperty('id', i.get('id'));
+			item = this.get('contentAc.content').findProperty('id', i.get('id'));
 			item.set('orden', this.get('selection').length + 1);
 			this.get('selection').addObject(item);
-			this.get('content').removeObject(item);
+			this.get('contentAc.content').removeObject(item);
 			this.set('filterText', '');
 		}
 
@@ -8495,7 +8496,7 @@ App.MultiSelectListView = Ember.View.extend({
 		this._super();
 
 		this.set('selectionAc', Ember.ArrayController.create({ sortProperties: ['orden']}));
-		
+
 		if (this.get('useCustomController')) {
 			this.set('contentController', App.get(this.get('controllerName')));
 			this.controllerContentChanged();
@@ -8510,6 +8511,9 @@ App.MultiSelectListView = Ember.View.extend({
 		} else if (!this.get('suggestable')) {
 			if (!this.get('contentController.loaded')) this.get('contentController').load();
 		}
+		
+		if (!this.get('contentAc'))
+			this.set('contentAc', Ember.ArrayController.create({ sortProperties: this.get('contentController').get('sortProperties')}));
 	},
 
 	clickMoverArribaInTema: function (item) {	
@@ -8537,6 +8541,7 @@ App.MultiSelectListView = Ember.View.extend({
 		}
 	},
 });
+
 
 
 App.TimeLineView = Ember.View.extend({
