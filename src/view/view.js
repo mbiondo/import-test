@@ -10041,6 +10041,11 @@ App.PedidoConsultaView = Ember.View.extend({
 	audits: function(){
 		return App.get('auditController');
 	}.property('App.auditController.content'),
+
+	puedeEditar: function () {
+		return App.get('userController').hasRole('IP_SOLICITUDES_EDIT') 
+	}.property('App.userController.user'),
+
 });
 
 
