@@ -9913,7 +9913,7 @@ App.CrearPedidoView = Ember.View.extend({
 		if (this.get('content.createSuccess')) {
 			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
 
-			App.get('uploaderController').fileChange();
+			//App.get('uploaderController').fileChange();
 			App.pedidosController = App.PedidosController.create();
 
 			fn = function() {
