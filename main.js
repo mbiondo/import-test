@@ -759,7 +759,7 @@ Storage.prototype.getObject = function(key) {
 
 
 $( document ).ajaxComplete(function( event, xhr, settings ) {
-	if (xhr.status == 401 || xhr.status == 0) {
+	if (xhr.status == 400 || xhr.status == 401 || xhr.status == 403 || xhr.status == 432)  {
 		if (App.userController.user) {
 			
 			App.userController.set('user', null);
