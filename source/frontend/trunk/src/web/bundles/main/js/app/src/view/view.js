@@ -9913,10 +9913,7 @@ App.CrearPedidoView = Ember.View.extend({
 		if (this.get('content.createSuccess')) {
 			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
 
-			App.set('uploaderController.folder', 'uploads/solicitudes/' + this.get('content.id') + "/");
-			//App.set('uploadFolder', 'uploads/solicitudes/' + this.get('content.id') + "/");
 			App.get('uploaderController').fileChange();
-
 			App.pedidosController = App.PedidosController.create();
 
 			fn = function() {
@@ -10113,16 +10110,31 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 
 	localidades: function(){
 		var _self = this;
-		var localidades;
+		var localidades = [''];
 
 		if(this.get('parentView.content.provincia')){
-			localidades = $.map(_self.get('provinciasLocalidades'), function(key, value){ if(key.provincia == _self.get('parentView.content.provincia')) return key.localidad; });
+			$.map(_self.get('provinciasLocalidades'), function(key, value){
+				if(key.provincia == _self.get('parentView.content.provincia')){
+					localidades.push(key.localidad);
+				}
+			});
 		}
 		else{
-			localidades = [''];
+			localidades = [];
 		}		
 		
 		return localidades;
 
-	}.property('parentView.content.provincia', 'parentView.content.localidad')
+	}.property('parentView.content.provincia'),
+	localidadYProvincia: function(){
+		var str;
+
+		if(this.get('parentView.content.provincia') && this.get('parentView.content.localidad'))
+		{
+			str = this.get('parentView.content.provincia') + ', ' + this.get('parentView.content.localidad');
+			this.set('parentView.content.localidadYProvincia', str);
+		}	
+
+
+	}.observes('parentView.content.provincia', 'parentView.content.localidad'),
 });
