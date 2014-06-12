@@ -572,7 +572,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Listado', url: '#/direccionsecretaria/mesadeentrada/legisladores/listado'},
 							]);			
 
-							App.get('menuController').seleccionar(9, 2, 1);	
+							App.get('menuController').seleccionar(9, 2, 1);								
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 						},						
 					}),	
@@ -1656,7 +1656,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Listado', url: '#/admin/bloques/listado'},
 						]);			
 
-						App.get('menuController').seleccionar(9, 2, 2);	
+						App.get('menuController').seleccionar(5, 1, 2);	
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},						
 				}),						
@@ -1696,7 +1696,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Listado', url: '#/admin/legisladores/listado'},
 						]);			
 
-						App.get('menuController').seleccionar(9, 2, 1);	
+						//App.get('menuController').seleccionar(9, 2, 1);	
+						App.get('menuController').seleccionar(5, 1, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},						
 				}),	
@@ -1734,7 +1735,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Ver'},
 						]);		
 
-						App.get('menuController').seleccionar(9, 2, 1);	
+						//App.get('menuController').seleccionar(9, 2, 1);	
+						App.get('menuController').seleccionar(5, 1, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},
 				}),
@@ -1790,7 +1792,8 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Editar'}
 						]);		
 
-						App.get('menuController').seleccionar(9, 2, 1);	
+						//App.get('menuController').seleccionar(9, 2, 1);	
+						App.get('menuController').seleccionar(5, 1, 1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},
 				}),							
