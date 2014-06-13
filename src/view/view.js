@@ -9583,16 +9583,16 @@ App.VincularFirmanteView = App.ModalView.extend({
 
 App.addWordsInput = Ember.TextField.extend({
 	insertNewline: function(){
-		
+/*		
 		var query = App.get('proyectosController.query');
 		var palabra = App.get('proyectosController.query.palabra');
 		var palabras = App.get('proyectosController.query.palabras');
-		
-/*
+*/		
+
 		var query = this.get('parentView');
 		var palabra = this.get('parentView').get('palabra');
 		var palabras = this.get('parentView').get('palabras');
-*/
+
 		palabras.pushObject({nombre: palabra});
 		query.set('palabra', '');
 	},
