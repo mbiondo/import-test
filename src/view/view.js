@@ -9315,6 +9315,7 @@ App.ProyectoSearchView = Em.View.extend({
 	palabras: [],
 	tipoPub: ['TP'],
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
+	palabrasError: false,
 
 
 	collapseToggle: function(){
@@ -9412,6 +9413,12 @@ App.ProyectoSearchView = Em.View.extend({
 		shortcut.remove('enter');
 		$(".nav-tabs > li").each(function(index){ shortcut.remove("F" + (index + 1)); });
 	},
+	palabrasChange: function(){
+		if(this.get('palabra').length > 2)
+		{
+			this.set('palabrasError', false);
+		}
+	}.observes('palabra')
 });
 
 
@@ -9584,19 +9591,19 @@ App.VincularFirmanteView = App.ModalView.extend({
 });
 
 App.addWordsInput = Ember.TextField.extend({
-	insertNewline: function(){
-/*		
-		var query = App.get('proyectosController.query');
-		var palabra = App.get('proyectosController.query.palabra');
-		var palabras = App.get('proyectosController.query.palabras');
-*/		
-
+	insertNewline: function(){ 
 		var query = this.get('parentView');
 		var palabra = this.get('parentView').get('palabra');
 		var palabras = this.get('parentView').get('palabras');
 
-		palabras.pushObject({nombre: palabra});
-		query.set('palabra', '');
+		if(palabra.length > 2)
+		{		
+			palabras.pushObject({nombre: palabra});
+			query.set('palabra', '');
+			this.set('parentView.palabrasError', false)
+		}else{
+			this.set('parentView.palabrasError', true)			
+		}
 	},
 });
 
