@@ -9316,6 +9316,7 @@ App.ProyectoSearchView = Em.View.extend({
 	tipoPub: ['TP'],
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	palabrasError: false,
+	palabrasErrorExist: false,
 
 
 	collapseToggle: function(){
@@ -9596,13 +9597,22 @@ App.addWordsInput = Ember.TextField.extend({
 		var palabra = this.get('parentView').get('palabra');
 		var palabras = this.get('parentView').get('palabras');
 
-		if(palabra.length > 2)
-		{		
-			palabras.pushObject({nombre: palabra});
-			query.set('palabra', '');
-			this.set('parentView.palabrasError', false)
-		}else{
-			this.set('parentView.palabrasError', true)			
+		if(palabras.findProperty('nombre', palabra))
+		{
+			this.set('parentView.palabrasErrorExist', true);		
+		}
+		else
+		{
+			this.set('parentView.palabrasErrorExist', false);			
+
+			if(palabra.length > 2)
+			{		
+				palabras.pushObject({nombre: palabra});
+				query.set('palabra', '');
+				this.set('parentView.palabrasError', false);
+			}else{
+				this.set('parentView.palabrasError', true);		
+			}
 		}
 	},
 });
