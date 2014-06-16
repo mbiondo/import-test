@@ -195,6 +195,10 @@ App.Notificacion = Em.Object.extend({
 		"comisiones",
 		"firmantes"
 	],	
+
+	label: function () {
+		return this.get('mensaje');
+	}.property('mensaje'),
 });
 
 

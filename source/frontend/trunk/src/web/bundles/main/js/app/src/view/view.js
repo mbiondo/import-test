@@ -681,6 +681,8 @@ App.SimpleListItemView = Ember.View.extend({
 	templateName: 'simple-list-item',
 });
 
+
+
 App.ListFilterView = Ember.View.extend({
 	templateName: 'simple-list',
 	filterListText: '',
@@ -10135,6 +10137,7 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 		}
 	},
 	*/
+
 	localidades: function(){
 		var _self = this;
 		var localidades = [''];
@@ -10153,6 +10156,7 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 		return localidades;
 
 	}.property('parentView.content.provincia'),
+
 	localidadYProvincia: function(){
 		var str;
 
@@ -10163,4 +10167,86 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 		}	
 	}.observes('parentView.content.provincia', 'parentView.content.localidad'),
 
+});
+
+
+//
+
+App.ListItemView = Ember.View.extend({
+	tagName: 'li',
+	templateName: 'list-item',
+});
+
+
+App.ListView = Ember.View.extend({
+	templateName: 'list',
+	itemPerPageList: [50, 25, 15, 10, 5],
+	filterText: '',
+	itemViewClass: App.ListItemView,
+	contentAc: null,
+	content: null,
+	itemPerPage: 15,
+	currentPage: 1,
+	totalPages: 0,
+
+	refreshContent: function () {	
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+		var filtered;
+
+		if(this.get('content'))
+		{
+			filtered = this.get('content').filter(function(item){
+				return regex.test(item.get('label').toLowerCase());
+			});
+		}
+
+		var currentPage = parseInt(this.get('currentPage'));
+		var itemPerPage = parseInt(this.get('itemPerPage'));
+
+		if (!filtered) {
+			filtered = [];
+		}
+
+		var init = (currentPage - 1) * itemPerPage;
+		var end = init + itemPerPage;
+		var data = filtered.slice(init, end);
+
+		this.set('totalPages', Math.ceil(filtered.length / this.get('itemPerPage')));
+		this.set('contentAc.content', data);
+
+	}.observes('filterText', 'content', 'content.@each', 'itemPerPage', 'currentPage'),
+
+
+	nextPage: function () {
+		this.set('currentPage', this.get('currentPage') + 1);
+	},
+
+	prevPage: function () {
+		this.set('currentPage', this.get('currentPage') - 1);
+	},
+
+	haveNextPage: function () {
+		if (this.get('currentPage') < this.get('totalPages')) {
+			return true;
+		} else {
+			return false;
+		}
+	}.property('content.@each', 'itemPerPage', 'currentPage', 'totalPages'),
+
+	havePrevPage: function () {
+		if (this.get('currentPage') > 1) 
+			return true;
+		else
+			return false;
+	}.property('content.@each', 'itemPerPage', 'currentPage'),
+
+	didInsertElement: function () {
+		this._super();
+
+		this.set('contentAc', Ember.ArrayController.create({
+			sortProperties: [this.get('sortProperty')],
+			content: this.get('content'),
+		}));
+	},
+	
 });
