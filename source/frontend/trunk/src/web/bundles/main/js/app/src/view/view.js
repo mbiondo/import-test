@@ -8747,7 +8747,8 @@ App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 App.MultiSelectTextSearch = Ember.TextField.extend({
 	insertNewline: function(){		
 		var _self = this.get('parentView');
-		element = _self.get('content.firstObject');
+//		element = _self.get('content.firstObject');
+		element = _self.get('contentAc.arrangedContent.firstObject');
 		_self.selectedItem(element);
 
 		this.set('value', '');
