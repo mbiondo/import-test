@@ -7242,6 +7242,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					this.$("#nav-tabs-giros").click();
 					break;
 			}
+			
+		/*
+			// Nuevo Refactor 1/2	
+			$("[tab-order="+ this.get('parentView.errorTab') +"]").click();
+		*/
 		}
 	}.observes('parentView.errorTab'),
 
@@ -7276,6 +7281,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	didInsertElement: function() {
 		this._super();
 		var _self = this;
+		
 		var chequearContent = [];
 		var navtab_list_InputFocus = [];
 		
@@ -7302,6 +7308,24 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			});
 		});
 
+		/*
+			// Nuevo Refactor 2/2	
+		
+		$(".nav-tabs > li")
+		.on('click', function(){ // auto focus
+			var tabContent 	 = $($(this).children().attr('href'));
+			var checkContent = setInterval(function(){
+				if(tabContent.is(":visible")){
+					tabContent.find(".tab-autofocus :input").focus();
+					clearInterval(checkContent);
+				}
+			}, 500);
+		})
+		.each(function(index){ // shorcut tabs
+			var _self = $(this);
+			shortcut.add("F" + _self.children().attr('tab-order'), function(){ _self.children().click(); });
+		});
+		*/
 
 		//this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
