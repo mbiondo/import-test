@@ -2207,7 +2207,17 @@ App.UploaderView = Em.View.extend({
 					if (data.result == "ok") {
 						_self.set('file', data.file);
 					} 
-				}
+				},
+				complete: function(jqXHR, textStatus)				
+				{
+					console.log(jqXHR);
+					console.log(textStatus);
+				},
+				error: function(jqXHR , textStatus, errorThrown){
+					console.log(jqXHR);
+					console.log(textStatus);
+					console.log(errorThrown);					
+				},
 			});
 		}
 	}.observes('url'),
@@ -2250,7 +2260,6 @@ App.AttachFileView = Em.View.extend({
 			App.uploaderController.set('useControllerUpload', false);
 		}
 		App.get('uploaderController').addObserver('content', this, this.attachFile);
-
 
 		App.UploaderModalView.popup();
 	},
@@ -10080,7 +10089,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	}.property('App.auditController.content'),
 
 	puedeEditar: function () {
-		return App.get('userController').hasRole('IP_SOLICITUDES_EDIT') 
+		return App.get('userController').hasRole('ROLE_IP_SOLICITUDES_EDIT') 
 	}.property('App.userController.user'),
 
 });
