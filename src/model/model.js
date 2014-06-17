@@ -2264,6 +2264,8 @@ App.Pedido = Ember.Object.extend({
 	url: 'pedido',
 	useApi: false,
 	auditable: true,
+	adjuntoEnvio:'',
+	adjuntoRespuesta:'',
 
 
 	serializable: [
@@ -2291,7 +2293,9 @@ App.Pedido = Ember.Object.extend({
 		'observacion',
 		'userSaraReviso',
 		'provincia',
-		'localidad'
+		'localidad',
+		'adjuntoEnvio',
+		'adjuntoRespuesta',
 	],
 
 	normalize: function () {
