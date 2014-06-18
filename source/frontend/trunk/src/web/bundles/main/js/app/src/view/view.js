@@ -10360,6 +10360,14 @@ App.ScrollBarView = Ember.View.extend({
     		});
     	});
 
+
+    	this.$('.bar').click(function (e) {
+    		console.log(e);
+			var p = Math.ceil(e.offsetY / (view.$('.bar').height() - view.$('.track').height()) * 100);
+			view.get('contentController').scrollTo(p);
+    	}); 
+
+
     	this.$().mouseup(function (e) {
     		view.$().unbind('mousemove');
     	});    	
