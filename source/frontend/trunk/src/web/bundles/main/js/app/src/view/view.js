@@ -8327,29 +8327,20 @@ App.TestView = Ember.View.extend({
 	roles: [],
 	funciones: [],
 
+	content: [],
+
 	crearTest: function () {
 		App.TimeLineEventCreateView.popup();
 	},
 
+	willInsertElement: function () {
+		for (var i=0; i < 500; i++) {
+			this.get('content').addObject({label: 'pepe' + i});
+		}
+	},
+
 	didInsertElement: function () {
 		this._super();
-		
-		/*
-		var evento = App.TimeLineEvent.extend(App.Savable).create({
-	        objectID: 1, 
-	        titulo: 'Probando duplicados',
-	        fecha:  moment().format('YYYY-MM-DD HH:mm'),
-	        mensaje: 'Nunc at dolor at augue posuere tincidunt molestie a odio. Aenean sit amet nisl quis nunc vulputate tristique. Integer feugiat eros ut dapibus dignissim',
-	        icono: 'creado',
-	        link: '#/direccion/secretaria/mesa/de/entrada/diputados/listado',
-	        duplicados: ['158751', '158640', '158902'],
-		});
-		evento.create();
-		*/
-		
-
-		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
-		this.get('timeLineController').load();
 	},	
 });
 
@@ -10208,6 +10199,10 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 App.ListItemView = Ember.View.extend({
 	tagName: 'li',
 	templateName: 'list-item',
+
+	didInsertElement: function () {
+		this.$().show(0);
+	},
 });
 
 
@@ -10220,7 +10215,12 @@ App.ListView = Ember.View.extend({
 	content: null,
 	itemPerPage: 15,
 	currentPage: 1,
-	totalPages: 0,
+	totalPages: 1,
+
+	filterTextChange: function () {
+		this.set('currentPage', 1);
+		this.refreshContent();
+	}.observes('filterText', 'itemPerPage'),
 
 	refreshContent: function () {	
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
@@ -10247,7 +10247,7 @@ App.ListView = Ember.View.extend({
 		this.set('totalPages', Math.ceil(filtered.length / this.get('itemPerPage')));
 		this.set('contentAc.content', data);
 
-	}.observes('filterText', 'content', 'content.@each', 'itemPerPage', 'currentPage'),
+	}.observes('content', 'content.@each', 'currentPage'),
 
 
 	nextPage: function () {
@@ -10256,7 +10256,7 @@ App.ListView = Ember.View.extend({
 
 	prevPage: function () {
 		this.set('currentPage', this.get('currentPage') - 1);
-	},
+	},	
 
 	haveNextPage: function () {
 		if (this.get('currentPage') < this.get('totalPages')) {
@@ -10281,5 +10281,107 @@ App.ListView = Ember.View.extend({
 			content: this.get('content'),
 		}));
 	},
-	
+});	
+
+
+
+App.ScrolleableListView = Ember.View.extend({
+	contentController: null,
+	templateName: 'list-scrolleable',
+	itemViewClass: App.ListItemView,
+
+	didInsertElement: function () {
+		this._super();
+
+		this.set('contentController', App.ScrollContentController.create({
+			visibleItems: 20,
+			content: this.get('content'),
+			step: 5,
+		}));
+
+		this.get('contentController').contentChanged();
+
+
+		var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
+		var view = this;
+
+		if (document.attachEvent) {
+    		document.attachEvent("on"+mousewheelevt, function (e) {
+				var e = window.event || e;
+				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));		
+				if (delta > 0)
+					view.get('contentController').scrollUp();
+				else 
+					view.get('contentController').scrollDown();				
+    		});
+    	}
+		else if (document.addEventListener) {
+    		document.addEventListener(mousewheelevt, function (e) {
+				var e = window.event || e;
+				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));		
+				if (delta > 0)
+					view.get('contentController').scrollUp();
+				else 
+					view.get('contentController').scrollDown();
+    		}, false);
+    	}
+
+	},
+
 });
+
+
+App.ScrollBarView = Ember.View.extend({
+	templateName: 'scroll-bar',
+	classNames: ['scroll-bar'],
+	interval: null,
+
+	positionChange: function () {
+		var pi = Math.round(this.get('contentController.visibleItems') / this.get('contentController.content.length') * 100);
+		var p = this.get('contentController.currentPosition') * (100 - pi) / 100;
+		this.$('.track').css('top', p + '%');
+	}.observes('contentController.currentPosition', 'updating'),
+
+	lengthChange: function () {
+		var p = Math.round(this.get('contentController.visibleItems') / this.get('contentController.content.length') * 100);
+		this.$('.track').css('height', p + '%');
+	}.observes('contentController.content.length', 'contentController.visibleItems'),
+
+
+	setupHandlers: function () {
+		view = this;
+
+    	this.$(".track").mousedown(function (e) {
+    		view.$().mousemove(function (e) {
+    			if (e.target.className != "track") {
+	    			var p = Math.ceil(e.offsetY / (view.$('.bar').height() - view.$('.track').height()) * 100);
+	    			view.get('contentController').scrollTo(p);
+    			}
+    		});
+    	});
+
+    	this.$().mouseup(function (e) {
+    		view.$().unbind('mousemove');
+    	});    	
+
+    	this.$().mouseleave(function (e) {
+    		view.$().unbind('mousemove');
+    	});
+
+    	this.$(".track").mouseup(function (e) {
+    		view.$().unbind('mousemove');
+    	});    	
+
+		this.$(".bar").mouseup(function (e) {
+    		view.$().unbind('mousemove');
+    	});
+	},
+
+
+	didInsertElement: function () {
+		this._super();
+		this.lengthChange();
+		this.positionChange();
+		this.setupHandlers();		
+	},
+})
