@@ -5637,3 +5637,71 @@ App.PedidoConsultaController = Ember.Object.extend({
 App.ProyectoCrearController = Em.Object.extend({
 	content: '',
 });
+
+
+App.ScrollContentController = Ember.ArrayController.extend({
+	scrolledContent: null,
+	visibleItems: 10,
+	currentPosition: 0,
+	currentIndex: 0,
+	content: null,
+	step: 1,
+
+
+	scrollUp: function () {
+		var p = this.get('step') / this.get('content.length') * 100;
+		p = Math.floor(p * 1000) / 1000;
+		t = this.get('currentPosition') - p;
+		if (t < 0)
+			t = 0;
+		this.scrollTo(t);
+	},
+
+	scrollDown: function () {
+		var p = this.get('step') / this.get('content.length') * 100;
+		p = Math.floor(p * 1000) / 1000;
+		t = this.get('currentPosition') + p;
+		if (t < 0)
+			t = 0;
+		this.scrollTo(t);
+	},
+
+	contentChanged: function () {
+		this.set('scrolledContent', this.get('content').slice(this.get('currentIndex'), this.get('visibleItems')));
+	}.observes('content'),
+
+
+	scrollTo: function (position) {
+		if (position >= 0 && position <= 100 && position != this.get('currentPosition')) {
+
+			var topItems = this.get('content.length') - this.get('visibleItems');
+
+			var newIndex = Math.ceil(position * topItems / 100);
+
+			var positionDif = position - this.get('currentPosition');
+
+			var diffItems = Math.abs(this.get('currentIndex') - newIndex);
+
+			if (diffItems > this.get('visibleItems')) {
+				this.set('scrolledContent', this.get('content').slice(newIndex, newIndex + this.get('visibleItems')));
+			} else {
+				if (positionDif > 0) {
+					for (var i = 0; i < diffItems; i++) {
+						this.get('scrolledContent').addObject(this.get('content').objectAt(this.get('currentIndex') + this.get('visibleItems') + i));
+						this.get('scrolledContent').removeAt(0);
+					};
+					this.set('currentIndex', newIndex);
+				} else {
+					for (var i = 0; i < diffItems; i++) {
+						this.get('scrolledContent').insertAt(0, this.get('content').objectAt(this.get('currentIndex') - (i + 1)));
+						this.get('scrolledContent').removeAt(this.get('scrolledContent.length') - 1);
+					};
+
+					this.set('currentIndex', newIndex);
+				}
+			}
+
+			this.set('currentPosition', position);
+		}
+	},
+});

@@ -4258,7 +4258,7 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Trámite Parlamentario'},
 							{titulo: 'Listado', url: '#/publicaciones/TP/listado'},
-							{titulo: 'Ver'},
+							{titulo: 'N° ' + context.get('numero')},
 						]);		
 
 						App.get('menuController').seleccionar(12, 0, 0);	
