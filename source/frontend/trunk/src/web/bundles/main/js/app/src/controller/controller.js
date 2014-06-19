@@ -501,7 +501,7 @@ App.IoController = Em.Object.extend({
 						url: '/notification/' + options.id,
 						dataType: 'JSON',
 						type: 'POST',
-						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
 						context: this,
 						success: function (data) {
 							if (data.notificaciones) {
@@ -666,16 +666,18 @@ App.UserController = Em.Controller.extend({
 	loginoAuth: function (cuil, access_token, token_type) {
 
 		//var urlUserData = 'usr/userdata';
-		var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		//var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		var urlUserData = App.get('apiController.authURL') + 'info_user/';
+		
 		var _self = this;
 
 
 		$.ajax({
 			url:  urlUserData,
-			contentType: 'text/plain',
-			type: 'POST',
-			data: cuil,
-			dataType: 'JSON',
+			//contentType: 'text/plain',
+			type: 'GET',
+			//data: cuil,
+			//dataType: 'JSON',
 
 			success: function (data) {
 				var tmpUser = App.Usuario.extend(App.Savable).create(data);
@@ -891,7 +893,7 @@ App.NotificationController = Em.Controller.extend({
 		
 		if (havePermission == 0 && window.webkitNotifications && !App.get('userController').get('esDiputado')) {
 			var notification = window.webkitNotifications.createNotification(
-			  "bundles/main/beta/img/logo-notificacion.png",
+			  "bundles/main/beta/img/logoHCDNSmall.png",
 			  notificacion.titulo,
 			  notificacion.mensaje
 			);
@@ -1595,7 +1597,7 @@ App.NotificacionesController = App.RestController.extend({
 				url: url,
 				dataType: 'JSON',
 				type: 'POST',
-				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
@@ -3778,7 +3780,7 @@ App.TurnosController = App.RestController.extend({
 
 			turno.get('oradores').forEach(function(orador){
 				var dipStr = "Dip " + orador.user.apellido + " " + orador.user.nombre;
-				if (dipStr.toLowerCase() == App.get('userController.user.estructuraReal').toLowerCase()) {
+				if (dipStr.toLowerCase() == App.get('userController.user.estructura').toLowerCase()) {
 					tengoOrador = true;
 				}
 			});
@@ -5254,6 +5256,8 @@ App.ProyectosController = App.RestController.extend({
 	pageSize: 25,
 	pageNumber: 1,
 	query: null,
+	isPaginated: false,
+
 	
 	buildURL: function (filterText) {
 		var url =  this.get('url');
@@ -5269,6 +5273,8 @@ App.ProyectosController = App.RestController.extend({
 
 	nextPage: function () {
 		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.set('newestContent', []);
+		this.set('newestContentReady', false);
 		this.load();
 	},
 
@@ -5322,9 +5328,15 @@ App.ProyectosController = App.RestController.extend({
 			this.createObject(i);
 		}, this);
 
+		if (this.get('newestContent')) {
+			this.set('newestContentReady', true);
+		}
+
 		App.set('proyectosController.recordcount', data.recordcount);
 		App.get('proyectosController').set('loading', false);
 		App.get('proyectosController').set('loaded', true);
+
+		this.set('isPaginated', false);
 	},
 
 	createObject: function (data, save) {
@@ -5333,6 +5345,10 @@ App.ProyectosController = App.RestController.extend({
 		
 		item = App.Expediente.extend(App.Savable).create(data);
 		item.setProperties(data);
+
+		if (this.get('newestContent')) {
+			this.get('newestContent').addObject(item);			
+		}
 
 		this.addObject(item);
 	},	
@@ -5646,6 +5662,7 @@ App.ScrollContentController = Ember.ArrayController.extend({
 	currentIndex: 0,
 	content: null,
 	step: 1,
+	oldLength: 0,
 
 
 	scrollUp: function () {
@@ -5666,8 +5683,18 @@ App.ScrollContentController = Ember.ArrayController.extend({
 		this.scrollTo(t);
 	},
 
+	contentLengthChanged: function () {
+		if (this.get('oldLength') > 0) {
+			var p = this.get('oldLength') / this.get('content.length') * 100;
+			this.scrollTo(p);
+		}
+		this.set('oldLength', this.get('content.length'));
+	}.observes('content.length'),
+
 	contentChanged: function () {
 		this.set('scrolledContent', this.get('content').slice(this.get('currentIndex'), this.get('visibleItems')));
+		this.set('currentPosition', 0);
+		this.set('currentIndex', 0);
 	}.observes('content'),
 
 
@@ -5676,7 +5703,7 @@ App.ScrollContentController = Ember.ArrayController.extend({
 
 			var topItems = this.get('content.length') - this.get('visibleItems');
 
-			var newIndex = Math.ceil(position * topItems / 100);
+			var newIndex = Math.round(position * topItems / 100);
 
 			var positionDif = position - this.get('currentPosition');
 
