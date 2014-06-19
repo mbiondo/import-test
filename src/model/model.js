@@ -12,7 +12,7 @@ App.Usuario = Em.Object.extend({
 	password: '',
 
 	roles: '',
-	estructuraReal: '',
+	estructura: '',
 	funcion: '',
 	comisiones: '',
 	avatar: '',
@@ -56,9 +56,6 @@ App.Usuario = Em.Object.extend({
 		return str.htmlSafe();
 	}.property('comisiones'),
 
-	estructura: function () {
-		return this.get('estructuraReal');
-	}.property('estructuraReal'),
 });
 
 App.Estructura = Em.Object.extend({
