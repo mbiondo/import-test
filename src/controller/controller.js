@@ -666,16 +666,18 @@ App.UserController = Em.Controller.extend({
 	loginoAuth: function (cuil, access_token, token_type) {
 
 		//var urlUserData = 'usr/userdata';
-		var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		//var urlUserData = App.get('apiController.url') + 'usr/userdata';
+		var urlUserData = App.get('apiController.authURL') + 'info_user/';
+		
 		var _self = this;
 
 
 		$.ajax({
 			url:  urlUserData,
-			contentType: 'text/plain',
-			type: 'POST',
-			data: cuil,
-			dataType: 'JSON',
+			//contentType: 'text/plain',
+			type: 'GET',
+			//data: cuil,
+			//dataType: 'JSON',
 
 			success: function (data) {
 				var tmpUser = App.Usuario.extend(App.Savable).create(data);
