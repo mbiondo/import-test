@@ -501,7 +501,7 @@ App.IoController = Em.Object.extend({
 						url: '/notification/' + options.id,
 						dataType: 'JSON',
 						type: 'POST',
-						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
 						context: this,
 						success: function (data) {
 							if (data.notificaciones) {
@@ -1597,7 +1597,7 @@ App.NotificacionesController = App.RestController.extend({
 				url: url,
 				dataType: 'JSON',
 				type: 'POST',
-				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
+				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
@@ -3780,7 +3780,7 @@ App.TurnosController = App.RestController.extend({
 
 			turno.get('oradores').forEach(function(orador){
 				var dipStr = "Dip " + orador.user.apellido + " " + orador.user.nombre;
-				if (dipStr.toLowerCase() == App.get('userController.user.estructuraReal').toLowerCase()) {
+				if (dipStr.toLowerCase() == App.get('userController.user.estructura').toLowerCase()) {
 					tengoOrador = true;
 				}
 			});
