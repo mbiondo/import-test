@@ -501,7 +501,7 @@ App.IoController = Em.Object.extend({
 						url: '/notification/' + options.id,
 						dataType: 'JSON',
 						type: 'POST',
-						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
+						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
 						context: this,
 						success: function (data) {
 							if (data.notificaciones) {
@@ -666,18 +666,16 @@ App.UserController = Em.Controller.extend({
 	loginoAuth: function (cuil, access_token, token_type) {
 
 		//var urlUserData = 'usr/userdata';
-		//var urlUserData = App.get('apiController.url') + 'usr/userdata';
-		var urlUserData = App.get('apiController.authURL') + 'info_user/';
-		
+		var urlUserData = App.get('apiController.url') + 'usr/userdata';
 		var _self = this;
 
 
 		$.ajax({
 			url:  urlUserData,
-			//contentType: 'text/plain',
-			type: 'GET',
-			//data: cuil,
-			//dataType: 'JSON',
+			contentType: 'text/plain',
+			type: 'POST',
+			data: cuil,
+			dataType: 'JSON',
 
 			success: function (data) {
 				var tmpUser = App.Usuario.extend(App.Savable).create(data);
@@ -893,7 +891,7 @@ App.NotificationController = Em.Controller.extend({
 		
 		if (havePermission == 0 && window.webkitNotifications && !App.get('userController').get('esDiputado')) {
 			var notification = window.webkitNotifications.createNotification(
-			  "bundles/main/beta/img/logoHCDNSmall.png",
+			  "bundles/main/beta/img/logo-notificacion.png",
 			  notificacion.titulo,
 			  notificacion.mensaje
 			);
@@ -1597,7 +1595,7 @@ App.NotificacionesController = App.RestController.extend({
 				url: url,
 				dataType: 'JSON',
 				type: 'POST',
-				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
+				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructuraReal'), funcion: App.get('userController.user.funcion')}),
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
@@ -3780,7 +3778,7 @@ App.TurnosController = App.RestController.extend({
 
 			turno.get('oradores').forEach(function(orador){
 				var dipStr = "Dip " + orador.user.apellido + " " + orador.user.nombre;
-				if (dipStr.toLowerCase() == App.get('userController.user.estructura').toLowerCase()) {
+				if (dipStr.toLowerCase() == App.get('userController.user.estructuraReal').toLowerCase()) {
 					tengoOrador = true;
 				}
 			});
