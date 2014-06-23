@@ -10188,7 +10188,16 @@ App.PedidosView = Ember.View.extend({
 	contentCount: 0,
 
 	willInsertElement: function(){
-		this.set('content', App.get('pedidosController.arrangedContent'));
+		//this.set('content', App.get('pedidosController.arrangedContent'));
+		var content = [];
+
+		if(App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT')){
+			content = App.get('pedidosController.arrangedContent');
+		}else{
+			content = $.map(App.get('pedidosController.arrangedContent'), function(item){ if(item.userSaraAsignado && item.userSaraAsignado.cuil == App.get('userController.user.cuil')) return item; });			
+		}
+		
+		this.set('content', content);
 	}
 });
 
