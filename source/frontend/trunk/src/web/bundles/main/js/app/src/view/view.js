@@ -5910,7 +5910,7 @@ App.PieGraphView = Ember.View.extend({
 			tooltip: {
 				//pointFormat: '',
 				pointFormat: this.get('pointFormat') , 
-			},
+			},            		    
 			plotOptions: {
 				pie: {
 					allowPointSelect: true,
@@ -5921,7 +5921,7 @@ App.PieGraphView = Ember.View.extend({
 						connectorColor: '#000000',
 						formatter: function() {
 							return '<b>'+ this.point.name +'</b>';
-						}
+						},
 					}
 				}
 			},
@@ -7198,6 +7198,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	firmantesSeleccionados: [],
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	comisionesBicamerales: false,
+	puedeVerPreviewTramiteParlamentario: false,
 
 	camarasChange: function(){
 		var _self = this;
@@ -7231,6 +7232,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	errorTabChange: function () {
 		if (this.get('parentView.errorTab') > 0) {
+			
 			switch (this.get('parentView.errorTab')) {
 				case 1:
 					this.$("#nav-tabs-proyecto").click();
@@ -7243,10 +7245,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					break;
 			}
 			
-		/*
+			
+		
 			// Nuevo Refactor 1/2	
-			$("[tab-order="+ this.get('parentView.errorTab') +"]").click();
-		*/
+			//$("[tab-order="+ this.get('parentView.errorTab') +"]").click();
+		
 		}
 	}.observes('parentView.errorTab'),
 
@@ -7307,10 +7310,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				$("#nav-tabs-"+ value).click();
 			});
 		});
-
-		/*
-			// Nuevo Refactor 2/2	
 		
+		
+			// Nuevo Refactor 2/2	
+		/*
 		$(".nav-tabs > li")
 		.on('click', function(){ // auto focus
 			var tabContent 	 = $($(this).children().attr('href'));
@@ -7428,7 +7431,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.get('content').set('expdip', this.get('content.expdipN') + "-" + expdipT + "-" + this.get('content.expdipA'));
 		}
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
-
 	changeExdip: function(){
 		var _self = this;
 		if(this.get('content.expdipN') && this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4)
@@ -7577,7 +7579,60 @@ App.ExpedienteFormLeyView = Ember.View.extend({
             };                                                                             
 
 		}
-	}
+	},
+	changeNumeroTP: function(){		
+		if(App.get('tpsController.arrangedContent'))
+		{
+			var tpSelect = App.get('tpsController.arrangedContent').findProperty('numero', this.get('content.pubnro'));
+			
+			if(tpSelect)
+			{		
+				var tp = App.TP.extend(App.Savable).create({id: tpSelect.id})
+
+				tp.set('loaded', false);
+				var deferred = $.Deferred(),
+				fn = function() {
+					/*
+					var firmantesList = $.map(this.get('content.autoridades'), function(firmante){ return [{nombre: firmante.diputado.datosPersonales.apellido + ", " + firmante.diputado.datosPersonales.nombre}] });
+					var girosList = $.map(this.get('content.comisiones'), function(giro){ return [{comision: giro.nombre}] });
+
+					//var proyecto = App.Proyecto.create({id: '', titulo: this.get('content.titulo'), firmantes: this.get('content.autoridades'), giro: this.get('content.comisiones')});
+					var proyecto = App.Proyecto.create({expdip: this.get('content.expdip'), titulo: this.get('content.titulo'), firmantes: firmantesList, giro: girosList});
+					var proyectoObject = JSON.parse(JSON.stringify(proyecto));
+					
+					if(tp.get('proyectosD') && this.get('content.expdipT').id == 'D'){
+						tp.get('proyectosD').pushObject(proyectoObject);
+					}				
+					if(tp.get('proyectosS') && this.get('content.expdipT').id == 'S'){
+						tp.get('proyectosS').pushObject(proyectoObject);
+					}				
+					if(tp.get('proyectosPE') && this.get('content.expdipT').id == 'PE'){
+						tp.get('proyectosPE').pushObject(proyectoObject);
+					}				
+					if(tp.get('proyectosJGM') && this.get('content.expdipT').id == 'JGM'){
+						tp.get('proyectosJGM').pushObject(proyectoObject);
+					}	
+					*/
+					App.tpConsultaController = App.TPConsultaController.create();
+					this.set('puedeVerPreviewTramiteParlamentario', true);
+					App.set('tpConsultaController.content', tp);
+
+				    tp.removeObserver('loaded', this, fn);
+				    deferred.resolve(tp);
+				};
+
+				tp.addObserver('loaded', this, fn);
+				tp.load();
+			}
+		}
+//	}.observes('content.pubnro', 'content.expdipT'),
+	}.observes('content.pubnro'),
+	previewTramiteParlamentario: function(){
+		App.PreviewTramiteParlamentarioView.popup();
+	},
+	cancelarPreviewTramiteParlamentario: function(){
+		this.set('puedeVerPreviewTramiteParlamentario', false);
+	},
 });
 
 App.ExpedienteFormDeclaracionView = App.ExpedienteFormLeyView.extend({
@@ -10392,4 +10447,40 @@ App.ScrollBarView = Ember.View.extend({
 		this.positionChange();
 		this.setupHandlers();		
 	},
-})
+});
+
+App.PreviewTramiteParlamentarioView = App.ModalView.extend({
+	templateName: 'preview-tramite-parlamentario',
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			_self = this;
+			if (this.get('content.id')) {
+				this.get('content').addObserver('saveSuccess', function () {
+					if (this.get('saveSuccess')) {
+						//
+					}
+				});
+				//this.get('content').save();
+			} else {
+				this.get('content').addObserver('createSuccess', function () {
+					if (this.get('createSuccess')) {
+						//
+					}
+				});
+				this.get('content').create();
+			}
+			return true;
+		} else if (opts.secondary) {
+			//alert('cancel')
+		} else {
+			//alert('close')
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.get('tpConsultaController.content'));
+	}, 
+});
