@@ -10161,7 +10161,9 @@ App.PedidoConsultaView = Ember.View.extend({
 	puedeEditar: function () {
 		return App.get('userController').hasRole('ROLE_IP_SOLICITUDES_EDIT') 
 	}.property('App.userController.user'),
-
+	reenviarRespuesta: function(){
+		App.ReenviarRespuestaView.popup();
+	},
 });
 
 
@@ -10491,5 +10493,85 @@ App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 	didInsertElement: function(){	
 		this._super();
 		this.set('content', App.get('tpConsultaController.content'));
+	}, 
+});
+
+App.ReenviarRespuestaView = App.ModalView.extend({
+	templateName: 'if-pedido-reenviar-respuesta',
+	actividades: ["Sector público", "Sector privado", "Particular"],
+	prioridades: ["Alta","Media","Baja"],
+	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+
+	sendEmail: function(){
+		emailList = ['emmanuel.lazarte@goblab.org'];
+		
+		var notificacion = {
+			titulo: 'Información Parlamentaria - Respuesta',
+			mensaje: 'Se ha convocado a una citacion para ' + this.get('content.start'),
+			emailList: emailList,
+			objeto: this.get('content'),
+			url: "#/informacionparlamentaria/solicitudes/solicitud/" + this.get('content.id') + "/ver",
+//						icono: "../../../../images/calendar.png"
+		}
+		
+		var email = notificacion;
+		email.url = document.location.origin + '/' + email.url;
+		
+		App.get('ioController').sendNotification(notificacion);
+		App.get('ioController').sendEmail(email);
+	},
+	createSucceeded: function () {
+		if (this.get('content.createSuccess')) {
+			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
+
+			App.pedidosController = App.PedidosController.create();
+
+			fn = function() {
+				if(App.get('pedidosController.loaded'))
+				{
+					//this.sendEmail();
+					App.get('pedidosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+				}
+			};
+			
+			App.get('pedidosController').addObserver('loaded', this, fn);
+
+			App.get('pedidosController').load();	
+		} else {
+			if (this.get('content.createSuccess') == false) {
+				$.jGrowl('No se ha creado la solicitud!', { life: 5000 });
+				this.set('loading', false);
+			}
+		}
+	},
+
+	callback: function(opts, event){
+		if (opts.primary) {
+			if ( !$("#if-pedido-reenviar-respuesta-form").parsley('validate')){
+				return false;
+			} 
+			else{		
+				this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
+				this.get('content').userSaraCreado = App.get('userController.user.cuil');
+				this.get('content').addObserver('createSuccess', this, this.createSucceeded);
+				this.get('content').create();
+			}						
+						//
+				//this.get('content').save();
+			return true;
+		} else if (opts.secondary) {
+			//alert('cancel')
+		} else {
+			//alert('close')
+		}
+		event.preventDefault();
+	}, 
+	
+	didInsertElement: function(){	
+		this._super();
+		this.set('content', App.Pedido.extend(App.Savable).create()); 
+//		this.set('content.tipos', []);
+		this.set('content.observaciones', App.get('pedidoConsultaController.content.observaciones'));
 	}, 
 });
