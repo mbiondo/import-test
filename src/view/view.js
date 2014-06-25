@@ -10572,6 +10572,6 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 		this._super();
 		this.set('content', App.Pedido.extend(App.Savable).create()); 
 //		this.set('content.tipos', []);
-		this.set('content.observaciones', App.get('pedidoConsultaController.content.observaciones'));
+		this.set('content.observacion', App.get('pedidoConsultaController.content.observacion'));
 	}, 
 });
