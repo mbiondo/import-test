@@ -5684,18 +5684,31 @@ App.ScrollContentController = Ember.ArrayController.extend({
 	},
 
 	contentLengthChanged: function () {
-		if (this.get('oldLength') > 0) {
+		if (this.get('oldLength') > 0 && this.get('currentPosition') > 0) {
+
 			var p = this.get('oldLength') / this.get('content.length') * 100;
-			this.scrollTo(p);
+			this.set('currentPosition', p);
 		}
 		this.set('oldLength', this.get('content.length'));
 	}.observes('content.length'),
 
 	contentChanged: function () {
-		this.set('scrolledContent', this.get('content').slice(this.get('currentIndex'), this.get('visibleItems')));
-		this.set('currentPosition', 0);
-		this.set('currentIndex', 0);
+		if (this.get('content')) {
+			this.set('currentIndex', 0);
+			var s = this.get('content').slice(this.get('currentIndex'), this.get('currentIndex') + this.get('visibleItems'));
+			if (s.length > 0) {
+				this.set('scrolledContent', s);
+				this.set('currentPosition', 0);
+				this.set('oldLength', this.get('content.length'));
+			}
+		}
 	}.observes('content'),
+
+	visibleItemsChanged: function () {
+		var s = this.get('content').slice(this.get('currentIndex'), this.get('currentIndex') + this.get('visibleItems'));
+		if (s.length > 0) 
+			this.set('scrolledContent', s);
+	}.observes('visibleItems'),
 
 
 	scrollTo: function (position) {
