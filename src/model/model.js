@@ -2293,6 +2293,7 @@ App.Pedido = Ember.Object.extend({
 		'localidad',
 		'adjuntoEnvio',
 		'adjuntoRespuesta',
+		'observaciones',
 	],
 
 	normalize: function () {
@@ -2320,4 +2321,34 @@ App.Pedido = Ember.Object.extend({
 		return this.get('nombreYApellido');
 		//return this.get('userSaraAsignado.nombre') + this.get('userSaraAsignado.apellido');
 	}.property('nombreYApellido'),
+	idPedido: function(){
+		var str = '';
+		
+		if(this.get('tipoIngreso'))
+		{
+
+
+//			while (this.get('id').toString().length < 3)
+//			{
+				str += '0' + this.get('id');
+//            }
+
+			str += '-';
+
+			if(this.get('tipoIngreso') == 'Sistema Parlamentario Digital'){
+				str += 'S';
+			}
+			if(this.get('tipoIngreso') == 'Web de digesto'){
+				str += 'D';
+			}
+			if(this.get('tipoIngreso') == 'Web HCDN'){
+				str += 'H';
+			}
+
+			str += '-';
+			str += moment(this.get('fechaCreacion.date'), 'YYYY-MM-DD').format('YYYY');
+		}
+
+		return str;
+	}.property('id', 'tipoIngreso', 'fechaCreacion'),
 });
