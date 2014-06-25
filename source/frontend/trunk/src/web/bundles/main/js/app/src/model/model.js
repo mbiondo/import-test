@@ -2293,7 +2293,7 @@ App.Pedido = Ember.Object.extend({
 		'localidad',
 		'adjuntoEnvio',
 		'adjuntoRespuesta',
-		'observaciones',
+		'norma',
 	],
 
 	normalize: function () {
