@@ -8389,7 +8389,7 @@ App.TestView = Ember.View.extend({
 	},
 
 	willInsertElement: function () {
-		for (var i=0; i < 500; i++) {
+		for (var i=0; i < 100; i++) {
 			this.get('content').addObject({label: 'pepe' + i});
 		}
 	},
@@ -10161,9 +10161,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	puedeEditar: function () {
 		return App.get('userController').hasRole('ROLE_IP_SOLICITUDES_EDIT') 
 	}.property('App.userController.user'),
-	reenviarRespuesta: function(){
-		App.ReenviarRespuestaView.popup();
-	},
+
 });
 
 
@@ -10265,6 +10263,7 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 App.ListItemView = Ember.View.extend({
 	tagName: 'li',
 	templateName: 'list-item',
+	classNames: ['row'],
 
 	didInsertElement: function () {
 		this.$().show(0);
@@ -10355,18 +10354,13 @@ App.ScrolleableListView = Ember.View.extend({
 	contentController: null,
 	templateName: 'list-scrolleable',
 	itemViewClass: App.ListItemView,
+	itemHeight: 80,
+	step: 1,
+	paddingBottom: 2,
 
 	didInsertElement: function () {
+
 		this._super();
-
-		this.set('contentController', App.ScrollContentController.create({
-			visibleItems: 20,
-			content: this.get('content'),
-			step: 5,
-		}));
-
-		this.get('contentController').contentChanged();
-
 
 		var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
 		var view = this;
@@ -10392,6 +10386,31 @@ App.ScrolleableListView = Ember.View.extend({
     		}, false);
     	}
 
+    	view = this;
+
+	  	var h = $(window).height() - view.$().offset().top - view.get('paddingBottom');
+
+	  	visibleItems = Math.floor((h - view.get('itemHeight') / 2) / view.get('itemHeight'));
+
+	  	view.$('.list-scroll-wrapper').css('height', visibleItems * view.get('itemHeight') + view.get('paddingBottom'));
+		view.$('.list-scroll-wrapper .scroll-bar').css('height', visibleItems * view.get('itemHeight') - 10);
+
+		this.set('contentController', App.ScrollContentController.create({
+			visibleItems: visibleItems,
+			content: this.get('content'),
+			step: this.get('step'),
+		}));
+
+		view.get('contentController').contentChanged();
+
+
+		$(window).resize(function (event) {
+		  	var h = $(window).height() - view.$('.list-scroll-wrapper').offset().top - view.get('paddingBottom');
+		  	visibleItems = Math.floor((h - view.get('itemHeight') / 2) / view.get('itemHeight'));
+		  	view.$('.list-scroll-wrapper').css('height', visibleItems * view.get('itemHeight') + view.get('paddingBottom') * 2);
+		  	view.$('.list-scroll-wrapper .scroll-bar').css('height', visibleItems * view.get('itemHeight') - 10);
+		  	view.get('contentController').set('visibleItems', visibleItems);
+		});    	
 	},
 
 });
@@ -10496,64 +10515,70 @@ App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 	}, 
 });
 
-App.ReenviarRespuestaView = App.ModalView.extend({
-	templateName: 'if-pedido-reenviar-respuesta',
-	actividades: ["Sector público", "Sector privado", "Particular"],
-	prioridades: ["Alta","Media","Baja"],
-	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+App.ProyectoListItemNewView = Ember.View.extend({
+	tagName: 'li',
+	classNames: ['row'],
+	templateName: 'proyectos-list-item-new',
+});
 
-	createSucceeded: function () {
-		if (this.get('content.createSuccess')) {
-			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
 
-			App.pedidosController = App.PedidosController.create();
+App.ProyectosListScrolleableView = App.ScrolleableListView.extend({
+	//templateName: 'proyectos-sortable-list',
+	itemViewClass: App.ProyectoListItemNewView,
+	headerViewClass : App.ListHeaderWithSortView,
+	sortablController: null,
+	step: 1,
+	filterText: '',
+	itemHeight: 80,
 
-			fn = function() {
-				if(App.get('pedidosController.loaded'))
-				{
-					//this.sendEmail();
-					App.get('pedidosController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
-				}
-			};
-			
-			App.get('pedidosController').addObserver('loaded', this, fn);
+	columnas: [
+		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
+		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
+		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
+		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
+	],	
 
-			App.get('pedidosController').load();	
-		} else {
-			if (this.get('content.createSuccess') == false) {
-				$.jGrowl('No se ha creado la solicitud!', { life: 5000 });
-				this.set('loading', false);
-			}
-		}
+	didInsertElement: function(){
+		this._super();
 	},
 
-	callback: function(opts, event){
-		if (opts.primary) {
-			if ( !$("#if-pedido-reenviar-respuesta-form").parsley('validate')){
-				return false;
-			} 
-			else{		
-				this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
-				this.get('content').userSaraCreado = App.get('userController.user.cuil');
-				this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-				this.get('content').create();
-			}						
-						//
-				//this.get('content').save();
-			return true;
-		} else if (opts.secondary) {
-			//alert('cancel')
-		} else {
-			//alert('close')
-		}
-		event.preventDefault();
-	}, 
 	
-	didInsertElement: function(){	
-		this._super();
-		this.set('content', App.Pedido.extend(App.Savable).create()); 
-//		this.set('content.tipos', []);
-		this.set('content.observacion', App.get('pedidoConsultaController.content.observacion'));
-	}, 
+	contentChanged: function () {
+		if (this.get('contentController')) {
+			this.set('contentController.content', this.get('content'));	
+		} 
+	}.observes('sourceController.content'),
+	
+
+	filterChanged: function (){
+		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+
+		filtered = this.get('sourceController').get('arrangedContent').filter(function(proyecto){
+			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
+		});
+
+		this.set('content.count', filtered.length);
+
+		if (this.get('contentController')) 
+			this.set('contentController.content', filtered);	
+
+	}.observes('filterText', 'sorting'),
+
+	currentPositionChange: function () {
+		if (this.get('contentController.currentPosition') >= 98) {
+			this.showMeMore();
+		}
+	}.observes('contentController.currentPosition'),
+
+	showMeMore: function () {
+		this.get('sourceController').nextPage();
+	},
+
+	newestContentLoaded: function () {
+		if (this.get('sourceController.newestContentReady')) {
+			this.get('contentController').addObjects(this.get('sourceController.newestContent'));
+		}
+	}.observes('sourceController.newestContentReady'),
+
 });
