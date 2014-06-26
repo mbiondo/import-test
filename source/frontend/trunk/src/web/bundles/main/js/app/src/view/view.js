@@ -10593,22 +10593,16 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 
 	sendEmail: function(){
-		emailList = ['emmanuel.lazarte@goblab.org'];
-		
-		var notificacion = {
-			titulo: 'Información Parlamentaria - Respuesta',
-			mensaje: 'Se ha convocado a una citacion para ' + this.get('content.start'),
-			emailList: emailList,
-			objeto: this.get('content'),
-			url: "#/informacionparlamentaria/solicitudes/solicitud/" + this.get('content.id') + "/ver",
-//						icono: "../../../../images/calendar.png"
-		}
-		
-		var email = notificacion;
-		email.url = document.location.origin + '/' + email.url;
-		
-		App.get('ioController').sendNotification(notificacion);
-		App.get('ioController').sendEmail(email);
+		var url = 'pedido/' + this.get('id') + '/sendmail'
+		$.ajax({
+			url:  url,
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			data : this.getJson(),
+			success: this.aproveSuccess,
+			complete: this.aproveCompleted,
+		});			
 	},
 	createSucceeded: function () {
 		if (this.get('content.createSuccess')) {
