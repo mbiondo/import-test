@@ -5568,7 +5568,7 @@ App.PedidosController = App.RestController.extend({
 
 	createObject: function (data, save) {
 		save = save || false;
-		
+		console.log('PEPE');
 		item = App.Pedido.create(data);
 		item.setProperties(data);
 		this.addObject(item);
