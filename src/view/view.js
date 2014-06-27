@@ -9993,6 +9993,7 @@ App.CrearPedidoView = Ember.View.extend({
 	actividades: ["Sector público", "Sector privado", "Particular"],
 	prioridades: ["Alta","Media","Baja"],
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+	departamentos: ["DSDP"],
 	//uploadFolder: 'uploads/solicitudes/',
 	agregarOtra: false,
 
@@ -10026,6 +10027,7 @@ App.CrearPedidoView = Ember.View.extend({
 				item.set('actividad',this.get('content.actividad'));
 				item.set('profesion',this.get('content.profesion'));
 				item.set('organizacion',this.get('content.organizacion'));
+				item.set('departamento',this.get('content.departamento'));
 				item.create();
 			},this);		
 			this.createSucceeded();
@@ -10212,7 +10214,21 @@ App.PedidoConsultaView = Ember.View.extend({
 	}.property('App.auditController.content'),
 
 	puedeEditar: function () {
-		return App.get('userController').hasRole('ROLE_IP_SOLICITUDES_EDIT') 
+		var puedeEditar = false;
+
+		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT'))
+		{
+			puedeEditar = true;
+		}
+		else
+		{		
+			if(App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO') && App.get('pedidoConsultaController.content.userSaraAsignado.cuil') == App.get('userController.user.cuil'))
+			{
+				puedeEditar = true;
+			}
+		}
+
+		return puedeEditar;
 	}.property('App.userController.user'),
 	reenviarRespuesta: function(){
 		App.ReenviarRespuestaView.popup();
@@ -10247,10 +10263,11 @@ App.PedidosView = Ember.View.extend({
 		//this.set('content', App.get('pedidosController.arrangedContent'));
 		var content = [];
 
-		if(App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT')){
+		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO')){
 			content = App.get('pedidosController.arrangedContent');
-		}else{
-			content = $.map(App.get('pedidosController.arrangedContent'), function(item){ if(item.userSaraAsignado && item.userSaraAsignado.cuil == App.get('userController.user.cuil')) return item; });			
+		}
+		if(App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT')){
+			content = App.get('pedidosController.findByDepartamento');
 		}
 		
 		this.set('content', content);
@@ -10644,6 +10661,7 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 	actividades: ["Sector público", "Sector privado", "Particular"],
 	prioridades: ["Alta","Media","Baja"],
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+	departamentos: ["DSDP"],
 
 	sendEmail: function(){
 		var url = 'pedido/' + this.get('id') + '/sendmail'
