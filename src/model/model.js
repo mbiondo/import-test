@@ -2299,7 +2299,8 @@ App.Pedido = Ember.Object.extend({
 		'adjuntoEnvio',
 		'adjuntoRespuesta',
 		'norma',
-		'departamento'
+		'departamento',
+		'cargo'
 	],
 
 	normalize: function () {
