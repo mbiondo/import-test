@@ -5572,7 +5572,24 @@ App.PedidosController = App.RestController.extend({
 		item.setProperties(data);
 		this.addObject(item);
 	},
+	findByCuil: function(){
+		var content = $.map(this.get('content'), function(item){
+			if(item.userSaraAsignado && item.userSaraAsignado.cuil == App.get('userController.user.cuil')){
+			 	return item;	
+			}
+		});		
 
+		return content;
+	}.property('content'),
+	findByDepartamento: function(){
+		var content = $.map(this.get('content'), function(item){
+			if(item.departamento && item.departamento == App.userController.user.departamento){
+			 	return item;	
+			}
+		});		
+
+		return content;
+	}.property('content'),
 	estadisticasPorResueltos: function (){
 		var data = [];
 		if(this.get('content')){
