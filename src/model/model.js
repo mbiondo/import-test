@@ -2257,6 +2257,11 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 	],	
 });
 
+App.PedidoCrear = Ember.Object.extend({
+	consultas : [],
+
+});
+
 App.Pedido = Ember.Object.extend({
 	url: 'pedido',
 	useApi: false,

@@ -9994,56 +9994,109 @@ App.CrearPedidoView = Ember.View.extend({
 	prioridades: ["Alta","Media","Baja"],
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 	//uploadFolder: 'uploads/solicitudes/',
+	agregarOtra: false,
+
+
+	collapseToggle: function(event){
+		if(event.context.collapse == true){
+			event.context.set('collapse', false);
+		}else{
+			event.context.set('collapse', true);
+		}
+	},
 
 	crear: function () {
 
 		if ( !$("#if-pedido-crear-form").parsley('validate')){
 			return false;
 		} 
-		else{		
-			this.get('content').tipoIngreso = "Sistema Parlamentario Digital";
-			this.get('content').userSaraCreado = App.get('userController.user.cuil');
-			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
-			this.get('content').create();
+		else{
+			this.get('content.consultas').forEach(function(item){
+				item.set('tipoIngreso',"Sistema Parlamentario Digital");
+				item.set('userSaraCreado',App.get('userController.user.cuil'));
+				item.set('nombreYApellido',this.get('content.nombreYApellido'));
+				item.set('email',this.get('content.email'));
+				item.set('direccion',this.get('content.direccion'));
+				item.set('codigoPostal',this.get('content.codigoPostal'));
+				item.set('provincia',this.get('content.provincia'));
+				item.set('localidad',this.get('content.localidad'));
+				item.set('localidadYProvincia', this.get('content.provincia') + ", " + this.get('content.localidad'));
+				item.set('fax',this.get('content.fax'));
+				item.set('telefono',this.get('content.telefono'));
+				item.set('actividad',this.get('content.actividad'));
+				item.set('profesion',this.get('content.profesion'));
+				item.set('organizacion',this.get('content.organizacion'));
+				item.create();
+			},this);		
+			this.createSucceeded();
 		}
 	},
 
-	createSucceeded: function () {
-		if (this.get('content.createSuccess')) {
-			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
-
-			//App.get('uploaderController').fileChange();
-			App.pedidosController = App.PedidosController.create();
-
-			fn = function() {
-				if(App.get('pedidosController.loaded'))
-				{
-					App.get('pedidosController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
-				}
-			};
-			
-			App.get('pedidosController').addObserver('loaded', this, fn);
-
-			App.get('pedidosController').load();	
-		} else {
-			if (this.get('content.createSuccess') == false) {
-				$.jGrowl('No se ha creado la solicitud!', { life: 5000 });
-				this.set('loading', false);
-			}
+	removerUltima : function () {
+		var cantElementos = this.get('content.consultas').length;
+		if(cantElementos > 1){
+			var ultimaConsulta = this.get('content.consultas')[cantElementos-1];
+			console.log(ultimaConsulta);
+			this.get('content.consultas').removeObject(ultimaConsulta);
 		}
+	},
+
+	agregarOtra : function () {
+		$('[id^=collapseConsulta]').removeClass('in');
+		$('[id^=collapseConsulta]').addClass('collapse');
+		this.get('content.consultas').forEach(function (item){ item.set('collapse', true)});
+		var nuevaConsulta = App.Pedido.extend(App.Savable).create();
+		nuevaConsulta.set('orden',this.get('content.consultas').length + 1);
+		nuevaConsulta.set('collapse', false);
+		nuevaConsulta.set('idDiv', "collapseConsulta" + this.get('content.consultas').length + 1);
+		nuevaConsulta.set('idHref', "#collapseConsulta" + this.get('content.consultas').length + 1);
+		this.get('content.consultas').pushObject(nuevaConsulta);
+	},
+
+
+	createSucceeded: function () {
+
+		$.jGrowl('Se han creado las solicitudes!', { life: 5000 });
+
+		//App.get('uploaderController').fileChange();
+
+		App.pedidosController = App.PedidosController.create();
+
+		fn = function() {
+			if(App.get('pedidosController.loaded'))
+			{
+				App.get('pedidosController').removeObserver('loaded', this, fn);	
+				App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+			}
+		};
+		
+		App.get('pedidosController').addObserver('loaded', this, fn);
+
+		App.get('pedidosController').load();	
+			
+
 	},
 	
 
 	limpiar: function () {
-		this.set('content', App.Pedido.extend(App.Savable).create());
+		this.set('content', App.PedidoCrear.extend(App.Savable).create());
+		this.set('content.consultas',[]);
+	},
+
+	willDestroyElement: function (){
+		this.set('content.consultas',[]);
 	},
 
 	didInsertElement: function () {
 		this._super();
-		this.set('content', App.Pedido.extend(App.Savable).create()); 
+		this.set('content', App.PedidoCrear.extend(App.Savable).create()); 		
 		this.limpiar();
-	}
+		var nuevaConsulta = App.Pedido.extend(App.Savable).create();
+		nuevaConsulta.set('orden',this.get('content.consultas').length + 1);
+		nuevaConsulta.set('idDiv', "collapseConsulta" + this.get('content.consultas').length + 1);
+		nuevaConsulta.set('idHref', "#collapseConsulta" + this.get('content.consultas').length + 1);
+		this.get('content.consultas').pushObject(nuevaConsulta);
+	},
 })
 
 App.PedidoConsultaView = Ember.View.extend({
