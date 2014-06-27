@@ -5583,7 +5583,7 @@ App.PedidosController = App.RestController.extend({
 	}.property('content'),
 	findByDepartamento: function(){
 		var content = $.map(this.get('content'), function(item){
-			if(item.departamento && item.departamento == App.userController.user.departamento){
+			if(item.departamento && item.departamento == App.get('userController.user.departamento')){
 			 	return item;	
 			}
 		});		
