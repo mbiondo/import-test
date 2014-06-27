@@ -10664,11 +10664,11 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 	departamentos: ["DSDP"],
 
 	sendEmail: function(){
-		var url = 'pedido/' + this.get('id') + '/sendmail'
+		var url = 'pedido/sendmail/' + this.get('id');
 		$.ajax({
 			url:  url,
 			dataType: 'JSON',
-			type: 'PUT',
+			type: 'GET',
 			context: this,
 			data : this.getJson(),
 			success: this.aproveSuccess,
