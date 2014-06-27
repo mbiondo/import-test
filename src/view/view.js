@@ -10027,7 +10027,6 @@ App.CrearPedidoView = Ember.View.extend({
 				item.set('actividad',this.get('content.actividad'));
 				item.set('profesion',this.get('content.profesion'));
 				item.set('organizacion',this.get('content.organizacion'));
-				item.set('departamento',this.get('content.departamento'));
 				item.set('cargo',this.get('content.cargo'));
 				item.create();
 			},this);		
