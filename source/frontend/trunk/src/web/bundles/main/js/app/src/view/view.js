@@ -10260,17 +10260,17 @@ App.PedidosView = Ember.View.extend({
 	contentCount: 0,
 
 	willInsertElement: function(){
-		//this.set('content', App.get('pedidosController.arrangedContent'));
-		var content = [];
+		this.set('content', App.get('pedidosController.arrangedContent'));
+		/*var content = [];
 
-		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO')){
+		if(App.get('userController').hasRole('') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO')){
 			content = App.get('pedidosController.arrangedContent');
 		}
 		if(App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT')){
 			content = App.get('pedidosController.findByDepartamento');
 		}
-		
 		this.set('content', content);
+		*/
 	}
 });
 
