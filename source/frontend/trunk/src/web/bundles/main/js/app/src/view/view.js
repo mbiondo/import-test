@@ -8073,6 +8073,7 @@ App.ExpedientesBiographyView = Ember.View.extend({
 
 		App.CreateBiographyInfoView.popup();
 	},
+
 	puedeEditar: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
@@ -8133,13 +8134,13 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 
 	mostrarMas: function () {
 		this.set('scroll', $(document).scrollTop());
-		App.get('expedientesController').set('loaded', false);
-		App.get('expedientesController').nextPage();
+		App.get('proyectosController').set('loaded', false);
+		App.get('proyectosController').nextPage();
 		this.set('loading', true);
 	},
 
 	expedientesLoaded: function () {
-		if (App.get('expedientesController.loaded')) {
+		if (App.get('proyectosController.loaded')) {
 			this.set('loading', false);
 		}
 		else
@@ -8159,22 +8160,12 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 
 	didInsertElement: function(){
 		this._super();
-		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
-		App.get('expedientesController').set('pageSize', 250);
+		App.get('proyectosController').addObserver('loaded', this, this.expedientesLoaded);
+		App.get('proyectosController').set('pageSize', 25);
 		this.set('mostrarMasEnabled', false);
 	},
-/*
-	lista: function (){
-		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
-			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
-		});
-		
-		this.set('mostrarMasEnabled', true);
-		return filtered;
-	}.property('filterText', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
-*/	
-	lista: function (){
+
+	lista: function () {
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
 			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
@@ -8182,7 +8173,7 @@ App.ExpedientesBiographyListView = App.ListFilterWithSortView.extend({
 
 		this.set('mostrarMasEnabled', true);
 		return filtered;
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+	}.property('filterText', 'App.proyectosController.arrangedContent.@each', 'totalRecords'),
 
 });
 
@@ -10230,6 +10221,7 @@ App.PedidoConsultaView = Ember.View.extend({
 
 		return puedeEditar;
 	}.property('App.userController.user'),
+
 	reenviarRespuesta: function(){
 		App.ReenviarRespuestaView.popup();
 	},
