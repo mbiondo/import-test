@@ -11,7 +11,7 @@ Ember.View.reopen({
 				// Use debugTemplates() # params: true/false
 				// NOTA: Recordar comentar linea al comitear
 			*/
-			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 		}
 	},
 });
@@ -10546,6 +10546,7 @@ App.ScrollBarView = Ember.View.extend({
 
 App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 	templateName: 'preview-tramite-parlamentario',
+	classNames: ['modal-tp'],
 
 	callback: function(opts, event){
 		if (opts.primary) {
