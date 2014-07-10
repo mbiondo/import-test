@@ -202,3 +202,24 @@ Handlebars.registerHelper("linkProyecto", function(id, options) {
   return "#/direccionsecretaria/mesadeentrada/proyecto/" + id + "/ver";
 });
 
+
+
+Ember.Handlebars.registerHelper('substr', function(value, options) {
+
+    var context = (options.contexts && options.contexts[0]) || this;
+
+    var value = getPath(context, value, options.fn);
+    
+    var opts = options.hash;
+
+    var start = opts.start || 0;
+    
+    var len = opts.max;
+
+    var out = value.substr(start, len);
+
+    if (value.length > len)
+        out += '...';
+
+    return new Handlebars.SafeString(out);
+});
