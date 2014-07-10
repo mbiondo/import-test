@@ -638,7 +638,9 @@ App.LoginView = Ember.View.extend({
 		if(!$('#login').parsley('validate')) return false;
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
 	},
-
+	recoveryPassword: function(){
+		this.set('parentView.recoveryPassword', true);
+	},
 });
 
 App.ListHeaderItemView = Em.View.extend({
@@ -2325,7 +2327,6 @@ App.InicioView = Em.View.extend({
 App.ApplicationView = Em.View.extend({
 	templateName: 'application',
 	
-	
 	activarNotificaciones: function (){
 		if (window.webkitNotifications) {
 			window.webkitNotifications.requestPermission();
@@ -2336,7 +2337,7 @@ App.ApplicationView = Em.View.extend({
 	mostrar : function () {
 		this.get('testModal').mostrar();
 	},
-
+	
 });
 
 App.ExpedienteConsultaView = Em.View.extend({
@@ -10722,4 +10723,40 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 //		this.set('content.tipos', []);
 		this.set('content.observacion', App.get('pedidoConsultaController.content.observacion'));
 	}, 
+});
+
+App.RecoveryPasswordView = Ember.View.extend({
+	templateName: 'recovery-password',
+	recoveryPasswordError: false,
+	recoveryPasswordSuccess: false,
+
+	didInsertElement: function(){
+		this._super();
+
+		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
+	},
+	recoveryPassword: function(){
+		var _self = this;
+		// Ej.
+		// cuil: 654321
+		// mail: emmanuel.lazarte@goblab.org
+		var url = "http://10.102.13.3:8000/o/recover_password/" + this.get('cuil') + "/" + this.get('mail') + "/";
+
+		$.ajax({
+			url: url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'GET',
+	    	headers: { 'Authorization': 'Bearer 123456'},
+	    	success: function(){
+	    		_self.set('recoveryPasswordError', false);
+	    		_self.set('recoveryPasswordSuccess', true);
+	    	},
+	    	error: function(){
+	    		_self.set('recoveryPasswordError', true);
+	    		_self.set('recoveryPasswordSuccess', false);
+	    	}
+		});			
+		
+	}
 });
