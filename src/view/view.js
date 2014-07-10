@@ -10750,6 +10750,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 //	    	headers: { 'Authorization': 'Bearer 123456'},
 	    	headers: {
 	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
+//	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
 	    	},
 	    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
 	    	success: function(){
