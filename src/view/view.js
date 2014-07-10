@@ -10747,7 +10747,13 @@ App.RecoveryPasswordView = Ember.View.extend({
 			contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'GET',
-	    	headers: { 'Authorization': 'Bearer 123456'},
+//	    	headers: { 'Authorization': 'Bearer 123456'},
+	    	headers: {
+	    		'Authorization': 'Credential',
+	    		'client_id': App.get('apiController.client'),
+	    		'client_secret': App.get('apiController.secret')
+	    	},
+	    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
 	    	success: function(){
 	    		_self.set('recoveryPasswordError', false);
 	    		_self.set('recoveryPasswordSuccess', true);
@@ -10758,5 +10764,11 @@ App.RecoveryPasswordView = Ember.View.extend({
 	    	}
 		});			
 		
-	}
+	},
+	cancel: function () {
+		App.get('userController').set('user.first_login', false);
+		App.get('userController').set('changePassword', false);
+		App.get('router').transitionTo('loading');
+		App.get('router').transitionTo('index');
+	},
 });
