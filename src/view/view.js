@@ -568,7 +568,7 @@ App.ChangePasswordView = Ember.View.extend({
 	cancel: function () {
 		if (App.get('userController.user'))
 			App.get('userController').set('user.first_login', false);
-		
+
 		App.get('userController').set('changePassword', false);
 		App.get('router').transitionTo('loading');
 		App.get('router').transitionTo('index');
@@ -10785,8 +10785,8 @@ App.RecoveryPasswordView = Ember.View.extend({
 			dataType: 'JSON',
 			type: 'GET',
 	    	headers: {
-//	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
-	    		'Authorization': 'Credential 1 1'
+	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
+	    		//'Authorization': 'Credential 1 1'
 	    	},
 	    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
 	    	success: function(){
