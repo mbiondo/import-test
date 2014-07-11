@@ -566,7 +566,9 @@ App.ChangePasswordView = Ember.View.extend({
 	},
 
 	cancel: function () {
-		App.get('userController').set('user.first_login', false);
+		if (App.get('userController.user'))
+			App.get('userController').set('user.first_login', false);
+		
 		App.get('userController').set('changePassword', false);
 		App.get('router').transitionTo('loading');
 		App.get('router').transitionTo('index');
@@ -666,11 +668,9 @@ App.LoginView = Ember.View.extend({
 		if(!$('#login').parsley('validate')) return false;
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
 	},
-	recoveryPassword: function(){
-//		if(this.get('parentView.recoveryPassword')){
-//			this.get('parentView').set('recoveryPassword', true);
-			App.get('userController').set('recoveryPassword', true);
-//		}
+
+	recoveryPassword: function() {
+		App.get('userController').set('recoveryPassword', true);
 	},
 });
 
@@ -10768,22 +10768,22 @@ App.RecoveryPasswordView = Ember.View.extend({
 		this._super();
 
 		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
-		//this.set('cuil', '654321');
-		//this.set('mail', 'emmanuel.lazarte@goblab.org');
+
+		this.set('cuil', '654321');
+		this.set('mail', 'emmanuel.lazarte@goblab.org');
 	},
 	recoveryPassword: function(){
 		var _self = this;
 		// Ej.
 		// cuil: 654321
 		// mail: emmanuel.lazarte@goblab.org
-		var url = "http://10.102.13.3:8000/o/recover_password/" + this.get('cuil') + "/" + this.get('mail') + "/";
+		var url = App.get('apiController').get('authURL') +  "recover_password/" + this.get('cuil') + "/" + this.get('mail') + "/";
 
 		$.ajax({
 			url: url,
 			contentType: 'text/plain',
 			dataType: 'JSON',
 			type: 'GET',
-//	    	headers: { 'Authorization': 'Bearer 123456'},
 	    	headers: {
 //	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
 	    		'Authorization': 'Credential 1 1'
@@ -10801,9 +10801,11 @@ App.RecoveryPasswordView = Ember.View.extend({
 		
 	},
 	cancel: function () {
-		App.get('userController').set('user.first_login', false);
-		App.get('userController').set('changePassword', false);
-		App.get('router').transitionTo('loading');
-		App.get('router').transitionTo('index');
+		App.set('userController.user', null);
+		App.get('userController').set('recoveryPassword', false);
+		//App.get('userController').set('user.first_login', false);
+
+		//App.get('router').transitionTo('loading');
+		//App.get('router').transitionTo('index');
 	},
 });

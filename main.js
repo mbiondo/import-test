@@ -8,6 +8,7 @@ App.apiController = App.ApiController.create({
 	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
 
 	authURL: 'http://10.105.5.55:9000/o/',
+	//authURL: 'http://10.102.13.3:8000/o/',
 	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
 	secret: '3KJtUIRd7=SgzpdTA?aeC5r9a8GkoF7rwCWufg5BXYTb9Pwlx_ef6NXbo.A3Fwn.1ok_8L8gSe_WDGJq_ZKn.D5y9MLAr9.T1j.IjT=exFT6q.3ox42g2RAjHle-KrHv',
 	use_auth: true,
@@ -780,7 +781,7 @@ $( document ).ajaxComplete(function( event, xhr, settings ) {
 });
 
 
-App.deferReadiness();
+//App.deferReadiness();
 
 App.puedeEditar = false;
 
@@ -810,13 +811,11 @@ if (user) {
 	}
 
 
-
 	usuario.set('rolesmerged', rolesmerged);
 	usuario.set('roles', roles);
 
 	App.userController.set('user', usuario);
 	
-
 	if (App.apiController.get('use_auth')) {
 		$.ajaxSetup({
 	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
@@ -831,49 +830,8 @@ if (user) {
 	
 }
 
-$('#loadingScreen').remove();
-App.advanceReadiness();
+//$('#loadingScreen').remove();
 
-/*
-var com = localStorage.getObject('comisiones');
-
-if(!com){
-	$.ajax({
-		url:  App.get('apiController.url') + "/com/comisiones/CD/P/resumen",
-		dataType: 'JSON',
-		type: 'GET',
-
-		success: function (data) {
-			localStorage.setObject('comisiones', data);
-
-			$('#loadingScreen').remove();
-
-			App.advanceReadiness();				
-		}
-	});
-}
-*/
-
-/*//var exp = localStorage.getObject('expedientes');
-var exp = null;
-if (exp) {
-	$.ajax({
-		url:  App.get('apiController.url') + "/exp/proyectos/2013",
-		dataType: 'JSON',
-		type: 'GET',
-
-		success: function (data) {
-			localStorage.setObject('expedientes', data);
-
-			$('#loadingScreen').remove();
-
-			App.advanceReadiness();				
-		}
-	});
-} else {
-	 $('#loadingScreen').remove();
-	 App.advanceReadiness();
-}*/
-
+//App.advanceReadiness();
 
 
