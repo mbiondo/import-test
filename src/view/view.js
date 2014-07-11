@@ -639,7 +639,9 @@ App.LoginView = Ember.View.extend({
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
 	},
 	recoveryPassword: function(){
-		this.set('parentView.recoveryPassword', true);
+//		if(this.get('parentView.recoveryPassword')){
+			this.get('parentView').set('recoveryPassword', true);
+//		}
 	},
 });
 
@@ -10749,8 +10751,8 @@ App.RecoveryPasswordView = Ember.View.extend({
 			type: 'GET',
 //	    	headers: { 'Authorization': 'Bearer 123456'},
 	    	headers: {
-	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
 //	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
+	    		'Authorization': 'Credential 1 1'
 	    	},
 	    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
 	    	success: function(){
