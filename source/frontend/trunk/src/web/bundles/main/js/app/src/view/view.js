@@ -529,17 +529,39 @@ App.ChangePasswordView = Ember.View.extend({
 		if(this.get('password') == this.get('password_confirm')) return true;
 		else return false;
 	}.property('password', 'password_confirm'),
-	changePassword: function () {
-		if($('#login').parsley('validate') && this.get('comparePasswordisValid'))
+	changePassword: function () {		
+		var data;
+
+		if($('#login').parsley('validate'))
 		{
-			$.ajax({
-				url: App.get('apiController.authURL') + 'change_password/',
-				dataType: 'JSON',
-				type: 'PUT',
-				context : {controller: this},
-				data : {password: this.get('password') },
-				success: this.changeSucceeded,
-			});
+			if(App.get('userController.access_token'))
+			{
+				$.ajax({
+					url: App.get('apiController.authURL') + 'change_password/',
+					dataType: 'JSON',
+					type: 'PUT',
+					context : {controller: this},
+			    	headers: {'Authorization': 'Bearer ' + App.get('userController.access_token')},
+					data : {password: this.get('password') },
+					success: this.changeSucceeded,
+				});
+			}
+			else
+			{			
+				if(this.get('comparePasswordisValid'))
+				{
+					$.ajax({
+						url: App.get('apiController.authURL') + 'change_password/',
+						dataType: 'JSON',
+						type: 'PUT',
+						context : {controller: this},
+						data : {password: this.get('password') },
+						success: this.changeSucceeded,
+					});
+				}
+			}
+
+
 		}
 	},
 
@@ -553,7 +575,13 @@ App.ChangePasswordView = Ember.View.extend({
 	changeSucceeded: function (data) {
 		if (data.is_valid == true)
 		{
-			App.get('userController.user').set('first_login', false);
+			if(App.get('userController.isLogin'))
+			{
+				App.get('userController.user').set('first_login', false);
+			}
+
+			App.get('userController').set('changePassword', false);
+
 			localStorage.setObject('user', JSON.stringify(App.userController.user));
 			App.get('router').transitionTo('loading');
 			App.get('router').transitionTo('index');
@@ -640,7 +668,8 @@ App.LoginView = Ember.View.extend({
 	},
 	recoveryPassword: function(){
 //		if(this.get('parentView.recoveryPassword')){
-			this.get('parentView').set('recoveryPassword', true);
+//			this.get('parentView').set('recoveryPassword', true);
+			App.get('userController').set('recoveryPassword', true);
 //		}
 	},
 });
@@ -10732,10 +10761,15 @@ App.RecoveryPasswordView = Ember.View.extend({
 	recoveryPasswordError: false,
 	recoveryPasswordSuccess: false,
 
+	cuil: '',
+	mail: '',
+
 	didInsertElement: function(){
 		this._super();
 
 		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
+		//this.set('cuil', '654321');
+		//this.set('mail', 'emmanuel.lazarte@goblab.org');
 	},
 	recoveryPassword: function(){
 		var _self = this;
