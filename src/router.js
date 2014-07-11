@@ -217,13 +217,16 @@ App.Router =  Em.Router.extend({
 		}),
 		
 		cambiarPassword: Em.Route.extend({
-			route: "/cambiarPassword",
+			route: "/cambiarPassword?token=:token",
 			roles: ['pepe'],
 
-			deserialize: function () {
-
-				App.get('userController').set('user.first_login', true);
+			deserialize: function (router, params) {								
+				App.userController = App.UserController.create();
 				App.get('userController').set('changePassword', true);
+				//App.get('userController').set('recoveryPassword', true);
+				App.get('userController').set('access_token', params.token);
+				
+				/*
 
 				if (!App.notificacionesFiltradasController) 
 					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
@@ -248,6 +251,7 @@ App.Router =  Em.Router.extend({
 				} else {
 					return null;
 				}
+				*/
 			},
 
 			connectOutlets: function(router, context) {
@@ -262,7 +266,7 @@ App.Router =  Em.Router.extend({
 				});
 				
 				// App.get('menuController').seleccionar(0);
-				App.get('menuController').seleccionar(0,0,0);
+				//App.get('menuController').seleccionar(0,0,0);
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 				App.get('breadCumbController').set('content', [
