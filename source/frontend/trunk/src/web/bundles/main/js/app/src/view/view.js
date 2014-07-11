@@ -10780,31 +10780,33 @@ App.RecoveryPasswordView = Ember.View.extend({
 		// mail: emmanuel.lazarte@goblab.org
 		var url = App.get('apiController').get('authURL') +  "recover_password/" + this.get('cuil') + "/" + this.get('mail') + "/";
 
-		$.ajax({
-			url: url,
-			contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'GET',
-	    	headers: {
-	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
-	    		//'Authorization': 'Credential 1 1'
-	    	},
-	    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
-	    	success: function(){
-	    		_self.set('recoveryPasswordError', false);
-	    		_self.set('recoveryPasswordSuccess', true);
-	    	},
-	    	error: function(jqXHR, textStatus, errorThrown){
-	    		_self.set('recoveryPasswordError', true);
-	    		_self.set('recoveryPasswordSuccess', false);
+		if($('#recovery-password').parsley('validate'))
+		{
+			$.ajax({
+				url: url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'GET',
+		    	headers: {
+		    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
+		    		//'Authorization': 'Credential 1 1'
+		    	},
+		    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
+		    	success: function(){
+		    		_self.set('recoveryPasswordError', false);
+		    		_self.set('recoveryPasswordSuccess', true);
+		    	},
+		    	error: function(jqXHR, textStatus, errorThrown){
+		    		_self.set('recoveryPasswordError', true);
+		    		_self.set('recoveryPasswordSuccess', false);
 
-	    		if(jqXHR.status && jqXHR.status == 434)
-	    		{
-	    			_self.set('recoveryPasswordErrorText', 'Los datos ingresados no son validos');
-	    		}
-	    	}
-		});			
-		
+		    		if(jqXHR.status && jqXHR.status == 434)
+		    		{
+		    			_self.set('recoveryPasswordErrorText', 'Los datos ingresados no son validos');
+		    		}
+		    	}
+			});			
+		}
 	},
 	cancel: function () {
 		App.set('userController.user', null);
