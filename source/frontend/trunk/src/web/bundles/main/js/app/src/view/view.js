@@ -10760,6 +10760,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 	templateName: 'recovery-password',
 	recoveryPasswordError: false,
 	recoveryPasswordSuccess: false,
+	recoveryPasswordErrorText: '',
 
 	cuil: '',
 	mail: '',
@@ -10769,8 +10770,8 @@ App.RecoveryPasswordView = Ember.View.extend({
 
 		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
 
-		this.set('cuil', '654321');
-		this.set('mail', 'emmanuel.lazarte@goblab.org');
+		//this.set('cuil', '654321');
+		//this.set('mail', 'emmanuel.lazarte@goblab.org');
 	},
 	recoveryPassword: function(){
 		var _self = this;
@@ -10793,9 +10794,14 @@ App.RecoveryPasswordView = Ember.View.extend({
 	    		_self.set('recoveryPasswordError', false);
 	    		_self.set('recoveryPasswordSuccess', true);
 	    	},
-	    	error: function(){
+	    	error: function(jqXHR, textStatus, errorThrown){
 	    		_self.set('recoveryPasswordError', true);
 	    		_self.set('recoveryPasswordSuccess', false);
+
+	    		if(jqXHR.status && jqXHR.status == 434)
+	    		{
+	    			_self.set('recoveryPasswordErrorText', 'Los datos ingresados no son validos');
+	    		}
 	    	}
 		});			
 		
