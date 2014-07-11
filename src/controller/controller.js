@@ -635,6 +635,7 @@ App.UserController = Em.Controller.extend({
 			context: this,
 
 			data : {grant_type: 'password', username: cuil, password: password, client_id: App.get('apiController.client'), client_secret: App.get('apiController.secret')},
+//			data : {grant_type: 'password', username: cuil, password: password, client_id: 1, client_secret: 1},
 
 			success: function( data ) 
 			{
