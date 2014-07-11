@@ -10,6 +10,7 @@ App.Usuario = Em.Object.extend({
 	
 	cuil: '',
 	password: '',
+	email: '',
 
 	roles: '',
 	estructura: '',

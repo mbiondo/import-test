@@ -684,7 +684,7 @@ App.UserController = Em.Controller.extend({
 				var tmpUser = App.Usuario.extend(App.Savable).create(data);
 
 				var url = 'user/access';
-				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
+				var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion'), email: tmpUser.get('email') });
 				posting.done(function( data ){
 					data = JSON.parse(data);
 

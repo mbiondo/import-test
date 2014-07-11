@@ -223,35 +223,8 @@ App.Router =  Em.Router.extend({
 			deserialize: function (router, params) {								
 				App.userController = App.UserController.create();
 				App.get('userController').set('changePassword', true);
-				//App.get('userController').set('recoveryPassword', true);
 				App.get('userController').set('access_token', params.token);
 				
-				/*
-
-				if (!App.notificacionesFiltradasController) 
-					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
-				App.notificacionesFiltradasController.set('url', "notification/all");
-				App.diputadosVigentesController = App.DiputadosVigentesController.create({content: []});
-
-				if (App.get('userController').get('isLogin'))
-				{
-					var deferred = $.Deferred(),
-
-					fn = function() {
-						if (App.get('notificacionesFiltradasController.loaded')) {
-							App.get('notificacionesFiltradasController').removeObserver('loaded', this, fn);
-							deferred.resolve(null);	
-						}
-					};					
-
-					App.get('notificacionesFiltradasController').addObserver('loaded', this, fn);
-					App.get('notificacionesFiltradasController').load();		
-					
-					return deferred.promise();				
-				} else {
-					return null;
-				}
-				*/
 			},
 
 			connectOutlets: function(router, context) {
@@ -263,16 +236,7 @@ App.Router =  Em.Router.extend({
 
 				Ember.run.next(function () {
 					appController.connectOutlet('main', 'inicio');
-				});
-				
-				// App.get('menuController').seleccionar(0);
-				//App.get('menuController').seleccionar(0,0,0);
-				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-				App.get('breadCumbController').set('content', [
-					{titulo: 'Inicio', url: '#'},
-					{titulo: 'Novedades', url: '#'},
-				]);				
+				});				
 			},		
 
 		}),
@@ -288,14 +252,7 @@ App.Router =  Em.Router.extend({
 				Ember.run.next(function () {
 					appController.connectOutlet('main', 'perfil');
 				});
-				
-				App.get('menuController').seleccionar(0);
-				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-				App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-				App.get('breadCumbController').set('content', [
-					{titulo: 'Inicio', url: '#'},
-					{titulo: 'Perfil', url: '/perfil'}
-				]);				
+						
 			},			
 
 		}),
