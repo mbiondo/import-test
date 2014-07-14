@@ -1,12 +1,9 @@
 App.apiController = App.ApiController.create({
-
 	//url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl2/rest/',
 	url: 'http://sparl-desa.hcdn.gob.ar:9090/sparl2/rest/',
 	//url: 'http://10.102.13.4:8080/sparl/rest/',
 	tomcat: 'http://sparl-desa.hcdn.gob.ar:9090',
-
 	existURL: 'http://sparl-desa.hcdn.gob.ar:8080/exist/rest/',
-
 	authURL: 'http://10.105.5.55:9000/o/',
 	//authURL: 'http://10.102.13.3:8000/o/',
 	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
