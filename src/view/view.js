@@ -12,6 +12,9 @@ Ember.View.reopen({
 				// NOTA: Recordar comentar linea al comitear
 			*/
 			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
+			
+			
+
 		}
 	},
 });
@@ -5955,10 +5958,9 @@ App.PieGraphView = Ember.View.extend({
 						enabled: true,
 						color: '#000000',
 						connectorColor: '#000000',
-						formatter: function() {
-							return '<b>'+ this.point.name +'</b>';
-						},
-					}
+		 				format: '{point.percentage:.1f} %',
+					},
+					showInLegend: true
 				}
 			},
 			series: [{
