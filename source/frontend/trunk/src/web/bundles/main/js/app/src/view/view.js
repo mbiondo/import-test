@@ -9305,10 +9305,12 @@ App.NotificacionItemView = Ember.View.extend({
 	loading: false,
 	classNameBindings: ['leida:read:unread'],
 
+	/*
 	click: function () {
 		if (!this.get('leida'))
 			this.marcarLeido();
 	},
+	*/
 
 	leida: function () {
 		return this.get('content.leida');
@@ -10773,6 +10775,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 		//this.set('cuil', '654321');
 		//this.set('mail', 'emmanuel.lazarte@goblab.org');
 	},
+	
 	recoveryPassword: function(){
 		var _self = this;
 		// Ej.
