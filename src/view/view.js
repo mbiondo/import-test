@@ -1856,7 +1856,18 @@ App.PerfilView = Em.View.extend({
 		this._super();
 		this.set('content', App.userController.user);
 
+		var url = 'notificaciones/config';
+		var posting = $.post( url, { cuil: App.get('userController.user').get('cuil'), funcion: App.get('userController.user').get('funcion'), estructura: App.get('userController.user').get('estructura')});
+		_self = this;
+		posting.done(function( data ){
+			data = JSON.parse(data);
+			_self.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
+		});
 	},
+
+	guardarConfig: function () {
+		console.log(this.get('notificationConfig'));
+	}
 });
 
 App.ExpedienteSearchView = Em.View.extend({

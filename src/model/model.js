@@ -2362,3 +2362,30 @@ App.Pedido = Ember.Object.extend({
 		return str;
 	}.property('id', 'tipoIngreso', 'fechaCreacion'),
 });
+
+App.NotificacionConfig = Ember.Object.extend({
+	url: '/notificaciones/config',
+	useApi: false,
+	id: '',
+	tipos: [],
+
+	serializable: function () {
+		return [
+			'id', 
+			'tipos'
+		];
+	},
+});
+
+App.NotificacionTipoConfig = Ember.Object.extend({
+	id: '',
+	tipo: null,
+	enabled: false,
+
+	serializable: function () {
+		return [
+			'id', 
+			'enabled'
+		]
+	},
+})
