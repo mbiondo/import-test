@@ -206,12 +206,14 @@ App.NotificacionLeida = Em.Object.extend({
 	id: '',
 	cuil: '',
 	idNotificacion: '',
+	duplicated: [],
 
 
 	serializable: [
 		"id",
 		"cuil",
-		"idNotificacion"
+		"idNotificacion",
+		"duplicated"
 	],	
 });
 

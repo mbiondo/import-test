@@ -473,6 +473,10 @@ App.ContentView = Ember.View.extend({
 		App.get('router').transitionTo('index');
 	},
 
+	marcarTodas: function () {
+		App.get('notificacionesController').marcarTodas();
+	},
+
 	didInsertElement: function () {
 		this._super();
 		var $menuWrapperTiny =  this.$('#mainMenuTiny');
@@ -2434,8 +2438,8 @@ App.ExpedienteConsultaView = Em.View.extend({
 			App.get('expedienteConsultaController.content').loadBiography();
 		}
 
-		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
-//		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip')}));
+		//this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
+		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip')}));
 		this.get('timeLineController').load();		
 	}
 });
