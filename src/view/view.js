@@ -7935,7 +7935,7 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 		
 	},
 	exportar: function () {
-		$.download('exportar/visitas-guiadas', "&type=visitas-guiadas&data=" + JSON.stringify(App.get('visitasGuiadasController.arrangedContent')));
+		$.download('exportar/visitas-guiadas', "&type=visitas-guiadas&data=" + JSON.stringify(this.get('lista')));
 	},	
 	didInsertElement: function(){
 		this._super();
