@@ -734,14 +734,32 @@ App.ListFilterView = Ember.View.extend({
 	headerViewClass : App.ListHeaderView,
 	columnas: ['ID', 'Label'],
 	puedeExportar: false,
+	filterTextChanged: false,
+	delayFilter: 500,
+
 
 	didInsertElement: function(){
 		this._super();
 	},
+
+	filterTextChangedText: function () {
+		_self = this;
+
+		if (this.get('interval'))
+			clearInterval(this.get('interval'));		
+
+		this.set('interval', setInterval(function () {
+			_self.set('filterTextChanged', true);
+			clearInterval(_self.get('interval'));
+		}, this.get('delayFilter')));
+	}.observes('filterText'),
+
+
 	filterList: function(){
 		this.set('filterListText', this.get('parentView.filterList'));
 	}.observes('parentView.filterList'),
-	filterTextChanged: function () {
+
+	filterTextChangedScroll: function () {
 		//this.set('scroll', 0);
 		/*if(this.get('filterText').length == 1)*/
 			this.set('scroll', $(document).scrollTop());
@@ -761,13 +779,13 @@ App.ListFilterView = Ember.View.extend({
 
 		var filtered;
 
-			if(this.get('content'))
-			{
-				filtered = this.get('content').filter(function(item){
-					return regex.test(item.get('label').toLowerCase());
-	//				return regex.test(item.get('label'));
-				});
-			}
+		if(this.get('content'))
+		{
+			filtered = this.get('content').filter(function(item){
+				return regex.test(item.get('label').toLowerCase());
+//				return regex.test(item.get('label'));
+			});
+		}
 
 		if (!filtered)
 			filtered = [];
@@ -779,9 +797,11 @@ App.ListFilterView = Ember.View.extend({
 		} else {
 			this.set('mostrarMasEnabled', true);
 		}
+
+		this.set('filterTextChanged', false);
 		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterText', 'filterListText', 'content', 'totalRecords', 'step', 'content.@each'),
+	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged'),
 	
 	updateScroll: function () {
 		_self = this;
@@ -6974,6 +6994,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.autoridades.@each', 'clickGuardar'),
 
 	faltanGiros: function(){
+		/*
 		if (this.get('clickGuardar') == false)
 			return false;
 
@@ -6984,7 +7005,8 @@ App.CrearExpedienteView = Ember.View.extend({
 		else
 		{
 			return false;
-		} 
+		}*/ 
+		return false;
 	}.property('content.comisiones.@each', 'clickGuardar'),
 
 	errorTab: 1,
@@ -7060,6 +7082,29 @@ App.CrearExpedienteView = Ember.View.extend({
 		this.get('content').desNormalize();
 
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+		if (this.get('content.createSuccess')) {
+			App.confirmActionController.setProperties({
+				title: 'Comprobante de ingreso',
+				message: '¿ Desea imprimir el comprobante de ingreso ?',
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', this, this.confirmarImprimirSuccess);
+			App.confirmActionController.show();		
+		} else {
+			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+			this.set('loading', false);
+		}
+	},
+
+
+	confirmarImprimirSuccess: function () {
+
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);		
+
+		if(App.get('confirmActionController.success')) {
+			$.download('exportar', "&type=comprobante-expediente&data=" + JSON.stringify(this.get('content')));			
+		}
 
 		if (this.get('tipo')) {
 			this.get('content').set('tipo', this.get('tipo'));
@@ -7141,10 +7186,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			evento.create();
 			*/
 
-		} else {
-			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
-			this.set('loading', false);
-		}
+		} 
 	},
 
 	setupEnter: function(){
@@ -8872,6 +8914,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
 		App.confirmActionController.show();
 
+	},
+
+	imprimirComprobante: function () {
+		$.download('exportar', "&type=comprobante-expediente&data=" + JSON.stringify(this.get('controller.content')));
 	},
 
 	confirmActionDone: function () {
