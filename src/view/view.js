@@ -10867,7 +10867,6 @@ App.RecoveryPasswordView = Ember.View.extend({
 App.NotificacionConfigItemView = Ember.View.extend({
 	templateName: 'notificacion-config-item',
 	tagName: 'li',
-
 	checkedChanged: function () {
 		this.get('content').save();
 	}.observes('content.enabled'),
