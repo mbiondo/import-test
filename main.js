@@ -9,7 +9,6 @@ App.apiController = App.ApiController.create({
 	client: '5FbzJ9oU=9Db0y7s92SvuhSixxfU3Ajcwly2jNbb',
 	secret: '3KJtUIRd7=SgzpdTA?aeC5r9a8GkoF7rwCWufg5BXYTb9Pwlx_ef6NXbo.A3Fwn.1ok_8L8gSe_WDGJq_ZKn.D5y9MLAr9.T1j.IjT=exFT6q.3ox42g2RAjHle-KrHv',
 	use_auth: true,
-
 });
 
 App.menuController = App.MenuController.create({
@@ -135,7 +134,7 @@ App.menuController = App.MenuController.create({
 				}),
 				App.MenuItem.create({
 					id: 1,
-					roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
+					roles: [['ROLE_SEC_PARL_VIEW']],
 					titulo: 'Envíos a Archivo',
 					url: '#/direccionsecretaria/envios/listado',
 					icono: 'ic ic-archivados',
@@ -143,7 +142,7 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_MESA_DE_ENTRADA']],
+							roles: [['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Listado',
 							url: '#/direccionsecretaria/envios/listado',
 						}),
