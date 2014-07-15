@@ -13,7 +13,7 @@ Ember.View.reopen({
 			*/
 			//this.$('').not("option").prepend('<div class="view-template-block"><div class="view-template-name">' + this.get('templateName') + '</div></div>');
 			
-			
+			//new WOW().init();
 
 		}
 	},
@@ -10867,6 +10867,8 @@ App.RecoveryPasswordView = Ember.View.extend({
 App.NotificacionConfigItemView = Ember.View.extend({
 	templateName: 'notificacion-config-item',
 	tagName: 'li',
+	classNames: ['widget-toggle'],
+
 	checkedChanged: function () {
 		this.get('content').save();
 	}.observes('content.enabled'),
