@@ -1524,24 +1524,6 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 					this.get('notificationType.comisiones').removeObject(object);
 				}
 				break;
-			case "(subclass of App.Estructura)":
-				var item = this.get('notificationType.estructuras').findProperty("id", object.get('id'));
-				if (!item) {
-					this.get('notificationType.estructuras').pushObject(object);
-				}
-				else {
-					this.get('notificationType.estructuras').removeObject(object);
-				}
-				break;
-			case "(subclass of App.Funcion)":
-				var item = this.get('notificationType.funciones').findProperty("id", object.get('id'));
-				if (!item) {
-					this.get('notificationType.funciones').pushObject(object);
-				}
-				else {
-					this.get('notificationType.funciones').removeObject(object);
-				}
-				break;
 		}
 	},
 
