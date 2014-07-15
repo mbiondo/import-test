@@ -1844,12 +1844,9 @@ App.PerfilView = Em.View.extend({
 		posting.done(function( data ){
 			data = JSON.parse(data);
 			_self.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
+			_self.get('notificationConfig').desNormalize();
 		});
 	},
-
-	guardarConfig: function () {
-		console.log(this.get('notificationConfig'));
-	}
 });
 
 App.ExpedienteSearchView = Em.View.extend({
@@ -10818,4 +10815,19 @@ App.RecoveryPasswordView = Ember.View.extend({
 		//App.get('router').transitionTo('loading');
 		//App.get('router').transitionTo('index');
 	},
+});
+
+
+App.NotificacionConfigItemView = Ember.View.extend({
+	templateName: 'notificacion-config-item',
+	tagName: 'li',
+
+	checkedChanged: function () {
+		this.get('content').save();
+	}.observes('content.enabled'),
+});
+
+App.NotificacionConfigView = Ember.CollectionView.extend({
+	itemViewClass: App.NotificacionConfigItemView,
+	tagName: 'ul',
 });

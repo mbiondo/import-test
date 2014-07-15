@@ -2369,23 +2369,29 @@ App.NotificacionConfig = Ember.Object.extend({
 	id: '',
 	tipos: [],
 
-	serializable: function () {
-		return [
-			'id', 
-			'tipos'
-		];
+	desNormalize: function () {
+		var tipos = [];
+		this.get('tipos').forEach(function (tipo) {
+			tipos.push(App.NotificacionTipoConfig.extend(App.Savable).create(tipo));
+		});
+		this.set('tipos', tipos);
 	},
+
+	serializable: [
+		'id', 
+		'tipos'
+	],
 });
 
 App.NotificacionTipoConfig = Ember.Object.extend({
 	id: '',
 	tipo: null,
 	enabled: false,
+	url: 'notificaciones/config/tipo',
+	useApi: false,
 
-	serializable: function () {
-		return [
-			'id', 
-			'enabled'
-		]
-	},
+	serializable: [
+		'id', 
+		'enabled'
+	],
 })
