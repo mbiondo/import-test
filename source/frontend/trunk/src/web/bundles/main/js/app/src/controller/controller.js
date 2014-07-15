@@ -2568,7 +2568,8 @@ App.ComisionesController = App.RestController.extend({
 
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.Comision.create(data);
+		//item = App.Comision.create(data);
+		item = App.Comision.extend(App.Savable).create(data);
 		item.setProperties(data);
 		
 		if(save){
