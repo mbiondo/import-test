@@ -658,6 +658,12 @@ App.UserController = Em.Controller.extend({
 						var response = JSON.parse(xhr.responseText);
 						this.set('loginError', true);
 						this.set('loginMessage', "Cuil o Contraseña incorrecta.");
+						_self = this;
+						var interval = setInterval(function () {
+							_self.set('loginError', false);
+							_self.set('loginMessage', '');
+							clearInterval(this);
+						}, 5000);
 					}
 				}
 			},
