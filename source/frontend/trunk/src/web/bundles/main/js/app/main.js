@@ -787,30 +787,35 @@ var user = localStorage.getObject('user');
 
 if (user) {
 	var usuario = App.Usuario.extend(App.Savable).create(JSON.parse(user));
-	if (usuario.expires_in > moment().unix()) {
-		var delay = (usuario.expires_in - moment().unix()) * 1000;
+	if (usuario.expires_in) {
+		if (usuario.expires_in > moment().unix()) {
+			var delay = (usuario.expires_in - moment().unix()) * 1000;
 
-		setInterval(function () {
+			setInterval(function () {
 
-			clearInterval(this);
+				clearInterval(this);
 
-			App.userController.set('user', null);
-			localStorage.setObject('user', null);
+				App.userController.set('user', null);
+				localStorage.setObject('user', null);
 
-			App.get('router').transitionTo('loading');
-			App.get('router').transitionTo('index');
+				App.get('router').transitionTo('loading');
+				App.get('router').transitionTo('index');
 
+				$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			}, delay);
+
+			if (App.apiController.get('use_auth')) {
+				$.ajaxSetup({
+			    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+				});				
+			}
+			App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
+		} else {
 			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
-		}, delay);
-
-		if (App.apiController.get('use_auth')) {
-			$.ajaxSetup({
-		    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
-			});				
 		}
-		App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
 	} else {
-		$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+		$('#loadingScreen').remove();
+		App.advanceReadiness();	
 	}
 } else {
 	$('#loadingScreen').remove();
