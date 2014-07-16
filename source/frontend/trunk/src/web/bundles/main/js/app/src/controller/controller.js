@@ -161,7 +161,7 @@ App.Savable = Ember.Mixin.create({
 				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 				audit.create();				
-			}			
+			}
 		}	
 		
 	},
@@ -3458,12 +3458,11 @@ App.CitacionCrearController = Em.Object.extend({
 			data : this.get('content').getJson()
 		});
 		*/	
-	},
-	
+	},	
 	createCompleted: function (data) {
 		//TO-DO Revisar que devuelva OK		
 		if (this.get('content.createSuccess'))
-		{
+		{		
 			$('.buttonSave').removeAttr('disabled');
 			$('.buttonSave').val('Guardar');
 
@@ -3481,6 +3480,23 @@ App.CitacionCrearController = Em.Object.extend({
 			
 			$.jGrowl('Citación creada con éxito!', { life: 5000 });	
 
+			var expedientesD = [];
+
+			data.temas.forEach(function (tema){
+			    tema.proyectos.forEach(function(p){ expedientesD.push(p.expdip); });
+			});
+
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+			    objectID: expedientesD[0], 
+			    titulo: 'Se han agregado Expedientes a una citación',
+			    fecha:  data.start,
+			    mensaje: 'Se han agregado Expedientes a una citación',
+			    icono: 'creado',
+			    link: '#/comisiones/citaciones/citacion/' + data.id + '/ver',
+			    duplicados: expedientesD,
+			});
+
+			evento.create();		
 
 		}
 	},
