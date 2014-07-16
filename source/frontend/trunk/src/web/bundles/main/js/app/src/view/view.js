@@ -538,9 +538,11 @@ App.ChangePasswordView = Ember.View.extend({
 	}.property('password', 'password_confirm'),
 	changePassword: function () {		
 		var data;
+		var _self = this;
 
 		if($('#login').parsley('validate'))
 		{
+			_self.set('loading', false);
 			if(App.get('userController.access_token'))
 			{
 				$.ajax({
@@ -577,11 +579,10 @@ App.ChangePasswordView = Ember.View.extend({
 			App.get('userController').set('user.first_login', false);
 
 		App.get('userController').set('changePassword', false);
-		App.get('router').transitionTo('loading');
-		App.get('router').transitionTo('index');
 	},
 
 	changeSucceeded: function (data) {
+		this.set('loading', false);
 		if (data.is_valid == true)
 		{
 			if(App.get('userController.isLogin'))
@@ -609,11 +610,18 @@ App.LoginView = Ember.View.extend({
 	cuil: '',
 	password: '',
 
+	loading: false,
+
+
 	didInsertElement: function () {
 		this._super();
 		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
 		this.$('#user_username'	).focus();
 	},
+
+	loadingChange: function () {
+		return App.get('userController.loading');
+	}.observes('App.userController.loading'),
 	
 	loginError: function(){
 		return App.get('userController.loginError');
@@ -623,54 +631,6 @@ App.LoginView = Ember.View.extend({
 		return App.get('userController.loginMessage');
 	}.property('App.userController.loginMessage'),		
 
-	/*
-	falseLogin: function (){
-		var tmpUser = App.Usuario.extend(App.Savable).create({nombre: "JORGE", apellido: "RIVAS", funcion: "DIPUTADO NACIONAL", cuil: "20148600105", estructuraReal: "DIP RIVAS JORGE"});
-		var url = 'user/access';
-		var posting = $.post( url, { cuil: tmpUser.get('cuil'), nombre: tmpUser.get('nombre'), apellido: tmpUser.get('apellido'), estructura: tmpUser.get('estructura'), funcion: tmpUser.get('funcion') });
-		posting.done(function( data ){
-			data = JSON.parse(data);
-
-			var userRoles = [];
-			var roles = data.roles;
-			roles.forEach(function (rol){
-				userRoles.addObject(App.Rol.create(rol));
-			});
-
-			var userRolesMerged = [];
-			var rolesmerged = data.rolesmerged;
-			rolesmerged.forEach(function (rol){
-				userRolesMerged.addObject(App.Rol.create(rol));
-			});				
-
-			var userComisiones = [];
-
-			var comisiones = data.comisiones;
-			if (comisiones) {
-				comisiones.forEach(function (comision){
-					userComisiones.addObject(App.Comision.create(comision));
-				});
-			}
-
-			tmpUser.set('roles', userRoles);
-			tmpUser.set('rolesmerged', userRolesMerged);
-			tmpUser.set('comisiones', userComisiones);
-			tmpUser.set('avatar', data.avatar);
-			tmpUser.set('id', data.id);
-
-			App.get('userController').set('user', tmpUser);
-
-			localStorage.setObject('user', JSON.stringify(tmpUser));
-
-			App.get('notificacionesController').load();		
-						
-			App.get('router').transitionTo('loading');
-			App.get('router').transitionTo('index');
-			
-		});
-	},	
-	*/
-
 	login: function () {
 		if(!$('#login').parsley('validate')) return false;
 		App.get('userController').loginCheck(this.get('cuil'), this.get('password'));
@@ -679,6 +639,10 @@ App.LoginView = Ember.View.extend({
 	recoveryPassword: function() {
 		App.get('userController').set('recoveryPassword', true);
 	},
+
+	solicitarAcceso: function () {
+		App.get('userController').set('createUser', true);
+	}
 });
 
 App.ListHeaderItemView = Em.View.extend({
@@ -10823,6 +10787,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 	recoveryPasswordError: false,
 	recoveryPasswordSuccess: false,
 	recoveryPasswordErrorText: '',
+	loading: false,
 
 	cuil: '',
 	mail: '',
@@ -10845,6 +10810,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 
 		if($('#recovery-password').parsley('validate'))
 		{
+			_self.set('loading', true);
 			$.ajax({
 				url: url,
 				contentType: 'text/plain',
@@ -10856,10 +10822,12 @@ App.RecoveryPasswordView = Ember.View.extend({
 		    	},
 		    	//  curl -i -H "Authorization: Credential 1 secret_1" http://10.105.5.59:9000/o/validate_token/D9F0c1uqwbn4hdXTmh0zGLISeeKFae/
 		    	success: function(){
+		    		_self.set('loading', false);
 		    		_self.set('recoveryPasswordError', false);
 		    		_self.set('recoveryPasswordSuccess', true);
 		    	},
 		    	error: function(jqXHR, textStatus, errorThrown){
+		    		_self.set('loading', false);
 		    		_self.set('recoveryPasswordError', true);
 		    		_self.set('recoveryPasswordSuccess', false);
 
@@ -10895,4 +10863,22 @@ App.NotificacionConfigItemView = Ember.View.extend({
 App.NotificacionConfigView = Ember.CollectionView.extend({
 	itemViewClass: App.NotificacionConfigItemView,
 	tagName: 'ul',
+});
+
+
+App.CreateUserView = Ember.View.extend({
+	templateName: 'create-user',
+
+	didInsertElement: function(){
+		this._super();
+	},
+
+	createUser: function () {
+		console.log('CREATED');
+	},
+	
+	cancel: function () {
+		App.set('userController.user', null);
+		App.get('userController').set('createUser', false);
+	},
 });
