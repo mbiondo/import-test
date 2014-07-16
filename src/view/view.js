@@ -10884,7 +10884,10 @@ App.CreateUserView = Ember.View.extend({
 
 	cuilChanged: function () {
 		if (this.get('cuil').length == 11) {
+			this.set('cuilIsValid', true);
 			this.findCuil();
+		} else {
+			this.set('cuilIsValid', false);
 		}
 	}.observes('cuil'),
 
