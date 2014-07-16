@@ -88,6 +88,7 @@ App.menuController = App.MenuController.create({
 			
 			subMenu: [
 
+				/*
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Movimiento Autoridades',
@@ -110,6 +111,7 @@ App.menuController = App.MenuController.create({
 						}),	
 					],
 				}),
+				*/
 			
 
 				App.MenuItem.create({
