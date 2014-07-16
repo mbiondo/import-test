@@ -10931,18 +10931,20 @@ App.CreateUserView = Ember.View.extend({
 	    		if (data.is_valid) {
 	    			_self.set('isValid', true);
 	    			_self.set('isNew', false);
+
 	    			_self.set('nombre', data.nombre);
 	    			_self.set('apellido', data.apellido);
 	    			_self.set('email', data.email);
 	    			_self.set('estructura', data.estructura);
 	    			_self.set('funcion', data.funcion);
 
-	    			_self.$( "input[name='_nombre']" ).attr('readonly', true);
-	    			_self.$( "input[name='_apellido']" ).attr('readonly', true);
-	    			_self.$( "input[name='_email']" ).attr('readonly', true);
-	    			_self.$( "input[name='_funcion']" ).attr('readonly', true);
-	    			_self.$( "input[name='_estructura']" ).attr('readonly', true);
-
+	    			Ember.run.next(function () {
+		    			_self.$( "input[name='_nombre']" ).attr('readonly', true);
+		    			_self.$( "input[name='_apellido']" ).attr('readonly', true);
+		    			_self.$( "input[name='_email']" ).attr('readonly', true);
+		    			_self.$( "input[name='_funcion']" ).attr('readonly', true);
+		    			_self.$( "input[name='_estructura']" ).attr('readonly', true);
+	    			});
 	    		} else {
 	    			_self.set('isNew', true);
 	    			_self.set('isValid', false);
