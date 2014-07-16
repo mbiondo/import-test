@@ -624,10 +624,12 @@ App.IoController = Em.Object.extend({
 App.UserController = Em.Controller.extend({
 	user : undefined,
 	loginError: false,
+	loading: false,
 
 
 	loginCheckoAuth: function(cuil, password){
 		//var url = 'usr/autenticate';
+		this.set('loading', true);
 		var url = App.get('apiController.authURL') + 'token/';
 		$.ajax({
 			url:  url,
@@ -644,7 +646,7 @@ App.UserController = Em.Controller.extend({
 					$.ajaxSetup({
 				    	headers: { 'Authorization': data.token_type + ' ' +  data.access_token }
 					});	
-					
+
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
 
@@ -662,6 +664,7 @@ App.UserController = Em.Controller.extend({
 					if (xhr.responseText) {
 						var response = JSON.parse(xhr.responseText);
 						this.set('loginError', true);
+						this.set('loading', false);
 						this.set('loginMessage', "Cuil o Contraseña incorrecta.");
 						_self = this;
 						var interval = setInterval(function () {
@@ -682,7 +685,7 @@ App.UserController = Em.Controller.extend({
 		var urlUserData = App.get('apiController.authURL') + 'info_user/';
 		
 		var _self = this;
-
+		_self.set('loading', true);
 
 		$.ajax({
 			url:  urlUserData,
@@ -692,6 +695,8 @@ App.UserController = Em.Controller.extend({
 			//dataType: 'JSON',
 
 			success: function (data) {
+				_self.set('loading', false);
+				
 				var tmpUser = App.Usuario.extend(App.Savable).create(data);
 
 				var url = 'user/access';
@@ -738,7 +743,8 @@ App.UserController = Em.Controller.extend({
 						App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
-					App.advanceReadiness();					
+					App.advanceReadiness();	
+					$('#loadingScreen').remove();				
 				});
 			},
 		});			
@@ -2516,7 +2522,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisiones/',
+	url: 'pap/com/comisionesFull',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],

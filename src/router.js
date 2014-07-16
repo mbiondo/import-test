@@ -61,11 +61,13 @@ App.Router =  Em.Router.extend({
 	route: function(path) {
 	  this._super(path);
 
-	  /*
-	  if (!App.get('userController.user'))
+	  
+	  /*if (!App.get('userController.user'))
 	  {
-	  		this.transitionTo("index");
-	  		return;
+	  		//console.log(path);
+	  		//App.userController.set('transitionTo', path);
+	  		//this.transitionTo("index");
+	  		//return;
 	  }
 	  */
 
@@ -740,7 +742,7 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Dirección Secretaría'},
 							{titulo: 'Mesa de Entrada'},
-							{titulo: 'Buscador de Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
+							{titulo: 'Listado de Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
 						]);			
 	                },
 				}),

@@ -121,7 +121,7 @@ App.menuController = App.MenuController.create({
 						App.MenuItem.create({
 							id: 3,
 							roles: [['ROLE_MESA_DE_ENTRADA'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Buscador de proyectos',
+							titulo: 'Listado de proyectos',
 							url: '#/direccionsecretaria/mesadeentrada/proyectos',
 						}),						
 						App.MenuItem.create({
@@ -810,10 +810,11 @@ if (user) {
 	} else {
 		$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
 	}
+} else {
+	$('#loadingScreen').remove();
+	App.advanceReadiness();	
 }
 
-$('#loadingScreen').remove();
 
-App.advanceReadiness();
 
 
