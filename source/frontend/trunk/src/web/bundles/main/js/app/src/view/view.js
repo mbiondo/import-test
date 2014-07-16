@@ -10797,8 +10797,12 @@ App.RecoveryPasswordView = Ember.View.extend({
 
 		this.set('imageClass', 'login-background-0' + Math.floor((Math.random() * 5) + 1));
 
-		//this.set('cuil', '654321');
-		//this.set('mail', 'emmanuel.lazarte@goblab.org');
+		if (App.get('userController.currentCuil')) {
+			this.set('cuil', App.get('userController.currentCuil'));
+		}
+		if (App.get('userController.currentEmail')) {
+			this.set('mail', App.get('userController.currentEmail'));
+		}
 	},
 	
 	recoveryPassword: function(){
@@ -10910,6 +10914,9 @@ App.CreateUserView = Ember.View.extend({
 	},
 
 	recuperar: function () {
+		App.get('userController').set('currentEmail', this.get('email'));
+		App.get('userController').set('currentCuil', this.get('cuil'));
+
 		App.get('userController').set('createUser', false);
 		App.get('userController').set('recoveryPassword', true);
 	},
