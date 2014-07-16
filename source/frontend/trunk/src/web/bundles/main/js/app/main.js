@@ -777,7 +777,7 @@ $( document ).ajaxComplete(function( event, xhr, settings ) {
 });
 
 
-//App.deferReadiness();
+App.deferReadiness();
 
 App.puedeEditar = false;
 
@@ -785,49 +785,35 @@ var user = localStorage.getObject('user');
 
 if (user) {
 	var usuario = App.Usuario.extend(App.Savable).create(JSON.parse(user));
+	if (usuario.expires_in > moment().unix()) {
+		var delay = (usuario.expires_in - moment().unix()) * 1000;
 
-	var roles = [];
-	
-	if (usuario.get('roles')) {
-		usuario.get('roles').forEach(function (rol) {
-			roles.addObject(App.Rol.create(rol));
-			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA_EDIT")
-				App.puedeEditar = true;
-		});
+		setInterval(function () {
+
+			clearInterval(this);
+
+			App.userController.set('user', null);
+			localStorage.setObject('user', null);
+
+			App.get('router').transitionTo('loading');
+			App.get('router').transitionTo('index');
+
+			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+		}, delay);
+
+		if (App.apiController.get('use_auth')) {
+			$.ajaxSetup({
+		    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+			});				
+		}
+		App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
+	} else {
+		$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
 	}
-
-	var rolesmerged = [];
-	
-	if (usuario.get('rolesmerged')) {
-		usuario.get('rolesmerged').forEach(function (rol) {
-			rolesmerged.addObject(App.Rol.create(rol));
-			if (rol.nombre == "ROLE_LABOR_PARLAMENTARIA_EDIT")
-				App.puedeEditar = true;
-		});
-	}
-
-
-	usuario.set('rolesmerged', rolesmerged);
-	usuario.set('roles', roles);
-
-	App.userController.set('user', usuario);
-	
-	if (App.apiController.get('use_auth')) {
-		$.ajaxSetup({
-	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
-		});				
-	}
-
-	App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
-	
-	App.get('notificacionesFiltradasController').load();
-	App.get('searchController').load();
-	App.get('notificacionesController').load();
-	
 }
 
-//$('#loadingScreen').remove();
+$('#loadingScreen').remove();
 
-//App.advanceReadiness();
+App.advanceReadiness();
 
 

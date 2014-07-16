@@ -644,8 +644,13 @@ App.UserController = Em.Controller.extend({
 					$.ajaxSetup({
 				    	headers: { 'Authorization': data.token_type + ' ' +  data.access_token }
 					});	
+					
+					App.get('router').transitionTo('loading');
+					App.get('router').transitionTo('index');
 
 					this.loginoAuth(cuil, data.access_token, data.token_type);
+					localStorage.setObject('user', JSON.stringify({cuil: cuil, access_token: data.access_token, token_type: data.token_type, expires_in: moment().unix() + data.expires_in }));
+
 				}
 				else
 				{
@@ -725,8 +730,6 @@ App.UserController = Em.Controller.extend({
 					tmpUser.set('first_login', data.first_login);
 
 					_self.set('user', tmpUser);				
-
-					localStorage.setObject('user', JSON.stringify(tmpUser));
 										
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
@@ -735,10 +738,7 @@ App.UserController = Em.Controller.extend({
 						App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
-
-					App.get('router').transitionTo('loading');
-					App.get('router').transitionTo('index');
-					
+					App.advanceReadiness();					
 				});
 			},
 		});			
