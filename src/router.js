@@ -61,11 +61,13 @@ App.Router =  Em.Router.extend({
 	route: function(path) {
 	  this._super(path);
 
+	  /*
 	  if (!App.get('userController.user'))
 	  {
 	  		this.transitionTo("index");
 	  		return;
 	  }
+	  */
 
 	  //Aca agregar logica si tiene o no permisos... 
 	  var userRoles = App.get('userController.roles');

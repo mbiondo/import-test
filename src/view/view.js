@@ -7082,7 +7082,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
-			App.confirmActionController.setProperties({
+			/*App.confirmActionController.setProperties({
 				title: 'Comprobante de ingreso',
 				message: '¿ Desea imprimir el comprobante de ingreso ?',
 				success: null,
@@ -7090,6 +7090,9 @@ App.CrearExpedienteView = Ember.View.extend({
 			
 			App.confirmActionController.addObserver('success', this, this.confirmarImprimirSuccess);
 			App.confirmActionController.show();		
+			*/
+
+			this.confirmarImprimirSuccess();
 
 		} else {
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
@@ -7102,9 +7105,9 @@ App.CrearExpedienteView = Ember.View.extend({
 
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);		
 
-		if(App.get('confirmActionController.success')) {
+		/*if(App.get('confirmActionController.success')) {
 			$.download('exportar', "&type=comprobante-expediente&data=" + JSON.stringify(this.get('content')));			
-		}
+		}*/
 
 		if (this.get('tipo')) {
 			this.get('content').set('tipo', this.get('tipo'));
