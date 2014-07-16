@@ -2874,34 +2874,33 @@ App.CitacionCrearView = Em.View.extend({
 		App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
 	},
 	guardar: function () {
-		
 		this.$('#crear-citacion-form').parsley('validate');
 
 		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
 
 		var temas = App.get('citacionCrearController.content.temas');
 		var temasToRemove = [];
-		
-		
+				
 		temas.forEach(function (tema) {
 			var proyectos = tema.get('proyectos');
+
 			if (proyectos.length == 0)
 				temasToRemove.addObject(tema);
 		});
-		
+
 		temas.removeObjects(temasToRemove);
 				
 		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
-		
+
 		if (this.get('content').get('id')) {
 			App.get('citacionCrearController').save();
 		}
 		else {
 			App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+
 			App.get('citacionCrearController').create();		
 		}
-	},
-	
+	},	
 	crearInvitado: function () {
 		var invitado = this.get('invitado');
 
@@ -7091,6 +7090,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			
 			App.confirmActionController.addObserver('success', this, this.confirmarImprimirSuccess);
 			App.confirmActionController.show();		
+
 		} else {
 			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
 			this.set('loading', false);
@@ -7125,7 +7125,16 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.create();      
 
 
-
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+			    objectID: expediente.expdip, 
+			    titulo: expediente.titulo,
+			    fecha:  expediente.pubFecha,
+			    mensaje: 'Expediente creado',
+			    icono: 'creado',
+			    link: '#/direccionsecretaria/mesadeentrada/proyecto/'+ expediente.id +'/ver',
+			    duplicados: [],
+			});
+			evento.create();
 
 			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 
@@ -8904,6 +8913,12 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
 
+	didInsertElement: function(){
+		this._super();
+
+		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + this.get('controller.content.expdip')}));
+		this.get('timeLineController').load();	
+	},
 	borrar: function () {
 		App.confirmActionController.setProperties({
 			title: 'Confirmar eliminar proyecto',
