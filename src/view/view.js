@@ -10826,6 +10826,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 		    		_self.set('recoveryPasswordError', false);
 		    		_self.set('recoveryPasswordSuccess', true);
 		    	},
+
 		    	error: function(jqXHR, textStatus, errorThrown){
 		    		_self.set('loading', false);
 		    		_self.set('recoveryPasswordError', true);
@@ -10868,13 +10869,100 @@ App.NotificacionConfigView = Ember.CollectionView.extend({
 
 App.CreateUserView = Ember.View.extend({
 	templateName: 'create-user',
+	funciones: ['DIPUTADO NACIONAL', 'SECRETARIO ADMINISTRATIVO', 'SECRETARIO PARLAMENTARIO', 'PROSECRETARIO ADMINISTRATIVO', 'PROSECRETARIO PARLAMENTARIO', 'DIRECTOR GENERAL', 'SUBDIRECTOR', 'JEFE DE DEPARTAMENTO', 'JEFE DE DIVISION', 'ADMINISTRATIVO Y TECNICO', 'MAESTRANZA', 'SECRETARIO DE COMISION', 'TAQUIGRAFO DE PRIMERA', 'TAQUIGRAFO DE SEGUNDA', 'SERVICIOS', 'ADSCRIPTOS', 'EN COMISON', 'PROSECRETARIO GENERAL', 'SECRETARIO GENERAL DE LA PRES.', 'PRELEGAJO', 'JEFE DE COMISION', 'ASESOR EN COM Y REL PUBLICAS'],
+	estructuras: [ 'A0000000 PRESIDENCIA - HCDN (PRESI)', 'DIR. GRAL. RELACIONES INTERNACIONALES (DGRI)', 'DIRECCION  DE RELACIONES INTERNACIONAL (DGRI)', 'DIR. GRAL. DE COORDINACION DE LA PRESIDENCIA (DGCP)', 'DIRECCION DE SECRETARIA PRIVADA  (DIR SEC PRIV)', 'DIRECCION DE PROTOCOLO Y CEREMONIAL (DIR PC)', 'ASESORIA DE GABINETE DE LA PRESIDENCIA (ASE GAB PRES)', 'DIR. GRAL. DE PRENSA Y CONUNICACIONES (DGPC)', 'DIRECCION DE PRENSA Y COMUNICACION', 'DEPARTAMENTO DE FOTOGRAFIA', 'DEPARTAMENTO DE COMUNICACION', 'DIRECCION DE DIPUTADOS "T.V."', 'ASESORIA EN COMUNICACIONES Y RELACIONES PUB. (ACRP)', 'ASESOR EN REALCIONES INTERJURISDICCIONALES (A REL INTERJ)', 'SECRETARIA ADMINISTRATIVA (SEC ADM)', 'SUBDIRECCION GESTION LEGAL Y CONTABLE (SUBD G L C)', 'DEPARTAMENTO GESTION LEGAL (DEP GES LEGAL)', 'SUBDIRECCION DE OBRAS Y PROYECTOS (SUBD O Y PROY)', 'DIRECCION DE SEGURIDAD (DIR SEG)', 'DIRECCION DE SISTEMAS ELECTRONICOS (DIR SIST ELEC)', 'DIRECCION AUDITORIA INTERNA (DIR AUD INT)', 'SUBDIRECCION OPERATIVA (SUBD OPE)', 'DEPARTAMENTO SERVICIO VEHICULAR (DEP SER VEHI)', 'DIRECCION DE HIGIENE Y SEGURIDAD DEL TRABAJO (D HST)', 'DIR. GRAL. DE RECURSOS HUMANOS (DIR G R H)', 'SUBDIRECCION REMUNERACIONES Y DIETAS (SUBD RD)', 'PLANTA POLITICA F RP 66/12 (PLA PO RP 66/12)', 'PLANTA POLITICA U RP 69/12 (PLA PO RP 69/12)', 'DIRECCION RELACIONES OFICIALES (DIR REL OFIC)', 'DIRECCION SERVICIO MEDICO (DIR SERV MED)', 'AGENTE ADSCRIPTOS (AGT ADC)', 'AGENTES ADSCRIPTOS AL SUR (AGT ADSC SUR)', 'AGENTES EN COMISION DE OTROS ORGANISMOS (AG COM ORG)', 'AGENTES CON LICENCIA SIN GOCE DE HABERES (A LI S COGE)', 'AGENTES EN COMISION EN OTROS DESTINOS (A COM O DEST)', 'AGENTES AFECTADOS TEMPORARIAMENTE (AGT AFE TEM)', 'CIRCULO DE LEGISLADORES (CIR LEG)', 'DIRECCION JARDIN MATERNO INFANTIL (D JMI)', 'DIR. GRAL. ADMINSTRATIVO CONTABLE (D GRAL ADM CONT)', 'DEPARTAMENTO SUMINISTROS (DTO SUM)', 'DEPARTAMENTO LIQUIDACION DE GASTOS (DTO LIQ DE GAST)', 'DIRECCION COMPRAS (DIR COMPRAS)', 'DIRECCION  DE TESORERIA (DIR TESORE)', 'DIR. GRAL. DE INFORMATICA Y SISTEMAS (D G INF SIST)', 'DIR. GRAL. OBRAS Y SERV. GRALES (DGOYSG)', 'DIRECCION DE OBRAS Y OPERACIONES (DOYO)', 'DIRECCION SERVICIOS GENERALES (DSG)', 'DIR. GRAL.  COORDINACION ADMINISTRATIVA (DIG COO AD)', 'DIRECCION DE AUTOMOTORES (D AUTOM)', 'DIRECCION RELACIONES OFICIALES (D RELOFI)', 'PROSECRETARIA  ADMINISTRATIVA (PROS ADM)', 'SECRETARIA PARLAMENTARIA (SEC PARL)', 'DIRECCION DE PRESUPUESTO Y HACIENDA (DIR PRE HAC)', 'DEPARTAMENTO ADMINISTRATIVO (DTO ADM)', 'DIRECCION DE REL INSTITUTCIONALES Y PRO (DIR RE INS PRO)', 'DIRECCION DE TAQUIGRAFOS (DIR TAQUI)', 'DIRECCION INFORMACION PARLAMENTARIA (DIR INF PARL)', 'DIRECCION ARCHIVO PUBLICACIONES Y MUSEO (DIR A PU MU)', 'DIRECCION COMISIONES', 'COMISION EDUCACION', 'DIRECCION CULTURA (DIR. CULT)', 'DIRECCION DE COORDINACION DE LABOR PARLAMENT. (DIR COOR L P)', 'DIRECCION DEL INSTITUTO DE CAPACI  PARLA (DIR INS CAP PAR)', 'PROSECRETARIA PARLAMENTARIA (PROSEC PARL)', 'SECRETARIA GENERAL DE LA PRESIDENCIA (SEC GP)', 'DIRECCION DE ENLACE CON EL P.E.N (DIR EN PEN)', 'DEPARTAMENTO DE COODINACION DEL P.E.N (DCPEN)', 'DIRECCION DE REL INSTITUCIONA CON LA JUVENTUD (DRICJ)', 'DIRECCION DE ENLACE Y COOP C SISTEMA UNIV NAC (DECSUN)', 'PROSECRETARIA GENERAL DE LA H.C.D.N. (PROS G H.C.D.N.)', 'DIR. GRAL. ADMINISTRATIVA (DIR GRAL ADM)', 'DIRECCION DE COORDINACION (DIR COOD)', 'DIR. GRAL. DE COORDINACION  TECNICO Y LEGAL (DGCTL)', 'DIRECCION DE TRAMITES OFICIALES (DIR TRAM OFIC)', 'DEPARTAMENTO DESPACHO GENERAL  (PRESI)', 'DEPARTAMENTO DE TRAMITES OFICIALES', 'DIRECCION DE ASUNTOS JURIDICOS (DIR A JU)', 'SECRETARIA DE COORDINACION OPERATIVA (SEC COORD OPER)', 'PROSECRETARIA DE COORDINACION OPERATIVA (PROS COORD OPER)', 'BLOQUE UCR (B UCR)', 'BLOQUE UNIDAD POPULAR (B UNI POP)', 'BLOQUE UNION PERONISTA (B UNIN PER)', 'BLOQUE FRENTE PARA LA VICTORIA - PJ (B FPV)', 'BLOQUE PRO (B PRO)', 'BLOQUE FRENTE CIVICO Y SOCIAL DE CATAMARCA (B F C S CATAM)', 'BLOQUE FRENTE PERONISTA (B F PERON)', 'BLOQUE MOVIMIENTO POPULAR FUEGUINO (B MOV POP FUE)', 'BLOQUE POR LA INCLUSION SOCIAL (B INC SOC)', 'BLOQUE FRENTE CIVICO POR SANTIAGO (B F C SANTI)', 'BLOQUE G E N (B G E N)', 'BLOQUE PARTIDO JUSTICIALISTA DE LA PAMPA (B JUST PAMPA)', 'BLOQUE LIBRES DEL SUR UNEN (B L DEL SUR)', 'BLOQUE PROYECTO SUR (B P SUR)', 'BLOQUE MOVIMIENTO POPULAR NEUQUINO (B M P NEUQ)', 'BLOQUE DEMOCRATA DE MENDOZA (B D MZA)', 'BLOQUE FRENTE PERONISTA FEDERAL (B F PER FED)', 'BLOQUE FRENTE NUEVO ENCUENTRO (B  F N ENC)', 'BLOQUE SALTA SOMOS TODOS (B S S TODOS)', 'BLOQUE PARA EL DESARROLLO SOCIAL Y  EQUIDAD (B UDESO)', 'BLOQUE COALICION CIVICA - ARI (COAL CIV ARI)', 'BLOQUE UNION POR TODOS (B UNO P TODOS)', 'BLOQUE DEMOCRATA PROGRESISTA (B DEM PROG)', 'BLOQUE UNION POR SAN JUAN (B UNI P S JUAN)', 'BLOQUE U.DE.SO SALTA - UCR (B UDESO STA)', 'BLOQUE PARTIDO SOCIALISTA (B P SOC)', 'BLOQUE FRENTE CIVICO - CORDOBA (B F C CBA)', 'BLOQUE RENOVADOR DE SALTA (B R SALTA)', 'VICE PRESIDENCIA I (VICE I)', 'VICE PRESIDENCIA II (VICE II)', 'VICE PRESIDENCIA III (VICE III)', 'BLOQUE SANTA FE EN MOVIMIENTO (B STA FE MOV)', 'BLOQUE FRENTE RENOVADOR  (BLO POL)', 'BLOQUE CULTURA, EDUCACION Y TRABAJO (B CET)', 'BLOQUE PERONISMO MAS AL SUR (B P MAS SUR)', 'BLOQUE COMPROMISO FEDERAL (B COM FED)', 'BLOQUE DE IZQUIERDA DE LOS TRABAJADORES (B IZTRAB)', 'BLOQUE SUMA+UNEN (B S+U)', 'BLOQUE UNION POR CORDOBA (B U CORD)', 'BLOQUE UNION CELESTE Y BLANCO (B UCB)', 'BLOQUE UNION POR ENTRE RIOS (B UPER)', 'BLOQUE MOVIMIENTO SOLIDARIO Y POPULAR (BMSP)', 'BLOQUE ENCUENTRO POR CORRIENTES (B EPC)', 'BLOQUE CONSERVADOR PUPULAR (B CONSEPOP)', 'BLOQUE UNIR (B U)', 'BLOQUE PTS FRENTE IZQUIERDA (B PTS FIZQ)', 'BLOQUE FE (B FE)', 'PRELEGAJOS (PRELE)'],
+	createSuccess: false,
+	isNew: false,
 
 	didInsertElement: function(){
 		this._super();
 	},
 
+	cuilChanged: function () {
+		if (this.get('cuil').length == 11) {
+			this.findCuil();
+		}
+	}.observes('cuil'),
+
 	createUser: function () {
-		console.log('CREATED');
+		_self = this;
+		var url = 'create/user';
+		var data = JSON.stringify({cuil: _self.cuil, nombre: _self.nombre, apellido: _self.apellido, email: _self.email, estructura: _self.estructura, funcion: _self.funcion, telefono: _self.telefono });
+		$.ajax({
+			url: url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'POST',
+			data: data,
+
+	    	success: function(data) {
+	    		if (data.result == true) {
+	    			_self.set('createSuccess', true);
+	    		} else {
+
+	    		}
+	    	},
+
+	    	error: function(jqXHR, textStatus, errorThrown){
+
+	    	}
+		});				
+	},
+
+	recuperar: function () {
+		App.get('userController').set('createUser', false);
+		App.get('userController').set('recoveryPassword', true);
+	},
+
+
+	findCuil: function () {
+		_self = this;
+		var url = App.get('apiController').get('authURL') +  "info_cuil/" + this.get('cuil') + "/";
+		$.ajax({
+			url: url,
+			contentType: 'text/plain',
+			dataType: 'JSON',
+			type: 'GET',
+	    	headers: {
+	    		'Authorization': 'Credential ' +  App.get('apiController.client') + " " + App.get('apiController.secret')
+	    	},
+
+	    	success: function(data) {
+	    		if (data.is_valid) {
+	    			_self.set('isValid', true);
+	    			_self.set('isNew', false);
+	    			_self.set('nombre', data.nombre);
+	    			_self.set('apellido', data.apellido);
+	    			_self.set('email', data.email);
+	    			_self.set('estructura', data.estructura);
+	    			_self.set('funcion', data.funcion);
+
+	    			_self.$( "input[name='_nombre']" ).attr('readonly', true);
+	    			_self.$( "input[name='_apellido']" ).attr('readonly', true);
+	    			_self.$( "input[name='_email']" ).attr('readonly', true);
+	    			_self.$( "input[name='_funcion']" ).attr('readonly', true);
+	    			_self.$( "input[name='_estructura']" ).attr('readonly', true);
+
+	    		} else {
+	    			_self.set('isNew', true);
+	    			_self.set('isValid', false);
+	    			_self.set('nombre', '');
+	    			_self.set('apellido', '');
+	    			_self.set('email', '');
+	    			_self.set('estructura', '');
+	    			_self.set('funcion', '');	
+
+	    			_self.$( "input[name='_nombre']" ).attr('readonly', false);
+	    			_self.$( "input[name='_apellido']" ).attr('readonly', false);
+	    			_self.$( "input[name='_email']" ).attr('readonly', false);
+
+	    		}
+	    	},
+
+	    	error: function(jqXHR, textStatus, errorThrown){
+
+	    	}
+		});		
 	},
 	
 	cancel: function () {
