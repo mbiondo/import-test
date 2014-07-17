@@ -2036,6 +2036,7 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 			
 			listaEnvioArchivo.set('fecha', moment(fecha, 'DD/MM/YYYY').format("YYYY-MM-DD  HH:mm"));
 			listaEnvioArchivo.set('autor', usuario.get('nombre') + " " + usuario.get('apellido') );
+			App.get('expedientesArchivadosController.content').set('seleccionados', seleccionados);
 			listaEnvioArchivo.set('expedientes', seleccionados);
 			listaEnvioArchivo.set('comision', App.get('expedientesArchivablesController.comision'));
 			
@@ -2055,12 +2056,34 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 		}
 	},
 	createSucceeded: function (data) {
+		var _self = this;
+
 		if (data.id)
 		{
+
 			fn = function() {
 				App.get('expedientesArchivadosController').get('arrangedContent').setEach('seleccionado', false);
 				App.get('envioArchivoController').removeObserver('loaded', this, fn);                    
 				App.get('router').transitionTo('enviosArchivados.index');                     
+
+				var expedientesD = [];
+
+				App.get('expedientesArchivadosController.content.seleccionados').forEach(function(expedienteSeleccionado){
+					expedientesD.push(expedienteSeleccionado.expdip);
+				});
+
+				var evento = App.TimeLineEvent.extend(App.Savable).create({
+				    objectID: expedientesD[0], 
+				    titulo: 'Se ha creado un Envio a Archivo',
+				    fecha:  moment().format('YYYY-MM-DD HH:mm'),
+				    mensaje: 'Se ha ha creado un Envío a Archivo',
+				    icono: 'creado',
+				    link: '#/comisiones/envios/envio/' + data.id + '/ver',
+				    duplicados: expedientesD,
+				});
+
+				evento.create();
+
 			};
 
 			$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
