@@ -4691,6 +4691,7 @@ App.DictamenCargarView = Ember.View.extend({
 	},
 
 	saveSuccessed: function () {
+		var _self = this.get('content');
 		this.get('content').removeObserver('createSuccess', this, this.saveSuccessed);
 		if (this.get('content.saveSuccess')) {
 							
@@ -4708,6 +4709,35 @@ App.DictamenCargarView = Ember.View.extend({
 
 				App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
 				$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+
+				var expedientesD = [];
+
+				if(_self.proyectosVistos)
+				{				
+					_self.proyectosVistos.forEach(function (proyecto){
+						expedientesD.push(proyecto.proyecto.expdip);
+					});
+				}
+
+				if(_self.proyectos)
+				{				
+					_self.proyectos.forEach(function (proyecto){
+						expedientesD.push(proyecto.proyecto.expdip);
+					});
+				}
+
+				var evento = App.TimeLineEvent.extend(App.Savable).create({
+				    objectID: expedientesD[0], 
+				    titulo: 'Se han agregado Expedientes a un dictamen',
+				    fecha:  moment().format('YYYY-MM-DD HH:mm'),
+				    mensaje: 'Se han agregado Expedientes a un dictamen',
+				    icono: 'creado',
+				    link: '#/comisiones/dictamenes/dictamen/'+ _self.id +'/ver',
+				    duplicados: expedientesD,
+				});
+
+				evento.create();	
+
 			 };
 
 			 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
