@@ -4220,6 +4220,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('main', 'TPs');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Publicaciones'},
 							{titulo: 'Trámite Parlamentario', url: '#/publicaciones/TP/listado'},
 							{titulo: 'Listado'},
 						]);			
@@ -4242,6 +4243,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('main', 'tPCrear', tp);
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Publicaciones'},
 							{titulo: 'Trámite Parlamentario', url: '#/publicaciones/TP/listado'},
 							{titulo: 'Crear'},
 						]);			
@@ -4277,6 +4279,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('main', 'tPConsulta', context);
 
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Publicaciones'},
 							{titulo: 'Trámite Parlamentario'},
 							{titulo: 'Listado', url: '#/publicaciones/TP/listado'},
 							{titulo: 'N° ' + context.get('numero')},
