@@ -1250,6 +1250,40 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 	},
 
 	loadSucceeded: function (data) {
+		var dictamen = App.get('dictamenController.content');
+		var expedientesD = [];
+
+		if(dictamen.proyectosVistos)
+		{				
+			dictamen.proyectosVistos.forEach(function (proyecto){
+				if(proyecto.proyecto)
+				{
+					expedientesD.push(proyecto.proyecto.expdip);
+				}
+			});
+		}
+
+		if(dictamen.proyectos)
+		{				
+			dictamen.proyectos.forEach(function (proyecto){
+				if(proyecto.proyecto)
+				{
+					expedientesD.push(proyecto.proyecto.expdip);
+				}
+			});
+		}
+
+		var evento = App.TimeLineEvent.extend(App.Savable).create({
+		    objectID: expedientesD[0], 
+		    titulo: 'Se ha creado una Orden del Día con Dictamen',
+		    fecha:  moment().format('YYYY-MM-DD HH:mm'),
+		    mensaje: 'Se ha creado una Orden del Día con Dictamen',
+		    icono: 'creado',
+		    link: '#OD/orden/' + dictamen.id + '/ver',
+		    duplicados: expedientesD,
+		});
+
+		evento.create();	
 		if(data)
 		{		
 			//CREATE NOTIFICATION TEST 
@@ -1269,6 +1303,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 			//Crear
 			
 			notification.create();
+
 		}
 	}
 });
@@ -6445,6 +6480,34 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			notification.create();
 
 			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
+
+			var expedientesD = [];
+			var planDeLabor = this.get('content');
+
+			if(planDeLabor.items)
+			{		
+				planDeLabor.items.forEach(function(item){
+					if(item.proyectos)
+					{
+						item.proyectos.forEach(function(proyecto){
+							expedientesD.push(proyecto.proyecto.expdip);
+						});
+					}
+				});
+			}
+
+
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+			    objectID: expedientesD[0], 
+			    titulo: 'Se ha creado un Plan de labor',
+			    fecha:  moment().format('YYYY-MM-DD HH:mm'),
+			    mensaje: 'Se ha ha creado un Plan de labor',
+			    icono: 'creado',
+			    link: '#/laborparlamentaria/plandelabor/' + planDeLabor.id + '/ver',
+			    duplicados: expedientesD,
+			});
+
+			evento.create();	
 
 		} else {
 			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
