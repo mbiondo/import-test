@@ -1925,6 +1925,8 @@ App.VisitaGuiada = Ember.Object.extend({
             'observaciones',
             'aprobado',
             'asistencia',
+            'horarioEstipulado',
+            'fechaEstipulada',
 	],
 
 	label: function (){
