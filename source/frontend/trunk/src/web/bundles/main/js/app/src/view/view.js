@@ -2646,10 +2646,10 @@ App.CalendarTool = Em.View.extend({
 									switch (citacion.get('estado').id)
 									{
 											case 2:
-													color = "green";
+													color = "#47a447";
 											break;
 											case 3:
-													color = "red";
+													color = "#d2322d";
 											break;						
 											default:
 													color = "";
