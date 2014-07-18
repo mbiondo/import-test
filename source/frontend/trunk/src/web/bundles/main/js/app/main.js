@@ -812,6 +812,7 @@ if (user) {
 			App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
 		} else {
 			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			App.advanceReadiness();
 		}
 	} else {
 		$('#loadingScreen').remove();
