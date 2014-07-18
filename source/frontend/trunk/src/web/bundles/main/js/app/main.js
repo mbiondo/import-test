@@ -773,7 +773,7 @@ $( document ).ajaxComplete(function( event, xhr, settings ) {
 			App.get('router').transitionTo('loading');
 			App.get('router').transitionTo('index');
 
-			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente!', { life: 5000 });
 		}
 	}
 });
