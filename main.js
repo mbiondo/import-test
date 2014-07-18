@@ -47,7 +47,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 3,
-							roles: [['ROLE_SITE_ADMIN']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA']],
 							titulo: 'Dictámenes',
 							url: '#/novedades/3',
 						}),								
@@ -580,42 +580,42 @@ App.menuController = App.MenuController.create({
 			titulo: 'Administrar Accesos',
 			url: '#/admin/roles',
 			icono: 'ic ic-accesos',
-			roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+			roles: [['ROLE_SITE_ADMIN']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Administrar',
 					url: '#/admin/roles',
-					roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+					roles: [['ROLE_SITE_ADMIN']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Usuarios y Roles',
 							url: '#/admin/roles',
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 						}),		
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Usuarios y Comisiones',
 							url: '#/admin/comisiones',
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 						}),		
 						App.MenuItem.create({
 							id: 2,
 							titulo: 'Tipos de Notificaciones',
 							url: '#/admin/notificaciones',
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 						}),	
 						App.MenuItem.create({
 							id: 3,
 							titulo: 'Crear Tipo de Notificación',
 							url: '#/admin/notificaciones/tipo/crear',
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 						}),	
 						App.MenuItem.create({
 							id: 4,
 							titulo: 'Usuarios y Legisladores',
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 							url: '#/admin/usuarios-legisladores',
 						}),
 
@@ -626,18 +626,18 @@ App.menuController = App.MenuController.create({
 					id: 1,
 					titulo: 'Legisladores',
 					url: '#/admin/legisladores/listado',
-					roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+					roles: [['ROLE_SITE_ADMIN']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 							titulo: 'Legisladores Vigentes',
 							url: '#/admin/legisladores/listado',
 						}),
 
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_USER', 'ROLE_SITE_ADMIN']],
+							roles: [['ROLE_SITE_ADMIN']],
 							titulo: 'Bloques',
 							url: '#/admin/bloques/listado',
 						}),						
