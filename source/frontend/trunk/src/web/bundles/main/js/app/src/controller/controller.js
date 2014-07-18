@@ -1808,7 +1808,7 @@ App.RolesController = App.RestController.extend({
 	url: 'user/roles',
 	type: App.Rol,
 	useApi: false,
-	sortProperties: ['nivel'],
+	sortProperties: ['nombre'],
 	sortAscending: false,
 
 	createObject: function (data, save) {
