@@ -7659,6 +7659,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			App.get('proyectosController').addObserver('loaded', this, fn);
 			App.get('proyectosController').load();
 		}
+		else{
+			_self.get('parentView').set('expedienteExist', false);
+		}
 	}.observes('content.expdipN', 'content.expdipA'),
 
 	duplicarCancelar: function(){
