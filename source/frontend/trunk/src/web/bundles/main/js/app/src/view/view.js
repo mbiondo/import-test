@@ -6640,6 +6640,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 	createSucceeded: function (data) {
 		if (data.success == true) {
+
 			this.model.set('id', data.id);
 
 			//CREATE NOTIFICATION TEST 
@@ -6729,6 +6730,7 @@ App.SugestView = Ember.View.extend({
 	controller: null,
 	optionLabelPath: 'content.label',
 	optionValuePath: 'content',
+	applyOrden: false,
 
 	sugestTextChanged: function () {
 		if (this.get('sugestText').length >= this.get('threshold')) {
@@ -6750,6 +6752,9 @@ App.SugestView = Ember.View.extend({
 	itemSelect: function(item) {
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
+				if (this.get('applyOrden')) {
+					item.set('orden', this.get('selection.length'));
+				}
 				this.get('selection').addObject(item);
 			}
 		}
