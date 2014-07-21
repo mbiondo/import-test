@@ -11011,6 +11011,9 @@ App.CreateUserView = Ember.View.extend({
 
 	createUser: function () {
 		_self = this;
+		
+		if(!$('form').parsley('validate')) return false;
+
 		var url = 'create/user';
 		var data = JSON.stringify({cuil: _self.cuil, nombre: _self.nombre, apellido: _self.apellido, email: _self.email, estructura: _self.estructura, funcion: _self.funcion, telefono: _self.telefono });
 		$.ajax({
