@@ -538,7 +538,7 @@ App.ChangePasswordView = Ember.View.extend({
 	}.property('password', 'password_confirm'),
 	changePassword: function () {		
 		var data;
-		var _self = this;
+		_self = this;
 
 		if($('#login').parsley('validate'))
 		{
@@ -582,7 +582,7 @@ App.ChangePasswordView = Ember.View.extend({
 	},
 
 	changeSucceeded: function (data) {
-		this.set('loading', false);
+		_self.set('loading', false);
 		if (data.is_valid == true)
 		{
 			if(App.get('userController.isLogin'))
