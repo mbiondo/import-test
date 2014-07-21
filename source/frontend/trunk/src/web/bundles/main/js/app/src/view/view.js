@@ -7830,6 +7830,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 //	}.observes('content.pubnro', 'content.expdipT'),
 	}.observes('content.pubnro'),
 	previewTramiteParlamentario: function(){
+		this.changeNumeroTP();
 		App.PreviewTramiteParlamentarioView.popup();
 	},
 	cancelarPreviewTramiteParlamentario: function(){
