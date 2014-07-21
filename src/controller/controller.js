@@ -1809,7 +1809,7 @@ App.RolesController = App.RestController.extend({
 	type: App.Rol,
 	useApi: false,
 	sortProperties: ['nombre'],
-	sortAscending: false,
+	sortAscending: true,
 
 	createObject: function (data, save) {
 	
