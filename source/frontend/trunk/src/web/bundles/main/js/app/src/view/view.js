@@ -2286,13 +2286,13 @@ App.UploaderView = Em.View.extend({
 				},
 				complete: function(jqXHR, textStatus)				
 				{
-					console.log(jqXHR);
-					console.log(textStatus);
+					//console.log(jqXHR);
+					//console.log(textStatus);
 				},
 				error: function(jqXHR , textStatus, errorThrown){
-					console.log(jqXHR);
-					console.log(textStatus);
-					console.log(errorThrown);					
+					//console.log(jqXHR);
+					//console.log(textStatus);
+					//console.log(errorThrown);					
 				},
 			});
 		}
@@ -8041,7 +8041,7 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.$('span').tooltip();
-		console.log(this.get('content.asistencia'));
+		//console.log(this.get('content.asistencia'));
 	},
 });
 
@@ -10245,7 +10245,7 @@ App.CrearPedidoView = Ember.View.extend({
 		var cantElementos = this.get('content.consultas').length;
 		if(cantElementos > 1){
 			var ultimaConsulta = this.get('content.consultas')[cantElementos-1];
-			console.log(ultimaConsulta);
+			//console.log(ultimaConsulta);
 			this.get('content.consultas').removeObject(ultimaConsulta);
 		}
 	},
@@ -10728,7 +10728,7 @@ App.ScrollBarView = Ember.View.extend({
 
 
     	this.$('.bar').click(function (e) {
-    		console.log(e);
+    		//console.log(e);
 			var p = Math.ceil(e.offsetY / (view.$('.bar').height() - view.$('.track').height()) * 100);
 			view.get('contentController').scrollTo(p);
     	}); 
