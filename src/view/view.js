@@ -575,10 +575,14 @@ App.ChangePasswordView = Ember.View.extend({
 	},
 
 	cancel: function () {
+
 		if (App.get('userController.user'))
 			App.get('userController').set('user.first_login', false);
 
 		App.get('userController').set('changePassword', false);
+		
+		App.get('router').transitionTo('loading');
+		App.get('router').transitionTo('index');		
 	},
 
 	changeSucceeded: function (data) {

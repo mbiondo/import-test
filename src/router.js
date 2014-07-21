@@ -256,6 +256,11 @@ App.Router =  Em.Router.extend({
 				Ember.run.next(function () {
 					appController.connectOutlet('main', 'perfil');
 				});
+
+				App.get('tituloController').set('titulo', "Perfil");
+				App.get('breadCumbController').set('content', [
+					{titulo: 'Perfil'}
+				]);					
 						
 			},			
 
