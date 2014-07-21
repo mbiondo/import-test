@@ -6643,6 +6643,37 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 			this.model.set('id', data.id);
 
+			var expedientesD = [];
+
+			var content = this.scope.content;
+			var items = this.scope.content.items;
+
+			if(items)
+			{							
+				items.forEach(function(item){			
+					if(item.proyectos)
+					{				
+						item.proyectos.forEach(function (proyecto){
+							if(proyecto)
+							{
+								expedientesD.push(proyecto.expdip);
+							}
+						});
+					}
+				});
+			}
+
+			var evento = App.TimeLineEvent.extend(App.Savable).create({
+			    objectID: expedientesD[0], 
+			    titulo: 'Se ha creado una Sesión desde un Plan de Labor Confirmado',
+			    fecha:  moment().format('YYYY-MM-DD HH:mm'),
+			    mensaje: 'Se ha creado una Sesión desde un Plan de Labor Confirmado',
+			    icono: 'creado',
+			    link: '#laborparlamentaria/plandelabor/'+ data.id +'/ver',
+			    duplicados: expedientesD,
+			});
+
+			evento.create();	
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
