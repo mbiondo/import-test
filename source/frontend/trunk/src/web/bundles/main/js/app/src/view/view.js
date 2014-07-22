@@ -7797,27 +7797,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				tp.set('loaded', false);
 				var deferred = $.Deferred(),
 				fn = function() {
-					/*
-					var firmantesList = $.map(this.get('content.autoridades'), function(firmante){ return [{nombre: firmante.diputado.datosPersonales.apellido + ", " + firmante.diputado.datosPersonales.nombre}] });
-					var girosList = $.map(this.get('content.comisiones'), function(giro){ return [{comision: giro.nombre}] });
-
-					//var proyecto = App.Proyecto.create({id: '', titulo: this.get('content.titulo'), firmantes: this.get('content.autoridades'), giro: this.get('content.comisiones')});
-					var proyecto = App.Proyecto.create({expdip: this.get('content.expdip'), titulo: this.get('content.titulo'), firmantes: firmantesList, giro: girosList});
-					var proyectoObject = JSON.parse(JSON.stringify(proyecto));
-					
-					if(tp.get('proyectosD') && this.get('content.expdipT').id == 'D'){
-						tp.get('proyectosD').pushObject(proyectoObject);
-					}				
-					if(tp.get('proyectosS') && this.get('content.expdipT').id == 'S'){
-						tp.get('proyectosS').pushObject(proyectoObject);
-					}				
-					if(tp.get('proyectosPE') && this.get('content.expdipT').id == 'PE'){
-						tp.get('proyectosPE').pushObject(proyectoObject);
-					}				
-					if(tp.get('proyectosJGM') && this.get('content.expdipT').id == 'JGM'){
-						tp.get('proyectosJGM').pushObject(proyectoObject);
-					}	
-					*/
 					App.tpConsultaController = App.TPConsultaController.create();
 					this.set('puedeVerPreviewTramiteParlamentario', true);
 					App.set('tpConsultaController.content', tp);
@@ -7833,7 +7812,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 //	}.observes('content.pubnro', 'content.expdipT'),
 	}.observes('content.pubnro'),
 	previewTramiteParlamentario: function(){
-		this.changeNumeroTP();
+		//this.changeNumeroTP();
 		App.PreviewTramiteParlamentarioView.popup();
 	},
 	cancelarPreviewTramiteParlamentario: function(){
@@ -10799,7 +10778,26 @@ App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 	
 	didInsertElement: function(){	
 		this._super();
-		this.set('content', App.get('tpConsultaController.content'));
+		
+		//this.set('content', App.get('tpConsultaController.content'));		
+		
+		var tp = App.TP.extend(App.Savable).create({id: App.get('tpConsultaController.content.id')})
+
+		this.set('loading', true)
+		tp.set('loaded', false);
+		var deferred = $.Deferred(),
+
+		fn = function() {
+			this.set('loading', false)
+			this.set('content', tp);
+
+		    tp.removeObserver('loaded', this, fn);
+		    deferred.resolve(tp);
+		};
+
+		tp.addObserver('loaded', this, fn);
+		tp.load();
+
 	}, 
 });
 
