@@ -1829,26 +1829,23 @@ App.Router =  Em.Router.extend({
 				
 				deserialize: function(router, params) {
 					 App.usuariosController = App.UsuariosController.create();
-					 App.funcionesController = App.FuncionesController.create();
-					 App.estructurasController = App.EstructurasController.create();
+					
 					 App.rolesController = App.RolesController.create();
 
 					 var deferred = $.Deferred(),
 					
 					 fn = function() {
-					 	 if (App.get('usuariosController.loaded') && App.get('funcionesController.loaded') && App.get('estructurasController.loaded') && App.get('rolesController.loaded')) {
+					 	 if (App.get('usuariosController.loaded')  && App.get('rolesController.loaded')) {
 							deferred.resolve(null);
 					 	 }					
 					 };
 
 					 App.get('usuariosController').addObserver('loaded', this, fn);
-					 App.get('funcionesController').addObserver('loaded', this, fn);
-					 App.get('estructurasController').addObserver('loaded', this, fn);
+					
 					 App.get('rolesController').addObserver('loaded', this, fn);
 
 					 App.get('usuariosController').load();
-					 App.get('funcionesController').load();
-					 App.get('estructurasController').load();
+					 
 					 App.get('rolesController').load();
 					
 					 return deferred.promise();
