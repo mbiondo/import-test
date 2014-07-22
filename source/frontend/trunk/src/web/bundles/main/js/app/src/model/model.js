@@ -1927,6 +1927,7 @@ App.VisitaGuiada = Ember.Object.extend({
             'asistencia',
             'horarioEstipulado',
             'fechaEstipulada',
+            'comentariosDelVisitante',
 	],
 
 	label: function (){
@@ -1934,7 +1935,7 @@ App.VisitaGuiada = Ember.Object.extend({
 		if(this.get('fechaPreferencia')){
 			fechaFormat = moment(this.get('fechaPreferencia.date'), 'YYYY/MM/DD').format('LL')
 		}
-		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia") + " " + fechaFormat;
+		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia") + " " + this.get("nivelAlumnos") + " " + fechaFormat;
 	}.property('id'),
 
 	aprove: function () {
