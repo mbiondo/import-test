@@ -7095,7 +7095,11 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
+	/*
+	test: function(){
 
+	}.observes(),
+	*/
 	faltanFirmantes: function(){
 		if (!this.get('clickGuardar'))
 			return false;
@@ -7245,6 +7249,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
+//			notiTest.set('firmantes', firmantes);
 			notification.create();      
 
 
@@ -9700,7 +9705,7 @@ App.ProyectoSearchView = Em.View.extend({
 			
 			App.proyectosController.load();
 			
-			$("#buscarProyecto").click();
+			//$("#buscarProyecto").click();
 
 			this.set('loading', true);
 		}
