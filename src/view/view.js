@@ -8030,7 +8030,7 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 
 App.VisitasGuiadasListView = App.ListFilterView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
-	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita', 'Visitantes', 'Detalles'],
+	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita','Nivel de alumnos', 'Visitantes', 'Detalles'],
 	templateName: 'simple-list-whit-date-range',
 	fechaDesde: '',
 	fechaHasta: '',
