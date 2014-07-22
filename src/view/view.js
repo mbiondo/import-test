@@ -9700,7 +9700,10 @@ App.ProyectoSearchView = Em.View.extend({
 			
 			App.proyectosController.load();
 			
-			//$("#buscarProyecto").click();
+			if(this.get('collapse') == false)
+			{
+				$(".panel-heading > a").click();
+			}
 
 
 			this.set('loading', true);
