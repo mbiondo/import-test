@@ -7095,11 +7095,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
-	/*
-	test: function(){
-
-	}.observes(),
-	*/
+	
+	
 	faltanFirmantes: function(){
 		if (!this.get('clickGuardar'))
 			return false;
@@ -7249,9 +7246,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-//			notiTest.set('firmantes', firmantes);
+			//notiTest.set('firmantes', this.get('content.autoridades'));
 			notification.create();      
-
 
 			var evento = App.TimeLineEvent.extend(App.Savable).create({
 			    objectID: expediente.expdip, 
@@ -9707,6 +9703,7 @@ App.ProyectoSearchView = Em.View.extend({
 			
 			//$("#buscarProyecto").click();
 
+
 			this.set('loading', true);
 		}
 	},
@@ -11043,9 +11040,19 @@ App.RecoveryPasswordView = Ember.View.extend({
 		    		_self.set('recoveryPasswordError', true);
 		    		_self.set('recoveryPasswordSuccess', false);
 
-		    		if(jqXHR.status && jqXHR.status == 434)
-		    		{
-		    			_self.set('recoveryPasswordErrorText', 'Los datos ingresados no son validos');
+		    		if(jqXHR.status)
+		    		{	    			
+			    		if(jqXHR.status == 515)
+			    		{
+			    			_self.set('recoveryPasswordErrorText', 'El cuil no es válido');
+			    		}
+			    		else
+			    		{
+				    		if(jqXHR.status == 436)
+				    		{
+				    			_self.set('recoveryPasswordErrorText', 'El correo no es válido o no coincide con el usuario ingresado');
+				    		}			    			
+			    		}
 		    		}
 		    	}
 			});			
