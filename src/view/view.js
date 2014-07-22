@@ -1833,7 +1833,7 @@ App.PerfilView = Em.View.extend({
 	templateName: 'perfil',
 	guardarEnabled: false,
 	oldAvatar: '',
-
+	hayComisiones: false,
 
 	guardar: function () {
 		App.userController.get('user').save();
@@ -1857,9 +1857,15 @@ App.PerfilView = Em.View.extend({
 		this.get('content').set('avatar', null);
 	},
 
+	
+
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.userController.user);
+		if(this.get('content.comisiones').length > 0){
+			this.set('hayComisiones', true);
+		}
+		
 
 		var url = 'notificaciones/config';
 		var posting = $.post( url, { cuil: App.get('userController.user').get('cuil'), funcion: App.get('userController.user').get('funcion'), estructura: App.get('userController.user').get('estructura')});
