@@ -9680,6 +9680,8 @@ App.ProyectoSearchView = Em.View.extend({
 			}
 			
 			App.proyectosController.load();
+			
+			$("#buscarProyecto").click();
 
 			this.set('loading', true);
 		}
