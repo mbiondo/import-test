@@ -7220,8 +7220,6 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', false);
 		}
 	},
-
-
 	confirmarImprimirSuccess: function () {
 
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);		
@@ -7246,7 +7244,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-			//notiTest.set('firmantes', this.get('content.autoridades'));
+			notification.set('firmantes', this.get('content.autoridades'));
+			
 			notification.create();      
 
 			var evento = App.TimeLineEvent.extend(App.Savable).create({
