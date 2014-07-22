@@ -8180,7 +8180,47 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 
 	audits: function(){
 		return App.get('auditController');
-	}.property('App.auditController.content')
+	}.property('App.auditController.content'),
+
+	borrar: function (){
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la baja de la visita',
+			message: '¿ Confirma que desea dar de baja la visita de ' +_self.get('content.razonSocial')+ ' ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.confirmActionDone);
+		App.confirmActionController.show();
+
+
+	},
+
+	confirmActionDone: function(){
+		this.set('content.url', 'visitas-guiadas/visita/delete')
+		var visita = App.VisitaGuiada.extend(App.Savable).create(this.get('content'));
+		visita.delete();
+		
+		//console.log(this);
+
+		App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+		fn = function() {
+				if(App.get('visitasGuiadasController.loaded'))
+				{
+					App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('visitasGuiadas.index')
+				}
+		};
+
+		App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+		App.get('visitasGuiadasController').load();                      
+					
+					
+		$.jGrowl('Se dio de baja la visita guiada', { life: 5000 });
+	},
 
 });
 
