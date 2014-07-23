@@ -9146,6 +9146,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		}
 	},	
 
+	puedeEditar: function(){
+		return App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT'); 
+	}.property('App.userController.user'),
+
 	deleteSuccess: function () {
 		if (this.get('controller.content.deleteSuccess') == true) {
 			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
