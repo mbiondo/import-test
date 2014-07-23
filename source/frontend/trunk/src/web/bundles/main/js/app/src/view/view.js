@@ -6691,6 +6691,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			this.model.set('id', data.id);
 
 			var expedientesD = [];
+			var firmantes = [];
 
 			var content = this.scope.content;
 			var items = this.scope.content.items;
@@ -6704,6 +6705,13 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 							if(proyecto)
 							{
 								expedientesD.push(proyecto.expdip);
+
+								if(proyecto.firmantes)
+								{
+									proyecto.firmantes.forEach(function(firmante){
+										firmantes.push(firmante);
+									});
+								}
 							}
 						});
 					}
@@ -6735,6 +6743,8 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			//Custom message
 //			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('LL'));
 			notification.set('mensaje', "Se ha creado la sesion del dia " +  moment.unix(this.model.get('fecha')).format('dddd, LL'));
+
+			notification.set('firmantes', firmantes);
 
 			//Crear
 			notification.create();
