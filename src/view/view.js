@@ -1256,6 +1256,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 	loadSucceeded: function (data) {
 		var dictamen = App.get('dictamenController.content');
 		var expedientesD = [];
+		var firmantes = [];
 
 		if(dictamen.proyectosVistos)
 		{				
@@ -1277,6 +1278,18 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 			});
 		}
 
+		if(dictamen.textos)
+		{
+			dictamen.textos.forEach(function(texto){
+				if(texto.firmantes)
+				{
+					texto.firmantes.forEach(function(firmante){
+						firmantes.push(firmante.diputado.datosPersonales);
+					});
+				}
+			});
+		}
+
 		var evento = App.TimeLineEvent.extend(App.Savable).create({
 		    objectID: expedientesD[0], 
 		    titulo: 'Se ha creado una Orden del Día con Dictamen',
@@ -1287,7 +1300,9 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		    duplicados: expedientesD,
 		});
 
-		evento.create();	
+		evento.create();
+
+		console.log(data);
 		if(data)
 		{		
 			//CREATE NOTIFICATION TEST 
@@ -1295,13 +1310,16 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 			//ACA TITULO DE LA NOTIFICACION
 			notification.set('tipo', 'crearOrdenDelDia');	
 			//Si hace falta ID del objeto modificado
-			notification.set('objectId', data.dictamen.id);
+			notification.set('objectId', data.id);
 			//Link del objeto
-			notification.set('link', "#/OD/orden/" + data.dictamen.id + "/ver");
+			notification.set('link', "#/OD/orden/" + data.id + "/ver");
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			//Custom message
+			//notification.set('mensaje', "Se ha cargado la Orden del Día");
 			notification.set('mensaje', "Se ha cargado la Orden del Día " + data.dictamen.numero);
+
+			notification.set('firmantes', firmantes);
 
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
@@ -4779,6 +4797,7 @@ App.DictamenCargarView = Ember.View.extend({
 				$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
 
 				var expedientesD = [];
+				var firmantes = [];
 
 				if(_self.proyectosVistos)
 				{				
@@ -4794,6 +4813,15 @@ App.DictamenCargarView = Ember.View.extend({
 					});
 				}
 
+				if(_self.textos)
+				{
+					_self.textos.forEach(function(texto){
+						texto.firmantes.forEach(function(firmante){
+							firmantes.push(firmante.diputado);
+						});
+					});
+				}
+
 				var evento = App.TimeLineEvent.extend(App.Savable).create({
 				    objectID: expedientesD[0], 
 				    titulo: 'Se han agregado Expedientes a un dictamen',
@@ -4806,6 +4834,15 @@ App.DictamenCargarView = Ember.View.extend({
 
 				evento.create();	
 
+				var notification = App.Notificacion.extend(App.Savable).create();
+				notification.set('tipo', 'crearDictamen');	
+				notification.set('objectId', _self.id);
+				notification.set('link', "/#/comisiones/dictamenes/dictamen/"+_self.id+"/ver");
+				notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+				notification.set('mensaje', "Se ha creado un dictamen " + _self.id);
+				notification.set('firmantes', firmantes);
+				
+				notification.create();      
 			 };
 
 			 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
