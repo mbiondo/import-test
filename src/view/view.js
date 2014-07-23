@@ -6539,20 +6539,12 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
-
-			var notification = App.Notificacion.extend(App.Savable).create();
-			notification.set('tipo', 'confirmarLaborParlamentaria');	
-			notification.set('objectId', this.get('content.id'));
-			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
-			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del día " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
-
-			notification.create();
+			
+			var planDeLabor = this.get('content');
+			var expedientesD = [];
+			var firmantes = [];
 
 			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
-
-			var expedientesD = [];
-			var planDeLabor = this.get('content');
 
 			if(planDeLabor.items)
 			{		
@@ -6560,7 +6552,17 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 					if(item.proyectos)
 					{
 						item.proyectos.forEach(function(proyecto){
-							expedientesD.push(proyecto.proyecto.expdip);
+							if(proyecto.proyecto)
+							{
+								expedientesD.push(proyecto.proyecto.expdip);
+
+								if(proyecto.proyecto.firmantes)
+								{
+									proyecto.proyecto.firmantes.forEach(function(firmante){
+										firmantes.push(firmante);
+									});
+								}
+							}
 						});
 					}
 				});
@@ -6578,6 +6580,16 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			});
 
 			evento.create();	
+
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'confirmarLaborParlamentaria');	
+			notification.set('objectId', this.get('content.id'));
+			notification.set('link', "#/laborparlamentaria/plandelabor/" + this.get('content.id') + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha confirmado el Plan de Labor Tentativo del día " + moment(this.get('content.fechaEstimada')).format('dddd') + " " + moment(this.get('content.fechaEstimada')).format('LL') );
+			notification.set('firmantes', firmantes);
+
+			notification.create();
 
 		} else {
 			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
@@ -6712,6 +6724,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 										firmantes.push(firmante);
 									});
 								}
+
 							}
 						});
 					}
