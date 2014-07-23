@@ -9159,10 +9159,14 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		}
 	},	
 
-	puedeEditar: function(){
-		return App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT'); 
+	canEdit: function(){
+		if (App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT')){
+			return true;
+		}else{
+			return false;
+		}		
 	}.property('App.userController.user'),
-
+	
 	deleteSuccess: function () {
 		if (this.get('controller.content.deleteSuccess') == true) {
 			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
@@ -9215,6 +9219,14 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 	oldInit: undefined,
 
+
+	canEdit: function(){
+		if (App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT')){
+			return true;
+		}else{
+			return false;
+		}		
+	}.property('App.userController.user'),
 
 	camarasChange: function(){
 		
