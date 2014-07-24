@@ -660,19 +660,23 @@ App.UserController = Em.Controller.extend({
 				}
 			},
 			complete: function (xhr) {
-				if (xhr.status == 400) {
-					if (xhr.responseText) {
-						var response = JSON.parse(xhr.responseText);
-						this.set('loginError', true);
-						this.set('loading', false);
-						this.set('loginMessage', "Cuil o Contraseña incorrecta.");
-						_self = this;
-						var interval = setInterval(function () {
-							_self.set('loginError', false);
-							_self.set('loginMessage', '');
-							clearInterval(this);
-						}, 5000);
-					}
+				var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: xhr});
+				console.log("dasdasd " + xhr.status + " " + xHRAuthURLController.getShowMessage());
+				
+				if (xHRAuthURLController.hasError()){								
+					var response = JSON.parse(xhr.responseText);
+					
+					this.set('loginError', true);
+					this.set('loading', false);
+					this.set('loginMessage', xHRAuthURLController.getShowMessage());
+					
+					_self = this;
+					var interval = setInterval(function () {
+						_self.set('loginError', false);
+						_self.set('loginMessage', '');
+						clearInterval(this);
+					}, 5000);
+					
 				}
 			},
 		});			
@@ -693,6 +697,26 @@ App.UserController = Em.Controller.extend({
 			type: 'GET',
 			//data: cuil,
 			//dataType: 'JSON',
+
+			complete: function (xhr) {
+				var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: xhr});				
+				
+				if (xHRAuthURLController.hasError()){								
+					var response = JSON.parse(xhr.responseText);
+					
+					this.set('loginError', true);
+					this.set('loading', false);
+					this.set('loginMessage', xHRAuthURLController.getShowMessage());
+					
+					_self = this;
+					var interval = setInterval(function () {
+						_self.set('loginError', false);
+						_self.set('loginMessage', '');
+						clearInterval(this);
+					}, 5000);
+					
+				}
+			},
 
 			success: function (data) {
 				_self.set('loading', false);
@@ -1604,7 +1628,7 @@ App.NotificacionesController = App.RestController.extend({
 
 		this.set('loaded', false);
 		var url =  this.get('url');
-
+		
 		if ( url ) {
 			$.ajax({
 				url: url,
@@ -5805,4 +5829,38 @@ App.ScrollContentController = Ember.ArrayController.extend({
 			this.set('currentPosition', position);
 		}
 	},
+});
+
+App.XHRAuthURLController = Ember.Object.extend({
+	xhr : '',
+	errorMessage: {	400: "CUIL o contraseña incorrectos", 
+					401: "Por favor intente mas tarde nuevamente", 
+					432: "Por favor intente mas tarde nuevamente" , 
+					433: "Su sesión expiró", 
+					434: "Acceso no autorizado", 
+					435: "CUIL o mail incorrectos", 
+					436: "Mail incorrecto", 
+					437: "Falta cargar el mail", 
+					438: "Falta cargar el cuit", 
+					512: "Por favor intente mas tarde nuevamente", 
+					513: "Por favor intente mas tarde nuevamente", 
+					514: "Por favor intente mas tarde nuevamente", 
+					515: "CUIL incorrecto", 
+					516: "No se pudo enviar mail, intente mas tarde", 
+					517: "Por favor intente mas tarde nuevamente" },
+
+	getShowMessage: function (){
+		var message =this.get('errorMessage')[this.get('xhr').status];
+		if(message){
+			return  message;	
+		}else{
+			return "";
+		}
+		
+	},
+
+	hasError: function (){
+		return this.get('xhr').status != 200;
+	},
+
 });
