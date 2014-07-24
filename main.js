@@ -773,7 +773,7 @@ $( document ).ajaxComplete(function( event, xhr, settings ) {
 			App.get('router').transitionTo('loading');
 			App.get('router').transitionTo('index');
 
-			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
 		}
 	}
 });
@@ -801,7 +801,7 @@ if (user) {
 				App.get('router').transitionTo('loading');
 				App.get('router').transitionTo('index');
 
-				$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+				$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
 			}, delay);
 
 			if (App.apiController.get('use_auth')) {
@@ -811,7 +811,7 @@ if (user) {
 			}
 			App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
 		} else {
-			$.jGrowl('Su session ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
 			App.userController.set('user', null);
 			localStorage.setObject('user', null);		
 			App.advanceReadiness();
