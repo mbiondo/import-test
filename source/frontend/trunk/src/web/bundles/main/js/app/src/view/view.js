@@ -10920,6 +10920,8 @@ App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 		var deferred = $.Deferred(),
 
 		fn = function() {
+			tp.desNormalize(); 
+			
 			this.set('loading', false)
 			this.set('content', tp);
 
