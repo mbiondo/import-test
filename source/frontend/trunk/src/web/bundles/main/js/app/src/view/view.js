@@ -11130,24 +11130,17 @@ App.RecoveryPasswordView = Ember.View.extend({
 		    	},
 
 		    	error: function(jqXHR, textStatus, errorThrown){
-		    		_self.set('loading', false);
-		    		_self.set('recoveryPasswordError', true);
-		    		_self.set('recoveryPasswordSuccess', false);
 
-		    		if(jqXHR.status)
-		    		{	    			
-			    		if(jqXHR.status == 515)
-			    		{
-			    			_self.set('recoveryPasswordErrorText', 'El cuil no es válido');
-			    		}
-			    		else
-			    		{
-				    		if(jqXHR.status == 436)
-				    		{
-				    			_self.set('recoveryPasswordErrorText', 'El correo no es válido o no coincide con el usuario ingresado');
-				    		}			    			
-			    		}
-		    		}
+					var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: jqXHR});				
+				
+					if (xHRAuthURLController.hasError()){								
+						var response = JSON.parse(jqXHR.responseText);						
+						_self.set('loading', false);
+		    			_self.set('recoveryPasswordError', true);
+		    			_self.set('recoveryPasswordSuccess', false);
+						_self.set('recoveryPasswordErrorText', xHRAuthURLController.getShowMessage());
+					}
+
 		    	}
 			});			
 		}
