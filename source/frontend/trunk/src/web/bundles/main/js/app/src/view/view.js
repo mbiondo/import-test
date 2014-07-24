@@ -2435,7 +2435,7 @@ App.ApplicationView = Em.View.extend({
 	mostrar : function () {
 		this.get('testModal').mostrar();
 	},
-	
+
 });
 
 App.ExpedienteConsultaView = Em.View.extend({
@@ -7855,7 +7855,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if(App.get('tpsController.arrangedContent'))
 		{
 			var tpSelect = App.get('tpsController.arrangedContent').findProperty('numero', this.get('content.pubnro'));
+			var tp = App.TP.extend(App.Savable).create({id: tpSelect.id})
+			App.tpConsultaController = App.TPConsultaController.create();
+			App.set('tpConsultaController.content', tp);
+			this.set('puedeVerPreviewTramiteParlamentario', true);
 			
+			/*
 			if(tpSelect)
 			{		
 				var tp = App.TP.extend(App.Savable).create({id: tpSelect.id})
@@ -7874,6 +7879,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				tp.addObserver('loaded', this, fn);
 				tp.load();
 			}
+			*/
 		}
 //	}.observes('content.pubnro', 'content.expdipT'),
 	}.observes('content.pubnro'),
