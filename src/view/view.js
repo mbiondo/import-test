@@ -11198,29 +11198,33 @@ App.CreateUserView = Ember.View.extend({
 	createUser: function () {
 		_self = this;
 		
-		if(!$('form').parsley('validate')) return false;
+//		if(!$('form').parsley('validate')) return false;
+		//console.log(_self.get('isValid'));
 
-		var url = 'create/user';
-		var data = JSON.stringify({cuil: _self.cuil, nombre: _self.nombre, apellido: _self.apellido, email: _self.email, estructura: _self.estructura, funcion: _self.funcion, telefono: _self.telefono });
-		$.ajax({
-			url: url,
-			contentType: 'text/plain',
-			dataType: 'JSON',
-			type: 'POST',
-			data: data,
+		if($('form').parsley('validate')){
+			var url = 'create/user';
+			var data = JSON.stringify({cuil: _self.cuil, nombre: _self.nombre, apellido: _self.apellido, email: _self.email, estructura: _self.estructura, funcion: _self.funcion, telefono: _self.telefono });
+			$.ajax({
+				url: url,
+				contentType: 'text/plain',
+				dataType: 'JSON',
+				type: 'POST',
+				data: data,
 
-	    	success: function(data) {
-	    		if (data.result == true) {
-	    			_self.set('createSuccess', true);
-	    		} else {
+		    	success: function(data) {
+		    		if (data.result == true) {
+		    			_self.set('createSuccess', true);
+		    		} else {
 
-	    		}
-	    	},
+		    		}
+		    	},
 
-	    	error: function(jqXHR, textStatus, errorThrown){
+		    	error: function(jqXHR, textStatus, errorThrown){
 
-	    	}
-		});				
+		    	}
+			});				
+		}
+
 	},
 
 	recuperar: function () {
@@ -11246,6 +11250,8 @@ App.CreateUserView = Ember.View.extend({
 
 	    	success: function(data) {
 	    		if (data.is_valid) {
+	    			$("form").parsley('reset')
+	    			
 	    			_self.set('isValid', true);
 	    			_self.set('isNew', false);
 
