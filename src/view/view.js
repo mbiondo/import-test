@@ -11123,6 +11123,8 @@ App.RecoveryPasswordView = Ember.View.extend({
 		    		_self.set('loading', false);
 		    		_self.set('recoveryPasswordError', false);
 		    		_self.set('recoveryPasswordSuccess', true);
+		    		_self.set('cuil', '');
+		    		_self.set('mail', '');
 		    	},
 
 		    	error: function(jqXHR, textStatus, errorThrown){
@@ -11151,6 +11153,7 @@ App.RecoveryPasswordView = Ember.View.extend({
 	cancel: function () {
 		App.set('userController.user', null);
 		App.get('userController').set('recoveryPassword', false);
+
 		//App.get('userController').set('user.first_login', false);
 
 		//App.get('router').transitionTo('loading');
@@ -11251,7 +11254,7 @@ App.CreateUserView = Ember.View.extend({
 	    	success: function(data) {
 	    		if (data.is_valid) {
 	    			$("form").parsley('reset')
-	    			
+
 	    			_self.set('isValid', true);
 	    			_self.set('isNew', false);
 
