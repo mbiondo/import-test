@@ -6086,7 +6086,7 @@ App.PieGraphView = Ember.View.extend({
 });
 
 App.ColumnGraphView = Ember.View.extend({
-	attributeBindings: ['title', 'name', 'content', 'categories'],
+	attributeBindings: ['title', 'name', 'content'],
 	pointFormat: '{point.y}',
 	type: 'column',
 	categorias :[   'Enero',
@@ -6104,17 +6104,17 @@ App.ColumnGraphView = Ember.View.extend({
                 ],
 
 	redrawChart: function () {
-		this.$().highcharts({
+		$('#divEstadisticasVisitantesPorMes').highcharts({
 			chart: {
 				plotBackgroundColor: null,
 				plotBorderWidth: null,
-				plotShadow: false
+				plotShadow: false,
+				renderTo: 'divEstadisticasVisitantesPorMes',
 			},
 			title: {
 				text: this.get('title')
 			},
 			tooltip: {
-				//pointFormat: '',
 				pointFormat: this.get('pointFormat') , 
 			},
 			plotOptions: {
@@ -6127,7 +6127,9 @@ App.ColumnGraphView = Ember.View.extend({
 						connectorColor: '#000000',
 						formatter: function() {
 							return '<b>'+ this.point.y +'</b>';
-						}
+						},
+						useHTML: true,
+						showInLegend: true,
 					}
 				}
 			},
@@ -6142,9 +6144,11 @@ App.ColumnGraphView = Ember.View.extend({
 			series: [{
 				type:  this.get('type'),
 				name: this.get('name'),
-				data: this.get('content')
+				data: this.get('content'),
 			}]
 	   });
+
+		console.log(this.get('content'));
 	}.observes('content.@each'),
 
 	didInsertElement: function () {

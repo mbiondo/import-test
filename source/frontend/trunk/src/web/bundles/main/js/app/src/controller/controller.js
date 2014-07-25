@@ -1539,7 +1539,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 	}.property('content.@each'),
 
 	estadisticasPorMes: function(){			
-		var meses = [{name:"Enero",y:0,mes:0} ,{name:"Febrero",y:0,mes:1} ,{name:"Marzo",y:0,mes:2} ,{name:"Abril",y:0,mes:3} ,{name:"Mayo",y:0,mes:4} ,{name:"Junio",y:0,mes:5} ,{name:"Julio",y:0,mes:6} ,{name:"Agosto",y:0,mes:7} ,{name:"Septiembre",y:0,mes:8} ,{name:"Octubre",y:0,mes:9} ,{name:"Noviembre",y:0,mes:10} ,{name:"Diciembre",y:0,mes:11}];
+		var meses = [{name:"Enero",y:0} ,{name:"Febrero",y:0} ,{name:"Marzo",y:0} ,{name:"Abril",y:0} ,{name:"Mayo",y:0} ,{name:"Junio",y:0} ,{name:"Julio",y:0} ,{name:"Agosto",y:0} ,{name:"Septiembre",y:0} ,{name:"Octubre",y:0} ,{name:"Noviembre",y:0} ,{name:"Diciembre",y:0}];
 		var _self = this;
 		var anioActual = new Date().getUTCFullYear();		
 		if (this.get('content'))
@@ -1548,7 +1548,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 				if(item.fechaPreferencia){
 					itemDate = new Date(item.fechaPreferencia.date.substring(0,10));
 					if(anioActual == itemDate.getUTCFullYear()){
-						var index = meses.map(function(e) { return e.mes; }).indexOf(itemDate.getMonth());
+						var index = itemDate.getMonth();
 					
 						if(index >= 0){
 							meses[index].y += parseInt(item.visitantes);
@@ -1558,7 +1558,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 			});
 		}
 
-		return meses;
+		return meses.map(function(e) { return e.y; });
 	}.property('content.@each'),
 
 });
