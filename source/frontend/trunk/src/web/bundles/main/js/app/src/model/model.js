@@ -1928,6 +1928,7 @@ App.VisitaGuiada = Ember.Object.extend({
             'horarioEstipulado',
             'fechaEstipulada',
             'comentariosDelVisitante',
+            'esMiercoles',
 	],
 
 	label: function (){

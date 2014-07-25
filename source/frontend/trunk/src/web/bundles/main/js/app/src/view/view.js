@@ -8187,6 +8187,16 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	},
 
 	aprobar: function () {
+
+		if(this.get('content.fechaEstipulada')){
+			var day = moment(this.get('content.fechaEstipulada'), 'DD/MM/YYYY').format('d');
+			if(day == 3){
+				this.get('content').set('esMiercoles', true);
+			}else{
+				this.get('content').set('esMiercoles', false);
+			}
+		}
+		
 		this.get('content').set('aprobado', true);
 		this.get('content').addObserver('aproveSuccess', this, this.aproveSuccessed);
 		this.get('content').aprove();	
