@@ -6118,7 +6118,7 @@ App.ColumnGraphView = Ember.View.extend({
 				pointFormat: this.get('pointFormat') , 
 			},
 			plotOptions: {
-				pie: {
+				column: {
 					allowPointSelect: true,
 					cursor: 'pointer',
 					dataLabels: {
@@ -6126,7 +6126,7 @@ App.ColumnGraphView = Ember.View.extend({
 						color: '#000000',
 						connectorColor: '#000000',
 						formatter: function() {
-							return '<b>'+ this.point.name +'</b>';
+							return '<b>'+ this.point.y +'</b>';
 						}
 					}
 				}
