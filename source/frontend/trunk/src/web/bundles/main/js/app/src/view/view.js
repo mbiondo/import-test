@@ -8305,7 +8305,7 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 		App.get('visitasGuiadasController').load();                      
 					
 					
-		$.jGrowl('Se dio de baja la visita guiada', { life: 5000 });
+		$.jGrowl(jGrowlMessage.bajaVisita, { life: 5000 });
 	},
 
 });
