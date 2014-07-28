@@ -5658,15 +5658,15 @@ App.CrearTurnoView = App.ModalView.extend({
 		var mensajes = [];
 		var turno = App.get('crearTurnoController').get('turno');
 		if (turno.tiempo < 1) 
-			mensajes.push({titulo: "Debes seleccionar un tiempo mayor a 0"});
+			mensajes.push({titulo: "Debe seleccionar un tiempo mayor a 0"});
 		if (turno.orden < 0) 
-			mensajes.push({titulo: "Debes seleccionar un tiempo orden a 0."});
+			mensajes.push({titulo: "Debe seleccionar un tiempo orden a 0."});
 		if (turno.listaId == null) 
-			mensajes.push({titulo: "Debes seleccionar una lista."});
+			mensajes.push({titulo: "Debe seleccionar una lista."});
 		if (turno.oradores == null || turno.oradores.length == 0) 
-			mensajes.push({titulo: "Debes seleccionar uno o mas oradores."});
+			mensajes.push({titulo: "Debe seleccionar uno o mas oradores."});
 		if (this.get('esDictamen') && turno.tag == null)
-			mensajes.push({titulo: "Debes seleccionar el tipo de dictamen."});
+			mensajes.push({titulo: "Debe seleccionar el tipo de dictamen."});
 		return mensajes;
 	}.property('turno.listaId', 'turno.oradores', 'turno.oradores.length', 'turno.tiempo', 'turno.tag', 'turno.orden'),
 	
