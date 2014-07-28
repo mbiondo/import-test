@@ -391,7 +391,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
                                 {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
-								{titulo: 'LEY ' + context.expdip},
+								{titulo: context.tipo + ' ' + context.expdip},
 								{titulo: 'Ver'},
 							]);		
 
@@ -510,7 +510,7 @@ App.Router =  Em.Router.extend({
 								{titulo: 'Dirección Secretaría'},
 								{titulo: 'Mesa de entrada'},
                                 {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
-								{titulo: context.expdip},
+                                {titulo: context.tipo + ' ' + context.expdip},
 								{titulo: 'Editar'},
 							]);		
 
@@ -4283,8 +4283,8 @@ App.Router =  Em.Router.extend({
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Publicaciones'},
 							{titulo: 'Trámite Parlamentario'},
-							{titulo: 'Listado', url: '#/publicaciones/TP/listado'},
-							{titulo: 'N° ' + context.get('numero')},
+							{titulo: moment(context.get('fecha'), 'YYYY-MM-DD').format('LL') + ' - N° ' + context.get('numero')},
+							{titulo: 'Ver'},
 						]);		
 
 						App.get('menuController').seleccionar(12, 0, 0);	
