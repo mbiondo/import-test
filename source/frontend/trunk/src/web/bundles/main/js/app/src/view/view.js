@@ -599,6 +599,9 @@ App.ChangePasswordView = Ember.View.extend({
 			localStorage.setObject('user', JSON.stringify(App.userController.user));
 			App.get('router').transitionTo('loading');
 			App.get('router').transitionTo('index');
+			$.jGrowl( jGrowlMessage.modificadoContrasena.message , { life: jGrowlMessage.modificadoContrasena.life });
+		}else{
+			$.jGrowl( jGrowlMessage.noModificadoContrasena.message , { life: jGrowlMessage.noModificadoContrasena.life });
 		}
 	},
 
@@ -8305,7 +8308,7 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 		App.get('visitasGuiadasController').load();                      
 					
 					
-		$.jGrowl(jGrowlMessage.bajaVisita, { life: 5000 });
+		$.jGrowl(jGrowlMessage.bajaVisita.message, { life: jGrowlMessage.bajaVisita.life });
 	},
 
 });
