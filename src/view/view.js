@@ -8589,6 +8589,8 @@ App.TPCrearView = Ember.View.extend({
 
 App.TPConsultaView = Ember.View.extend({
 	templateName: 'tp-consulta',
+	loading: false,
+	url: '',
 	
 	documentURL: function () {
 		var url = this.get('controller.content.url');
@@ -8627,6 +8629,33 @@ App.TPConsultaView = Ember.View.extend({
 	confeccionarTP: function () {
 		return App.get('userController').hasRole('ROLE_PUBLICACIONES_EDIT') 
 	}.property('App.userController.user'),
+
+	publish: function () {
+		this.set('loading', true);
+		$.ajax({
+			url:  'publicaciones/generate/tp',
+			dataType: 'JSON',
+			type: 'POST',
+			context: this,
+			contentType: 'text/plain',
+			crossDomain: 'true',			
+			data : this.get('controller.content').getJson(),
+			success: this.createSucceded,
+			complete: this.createCompleted,
+		});		
+	},
+
+	createSucceded: function (data) {
+		if (data.success) {
+			//
+			this.set('url', data.url);
+			this.set('loading', false);
+		}
+	},
+
+	createCompleted: function (data) {
+	},
+
 
 });
 
@@ -8691,14 +8720,39 @@ App.TestView = Ember.View.extend({
 
 	content: [],
 
-	crearTest: function () {
-		App.TimeLineEventCreateView.popup();
+	publish: function () {
+
+		$.ajax({
+			url:  'publicaciones/generate/tp',
+			dataType: 'JSON',
+			type: 'POST',
+			context: this,
+			contentType: 'text/plain',
+			crossDomain: 'true',			
+			data : JSON.stringify(json),
+			success: this.createSucceded,
+			complete: this.createCompleted,
+		});		
 	},
 
+	createSucceded: function (data) {
+		console.log(data);
+		if (data.success) {
+			alert(data.url);
+		}
+	},
+
+	createCompleted: function (data) {
+		console.log(data);
+	},
+
+
 	willInsertElement: function () {
+		/*
 		for (var i=0; i < 100; i++) {
 			this.get('content').addObject({label: 'pepe' + i});
 		}
+		*/
 	},
 
 	didInsertElement: function () {
