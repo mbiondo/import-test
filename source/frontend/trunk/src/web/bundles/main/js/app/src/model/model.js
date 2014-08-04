@@ -628,6 +628,7 @@ App.Expediente = Em.Object.extend({
     desNormalize: function ()  {
         this.set('pubFecha', moment(this.get('pubFecha'), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY'));
 
+/*
 		if(this.get('expdip')){
 			expdip = this.get('expdipN').split('-');
 			expdipN = expdip[0];
@@ -637,6 +638,7 @@ App.Expediente = Em.Object.extend({
 			this.set('expdipN', expdipN);
 			this.set('expdipA', expdipA);
 		}
+*/
 		
 		if(this.get('mjeFecha'))
 		{
