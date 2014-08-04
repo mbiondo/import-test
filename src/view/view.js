@@ -7314,6 +7314,8 @@ App.CrearExpedienteView = Ember.View.extend({
 		if (this.get('content.createSuccess')) {
 			var expediente = this.get('content');
 			
+
+			console.log(expediente);
 			$.jGrowl('Se ha creado el expediente!', { life: 5000 });
 			
 			var notification = App.Notificacion.extend(App.Savable).create();
@@ -7343,7 +7345,6 @@ App.CrearExpedienteView = Ember.View.extend({
 
 
 			this.set('content', App.Expediente.extend(App.Savable).create({
-				expdipA: '', 
 				expdipN: '', 
 				tipo: 'LEY', 
 				pubtipo: expediente.get('pubtipo'), 
