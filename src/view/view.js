@@ -7713,7 +7713,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
 	changeExdip: function(){
 		var _self = this;
-		if(this.get('content.expdipN') && this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4)
+		if((this.get('content.expdipN') && this.get('content.expdipA')) && (this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4))
 		{		
 			App.proyectosController = App.ProyectosController.create({ content: []});
 			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: this.get('content.expdip')}));
@@ -7867,10 +7867,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if(App.get('tpsController.arrangedContent'))
 		{
 			var tpSelect = App.get('tpsController.arrangedContent').findProperty('numero', this.get('content.pubnro'));
-			var tp = App.TP.extend(App.Savable).create({id: tpSelect.id})
-			App.tpConsultaController = App.TPConsultaController.create();
-			App.set('tpConsultaController.content', tp);
-			this.set('puedeVerPreviewTramiteParlamentario', true);
+			if(tpSelect)
+			{
+				var tp = App.TP.extend(App.Savable).create({id: tpSelect.id})
+				App.tpConsultaController = App.TPConsultaController.create();
+				App.set('tpConsultaController.content', tp);
+				this.set('puedeVerPreviewTramiteParlamentario', true);
+			}
 			
 			/*
 			if(tpSelect)
