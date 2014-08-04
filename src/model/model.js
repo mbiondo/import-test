@@ -2032,7 +2032,12 @@ App.TP = Ember.Object.extend({
         'id',
         'numero',
         'periodo',
-        'fecha'
+        'fecha',
+        'proyectosD',
+        'proyectosS',
+        'proyectosPE',
+        'proyectosJGM',
+        'senadoConModif',
 	],    
 
    normalize: function () {
