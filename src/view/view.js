@@ -2924,7 +2924,12 @@ App.CitacionCrearView = Em.View.extend({
 		//App.get('citacionCrearController').cargarExpedientes();
 	},
 	cancelarEdicion: function(){
-		App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+		if(this.get('content.id')){
+			App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+		}
+		else{
+			App.get('router').transitionTo('comisiones.citaciones.index');
+		}
 	},
 	guardar: function () {
 		this.$('#crear-citacion-form').parsley('validate');
