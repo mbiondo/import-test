@@ -1369,6 +1369,7 @@ App.Router =  Em.Router.extend({
 							App.get('ioController').joinRoom('oradores');
 							App.get('menuController').seleccionar(4);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+
 						},
 
 						exit: function () {
@@ -1467,6 +1468,7 @@ App.Router =  Em.Router.extend({
 									//appController.connectOutlet('menu', 'subMenu');
 									if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 										appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+										App.puedeEditar = true;
 										//appController.connectOutlet('help', 'crearTurnoInline');
 									}
 								 	else
@@ -1608,6 +1610,7 @@ App.Router =  Em.Router.extend({
 									if (hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 										//appController.connectOutlet('help', 'crearTurnoInline');
 										appController.connectOutlet('main', 'oradoresEditorSesionConsulta');
+										App.puedeEditar = true;
 									}
 								 	else
 										appController.connectOutlet('main', 'sesionConsulta');
