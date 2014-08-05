@@ -3164,11 +3164,14 @@ App.Router =  Em.Router.extend({
 					roles: ['MIRANDA', 'PEDRO'],
 
 					deserialize: function(router, params) {
-						 var deferred = $.Deferred(),
+						 var deferred = $.Deferred();
+
+						 App.reunionesSinParteController = App.ReunionesSinParteController.create();
 						
 						 fn = function() {
 							App.get('reunionesSinParteController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);					
+						 	}
 						 };
 
 						 App.get('reunionesSinParteController').addObserver('loaded', this, fn);
@@ -3197,12 +3200,16 @@ App.Router =  Em.Router.extend({
 					route: "/con/parte",
 					
 					deserialize: function(router, params) {
-						 var deferred = $.Deferred(),
+						 var deferred = $.Deferred();
 						
+						App.reunionesConParteController = App.ReunionesConParteController.create();
+
 						 fn = function() {
+						 	if(App.get('reunionesConParteController.loaded')){
 							App.get('reunionesConParteController').removeObserver('loaded', this, fn);	
 
-							deferred.resolve(null);					
+							deferred.resolve(null);	
+							}				
 						 };
 
 
