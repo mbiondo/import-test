@@ -2935,7 +2935,8 @@ App.ReunionesSinParteController = App.RestController.extend({
 		this._super();
 	},
 	loadSucceeded: function(data){
-		if(data.length > 1)
+//		if(data.length > 1)
+		if(data && data.length > 0)
 		{
 			this._super(data);
 		}
