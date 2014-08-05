@@ -7500,7 +7500,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('tpsController.content.@each'),
 
 	numerosChanged: function(){
-		if (this.get('pubnro')) {
+		if (this.get('pubnro')) {	
 			this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
 			this.set('content.pubnro', this.get('pubnro.numero'));
 			this.set('parentView.oldTP', this.get('pubnro'));
@@ -7510,7 +7510,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.set('content.pubFecha', null);
 			this.set('content.pubnro', null);
 		}
-	}.observes('pubnro'),
+	}.observes('pubnro', 'content'),
 
 
 	errorTabChange: function () {
@@ -7619,7 +7619,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		_self = this;
 
 		if (this.get('parentView.oldTP')) {
-			_self.set('pubnro', _self.get('parentView.oldTP'));
+			this.set('pubnro', _self.get('parentView.oldTP'));
 		}
 
 		//if (!this.get('content.id')) {
@@ -7654,6 +7654,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	parentViewChangeTP: function () {
 		_self = this;
+		console.log(_self.get('parentView.oldTP'));
 		Ember.run.next(function () { 
 			_self.set('pubnro', _self.get('parentView.oldTP'));
 		});
