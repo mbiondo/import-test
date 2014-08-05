@@ -7436,6 +7436,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			autoridades: [],
 		}));                
 
+		
 		var tp = App.get('tpsController.arrangedContent.firstObject');
 		this.set('oldTP', tp);
           
@@ -7618,9 +7619,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		_self = this;
 
 		if (this.get('parentView.oldTP')) {
-			Ember.run.next(function () { 
-				_self.set('pubnro', _self.get('parentView.oldTP'));
-			});	
+			_self.set('pubnro', _self.get('parentView.oldTP'));
 		}
 
 		//if (!this.get('content.id')) {
@@ -9532,6 +9531,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 
 		this.set('content', this.get('controller.content'));
 
+		
 
 		var tp = App.get('tpsController.content').findProperty('numero', parseInt(this.get('content').get('pubnro')));
 
