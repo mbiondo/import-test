@@ -7654,7 +7654,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	parentViewChangeTP: function () {
 		_self = this;
-		console.log(_self.get('parentView.oldTP'));
 		Ember.run.next(function () { 
 			_self.set('pubnro', _self.get('parentView.oldTP'));
 		});
