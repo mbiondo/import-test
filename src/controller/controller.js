@@ -660,8 +660,7 @@ App.UserController = Em.Controller.extend({
 				}
 			},
 			complete: function (xhr) {
-				var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: xhr});
-				console.log("dasdasd " + xhr.status + " " + xHRAuthURLController.getShowMessage());
+				var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: xhr});				
 				
 				if (xHRAuthURLController.hasError()){								
 					var response = JSON.parse(xhr.responseText);
@@ -771,6 +770,15 @@ App.UserController = Em.Controller.extend({
 					$('#loadingScreen').remove();				
 				});
 			},
+			error: function(data){
+				App.userController.set('user', null);
+				localStorage.setObject('user', null);
+
+				App.get('router').transitionTo('loading');
+				App.get('router').transitionTo('index');
+
+				$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
+			}
 		});			
 	},
 
