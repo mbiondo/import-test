@@ -950,10 +950,11 @@ App.NotificationController = Em.Controller.extend({
 		}
 		else
 		{
-			$.jGrowl('<a href="' + notificacion.link + '" >' + notificacion.mensaje + '</a>', {header: notificacion.titulo , life: 5000 });
+			$.jGrowl('<a href="' + notificacion.link + '" >' + notificacion.mensaje + '</a>', {life: 5000 });
 		}
 	},
 });
+
 
 App.ApplicationController = Em.Controller.extend({
 	loading : false,
@@ -2935,8 +2936,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 		this._super();
 	},
 	loadSucceeded: function(data){
-//		if(data.length > 1)
-		if(data && data.length > 0)
+		if(data.length > 1)
 		{
 			this._super(data);
 		}
@@ -4409,7 +4409,7 @@ App.ListaController = Em.Object.extend({
 	}.property('content', 'App.turnosController.turnoHablando'),
 	
 	turnosDesbloqueados : function () {
-		console.log('turnosDesbloqueados');
+		//console.log('turnosDesbloqueados');
 		var temaController = App.get('temaController');
 
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
@@ -4428,7 +4428,7 @@ App.ListaController = Em.Object.extend({
 	}.property('content', 'App.temaController.content.@each', 'App.turnosController.content.@each.bloqueado', 'App.turnosController.isUpdated').cacheable(),
 
 	turnosBloqueados : function () {
-		console.log('turnosBloqueados');
+		//console.log('turnosBloqueados');
 		var temaController = App.get('temaController');
 
 		var turnos = App.get('turnosController.arrangedContent').filter(function(item){
