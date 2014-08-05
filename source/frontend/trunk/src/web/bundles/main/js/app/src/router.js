@@ -3167,7 +3167,7 @@ App.Router =  Em.Router.extend({
 						 var deferred = $.Deferred(),
 						
 						 fn = function() {
-							 App.get('reunionesSinParteController').removeObserver('loaded', this, fn);	
+							App.get('reunionesSinParteController').removeObserver('loaded', this, fn);	
 							deferred.resolve(null);					
 						 };
 

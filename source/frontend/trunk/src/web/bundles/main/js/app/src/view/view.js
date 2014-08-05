@@ -6156,7 +6156,7 @@ App.ColumnGraphView = Ember.View.extend({
 			}]
 	   });
 
-		console.log(this.get('content'));
+		//console.log(this.get('content'));
 	}.observes('content.@each'),
 
 	didInsertElement: function () {
@@ -8746,14 +8746,14 @@ App.TestView = Ember.View.extend({
 	},
 
 	createSucceded: function (data) {
-		console.log(data);
+		//console.log(data);
 		if (data.success) {
 			alert(data.url);
 		}
 	},
 
 	createCompleted: function (data) {
-		console.log(data);
+		//console.log(data);
 	},
 
 
