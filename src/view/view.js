@@ -7259,10 +7259,12 @@ App.CrearExpedienteView = Ember.View.extend({
 				this.get('content').set('tipo', this.get('expTipo'));
 			}
 			
+			/*
 			while (this.get('content.expdipN').length < 4)
 			{
                 this.set(('content.expdipN'),  '0' + this.get('content.expdipN'));
             }
+            */
 
 			this.set('loading', true);
 			this.get('content').normalize();
@@ -7368,6 +7370,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			//$("#formCrearExpediente").parsley('reset');
 			$("#formCrearExpediente").parsley('destroy');
+
 			$("#nav-tabs-proyecto").click();
 			$("#selector-tipo-proyecto").focus();
 
@@ -7516,6 +7519,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	errorTabChange: function () {
 		if (this.get('parentView.errorTab') > 0) {
 			
+			/*
 			switch (this.get('parentView.errorTab')) {
 				case 1:
 					this.$("#nav-tabs-proyecto").click();
@@ -7526,13 +7530,9 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				case 3:
 					this.$("#nav-tabs-giros").click();
 					break;
-			}
-			
-			
-		
+			}*/
 			// Nuevo Refactor 1/2	
-			//$("[tab-order="+ this.get('parentView.errorTab') +"]").click();
-		
+			$("[tab-order="+ this.get('parentView.errorTab') +"]").click();
 		}
 	}.observes('parentView.errorTab'),
 
@@ -7576,6 +7576,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		navtab_list_InputFocus['giros'] 	= 'searchWidgetGiros';
 
 		navtab_list = ['proyecto', 'firmantes', 'giros'];
+		/*
 		navtab_list.forEach(function(value, index){
 			$("#nav-tabs-"+ value).on("click", function(){
 				chequearContent[value] = setInterval(function(){
@@ -7593,6 +7594,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				$("#nav-tabs-"+ value).click();
 			});
 		});
+		*/
 		
 		
 			// Nuevo Refactor 2/2	
@@ -8581,17 +8583,31 @@ App.TPCrearView = Ember.View.extend({
 	crear: function(){
 		this.set('clickGuardar', true);
 
+
 		if($('#formCrearTP').parsley('validate'))
 		{
-			while (this.get('controller.content.numero').length < 3)
-			{
-                this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
-            }
 
-			this.set('controller.content.fecha', this.get('fecha'));
+			App.confirmActionController.setProperties({
+				title: 'Confirmar creación de Proyecto',
+				message: '¿ Confirma que desea crear el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + this.get('fecha') +  ' ?',
+				success: null,
+			});
 			
-			this.get('controller').crear();
+			App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+			App.confirmActionController.show();			
 		} 
+	},
+
+	confirmActionDone: function () {
+		while (this.get('controller.content.numero').length < 3)
+		{
+            this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
+        }
+
+		this.set('controller.content.fecha', this.get('fecha'));
+		
+		this.get('controller').crear();
+
 	},
 
 })
