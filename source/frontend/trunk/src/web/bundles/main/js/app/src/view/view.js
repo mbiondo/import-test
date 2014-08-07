@@ -9730,9 +9730,16 @@ App.ProyectoListItemView = Ember.View.extend({
 	templateName: 'proyectos-list-item',
 });
 
+App.ProyectoListItemExportView = Ember.View.extend({
+	tagName: 'tr',
+	classNames: ['gradeX'],
+	templateName: 'proyectos-list-item-for-export',
+});
+
 App.ProyectosListView = App.ListFilterWithSortView.extend({
 	templateName: 'proyectos-sortable-list',
 	itemViewClass: App.ProyectoListItemView,
+	itemViewClassExport: App.ProyectoListItemExportView,
 
 	mostrarMas: function () {
 		this.set('scroll', $(document).scrollTop());
