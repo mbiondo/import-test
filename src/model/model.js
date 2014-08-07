@@ -736,6 +736,47 @@ App.Expediente = Em.Object.extend({
 
 	}.property('giro'),
 
+	firmantesCompletoLabel: function() {
+		var strFirmantes = [];
+
+		if (this.get('firmantes')) {
+			var firmantes = this.get('firmantes').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
+			
+			var regex = new RegExp('-PE-');
+			var regex2 = new RegExp('-JGM-');
+			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
+				return firmantes.objectAt(0).nombre;
+			} else {				
+				firmantes.forEach(function (firmante) {
+					strFirmantes.addObject(firmante.nombre);
+				});
+				return strFirmantes.join(' y ');	
+			}
+		}
+	}.property('firmantes'),
+
+	girosCompletoLabel: function () {
+		var strGiros = [];
+		var field = "orden";
+		if (this.get('giro')) {
+			var giros = this.get('giro').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
+
+			if (giros.length > 0){
+				giros.forEach(function (giro) {
+					strGiros.addObject(giro.comision);
+				});
+				return strGiros.join(' y ');			
+			}
+		} else {
+			return "";
+		}
+
+	}.property('giro'),
+
 	serializable: [
         "id",
     	"tipo",
@@ -2148,6 +2189,42 @@ App.Proyecto = Em.Object.extend({
 			}
 		}
 	}.property('firmantes'),	
+
+	firmantesCompletoLabel: function() {
+		var strFirmantes = [];
+
+		if (this.get('firmantes')) {
+			var firmantes = this.get('firmantes').sort(function (a, b) {
+				return a.orden - b.orden;
+			});
+			
+			var regex = new RegExp('-PE-');
+			var regex2 = new RegExp('-JGM-');
+			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
+				return firmantes.objectAt(0).nombre;
+			} else {				
+				firmantes.forEach(function (firmante) {
+						strFirmantes.addObject(firmante.nombre);
+					});
+				console.log(strFirmantes.join(' y '));
+				return strFirmantes.join(' y ');	
+			}
+		}
+	}.property('firmantes'),
+
+	girosCompletoLabel: function () {
+		var field = "orden";
+		var giros = this.get('giro').sort(function (a, b) {
+			return a.orden - b.orden;
+		});
+
+		if (giros.length > 0)
+		{
+			console.log(giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")");						
+			return giros.objectAt(0).comision + " y otras (" + (giros.length - 1 ) + ")";	
+		}
+
+	}.property('giro'),
 
 	girosLabel: function () {
 		var field = "orden";
