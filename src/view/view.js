@@ -8945,6 +8945,7 @@ App.MultiSelectListView = Ember.View.extend({
 					this.get('contentAc.content').addObject(item);
 			} else {
 				this.get('contentAc.content').addObject(item);
+				this.get('contentController.content').addObject(item);
 			}
 			this.get('selection').removeObject(item);
 		} else {
