@@ -1839,13 +1839,24 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 	},
 
-	lista: function (){
+	lista: function (){		
+		var _self = this;
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
 
 		this.set('mostrarMasEnabled', true);
+
+		Ember.run.next(function(){
+		// High Light Words
+		// Agrega la clase .highlight, modificar el css si se quiere cambiar el color de fondo
+			$('table').removeHighlight();
+
+			if(_self.get('filterText') && _self.get('filterText').length > 0){
+				$('td').highlight(_self.get('filterText'));
+			}
+		});
 		return filtered;
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.expedientesController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });
@@ -9303,7 +9314,23 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
 		}
 	},
+	/*
+	openDocument: function () {
+		this.set('loading', true);
+//		var url = App.get('expedienteConsultaController.content.documentURL');
+		var url = this.get('controller.content.documentURL');
 
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: this.loadSucceeded,
+			complete: this.loadCompleted,
+			contentType: 'text/plain',
+			crossDomain: true,
+			context: this,
+		});			
+	},
+	*/
 });
 
 App.MEExpedienteEditarView = Ember.View.extend({
@@ -9791,7 +9818,9 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	}.property('App.proyectosController.recordcount'),
 
 	lista: function (){
+		var _self = this;
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+
 		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
 			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
 		});
@@ -9803,6 +9832,16 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		} else {
 			this.set('mostrarMasEnabled', false);
 		}
+
+		Ember.run.next(function(){
+		// High Light Words
+		// Agrega la clase .highlight, modificar el css si se quiere cambiar el color de fondo
+			$('table').removeHighlight();
+
+			if(_self.get('filterText') && _self.get('filterText').length > 0){
+				$('td').highlight(_self.get('filterText'));
+			}
+		});
 
 		return filtered;
 	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
