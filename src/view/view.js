@@ -470,10 +470,23 @@ App.ContentView = Ember.View.extend({
 	},
 
 	changePassword: function () {
+		
+/*
 		App.get('router').transitionTo('loading');
-		App.get('userController').set('user.first_login', true);
-		App.get('userController').set('changePassword', true);
 		App.get('router').transitionTo('index');
+*/
+
+		if (App.get('userController.user'))
+			App.get('userController').set('user.first_login', true);
+		
+		App.get('userController').set('changePassword', true);
+		App.userController.set('user', null);
+		localStorage.setObject('user', null);
+
+		App.get('router').transitionTo('loading');
+		App.get('router').transitionTo('index');
+
+		$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
 	},
 
 	marcarTodas: function () {
@@ -804,6 +817,7 @@ App.ConfirmActionPopupView = App.ModalView.extend({
 	templateName: 'confirmar-accion-popup',
 
 	callback: function(opts, event){
+
 		if (opts.primary) {
 			App.get('confirmActionController').set('success', true);
 		} else if (opts.secondary) {
@@ -7225,7 +7239,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		this.set('errorTab', 0);
 		var formIsValid = $("#formCrearExpediente").parsley('validate');
 
-
+		this.set('clickGuardar', true);
 
 		if(this.get('clickGuardar') == true)
 		{
@@ -7311,6 +7325,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('loading', false);
 		}
 	},
+
 	confirmarImprimirSuccess: function () {
 
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);		
@@ -7418,7 +7433,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	setupEnter: function(){
 		var _self = this;
 		// console.log('setupEnter');
-
+/*
 		$("#crearProyecto").on('click', function(){
 			 // console.log('click');				
 
@@ -7434,6 +7449,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				// console.log("clickGuardar: " + _self.get('clickGuardar'));
 			}
 		});
+*/
 	},
 
 	didInsertElement: function () {
@@ -9790,7 +9806,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		_self = this;
 		if (this.get('intervalText'))
 			clearInterval(_self.get('intervalText'));
-		
+
 		var i = setInterval(function () {
 			clearInterval(_self.get('intervalText'));	
 			_self.set('sorting', ! _self.get('sorting'));
