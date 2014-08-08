@@ -7587,7 +7587,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		navtab_list_InputFocus['giros'] 	= 'searchWidgetGiros';
 
 		navtab_list = ['proyecto', 'firmantes', 'giros'];
-		/*
+		
 		navtab_list.forEach(function(value, index){
 			$("#nav-tabs-"+ value).on("click", function(){
 				chequearContent[value] = setInterval(function(){
@@ -7605,7 +7605,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				$("#nav-tabs-"+ value).click();
 			});
 		});
-		*/
+		
 		
 		
 			// Nuevo Refactor 2/2	
@@ -9783,6 +9783,20 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	templateName: 'proyectos-sortable-list',
 	itemViewClass: App.ProyectoListItemView,
 	itemViewClassExport: App.ProyectoListItemExportView,
+	intervalText: null,
+
+
+	changeFilterText: function () {
+		_self = this;
+		if (this.get('intervalText'))
+			clearInterval(_self.get('intervalText'));
+		
+		var i = setInterval(function () {
+			clearInterval(_self.get('intervalText'));	
+			_self.set('sorting', ! _self.get('sorting'));
+		}, 800);
+		this.set('intervalText', i);
+	}.observes('filterText'),
 
 	mostrarMas: function () {
 		this.set('scroll', $(document).scrollTop());
@@ -9844,7 +9858,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		});
 
 		return filtered;
-	}.property('startFecha', 'endFecha','filterText', 'filterFirmantes', 'filterTipos', 'filterComisiones', 'App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+	}.property('App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting', 'filterTextChanged'),
 
 });
 
