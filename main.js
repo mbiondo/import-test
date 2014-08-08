@@ -783,8 +783,11 @@ App.deferReadiness();
 
 App.puedeEditar = false;
 
-if (localStorage.getItem('user') == "undefined")
-	localStorage.setObject(null);	
+
+
+if (localStorage.getItem('user') == "undefined") {
+	localStorage.setObject('user', null);	
+}
 
 var user = localStorage.getObject('user');
 
