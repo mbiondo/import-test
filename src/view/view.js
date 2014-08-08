@@ -478,7 +478,7 @@ App.ContentView = Ember.View.extend({
 
 		if (App.get('userController.user'))
 			App.get('userController').set('user.first_login', true);
-		
+
 		App.get('userController').set('changePassword', true);
 		App.userController.set('user', null);
 		localStorage.setObject('user', null);
@@ -7741,6 +7741,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.get('content').set('expdip', this.get('content.expdipN') + "-" + expdipT + "-" + this.get('content.expdipA'));
 		}
 	}.observes('content.expdipT', 'content.expdipN', 'content.expdipA'),
+
 	changeExdip: function(){
 		var _self = this;
 		if((this.get('content.expdipN') && this.get('content.expdipA')) && (this.get('content.expdipN').length == 4 && this.get('content.expdipA').length == 4))
@@ -7833,6 +7834,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 						_self.set('content.autoridades', ex.autoridades);
 
  				 		Ember.run.next(function(){		
+ 				 			_self.set('content.expdipN', '');
  				 			_self.set('content.titulo', ex.titulo);
  				 			//_self.set('content.periodo', ex.periodo);
  				 			_self.set('content.iniciado', ex.iniciado);
