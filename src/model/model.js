@@ -1156,6 +1156,21 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 		}
 	}.property('disidencia'),
 
+	bloque: function () {
+		var bloquesFirmante = this.get('diputado.datosPersonales.bloques');
+    	var bloqueActual = null;
+    	bloquesFirmante.forEach(function (b) {
+    		if(bloqueActual){
+    			if(bloqueActual.fechaFin < b.fechaFin){
+    				bloqueActual = b;
+    			}            			
+    		}else{
+				bloqueActual = b;
+    		}            
+    	});		
+    	return bloqueActual;
+	}.property('diputado.datosPersonales'),
+
 	label: function() {
 		return (this.get('diputado.datosPersonales.apellido') + ", " + this.get('diputado.datosPersonales.nombre'));
 	}.property('diputado.datosPersonales.apellido'),
