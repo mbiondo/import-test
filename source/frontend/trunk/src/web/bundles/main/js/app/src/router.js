@@ -282,7 +282,7 @@ App.Router =  Em.Router.extend({
 							App.firmantesController = App.FirmantesController.create();
 							App.comisionesController = App.ComisionesController.create();
 
-							 if (!App.get('tpsController'))
+							 if (!App.get('tpsController') || !App.get('tpsController.periodo'))
 							 	App.tpsController = App.TPsController.create({periodo: 132});
 
 							var deferred = $.Deferred(),
@@ -454,6 +454,8 @@ App.Router =  Em.Router.extend({
 
 							 	    if (!App.get('tpsController')) {
 							 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
+							 	    } else {
+							 	    	App.tpsController.set('periodo', ex.get('periodo'));
 							 	    }
 
 									App.get('firmantesController').addObserver('loaded', this, fn3);
