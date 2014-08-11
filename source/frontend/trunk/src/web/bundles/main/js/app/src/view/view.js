@@ -7344,8 +7344,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			
 
 			
-			
-			$.jGrowl('Se ha creado el expediente!', { life: 5000 });
+			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000 });
 			
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'crearProyecto');	
