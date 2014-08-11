@@ -616,7 +616,19 @@ App.Expediente = Em.Object.extend({
             this.set('autoridades', this.get('autoridades').sort(function(a, b){ return a.orden-b.orden }));
 
             this.get('autoridades').forEach(function (firmante) {
-                var itemDatos = {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: firmante.get('diputado.datosPersonales.bloques.firstObject.nombre')};
+            	var bloquesFirmante = firmante.get('diputado.datosPersonales.bloques');
+            	var bloqueActual = null;
+            	bloquesFirmante.forEach(function (bloque) {
+            		if(bloqueActual){
+            			if(bloqueActual.fechaFin < bloque.fechaFin){
+            				bloqueActual = bloque;
+            			}            			
+            		}else{
+						bloqueActual = bloque;
+            		}            
+            	});
+
+                var itemDatos = {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: bloqueActual.nombre};
                 orden++;
                 fs.pushObject(itemDatos);
             }, this);
