@@ -7475,6 +7475,9 @@ App.CrearExpedienteView = Ember.View.extend({
 		});
 
 		this.setupEnter();
+	},
+	cancelar: function(){
+		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.proyectos');				
 	}
 });
 
@@ -9869,9 +9872,12 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		var _self = this;
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 
-		filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
-			return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
-		});
+		if(App.get('proyectosController').get('arrangedContent'))
+		{
+			filtered = App.get('proyectosController').get('arrangedContent').filter(function(proyecto){
+				return regex.test((proyecto.tipo + proyecto.titulo + proyecto.expdip + proyecto.get('firmantesLabel') + proyecto.get('girosLabel')).toLowerCase());
+			});
+		}
 
 		this.set('content.count', filtered.length);		
 
