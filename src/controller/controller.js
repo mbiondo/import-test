@@ -5125,7 +5125,7 @@ App.TPsController = App.RestController.extend({
 	type: App.TP,
 	periodo: 132,
 
-	sortProperties: ['numero'],
+	sortProperties: ['fecha'],
 	sortAscending: false,	
 
 	load: function () {
