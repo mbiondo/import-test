@@ -7345,7 +7345,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			
 			
-			$.jGrowl('Se ha creado el expediente!', { life: 5000 });
+			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000 });
 			
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'crearProyecto');	
@@ -8618,7 +8618,7 @@ App.TPCrearView = Ember.View.extend({
 		{
 
 			App.confirmActionController.setProperties({
-				title: 'Confirmar creación de Proyecto',
+				title: 'Confirmar creación de Trámite Parlamentario',
 				message: '¿ Confirma que desea crear el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + this.get('fecha') +  ' ?',
 				success: null,
 			});
@@ -8629,14 +8629,19 @@ App.TPCrearView = Ember.View.extend({
 	},
 
 	confirmActionDone: function () {
-		while (this.get('controller.content.numero').length < 3)
-		{
-            this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
-        }
-
-		this.set('controller.content.fecha', this.get('fecha'));
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 		
-		this.get('controller').crear();
+		if (App.get('confirmActionController.success'))
+		{
+			while (this.get('controller.content.numero').length < 3)
+			{
+	            this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
+	        }
+
+			this.set('controller.content.fecha', this.get('fecha'));
+			
+			this.get('controller').crear();
+		}
 
 	},
 
