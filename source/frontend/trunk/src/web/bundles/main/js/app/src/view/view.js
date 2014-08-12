@@ -7298,6 +7298,8 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
+		}else{
+			$("#crearProyecto").focus();
 		}
 	},
 
@@ -7427,11 +7429,13 @@ App.CrearExpedienteView = Ember.View.extend({
 			evento.create();
 			*/
 
-		} 
+		}
 	},
 
 	setupEnter: function(){
 		var _self = this;
+	
+
 		// console.log('setupEnter');
 /*
 		$("#crearProyecto").on('click', function(){
@@ -7475,9 +7479,22 @@ App.CrearExpedienteView = Ember.View.extend({
 		});
 
 		this.setupEnter();
+
+		shortcut.add('enter', function() {
+		  if($('#crearProyecto').is(':focus'))
+		  {
+			$("#crearProyecto").blur();
+		    _self.guardar();
+		  }
+		});
+
 	},
 	cancelar: function(){
 		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.proyectos');				
+	},
+	willDestroyElement: function(){
+		// remove shorcut
+		shortcut.remove('enter');
 	}
 });
 
