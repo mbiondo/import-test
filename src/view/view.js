@@ -8056,20 +8056,40 @@ App.BiographyView = Ember.View.extend({
 	}.property('App.userController.user'),
 
 	edit: function () {
-		
-		var biography;
-			biography = App.Biography.extend(App.Savable).create(this.get('content'));
-			biography.set('bloque', App.bloquesController.findProperty('nombre', this.get('content').get('bloque.nombre')));
-			biography.set('interBloque', App.interBloquesController.findProperty('nombre', this.get('content').get('interBloque.nombre')));
-			biography.set('url', 'biographys/biography/' + this.get('content').get('id') + '/');
-			biography.set('noConcatURL', true);
 
-		App.biographyController = App.BiographyController.create({
-			content: biography,
-			expediente: App.get('expedienteConsultaController.content'),
-		});
+		App.bloquesController = App.BloquesController.create();
+		App.interBloquesController = App.InterBloquesController.create();
 
-		App.CreateBiographyView.popup();
+
+		fn = function() {
+			if (App.get('bloquesController.loaded') && App.get('interBloquesController.loaded')) {
+				var biography;
+					biography = App.Biography.extend(App.Savable).create(this.get('content'));
+					biography.set('bloque', App.bloquesController.findProperty('nombre', this.get('content').get('bloque.nombre')));
+					biography.set('interBloque', App.interBloquesController.findProperty('nombre', this.get('content').get('interBloque.nombre')));
+					biography.set('url', 'biographys/biography/' + this.get('content').get('id') + '/');
+					biography.set('noConcatURL', true);
+
+				var exp = this.get('parentView.controller.content');
+				if (!exp)
+					exp = App.get('expedienteConsultaController.content');
+
+
+				App.biographyController = App.BiographyController.create({
+					content: biography,
+					expediente: exp,
+				});
+
+				App.CreateBiographyView.popup();
+			}
+		};
+
+
+		App.get('bloquesController').addObserver('loaded', this, fn);
+		App.get('interBloquesController').addObserver('loaded', this, fn);
+
+		App.get('bloquesController').load();
+		App.get('interBloquesController').load();			
 	},
 });
 
@@ -9295,12 +9315,33 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
 
+	puedeCrear: function(){
+		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
+	}.property('App.userController.user'),
+	
+	createBiography: function () {		
+		App.biographyController = App.BiographyController.create({
+			content: App.Biography.extend(App.Savable).create({
+				expNro: this.get('controller.content.expdip'), 
+				idProyecto: this.get('controller.content.id')
+			}),
+			expediente: App.get('expedienteConsultaController.content')
+		});
+
+		App.CreateBiographyView.popup();
+	},
+
 	didInsertElement: function(){
 		this._super();
+
+		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+			this.get('controller.content').loadBiography();
+		}
 
 		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + this.get('controller.content.expdip')}));
 		this.get('timeLineController').load();	
 	},
+
 	borrar: function () {
 		App.confirmActionController.setProperties({
 			title: 'Confirmar eliminar proyecto',
