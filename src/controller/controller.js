@@ -1710,6 +1710,17 @@ App.NotificacionesController = App.RestController.extend({
 		}
 	},
 
+	deleteByObjectId: function(id){
+		var url =  'notification/' + id;
+
+		$.ajax({
+			url: url,
+			dataType: 'JSON',
+			type: 'DELETE',
+			context: this,			
+		});
+	},
+
 });
 
 
