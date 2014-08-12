@@ -7217,7 +7217,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.autoridades.@each', 'clickGuardar'),
 
 	faltanGiros: function(){
-		/*
+		
 		if (this.get('clickGuardar') == false)
 			return false;
 
@@ -7228,8 +7228,8 @@ App.CrearExpedienteView = Ember.View.extend({
 		else
 		{
 			return false;
-		}*/ 
-		return false;
+		} 
+		//return false;
 	}.property('content.comisiones.@each', 'clickGuardar'),
 
 	errorTab: 1,
