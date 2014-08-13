@@ -2494,6 +2494,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 	loadSucceeded: function (data) {
 		this.set('loading', false);
+
 		if (data == "")
 		{
 			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
@@ -9412,7 +9413,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
 		}
 	},
-	/*
+	
 	openDocument: function () {
 		this.set('loading', true);
 //		var url = App.get('expedienteConsultaController.content.documentURL');
@@ -9428,7 +9429,21 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			context: this,
 		});			
 	},
-	*/
+	loadSucceeded: function (data) {
+		this.set('loading', false);
+
+		if (data == "")
+		{
+//			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
+			window.open(this.get('controller.content.url'), '_blank');
+		} 
+		else
+		{
+//			var url = App.get('expedienteConsultaController.content.documentURL');
+			var url = this.get('controller.content.documentURL');
+			window.open(url, '_blank');
+		}
+	},	
 });
 
 App.MEExpedienteEditarView = Ember.View.extend({
