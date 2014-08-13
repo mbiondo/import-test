@@ -1366,6 +1366,7 @@ App.OrdenDelDiaDetalleView = Ember.View.extend({
 
 	openDocument: function () {
 		this.set('loading', true);
+
 		$.ajax({
 			url: App.get('ordenDelDiaController.content.documentURL'),
 			type: 'GET',
@@ -2469,6 +2470,7 @@ App.ApplicationView = Em.View.extend({
 App.ExpedienteConsultaView = Em.View.extend({
 	templateName: 'expedienteConsulta',
 	loading: false,
+	noDocument: false,
 
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
@@ -2481,6 +2483,9 @@ App.ExpedienteConsultaView = Em.View.extend({
 		if (App.get('expedienteConsultaController.content.id') == 160126) {
 			url = 'uploads/exp/PE247_13PL.pdf';
 		}
+
+		delete $.ajaxSettings.headers["Authorization"];
+
 		$.ajax({
 			url: url,
 			type: 'GET',
@@ -2491,13 +2496,19 @@ App.ExpedienteConsultaView = Em.View.extend({
 			context: this,
 		});			
 	},
-
+	loadCompleted: function () {
+		var usuario = App.userController.get('user');
+		$.ajaxSetup({
+	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+		});				
+	},
 	loadSucceeded: function (data) {
 		this.set('loading', false);
 
 		if (data == "")
 		{
-			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
+			//window.open(App.get('expedienteConsultaController.content.url'), '_blank');
+			this.set('noDocument', true);
 		} 
 		else
 		{
