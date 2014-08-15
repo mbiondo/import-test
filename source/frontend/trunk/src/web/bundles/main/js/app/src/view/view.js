@@ -7210,6 +7210,18 @@ App.CrearExpedienteView = Ember.View.extend({
 			return false;
 		}
 	}.property('content.tipo'),
+
+
+	noHayOrigen: function () {
+		if(this.get('content.expdipT') == null)
+		{
+			return true;
+		}
+		else
+		{	
+			return false;
+		}
+	}.property('content.tipo'),
 	
 	
 	faltanFirmantes: function(){
@@ -7270,7 +7282,7 @@ App.CrearExpedienteView = Ember.View.extend({
 					this.set('errorTab', 1);
 				}
 
-				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false)
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && _self.get('noHayOrigen') == false)
 				{				
 					App.confirmActionController.setProperties({
 						title: 'Confirmar creación de Proyecto',
@@ -7863,14 +7875,19 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 						_self.get('parentView').set('expedienteExist', false);
 						_self.set('content.comisiones', ex.comisiones);
-						_self.set('content.autoridades', ex.autoridades);
+
+						var titulo = ex.titulo;
+						titulo = titulo.substring(0, titulo.length - 1);
+						titulo = titulo + " (" + ex.expdip + ", REPRODUCIDO)."
 
  				 		Ember.run.next(function(){		
  				 			_self.set('content.expdipN', '');
- 				 			_self.set('content.titulo', ex.titulo);
+ 				 			_self.set('content.expdipA', moment().format('YYYY'));
+ 				 			_self.set('content.titulo', titulo);
  				 			//_self.set('content.periodo', ex.periodo);
  				 			_self.set('content.iniciado', ex.iniciado);
  				 			_self.set('content.tipo', ex.tipo);
+ 				 			_self.set('content.ReproduceExp', ex.expdip);
  				 		});						
 					}
 				}
@@ -9018,7 +9035,13 @@ App.MultiSelectListView = Ember.View.extend({
 		if (this.get('contentAc.content'))
 			this.set('contentAc.content', this.get('contentAc.content').slice(0, 20));
 			
-
+		_self = this;
+		Ember.run.next(function() {
+			_self.$('.search ul').removeHighlight();
+			if (_self.get('filterText').length >= _self.get('threshold')) {
+				_self.$('.search li').highlight(_self.get('filterText'));
+			}
+		});
 
 	},
 
