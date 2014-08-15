@@ -5136,7 +5136,7 @@ App.TPsController = App.RestController.extend({
 	type: App.TP,
 	periodo: 132,
 
-	sortProperties: ['fecha'],
+	sortProperties: ['numero'],
 	sortAscending: false,	
 
 	load: function () {
@@ -5339,7 +5339,7 @@ App.ProyectosController = App.RestController.extend({
 
 	type: App.Proyecto,
 	useApi: true,
-	sortProperties: ['expdipA', 'expdipN'],
+	sortProperties: ['expdip'],
 	sortAscending: false,
 	loaded: false,
 	pageSize: 25,
