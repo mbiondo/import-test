@@ -628,6 +628,9 @@ App.Expediente = Em.Object.extend({
             		}            
             	});
 
+            	if (!bloqueActual)
+            		bloqueActual = {nombre: 'PODER EJECUTIVO'};
+
                 var itemDatos = {orden: orden, nombre: firmante.get('diputado.datosPersonales.apellido') + ", " + firmante.get('diputado.datosPersonales.nombre'), distrito: firmante.diputado.distrito, bloque: bloqueActual.nombre};
                 orden++;
                 fs.pushObject(itemDatos);
@@ -1168,6 +1171,8 @@ App.FirmanteTextoDictamen = Em.Object.extend({
 				bloqueActual = b;
     		}            
     	});		
+    	if (!bloqueActual)
+    		bloqueActual = {nombre: 'PODER EJECUTIVO'};
     	return bloqueActual;
 	}.property('diputado.datosPersonales'),
 
