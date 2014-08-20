@@ -1451,7 +1451,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 				var cant = 0;
 				provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
 				provincia_list.forEach(function(item){
-					cant+=parseInt(item.visitantes);
+					if(item.visitantes){
+						cant+=parseInt(item.visitantes);
+					}
 				});
 
 				var fila = App.VisitaGuiadaEstadisticaTable.create({provincia: item, cantPersonas: cant});
@@ -1479,7 +1481,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 				var cant = 0;
 				provincia_list = _self.get('arrangedContent').filterProperty('provincia', item);			    
 				provincia_list.forEach(function(item){
-					cant+=parseInt(item.visitantes);
+					if(item.visitantes){
+						cant+=parseInt(item.visitantes);
+					}
 				});
 
 				data.push({name: item, y: cant});
@@ -1513,7 +1517,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 				var cant = 0;
 				tipoInstituciones_list = _self.get('arrangedContent').filterProperty('visitaPara', item);			    
 				tipoInstituciones_list.forEach(function(item){
-					cant+=parseInt(item.visitantes);
+					if(item.visitantes){
+						cant+=parseInt(item.visitantes);
+					}
 				});
 
 				data.push({name: item, y: cant});
@@ -1537,7 +1543,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 				var cant = 0;
 				nivelesAlumnos_list = _self.get('arrangedContent').filterProperty('nivelAlumnos', item);			    
 				nivelesAlumnos_list.forEach(function(item){
-					cant+=parseInt(item.visitantes);
+					if(item.visitantes){
+						cant+=parseInt(item.visitantes);
+					}
 				});
 
 				data.push({name: item, y: cant});
@@ -1560,7 +1568,9 @@ App.VisitasGuiadasController = App.RestController.extend({
 						var index = itemDate.getMonth();
 					
 						if(index >= 0){
-							meses[index].y += parseInt(item.visitantes);
+							if(item.visitantes){
+								meses[index].y += parseInt(item.visitantes);
+							}
 						}
 					}
 				}
