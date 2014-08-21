@@ -2121,7 +2121,7 @@ App.TP = Ember.Object.extend({
     }, 
 
     desNormalize: function () {
-    		this.set('fecha', moment(this.get('fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+    	this.set('fecha', moment(this.get('fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
     },
 
     label: function () {

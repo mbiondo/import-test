@@ -31,6 +31,7 @@ App.Savable = Ember.Mixin.create({
 				url:  url,
 				dataType: 'JSON',
 				type: 'DELETE',
+				crossDomain: 'true',
 				context: this,
 				data : this.getJson(),
 				success: this.deleteSucceeded,
@@ -100,6 +101,7 @@ App.Savable = Ember.Mixin.create({
 			type: 'GET',
 			dataType: 'JSON',
 			context: this,
+			crossDomain: 'true',
 			success: this.loadSucceeded,
 			complete: this.loadCompleted
 		});
@@ -209,6 +211,7 @@ App.Savable = Ember.Mixin.create({
 				type: 'PUT',
 				context: this,
 				data : this.getJson(),
+				crossDomain: 'true',
 				success: this.saveSucceeded,
 				complete: this.saveCompleted,
 			});			
@@ -696,6 +699,7 @@ App.UserController = Em.Controller.extend({
 			type: 'GET',
 			//data: cuil,
 			//dataType: 'JSON',
+			context: this,
 
 			complete: function (xhr) {
 				var xHRAuthURLController =  App.XHRAuthURLController.create({xhr: xhr});				
@@ -1039,10 +1043,6 @@ App.RestController = Em.ArrayController.extend({
 
 		var url = this.buildURL(filterText);
 
-		var async = true;
-		if (this.get('async'))
-			async = this.get('async');
-			
 		if ( url ) {
 			$.ajax({
 				url: url,
@@ -1050,7 +1050,7 @@ App.RestController = Em.ArrayController.extend({
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
-				async: async,
+				crossDomain: 'true',
 			});
 
 		}		
@@ -1087,20 +1087,16 @@ App.RestController = Em.ArrayController.extend({
 		if (this.get('useApi'))
 			url = App.get('apiController').get('url') + url;
 
-		var async = true;
-		if (this.get('async'))
-			async = this.get('async');
 			
 		if ( url ) {
 			$.ajax({
 				url: url,
-				dataType: 'JSON',
+				dataType: 'json',
 				context: this,
 				success: this.loadSucceeded,
 				complete: this.loadCompleted,
-				async: async,
+				crossDomain: 'true',
 			});
-
 		}
 	},
 
@@ -1131,6 +1127,7 @@ App.RestController = Em.ArrayController.extend({
 				context : {controller: this, model : item },
 				data : item.getJson(),
 				success: this.createSucceeded,
+				crossDomain: 'true',
 			});
 		}else{
 			this.addObject(item);
@@ -1147,6 +1144,7 @@ App.RestController = Em.ArrayController.extend({
 			type: 'DELETE',
 			context : {controller: this, model : object },
 			success: this.deleteSucceeded,
+			crossDomain: 'true',
 		});
 	},
 
@@ -1179,6 +1177,7 @@ App.RestController = Em.ArrayController.extend({
 			context : this,
 			data : {sort: JSON.stringify(ids)},
 			success: this.sortSucceeded,
+			crossDomain: 'true',
 		});
 	},
 
@@ -1645,20 +1644,21 @@ App.NotificacionesController = App.RestController.extend({
 
 	load: function() {
 
-		this.set('loaded', false);
-		var url =  this.get('url');
-		
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'JSON',
-				type: 'POST',
-				data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted,
-			});
-
+		if (App.get('userController.user.roles.length') > 0) {
+			this.set('loaded', false);
+			var url =  this.get('url');
+			
+			if ( url ) {
+				$.ajax({
+					url: url,
+					dataType: 'JSON',
+					type: 'POST',
+					data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
+					context: this,
+					success: this.loadSucceeded,
+					complete: this.loadCompleted,
+				});
+			}
 		}
 	},
 
@@ -5146,7 +5146,7 @@ App.TPsController = App.RestController.extend({
 	type: App.TP,
 	periodo: 132,
 
-	sortProperties: ['numero'],
+	sortProperties: ['fecha'],
 	sortAscending: false,	
 
 	load: function () {
@@ -5349,7 +5349,7 @@ App.ProyectosController = App.RestController.extend({
 
 	type: App.Proyecto,
 	useApi: true,
-	sortProperties: ['expdip'],
+	sortProperties: ['expdipA', 'expdipN'],
 	sortAscending: false,
 	loaded: false,
 	pageSize: 25,
