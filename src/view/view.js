@@ -314,8 +314,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm:ss'));
 		//Custom message
-		notification.set('mensaje', "Ha iniciado la Sesión " + numSesion + ", Reunión " + reunion + " a las " + moment().format('HH:mm') + "h del día " + moment().format('dddd D') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
-
+		notification.set('mensaje', "Ha iniciado la Sesión " + numSesion + ", Reunión " + reunion + " del día " + moment().format('LL'));
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
@@ -340,7 +339,7 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		//Custom message
-		notification.set('mensaje', "Ha finalizado la Sesión " + numSesion + ", Reunión " + reunion + " a las " + moment().format('HH:mm') + "h del día " + moment().format('dddd D') + " de " + moment().format('MMMM') + " del " + moment().format('YYYY'));
+		notification.set('mensaje', "Ha finalizado la Sesión " + numSesion + ", Reunión " + reunion + " del día " + moment().format('LL'));
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
@@ -1043,6 +1042,8 @@ App.PlanDeLaborView = Ember.View.extend({
 	createSucceeded: function (data) {
 		if (data.success == true) {
 			this.model.set('id', data.id);
+
+			console.log(this.model)
 
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
