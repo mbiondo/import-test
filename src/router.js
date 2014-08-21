@@ -1492,6 +1492,8 @@ App.Router =  Em.Router.extend({
 								
 								var sesion = App.get('sesionController.content');
 								App.get('breadCumbController').set('content', [
+									{titulo: 'Labor Parlamentaria'},
+									{titulo: 'Recinto', url: '#/laborparlamentaria/recinto/oradores'},
 									{titulo: 'Oradores', url: '#/laborparlamentaria/recinto/oradores'},	
 									{titulo: 'Sesión ' + sesion.get('sesion') +' / Reunión: ' + sesion.get('reunion')}
 								]);					
