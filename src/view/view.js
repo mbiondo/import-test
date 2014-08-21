@@ -2508,7 +2508,7 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 		if (data == "")
 		{
-			//window.open(App.get('expedienteConsultaController.content.url'), '_blank');
+			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
 			this.set('noDocument', true);
 		} 
 		else
@@ -7514,9 +7514,26 @@ App.CrearExpedienteView = Ember.View.extend({
 		});
 
 	},
-	cancelar: function(){
-		App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.proyectos');				
+	cancelar: function() {
+		App.confirmActionController.setProperties({
+			title: 'Confirmar cancelacion de creación de Proyecto',
+			message: '¿ Confirma que desea salir? Se perderan los datos no guardados.',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', this, this.confirmCancelActionDone);
+		App.confirmActionController.show();
 	},
+
+	confirmCancelActionDone: function () {
+		App.confirmActionController.addObserver('success', this, this.confirmCancelActionDone);
+
+		if(App.get('confirmActionController.success')) {
+			App.get('router').transitionTo('direccionSecretaria.mesaDeEntrada.proyectos');						
+		}
+
+	},
+
 	willDestroyElement: function(){
 		// remove shorcut
 		shortcut.remove('enter');
@@ -8721,7 +8738,11 @@ App.TPConsultaView = Ember.View.extend({
 	templateName: 'tp-consulta',
 	loading: false,
 	url: '',
-	
+	withGiros: true,
+	creating: false,
+
+
+
 	documentURL: function () {
 		var url = this.get('controller.content.url');
 
@@ -8730,18 +8751,20 @@ App.TPConsultaView = Ember.View.extend({
 			url = App.get('apiController.url') + url;
 		}
 
-		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/docxpath";
-	}.property('controller.content'),
+		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/" + this.get('withGiros') + "/docxpath";
+	}.property('controller.content', 'withGiros'),
 
 
 	exportar: function () {
 		var _self = this;
+		_self.set('creating', true);
 		$.ajax({
 
 		    url: this.get('documentURL'),
 		    type: 'GET',
 
 		    success: function(data) {
+		    	_self.set('creating', false);
 		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
 
 				var audit = App.Audit.extend(App.Savable).create();
@@ -9482,8 +9505,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		if (data == "")
 		{
 //			window.open(App.get('expedienteConsultaController.content.url'), '_blank');
-			//window.open(this.get('controller.content.url'), '_blank');
-			this.set('noDocument', true);
+			window.open("http://www1.hcdn.gov.ar/proyxml/expediente.asp?numexp=" + this.get('controller.content.expdip'), '_blank');
+			//this.set('noDocument', true);
 
 		} 
 		else
@@ -9720,7 +9743,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		var deferred = $.Deferred(),
 		fn = function() {
 			App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
-			deferred.resolve(ex);				
+			deferred.resolve(ex);		
 		};
 
 		ex.addObserver('loaded', this, fn);
@@ -11495,6 +11518,9 @@ App.NotificacionConfigView = Ember.CollectionView.extend({
 	tagName: 'ul',
 });
 
+App.WelcomeView = Ember.View.extend({
+	templateName: 'welcome',
+});
 
 App.CreateUserView = Ember.View.extend({
 	templateName: 'create-user',
