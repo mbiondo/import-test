@@ -825,11 +825,11 @@ if (user) {
 	} else {
 		App.userController.set('user', null);
 		localStorage.setObject('user', null);		
-		$('#loadingScreen').remove();
+		$('#bcLoader').remove();
 		App.advanceReadiness();	
 	}
 } else {
-	$('#loadingScreen').remove();
+	$('#bcLoader').remove();
 	App.advanceReadiness();	
 }
 
