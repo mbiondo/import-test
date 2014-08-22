@@ -1400,7 +1400,7 @@ App.Sesion = Em.Object.extend({
 	}.property('sesion'),
 
 	sortValue: function () {
-		return this.get('fecha').toString();
+		return this.get('fecha');
 	}.property('fecha'),
 	
 	sFecha: function () {
