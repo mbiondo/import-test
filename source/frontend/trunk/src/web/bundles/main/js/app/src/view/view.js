@@ -8770,7 +8770,7 @@ App.TPConsultaView = Ember.View.extend({
 		    type: 'GET',
 
 		    success: function(data) {
-		    	_self.set('creating', false);
+		    	//_self.set('creating', false);
 		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
 
 				var audit = App.Audit.extend(App.Savable).create();
