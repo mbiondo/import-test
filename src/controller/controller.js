@@ -119,15 +119,15 @@ App.Savable = Ember.Mixin.create({
 					url = App.get('apiController').get('url') + this.get('url');	
 
 		$.ajax({
-					url:  url,
-					dataType: 'JSON',
-					type: 'POST',
-					context: this,
-					contentType: 'text/plain',
-					crossDomain: 'true',			
-					data : this.getJson(),
-					success: this.createSucceded,
-					complete: this.createCompleted,
+			url:  url,
+			dataType: 'JSON',
+			type: 'POST',
+			context: this,
+			contentType: 'text/plain',
+			data : this.getJson(),
+			success: this.createSucceded,
+			crossDomain: 'true',
+			complete: this.createCompleted,
 		});
 	},
 
