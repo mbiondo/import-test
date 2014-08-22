@@ -31,7 +31,6 @@ App.Savable = Ember.Mixin.create({
 				url:  url,
 				dataType: 'JSON',
 				type: 'DELETE',
-				crossDomain: 'true',
 				context: this,
 				data : this.getJson(),
 				success: this.deleteSucceeded,
@@ -211,7 +210,6 @@ App.Savable = Ember.Mixin.create({
 				type: 'PUT',
 				context: this,
 				data : this.getJson(),
-				crossDomain: 'true',
 				success: this.saveSucceeded,
 				complete: this.saveCompleted,
 			});			
