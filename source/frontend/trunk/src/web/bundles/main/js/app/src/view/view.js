@@ -343,7 +343,6 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//notification.set('comisiones', this.get('content.comisiones'));
 		//Crear
 		notification.create();
-
 	},	
 
 	hayOradoresPendientes: function(){
@@ -7602,6 +7601,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.set('content.pubFecha', null);
 			this.set('content.pubnro', null);
 		}
+
+//: moment().format('DD/MM/YYYY') + '/detalle',
+
+		this.get('content').set('autoridades', []);
+		App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
+		App.get('firmantesController').load();		
+
 	}.observes('pubnro', 'content'),
 
 

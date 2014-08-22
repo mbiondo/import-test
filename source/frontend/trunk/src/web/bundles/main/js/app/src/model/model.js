@@ -1169,7 +1169,10 @@ App.FirmanteTextoDictamen = Em.Object.extend({
     			}            			
     		}else{
 				bloqueActual = b;
-    		}            
+    		}
+    		if(bloqueActual.fechaFin < moment().format('YYYY-MM-DD HH:mm')){
+    			bloqueActual = null;
+    		}
     	});		
     	if (!bloqueActual)
     		bloqueActual = {nombre: 'PODER EJECUTIVO'};
@@ -2238,7 +2241,6 @@ App.Proyecto = Em.Object.extend({
 				firmantes.forEach(function (firmante) {
 						strFirmantes.addObject(firmante.nombre);
 					});
-				console.log(strFirmantes.join(' y '));
 				return strFirmantes.join(' y ');	
 			}
 		}
@@ -2325,7 +2327,8 @@ App.ProyectoQuery = Em.Object.extend({
 		return $.map(this.get('comisionesObject'), function(value, key){ return value.get('nombre') });
 	}.property('comisionesObject.@each'),
 	firmantes: function () {
-		return $.map(this.get('firmantesObject'), function(value, key){ return value.get('apellido') });
+
+		return $.map(this.get('firmantesObject'), function(value, key){ return value.get('apellido') + ", " + value.get('diputado.datosPersonales.nombre') });
 	}.property('firmantesObject.@each'),
 });
 
