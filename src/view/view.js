@@ -7454,7 +7454,11 @@ App.CrearExpedienteView = Ember.View.extend({
 			*/
 
 		} else {
+
+			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 			this.get('content').desNormalize();
+			this.get('content').set('iniciado', iniciado);
+
 			this.setupEnter();
 
 			this.set('loading', false);
