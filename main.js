@@ -835,4 +835,14 @@ if (user) {
 
 
 
+function isOnline () {
+	$('#application').removeClass('sin-conexion');
+}
+
+function isOffline () {
+	$('#application').addClass('sin-conexion');
+}
+
+window.addEventListener("online", isOnline, false);
+window.addEventListener("offline", isOffline, false);
 

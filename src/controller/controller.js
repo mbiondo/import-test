@@ -1,6 +1,7 @@
 App.Savable = Ember.Mixin.create({
 	saveSuccess: '',
 	createSuccess: '',
+	creating: false,
 	
 	delete: function () {
 		this.set('deleteSuccess', '');
@@ -113,10 +114,11 @@ App.Savable = Ember.Mixin.create({
 
 	create: function () {
 		this.set('createSuccess', '');
+		this.set('creating', true);
 		var url = this.get('url');
 
 		if (this.get('useApi')) 
-					url = App.get('apiController').get('url') + this.get('url');	
+			url = App.get('apiController').get('url') + this.get('url');	
 
 		$.ajax({
 			url:  url,
@@ -132,6 +134,7 @@ App.Savable = Ember.Mixin.create({
 	},
 
 	createSucceded: function (data) {
+		this.set('creating', false);
 		if (data) {
 			if ((this.get('useApi') || this.get('absolutURL')) && data.id) {
 				this.set('id', data.id);
@@ -170,10 +173,12 @@ App.Savable = Ember.Mixin.create({
 	createCompleted: function(xhr){
 
 		if (this.get('useApi') && xhr.status == 200) {
+			this.set('creating', false);
 			this.set('createSuccess', true);
 		} 
 		else
 		{
+			this.set('creating', false);
 			this.set('createSuccess', false);
 		}
 	},	
