@@ -7453,6 +7453,18 @@ App.CrearExpedienteView = Ember.View.extend({
 			evento.create();
 			*/
 
+		} else {
+			this.get('content').desNormalize();
+			this.setupEnter();
+
+			this.set('loading', false);
+			this.set('clickGuardar', false);
+
+			//$("#formCrearExpediente").parsley('reset');
+			$("#formCrearExpediente").parsley('destroy');
+
+			$("#nav-tabs-proyecto").click();
+			$("#selector-tipo-proyecto").focus();			
 		}
 	},
 
