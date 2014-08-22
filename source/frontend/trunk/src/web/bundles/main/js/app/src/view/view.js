@@ -5147,7 +5147,8 @@ App.JQuerySortableView = Ember.CollectionView.extend({
 				order = (idArray.length-1) - ap.indexOf(item);
 			}
 
-			model.set(this.get('sortValue'), this.get('sortIndex') + order);
+			if (model) 
+				model.set(this.get('sortValue'), this.get('sortIndex') + order);
 		}, this);
 		return sortArr;
 	},
@@ -7330,10 +7331,9 @@ App.CrearExpedienteView = Ember.View.extend({
 	createSucceeded: function () {
 		var _self = this;
 
-		this.get('content').desNormalize();
-
-		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
-		if (this.get('content.createSuccess')) {
+		if (this.get('content.createSuccess') == true) {
+			this.get('content').desNormalize();
+			this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 			/*App.confirmActionController.setProperties({
 				title: 'Comprobante de ingreso',
 				message: '¿ Desea imprimir el comprobante de ingreso ?',
@@ -7346,9 +7346,33 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			this.confirmarImprimirSuccess();
 
-		} else {
-			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
-			this.set('loading', false);
+		} else  {
+			if (this.get('content.createSuccess') == false) {
+				if (typeof this.get('content.createSuccess') == "boolean")
+				{
+					this.get('content').desNormalize();
+					this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
+					var expiniciado = this.get('content.iniciado');
+
+					var iniciado = this.get('camaras').findProperty('id', this.get('content').get('expdipT'));
+					this.get('content').set('iniciado', expiniciado);
+					this.get('content').set('expdipT', iniciado);
+
+					this.setupEnter();
+
+					this.set('loading', false);
+					this.set('clickGuardar', false);
+
+					//$("#formCrearExpediente").parsley('reset');
+					$("#formCrearExpediente").parsley('destroy');
+
+					$("#nav-tabs-proyecto").click();
+					$("#selector-tipo-proyecto").focus();	
+
+					$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+					this.set('loading', false);
+				}
+			}
 		}
 	},
 
@@ -7367,10 +7391,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			
 		if (this.get('content.createSuccess')) {
 			var expediente = this.get('content');
-			
-
-			
-			
+					
 			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000 });
 			
 			var notification = App.Notificacion.extend(App.Savable).create();
@@ -7415,16 +7436,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				autoridades: [],
 			}));
 
-			this.setupEnter();
 
-			this.set('loading', false);
-			this.set('clickGuardar', false);
-
-			//$("#formCrearExpediente").parsley('reset');
-			$("#formCrearExpediente").parsley('destroy');
-
-			$("#nav-tabs-proyecto").click();
-			$("#selector-tipo-proyecto").focus();
 
 			//this.set('oldTP', tp);
 
@@ -7452,25 +7464,18 @@ App.CrearExpedienteView = Ember.View.extend({
 			});
 			evento.create();
 			*/
+		} 
 
-		} else {
-			var expiniciado = this.get('content.iniciado');
-			
-			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
-			this.get('content').desNormalize();
-			this.get('content').set('iniciado', expiniciado);
+		this.setupEnter();
 
-			this.setupEnter();
+		this.set('loading', false);
+		this.set('clickGuardar', false);
 
-			this.set('loading', false);
-			this.set('clickGuardar', false);
+		//$("#formCrearExpediente").parsley('reset');
+		$("#formCrearExpediente").parsley('destroy');
 
-			//$("#formCrearExpediente").parsley('reset');
-			$("#formCrearExpediente").parsley('destroy');
-
-			$("#nav-tabs-proyecto").click();
-			$("#selector-tipo-proyecto").focus();			
-		}
+		$("#nav-tabs-proyecto").click();
+		$("#selector-tipo-proyecto").focus();		
 	},
 
 	setupEnter: function(){

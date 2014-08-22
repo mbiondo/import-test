@@ -662,11 +662,11 @@ App.Expediente = Em.Object.extend({
 	    
         if (this.get('giro'))
         {
-        		this.set('comisiones', []);
+    		this.set('comisiones', []);
 
-                this.get('giro').forEach(function (item) {
-                    this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision, orden: item.ordenCarga}));
-                }, this);
+            this.get('giro').forEach(function (item) {
+                this.get('comisiones').pushObject(App.Comision.create({id: item.idComision, nombre: item.comision, orden: item.ordenCarga}));
+            }, this);
         }
 
         if (this.get('firmantes'))
