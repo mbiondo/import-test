@@ -7405,7 +7405,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				pubtipo: expediente.get('pubtipo'), 
 				periodo: expediente.get('periodo'),
 				expdipA: expediente.get('expdipA'),
-				iniciad: expediente.get('iniciado'),
+				iniciado: expediente.get('iniciado'),
 				expdipT: iniciado,
 				pubFecha: expediente.get('pubFecha'),
 				sesion: expediente.get('sesion'),
@@ -7454,10 +7454,11 @@ App.CrearExpedienteView = Ember.View.extend({
 			*/
 
 		} else {
-
+			var expiniciado = this.get('content.iniciado');
+			
 			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 			this.get('content').desNormalize();
-			this.get('content').set('iniciado', iniciado);
+			this.get('content').set('iniciado', expiniciado);
 
 			this.setupEnter();
 
