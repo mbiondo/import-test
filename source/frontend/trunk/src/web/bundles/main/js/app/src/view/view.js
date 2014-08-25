@@ -7537,8 +7537,8 @@ App.CrearExpedienteView = Ember.View.extend({
 	},
 	cancelar: function() {
 		App.confirmActionController.setProperties({
-			title: 'Confirmar cancelacion de creación de Proyecto',
-			message: '¿ Confirma que desea salir? Se perderan los datos no guardados.',
+			title: 'Confirmar cancelación de creación de Proyecto',
+			message: '¿Confirma que desea salir? Se perderan los datos no guardados.',
 			success: null,
 		});
 		
@@ -7630,11 +7630,14 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 */
 	}.observes('pubnro', 'content'),
 
-	fechaChanged: function(){
-		if(this.get('content.pubFecha')){
-			this.get('content').set('autoridades', []);
-			App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
-			App.get('firmantesController').load();	
+	fechaChanged: function() {
+		var p = new RegExp('/');
+		if (p.test(this.get('content.pubFecha'))) {
+			if(this.get('content.pubFecha')) {
+				this.get('content').set('autoridades', []);
+				App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
+				App.get('firmantesController').load();	
+			}
 		}
 	}.observes('content.pubFecha'),
 
@@ -8798,7 +8801,7 @@ App.TPConsultaView = Ember.View.extend({
 		    type: 'GET',
 
 		    success: function(data) {
-		    	//_self.set('creating', false);
+		    	_self.set('creating', false);
 		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
 
 				var audit = App.Audit.extend(App.Savable).create();
