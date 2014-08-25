@@ -8804,6 +8804,9 @@ App.TPConsultaView = Ember.View.extend({
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 				audit.create();				
 		    },
+		    complete: function(){
+		    	_self.set('creating', false);
+		    }
 		});
 	},
 
