@@ -544,7 +544,7 @@ App.Expediente = Em.Object.extend({
 	comisiones: null,
 	autoridades: null,
 	reproduce_exp: null,
-	
+	isNormalize: false,
 	oringen: null,
 
 
@@ -638,6 +638,7 @@ App.Expediente = Em.Object.extend({
 
             this.set('firmantes', fs);
         }
+    	this.set('isNormalize', true);
     },
 
     desNormalize: function ()  {
@@ -676,6 +677,7 @@ App.Expediente = Em.Object.extend({
                 this.get('autoridades').pushObject(App.FirmanteTextoDictamen.create({id: 1, nombre: firmante.nombre }));
             }, this);*/
         }    	
+        this.set('isNormalize', false);
     },
 
 	tipolabel: function () {
@@ -762,7 +764,10 @@ App.Expediente = Em.Object.extend({
 			var regex = new RegExp('-PE-');
 			var regex2 = new RegExp('-JGM-');
 			if (regex.test(this.get('expdip')) || regex2.test(this.get('expdip'))) {
-				return firmantes.objectAt(0).nombre;
+				if (firmantes.objectAt(0))
+					return firmantes.objectAt(0).nombre;
+				else
+					return "";
 			} else {				
 				firmantes.forEach(function (firmante) {
 					strFirmantes.addObject(firmante.nombre);
