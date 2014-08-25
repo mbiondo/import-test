@@ -7625,12 +7625,18 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		}
 
 //: moment().format('DD/MM/YYYY') + '/detalle',
-
-		this.get('content').set('autoridades', []);
-		App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
-		App.get('firmantesController').load();		
-
+/*
+	
+*/
 	}.observes('pubnro', 'content'),
+
+	fechaChanged: function(){
+		if(this.get('content.pubFecha')){
+			this.get('content').set('autoridades', []);
+			App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
+			App.get('firmantesController').load();	
+		}
+	}.observes('content.pubFecha'),
 
 
 	errorTabChange: function () {
