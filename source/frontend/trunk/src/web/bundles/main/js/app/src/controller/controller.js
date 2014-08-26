@@ -2344,6 +2344,7 @@ App.CitacionesController = App.RestController.extend({
 		var comsiones = App.get('userController.user.comisiones');
 
 		if(roles.contains('ROLE_DIPUTADO') && !roles.contains('ROLE_DIRECCION_COMISIONES')) {
+			/*
 			this.get('arrangedContent').forEach(function (citacion) {
 				if (citacion.get('estado.id') != 1) {
 					comsiones.forEach(function (comision) {
@@ -2357,6 +2358,8 @@ App.CitacionesController = App.RestController.extend({
 					});	
 				}
 			});
+			*/
+			citaciones = this.get('arrangedContent');
 		} else {
 			if (roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW')) {
 				citaciones = this.get('arrangedContent');
