@@ -1370,7 +1370,7 @@ App.OrdenDelDiaDetalleView = Ember.View.extend({
 
 	openDocument: function () {
 		this.set('loading', true);
-
+		delete $.ajaxSettings.headers["Authorization"];
 		$.ajax({
 			url: App.get('ordenDelDiaController.content.documentURL'),
 			type: 'GET',
@@ -1383,7 +1383,10 @@ App.OrdenDelDiaDetalleView = Ember.View.extend({
 	},
 
 	loadCompleted: function (data) {
-
+		var usuario = App.userController.get('user');
+		$.ajaxSetup({
+	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+		});	
 	},
 
 	loadSucceeded: function (data) {
