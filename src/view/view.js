@@ -1118,6 +1118,7 @@ App.ODMiniView = Ember.View.extend({
 
 
 	openDocument: function () {
+		delete $.ajaxSettings.headers["Authorization"];
 		this.set('loading', true);
 		$.ajax({
 			url: this.get('content.documentURL'),
@@ -1130,9 +1131,12 @@ App.ODMiniView = Ember.View.extend({
 		});			
 	},
 
-	loadCompleted: function (data) {
-
-	},
+	loadCompleted: function () {
+		var usuario = App.userController.get('user');
+		$.ajaxSetup({
+	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
+		});				
+	},	
 
 	loadSucceeded: function (data) {
 		this.set('loading', false);
@@ -7411,7 +7415,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			    mensaje: 'Expediente creado',
 			    icono: 'creado',
 			    link: '#/direccionsecretaria/mesadeentrada/proyecto/'+ expediente.id +'/ver',
-			    duplicados: [],
+			 	   duplicados: [],
 			});
 			evento.create();
 
