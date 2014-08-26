@@ -35,13 +35,13 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 1,
-							roles: [['ROLE_MESA_DE_ENTRADA']],
+							roles: [['ROLE_MESA_DE_ENTRADA'], ['ROLE_DIPUTADO']],
 							titulo: 'Movimientos de Expedientes',
 							url: '#/novedades/1',
 						}),
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_COMISIONES']],
+							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
 							titulo: 'Agenda Comisiones',
 							url: '#/novedades/2',
 						}),
@@ -59,7 +59,7 @@ App.menuController = App.MenuController.create({
 						}),									
 						App.MenuItem.create({
 							id: 5,
-							roles: [['ROLE_PUBLICACIONES']],
+							roles: [['ROLE_PUBLICACIONES'], ['ROLE_DIPUTADO']],
 							titulo: 'Publicaciones',
 							url: '#/novedades/5',
 						}),													
@@ -71,7 +71,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 6,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER'], , ['ROLE_DIPUTADO']],
 							titulo: 'Sesiones',
 							url: '#/novedades/6',
 						}),														
