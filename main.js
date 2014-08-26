@@ -490,25 +490,25 @@ App.menuController = App.MenuController.create({
 			titulo: 'Información Parlamentaria',
 			url: '#/informacionparlamentaria/solicitudes/listado',
 			icono: 'ic ic-tickets',
-			roles: [['ROLE_USER', 'ROLE_INFORMACION_PARLAMENTARIA']],
+			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Solicitudes',
 					url: '#/informacionparlamentaria/solicitudes/listado',
-					roles: [['ROLE_USER']],
+					roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Listado',
 							url: '#/informacionparlamentaria/solicitudes/listado',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA']],
 						}),					
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Nueva solicitud',
 							url: '#/informacionparlamentaria/solicitudes/nueva',
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
 						}),
 					],
 				}),
@@ -571,6 +571,14 @@ App.menuController = App.MenuController.create({
 							titulo: 'Estadísticas',
 							url: '#/visitas-guiadas/estadisticas',
 						}),	
+						/*
+						App.MenuItem.create({
+							id: 2,
+							roles: [['ROLE_VISITAS_GUIADAS']],
+							titulo: 'Nueva visita',
+							url: '#/visitas-guiadas/visita/crear',
+						}),	
+						*/
 					],
 				}),
 			]
