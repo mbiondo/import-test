@@ -1130,7 +1130,6 @@ App.RestController = Em.ArrayController.extend({
 				context : {controller: this, model : item },
 				data : item.getJson(),
 				success: this.createSucceeded,
-				crossDomain: 'true',
 			});
 		}else{
 			this.addObject(item);
@@ -1147,7 +1146,6 @@ App.RestController = Em.ArrayController.extend({
 			type: 'DELETE',
 			context : {controller: this, model : object },
 			success: this.deleteSucceeded,
-			crossDomain: 'true',
 		});
 	},
 
@@ -1180,7 +1178,6 @@ App.RestController = Em.ArrayController.extend({
 			context : this,
 			data : {sort: JSON.stringify(ids)},
 			success: this.sortSucceeded,
-			crossDomain: 'true',
 		});
 	},
 
