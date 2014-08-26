@@ -7595,6 +7595,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	comisionesBicamerales: false,
 	puedeVerPreviewTramiteParlamentario: false,
+	oldFecha: '',
 
 	camarasChange: function(){
 		var _self = this;
@@ -7613,10 +7614,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	}.property('tpsController.content.@each'),
 
 	numerosChanged: function(){
-		if (this.get('pubnro')) {	
-			this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
-			this.set('content.pubnro', this.get('pubnro.numero'));
-			this.set('parentView.oldTP', this.get('pubnro'));
+		if (this.get('pubnro')) {
+			if (this.get('oldFecha') != this.get('pubnro.fecha')) {
+				this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+				this.set('content.pubnro', this.get('pubnro.numero'));
+				this.set('parentView.oldTP', this.get('pubnro'));
+				this.set('oldFecha', this.get('pubnro.fecha'));
+			}
 		}
 		else 
 		{
@@ -7634,9 +7638,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		var p = new RegExp('/');
 		if (p.test(this.get('content.pubFecha'))) {
 			if(this.get('content.pubFecha')) {
-				this.get('content').set('autoridades', []);
-				App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
-				App.get('firmantesController').load();	
+				if (this.get('oldFechaTp') != this.get('content.pubFecha')) {
+					this.get('content').set('autoridades', []);
+					App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
+					App.get('firmantesController').load();	
+					this.set('oldFechaTp', this.get('content.pubFecha'));
+				}
 			}
 		}
 	}.observes('content.pubFecha'),
@@ -7782,9 +7789,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	parentViewChangeTP: function () {
 		_self = this;
-		Ember.run.next(function () { 
-			_self.set('pubnro', _self.get('parentView.oldTP'));
-		});
+		if (_self.get('parentView.oldTP') != _self.get('pubnro')) {
+			Ember.run.next(function () { 
+				_self.set('pubnro', _self.get('parentView.oldTP'));
+			});
+		}
 	}.observes('parentView.oldTP'),
 
 	camaraChange: function () {

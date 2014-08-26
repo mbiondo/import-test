@@ -432,6 +432,7 @@ App.Router =  Em.Router.extend({
 							fn3 = function () {
 								if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) {
 									App.get('tpsController').addObserver('loaded', this, fn3);
+									App.get('firmantesController').removeObserver('loaded', this, fn3);
 									ex.desNormalize(); 
 									ex.set('autoridades', []);
 									var orden = 1;
