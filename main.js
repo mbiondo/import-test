@@ -280,7 +280,7 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					id: 2,
 					titulo: 'Dictámenes',
-					roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW'], ['ROLE_USER', 'ROLE_DIPUTADO']],
+					roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -292,7 +292,7 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Dictámenes',
 							url: '#/comisiones/dictamenes/dictamenes',
-							roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW'], ['ROLE_USER', 'ROLE_DIPUTADO']],
+							roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
 						}),
 						App.MenuItem.create({
 							id: 2,
@@ -420,7 +420,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/laborparlamentaria/planesdelabor/definitivos',
+			url: '#/laborparlamentaria/recinto/oradores',
 			roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 			icono: 'ic ic-labor',
 			subMenu: [
