@@ -571,14 +571,13 @@ App.menuController = App.MenuController.create({
 							titulo: 'Estadísticas',
 							url: '#/visitas-guiadas/estadisticas',
 						}),	
-						/*
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_VISITAS_GUIADAS']],
+//							roles: [['ROLE_VISITAS_GUIADAS_EDIT', 'ROLE_DIPUTADO']],
+							roles: [['ROLE_VISITAS_GUIADAS_EDIT']],
 							titulo: 'Nueva visita',
 							url: '#/visitas-guiadas/visita/crear',
 						}),	
-						*/
 					],
 				}),
 			]
