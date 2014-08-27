@@ -7407,7 +7407,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-			notification.set('firmantes', this.get('content.autoridades'));
+			notification.set('firmantes', this.get('content.firmantes'));
 			
 			notification.create();      
 
@@ -11697,4 +11697,54 @@ App.CreateUserView = Ember.View.extend({
 		App.set('userController.user', null);
 		App.get('userController').set('createUser', false);
 	},
+});
+
+App.VisitaGuiadaCrearView = Ember.View.extend({
+	templateName: 'visitas-guiadas-crear',
+
+	startHora: '',
+	visitaPara: ['PARTICULAR', 'ENTIDAD', 'ESTABLECIMIENTO EDUCATIVO', 'DIPUTADO', 'EMPLEADO ADMINISTRATIVO', 'VISITA ESPECIAL'],
+	tipoInstitucion: ['PRIVADO', 'PUBLICO'],
+	alumnosConocimiento: [],
+	nivelAlumnos: ['Sin Instrucción', 'Primario', 'Secundario', 'Terciario', 'Universitario', 'Posgrado'],
+	nivelDeInteres: [1, 2, 3, 4, 5],
+	horario: '09:00',
+	horarioGeneral: '11:00',
+	
+	didInsertElement: function(){
+		this._super();
+
+		$('.horarioGeneral').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: '11:00',
+			timeSteps: [1, 0, 1],
+
+			minTime: '11:00',
+			maxTime: '17:00',
+		});	 
+
+		$('.horario').timeEntry({
+			show24Hours: true, // 24 hours format
+			showSeconds: false, // Show seconds?
+			spinnerImage: 'bundles/main/images/elements/ui/spinner.png', // Arrows image
+			spinnerSize: [19, 26, 0], // Image size
+			spinnerIncDecOnly: true, // Only up and down arrows
+			defaultTime: '09:00',
+			timeSteps: [1, 30, 1],
+
+			minTime: '09:00',
+			maxTime: '17:30',
+		});	 
+		
+	},
+	crear: function(){
+
+	},
+	limpiar: function(){
+
+	}
 });
