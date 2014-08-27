@@ -2273,6 +2273,30 @@ App.Router =  Em.Router.extend({
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 				},					
 			}),
+			visitaCrear: Ember.Route.extend({
+				route: '/visita/crear',
+
+				deserialize: function(router, params){
+//					App.visitaGuiadaCrearController = App.VisitaGuiadaCrearController.create();
+//					App.set('visitaGuiadaConsultaController.content', App.VisitaGuiada.extend(App.Savable).create({id: params.visita}));
+
+				},
+				connectOutlets: function(router, context){
+					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
+					appController.connectOutlet('main', 'VisitaGuiadaCrear');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/listado'},
+						{titulo: 'Visita'},
+						{titulo: 'Crear', url: '#/visitas-guiada/visita/crear'}
+					]);					
+					App.get('menuController').seleccionar(11, 0, 2);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+				},
+			}),
+				
 		}),	
 
 		informacionparlamentaria: Ember.Route.extend({
