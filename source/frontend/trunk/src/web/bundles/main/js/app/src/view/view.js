@@ -478,6 +478,7 @@ App.ContentView = Ember.View.extend({
 			App.get('userController').set('user.first_login', true);
 
 		App.get('userController').set('changePassword', true);
+		/*
 		App.userController.set('user', null);
 		localStorage.setObject('user', null);
 
@@ -485,6 +486,7 @@ App.ContentView = Ember.View.extend({
 		App.get('router').transitionTo('index');
 
 		$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
+		*/
 	},
 
 	marcarTodas: function () {
@@ -8746,7 +8748,58 @@ App.LineSeriesChartView = Ember.View.extend({
 // -> TP
 
 App.TPListItemView = Ember.View.extend({
-	templateName: 'tp-list-item'
+	templateName: 'tp-list-item',
+
+	borrar: function () {
+		App.confirmActionController.setProperties({
+			title: 'Confirmar borrar Trámite Parlamentario',
+			message: '¿ Confirma que desea borrar el Trámite parlamentario N° ' + this.get('content.numero') + ' con fecha ' + this.get('content.fecha') +  ' ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();		
+	},
+
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		
+		if (App.get('confirmActionController.success'))
+		{
+			this.get('content').addObserver('deleteSuccess', this, this.deleteSuccess);
+			this.get('content').delete();
+		}
+
+	},	
+
+	deleteSuccess: function () {
+		if (this.get('content.deleteSuccess') == true) {
+
+			this.get('content').removeObserver('deleteSuccess', this, this.deleteSuccess);
+
+			App.tpsController = App.TPsController.create();		
+
+			fn = function() {
+				if (App.get('tpsController.loaded'))
+				{
+					App.get('tpsController').removeObserver('loaded', this, fn);
+					App.get('comisionesController').removeObserver('loaded', this, fn);	
+					App.get('proyectosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.publicaciones.tp.listado');
+
+				}
+			};
+
+			App.get('tpsController').addObserver('loaded', this, fn);
+
+			App.get('tpsController').load();
+
+			$.jGrowl('Se ha elimiado el Trámite Parlamentario!', { life: 5000 });
+
+		} else if (this.get('content.deleteSuccess') == false && this.get('content.deleteSuccess') != '') {
+			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+		}
+	},	
 });
 
 App.TPListView = App.ListFilterView.extend({
@@ -8816,6 +8869,56 @@ App.TPConsultaView = Ember.View.extend({
 	creating: false,
 
 
+	borrar: function () {
+		App.confirmActionController.setProperties({
+			title: 'Confirmar borrar Trámite Parlamentario',
+			message: '¿ Confirma que desea borrar el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + this.get('controller.content.fecha') +  ' ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();		
+	},
+
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		
+		if (App.get('confirmActionController.success'))
+		{
+			this.get('controller.content').addObserver('deleteSuccess', this, this.deleteSuccess);
+			this.get('controller.content').delete();
+		}
+
+	},	
+
+	deleteSuccess: function () {
+		if (this.get('controller.content.deleteSuccess') == true) {
+
+			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
+
+			App.tpsController = App.TPsController.create();		
+
+			fn = function() {
+				if (App.get('tpsController.loaded'))
+				{
+					App.get('tpsController').removeObserver('loaded', this, fn);
+					App.get('comisionesController').removeObserver('loaded', this, fn);	
+					App.get('proyectosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.publicaciones.tp.listado');
+
+				}
+			};
+
+			App.get('tpsController').addObserver('loaded', this, fn);
+
+			App.get('tpsController').load();
+
+			$.jGrowl('Se ha elimiado el Trámite Parlamentario!', { life: 5000 });
+
+		} else if (this.get('controller.content.deleteSuccess') == false && this.get('controller.content.deleteSuccess') != '') {
+			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+		}
+	},	
 
 	documentURL: function () {
 		var url = this.get('controller.content.url');
@@ -9513,6 +9616,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		}		
 	}.property('App.userController.user'),
 	
+
 	deleteSuccess: function () {
 		if (this.get('controller.content.deleteSuccess') == true) {
 
@@ -11766,19 +11870,20 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 	crear: function(){	
 		if($("#formCrearVisitasGuiadas").parsley('validate')){
 			//this.set('content.fechaPreferencia', {date: this.get('content.fechaPreferencia')});
+			this.get('content').addObserver("createSuccess", this, this.createSuccess);
 			this.get('content').normalize();
 			this.get('content').create();
-			this.get('content').desNormalize();
-			this.get('content').addObserver("createSuccess", this, this.createSuccess);
 		}
 	},
+
 	limpiar: function(){
 		this.set('content', App.VisitaGuiada.extend(App.Savable).create());
-		this.set('content', '');
+		//this.set('content', '');
 	},
+
 	createSuccess: function(){
 		this.get('content').removeObserver("createSuccess", this, this.createSuccess);
-
+		this.get('content').desNormalize();
 		if(this.get('content.createSuccess'))
 		{
 			App.visitasGuiadasController = App.VisitasGuiadasController.create();
