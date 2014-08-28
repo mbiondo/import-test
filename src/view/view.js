@@ -11739,12 +11739,44 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 			minTime: '09:00',
 			maxTime: '17:30',
 		});	 
-		
-	},
-	crear: function(){
 
+		this.set('content', App.VisitaGuiada.extend(App.Savable).create()); 			
+	},
+	crear: function(){	
+		if($("#formCrearVisitasGuiadas").parsley('validate')){
+			//this.set('content.fechaPreferencia', {date: this.get('content.fechaPreferencia')});
+			this.get('content').normalize();
+			this.get('content').create();
+			this.get('content').desNormalize();
+			this.get('content').addObserver("createSuccess", this, this.createSuccess);
+		}
 	},
 	limpiar: function(){
+		this.set('content', App.VisitaGuiada.extend(App.Savable).create());
+		this.set('content', '');
+	},
+	createSuccess: function(){
+		this.get('content').removeObserver("createSuccess", this, this.createSuccess);
 
+		if(this.get('content.createSuccess'))
+		{
+			App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+			fn = function(){
+				if(App.get('visitasGuiadasController.loaded'))
+				{
+					App.get('visitasGuiadasController').removeObserver('loaded', this, fn);
+					App.get('router').transitionTo('visitasGuiadas.index');
+				}
+			}
+
+			App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+			App.get('visitasGuiadasController').load();
+
+			$.jGrowl('Se creado la Visita Guiada con éxito!', { life: 5000 });
+		}else{
+			$.jGrowl('Ocurrio un error al crear la Visita Guiada!', { life: 5000 });
+		}
 	}
+	
 });
