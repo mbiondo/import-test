@@ -2274,7 +2274,7 @@ App.Router =  Em.Router.extend({
 				},					
 			}),
 			visitaCrear: Ember.Route.extend({
-				route: '/visita/crear',
+				route: '/visita/nueva',
 
 				deserialize: function(router, params){
 //					App.visitaGuiadaCrearController = App.VisitaGuiadaCrearController.create();
@@ -2290,7 +2290,7 @@ App.Router =  Em.Router.extend({
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/listado'},
 						{titulo: 'Visita'},
-						{titulo: 'Crear', url: '#/visitas-guiada/visita/crear'}
+						{titulo: 'Nueva', url: '#/visitas-guiada/visita/nueva'}
 					]);					
 					App.get('menuController').seleccionar(11, 0, 2);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
