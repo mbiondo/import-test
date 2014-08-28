@@ -1973,7 +1973,8 @@ App.VisitaGuiadaEstadisticaTable = Ember.Object.extend({
 });
 
 App.VisitaGuiada = Ember.Object.extend({
-	url: 'visitas-guiadas/visita/%@',
+	//url: 'visitas-guiadas/visita/%@',
+	url: 'visitas-guiadas/visita',
     useApi: false,
     auditable: true,
 	id: '',
@@ -1984,7 +1985,7 @@ App.VisitaGuiada = Ember.Object.extend({
 	provincia: '',
 	otrosCongreso: '',
 	nivelAlumnos: '',
-	movilidadReducida: '',
+	movilidadReducida: false,
 	mesPreferencia: '',
 	localidad: '',
 	leyesCongreso: '',
@@ -2010,6 +2011,7 @@ App.VisitaGuiada = Ember.Object.extend({
 
 	serializable: [
             'id',
+
             'contactado',
             'visitantes',
             'guia',
@@ -2022,13 +2024,34 @@ App.VisitaGuiada = Ember.Object.extend({
             'fechaEstipulada',
             'comentariosDelVisitante',
             'esMiercoles',
+
+            'visitaPara',
+            'tipoInstitucion',
+            'nivelAlumnos',
+            'telefono',
+            'razonSocial',
+            'provincia',
+            'localidad',
+            'cantPersonas',
+            'fechaPreferencia',
+            'horario',
+            'movilidadReducida',
+            'historiaCongreso',
+            'funcionesCongreso',
+            'leyesCongreso',
+            'democraciaCongreso',
+            'horarioGral',
+            'correo',
 	],
 
 	label: function (){
 		var fechaFormat = "";
-		if(this.get('fechaPreferencia')){
-			fechaFormat = moment(this.get('fechaPreferencia.date'), 'YYYY/MM/DD').format('LL')
+		
+		if(this.get('fechaPreferencia'))
+		{
+			fechaFormat = moment(this.get('fechaPreferencia'), 'YYYY/MM/DD').format('LL')
 		}
+
 		return this.get('id') + " " + this.get("visitaPara") + " " + this.get("provincia") + " " + this.get("localidad") + " " + this.get("razonSocial") + " " + this.get("correo") + " " + this.get("telefono") + " " + this.get("diaPreferencia") + " " + this.get("horario") + " " + this.get("cantPersonas") + " " + this.get("fechaPreferencia") + " " + this.get("nivelAlumnos") + " " + fechaFormat;
 	}.property('id'),
 
@@ -2048,11 +2071,12 @@ App.VisitaGuiada = Ember.Object.extend({
 
 	isVisitaEspecial: function(){
 		if(this.get('fechaPreferencia')){
-			var day = moment(this.get('fechaPreferencia.date'), 'YYYY/MM/DD').format('d');
+			var day = moment(this.get('fechaPreferencia'), 'YYYY/MM/DD').format('d');
 			if(day == 6){
 				return "SI";
 			}
 		}
+
 		return this.get('visitaEspecial');
 	}.property('id'),
 
@@ -2099,6 +2123,14 @@ App.VisitaGuiada = Ember.Object.extend({
 			this.set('aproveSuccess', false);
 		}
 	},		
+    normalize: function () {
+    	this.set('fechaPreferencia', moment(this.get('fechaPreferencia'), 'DD/MM/YYYY').format('YYYY-MM-DD'));
+    	//this.set('fechaPreferencia', moment(this.get('fechaPreferencia'), 'DD/MM/YYYY').toDate());
+    },
+    desNormalize: function ()  {
+    	this.set('fechaPreferencia', moment(this.get('fechaPreferencia'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
+    	//this.set('fechaPreferencia', moment(this.get('fechaPreferencia')).format('DD/MM/YYYY'));
+    },
 });
 
 
@@ -2532,4 +2564,4 @@ App.NotificacionTipoConfig = Ember.Object.extend({
 		'id', 
 		'enabled'
 	],
-})
+});
