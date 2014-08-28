@@ -5429,7 +5429,28 @@ App.TemaView = Ember.View.extend({
 App.SesionView = Ember.View.extend({
 	tagName: 'li',
 	templateName: 'sesion',
-	classNameBindings: ['content.seleccionada:active'],
+	classNameBindings: ['content.seleccionada:active', ':row' ],
+
+
+	verSesion : function(){
+		var tema = null;
+		
+		if(App.get('temasController.content')){
+			tema = App.get('temasController.content').objectAt(0);
+		}
+		
+		if(tema){
+			App.get('router').transitionTo('sesionConsulta.tema', tema);
+		}else{
+			var sesion = App.get('sesionController.content');
+			App.get('router').transitionTo('sesionConsulta.indexSubRoute', sesion);
+		}
+		
+	},
+
+	seleccionada: function () {
+		return (this.get('content.id') == App.get('sesionController.content.id'));
+	}.property('App.sesionController.content'),
 
 	verResumen : function () {
 		App.get('router').get('applicationController').seleccionarSesion(this.get('content'))
@@ -10978,7 +10999,7 @@ App.PedidoListItemView = Ember.View.extend({
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['Núm', 'Recibido/Terminado', 'Ingresado por', 'Solicitante', 'Departamento', 'Personal DIP', ''],
+	columnas: ['Nro. de consulta', 'Recibido/Terminado', 'Ingresado por', 'Solicitante', 'Departamento', 'Personal DIP', ''],
 });
 
 App.PedidosView = Ember.View.extend({
