@@ -576,7 +576,7 @@ App.menuController = App.MenuController.create({
 //							roles: [['ROLE_VISITAS_GUIADAS_EDIT', 'ROLE_DIPUTADO']],
 							roles: [['ROLE_VISITAS_GUIADAS_EDIT']],
 							titulo: 'Nueva visita',
-							url: '#/visitas-guiadas/visita/crear',
+							url: '#/visitas-guiadas/visita/nueva',
 						}),	
 					],
 				}),
