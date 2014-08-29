@@ -2432,6 +2432,7 @@ App.AsistenciasDiputadoSeleccionado = Em.Object.extend({
 
 App.PedidoCrear = Ember.Object.extend({
 	consultas : [],
+	consultasConErrores: [],
 
 });
 
@@ -2525,12 +2526,23 @@ App.Pedido = Ember.Object.extend({
 				str += 'H';
 			}
 
-			str += '-';
-			str += moment(this.get('fechaCreacion.date'), 'YYYY-MM-DD').format('YYYY');
+			if(this.get('fechaCreacion.date')){
+				str += '-';			
+				str += moment(this.get('fechaCreacion.date'), 'YYYY-MM-DD').format('YYYY');
+			}
 		}
 
 		return str;
 	}.property('id', 'tipoIngreso', 'fechaCreacion'),
+
+	createSucceeded: function () {		
+		this.removeObserver('createSuccess');
+		if(this.get('id')){
+			$.jGrowl('Se ha creado la solicitud: ' + this.get('idPedido') + '-' + moment().format('YYYY'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
+		}else{
+			$.jGrowl(jGrowlMessage.noCreadoPedidoError.message , { life: jGrowlMessage.noCreadoPedidoError.life, theme: jGrowlMessage.noCreadoPedidoError.theme});
+		}
+	},
 });
 
 App.NotificacionConfig = Ember.Object.extend({
