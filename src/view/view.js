@@ -1984,7 +1984,7 @@ App.ExpedienteSearchView = Em.View.extend({
 		App.expedientesController.set('content', []);
 		App.expedientesController.load();
 		this.set('loading', true);
-		
+
 		if(this.get('collapse') == false)
 		{
 			$(".panel-heading > a").click();
@@ -7434,7 +7434,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-			notification.set('firmantes', this.get('content.firmantes'));
+			//notification.set('firmantes', this.get('content.firmantes'));
 			
 			notification.create();      
 
