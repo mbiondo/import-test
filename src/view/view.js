@@ -697,6 +697,7 @@ App.ListHeaderWithSortView = App.ListHeaderView.extend({
 
 		this.get('sortablController').set('sortProperties', [campo]);
 		this.get('sortablController').set('sortAscending', asc);
+
 	},	
 });
 
@@ -8302,7 +8303,8 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 	templateName: 'visitas-guiadas-list-item',
 	tagName: 'tr',
 	//classNames: ['gradeX'],
-	classNameBindings: 'content.asistencia:asistencia',
+	//classNameBindings: 'content.asistencia:asistencia',
+	classNames: ['gradeX'],
 
 	didInsertElement: function () {
 		this._super();
@@ -8311,19 +8313,39 @@ App.VisitasGuiadasListItemView = Ember.View.extend({
 	},
 });
 
-App.VisitasGuiadasListView = App.ListFilterView.extend({
+//App.VisitasGuiadasListView = App.ListFilterView.extend({
+App.VisitasGuiadasListView = App.ListFilterWithSortView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
-	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita','Nivel de alumnos', 'Visitantes', 'Detalles'],
+	//columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita','Nivel de alumnos', 'Visitantes', 'Detalles'],
 	templateName: 'simple-list-whit-date-range',
 	fechaDesde: '',
 	fechaHasta: '',
+	columnas: [
+		App.SortableColumn.create({nombre: 'Contacto', campo: 'razonSocial'}), 
+		App.SortableColumn.create({nombre: 'Fecha', campo: 'fechaPreferencia'}),
+		App.SortableColumn.create({nombre: 'Provincia', campo: 'provincia'}),
+		App.SortableColumn.create({nombre: 'Tipo de visita', campo: 'visitaPara'}),
+		App.SortableColumn.create({nombre: 'Nivel de alumnos', campo: 'nivelAlumnos'}),
+		App.SortableColumn.create({nombre: 'Visitantes', campo: 'visitantes'}),
+		App.SortableColumn.create({nombre: 'Detalles', campo: ''}),
+	],	
 
 	lista: function (){
+
+		var _self = this;
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 		var filtered;
 
 		var fechaDesde = this.get('fechaDesde');
 		var fechaHasta = this.get('fechaHasta');
+
+		Ember.run.next(function() {			
+			_self.$('table').removeHighlight();
+
+			if(_self.get('filterText') && _self.get('filterText').length > 0){
+				_self.$('td').highlight(_self.get('filterText'));
+			}
+		});
 
 		if(this.get('content'))
 		{
@@ -8342,6 +8364,7 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 //				return regex.test(item.get('label'));
 			});
 
+			
 
 		}
 
@@ -8358,7 +8381,8 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 		}
 		this.set('count', filtered.length);		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each', 'fechaDesde', 'fechaHasta'),
+//	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each', 'fechaDesde', 'fechaHasta'),
+	}.property('filterText', 'content', 'totalRecords', 'step', 'content.@each', 'fechaDesde', 'fechaHasta', 'sorting'),
 
 	limpiar: function (){
 		this.set('fechaDesde','');
@@ -8372,8 +8396,19 @@ App.VisitasGuiadasListView = App.ListFilterView.extend({
 	didInsertElement: function(){
 		this._super();
 		this.set('exportarEnabled', true);
-	}
+	},
 
+	changeFilterText: function () {
+		_self = this;
+		if (this.get('intervalText'))
+			clearInterval(_self.get('intervalText'));
+
+		var i = setInterval(function () {
+			clearInterval(_self.get('intervalText'));	
+			_self.set('sorting', ! _self.get('sorting'));
+		}, 800);
+		this.set('intervalText', i);
+	}.observes('filterText'),
 });
 
 App.VisitasGuiadasView = Ember.View.extend({
@@ -10198,6 +10233,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	}.property('App.proyectosController.recordcount'),
 
 	lista: function (){
+
 		var _self = this;
 		var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 
