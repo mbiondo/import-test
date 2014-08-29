@@ -7,13 +7,14 @@ App.Savable = Ember.Mixin.create({
 		this.set('deleteSuccess', '');
 		var url = (this.get('url') + '/%@').fmt(encodeURIComponent(this.get('id')))
 
+
 		if (this.get('noConcatURL') == true)
 		{
 			url = this.get('url');
 		}
-		
+
 		if (this.get('useApi')) {
-			url = App.get('apiController').get('url') + this.get('url');
+			url = App.get('apiController').get('url') + url;
 			$.ajax({
 				url:  url,
 				contentType: 'text/plain',
@@ -312,13 +313,13 @@ App.IoController = Em.Object.extend({
 	
 	connect: function () {
 		var self = this;
+
 		this.set('socket', io.connect(App.nodeURL, {query: "token=" + App.token}));
-		
+
 		this.get('socket').on('connect', function (data) {
 			self.set('connected', true);
 			self.recieveMessage();
 			self.recieveNotification();
-
 			self.get('rooms').forEach(function (room) {
 				self.joinRoom(room, false);
 			});
@@ -328,17 +329,43 @@ App.IoController = Em.Object.extend({
 			self.set('connected', false);
 		});
 	},	
+
+
+	
+	userHandler: function () {
+		if (App.get('userController.user')) {
+			if (App.get('ioController').get('socket')) {
+				App.get('ioController').get('socket.socket').reconnect();
+			}
+			else {
+				App.get('ioController').connect();
+			}
+		} else {
+			if (App.get('ioController').get('socket')) {
+				App.get('ioController').get('socket').disconnect();
+			}
+		}
+	}.observes('App.userController.user'),
 	
 
 	joinRoom: function (room, addToArray) {
-		this.get('socket').emit('joinRoom', room);
-		// console.log("Entrando en " + room);
-		if (addToArray != false) this.get('rooms').pushObject(room);
+		if (this.get('socket')) {
+			this.get('socket').emit('joinRoom', room);
+		}
+
+		if (addToArray != false) {
+			this.get('rooms').pushObject(room);
+		}
+			
 	},
 
 	leaveRoom: function (room) {
-		this.get('socket').emit('leaveRoom', room);
-		this.get('rooms').removeObject(room);
+		if (this.get('socket')) {
+			this.get('socket').emit('leaveRoom', room);
+		}
+		else {
+			this.get('rooms').removeObject(room);		
+		}
 	},	
 
 	sendNotification: function (notificacion) {
@@ -502,27 +529,30 @@ App.IoController = Em.Object.extend({
 
 			case "Notificacion" :
 				if (App.get('notificacionesController')) {
-					//App.get('notificacionesController').addObject(App.Notificacion.create(options));
-					$.ajax({
-						url: '/notification/' + options.id,
-						dataType: 'JSON',
-						type: 'POST',
-						data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
-						context: this,
-						success: function (data) {
-							if (data.notificaciones) {
-								data.notificaciones.forEach(function (notificacion) {
-									App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));
+					if (App.get('userController.user'))
+					{
+						//App.get('notificacionesController').addObject(App.Notificacion.create(options));
+						$.ajax({
+							url: '/notification/' + options.id,
+							dataType: 'JSON',
+							type: 'POST',
+							data : JSON.stringify({cuil: App.get('userController.user.cuil'), estructura: App.get('userController.user.estructura'), funcion: App.get('userController.user.funcion')}),
+							context: this,
+							success: function (data) {
+								if (data.notificaciones) {
+									data.notificaciones.forEach(function (notificacion) {
+										App.get('notificacionesController').addObject(App.Notificacion.create(notificacion));
 
-									if (App.get('notificacionesFiltradasController')) {
-										App.get('notificacionesFiltradasController').addObject(App.Notificacion.create(notificacion));
-									}
+										if (App.get('notificacionesFiltradasController')) {
+											App.get('notificacionesFiltradasController').addObject(App.Notificacion.create(notificacion));
+										}
 
-									App.get('notificationController').enviarNotificacion(notificacion);
-								});
-							}
-						},
-					});
+										App.get('notificationController').enviarNotificacion(notificacion);
+									});
+								}
+							},
+						});
+					}
 				}
 				break;		
 
@@ -5168,7 +5198,7 @@ App.TPsController = App.RestController.extend({
 
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.TP.create(data);
+		item = App.TP.extend(App.Savable).create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},

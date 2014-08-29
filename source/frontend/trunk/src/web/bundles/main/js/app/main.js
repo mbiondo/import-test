@@ -693,7 +693,7 @@ App.crearSesionController = App.CrearSesionController.create();
 
 App.ioController = App.IoController.create();
 
-App.ioController.connect();
+//App.ioController.connect();
 
 App.tituloController = App.TituloController.create({});
 
