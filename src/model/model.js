@@ -546,6 +546,7 @@ App.Expediente = Em.Object.extend({
 	reproduce_exp: null,
 	isNormalize: false,
 	oringen: null,
+	noConcatURL: true,
 
 
 	url: 'ME/exp/proyecto',
@@ -2517,13 +2518,13 @@ App.Pedido = Ember.Object.extend({
 			str += '-';
 
 			if(this.get('tipoIngreso') == 'Sistema Parlamentario Digital'){
-				str += 'S';
+				str += 'SPD';
 			}
 			if(this.get('tipoIngreso') == 'Web de digesto'){
-				str += 'D';
+				str += 'DIG';
 			}
 			if(this.get('tipoIngreso') == 'Web HCDN'){
-				str += 'H';
+				str += 'WEB';
 			}
 
 			if(this.get('fechaCreacion.date')){
