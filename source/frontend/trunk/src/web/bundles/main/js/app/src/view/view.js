@@ -8900,7 +8900,7 @@ App.TPConsultaView = Ember.View.extend({
 	borrar: function () {
 		App.confirmActionController.setProperties({
 			title: 'Confirmar borrar Trámite Parlamentario',
-			message: '¿ Confirma que desea borrar el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + this.get('controller.content.fecha') +  ' ?',
+			message: '¿ Confirma que desea borrar el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + moment(this.get('controller.content.fecha'), 'YYYY-MM-DD HH:mm').format('LL') +  ' ?',
 			success: null,
 		});
 		
