@@ -546,7 +546,6 @@ App.Expediente = Em.Object.extend({
 	reproduce_exp: null,
 	isNormalize: false,
 	oringen: null,
-	noConcatURL: true,
 
 
 	url: 'ME/exp/proyecto',
