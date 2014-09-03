@@ -8323,6 +8323,7 @@ App.VisitasGuiadasListView = App.ListFilterWithSortView.extend({
 	itemViewClass: App.VisitasGuiadasListItemView,
 	//columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita','Nivel de alumnos', 'Visitantes', 'Detalles'],
 	templateName: 'simple-list-whit-date-range',
+	classNames: ['no-sorting'],
 	fechaDesde: '',
 	fechaHasta: '',
 
