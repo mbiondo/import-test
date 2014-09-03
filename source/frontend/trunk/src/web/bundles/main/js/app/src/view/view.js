@@ -7785,7 +7785,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		//this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
 		this.set('content.expdipA', moment().format("YYYY"));
 
-		_self = this;
+		var _self = this;
 
 		if (this.get('parentView.oldTP')) {
 			this.set('pubnro', _self.get('parentView.oldTP'));
@@ -7807,6 +7807,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			_self.set('camaras', _self.get('camaras'));
 		});
 		*/
+
+
 	},
 
 	willDestroyElement: function(){
@@ -10161,7 +10163,14 @@ App.ProyectosView = Ember.View.extend({
 App.ProyectoListItemView = Ember.View.extend({
 	tagName: 'tr',
 	classNames: ['gradeX'],
+	//classNameBindings: ['content.seleccionado:active'],
 	templateName: 'proyectos-list-item',
+	/*
+	click: function(){
+		this.set('content.seleccionado', !this.get('content.seleccionado'))
+	}
+	*/
+
 });
 
 App.ProyectoListItemExportView = Ember.View.extend({
@@ -10204,8 +10213,11 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 			this.set('loading', true);
 		}
 	},	
-
+	listaExport: function(){
+		return this.get('lista').filterProperty('seleccionado');
+	}.property('content.@each', 'content.@each.seleccionado'),
 	columnas: [
+		//App.SortableColumn.create({nombre: ''}), 
 		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
