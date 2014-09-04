@@ -7673,7 +7673,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if (p.test(this.get('content.pubFecha'))) {
 			if(this.get('content.pubFecha')) {
 				if (this.get('oldFechaTp') != this.get('content.pubFecha')) {
-					this.get('content').set('autoridades', []);
+					//this.get('content').set('autoridades', []);
 					App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
 					App.get('firmantesController').load();	
 					this.set('oldFechaTp', this.get('content.pubFecha'));
@@ -10967,21 +10967,23 @@ App.CrearPedidoView = Ember.View.extend({
 		//$.jGrowl('Se han creado las solicitudes: ' + this.idPedidosCreados, { life: 5000 });
 
 		//App.get('uploaderController').fileChange();
-		/*
-		App.pedidosController = App.PedidosController.create();
+		
+
+		App.misPedidosController = App.MisPedidosController.create({cuil: App.get('userController.user.cuil')});
 
 		fn = function() {
-			if(App.get('pedidosController.loaded'))
+			if(App.get('misPedidosController.loaded'))
 			{
-				App.get('pedidosController').removeObserver('loaded', this, fn);	
-				App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+				App.get('misPedidosController').removeObserver('loaded', this, fn);	
+				App.get('router').transitionTo('root.informacionparlamentaria.pedidos.misPedidos');
 			}
 		};
 		
-		App.get('pedidosController').addObserver('loaded', this, fn);
+		App.get('misPedidosController').addObserver('loaded', this, fn);
 
-		App.get('pedidosController').load();	
-		*/	
+		App.get('misPedidosController').load();	
+		
+		/*
 		this.limpiar();
 		$("#if-pedido-crear-form").parsley().destroy();
 
@@ -10990,6 +10992,7 @@ App.CrearPedidoView = Ember.View.extend({
 		nuevaConsulta.set('idDiv', "collapseConsulta" + this.get('content.consultas').length + 1);
 		nuevaConsulta.set('idHref', "#collapseConsulta" + this.get('content.consultas').length + 1);
 		this.get('content.consultas').pushObject(nuevaConsulta);
+		*/
 
 	},
 	
@@ -11152,6 +11155,18 @@ App.PedidoConsultaView = Ember.View.extend({
 });
 
 
+App.MiPedidoConsultaView = Ember.View.extend({
+	templateName: 'if-mi-pedido-consulta',
+	departamentos: ['ES', 'AC', 'LE'],
+	departamento: 'ES',
+
+
+	didInsertElement: function () {
+		this._super();
+		this.set('content', App.get('pedidoConsultaController').get('content'));
+	},
+});
+
 App.PedidoListItemView = Ember.View.extend({
 	templateName: 'if-pedido-list-item',
 	tagName: 'tr',
@@ -11188,6 +11203,36 @@ App.PedidosView = Ember.View.extend({
 		*/
 	}
 });
+
+
+App.MisPedidosView = Ember.View.extend({
+	templateName: 'if-mis-pedidos',
+	content: '',
+	contentCount: 0,
+
+	willInsertElement: function(){
+		this.set('content', App.get('misPedidosController.arrangedContent'));
+	}
+});
+
+App.MiPedidoListItemView = Ember.View.extend({
+	templateName: 'if-mis-pedidos-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+
+	didInsertElement: function () {
+		this._super();
+		this.$('span').tooltip();
+	},
+});
+
+
+App.MisPedidosListView = App.ListFilterView.extend({
+	itemViewClass: App.MiPedidoListItemView,
+	columnas: ['Nro. de consulta', 'Recibido/Terminado', 'Ingresado por', 'Solicitante', 'Departamento', 'Personal DIP', ''],
+});
+
+
 
 App.PedidosEstadisticasView = Ember.View.extend({
 	templateName: 'if-pedidos-estadisticas',

@@ -2342,6 +2342,96 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					},
 				}),
+
+				misPedidos: Ember.Route.extend({
+					route: '/mis-pedidos',
+
+					deserialize: function(router, params){
+						var deferred = $.Deferred();				
+						
+						App.misPedidosController = App.MisPedidosController.create({cuil: App.get('userController.user.cuil')});
+
+						fn = function() {
+							if(App.get('misPedidosController.loaded'))
+							{
+								App.get('misPedidosController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('misPedidosController').addObserver('loaded', this, fn);
+
+						App.get('misPedidosController').load();	
+
+						return deferred.promise();	
+					},
+
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'MisPedidos');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Solicitudes'},
+							{titulo: 'Ingreasadas por mi', url: '#/informacionparlamentaria/solicitudes/mis-pedidos'}
+						]);					
+
+						App.get('menuController').seleccionar(13, 0, 1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+
+				miPedido: Ember.Route.extend({
+					route: '/solicitud/mias/:pedido/ver',
+
+					deserialize: function(router, params){
+						App.pedidoConsultaController = App.PedidoConsultaController.create();
+
+						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
+
+						var deferred = $.Deferred(),
+
+						fn = function() {
+							var pedido = App.get('pedidoConsultaController.content');
+
+							if(App.get('pedidoConsultaController.loaded'))
+							{							
+								App.get('pedidoConsultaController').removeObserver('loaded', this, fn);
+								deferred.resolve(pedido);
+							}
+						};
+
+						App.get('pedidoConsultaController').addObserver('loaded', this, fn);
+
+						App.get('pedidoConsultaController').load();
+
+						return deferred.promise();
+					},
+
+					serialize: function(router, context){
+						return {pedido: context.get('id')}
+					},
+
+					connectOutlets: function(router, context){
+
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'MiPedidoConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Informacion Parlamentaria'},
+							{titulo: 'Solicitudes' , url: '#/informacionparlamentaria/solicitudes/mis-pedidos'},
+							{titulo: 'Ingreasadas por mi', url: '#/informacionparlamentaria/solicitudes/mis-pedidos'}
+						]);					
+
+						App.get('menuController').seleccionar(13, 0, 1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
 				
 				consulta: Ember.Route.extend({
 					route: '/solicitud/:pedido/ver',
@@ -2407,7 +2497,7 @@ App.Router =  Em.Router.extend({
 							{titulo: 'Nueva'}
 						]);	
 
-						App.get('menuController').seleccionar(13, 0, 1);
+						App.get('menuController').seleccionar(13, 0, 2);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 					},					
