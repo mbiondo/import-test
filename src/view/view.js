@@ -12023,5 +12023,4 @@ App.SolicitudCrearView = Ember.View.extend({
 
 App.FirmantesWidgetView = Ember.View.extend({
 	templateName: 'wg-firmantes',
-
 });
