@@ -848,8 +848,9 @@ function isOnline () {
 
 function isOffline () {
 	$('#application').addClass('sin-conexion');
+	$('#offline').addClass('sin-conexion');
 }
 
-window.addEventListener("online", isOnline, false);
+//window.addEventListener("online", isOnline, false);
 window.addEventListener("offline", isOffline, false);
 
