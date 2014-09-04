@@ -2418,7 +2418,10 @@ App.Router =  Em.Router.extend({
 
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('main', 'MiPedidoConsulta');
+						if (App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT') || App.get('userController').hasRole('ROLE_IP_EDITOR'))
+							appController.connectOutlet('main', 'PedidoConsulta');
+						else
+							appController.connectOutlet('main', 'MiPedidoConsulta');
 						appController.connectOutlet('menu', 'subMenu');
 						
 
