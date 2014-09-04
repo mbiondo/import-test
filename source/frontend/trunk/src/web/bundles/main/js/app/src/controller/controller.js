@@ -5689,6 +5689,8 @@ App.AsistenciasController = Ember.ObjectController.extend({
 });
 
 
+
+
 App.PedidosController = App.RestController.extend({
 	url: 'pedido',
 	useApi: false,
@@ -5747,6 +5749,31 @@ App.PedidosController = App.RestController.extend({
 	}.property('content.@each'),
 
 });
+
+
+App.MisPedidosController = App.PedidosController.extend({
+	url: 'pedidos',
+	cuil: '',
+
+	load: function() {
+		this.set('loaded', false);
+
+		url = this.get('url') + "/" + this.get('cuil');
+
+		if ( url ) {
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'GET',
+				context: this,
+				contentType: 'text/plain',
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+		}
+	},	
+});
+
 
 App.PedidoConsultaController = Ember.Object.extend({
 	url: 'pedido/%@',

@@ -503,9 +503,15 @@ App.menuController = App.MenuController.create({
 							titulo: 'Listado',
 							url: '#/informacionparlamentaria/solicitudes/listado',
 							roles: [['ROLE_INFORMACION_PARLAMENTARIA']],
-						}),					
+						}),
 						App.MenuItem.create({
 							id: 1,
+							titulo: 'Ingresadas por mi',
+							url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
+							roles: [['ROLE_USER']],
+						}),	
+						App.MenuItem.create({
+							id: 2,
 							titulo: 'Nueva solicitud',
 							url: '#/informacionparlamentaria/solicitudes/nueva',
 							roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
@@ -843,7 +849,7 @@ if (user) {
 
 
 function isOnline () {
-	$('#application').removeClass('sin-conexion');
+	$('#application').addClass('con-conexion');
 }
 
 function isOffline () {
@@ -851,6 +857,6 @@ function isOffline () {
 	$('#offline').addClass('sin-conexion');
 }
 
-//window.addEventListener("online", isOnline, false);
+window.addEventListener("online", isOnline, false);
 window.addEventListener("offline", isOffline, false);
 
