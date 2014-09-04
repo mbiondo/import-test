@@ -12014,3 +12014,14 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 	}
 	
 });
+
+
+App.SolicitudCrearView = Ember.View.extend({
+	templateName: 'solicitud-movimiento',
+
+});
+
+App.FirmantesWidgetView = Ember.View.extend({
+	templateName: 'wg-firmantes',
+
+});
