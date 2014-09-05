@@ -11982,6 +11982,7 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 	crear: function(){	
 		if($("#formCrearVisitasGuiadas").parsley('validate')){
 			//this.set('content.fechaPreferencia', {date: this.get('content.fechaPreferencia')});
+			this.set('content.userSaraCreado', App.get('userController.user.cuil'));
 			this.get('content').addObserver("createSuccess", this, this.createSuccess);
 			this.get('content').normalize();
 			this.get('content').create();
@@ -11998,6 +11999,7 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 		this.get('content').desNormalize();
 		if(this.get('content.createSuccess'))
 		{
+			/*
 			App.visitasGuiadasController = App.VisitasGuiadasController.create();
 
 			fn = function(){
@@ -12010,6 +12012,19 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 
 			App.get('visitasGuiadasController').addObserver('loaded', this, fn);
 			App.get('visitasGuiadasController').load();
+			*/
+			App.misVisitasGuiadasController = App.MisVisitasGuiadasController.create({cuil: App.get('userController.user.cuil')});
+
+			fn = function(){
+				if(App.get('misVisitasGuiadasController.loaded'))
+				{
+					App.get('misVisitasGuiadasController').removeObserver('loaded', this, fn);
+					App.get('router').transitionTo('visitasGuiadas.misVisitasGuiadas');
+				}
+			}
+
+			App.get('misVisitasGuiadasController').addObserver('loaded', this, fn);
+			App.get('misVisitasGuiadasController').load();
 
 			$.jGrowl('Se creado la Visita Guiada con éxito!', { life: 5000 });
 		}else{
@@ -12027,4 +12042,162 @@ App.SolicitudCrearView = Ember.View.extend({
 
 App.FirmantesWidgetView = Ember.View.extend({
 	templateName: 'wg-firmantes',
+});
+
+App.MisVisitasGuiadasView = Ember.View.extend({
+	templateName: 'mis-visitas-guiadas',
+	content: '',
+	contentCount: 0,
+
+	willInsertElement: function(){
+		this.set('content', App.get('misVisitasGuiadasController.arrangedContent'));
+	}
+});
+
+App.MisVisitasGuiadasListItemView = Ember.View.extend({
+	templateName: 'mis-visitas-guiadas-list-item',
+	tagName: 'tr',
+	classNames: ['gradeX'],
+
+	didInsertElement: function () {
+		this._super();
+		this.$('span').tooltip();
+	},
+});
+
+
+App.MisVisitasGuiadasListView = App.ListFilterView.extend({
+	itemViewClass: App.MisVisitasGuiadasListItemView,
+
+	columnas: ['Contacto', 'Fecha', 'Provincia', 'Tipo de visita','Nivel de alumnos', 'Visitantes', 'Detalles'],
+});
+
+App.MisVisitasGuiadasConsultaView = Ember.View.extend({
+	templateName: 'mis-visitas-guiadas-consulta',
+	content: '',
+
+	horariosEstipulados: ['09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'],
+
+	willInsertElement: function(){
+		this.set('content', App.get('visitaGuiadaConsultaController.content'));
+	},
+
+	aprobar: function () {
+
+		if(this.get('content.fechaEstipulada')){
+			var day = moment(this.get('content.fechaEstipulada'), 'DD/MM/YYYY').format('d');
+			if(day == 3){
+				this.get('content').set('esMiercoles', true);
+			}else{
+				this.get('content').set('esMiercoles', false);
+			}
+		}
+		
+		this.get('content').set('aprobado', true);
+		this.get('content').addObserver('aproveSuccess', this, this.aproveSuccessed);
+		this.get('content').aprove();	
+
+		var audit = App.Audit.extend(App.Savable).create();
+		audit.set('tipo', 'Test');
+		audit.set('accion', 'Aprobado');
+		audit.set('usuario', App.get('userController.user.cuil'));
+		audit.set('objeto', this.get('content').constructor.toString());
+		audit.set('objetoId', this.get('content').id);
+		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		audit.create();	
+	},
+
+	guardar: function(){
+		//App.get('visitaGuiadaConsultaController').save();
+		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
+		this.get('content').save();
+		if(this.get('content').contactado){
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Test');
+			audit.set('accion', 'Contactado');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', this.get('content').constructor.toString());
+			audit.set('objetoId', this.get('content').id);
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.create();
+		}
+	},
+
+	aproveSuccessed: function () {
+		this.get('content').removeObserver('aproveSuccess', this, this.createSucceeded);
+		if (this.get('content.aproveSuccess')) {
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('aproveSuccess') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	},
+
+	saveSuccessed: function () {
+		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
+		if (this.get('content.saveSuccess')) {
+			App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+			fn = function() {
+					if(App.get('visitasGuiadasController.loaded'))
+					{
+						App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+						App.get('router').transitionTo('visitasGuiadas.index')
+					}
+			};
+
+			App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+			App.get('visitasGuiadasController').load();                      
+						
+						
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+		} else if (this.get('saveSuccess') == false) {
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+		}
+	},   
+
+	audits: function(){
+		return App.get('auditController');
+	}.property('App.auditController.content'),
+
+	borrar: function (){
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la baja de la visita',
+			message: '¿ Confirma que desea dar de baja la visita de ' +_self.get('content.razonSocial')+ ' ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.confirmActionDone);
+		App.confirmActionController.show();
+
+
+	},
+
+	confirmActionDone: function(){
+		this.set('content.url', 'visitas-guiadas/visita/delete')
+		var visita = App.VisitaGuiada.extend(App.Savable).create(this.get('content'));
+		visita.delete();
+		
+		//console.log(this);
+
+		App.visitasGuiadasController = App.VisitasGuiadasController.create();
+
+		fn = function() {
+				if(App.get('visitasGuiadasController.loaded'))
+				{
+					App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('visitasGuiadas.index')
+				}
+		};
+
+		App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+		App.get('visitasGuiadasController').load();                      
+					
+					
+		$.jGrowl(jGrowlMessage.bajaVisita.message, { life: jGrowlMessage.bajaVisita.life });
+	},
+
 });
