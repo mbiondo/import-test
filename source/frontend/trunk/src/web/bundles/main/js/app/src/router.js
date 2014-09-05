@@ -2273,6 +2273,101 @@ App.Router =  Em.Router.extend({
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));						
 				},					
 			}),
+				misVisitasGuiadas: Ember.Route.extend({
+					route: '/mis-visitas',
+
+					deserialize: function(router, params){
+
+						var deferred = $.Deferred();				
+						
+						App.misVisitasGuiadasController = App.MisVisitasGuiadasController.create({cuil: App.get('userController.user.cuil')});
+
+						fn = function() {
+							if(App.get('misVisitasGuiadasController.loaded'))
+							{
+								App.get('misVisitasGuiadasController').removeObserver('loaded', this, fn);	
+								deferred.resolve(null);
+							}
+						};
+						
+						App.get('misVisitasGuiadasController').addObserver('loaded', this, fn);
+
+						App.get('misVisitasGuiadasController').load();	
+
+						return deferred.promise();	
+					},
+
+					connectOutlets: function(router, context){
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'MisVisitasGuiadas');
+						appController.connectOutlet('menu', 'subMenu');
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Visitas Guiadas', url: ''},
+							{titulo: 'Ingresadas por mi', url: ''}
+						]);				
+
+						App.get('menuController').seleccionar(11, 0, 3);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+
+				miVisitaGuiada: Ember.Route.extend({
+					route: '/visita/mias/:visita/ver',
+
+					deserialize: function(router, params){
+						
+						App.visitaGuiadaConsultaController = App.VisitaGuiadaConsultaController.create();
+
+						App.set('visitaGuiadaConsultaController.content', App.VisitaGuiada.extend(App.Savable).create({id: params.visita}));
+
+						var deferred = $.Deferred(),
+
+						fn = function() {
+							var visita = App.get('visitaGuiadaConsultaController.content');
+
+							if(App.get('visitaGuiadaConsultaController.loaded'))
+							{							
+								App.get('visitaGuiadaConsultaController').removeObserver('loaded', this, fn);
+								deferred.resolve(visita);
+							}
+						};
+
+						App.get('visitaGuiadaConsultaController').addObserver('loaded', this, fn);
+
+						App.get('visitaGuiadaConsultaController').load();
+
+						return deferred.promise();
+						
+					},
+
+					serialize: function(router, context){
+						return {visita: context.get('id')}
+					},
+
+					connectOutlets: function(router, context){
+
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						if (App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT') || App.get('userController').hasRole('ROLE_IP_EDITOR'))
+							appController.connectOutlet('main', 'VisitaGuiadaConsulta');
+						else
+							appController.connectOutlet('main', 'MisVisitasGuiadasConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/mias/listado'},
+							{titulo: 'Ingresadas por mi', url: ''},
+							{titulo: 'Visita', url: ''}
+						]);					
+
+						App.get('menuController').seleccionar(11, 0, 3);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
+					},
+				}),
+
+
 			visitaCrear: Ember.Route.extend({
 				route: '/visita/nueva',
 
