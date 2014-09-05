@@ -107,6 +107,13 @@ Handlebars.registerHelper("linkVisitaGuiada", function(id, options) {
   return "#/visitas-guiadas/visita/"+id+"/ver";
 });
 
+Handlebars.registerHelper("linkMiVisitaGuiada", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/visitas-guiadas/visita/mias/"+id+"/ver";
+});
+
 Handlebars.registerHelper("linkCrearOD", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
