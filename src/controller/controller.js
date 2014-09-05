@@ -2494,7 +2494,7 @@ App.ParteEstadosController = App.RestController.extend({
 
 App.FirmantesController = App.RestController.extend({
 	tipo: 'pap/dip/diputados',
-	url: moment().format('DD/MM/YYYY') + '/detalle',
+	url: moment().format('DD/MM/YYYY') + '/resumen',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
 	comision_id: '',
