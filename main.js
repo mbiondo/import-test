@@ -572,6 +572,12 @@ App.menuController = App.MenuController.create({
 							url: '#/visitas-guiadas/listado',
 						}),
 						App.MenuItem.create({
+							id: 3,
+							titulo: 'Ingresadas por mi',
+							url: '#/visitas-guiadas/mis-visitas',
+							roles: [['ROLE_USER'], ['ROLE_DIPUTADO']],
+						}),	
+						App.MenuItem.create({
 							id: 1,
 							roles: [['ROLE_VISITAS_GUIADAS']],
 							titulo: 'Estadísticas',
