@@ -370,6 +370,10 @@ App.ContentView = Ember.View.extend({
 	toggleHelp: true,
 	oldColumns: [],
 
+	refresh: function () {
+		window.location.reload();
+	},
+ 
 
 	appColumnsChange: function () {
 		this.set('columns', App.get('router.applicationController.columns'));
