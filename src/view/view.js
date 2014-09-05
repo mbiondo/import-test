@@ -8521,43 +8521,49 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	}.property('App.auditController.content'),
 
 	borrar: function (){
-		var _self = this;
 
 		App.confirmActionController.setProperties({
 			title: 'Confirmar la baja de la visita',
-			message: '¿ Confirma que desea dar de baja la visita de ' +_self.get('content.razonSocial')+ ' ?',
+			message: '¿ Confirma que desea dar de baja la visita de ' + this.get('content.razonSocial')+ ' ?',
 			success: null,
 		});
 		
-		App.confirmActionController.addObserver('success', _self, _self.confirmActionDone);
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
 		App.confirmActionController.show();
 
 
 	},
 
 	confirmActionDone: function(){
-		this.set('content.url', 'visitas-guiadas/visita/delete')
-		var visita = App.VisitaGuiada.extend(App.Savable).create(this.get('content'));
-		visita.delete();
-		
-		//console.log(this);
 
-		App.visitasGuiadasController = App.VisitasGuiadasController.create();
+		if (App.get('confirmActionController.success')) {
+			App.get('confirmActionController.success').removeObserver('success', this, this.confirmActionDone);
+			this.set('content.url', 'visitas-guiadas/visita/delete')
+			var visita = App.VisitaGuiada.extend(App.Savable).create(this.get('content'));
+			visita.delete();
 
-		fn = function() {
-				if(App.get('visitasGuiadasController.loaded'))
-				{
-					App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
-					App.get('router').transitionTo('visitasGuiadas.index')
-				}
-		};
+			App.visitasGuiadasController = App.VisitasGuiadasController.create();
 
-		App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+			fn = function() {
+					if(App.get('visitasGuiadasController.loaded'))
+					{
+						App.get('visitasGuiadasController').removeObserver('loaded', this, fn);	
+						App.get('router').transitionTo('visitasGuiadas.index')
+					}
+			};
 
-		App.get('visitasGuiadasController').load();                      
-					
-					
-		$.jGrowl(jGrowlMessage.bajaVisita.message, { life: jGrowlMessage.bajaVisita.life });
+			App.get('visitasGuiadasController').addObserver('loaded', this, fn);
+
+			App.get('visitasGuiadasController').load();                      
+						
+						
+			$.jGrowl(jGrowlMessage.bajaVisita.message, { life: jGrowlMessage.bajaVisita.life });
+		} else {
+			if (typeof App.get('confirmActionController.success') == "Boolean") {
+				App.get('confirmActionController.success').removeObserver('success', this, this.confirmActionDone);
+				$.jGrowl('No se ha podido eliimnar la visita!', { life: jGrowlMessage.bajaVisita.life });
+			}
+		}
 	},
 
 });
@@ -9020,6 +9026,13 @@ App.TPConsultaView = Ember.View.extend({
 
 	createCompleted: function (data) {
 	},
+
+	puedeEliminar: function () {
+		if (App.get('userController').hasRole('ROL_PUBLICACIONES_EDIT'))
+			return true;
+		else
+			return false;
+	}.property('App.userController.user'),
 
 
 });

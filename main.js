@@ -553,7 +553,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 11,
-			roles: [['ROLE_VISITAS_GUIADAS']],
+			roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_USER'], ['ROLE_DIPUTADO']],
 			titulo: 'Visitas Guiadas',
 			url: '#/visitas-guiadas',
 			icono: 'ic ic-visitas-guiadas',
@@ -563,7 +563,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Visitas Guiadas',
 					url: '',
-					roles: [['ROLE_VISITAS_GUIADAS']],
+					roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_USER'], ['ROLE_DIPUTADO']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -575,7 +575,7 @@ App.menuController = App.MenuController.create({
 							id: 3,
 							titulo: 'Ingresadas por mi',
 							url: '#/visitas-guiadas/mis-visitas',
-							roles: [['ROLE_USER'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_USER'], ['ROLE_DIPUTADO'], ['ROLE_USER']],
 						}),	
 						App.MenuItem.create({
 							id: 1,
@@ -585,7 +585,7 @@ App.menuController = App.MenuController.create({
 						}),	
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_VISITAS_GUIADAS_EDIT', 'ROLE_DIPUTADO']],
+							roles: [['ROLE_VISITAS_GUIADAS_EDIT'], ['ROLE_USER'], ['ROLE_DIPUTADO']],
 							//roles: [['ROLE_VISITAS_GUIADAS_EDIT']],
 							titulo: 'Nueva visita',
 							url: '#/visitas-guiadas/visita/nueva',

@@ -1592,7 +1592,7 @@ App.VisitasGuiadasController = App.RestController.extend({
 		{
 			this.get('content').forEach(function(item){
 				if(item.fechaPreferencia){
-					itemDate = new Date(item.fechaPreferencia.date.substring(0,10));
+					itemDate = new Date(item.fechaPreferencia);
 					if(anioActual == itemDate.getUTCFullYear()){
 						var index = itemDate.getMonth();
 					
@@ -1691,6 +1691,11 @@ App.NotificacionesController = App.RestController.extend({
 			}
 		}
 	},
+
+	clear: function () {
+		if (!App.get('userController.user'))
+			this.set('content', []);
+	}.observes('App.userController.user'),
 
 	parse : function (data) {
 		return data.notificaciones;
@@ -2812,6 +2817,7 @@ App.DictamenController = Ember.Object.extend({
 	},	
 });
 
+
 App.ExpedienteConsultaController = Ember.Object.extend({
 	content: null,
 	url: "exp/proyecto/%@",
@@ -2841,6 +2847,11 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 		this.set('content', item);
 		this.set('loaded', true);
 	},	
+});
+
+App.ProyectoConsultaController = App.ExpedienteConsultaController.extend({
+	url: 'ME/exp/proyecto/%@',
+	
 });
 
 App.DictamenesController = App.RestController.extend({

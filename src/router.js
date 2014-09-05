@@ -2350,7 +2350,7 @@ App.Router =  Em.Router.extend({
 
 						var appController = router.get('applicationController');
 						appController.connectOutlet('help', 'Help');
-						if (App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT') || App.get('userController').hasRole('ROLE_IP_EDITOR'))
+						if (App.get('userController').hasRole('ROLE_VISITAS_GUIADAS') || App.get('userController').hasRole('ROLE_VISITAS_GUIADAS_EDIT'))
 							appController.connectOutlet('main', 'VisitaGuiadaConsulta');
 						else
 							appController.connectOutlet('main', 'MisVisitasGuiadasConsulta');
@@ -2358,7 +2358,7 @@ App.Router =  Em.Router.extend({
 
 						App.get('breadCumbController').set('content', [
 							{titulo: 'Visitas Guiadas', url: '#/visitas-guiadas/mias/listado'},
-							{titulo: 'Ingresadas por mi', url: ''},
+							{titulo: 'Ingresadas por mi', url: '#/visitas-guiadas/mias/listado'},
 							{titulo: 'Visita', url: ''}
 						]);					
 
@@ -2773,6 +2773,7 @@ App.Router =  Em.Router.extend({
 					route: '/expediente/:expediente/ver',
 
 					deserialize: function(router, params) {
+						//App.proyectoConsultaController = App.ProyectoConsultaController.create();
 						App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
 						App.bloquesController = App.BloquesController.create();
 						App.interBloquesController = App.InterBloquesController.create();
@@ -2787,10 +2788,10 @@ App.Router =  Em.Router.extend({
 						};
 
 						
-						//App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');		
+						App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');
 						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 						App.get('expedienteConsultaController').load();		
-
+						App.set('expedienteConsultaController.url', 'exp/proyecto/%@');
 
 
 						App.get('bloquesController').addObserver('loaded', this, fn);
