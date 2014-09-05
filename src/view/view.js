@@ -8900,6 +8900,7 @@ App.TPConsultaView = Ember.View.extend({
 	creating: false,
 
 
+
 	borrar: function () {
 		App.confirmActionController.setProperties({
 			title: 'Confirmar borrar Trámite Parlamentario',
@@ -8959,6 +8960,9 @@ App.TPConsultaView = Ember.View.extend({
 		return url + "/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero') + "/" + this.get('withGiros') + "/docxpath";
 	}.property('controller.content', 'withGiros'),
 
+	urlHTML: function () {
+		return "publicaciones/generate/tpzip/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero');
+	}.property('controller.content'),
 
 	exportar: function () {
 		var _self = this;
