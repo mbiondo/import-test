@@ -5954,3 +5954,26 @@ App.XHRAuthURLController = Ember.Object.extend({
 	},
 
 });
+
+App.MisVisitasGuiadasController = App.VisitasGuiadasController.extend({
+	url: 'visitas-guiadas',
+	cuil: '',
+
+	load: function() {
+		this.set('loaded', false);
+
+		url = this.get('url') + "/" + this.get('cuil');
+
+		if ( url ) {
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'GET',
+				context: this,
+				contentType: 'text/plain',
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+		}
+	},	
+});
