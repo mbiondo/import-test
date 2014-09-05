@@ -2009,6 +2009,8 @@ App.VisitaGuiada = Ember.Object.extend({
     observaciones: '',
     asistencia: '',
 
+    userSaraCreado: '',
+
 	serializable: [
             'id',
 
@@ -2042,6 +2044,8 @@ App.VisitaGuiada = Ember.Object.extend({
             'democraciaCongreso',
             'horarioGral',
             'correo',
+
+			'userSaraCreado',
 	],
 
 	label: function (){
@@ -2129,7 +2133,7 @@ App.VisitaGuiada = Ember.Object.extend({
     },
     desNormalize: function ()  {
     	this.set('fechaPreferencia', moment(this.get('fechaPreferencia'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
-    	//this.set('fechaPreferencia', moment(this.get('fechaPreferencia')).format('DD/MM/YYYY'));
+    	//this.set('fechaPreferencia', moment(this.get('fechaPreferencia')).format('DD/MM/YYYY'));		
     },
 });
 
