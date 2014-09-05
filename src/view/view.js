@@ -7678,7 +7678,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			if(this.get('content.pubFecha')) {
 				if (this.get('oldFechaTp') != this.get('content.pubFecha')) {
 					//this.get('content').set('autoridades', []);
-					App.get('firmantesController').set('url', this.get('content.pubFecha') + '/detalle');
+					App.get('firmantesController').set('url', this.get('content.pubFecha') + '/resumen');
 					App.get('firmantesController').load();	
 					this.set('oldFechaTp', this.get('content.pubFecha'));
 				}
