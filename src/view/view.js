@@ -11275,6 +11275,9 @@ App.ProvinciasLocalidadesView =  Ember.View.extend({
 
 		var _self = this;
 		var url = "bundles/main/js/listadoProvinciasLocalidades.json";
+		
+		// La fuente del json se parseó en base a la siguiente fuente		
+		// https://code.google.com/p/apuranqn/source/browse/trunk/+apuranqn/Script+Provincias+y+Localidades.sql?r=8
 
 		$.getJSON(url, function(key, val){
 			_self.set('provincias', ['Seleccione una Opción']);
