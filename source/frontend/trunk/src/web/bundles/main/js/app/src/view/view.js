@@ -9032,7 +9032,7 @@ App.TPConsultaView = Ember.View.extend({
 	},
 
 	puedeEliminar: function () {
-		if (App.get('userController').hasRole('ROL_PUBLICACIONES_EDIT'))
+		if (App.get('userController').hasRole('ROLE_PUBLICACIONES_EDIT'))
 			return true;
 		else
 			return false;
