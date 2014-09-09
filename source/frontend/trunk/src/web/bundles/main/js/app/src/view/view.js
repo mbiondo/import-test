@@ -8913,8 +8913,8 @@ App.TPConsultaView = Ember.View.extend({
 
 	borrar: function () {
 		App.confirmActionController.setProperties({
-			title: 'Confirmar borrar Trámite Parlamentario',
-			message: '¿ Confirma que desea borrar el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + moment(this.get('controller.content.fecha'), 'YYYY-MM-DD HH:mm').format('LL') +  ' ?',
+			title: 'Confirmar eliminar Trámite Parlamentario',
+			message: '¿ Confirma que desea eliminar el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + moment(this.get('controller.content.fecha'), 'YYYY-MM-DD HH:mm').format('LL') +  ' ?',
 			success: null,
 		});
 		
@@ -9603,6 +9603,7 @@ App.MultiSelectTextSearch = Ember.TextField.extend({
 App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
 	noDocument: false,
+	withGiros: true,
 	
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
@@ -9643,9 +9644,41 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 
 	},
 
+
+	documentURL: function () {
+		var url = "ME/oblea";
+
+		if (this.get('controller.content').get('useApi'))
+		{
+			url = App.get('apiController.url') + url;
+		}
+
+		return url + "/" + this.get('withGiros') + "/docxpath";
+	}.property('controller.content', 'withGiros'),
+
+
 	imprimirComprobante: function () {
-		$.download('exportar', "&type=comprobante-expediente&data=" + JSON.stringify(this.get('controller.content')));
+		var _self = this;
+		_self.set('creating', true);
+		var data = {proyectos: [{id: this.get('controller.content.id')}]};
+		var jsondata = JSON.stringify(data);
+		$.ajax({
+
+		    url: this.get('documentURL'),
+		    type: 'POST',
+		    data: jsondata,
+		    dataType: "JSON",
+		    success: function(data) {
+		    	console.log(data);
+		    	_self.set('creating', false);
+		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
+		    },
+		    complete: function(){
+		    	_self.set('creating', false);
+		    }
+		});
 	},
+
 
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
