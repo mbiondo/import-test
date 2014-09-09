@@ -9929,7 +9929,8 @@ App.MEExpedienteEditarView = Ember.View.extend({
 		}
 				
 		if (this.get('content.saveSuccess')) {
-			$.jGrowl('Se ha modificado el expediente!', { life: 5000 });
+
+			$.jGrowl('Se ha modificado el expediente de '+ this.get('content.tipo') + ' ' + this.get('content.expdip') + ' correctamente !', { life: 5000 });
 
 			var ex = App.Expediente.extend(App.Savable).create({id: this.get('content.id')});
 			ex.set('loaded', false);
