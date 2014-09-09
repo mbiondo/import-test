@@ -10184,14 +10184,14 @@ App.ProyectosView = Ember.View.extend({
 
 App.ProyectoListItemView = Ember.View.extend({
 	tagName: 'tr',
-	classNames: ['gradeX'],
-	//classNameBindings: ['content.seleccionado:active'],
+	//classNames: ['gradeX'],
+	classNameBindings: ['content.seleccionado:active'],
 	templateName: 'proyectos-list-item',
-	/*
+	
 	click: function(){
 		this.set('content.seleccionado', !this.get('content.seleccionado'))
 	}
-	*/
+	
 
 });
 
@@ -10236,7 +10236,19 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		}
 	},	
 	listaExport: function(){
-		return this.get('lista').filterProperty('seleccionado');
+		var lista;
+		
+		if(this.get('lista').filterProperty('seleccionado').length > 0)
+		{
+			lista = this.get('lista').filterProperty('seleccionado');
+		}
+		else
+		{
+			lista = this.get('lista');
+		}
+		
+		return lista;
+
 	}.property('content.@each', 'content.@each.seleccionado'),
 	columnas: [
 		//App.SortableColumn.create({nombre: ''}), 
@@ -10246,7 +10258,6 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
 		App.SortableColumn.create({nombre: 'Comisiones', campo: 'girosLabel'}),
 	],	
-
 	didInsertElement: function(){
 		this._super();
 		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
