@@ -2171,7 +2171,7 @@ App.TP = Ember.Object.extend({
     },
 
     label: function () {
-    	return moment(this.get('fecha'), 'YYYY-MM-DD').format('LL') + this.get('numero') + this.get('periodo');
+    	return moment(this.get('fecha'), 'YYYY-MM-DD').format('LL') + " " + this.get('numero');
     }.property('observaciones'),
 
 });
