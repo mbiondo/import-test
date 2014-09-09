@@ -770,9 +770,10 @@ App.Expediente = Em.Object.extend({
 					return "";
 			} else {				
 				firmantes.forEach(function (firmante) {
-					strFirmantes.addObject(firmante.nombre);
+					strFirmantes.addObject(firmante.nombre + "<br/>");
 				});
-				return strFirmantes.join(' y ');	
+				//return strFirmantes.join(' y ');	
+				return strFirmantes.join('').htmlSafe();	
 			}
 		}
 	}.property('firmantes'),
@@ -787,9 +788,10 @@ App.Expediente = Em.Object.extend({
 
 			if (giros.length > 0){
 				giros.forEach(function (giro) {
-					strGiros.addObject(giro.comision);
+					strGiros.addObject(giro.comision + "<br/>");
 				});
-				return strGiros.join(' y ');			
+				//return strGiros.join(' y ');			
+				return strGiros.join('').htmlSafe();	
 			}
 		} else {
 			return "";
@@ -2285,6 +2287,7 @@ App.Proyecto = Em.Object.extend({
 				return strFirmantes.join(' y ');	
 			}
 		}
+		
 	}.property('firmantes'),
 
 	girosCompletoLabel: function () {
