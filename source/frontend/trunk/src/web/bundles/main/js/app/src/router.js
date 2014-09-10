@@ -4512,6 +4512,44 @@ App.Router =  Em.Router.extend({
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
 					},
 				}),	
+
+				editar: Ember.Route.extend({
+					route: '/:id/editar',
+
+					deserialize: function(router, params) {
+
+						var tp = App.TP.extend(App.Savable).create({id: params.id})
+						tp.set('loaded', false);
+						 var deferred = $.Deferred(),
+						 fn = function() {
+							tp.removeObserver('loaded', this, fn);
+							deferred.resolve(tp);				
+						 };
+
+						 tp.addObserver('loaded', this, fn);
+						 tp.load();
+						
+						 return deferred.promise();
+					},	
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('menu', 'subMenu');
+						appController.connectOutlet('main', 'tPEditar', context);
+
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Publicaciones'},
+							{titulo: 'Trámite Parlamentario'},
+							{titulo: moment(context.get('fecha'), 'YYYY-MM-DD').format('LL') + ' - N° ' + context.get('numero')},
+							{titulo: 'Editar'},
+						]);		
+
+						App.get('menuController').seleccionar(12, 0, 0);	
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));				
+					},
+				}),	
+
 			}),
 		}),        
 	}),	
