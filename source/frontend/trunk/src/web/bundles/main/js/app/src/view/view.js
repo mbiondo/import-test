@@ -12273,3 +12273,60 @@ App.MisVisitasGuiadasConsultaView = Ember.View.extend({
 	},
 
 });
+
+App.TPEditarView = App.TPCrearView.extend({
+//App.TPEditarView = Ember.View.extend({
+	templateName: 'tp-editar',
+	tpExiste: false,
+
+	didInsertElement: function(){
+		this._super();
+		this.set('fecha', moment().format("DD/MM/YYYY"));
+	},
+	guardar: function(){
+		this.set('clickGuardar', true);
+		this.set('loading', true);
+
+		if($('#formCrearTP').parsley('validate'))
+		{			
+			App.confirmActionController.setProperties({
+				title: 'Confirmar guardar los cambios del Trámite Parlamentario',
+				message: '¿ Confirma que desea guardar los cambios el Trámite parlamentario N° ' + this.get('controller.content.numero') + ' con fecha ' + this.get('fecha') +  ' ?',
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+			App.confirmActionController.show();			
+		}
+	},
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		
+		if (App.get('confirmActionController.success'))
+		{
+			while (this.get('controller.content.numero').length < 3)
+			{
+	            this.set(('controller.content.numero'),  '0' + this.get('controller.content.numero'));
+	        }
+
+			this.set('controller.content.fecha', this.get('fecha'));
+			
+			this.get('controller.content').addObserver('saveSuccess', this, this.saveSucceeded);
+			this.get('controller').guardar();
+		}
+	},
+	saveSucceeded: function(xhr){
+		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
+
+		if (this.get('controller.content.saveSuccess') == false)
+		{
+			this.set('tpExiste', true);
+		}
+		else
+		{
+			this.set('tpExiste', false);
+		}
+	}
+
+	
+});
