@@ -5231,6 +5231,40 @@ App.TPEditarController = Ember.ObjectController.extend({
 		this.get('content').save();
 		this.set('loading', true);
 	},
+	saveSucceeded: function (xhr) {
+		this.get('content').desNormalize();
+		this.get('content').removeObserver('saveSuccess', this, this.saveSucceeded);
+		if (this.get('content.saveSuccess')) {
+			var tp = this.get('content');
+			
+            $.jGrowl('Se ha modificado el Trámite Parlamentario  N°' + tp.numero + ' del período N°' + tp.periodo +' correctamente!', { life: 5000 });
+
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'editarTP');	
+			notification.set('objectId', tp.id);
+			notification.set('link', "/#/publicaciones/TP/" + tp.id + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha modificado el Trámite Parlamentario N°" + tp.numero + " del período N°" + tp.periodo);
+			notification.create();  
+
+            App.tpsController = App.TPsController.create();
+
+            fn = function() {
+                if(App.get('tpsController.loaded'))
+                {
+                    App.get('tpsController').removeObserver('loaded', this, fn);	
+                    App.get('router').transitionTo('publicaciones.tp.listado')
+                }
+            };
+
+            App.get('tpsController').addObserver('loaded', this, fn);
+            App.get('tpsController').load();                
+            this.set('loading', false);
+	    } else if (this.get('content.saveSuccess') == false) {
+            $.jGrowl('No se ha guardado los cambios del Trámite Parlamentario!', { life: 5000 });
+	        this.set('loading', false);
+		}
+	},
 });
 
 App.TPCrearController = Ember.ObjectController.extend({
