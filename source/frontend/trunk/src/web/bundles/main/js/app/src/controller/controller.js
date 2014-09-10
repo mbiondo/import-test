@@ -5224,6 +5224,15 @@ App.TPsController = App.RestController.extend({
 App.TPConsultaController = Ember.ObjectController.extend({
 });
 
+App.TPEditarController = Ember.ObjectController.extend({
+	guardar: function (){
+		this.get('content').normalize();
+		this.get('content').addObserver('saveSuccess', this, this.saveSucceeded);
+		this.get('content').save();
+		this.set('loading', true);
+	},
+});
+
 App.TPCrearController = Ember.ObjectController.extend({
 	crear: function (){
 		this.get('content').normalize();
