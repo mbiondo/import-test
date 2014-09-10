@@ -85,6 +85,13 @@ Handlebars.registerHelper("linkTP", function(id, options) {
   return "#/publicaciones/TP/" + id + "/ver";
 });
 
+Handlebars.registerHelper("linkEditarTP", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+  
+  return "#/publicaciones/TP/" + id + "/editar";
+});
+
 
 Handlebars.registerHelper("linkCargarDictamen", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
