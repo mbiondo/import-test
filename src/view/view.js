@@ -4467,7 +4467,7 @@ App.DictamenCrearView = Ember.View.extend({
 		this._super();
 		//this.set('content', App.Dictamen.create(App.get('dictamenController.content.evento')));
 		//===== Form elements styling =====//
-		this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+		//this.$("select, .check, .check :checkbox, input:radio, input:file").uniform();
 		// 
 		
 		$(".whead").on('click', function(){
