@@ -9340,6 +9340,7 @@ App.MultiSelectListView = Ember.View.extend({
 			if (!this.get('contentAc')) {
 				this.set('contentAc', Ember.ArrayController.create({ sortProperties: this.get('contentController').get('sortProperties')}));
 			} 
+
 			this.set('contentAc.content', this.get('contentController').get('arrangedContent'));
 
 			
@@ -9396,6 +9397,10 @@ App.MultiSelectListView = Ember.View.extend({
 		
 		if (!this.get('contentAc'))
 			this.set('contentAc', Ember.ArrayController.create({ sortProperties: this.get('contentController').get('sortProperties')}));
+	},
+
+	willDestroyElement: function () {
+		this.set('selection', []);
 	},
 
 	clickMoverArribaInTema: function (item) {	
