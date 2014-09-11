@@ -202,6 +202,13 @@ Handlebars.registerHelper("linkExpedienteEditar", function(id, options) {
   return "#/direccionsecretaria/mesadeentrada/proyecto/"+id+"/editar";
 });
 
+Handlebars.registerHelper("linkExpedienteMovimiento", function(id, options) {
+  var context = (options.contexts && options.contexts[0]) || this;
+  var id = getPath(context, id, options.fn);
+
+  return "#/direccionsecretaria/mesadeentrada/proyecto/"+id+"/movimiento";
+});
+
 Handlebars.registerHelper("linkExpedienteGirar", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
