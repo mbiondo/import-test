@@ -9660,7 +9660,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	imprimirComprobante: function () {
 		var _self = this;
 		_self.set('creating', true);
-		var data = {proyectos: [{id: this.get('controller.content.id')}]};
+		//var data = {proyectos: [{id: this.get('controller.content.id')}]};
+		var data = [this.get('controller.content.id')];
 		var jsondata = JSON.stringify(data);
 		$.ajax({
 
@@ -9669,12 +9670,12 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		    data: jsondata,
 		    dataType: "JSON",
 		    success: function(data) {
-		    	console.log(data);
 		    	_self.set('creating', false);
-		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
+//		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
 		    },
-		    complete: function(){
+		    complete: function(data){
 		    	_self.set('creating', false);
+		    	$.download(App.get('apiController.tomcat') + data.responseText, '&data=data');
 		    }
 		});
 	},
