@@ -7489,7 +7489,6 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
 
-
 			this.set('content', App.Expediente.extend(App.Savable).create({
 				expdipN: '', 
 				tipo: 'LEY', 
@@ -7506,8 +7505,6 @@ App.CrearExpedienteView = Ember.View.extend({
 				comisiones: [],
 				autoridades: [],
 			}));
-
-
 
 			this.set('oldTP', tp);
 
@@ -7535,8 +7532,6 @@ App.CrearExpedienteView = Ember.View.extend({
 			});
 			evento.create();
 			*/
-
-			console.log(this.get('content'));
 		} 
 
 		this.setupEnter();
