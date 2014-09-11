@@ -7487,7 +7487,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			var iniciado = this.get('camaras').findProperty('id', expediente.get('expdipT'));
 
-			//var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
+			var tp = App.get('tpsController.content').findProperty('numero', expediente.get('pubnro'));
 
 
 			this.set('content', App.Expediente.extend(App.Savable).create({
@@ -7499,6 +7499,7 @@ App.CrearExpedienteView = Ember.View.extend({
 				iniciado: expediente.get('iniciado'),
 				expdipT: iniciado,
 				pubFecha: expediente.get('pubFecha'),
+				pubNro: expediente.get('pubnro'),
 				sesion: expediente.get('sesion'),
 				firmantes: [],
 				giro: [],
@@ -7508,7 +7509,7 @@ App.CrearExpedienteView = Ember.View.extend({
 
 
 
-			//this.set('oldTP', tp);
+			this.set('oldTP', tp);
 
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
@@ -7534,6 +7535,8 @@ App.CrearExpedienteView = Ember.View.extend({
 			});
 			evento.create();
 			*/
+
+			console.log(this.get('content'));
 		} 
 
 		this.setupEnter();
@@ -7690,6 +7693,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				this.set('content.pubnro', this.get('pubnro.numero'));
 				this.set('parentView.oldTP', this.get('pubnro'));
 				this.set('oldFecha', this.get('pubnro.fecha'));
+				console.log(this.get('content'));
 			}
 		}
 		else 
@@ -7697,11 +7701,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			this.set('content.pubFecha', null);
 			this.set('content.pubnro', null);
 		}
-
-//: moment().format('DD/MM/YYYY') + '/detalle',
-/*
-	
-*/
 	}.observes('pubnro', 'content'),
 
 	fechaChanged: function() {
@@ -10091,6 +10090,7 @@ App.MEExpedienteGirarView = Ember.View.extend({
 });
 
 
+
 App.DiputadoConsultaView = Ember.View.extend({
 	templateName: 'diputado-consulta',
 });
@@ -12181,11 +12181,101 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 	
 });
 
-
-App.SolicitudCrearView = Ember.View.extend({
+App.MEExpedienteMovimientoView = Ember.View.extend({
 	templateName: 'solicitud-movimiento',
+	pubFecha: 'saraza',
 
+	periodoChanged: function () {
+		App.set('tpsController.periodo', this.get('periodo'));
+		//App.get('tpsController').addObserver('loaded', this, this.tpsLoaded);
+	}.observes('periodo'),
+
+	tpChanged: function () {
+		this.set('pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD hh:ss').format('DD/MM/YYYY'));
+	}.observes('pubnro'),
+
+	numeroChange: function () {
+		if ((!this.get('expdipT.id') && !this.get('expdipT')) || !this.get('expdipN')) {
+			this.set('expdip', '');
+		} else {
+			var expdipT = this.get('expdipT.id');
+			if (!expdipT)
+				expdipT = this.get('expdipT');
+
+			this.set('expdip', this.get('expdipN') + "-" + expdipT + "-" + this.get('expdipA'));
+		}
+	}.observes('expdipT', 'expdipN', 'expdipA'),	
+
+	vueltaDiputados: function () {
+		if (this.get('movimiento.id') == 17)
+			return true;
+		return false;
+	}.property('movimiento'),
+
+	didInsertElement: function () {
+		this._super();
+		this.set('expdipA', moment().format('YYYY'));
+	},
+
+	guardar: function () {
+		var movi = App.ExpedienteMovimiento.extend(App.Savable).create({
+			movimiento: this.get('movimiento.nombre'),
+			idProy: this.get('controller.content.id'),
+			camara: this.get('expdipT.nombre'),
+			per: this.get('periodo'),
+			codMovi: this.get('movimiento.id'),
+			pubTipo: this.get('publicacionTipo'),
+			pubNro: this.get('pubnro.numero'),
+			pubFecha: this.get('pubnro.fecha'),
+			auxFechaMovi: moment(this.get('fechaMovimiento'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:ss'),
+			expMovi: this.get('expdip'),
+			cdAnio: this.get('cdAnio'),
+			cdNro: this.get('cdNro'),
+			proy: [{ id: this.get('controller.content.id')}],
+			expComunic: this.get('cdNro') + '/' + this.get('cdAnio'),
+			texto: this.get('texto'),
+		});
+
+		this.set('movimiento', movi);
+
+		this.get('movimiento').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('movimiento').create();
+	},
+
+	createSucceeded: function () {
+		if (this.get('movimiento.createSuccess')) {
+			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
+			$.jGrowl('Movimiento cargado con exito!', { life: 5000 });
+			var ex = App.Expediente.extend(App.Savable).create({id: this.get('controller.content.id')});
+			ex.set('loaded', false);
+			var deferred = $.Deferred(),
+			fn = function() {
+				App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
+				deferred.resolve(ex);		
+			};
+
+			ex.addObserver('loaded', this, fn);
+			ex.load();				
+		} else {
+			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
+			$.jGrowl('Ocurrio un error al cargar el movimiento!', { life: 5000 });
+		}
+	},
+
+	cancelar: function () {
+		var ex = App.Expediente.extend(App.Savable).create({id: this.get('controller.content.id')});
+		ex.set('loaded', false);
+		var deferred = $.Deferred(),
+		fn = function() {
+			App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', ex);				
+			deferred.resolve(ex);		
+		};
+
+		ex.addObserver('loaded', this, fn);
+		ex.load();		
+	},
 });
+
 
 App.FirmantesWidgetView = Ember.View.extend({
 	templateName: 'wg-firmantes',

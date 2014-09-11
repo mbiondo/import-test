@@ -322,7 +322,7 @@ App.Router =  Em.Router.extend({
 					}),
 
 					girar: Em.Route.extend({
-						route: '/:id/girar',
+						route: '/:id/movimiento',
 
 						deserialize: function(router, params) {
 
@@ -330,15 +330,23 @@ App.Router =  Em.Router.extend({
 							ex.set('loaded', false);
 							 var deferred = $.Deferred(),
 							 fn = function() {
-	                            ex.desNormalize(); 
-								ex.removeObserver('loaded', this, fn);
-								deferred.resolve(ex);				
-							 };
+							 	if (App.get('tpsController.loaded') == true && ex.get('loaded') == true) {
+							 		App.get('tpsController').removeObserver('loaded', this, fn);
+									ex.removeObserver('loaded', this, fn);
+		                            ex.desNormalize(); 
+									deferred.resolve(ex);				
+							 	}
+							};
 
-							 ex.addObserver('loaded', this, fn);
-							 ex.load();
-							
-							 return deferred.promise();
+							App.tpsController = App.TPsController.create({periodo: 132});
+							App.get('tpsController').addObserver('loaded', this, fn);
+							App.get('tpsController').load();	
+
+							ex.addObserver('loaded', this, fn);
+							ex.load();
+
+
+							return deferred.promise();
 						},	
 
 						connectOutlets: function(router, context) {
@@ -346,21 +354,21 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('menu', 'subMenu');
 
-							appController.connectOutlet('main', 'mEExpedienteGirar', context);
+							appController.connectOutlet('main', 'mEExpedienteMovimiento', context);
 							
-							App.get('menuController').seleccionar(9, 2, 0);	
+							App.get('menuController').seleccionar(9, 0, 0);	
 
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
 							App.get('breadCumbController').set('content', [
-								{titulo: 'Dirección Secretaría'},
-								{titulo: 'Mesa de entrada'},
-                                {titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos'},
-								{titulo: 'LEY ' + context.expdip},
-								{titulo: 'Girar expediente'}
+								{ titulo: 'Dirección Secretaría' },
+								{ titulo: 'Mesa de entrada' },
+                                { titulo: 'Proyectos', url: '#/direccionsecretaria/mesadeentrada/proyectos' },
+								{ titulo: context.expdip },
+								{ titulo: 'Solicitar Movimiento' }
 							]);								
 						},						
-					}),
+					}),	
 
 					ver: Em.Route.extend({
 						route: '/:id/ver',

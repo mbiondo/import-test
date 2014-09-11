@@ -2584,3 +2584,31 @@ App.NotificacionTipoConfig = Ember.Object.extend({
 		'enabled'
 	],
 });
+
+
+
+App.ExpedienteMovimiento = Ember.Object.extend({
+	id: '',
+	url: 'ME/exp/movi',
+	useApi: true,
+
+	serializable: [
+		'id',
+		'movimiento',
+		'idProy',
+		'camara',
+		'per',
+		'codMovi',
+		'pubTipo',
+		'pubNro',
+		'texto',
+		'pp',
+		'auxFechaMovi',
+		'expMovi',
+		'cdAnio',
+		'cdNro',
+		'proy',
+		'firmantes',
+		'expComunic',
+	],
+});
