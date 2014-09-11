@@ -10241,6 +10241,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	itemViewClass: App.ProyectoListItemView,
 	itemViewClassExport: App.ProyectoListItemExportView,
 	intervalText: null,
+	withGiros: true,
 
 
 	changeFilterText: function () {
@@ -10334,7 +10335,48 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 
 		return filtered;
 	}.property('App.proyectosController.arrangedContent.@each', 'totalRecords', 'sorting', 'filterTextChanged'),
+	
+	documentURL: function () {
+		var url = "ME/oblea";
 
+		if (App.get('proyectosController').get('useApi'))
+		{
+			url = App.get('apiController.url') + url;
+		}
+
+		return url + "/" + this.get('withGiros') + "/docxpath";
+
+	}.property('App.proyectosController', 'withGiros'),
+	
+	imprimirComprobantes: function(){
+		var _self = this;
+		_self.set('creating', true);
+		
+		var data = [];
+
+		this.get('listaExport').forEach(function(item){
+			data.addObject(item.id);
+		});
+		
+		
+		var jsondata = JSON.stringify(data);
+		$.ajax({
+
+		    url: this.get('documentURL'),
+		    type: 'POST',
+		    data: jsondata,
+		    dataType: "JSON",
+		    success: function(data) {
+		    	_self.set('creating', false);
+//		    	$.download(App.get('apiController.tomcat') + data, '&data=data');
+		    },
+		    complete: function(data){
+		    	_self.set('creating', false);
+		    	$.download(App.get('apiController.tomcat') + data.responseText, '&data=data');
+		    }
+		});
+		
+	}
 });
 
 App.ProyectoSearchView = Em.View.extend({
