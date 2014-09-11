@@ -7353,8 +7353,10 @@ App.CrearExpedienteView = Ember.View.extend({
 					this.set('errorTab', 1);
 				}
 
-				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && _self.get('noHayOrigen') == false)
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && _self.get('noHayOrigen') == false && this.get('content.expdip'))
 				{				
+
+
 					App.confirmActionController.setProperties({
 						title: 'Confirmar creación de Proyecto',
 						message: '¿ Confirma que desea crear el proyecto de ' + _self.get('content.tipo') + ' ' + _self.get('content.expdip') + ' ?',
@@ -7385,7 +7387,7 @@ App.CrearExpedienteView = Ember.View.extend({
                 this.set(('content.expdipN'),  '0' + this.get('content.expdipN'));
             }
             */
-
+            
 			this.set('loading', true);
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
