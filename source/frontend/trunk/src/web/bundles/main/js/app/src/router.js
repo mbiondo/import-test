@@ -431,7 +431,7 @@ App.Router =  Em.Router.extend({
 
 							fn3 = function () {
 								if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) {
-									App.get('tpsController').addObserver('loaded', this, fn3);
+									App.get('tpsController').removeObserver('loaded', this, fn3);
 									App.get('firmantesController').removeObserver('loaded', this, fn3);
 									ex.desNormalize(); 
 									ex.set('autoridades', []);
@@ -460,6 +460,7 @@ App.Router =  Em.Router.extend({
 							 	    }
 
 									App.get('firmantesController').addObserver('loaded', this, fn3);
+									App.get('firmantesController').set('url', moment(ex.get('pubFecha'), 'YYYY-MM-DD hh:ss').format('DD/MM/YYYY') + '/resumen');
 
 								    var tipo = '';
 
