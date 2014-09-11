@@ -913,6 +913,38 @@ App.CalendarItemListView = Ember.View.extend({
 App.CalendarListView = App.ListFilterView.extend({ 
 	itemViewClass: App.CalendarItemListView, 	
 	columnas: ['Fecha', 'Título', 'Sala', 'Observaciones', 'Estado'],
+
+	lista: function (){
+		if (this.get('filterText')) {
+			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+			var filtered;
+
+			if(this.get('content'))
+			{
+				filtered = this.get('content').filter(function(item){
+					return regex.test(item.get('label').toLowerCase());
+				});
+			}
+
+			if (!filtered)
+				filtered = [];
+		} else {
+			filtered = this.get('content');
+		}
+
+		var max = this.get('totalRecords');
+		if (filtered.length <= max) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			this.set('mostrarMasEnabled', true);
+		}
+
+		this.set('filterTextChanged', false);
+		
+		return filtered.slice(0, this.get('totalRecords'));
+	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged'),
+
 });
 
 
