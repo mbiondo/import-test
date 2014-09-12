@@ -948,8 +948,20 @@ App.Router =  Em.Router.extend({
 				
 				var tituloNovedades;
 				var getId = parseInt(context.id);
-				tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'Orden del Día', 'Publicaciones', 'Sesiones', 'Plan de Labor'];
-
+				//tituloNovedades = ['Todas las Novedades','Movimientos de expedientes', 'Agenda de Comisiones', ' Dictámenes', 'Orden del Día', 'Publicaciones', 'Sesiones', 'Plan de Labor'];
+				
+				tituloNovedades = [
+					'Todas las Novedades',
+					'Movimientos de expedientes',
+					'Publicaciones', 
+					'Agenda de Comisiones',
+					'Dictámenes', 
+					'Orden del Día',
+					'Plan de Labor',
+					'Sesiones', 
+					'Agenda de Comisiones', 
+				];
+				
 				// App.get('menuController').seleccionar(0);
 
 				if(context.id)
