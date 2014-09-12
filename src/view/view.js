@@ -12466,6 +12466,7 @@ App.TPEditarView = App.TPCrearView.extend({
 			App.confirmActionController.show();			
 		}
 	},
+	
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 		
@@ -12482,6 +12483,7 @@ App.TPEditarView = App.TPCrearView.extend({
 			this.get('controller').guardar();
 		}
 	},
+
 	saveSucceeded: function(xhr){
 		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 

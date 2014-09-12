@@ -5234,6 +5234,7 @@ App.TPEditarController = Ember.ObjectController.extend({
 		this.get('content').save();
 		this.set('loading', true);
 	},
+
 	saveSucceeded: function (xhr) {
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('saveSuccess', this, this.saveSucceeded);
@@ -5272,6 +5273,8 @@ App.TPEditarController = Ember.ObjectController.extend({
 
 App.TPCrearController = Ember.ObjectController.extend({
 	crear: function (){
+
+
 		this.get('content').normalize();
 		this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('content').create();
@@ -6037,16 +6040,19 @@ App.MisVisitasGuiadasController = App.VisitasGuiadasController.extend({
 
 App.MEExpedienteMovimientoController = Ember.ObjectController.extend({
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
+	
 	movimientos: [
 		{id: 17, nombre: 'VUELVE A DIPUTADOS'},
 		{id: 22, nombre: 'SOLICITUD DEL AUTOR DE RETIRO DEL PROYECTO (AFIRMATIVA)'},
 		{id: 23, nombre: 'SOLICITUD DEL AUTOR DE MODIFICACION DEL PROYECTO (AFIRMATIVA)'}
 	],
+
 	camaras: [
 		{id: "D", nombre: "Diputados"}, 
 		{id: "S", nombre: "Senado"}, 
 		{id: "PE", nombre: "Poder Ejecutivo"}, 
 		{id: "JGM", nombre: "Jefatura de Gabinete de Ministros"}
 	],
+
 	publicacionTipo: ['TP'],
 });
