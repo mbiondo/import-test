@@ -7353,7 +7353,7 @@ App.CrearExpedienteView = Ember.View.extend({
 					this.set('errorTab', 1);
 				}
 
-				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && _self.get('noHayOrigen') == false && this.get('content.expdip'))
+				if($("#formCrearExpediente").parsley('validate') && _self.get('faltanFirmantes') == false && _self.get('faltanGiros') == false && this.get('expedienteExist') == false && _self.get('noHayOrigen') == false)
 				{				
 
 
@@ -12466,7 +12466,7 @@ App.TPEditarView = App.TPCrearView.extend({
 			App.confirmActionController.show();			
 		}
 	},
-	
+
 	confirmActionDone: function () {
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 		
