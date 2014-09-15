@@ -12451,7 +12451,8 @@ App.TPEditarView = App.TPCrearView.extend({
 
 	didInsertElement: function(){
 		this._super();
-		this.set('fecha', moment().format("DD/MM/YYYY"));
+//		this.set('fecha', moment().format("DD/MM/YYYY"));
+		this.set('fecha', moment(this.get('controller.content.fecha'), 'YYYY-MM-DD HH:mm').format('DD/MM/YYYY'));
 	},
 	guardar: function(){
 		this.set('clickGuardar', true);
