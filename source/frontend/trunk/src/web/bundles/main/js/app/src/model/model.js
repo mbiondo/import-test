@@ -130,6 +130,8 @@ App.Audit = Em.Object.extend({
 	objeto: '',
 	objetoId: '',
 	fecha: '',
+	json: '',
+	nombre: '',
 
 	serializable: [
 	    'id',
@@ -137,7 +139,9 @@ App.Audit = Em.Object.extend({
 	    'accion',
 	    'objeto',
 	    'objetoId',
-	    'fecha'
+	    'fecha',
+	    'json',
+	    'nombre',
 	],
 });
 
@@ -2444,6 +2448,7 @@ App.Pedido = Ember.Object.extend({
 	auditable: true,
 	adjuntoEnvio:'',
 	adjuntoRespuesta:'',
+	auditNombre: 'PedidoIP',
 
 
 	serializable: [
