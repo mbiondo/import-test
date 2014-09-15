@@ -10258,7 +10258,7 @@ App.ProyectoListItemView = Ember.View.extend({
 	templateName: 'proyectos-list-item',
 	
 	click: function(){
-		this.set('content.seleccionado', !this.get('content.seleccionado'))
+//		this.set('content.seleccionado', !this.get('content.seleccionado'))
 	}
 	
 
