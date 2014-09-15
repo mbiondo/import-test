@@ -8863,7 +8863,7 @@ App.TPListItemView = Ember.View.extend({
 			if (App.tpsController)
 				App.get('tpsController').removeObject(this.get('content'));
 
-			$.jGrowl('Se ha elimiado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000 });
 
 		} else if (this.get('content.deleteSuccess') == false && this.get('content.deleteSuccess') != '') {
 			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
@@ -8980,7 +8980,7 @@ App.TPConsultaView = Ember.View.extend({
 
 			App.get('tpsController').load();
 
-			$.jGrowl('Se ha elimiado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000 });
 
 		} else if (this.get('controller.content.deleteSuccess') == false && this.get('controller.content.deleteSuccess') != '') {
 			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
@@ -9763,7 +9763,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			App.get('comisionesController').load();
 			App.get('proyectosController').load();
 
-			$.jGrowl('Se ha elimiado el expediente!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el expediente!', { life: 5000 });
 
 		} else if (this.get('controller.content.deleteSuccess') == false && this.get('controller.content.deleteSuccess') != '') {
 			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
