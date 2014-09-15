@@ -9637,6 +9637,14 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	templateName: 'me-expediente-consulta',
 	noDocument: false,
 	withGiros: true,
+
+	mostrarCDFecha: function () {
+		var regex = RegExp('MENSAJE');
+		if (this.get('controller.content.tipo') == "LEY EN REVISION" || regex.test(this.get('controller.content.tipo'))) {
+			return true;
+		}
+		return false;
+	}.property('controller.content'),
 	
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
@@ -9648,7 +9656,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 				expNro: this.get('controller.content.expdip'), 
 				idProyecto: this.get('controller.content.id')
 			}),
-			expediente: App.get('expedienteConsultaController.content')
+			expediente: this.get('controller.content')
 		});
 
 		App.CreateBiographyView.popup();
