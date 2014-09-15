@@ -356,7 +356,8 @@ App.Router =  Em.Router.extend({
 
 							appController.connectOutlet('main', 'mEExpedienteMovimiento', context);
 							
-							App.get('menuController').seleccionar(9, 0, 0);	
+	                        App.get('menuController').seleccionar(9, 2, 3);
+//							App.get('menuController').seleccionar(9, 0, 0);	
 
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 
