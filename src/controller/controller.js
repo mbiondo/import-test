@@ -67,6 +67,8 @@ App.Savable = Ember.Mixin.create({
 				audit.set('objeto', this.constructor.toString());
 				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.set('json', this.getJson().toString());
+				audit.set('nombre', this.get('auditNombre'));
 				audit.create();				
 			}
 		}
@@ -168,6 +170,8 @@ App.Savable = Ember.Mixin.create({
 				audit.set('objeto', this.constructor.toString());
 				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.set('json', this.getJson().toString());
+				audit.set('nombre', this.get('auditNombre'));
 				audit.create();				
 			}
 		}	
@@ -281,6 +285,8 @@ App.Savable = Ember.Mixin.create({
 				audit.set('objeto', this.constructor.toString());
 				audit.set('objetoId', this.get('id'));
 				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.set('json', this.getJson().toString());
+				audit.set('nombre', this.get('auditNombre'));
 				audit.create();				
 			}
 		}			

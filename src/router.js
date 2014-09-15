@@ -391,6 +391,7 @@ App.Router =  Em.Router.extend({
 						},	
 
 						connectOutlets: function(router, context) {
+							console.log(context);
 							var appController = router.get('applicationController');
 							appController.connectOutlet('help', 'Help');
 							appController.connectOutlet('menu', 'subMenu');
