@@ -11032,8 +11032,6 @@ App.OradoresAsistenciasDiputadosListView = App.ListFilterView.extend({
 App.CrearPedidoView = Ember.View.extend({
 	templateName: 'if-pedido-crear',
 	actividades: ["Sector público", "Sector privado", "Particular"],
-	prioridades: ["Alta","Media","Baja"],
-	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 	departamentos: ["DSDP"],
 	//uploadFolder: 'uploads/solicitudes/',
 	agregarOtra: false,
@@ -11171,6 +11169,8 @@ App.CrearPedidoView = Ember.View.extend({
 
 App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
+	prioridades: ["Alta","Media","Baja"],
+	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 
