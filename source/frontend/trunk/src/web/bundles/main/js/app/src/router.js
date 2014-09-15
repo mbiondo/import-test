@@ -321,7 +321,7 @@ App.Router =  Em.Router.extend({
 						},
 					}),
 
-					girar: Em.Route.extend({
+					movimiento: Em.Route.extend({
 						route: '/:id/movimiento',
 
 						deserialize: function(router, params) {
@@ -329,18 +329,24 @@ App.Router =  Em.Router.extend({
 							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
 							ex.set('loaded', false);
 							 var deferred = $.Deferred(),
-							 fn = function() {
-							 	if (App.get('tpsController.loaded') == true && ex.get('loaded') == true) {
-							 		App.get('tpsController').removeObserver('loaded', this, fn);
-									ex.removeObserver('loaded', this, fn);
-		                            ex.desNormalize(); 
-									deferred.resolve(ex);				
-							 	}
+							
+							fn2 = function () {
+								if (App.get('tpsController.loaded') == true) {
+								 	App.get('tpsController').removeObserver('loaded', this, fn2);
+									deferred.resolve(ex);
+								}
 							};
 
-							App.tpsController = App.TPsController.create({periodo: 132});
-							App.get('tpsController').addObserver('loaded', this, fn);
-							App.get('tpsController').load();	
+							fn = function() {
+								ex.removeObserver('loaded', this, fn);
+	                            ex.desNormalize(); 
+
+								App.tpsController = App.TPsController.create({periodo: 132});
+								App.get('tpsController').addObserver('loaded', this, fn2);
+								App.get('tpsController').load();	
+							};
+
+										
 
 							ex.addObserver('loaded', this, fn);
 							ex.load();
