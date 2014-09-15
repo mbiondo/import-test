@@ -12220,28 +12220,31 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	},
 
 	guardar: function () {
-		var movi = App.ExpedienteMovimiento.extend(App.Savable).create({
-			movimiento: this.get('movimiento.nombre'),
-			idProy: this.get('controller.content.id'),
-			camara: this.get('expdipT.nombre'),
-			per: this.get('periodo'),
-			codMovi: this.get('movimiento.id'),
-			pubTipo: this.get('publicacionTipo'),
-			pubNro: this.get('pubnro.numero'),
-			pubFecha: this.get('pubnro.fecha'),
-			auxFechaMovi: moment(this.get('fechaMovimiento'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:ss'),
-			expMovi: this.get('expdip'),
-			cdAnio: this.get('cdAnio'),
-			cdNro: this.get('cdNro'),
-			proy: [{ id: this.get('controller.content.id')}],
-			expComunic: this.get('cdNro') + '/' + this.get('cdAnio'),
-			texto: this.get('texto'),
-		});
+		if($('#formCrearSolicitud').parsley('validate'))
+		{
+			var movi = App.ExpedienteMovimiento.extend(App.Savable).create({
+				movimiento: this.get('movimiento.nombre'),
+				idProy: this.get('controller.content.id'),
+				camara: this.get('expdipT.nombre'),
+				per: this.get('periodo'),
+				codMovi: this.get('movimiento.id'),
+				pubTipo: this.get('publicacionTipo'),
+				pubNro: this.get('pubnro.numero'),
+				pubFecha: this.get('pubnro.fecha'),
+				auxFechaMovi: moment(this.get('fechaMovimiento'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:ss'),
+				expMovi: this.get('expdip'),
+				cdAnio: this.get('cdAnio'),
+				cdNro: this.get('cdNro'),
+				proy: [{ id: this.get('controller.content.id')}],
+				expComunic: this.get('cdNro') + '/' + this.get('cdAnio'),
+				texto: this.get('texto'),
+			});
 
-		this.set('movimiento', movi);
+			this.set('movimiento', movi);
 
-		this.get('movimiento').addObserver('createSuccess', this, this.createSucceeded);
-		this.get('movimiento').create();
+			this.get('movimiento').addObserver('createSuccess', this, this.createSucceeded);
+			this.get('movimiento').create();
+		}		
 	},
 
 	createSucceeded: function () {
