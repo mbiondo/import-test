@@ -463,6 +463,17 @@ App.ContentView = Ember.View.extend({
 	},
 
 	logout: function () {
+		var audit = App.Audit.extend(App.Savable).create();
+		audit.set('tipo', 'Test');
+		audit.set('accion', 'Logout');
+		audit.set('usuario', App.get('userController.user.cuil'));
+		audit.set('objeto', this.constructor.toString());
+		audit.set('objetoId', '');
+		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		audit.set('json', '');
+		audit.set('nombre', 'Logout');
+		audit.create();	
+
 		App.get('router').transitionTo('loading');
 		
 		localStorage.setObject('user', null);

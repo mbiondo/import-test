@@ -697,7 +697,6 @@ App.UserController = Em.Controller.extend({
 
 					this.loginoAuth(cuil, data.access_token, data.token_type);
 					localStorage.setObject('user', JSON.stringify({cuil: cuil, access_token: data.access_token, token_type: data.token_type, expires_in: moment().unix() + data.expires_in }));
-
 				}
 				else
 				{
@@ -812,6 +811,17 @@ App.UserController = Em.Controller.extend({
 						App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
+					var audit = App.Audit.extend(App.Savable).create();
+					audit.set('tipo', 'Test');
+					audit.set('accion', 'Login');
+					audit.set('usuario', App.get('userController.user.cuil'));
+					audit.set('objeto', this.constructor.toString());
+					audit.set('objetoId', '');
+					audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+					audit.set('json', data.toString());
+					audit.set('nombre', 'Login');
+					audit.create();	
+					
 					App.advanceReadiness();	
 					$('#loadingScreen').remove();				
 				});
@@ -853,7 +863,7 @@ App.UserController = Em.Controller.extend({
 					}
 				},
 			});			
-		}
+		}		
 	},
 
 	login: function (cuil) {
@@ -906,6 +916,7 @@ App.UserController = Em.Controller.extend({
 
 					_self.set('user', tmpUser);
 
+
 					localStorage.setObject('user', JSON.stringify(tmpUser));
 										
 					App.get('notificacionesController').load();		
@@ -916,8 +927,7 @@ App.UserController = Em.Controller.extend({
 
 
 					App.get('router').transitionTo('loading');
-					App.get('router').transitionTo('index');
-					
+					App.get('router').transitionTo('index');					
 				});
 			},
 		});			
