@@ -7701,7 +7701,6 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 				this.set('content.pubnro', this.get('pubnro.numero'));
 				this.set('parentView.oldTP', this.get('pubnro'));
 				this.set('oldFecha', this.get('pubnro.fecha'));
-				console.log(this.get('content'));
 			}
 		}
 		else 
@@ -12205,6 +12204,7 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 App.MEExpedienteMovimientoView = Ember.View.extend({
 	templateName: 'solicitud-movimiento',
 	pubFecha: 'saraza',
+	expedienteExist: false,
 
 	periodoChanged: function () {
 		App.set('tpsController.periodo', this.get('periodo'));
@@ -12239,7 +12239,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	},
 
 	guardar: function () {
-		if($('#formCrearSolicitud').parsley('validate'))
+		if($('#formCrearSolicitud').parsley('validate') && this.get('expedienteExist') == false)
 		{
 			var movi = App.ExpedienteMovimiento.extend(App.Savable).create({
 				movimiento: this.get('movimiento.nombre'),
@@ -12298,6 +12298,38 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 		ex.addObserver('loaded', this, fn);
 		ex.load();		
 	},
+
+	changeExdip: function(){
+		var _self = this;
+		if((this.get('expdipN') && this.get('expdipA')) && (this.get('expdipN').length == 4 && this.get('expdipA').length == 4))
+		{		
+			App.proyectosController = App.ProyectosController.create({ content: []});
+			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: this.get('expdip')}));
+
+			fn = function() {
+				if (App.get('proyectosController.loaded'))
+				{
+					App.get('proyectosController').removeObserver('loaded', this, fn);									
+
+					if(App.get('proyectosController.recordcount') > 0)
+					{
+						_self.set('expedienteExist', true);
+					}
+					else
+					{
+						_self.set('expedienteExist', false);
+					}
+				}
+			};
+
+			App.get('proyectosController').addObserver('loaded', this, fn);
+			App.get('proyectosController').load();
+		}
+		else{
+			_self.set('expedienteExist', false);
+		}
+	}.observes('expdipN', 'expdipA'),
+
 });
 
 
