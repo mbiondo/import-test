@@ -338,6 +338,10 @@ App.Router =  Em.Router.extend({
 							};
 
 							fn = function() {
+								if (ex.get('loadError'))
+								{
+									App.get('router').transitionTo('page404');
+								}
 								ex.removeObserver('loaded', this, fn);
 	                            ex.desNormalize(); 
 
@@ -386,7 +390,11 @@ App.Router =  Em.Router.extend({
 							 var deferred = $.Deferred(),
 							 fn = function() {
 								ex.removeObserver('loaded', this, fn);
-
+								if (ex.get('loadError'))
+								{
+									App.get('router').transitionTo('page404');
+								}
+																
 								deferred.resolve(ex);				
 							 };
 
@@ -467,7 +475,10 @@ App.Router =  Em.Router.extend({
 							fn = function() {
 							   if (ex.get('loaded')) {
 	                               ex.removeObserver('loaded', this, fn);
-
+									if (ex.get('loadError'))
+									{
+										App.get('router').transitionTo('page404');
+									}
 							 	    if (!App.get('tpsController')) {
 							 			App.tpsController = App.TPsController.create({periodo: ex.get('periodo')});
 							 	    } else {
@@ -2146,7 +2157,7 @@ App.Router =  Em.Router.extend({
 	                        fn = function() {
 	                            App.get('firmantesController').removeObserver('loaded', this, fn);	
 	                            App.get('firmantesarhaController').removeObserver('loaded', this, fn);	
-	                            deferred.resolve(null);					
+	                            deferred.resolve(App.get('firmantesarhaController'));					
 	                        };
 
 	                        App.get('firmantesarhaController').addObserver('loaded', this, fn);

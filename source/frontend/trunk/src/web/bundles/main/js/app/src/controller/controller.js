@@ -87,11 +87,12 @@ App.Savable = Ember.Mixin.create({
 
 
 
-	loadCompleted: function(xhr){
+	loadCompleted: function(xhr) {
+
 		if(xhr.status == 400 || xhr.status == 420 || xhr.status != 200) {
 			this.set('loadError',true);	
-			App.get('router').transitionTo('page404');
 		}
+
 		this.set('loaded', true);
 		this.set('loading', false);
 	},
@@ -803,12 +804,11 @@ App.UserController = Em.Controller.extend({
 					tmpUser.set('first_login', data.first_login);
 
 					_self.set('user', tmpUser);				
-										
+					App.get('notificacionesController').set('content', []);
 					App.get('notificacionesController').load();		
 					App.get('searchController').load();
 
-					if (!App.notificacionesFiltradasController) 
-						App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
+					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
 
 					var audit = App.Audit.extend(App.Savable).create();
@@ -1711,11 +1711,6 @@ App.NotificacionesController = App.RestController.extend({
 		}
 	},
 
-	clear: function () {
-		if (!App.get('userController.user'))
-			this.set('content', []);
-	}.observes('App.userController.user'),
-
 	parse : function (data) {
 		return data.notificaciones;
 	},
@@ -1741,7 +1736,7 @@ App.NotificacionesController = App.RestController.extend({
 			}
 		}
 		this.set('unreads', count);
-	}.observes('content.@each.leida'),
+	}.observes('content', 'content.@each.leida'),
 
 	unreads: 0,
 

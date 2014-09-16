@@ -476,6 +476,15 @@ App.ContentView = Ember.View.extend({
 
 		App.get('router').transitionTo('loading');
 		
+		if (App.notificacionesController) {
+			App.get('notificacionesController.content', []);
+		}
+
+		if (App.notificacionesFiltradasController) {
+			App.get('notificacionesFiltradasController.content', []);
+		}
+
+
 		localStorage.setObject('user', null);
 		App.get('userController').set('user', null);
 		
