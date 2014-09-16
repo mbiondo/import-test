@@ -11046,6 +11046,7 @@ App.CrearPedidoView = Ember.View.extend({
 	//uploadFolder: 'uploads/solicitudes/',
 	agregarOtra: false,
 	idPedidosCreados: "",
+	puedeRemoverConsulta: false,
 
 
 	collapseToggle: function(event){
@@ -11113,7 +11114,16 @@ App.CrearPedidoView = Ember.View.extend({
 		nuevaConsulta.set('idHref', "#collapseConsulta" + this.get('content.consultas').length + 1);
 		this.get('content.consultas').pushObject(nuevaConsulta);
 	},
-
+	consultasChange: function(){
+		if(this.get('content.consultas').length > 1)
+		{
+			this.set('puedeRemoverConsulta', true);
+		}
+		else
+		{
+			this.set('puedeRemoverConsulta', false);
+		}
+	}.observes('content.consultas.@each'),
 
 	createSucceeded: function () {
 		/*this.get('content.consultas').forEach(function(item){
@@ -11342,7 +11352,7 @@ App.PedidoListItemView = Ember.View.extend({
 
 App.PedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['Nro. de consulta', 'Recibido/Terminado', 'Ingresado por', 'Solicitante', 'Departamento', 'Personal DIP', ''],
+	columnas: ['Código de Solicitud', 'Ingreso/Cierre', 'Ingresado desde', 'Solicitante', 'Departamento', 'Personal DIP', 'Prioridad'],
 });
 
 App.PedidosView = Ember.View.extend({
