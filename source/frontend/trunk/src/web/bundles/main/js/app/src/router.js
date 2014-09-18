@@ -2577,9 +2577,8 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params){
 						App.pedidoConsultaController = App.PedidoConsultaController.create();
-						
+
 						App.departamentosController = App.DepartamentosController.create();
-						App.departamentosController.load();
 						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
 
 						var deferred = $.Deferred(),
@@ -2587,7 +2586,7 @@ App.Router =  Em.Router.extend({
 						fn = function() {
 							var pedido = App.get('pedidoConsultaController.content');
 
-							if(App.get('pedidoConsultaController.loaded'))
+							if(App.get('pedidoConsultaController.loaded') && App.get('departamentosController.loaded'))
 							{							
 								App.get('pedidoConsultaController').removeObserver('loaded', this, fn);
 								deferred.resolve(pedido);
@@ -2595,7 +2594,8 @@ App.Router =  Em.Router.extend({
 						};
 
 						App.get('pedidoConsultaController').addObserver('loaded', this, fn);
-
+						App.get('departamentosController').addObserver('loaded', this, fn);
+						App.get('departamentosController').load();
 						App.get('pedidoConsultaController').load();
 
 						return deferred.promise();
