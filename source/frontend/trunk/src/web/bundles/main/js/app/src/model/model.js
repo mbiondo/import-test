@@ -2506,9 +2506,9 @@ App.Pedido = Ember.Object.extend({
 	},
 
 	label: function () {
-		return this.get('nombreYApellido');
-		//return this.get('userSaraAsignado.nombre') + this.get('userSaraAsignado.apellido');
-	}.property('nombreYApellido'),
+		return this.get('idPedido') + ' ' + this.get('tipoIngreso') + ' ' + this.get('departamento') + ' ' + this.get('prioridad');
+	}.property('id'),
+
 	idPedido: function(){
 		var str = '';
 		
