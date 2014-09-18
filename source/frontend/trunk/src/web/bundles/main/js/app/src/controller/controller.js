@@ -6085,4 +6085,25 @@ App.MEExpedienteMovimientoController = Ember.ObjectController.extend({
 App.DepartamentosController = App.RestController.extend({
 	url: 'departamento',
 	type: App.Departamento,
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Departamento.extend(App.Savable).create(data);
+		item.setProperties(data);
+		
+		if(save){
+			$.ajax({
+				url: '/departamento',
+				dataType: 'JSON',
+				type: 'POST',
+				context : {controller: this, model : item },
+				data : item.getJson(),
+				success: this.createSucceeded,
+			});
+		}else{
+			this.addObject(item);
+		}
+	},		
 });
