@@ -322,27 +322,42 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 	},
 
 	stopTimer : function () {
-		App.get('sesionesController').stopTimer(App.get('sesionController.content'));
-		var sesionId = App.get('sesionController').get('content').get('id');
-		var temasSesion = App.get('sesionController').get('content').get('temas');
-		var numSesion = App.get('sesionController').get('content').get('sesion');
-		var reunion = App.get('sesionController').get('content').get('reunion');
+		App.confirmActionController.setProperties({
+			title: 'Finalizar Sesión',
+			message: '¿ Esta seguro que desea finalizar la sesión ?',
+			success: null,
+		});
 
-		//CREATE NOTIFICATION TEST 
-		var notification = App.Notificacion.extend(App.Savable).create();
-		//ACA TITULO DE LA NOTIFICACION
-		notification.set('tipo', 'finalizarSesion');	
-		//Si hace falta ID del objeto modificado
-		notification.set('objectId', sesionId);
-		//Link del objeto
-		notification.set('link', "/#/laborparlamentaria/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
-		//CreateAt
-		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-		//Custom message
-		notification.set('mensaje', "Ha finalizado la Sesión " + numSesion + ", Reunión " + reunion + " del día " + moment().format('LL'));
-		//notification.set('comisiones', this.get('content.comisiones'));
-		//Crear
-		notification.create();
+		App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+		App.confirmActionController.show();
+	},
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+
+		if (App.get('confirmActionController.success'))
+		{
+			App.get('sesionesController').stopTimer(App.get('sesionController.content'));
+			var sesionId = App.get('sesionController').get('content').get('id');
+			var temasSesion = App.get('sesionController').get('content').get('temas');
+			var numSesion = App.get('sesionController').get('content').get('sesion');
+			var reunion = App.get('sesionController').get('content').get('reunion');
+
+			//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'finalizarSesion');	
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', sesionId);
+			//Link del objeto
+			notification.set('link', "/#/laborparlamentaria/recinto/oradores/sesion/" + sesionId + "/tema/" + temasSesion[0].id);
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			//Custom message
+			notification.set('mensaje', "Ha finalizado la Sesión " + numSesion + ", Reunión " + reunion + " del día " + moment().format('LL'));
+			//notification.set('comisiones', this.get('content.comisiones'));
+			//Crear
+			notification.create();
+		}
 	},	
 
 	hayOradoresPendientes: function(){
@@ -11359,9 +11374,63 @@ App.PedidoListItemView = Ember.View.extend({
 });
 
 
-App.PedidosListView = App.ListFilterView.extend({
+//App.PedidosListView = App.ListFilterView.extend({
+App.PedidosListView = App.ListFilterWithSortView.extend({
+	templateName: 'pedidos-sortable-list',
 	itemViewClass: App.PedidoListItemView,
-	columnas: ['Código de Solicitud', 'Ingreso-Cierre', 'Ingresado desde', 'Solicitante', 'Departamento', 'Personal DIP', 'Prioridad'],
+//	columnas: ['Código de Solicitud', 'Ingreso-Cierre', 'Ingresado desde', 'Solicitante', 'Departamento', 'Personal DIP', 'Prioridad'],
+
+	mostrarMas: function () {
+		this.set('scroll', $(document).scrollTop());
+		App.get('pedidosController').set('loaded', false);
+		App.get('pedidosController').nextPage();
+		this.set('loading', true);
+	},
+	columnas: [
+		App.SortableColumn.create({nombre: 'Código de Solicitud', campo: 'idPedido'}), 
+		App.SortableColumn.create({nombre: 'Ingreso-Cierre', campo: ''}),
+		App.SortableColumn.create({nombre: 'Ingresado desde', campo: 'tipoIngreso'}),
+		App.SortableColumn.create({nombre: 'Solicitante', campo: ''}),
+		App.SortableColumn.create({nombre: 'Departamento', campo: 'departamento'}),
+		App.SortableColumn.create({nombre: 'Personal DIP', campo: ''}),
+		App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
+	],
+	lista: function (){		
+
+		if (this.get('filterText').length > 0)
+		{
+			var _self	 	= this;
+			var regex 		= new RegExp(this.get('filterText').toString().toLowerCase());		
+			var filtered 	= [];
+
+			filtered = App.get('pedidosController').get('arrangedContent').filter(function(pedido){
+				return regex.test(pedido.get('label').toLowerCase());
+			});
+
+			Ember.run.next(function(){
+			// High Light Words
+			// Agrega la clase .highlight, modificar el css si se quiere cambiar el color de fondo
+				$('table').removeHighlight();
+
+				if(_self.get('filterText') && _self.get('filterText').length > 0){
+					$('td').highlight(_self.get('filterText'));
+				}
+			});
+
+		}
+		else
+		{
+			filtered = App.get('pedidosController').get('arrangedContent');
+		}
+
+
+		this.set('mostrarMasEnabled', true);
+
+		return filtered;
+		
+			
+
+	}.property('filterText', 'App.pedidosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
 });
 
 App.PedidosView = Ember.View.extend({
