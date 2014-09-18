@@ -11426,13 +11426,13 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 		this.set('loading', true);
 	},
 	columnas: [
+		//App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
 		App.SortableColumn.create({nombre: 'Código de Solicitud', campo: 'idPedido'}), 
-		App.SortableColumn.create({nombre: 'Ingreso-Cierre', campo: ''}),
-		App.SortableColumn.create({nombre: 'Ingresado desde', campo: 'tipoIngreso'}),
 		App.SortableColumn.create({nombre: 'Solicitante', campo: ''}),
-		App.SortableColumn.create({nombre: 'Departamento', campo: 'departamento'}),
-		App.SortableColumn.create({nombre: 'Personal DIP', campo: ''}),
-		App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
+		App.SortableColumn.create({nombre: 'Tipo de ingreso', campo: ''}),
+		//App.SortableColumn.create({nombre: 'Ingresado desde', campo: 'tipoIngreso'}),
+		App.SortableColumn.create({nombre: 'Departamento asignado', campo: 'departamento'}),
+		App.SortableColumn.create({nombre: '', campo: ''}),
 	],
 	lista: function (){		
 
@@ -11517,7 +11517,7 @@ App.MiPedidoListItemView = Ember.View.extend({
 
 App.MisPedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.MiPedidoListItemView,
-	columnas: ['Nro. de consulta', 'Recibido/Terminado', 'Ingresado por', 'Solicitante', 'Departamento', 'Personal DIP', ''],
+	columnas: ['Código de Solicitud', 'Solicitante', 'Tipo de ingreso', 'Departamento asignado',  ''],
 });
 
 
