@@ -90,7 +90,8 @@ App.Savable = Ember.Mixin.create({
 	loadCompleted: function(xhr) {
 
 		if(xhr.status == 400 || xhr.status == 420 || xhr.status != 200) {
-			this.set('loadError',true);	
+			this.set('loadError',true);
+			App.get('router').transitionTo('page404');
 		}
 
 		this.set('loaded', true);
