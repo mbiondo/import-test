@@ -1593,6 +1593,16 @@ App.RolesAdminView = Ember.View.extend({
 	templateName: 'roles-admin',
 	rolNombre: '',
 	rolNivel: '',
+	nombre: '',
+
+	crearDepartamento: function () {
+		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
+		this.set('nombre', '');
+	},
+
+	crearDepartamentoHabilitado: function () {
+		return this.get('nombre') != '';
+	}.property('nombre'),
 
 	crearRol: function () {
 		App.get('rolesController').createObject({nombre: this.get('rolNombre'), nivel: this.get('rolNivel')}, true);
@@ -1780,6 +1790,11 @@ App.ItemRoleableView = Em.View.extend({
 		this.set('change', true);
 	}.observes('content.avatar'),
 
+
+	departamentoChange: function () {
+		this.set('change', true);
+	}.observes('content.departamento'),
+
 	guardar: function () {
 		this.set('change', false);
 		this.get('content').save();
@@ -1788,6 +1803,15 @@ App.ItemRoleableView = Em.View.extend({
 
 App.ItemUserRoleableView = App.ItemRoleableView.extend({
 	templateName: 'item-user-roleable',
+
+	didInsertElement: function () {
+		this._super();
+		if (this.get('content.departamento.id')) {
+			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
+			this.set('content.departamento', departamento);
+			this.set('change', false);
+		}
+	},
 });
 
 App.ItemRoleableRolView = Em.View.extend({

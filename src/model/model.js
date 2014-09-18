@@ -23,7 +23,8 @@ App.Usuario = Em.Object.extend({
 		"cuil",
 		"roles",
 		"comisiones",
-		"avatar"
+		"avatar",
+		"departamento"
 	],
 
 	label: function () {

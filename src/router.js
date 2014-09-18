@@ -1878,11 +1878,12 @@ App.Router =  Em.Router.extend({
 					 App.usuariosController = App.UsuariosController.create();
 					
 					 App.rolesController = App.RolesController.create();
+					 App.departamentosController = App.DepartamentosController.create();
 
 					 var deferred = $.Deferred(),
 					
 					 fn = function() {
-					 	 if (App.get('usuariosController.loaded')  && App.get('rolesController.loaded')) {
+					 	 if (App.get('usuariosController.loaded')  && App.get('departamentosController.loaded') && App.get('rolesController.loaded')) {
 							deferred.resolve(null);
 					 	 }					
 					 };
@@ -1890,6 +1891,10 @@ App.Router =  Em.Router.extend({
 					 App.get('usuariosController').addObserver('loaded', this, fn);
 					
 					 App.get('rolesController').addObserver('loaded', this, fn);
+					 
+					 App.get('departamentosController').addObserver('loaded', this, fn);
+
+					 App.get('departamentosController').load();
 
 					 App.get('usuariosController').load();
 					 
