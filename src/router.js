@@ -2522,6 +2522,8 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params){
 						App.pedidoConsultaController = App.PedidoConsultaController.create();
+						App.departamentosController = App.DepartamentosController.create();
+						App.departamentosController.load();
 
 						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
 
@@ -2575,7 +2577,9 @@ App.Router =  Em.Router.extend({
 
 					deserialize: function(router, params){
 						App.pedidoConsultaController = App.PedidoConsultaController.create();
-
+						
+						App.departamentosController = App.DepartamentosController.create();
+						App.departamentosController.load();
 						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
 
 						var deferred = $.Deferred(),

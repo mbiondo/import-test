@@ -2622,3 +2622,17 @@ App.ExpedienteMovimiento = Ember.Object.extend({
 		'expComunic',
 	],
 });
+
+App.Departamento = Ember.Object.extend({
+	url: 'departamento/',
+	useApi: false,
+
+	id: '',
+	nombre: '',
+
+	serializable: [
+		'id',
+		'nombre'
+	],
+
+});
