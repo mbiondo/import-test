@@ -5475,7 +5475,8 @@ App.TurnoView = Ember.View.extend({
 	}.property('contentIndex'),
 	
 	didInsertElement: function(){
-		this._super();
+		//this._super();
+		this.$().show();
 
 		this.$("a").tooltip();
 	}
@@ -7722,10 +7723,11 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		if (this.get('pubnro')) {
 			if (this.get('oldFecha') != this.get('pubnro.fecha')) {
 				this.set('content.pubFecha', moment(this.get('pubnro.fecha'), 'YYYY-MM-DD').format('DD/MM/YYYY'));
-				this.set('content.pubnro', this.get('pubnro.numero'));
-				this.set('parentView.oldTP', this.get('pubnro'));
 				this.set('oldFecha', this.get('pubnro.fecha'));
 			}
+
+			this.set('content.pubnro', this.get('pubnro.numero'));
+			this.set('parentView.oldTP', this.get('pubnro'));
 		}
 		else 
 		{
@@ -12353,6 +12355,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	}.observes('expdipT', 'expdipN', 'expdipA'),	
 
 	vueltaDiputados: function () {
+		$('#formCrearSolicitud').parsley('destroy');
 		if (this.get('movimiento.id') == 17)
 			return true;
 		return false;
@@ -12678,4 +12681,48 @@ App.TPEditarView = App.TPCrearView.extend({
 	}
 
 	
+});
+
+App.TurnosPorListasView = App.ScrolleableListView.extend({
+
+	classNames: [ 'turnos'],
+	itemViewClass: App.TurnoView, 
+
+	isCollapse: false,
+	isCollapsable: false,
+
+	step: 1,
+	filterText: '',
+	itemHeight: 78,
+
+	didInsertElement: function(){
+		this._super();
+	},
+
+	click: function() {
+		if (this.get('isCollapsable')) {
+			if (this.get('isCollapse')) {
+				this.$().removeClass('collapse');
+				this.set('isCollapse', false);
+			} else {
+				this.$().addClass('collapse');
+				this.set('isCollapse', true);
+			}
+		}
+	},
+
+	updateSort : function (idArray){
+		var sortArr = this._super(idArray);
+
+		App.get('turnosController').saveSort(sortArr);
+		App.get('turnosController').actualizarHora();
+	},
+
+	contentChanged: function () {
+		if (this.get('contentController')) {
+			this.set('contentController.content', App.get('listaController.turnosDesbloqueados'));	
+		} 
+	}.observes('sourceController.content', 'sourceController.content.@each', 'App.listaController.turnosDesbloqueados', 'App.listaController.turnosDesbloqueados.@each'),
+	
+
 });

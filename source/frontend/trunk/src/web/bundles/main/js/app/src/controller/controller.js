@@ -5951,6 +5951,18 @@ App.ScrollContentController = Ember.ArrayController.extend({
 		}
 	}.observes('content'),
 
+	/*
+	contentChanged: function () {
+		if (this.get('content')) {
+			var s = this.get('content').slice(this.get('currentIndex'), this.get('currentIndex') + this.get('visibleItems'));
+			if (s.length > 0) {
+				this.set('scrolledContent', s);
+				this.set('oldLength', this.get('content.length'));
+			}
+		}
+	}.observes('content'),
+	*/	
+
 	visibleItemsChanged: function () {
 		var s = this.get('content').slice(this.get('currentIndex'), this.get('currentIndex') + this.get('visibleItems'));
 		if (s.length > 0) 
@@ -6067,4 +6079,10 @@ App.MEExpedienteMovimientoController = Ember.ObjectController.extend({
 	],
 
 	publicacionTipo: ['TP'],
+});
+
+
+App.DepartamentosController = App.RestController.extend({
+	url: 'departamento',
+	type: App.Departamento,
 });
