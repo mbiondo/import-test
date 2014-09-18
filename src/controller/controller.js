@@ -803,6 +803,7 @@ App.UserController = Em.Controller.extend({
 					tmpUser.set('access_token', access_token);
 					tmpUser.set('token_type', token_type);
 					tmpUser.set('first_login', data.first_login);
+					tmpUser.set('departamento', data.departamento);
 
 					_self.set('user', tmpUser);				
 					App.get('notificacionesController').set('content', []);
