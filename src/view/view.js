@@ -11331,7 +11331,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	puedeEditar: function () {
 		var puedeEditar = false;
 
-		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT'))
+		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT') || App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT'))
 		{
 			puedeEditar = true;
 		}
@@ -11406,7 +11406,7 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 			var regex 		= new RegExp(this.get('filterText').toString().toLowerCase());		
 			var filtered 	= [];
 
-			filtered = App.get('pedidosController').get('arrangedContent').filter(function(pedido){
+			filtered = this.get('content').filter(function(pedido){
 				return regex.test(pedido.get('label').toLowerCase());
 			});
 
@@ -11423,17 +11423,17 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 		}
 		else
 		{
-			filtered = App.get('pedidosController').get('arrangedContent');
+			filtered = this.get('content');
 		}
 
 
 		this.set('mostrarMasEnabled', true);
 
-		return filtered;
+		return filtered.slice(0, this.get('totalRecords'));
 		
 			
 
-	}.property('filterText', 'App.pedidosController.arrangedContent.@each', 'totalRecords', 'sorting'),	
+	}.property('filterText', 'content.@each', 'totalRecords', 'sorting'),	
 });
 
 App.PedidosView = Ember.View.extend({
@@ -11442,9 +11442,9 @@ App.PedidosView = Ember.View.extend({
 	contentCount: 0,
 
 	willInsertElement: function(){
-		this.set('content', App.get('pedidosController.arrangedContent'));
-		/*var content = [];
-
+//		this.set('content', App.get('pedidosController.arrangedContent'));
+//		var content = [];
+		/*
 		if(App.get('userController').hasRole('') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO')){
 			content = App.get('pedidosController.arrangedContent');
 		}
