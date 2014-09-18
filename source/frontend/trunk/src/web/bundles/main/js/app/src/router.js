@@ -2451,6 +2451,18 @@ App.Router =  Em.Router.extend({
 						
 						App.pedidosController = App.PedidosController.create();
 
+						if (App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT')) {
+							if (!App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT')) {
+								if (App.get('userController').get('user.departamento')) {
+									App.pedidosController.set('url', 'pedidos/departamento/' + App.get('userController').get('user.departamento.id'))
+								}
+							}
+						} else {
+							if (!App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT')) {
+								App.pedidosController.set('url', 'pedidos/' + App.get('userController').get('user.cuil'));
+							}
+						}
+
 						fn = function() {
 							if(App.get('pedidosController.loaded'))
 							{
