@@ -11110,6 +11110,7 @@ App.CrearPedidoView = Ember.View.extend({
 				item.set('profesion',this.get('content.profesion'));
 				item.set('organizacion',this.get('content.organizacion'));
 				item.set('cargo',this.get('content.cargo'));
+				item.set('prioridad',this.get('content.prioridad'));
 
 				item.addObserver('createSuccess', item, item.createSucceeded);
 				
@@ -11164,7 +11165,6 @@ App.CrearPedidoView = Ember.View.extend({
 
 		//App.get('uploaderController').fileChange();
 		
-
 		App.misPedidosController = App.MisPedidosController.create({cuil: App.get('userController.user.cuil')});
 
 		fn = function() {
@@ -11220,9 +11220,19 @@ App.PedidoConsultaView = Ember.View.extend({
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
+	tipoModificacion: '',
 
 	borrarAsignado: function () {
 		this.get('content').set('userSaraAsignado', null);
+	},
+
+	asignar: function(){
+		this.set('tipoModificacion', 'asignar');
+		this.guardar();
+	},
+	responder: function(){
+		this.set('tipoModificacion', 'responder');
+		this.guardar();
 	},
 
 	guardar: function () {
@@ -11236,6 +11246,30 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('content').removeObserver('saveSuccess', this, this.saveSuccessed);	
 
 		if (this.get('content.saveSuccess')) {
+
+			var notification = App.Notificacion.extend(App.Savable).create();
+
+			if(this.get('tipoModificacion') == 'asignar')
+			{
+				notification.set('tipo', 'asignarSolicitud');	
+				notification.set('mensaje', "Se ha asignado la Solicitud " + this.get('content.id'));				
+			}
+			else
+			{
+				if(this.get('tipoModificacion') == 'responder')
+				{
+					notification.set('tipo', 'responderSolicitud');	
+					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.id'));				
+				}
+			}
+
+
+			notification.set('objectId', this.get('content.id'));
+			notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.id')+"/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+
+			notification.create();
+
 			$.jGrowl('Se ha editado la solicitud!', { life: 5000 });
 
 			App.pedidosController = App.PedidosController.create();
