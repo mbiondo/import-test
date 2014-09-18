@@ -11295,6 +11295,8 @@ App.PedidoConsultaView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.get('pedidoConsultaController').get('content'));
+		var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
+		this.set('content.departamento', departamento)
 	},
 
  	exportar: function () {
