@@ -10629,10 +10629,12 @@ App.VinculateFirmanteView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		var vinculo = App.Firmantesarha.extend(App.Savable).create({id: this.get('content.id')});
-		this.set('vinculo', vinculo);
-		this.get('vinculo').addObserver('loaded', this, this.vinculoLoaded);
-		this.get('vinculo').load();
+		if(this.get('content.id') != 0){
+			var vinculo = App.Firmantesarha.extend(App.Savable).create({id: this.get('content.id')});
+			this.set('vinculo', vinculo);
+			this.get('vinculo').addObserver('loaded', this, this.vinculoLoaded);
+			this.get('vinculo').load();
+		}
 	},	
 
 	vinculoLoaded: function () {
@@ -10641,6 +10643,7 @@ App.VinculateFirmanteView = Ember.View.extend({
 				this.get('vinculos').push(this.get('vinculo.cuil'));
 				this.set('isEdit', true);
 			} else {
+				this.get('vinculo').set('id',this.get('content.id'));
 				this.set('isEdit', false);
 			}
 		}
