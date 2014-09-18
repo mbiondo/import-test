@@ -2546,6 +2546,16 @@ App.Pedido = Ember.Object.extend({
 		this.removeObserver('createSuccess');
 		if(this.get('id')){
 			$.jGrowl('Se ha creado la solicitud: ' + this.get('idPedido') + '-' + moment().format('YYYY'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
+
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'crearSolicitud');	
+			notification.set('objectId', this.get('id'));
+			notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('id')+"/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha creado una Solicitud " + this.get('id'));
+
+			notification.create();
+
 		}else{
 			$.jGrowl(jGrowlMessage.noCreadoPedidoError.message , { life: jGrowlMessage.noCreadoPedidoError.life, theme: jGrowlMessage.noCreadoPedidoError.theme});
 		}
