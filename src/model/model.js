@@ -2495,6 +2495,11 @@ App.Pedido = Ember.Object.extend({
 			this.set('userSaraCreadoObject', this.get('userSaraCreado'));
 			this.set('userSaraCreado', this.get('userSaraCreado.cuil'));
 		}
+
+		if (this.get('departamento')) {
+			var id = this.get('departamento').id;
+			this.set('departamento',id);
+		}
 	},
 
 	desNormalize: function () {
