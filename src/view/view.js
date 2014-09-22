@@ -9792,6 +9792,14 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		}
 	},	
 
+	puedeSolicitarMovimiento: function () {
+		if (App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_MOVIMIENTO')){
+			return true;
+		}else{
+			return false;
+		}		
+	}.property('App.userController.user'),
+
 	canEdit: function(){
 		if (App.get('userController').hasRole('ROLE_MESA_DE_ENTRADA_EDIT')){
 			return true;
@@ -11443,14 +11451,7 @@ App.PedidoListItemView = Ember.View.extend({
 App.PedidosListView = App.ListFilterWithSortView.extend({
 	templateName: 'pedidos-sortable-list',
 	itemViewClass: App.PedidoListItemView,
-//	columnas: ['Código de Solicitud', 'Ingreso-Cierre', 'Ingresado desde', 'Solicitante', 'Departamento', 'Personal DIP', 'Prioridad'],
 
-	mostrarMas: function () {
-		this.set('scroll', $(document).scrollTop());
-		App.get('pedidosController').set('loaded', false);
-		App.get('pedidosController').nextPage();
-		this.set('loading', true);
-	},
 	columnas: [
 		//App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
 		App.SortableColumn.create({nombre: 'Código de Solicitud', campo: 'idPedido'}), 
@@ -11488,8 +11489,8 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 			filtered = this.get('content');
 		}
 
-
-		this.set('mostrarMasEnabled', true);
+		if (this.get('totalRecords') < filtered.length)
+			this.set('mostrarMasEnabled', true);
 
 		return filtered.slice(0, this.get('totalRecords'));
 		
@@ -12395,6 +12396,11 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	guardar: function () {
 		if($('#formCrearSolicitud').parsley('validate') && this.get('expedienteExist') == false)
 		{
+			var expComunic = null;
+
+			if (this.get('cdNro') && this.get('cdAnio'))
+				expComunic = this.get('cdNro') + '/' + this.get('cdAnio');
+
 			var movi = App.ExpedienteMovimiento.extend(App.Savable).create({
 				movimiento: this.get('movimiento.nombre'),
 				idProy: this.get('controller.content.id'),
@@ -12409,7 +12415,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 				cdAnio: this.get('cdAnio'),
 				cdNro: this.get('cdNro'),
 				proy: [{ id: this.get('controller.content.id')}],
-				expComunic: this.get('cdNro') + '/' + this.get('cdAnio'),
+				expComunic: expComunic,
 				texto: this.get('texto'),
 			});
 
