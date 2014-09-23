@@ -11349,23 +11349,31 @@ App.PedidoConsultaView = Ember.View.extend({
 	},
 
 	respuestaCrear: function(){
-		var pedidoRespuesta = App.PedidoRespuesta.extend(App.Savable).create({
+		//console.log(this.get('content.enviarEmail'));
+
+		var respuesta = App.PedidoRespuesta.extend(App.Savable).create({
 			pedido: this.get('content.id'), 
 			fecha:  moment().format('YYYY-MM-DD HH:mm'),
-			//emailEnviado:  true,
-			emailEnviado:  this.get('content.enviarEmail'),
+			emailEnviado:  true,
+			//emailEnviado:  this.get('content.enviarEmail'),
 			observacion: this.get('content.observacion'),
 			adjunto: this.get('content.adjuntoRespuesta'),
 			usuario: App.get('userController.user.cuil')
 		});
 
-		pedidoRespuesta.create();
-
-		if(this.get('content.enviarEmail') == true)
+		this.set('respuesta', respuesta);
+		this.get('respuesta').addObserver('createSuccess', this, this.createSucceeded);
+		this.get('respuesta').create();
+	},
+	createSucceeded: function () {
+		if (this.get('respuesta.createSuccess'))
 		{
-			this.sendEmail();
-		}
+			if(this.get('content.enviarEmail') == true)
+			{
+				this.sendEmail();
+			}
 
+		}			
 	},
 	sendEmail: function(){
 		/*
