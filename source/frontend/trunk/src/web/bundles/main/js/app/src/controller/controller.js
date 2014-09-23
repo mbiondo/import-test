@@ -1632,6 +1632,8 @@ App.VisitasGuiadasController = App.RestController.extend({
 
 });
 
+
+
 App.VisitaGuiadaConsultaController = Ember.Object.extend({
 	url: 'visitas-guiadas/visita/%@',
 	type: App.VisitaGuiada,
@@ -5763,6 +5765,41 @@ App.AsistenciasController = Ember.ObjectController.extend({
 
 
 
+App.PedidoRespuestaController = App.RestController.extend({
+//	url: 'pedido/%@/respuestas',
+	url: '',
+	type: App.PedidoRespuesta,
+	useApi: false,
+	content: null,
+	loaded: false,
+
+	load: function() {
+		this.set('loaded', false);
+
+		//url = this.get('url') + "/" + this.get('pedido');
+		url = "pedido" + "/" + this.get('pedido') + "/respuestas";
+
+		if ( url ) {
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'GET',
+				context: this,
+				contentType: 'text/plain',
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+		}
+	},	
+	createObject: function (data, save) {
+		save = save || false;
+		item = App.PedidoRespuesta.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+
+});
+
 
 App.PedidosController = App.RestController.extend({
 	url: 'pedido',
@@ -5772,7 +5809,9 @@ App.PedidosController = App.RestController.extend({
 	content: null,
 	sortProperties: ['id'],
 	sortAscending: false,
-
+	pageSize: 25,
+	pageNumber: 1,
+	
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Pedido.create(data);
@@ -5820,7 +5859,10 @@ App.PedidosController = App.RestController.extend({
 		}
 		return data;
 	}.property('content.@each'),
-
+	nextPage: function () {
+		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.load();
+	},
 });
 
 
