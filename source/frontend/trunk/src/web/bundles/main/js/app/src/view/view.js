@@ -11335,11 +11335,15 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.set('tipoModificacion', 'asignar');
 		this.guardar();
 	},
+
 	responder: function(){
 		var _self = this;
 		App.confirmActionController.removeObserver('success',_self,_self.responder);
 		this.set('tipoModificacion', 'responder');
-		this.guardar();
+		//this.guardar();
+		// Creamos la respuesta
+		this.respuestaCrear();
+
 	},
 
 	guardar: function () {
@@ -11347,17 +11351,15 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
 	},
-
 	respuestaCrear: function(){
-		//console.log(this.get('content.enviarEmail'));
 
 		var respuesta = App.PedidoRespuesta.extend(App.Savable).create({
 			pedido: this.get('content.id'), 
 			fecha:  moment().format('YYYY-MM-DD HH:mm'),
 			emailEnviado:  true,
-			//emailEnviado:  this.get('content.enviarEmail'),
-			observacion: this.get('content.observacion'),
-			adjunto: this.get('content.adjuntoRespuesta'),
+			//enviarEmail:  this.get('content.enviarEmail'),
+			observacion: this.get('observacion'),
+			adjunto: this.get('adjuntoRespuesta'),
 			usuario: App.get('userController.user.cuil')
 		});
 
@@ -11365,16 +11367,45 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('respuesta').addObserver('createSuccess', this, this.createSucceeded);
 		this.get('respuesta').create();
 	},
+
 	createSucceeded: function () {
 		if (this.get('respuesta.createSuccess'))
 		{
+			this.set('observacion', '');
+			this.set('adjuntoRespuesta', '');
+			this.sendNotificationRespuesta();
+			this.auditRespuesta();
+
 			if(this.get('content.enviarEmail') == true)
-			{
+			{	
+				//TO-DO Notificar la creacion de la respuesta para el pedido
 				this.sendEmail();
 			}
 
 		}			
 	},
+
+	auditRespuesta: function () {
+		var audit = App.Audit.extend(App.Savable).create();
+		audit.set('tipo', 'Pedido');
+		audit.set('accion', 'Respondido');
+		audit.set('usuario', App.get('userController.user.cuil'));
+		audit.set('objeto', this.get('content').constructor.toString());
+		audit.set('objetoId', this.get('content').id);
+		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		audit.create();		
+	},
+
+	sendNotificationRespuesta: function () {
+		var notification = App.Notificacion.extend(App.Savable).create();
+		notification.set('objectId', this.get('content.id'));
+		notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.id')+"/ver");
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		notification.set('tipo', 'responderSolicitud');	
+		notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content').get('idPedido'));	
+		notification.create();
+	},
+
 	sendEmail: function(){
 		/*
 		$.ajax({
@@ -11388,6 +11419,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		});			
 		*/
 	},
+
 	saveSuccessed: function () {
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('saveSuccess', this, this.saveSuccessed);	
