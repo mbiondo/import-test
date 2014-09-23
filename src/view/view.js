@@ -11137,7 +11137,9 @@ App.CrearPedidoView = Ember.View.extend({
 				item.set('codigoPostal',this.get('content.codigoPostal'));
 				item.set('provincia',this.get('content.provincia'));
 				item.set('localidad',this.get('content.localidad'));
-				item.set('localidadYProvincia', this.get('content.provincia') + ", " + this.get('content.localidad'));
+
+				item.set('localidadYProvincia', (this.get('content.provincia')) ? "-": this.get('content.provincia')  + ", " + (this.get('content.localidad')) ? "-": this.get('content.localidad') );
+				
 				item.set('fax',this.get('content.fax'));
 				item.set('telefono',this.get('content.telefono'));
 				item.set('actividad',this.get('content.actividad'));
@@ -11250,21 +11252,70 @@ App.CrearPedidoView = Ember.View.extend({
 
 App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
-	prioridades: ["Alta","Media","Baja"],
+	prioridades: ["Urgente","Normal"],
 	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 	tipoModificacion: '',
+
+	revisarPopUp: function (){
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la revisión de la solicitud',
+			message: '¿ Confirma que desea dar por revisada la solicitud ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.revisar);
+		App.confirmActionController.show();
+
+
+	},
+
+	asignarPopUp: function (){
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la asignación de la solicitud',
+			message: '¿ Confirma que desea asignar la solicitud ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.asignar);
+		App.confirmActionController.show();
+
+
+	},
+
+	responderPopUp: function (){
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la respuesta a la solicitud',
+			message: '¿ Confirma que desea enviar la respuesta a la solicitud ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.responder);
+		App.confirmActionController.show();
+
+
+	},
 
 	borrarAsignado: function () {
 		this.get('content').set('userSaraAsignado', null);
 	},
 
 	asignar: function(){
+		var _self = this;
+		App.confirmActionController.removeObserver('success',_self,_self.asignar);
 		this.set('tipoModificacion', 'asignar');
 		this.guardar();
 	},
 	responder: function(){
+		var _self = this;
+		App.confirmActionController.removeObserver('success',_self,_self.responder);
 		this.set('tipoModificacion', 'responder');
 		this.guardar();
 	},
@@ -11336,6 +11387,9 @@ App.PedidoConsultaView = Ember.View.extend({
  	},
 
 	revisar: function () {
+		var _self = this;
+		App.confirmActionController.removeObserver('success',_self,_self.revisar);
+
 		this.set('content.userSaraReviso',App.get('userController.user.cuil'));
 
 		this.addObserver('revisoSuccess', this, this.revisoSuccess);
