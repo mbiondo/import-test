@@ -319,6 +319,17 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		//Crear
 		notification.create();
 
+		var audit = App.Audit.extend(App.Savable).create();
+		audit.set('tipo', 'Sesion');
+		audit.set('accion', 'Inicio sesion');
+		audit.set('usuario', App.get('userController.user.cuil'));
+		audit.set('objeto', '');
+		audit.set('objetoId', sesionId);
+		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		audit.set('json', '');
+		audit.set('nombre', 'Inicio sesion');
+		audit.create();
+
 	},
 
 	stopTimer : function () {
@@ -357,6 +368,17 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
 			notification.create();
+
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Sesion');
+			audit.set('accion', 'Fin sesion');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', '');
+			audit.set('objetoId', sesionId);
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.set('json', '');
+			audit.set('nombre', 'Fin sesion');
+			audit.create();
 		}
 	},	
 
