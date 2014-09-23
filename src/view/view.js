@@ -11378,10 +11378,8 @@ App.PedidoConsultaView = Ember.View.extend({
 
 					var respuestaJson = JSON.stringify(respuesta);
 
-					var url = 'pedido-respuesta';
-
 					$.ajax({
-						url:  url,
+						url:  'pedido-respuesta',
 						contentType: 'text/plain',
 						dataType: 'JSON',
 						type: 'POST',
@@ -11389,6 +11387,22 @@ App.PedidoConsultaView = Ember.View.extend({
 						data : respuestaJson,
 						complete: this.revisoCompleted,
 					});	
+
+					if(this.get('content.enviarEmail') == true)
+					{
+						/*
+						$.ajax({
+							url:  'pedido/sendmail/' + this.get('id'),
+							dataType: 'JSON',
+							type: 'GET',
+							context: this,
+							data : this.getJson(),
+							success: this.aproveSuccess,
+							complete: this.aproveCompleted,
+						});			
+						*/
+					}
+
 				}
 			}
 
