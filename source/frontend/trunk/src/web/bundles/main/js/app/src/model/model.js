@@ -2642,3 +2642,24 @@ App.Departamento = Ember.Object.extend({
 	],
 
 });
+
+App.PedidoRespuesta = Ember.Object.extend({
+	id: '',
+	pedido: '',
+	fecha: '',
+	adjunto: '',
+	observacion: '',
+	usuario: '',
+	emailEnviado: null,
+
+	serializable: [
+		'id',
+		'pedido',
+		'fecha',
+		'adjunto',
+		'observacion',
+		'usuario',
+		'emailEnviado',
+	],
+
+});
