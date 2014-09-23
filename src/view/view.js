@@ -11348,6 +11348,38 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('content').save();
 	},
 
+	respuestaCrear: function(){
+		var pedidoRespuesta = App.PedidoRespuesta.extend(App.Savable).create({
+			pedido: this.get('content.id'), 
+			fecha:  moment().format('YYYY-MM-DD HH:mm'),
+			//emailEnviado:  true,
+			emailEnviado:  this.get('content.enviarEmail'),
+			observacion: this.get('content.observacion'),
+			adjunto: this.get('content.adjuntoRespuesta'),
+			usuario: App.get('userController.user.cuil')
+		});
+
+		pedidoRespuesta.create();
+
+		if(this.get('content.enviarEmail') == true)
+		{
+			this.sendEmail();
+		}
+
+	},
+	sendEmail: function(){
+		/*
+		$.ajax({
+			url:  'pedido/sendmail/' + this.get('id'),
+			dataType: 'JSON',
+			type: 'GET',
+			context: this,
+			data : this.getJson(),
+			success: this.aproveSuccess,
+			complete: this.aproveCompleted,
+		});			
+		*/
+	},
 	saveSuccessed: function () {
 		this.get('content').desNormalize();
 		this.get('content').removeObserver('saveSuccess', this, this.saveSuccessed);	
@@ -11367,42 +11399,9 @@ App.PedidoConsultaView = Ember.View.extend({
 				{
 
 					notification.set('tipo', 'responderSolicitud');	
-					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.id'));				
+					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.id'));		
 
-					var respuesta = App.PedidoRespuesta.create({pedido: this.get('content.id')});
-						respuesta.set('fecha',  moment().format('YYYY-MM-DD HH:mm'));
-						respuesta.set('observacion', this.get('content.observacion'));
-						respuesta.set('emailEnviado', true);
-						respuesta.set('adjunto', this.get('content.adjuntoRespuesta'));
-						respuesta.set('usuario', App.get('userController.user.cuil'));
-
-					var respuestaJson = JSON.stringify(respuesta);
-
-					$.ajax({
-						url:  'pedido-respuesta',
-						contentType: 'text/plain',
-						dataType: 'JSON',
-						type: 'POST',
-						context: this,
-						data : respuestaJson,
-						complete: this.revisoCompleted,
-					});	
-
-					if(this.get('content.enviarEmail') == true)
-					{
-						/*
-						$.ajax({
-							url:  'pedido/sendmail/' + this.get('id'),
-							dataType: 'JSON',
-							type: 'GET',
-							context: this,
-							data : this.getJson(),
-							success: this.aproveSuccess,
-							complete: this.aproveCompleted,
-						});			
-						*/
-					}
-
+					this.respuestaCrear();
 				}
 			}
 
