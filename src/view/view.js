@@ -11365,8 +11365,30 @@ App.PedidoConsultaView = Ember.View.extend({
 			{
 				if(this.get('tipoModificacion') == 'responder')
 				{
+
 					notification.set('tipo', 'responderSolicitud');	
 					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.id'));				
+
+					var respuesta = App.PedidoRespuesta.create({pedido: this.get('content.id')});
+						respuesta.set('fecha',  moment().format('YYYY-MM-DD HH:mm'));
+						respuesta.set('observacion', this.get('content.observacion'));
+						respuesta.set('emailEnviado', true);
+						respuesta.set('adjunto', this.get('content.adjuntoRespuesta'));
+						respuesta.set('usuario', App.get('userController.user.cuil'));
+
+					var respuestaJson = JSON.stringify(respuesta);
+
+					var url = 'pedido-respuesta';
+
+					$.ajax({
+						url:  url,
+						contentType: 'text/plain',
+						dataType: 'JSON',
+						type: 'POST',
+						context: this,
+						data : respuestaJson,
+						complete: this.revisoCompleted,
+					});	
 				}
 			}
 
@@ -11401,7 +11423,9 @@ App.PedidoConsultaView = Ember.View.extend({
 		this._super();
 		this.set('content', App.get('pedidoConsultaController').get('content'));
 		var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
-		this.set('content.departamento', departamento)
+		this.set('content.departamento', departamento);
+//		this.set('content.respuestas', App.get('pedidoRespuestaController.content'));
+//		console.log(this.get('content.respuestas'));
 	},
 
  	exportar: function () {
@@ -11473,6 +11497,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	audits: function(){
 		return App.get('auditController');
 	}.property('App.auditController.content'),
+
 
 	puedeEditar: function () {
 		var puedeEditar = false;
@@ -11621,6 +11646,19 @@ App.MiPedidoListItemView = Ember.View.extend({
 App.MisPedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.MiPedidoListItemView,
 	columnas: ['Código de Solicitud', 'Solicitante', 'Tipo de ingreso', '',  ''],
+
+	highlightText: function(){
+		Ember.run.next(function(){
+		// High Light Words
+		// Agrega la clase .highlight, modificar el css si se quiere cambiar el color de fondo
+			$('table').removeHighlight();
+
+			if(_self.get('filterText') && _self.get('filterText').length > 0){
+				$('td').highlight(_self.get('filterText'));
+			}
+		});
+	}.observes('filterTextChanged'),
+	
 });
 
 
@@ -12834,3 +12872,4 @@ App.TurnosPorListasView = App.ScrolleableListView.extend({
 	
 
 });
+
