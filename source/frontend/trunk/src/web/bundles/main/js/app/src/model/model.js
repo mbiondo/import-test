@@ -2644,6 +2644,7 @@ App.Departamento = Ember.Object.extend({
 });
 
 App.PedidoRespuesta = Ember.Object.extend({
+	url: 'pedido-respuesta',
 	id: '',
 	pedido: '',
 	fecha: '',
