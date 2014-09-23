@@ -2598,22 +2598,33 @@ App.Router =  Em.Router.extend({
 						App.departamentosController = App.DepartamentosController.create();
 						App.set('pedidoConsultaController.content', App.Pedido.extend(App.Savable).create({id: params.pedido}));
 
+						App.pedidoRespuestaController = App.PedidoRespuestaController.create({pedido: params.pedido});
+						
+						//App.pedidoRespuestaController = App.PedidoRespuestaController.create();
+						//App.set('pedidoRespuestaController.content', App.PedidoRespuesta.create({id: params.pedido}));
+
+						//App.pedidoRespuestaController = App.PedidoRespuesta.extend(App.Savable).create({id: params.pedido});
+
+
 						var deferred = $.Deferred(),
 
 						fn = function() {
 							var pedido = App.get('pedidoConsultaController.content');
 
-							if(App.get('pedidoConsultaController.loaded') && App.get('departamentosController.loaded'))
+							if(App.get('pedidoConsultaController.loaded') && App.get('departamentosController.loaded') && App.get('pedidoRespuestaController.loaded'))
 							{							
 								App.get('pedidoConsultaController').removeObserver('loaded', this, fn);
+								App.get('pedidoRespuestaController').removeObserver('loaded', this, fn);
 								deferred.resolve(pedido);
 							}
 						};
 
 						App.get('pedidoConsultaController').addObserver('loaded', this, fn);
 						App.get('departamentosController').addObserver('loaded', this, fn);
+						App.get('pedidoRespuestaController').addObserver('loaded', this, fn);
 						App.get('departamentosController').load();
 						App.get('pedidoConsultaController').load();
+						App.get('pedidoRespuestaController').load();
 
 						return deferred.promise();
 					},
