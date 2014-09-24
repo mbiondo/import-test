@@ -2651,7 +2651,7 @@ App.PedidoRespuesta = Ember.Object.extend({
 	adjunto: '',
 	observacion: '',
 	usuario: '',
-	emailEnviado: null,
+	enviarEmail: null,
 
 	serializable: [
 		'id',
@@ -2660,7 +2660,7 @@ App.PedidoRespuesta = Ember.Object.extend({
 		'adjunto',
 		'observacion',
 		'usuario',
-		'emailEnviado',
+		'enviarEmail',
 	],
 
 });
