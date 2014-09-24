@@ -11332,17 +11332,24 @@ App.PedidoConsultaView = Ember.View.extend({
 	asignar: function(){
 		var _self = this;
 		App.confirmActionController.removeObserver('success',_self,_self.asignar);
-		this.set('tipoModificacion', 'asignar');
-		this.guardar();
+
+		if (App.get('confirmActionController.success'))
+		{
+			this.set('tipoModificacion', 'asignar');
+			this.guardar();
+		}
 	},
 
 	responder: function(){
 		var _self = this;
 		App.confirmActionController.removeObserver('success',_self,_self.responder);
-		this.set('tipoModificacion', 'responder');
-		//this.guardar();
-		// Creamos la respuesta
-		this.respuestaCrear();
+
+		if (App.get('confirmActionController.success')) {
+			this.set('tipoModificacion', 'responder');
+			//this.guardar();
+			// Creamos la respuesta
+			this.respuestaCrear();
+		}
 
 	},
 
@@ -11467,19 +11474,22 @@ App.PedidoConsultaView = Ember.View.extend({
 		var _self = this;
 		App.confirmActionController.removeObserver('success',_self,_self.revisar);
 
-		this.set('content.userSaraReviso',App.get('userController.user.cuil'));
+		if (App.get('confirmActionController.success'))
+		{
+			this.set('content.userSaraReviso',App.get('userController.user.cuil'));
 
-		this.addObserver('revisoSuccess', this, this.revisoSuccess);
+			this.addObserver('revisoSuccess', this, this.revisoSuccess);
 
-		var url = 'pedido/revisar/' + this.get('content').id
-		$.ajax({
-			url:  url,
-			dataType: 'JSON',
-			type: 'PUT',
-			context: this,
-			data : this.get('content').getJson(),
-			complete: this.revisoCompleted,
-		});		
+			var url = 'pedido/revisar/' + this.get('content').id
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'PUT',
+				context: this,
+				data : this.get('content').getJson(),
+				complete: this.revisoCompleted,
+			});		
+		}
 
 	},
 
