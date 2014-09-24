@@ -11356,8 +11356,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		var respuesta = App.PedidoRespuesta.extend(App.Savable).create({
 			pedido: this.get('content.id'), 
 			fecha:  moment().format('YYYY-MM-DD HH:mm'),
-			emailEnviado:  true,
-			//enviarEmail:  this.get('content.enviarEmail'),
+			enviarEmail:  this.get('enviarEmail'),
 			observacion: this.get('observacion'),
 			adjunto: this.get('adjuntoRespuesta'),
 			usuario: App.get('userController.user.cuil')
@@ -11375,13 +11374,6 @@ App.PedidoConsultaView = Ember.View.extend({
 			this.set('adjuntoRespuesta', '');
 			this.sendNotificationRespuesta();
 			this.auditRespuesta();
-
-			if(this.get('content.enviarEmail') == true)
-			{	
-				//TO-DO Notificar la creacion de la respuesta para el pedido
-				this.sendEmail();
-			}
-
 		}			
 	},
 
@@ -11404,20 +11396,6 @@ App.PedidoConsultaView = Ember.View.extend({
 		notification.set('tipo', 'responderSolicitud');	
 		notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content').get('idPedido'));	
 		notification.create();
-	},
-
-	sendEmail: function(){
-		/*
-		$.ajax({
-			url:  'pedido/sendmail/' + this.get('id'),
-			dataType: 'JSON',
-			type: 'GET',
-			context: this,
-			data : this.getJson(),
-			success: this.aproveSuccess,
-			complete: this.aproveCompleted,
-		});			
-		*/
 	},
 
 	saveSuccessed: function () {
