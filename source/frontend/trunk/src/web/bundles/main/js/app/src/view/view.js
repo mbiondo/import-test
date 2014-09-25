@@ -10377,7 +10377,12 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	itemViewClassExport: App.ProyectoListItemExportView,
 	intervalText: null,
 	withGiros: true,
+	seleccionado: false,
 
+
+	checkedHandler: function () {
+		App.get('proyectosController').get('content').setEach('seleccionado', this.get('seleccionado'));
+	}.observes('seleccionado'),
 
 	changeFilterText: function () {
 		_self = this;
