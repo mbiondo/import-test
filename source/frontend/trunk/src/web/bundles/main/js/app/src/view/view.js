@@ -12546,6 +12546,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.set('expdipA', moment().format('YYYY'));
+		this.set('texto', this.get('controller.content.titulo'));
 	},
 
 	guardar: function () {
