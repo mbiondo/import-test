@@ -11398,7 +11398,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	sendNotificationRespuesta: function () {
 		var notification = App.Notificacion.extend(App.Savable).create();
 		notification.set('objectId', this.get('content.id'));
-		notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.id')+"/ver");
+		notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.idPedido')+"/ver");
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 		notification.set('tipo', 'responderSolicitud');	
 		notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content').get('idPedido'));	
@@ -11416,7 +11416,7 @@ App.PedidoConsultaView = Ember.View.extend({
 			if(this.get('tipoModificacion') == 'asignar')
 			{
 				notification.set('tipo', 'asignarSolicitud');	
-				notification.set('mensaje', "Se ha asignado la Solicitud " + this.get('content.id'));				
+				notification.set('mensaje', "Se ha asignado la Solicitud " + this.get('content.idPedido'));				
 			}
 			else
 			{
@@ -11424,7 +11424,7 @@ App.PedidoConsultaView = Ember.View.extend({
 				{
 
 					notification.set('tipo', 'responderSolicitud');	
-					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.id'));		
+					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.idPedido'));		
 
 					this.respuestaCrear();
 				}
