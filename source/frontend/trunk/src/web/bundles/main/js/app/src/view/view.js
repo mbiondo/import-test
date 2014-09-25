@@ -136,7 +136,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-length' , 'data-range', 'data-pattern', 'data-parsley-pattern', 'autocomplete'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-length' , 'data-range', 'data-pattern', 'data-parsley-pattern', 'autocomplete', 'disabled'],
 });
 
 Ember.Select.reopen({
@@ -12517,6 +12517,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	templateName: 'solicitud-movimiento',
 	pubFecha: 'saraza',
 	expedienteExist: false,
+	expedienteDisabled: false,
 
 	periodoChanged: function () {
 		App.set('tpsController.periodo', this.get('periodo'));
@@ -12541,8 +12542,21 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 
 	vueltaDiputados: function () {
 		$('#formCrearSolicitud').parsley('destroy');
+		
 		if (this.get('movimiento.id') == 17)
+		{
+
+			this.set('expdipN', this.get('controller.content.expdipN'));
+			this.set('expedienteDisabled', true);
+
 			return true;
+		}
+		else
+		{
+			this.set('expdipN', '');
+			this.set('expedienteDisabled', false);
+		}
+
 		return false;
 	}.property('movimiento'),
 
@@ -12630,7 +12644,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 				{
 					App.get('proyectosController').removeObserver('loaded', this, fn);									
 
-					if(App.get('proyectosController.recordcount') > 0)
+					if(App.get('proyectosController.recordcount') > 0 && this.get('expedienteDisabled') == false)
 					{
 						_self.set('expedienteExist', true);
 					}
