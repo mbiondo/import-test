@@ -11361,6 +11361,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
 	},
+
 	respuestaCrear: function(){
 
 		var respuesta = App.PedidoRespuesta.extend(App.Savable).create({
@@ -11380,11 +11381,34 @@ App.PedidoConsultaView = Ember.View.extend({
 	createSucceeded: function () {
 		if (this.get('respuesta.createSuccess'))
 		{
+			this.get('respuesta').removeObserver('createSuccess', this, this.createSucceeded);
 			this.set('observacion', '');
 			this.set('adjuntoRespuesta', '');
 			this.sendNotificationRespuesta();
 			this.auditRespuesta();
-		}			
+
+			$.jGrowl('Se ha respondido la solicitud!', { life: 5000 });
+
+			App.pedidosController = App.PedidosController.create();
+
+			fn = function() {
+				if(App.get('pedidosController.loaded'))
+				{
+					App.get('pedidosController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('root.informacionparlamentaria.pedidos.listado');
+				}
+			};
+			
+			App.get('pedidosController').addObserver('loaded', this, fn);
+
+			App.get('pedidosController').load();	
+
+		} else {
+			if (typeof(this.get('respuesta.createSuccess'))  == "Boolean") {
+				this.get('respuesta').addObserver('createSuccess', this, this.createSucceeded);
+				$.jGrowl('Ocurrio un error al intentar responder la solicitud!', { life: 5000 });
+			}
+		}
 	},
 
 	auditRespuesta: function () {
@@ -11430,15 +11454,16 @@ App.PedidoConsultaView = Ember.View.extend({
 					notification.set('mensaje', "Se ha respondido la Solicitud " + this.get('content.idPedido'));		
 
 					this.respuestaCrear();
-				}
+				} 
 			}
 
+			if (this.get('tipoModificacion')) {
+				notification.set('objectId', this.get('content.id'));
+				notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.id')+"/ver");
+				notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 
-			notification.set('objectId', this.get('content.id'));
-			notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('content.id')+"/ver");
-			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-
-			notification.create();
+				notification.create();
+			}
 
 			$.jGrowl('Se ha editado la solicitud!', { life: 5000 });
 
@@ -11564,6 +11589,12 @@ App.PedidoConsultaView = Ember.View.extend({
 	reenviarRespuesta: function(){
 		App.ReenviarRespuestaView.popup();
 	},
+
+	finalizar: function () {
+		this.set('content.resuelto', true);
+		this.guardar();
+	},
+
 
 });
 

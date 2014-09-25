@@ -73,10 +73,17 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 6,
-							roles: [['ROLE_USER'], , ['ROLE_DIPUTADO']],
+							roles: [['ROLE_USER'], ['ROLE_DIPUTADO']],
 							titulo: 'Sesiones',
 							url: '#/novedades/6',
-						}),														
+						}),			
+
+						App.MenuItem.create({
+							id: 8,
+							roles: [['ROLE_USER'], ['ROLE_INFORMACION_PARLAMENTARIA']],
+							titulo: 'Solicitudes ID',
+							url: '#/novedades/8',
+						}),																			
 					],
 					/*
 					subMenu: [

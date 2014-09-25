@@ -982,7 +982,7 @@ App.Router =  Em.Router.extend({
 					'Orden del Día',
 					'Plan de Labor',
 					'Sesiones', 
-					'Agenda de Comisiones', 
+					'Solicitudes IP'
 				];
 				
 				// App.get('menuController').seleccionar(0);
