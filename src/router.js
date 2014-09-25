@@ -398,10 +398,15 @@ App.Router =  Em.Router.extend({
 								deferred.resolve(ex);				
 							 };
 
-							 ex.addObserver('loaded', this, fn);
-							 ex.load();
+							App.bloquesController = App.BloquesController.create();
+							App.interBloquesController = App.InterBloquesController.create();
+							App.get('bloquesController').load();
+							App.get('interBloquesController').load();
+
+							ex.addObserver('loaded', this, fn);
+							ex.load();
 							
-							 return deferred.promise();
+							return deferred.promise();
 						},	
 
 						connectOutlets: function(router, context) {

@@ -5465,7 +5465,6 @@ App.ProyectosController = App.RestController.extend({
 	query: null,
 	isPaginated: false,
 
-	
 	buildURL: function (filterText) {
 		var url =  this.get('url');
 		if (this.get('useApi'))
@@ -6149,4 +6148,122 @@ App.DepartamentosController = App.RestController.extend({
 			this.addObject(item);
 		}
 	},		
+});
+
+App.ProyectosMEController = App.RestController.extend({
+	url: 'ME/exp/proyectos/search',
+
+	type: App.Proyecto,
+	useApi: true,
+	sortProperties: ['expdipA', 'expdipN'],
+	sortAscending: false,
+	loaded: false,
+	pageSize: 25,
+	pageNumber: 1,
+	query: null,
+	isPaginated: false,
+
+	filter: function (filterText) {
+		this.set('loaded', false);
+		this.set('loading', true);
+		this.set('content', []);
+		this.set('query', App.ProyectoQuery.extend(App.Savable).create({expdip: filterText}))
+		this.set('query.pageNumber', 1);
+		this.set('query.pageSize', 100);
+		this.load();					
+	},
+	
+	buildURL: function (filterText) {
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		url += "/" + filterText;
+		return url;		
+	},
+
+	init : function(){
+		this._super();
+	},
+
+	nextPage: function () {
+		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.set('newestContent', []);
+		this.set('newestContentReady', false);
+		this.load();
+	},
+
+	load: function() {
+		this.set('loaded', false);
+
+		var getJSON = {};
+
+		if(this.get('query'))
+		{
+			this.set('query.pageNumber', this.get('pageNumber'));
+			this.set('query.pageSize', this.get('pageSize'));			
+			getJSON = this.get('query').getJson();
+		}
+
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+
+
+		if ( url ) {
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'POST',
+				context: this,
+				contentType: 'text/plain',
+				crossDomain: 'true',			
+				data : getJSON,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+
+	parse: function (data) {
+		return data.proyectos;
+	},
+
+	loadSucceeded: function(data) {
+		var items = this.parse(data);
+		var lista = [];
+
+		if(!data || !items){
+			App.get('proyectosController').set('loaded', true);
+			return;
+		}
+
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+
+		if (this.get('newestContent')) {
+			this.set('newestContentReady', true);
+		}
+
+		this.set('recordcount', data.recordcount);
+		this.set('loading', false);
+		this.set('loaded', true);
+
+		this.set('isPaginated', false);
+	},
+
+	createObject: function (data, save) {
+	
+		save = save || false;
+		
+		item = App.Expediente.extend(App.Savable).create(data);
+		item.setProperties(data);
+
+		if (this.get('newestContent')) {
+			this.get('newestContent').addObject(item);			
+		}
+
+		this.addObject(item);
+	},	
 });
