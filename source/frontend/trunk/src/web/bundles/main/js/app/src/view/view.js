@@ -9046,6 +9046,9 @@ App.TPConsultaView = Ember.View.extend({
 	deleteSuccess: function () {
 		if (this.get('controller.content.deleteSuccess') == true) {
 
+			App.notificacionesController.deleteByObjectId(this.get('controller.content.id'));
+
+
 			this.get('controller.content').removeObserver('deleteSuccess', this, this.deleteSuccess);
 
 			App.tpsController = App.TPsController.create();		
