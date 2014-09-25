@@ -2512,7 +2512,27 @@ App.Pedido = Ember.Object.extend({
 	},
 
 	label: function () {
-		return this.get('idPedido') + ' ' + this.get('tipoIngreso') + ' ' + this.get('departamento') + ' ' + this.get('prioridad');
+		
+		var fechaRespuesta 		= "";
+		var fechaCreacion 		= "";
+		var userSaraAsignado 	= "";
+
+		if(this.get('fechaRespuesta') && this.get('fechaRespuesta.date'))
+		{
+			fechaRespuesta = "cerrado el " + moment(this.get('fechaRespuesta.date'), 'YYYY/MM/DD').format('LL');
+		}
+
+		if(this.get('fechaCreacion') && this.get('fechaCreacion.date'))
+		{
+			fechaCreacion = "Creado el " + moment(this.get('fechaCreacion.date'), 'YYYY/MM/DD').format('LL');
+		}
+
+		if(this.get('userSaraAsignado') && (this.get('userSaraAsignado.apellido') || this.get('userSaraAsignado.nombre')))
+		{
+			userSaraAsignado = this.get('userSaraAsignado.apellido') + ", " + this.get('userSaraAsignado.nombre');
+		}
+
+		return this.get('idPedido') + ' ' + this.get('nombreYApellido') + ' ' + this.get('email') + ' ' + this.get('tipoIngreso') + ' ' + fechaRespuesta  + ' ' + fechaCreacion + ' ' + this.get('departamento.nombre') + ' ' + userSaraAsignado;
 	}.property('id'),
 
 	idPedido: function(){
@@ -2558,7 +2578,7 @@ App.Pedido = Ember.Object.extend({
 			notification.set('objectId', this.get('id'));
 			notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('id')+"/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha creado una Solicitud " + this.get('id'));
+			notification.set('mensaje', "Se ha creado la Solicitud " + this.get('idPedido'));
 
 			notification.create();
 
