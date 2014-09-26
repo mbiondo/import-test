@@ -1672,7 +1672,7 @@ App.NotificacionTipoCrearView = Ember.View.extend({
 
 	notificationType: null,
 
-	iconos: ['sprite-alert', 'sprite-info', 'sprite-check'],
+	iconos: ['notification-icon-comisiones-confirmada', 'notification-icon-sesion-iniciada', 'notification-icon-sesion-finalizada', 'notification-icon-labor-confirmada', 'notification-icon-od-cargada', 'notification-icon-publicaciones-creado', 'notification-icon-expedientes-creado', 'notification-icon-solicitudes-creada', 'notification-icon-solicitudes-asignada', 'notification-icon-solicitudes-respondida'],
 
 	itemClicked: function (object) {
 		switch (object.constructor.toString()) {
@@ -10315,6 +10315,11 @@ App.NotificacionItemView = Ember.View.extend({
 	},
 	*/
 
+	didInsertElement: function () {
+		this._super();
+		this.$('a').tooltip();
+	},	
+
 	leida: function () {
 		return this.get('content.leida');
 	}.property('content.leida'),
@@ -11658,7 +11663,6 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Tipo de ingreso', campo: ''}),
 		//App.SortableColumn.create({nombre: 'Ingresado desde', campo: 'tipoIngreso'}),
 		App.SortableColumn.create({nombre: 'Departamento asignado', campo: 'departamento'}),
-		App.SortableColumn.create({nombre: '', campo: ''}),
 	],
 	lista: function (){		
 
