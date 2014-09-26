@@ -85,58 +85,6 @@ App.menuController = App.MenuController.create({
 							url: '#/novedades/8',
 						}),																			
 					],
-					/*
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [[]],
-							titulo: 'Todas las Novedades',
-							url: '#',
-						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_MESA_DE_ENTRADA'], ['ROLE_DIPUTADO']],
-							titulo: 'Movimientos de Expedientes',
-							url: '#/novedades/1',
-						}),
-						App.MenuItem.create({
-							id: 2,
-							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
-							titulo: 'Agenda Comisiones',
-							url: '#/novedades/2',
-						}),
-						App.MenuItem.create({
-							id: 3,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Dictámenes',
-							url: '#/novedades/3',
-						}),								
-						App.MenuItem.create({
-							id: 4,
-							roles: [['ROLE_OD']],
-							titulo: 'Orden del Día',
-							url: '#/novedades/4',
-						}),									
-						App.MenuItem.create({
-							id: 5,
-							roles: [['ROLE_PUBLICACIONES'], ['ROLE_DIPUTADO']],
-							titulo: 'Publicaciones',
-							url: '#/novedades/5',
-						}),													
-						App.MenuItem.create({
-							id: 7,
-							roles: [['ROLE_LABOR_PARLAMENTARIA']],
-							titulo: 'Plan de Labor',
-							url: '#/novedades/7',
-						}),
-						App.MenuItem.create({
-							id: 6,
-							roles: [['ROLE_USER'], , ['ROLE_DIPUTADO']],
-							titulo: 'Sesiones',
-							url: '#/novedades/6',
-						}),														
-					],
-					*/
 				}),
 			]
 			
@@ -149,32 +97,6 @@ App.menuController = App.MenuController.create({
 			icono: 'ic ic-pen',
 			
 			subMenu: [
-
-				/*
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Movimiento Autoridades',
-					url: '',
-					roles: [['ROLE_USER', 'ROLE_MESA_DE_ENTRADA_EDIT']],
-
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Consulta',
-							url: '#/direccionsecretaria/autoridades/listado',
-						}),
-
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Alta',
-							url: '#/direccionsecretaria/autoridades/alta',
-						}),	
-					],
-				}),
-				*/
-			
 
 				App.MenuItem.create({
 					id: 2,
@@ -364,21 +286,7 @@ App.menuController = App.MenuController.create({
 						}),
 					],
 				}),
-				/*
-				App.MenuItem.create({
-					id: 3,
-					titulo: 'Análisis de Competencia Mixta',
-					roles: [['ROLE_USER', 'ROLE_COMISIONES']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							titulo: 'Análisis de Competencia Mixta pendientes',
-							url: '#/comisiones/mixta/pendientes',
-							roles: [['ROLE_USER', 'ROLE_COMISIONES']],
-						}),			
-					],
-				}),
-				*/
+
 				App.MenuItem.create({
 					id: 4,
 					titulo: 'Comisiones',
@@ -692,44 +600,6 @@ App.menuController = App.MenuController.create({
 				})
 			]			
 		}),
-        /*        
-		App.MenuItem.create({
-			id: 6,
-			roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-			titulo: 'Envíos a Archivo',
-			url: '#/envios',
-			icono: 'ic ic-archivados',
-			
-			subMenu: [
-				App.MenuItem.create({
-					id: 0,
-					titulo: 'Envíos a Archivo',
-					url: '#/envios',
-					roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-					subMenu: [
-						App.MenuItem.create({
-							id: 0,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_SEC_PARL_VIEW']],
-							titulo: 'Envios a Archivo',
-							url: '#/envios',
-						}),
-						App.MenuItem.create({
-							id: 1,
-							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA_EDIT']],
-							titulo: 'Crear Envío a Archivo',
-							url: '#/envios/envio/crear',
-						}),
-					],
-				}),
-			]
-		}),
-		*/
-
-		
-
-		
-
-
 	]
 });
 
@@ -770,8 +640,6 @@ App.crearTemaController = App.CrearTemaController.create();
 App.crearSesionController = App.CrearSesionController.create();
 
 App.ioController = App.IoController.create();
-
-//App.ioController.connect();
 
 App.tituloController = App.TituloController.create({});
 
