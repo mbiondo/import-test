@@ -11287,7 +11287,16 @@ App.PedidoConsultaView = Ember.View.extend({
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 	tipoModificacion: '',
-	//userSaraAsignadoExist: false,
+	clickAsignar: false,
+
+
+	userSaraAsignadoExist: function () {
+		if (this.get('content.userSaraAsignado'))
+			return true;
+		else
+			return false;
+	}.property('clickAsignar', 'content.userSaraAsignado'),
+
 
 	revisarPopUp: function (){
 		var _self = this;
@@ -11308,9 +11317,10 @@ App.PedidoConsultaView = Ember.View.extend({
 		var _self = this;
 
 		
+		this.set('clickAsignar', true);
+		
 		if(this.get('content.userSaraAsignado'))
 		{
-			//this.set('userSaraAsignadoExist', true);
 
 			if($('#formAsignarUsuario').parsley('validate'))
 			{				
@@ -11323,10 +11333,6 @@ App.PedidoConsultaView = Ember.View.extend({
 				App.confirmActionController.addObserver('success', _self, _self.asignar);
 				App.confirmActionController.show();
 			}
-		}
-		else
-		{
-			//this.set('userSaraAsignadoExist', false);
 		}
 	},
 
