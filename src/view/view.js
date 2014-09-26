@@ -10379,7 +10379,6 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	withGiros: true,
 	seleccionado: false,
 
-
 	checkedHandler: function () {
 		App.get('proyectosController').get('content').setEach('seleccionado', this.get('seleccionado'));
 	}.observes('seleccionado'),
@@ -11283,10 +11282,12 @@ App.CrearPedidoView = Ember.View.extend({
 App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
 	prioridades: ["Urgente","Normal"],
-	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+//	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
+	tipos: ["Trabajos especiales", "Trabajos de consulta", "DJA", "Bicameral y DJA"],
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 	tipoModificacion: '',
+	//userSaraAsignadoExist: false,
 
 	revisarPopUp: function (){
 		var _self = this;
@@ -11306,16 +11307,27 @@ App.PedidoConsultaView = Ember.View.extend({
 	asignarPopUp: function (){
 		var _self = this;
 
-		App.confirmActionController.setProperties({
-			title: 'Confirmar la asignación de la solicitud',
-			message: '¿ Confirma que desea asignar la solicitud ?',
-			success: null,
-		});
 		
-		App.confirmActionController.addObserver('success', _self, _self.asignar);
-		App.confirmActionController.show();
+		if(this.get('content.userSaraAsignado'))
+		{
+			//this.set('userSaraAsignadoExist', true);
 
-
+			if($('#formAsignarUsuario').parsley('validate'))
+			{				
+				App.confirmActionController.setProperties({
+					title: 'Confirmar la asignación de la solicitud',
+					message: '¿ Confirma que desea asignar la solicitud ?',
+					success: null,
+				});
+				
+				App.confirmActionController.addObserver('success', _self, _self.asignar);
+				App.confirmActionController.show();
+			}
+		}
+		else
+		{
+			//this.set('userSaraAsignadoExist', false);
+		}
 	},
 
 	responderPopUp: function (){
