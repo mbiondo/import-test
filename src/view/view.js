@@ -3117,10 +3117,16 @@ App.CitacionCrearView = Em.View.extend({
 				
 		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
 
+
+
 		if (this.get('content').get('id')) {
+			this.get('content').set('auditNombre', 'citacionGuardar');
+
 			App.get('citacionCrearController').save();
 		}
 		else {
+			this.get('content').set('auditNombre', 'citacionCrear');
+
 			App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
 
 			App.get('citacionCrearController').create();		
@@ -7470,6 +7476,8 @@ App.CrearExpedienteView = Ember.View.extend({
             }
             */
             
+            this.get('content').set('auditNombre', 'MEExpdienteCrear');
+
 			this.set('loading', true);
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
