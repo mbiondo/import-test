@@ -614,7 +614,7 @@ App.ChangePasswordView = Ember.View.extend({
 		var data;
 		_self = this;
 
-		if($('#login').parsley('validate'))
+		if($('#change-password').parsley('validate'))
 		{
 			_self.set('loading', false);
 			if(App.get('userController.access_token'))
