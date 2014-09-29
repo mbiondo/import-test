@@ -11703,6 +11703,8 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 
 		if (this.get('totalRecords') < filtered.length)
 			this.set('mostrarMasEnabled', true);
+		else
+			this.set('mostrarMasEnabled', false);
 
 		return filtered.slice(0, this.get('totalRecords'));
 		
