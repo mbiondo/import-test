@@ -11518,6 +11518,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		this.set('content', App.get('pedidoConsultaController').get('content'));
 		var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 		this.set('content.departamento', departamento);
+		this.set('enviarEmail', true);
 //		this.set('content.respuestas', App.get('pedidoRespuestaController.content'));
 //		console.log(this.get('content.respuestas'));
 	},
