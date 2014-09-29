@@ -12628,6 +12628,22 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	guardar: function () {
 		if($('#formCrearSolicitud').parsley('validate') && this.get('expedienteExist') == false)
 		{
+
+			App.confirmActionController.setProperties({
+				title: 'Confirmar la solicitud de movimiento',
+				message: '¿ Confirma que desea enviar la solicitud de movimiento ?',
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', this, this.guardarConfirm);
+			App.confirmActionController.show();
+		}		
+	},
+	guardarConfirm: function(){
+		App.confirmActionController.removeObserver('success', this, this.guardarConfirm);
+
+		if (App.get('confirmActionController.success'))
+		{		
 			var expComunic = null;
 
 			if (this.get('cdNro') && this.get('cdAnio'))
@@ -12655,9 +12671,9 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 
 			this.get('movimiento').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('movimiento').create();
-		}		
-	},
+		}
 
+	},
 	createSucceeded: function () {
 		if (this.get('movimiento.createSuccess')) {
 			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
