@@ -12718,38 +12718,6 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 		ex.addObserver('loaded', this, fn);
 		ex.load();		
 	},
-
-	changeExdip: function(){
-		var _self = this;
-		if((this.get('expdipN') && this.get('expdipA')) && (this.get('expdipN').length == 4 && this.get('expdipA').length == 4))
-		{		
-			App.proyectosController = App.ProyectosController.create({ content: []});
-			App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: this.get('expdip')}));
-
-			fn = function() {
-				if (App.get('proyectosController.loaded'))
-				{
-					App.get('proyectosController').removeObserver('loaded', this, fn);									
-
-					if(App.get('proyectosController.recordcount') > 0 && this.get('expedienteDisabled') == false)
-					{
-						_self.set('expedienteExist', true);
-					}
-					else
-					{
-						_self.set('expedienteExist', false);
-					}
-				}
-			};
-
-			App.get('proyectosController').addObserver('loaded', this, fn);
-			App.get('proyectosController').load();
-		}
-		else{
-			_self.set('expedienteExist', false);
-		}
-	}.observes('expdipN', 'expdipA'),
-
 });
 
 
