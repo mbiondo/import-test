@@ -11760,7 +11760,7 @@ App.MiPedidoListItemView = Ember.View.extend({
 
 App.MisPedidosListView = App.ListFilterView.extend({
 	itemViewClass: App.MiPedidoListItemView,
-	columnas: ['Código de Solicitud', 'Solicitante', 'Tipo de ingreso', '',  ''],
+	columnas: ['Código de Solicitud', 'Solicitante', 'Tipo de ingreso'],
 
 	highlightText: function(){
 		Ember.run.next(function(){
