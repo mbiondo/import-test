@@ -11190,6 +11190,8 @@ App.CrearPedidoView = Ember.View.extend({
 				item.set('cargo',this.get('content.cargo'));
 				item.set('prioridad',this.get('content.prioridad'));
 
+				item.set('fechaCreacion', moment().format('YYYY-MM-DD HH:mm:ss'));
+
 				item.addObserver('createSuccess', item, item.createSucceeded);
 				
 				item.create();
@@ -11296,7 +11298,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	templateName: 'if-pedido-consulta',
 	prioridades: ["Urgente","Normal"],
 //	tipos: ["Trabajos especiales", "Trabajos de consulta", "Digesto"],
-	tipos: ["Trabajos especiales", "Trabajos de consulta", "DJA", "Bicameral y DJA"],
+	tipos: ["Trabajos especiales", "Trabajos de consulta", "DJA - Bicameral", "DJA - Consultas"],
 	departamentos: ['ES', 'AC', 'LE'],
 	departamento: 'ES',
 	tipoModificacion: '',
@@ -11532,7 +11534,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	},
 
  	exportar: function () {
- 		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data=" + JSON.stringify(App.pedidoConsultaController.content));
+ 		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data2=" + JSON.stringify(App.auditController.content) +"&data=" + JSON.stringify(App.pedidoConsultaController.content));
  	},
 
 	revisar: function () {
@@ -11666,7 +11668,7 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 	itemViewClass: App.PedidoListItemView,
 
 	columnas: [
-		//App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
+		App.SortableColumn.create({nombre: 'Prioridad', campo: 'prioridad'}),
 		App.SortableColumn.create({nombre: 'Código de Solicitud', campo: 'idPedido'}), 
 		App.SortableColumn.create({nombre: 'Solicitante', campo: ''}),
 		App.SortableColumn.create({nombre: 'Tipo de ingreso', campo: ''}),
@@ -11708,9 +11710,9 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 
 		return filtered.slice(0, this.get('totalRecords'));
 		
-			
 
 	}.property('filterText', 'content.@each', 'totalRecords', 'sorting'),	
+
 });
 
 App.PedidosView = Ember.View.extend({
