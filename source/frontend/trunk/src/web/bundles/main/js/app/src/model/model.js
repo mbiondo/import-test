@@ -2159,6 +2159,13 @@ App.TP = Ember.Object.extend({
         'numero',
         'periodo',
         'fecha',
+        'proyectosD',
+        'proyectosS',
+        'proyectosJGM',
+        'proyectosPE',
+        'senadoConModif',
+        'retiroProyecto',
+        'modificacionProyecto',
 	],    
 
    normalize: function () {

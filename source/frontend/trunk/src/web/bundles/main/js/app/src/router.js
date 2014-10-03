@@ -731,9 +731,10 @@ App.Router =  Em.Router.extend({
 	                deserialize: function(router, params) {
 						var deferred = $.Deferred();
 						
-						App.firmantesController = App.FirmantesController.create();		
-						App.tpsController = App.TPsController.create({periodo: 132});		
 						App.proyectosController = App.ProyectosController.create({ content: []});
+						App.firmantesController = App.FirmantesController.create();		
+						
+						App.tpsController = App.TPsController.create({periodo: 132});							
 						App.get('proyectosController').set('loaded', false);
 						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));
 
@@ -2730,10 +2731,12 @@ App.Router =  Em.Router.extend({
 
 				deserialize: function(router, params) {					
 					var deferred = $.Deferred();
-					
+					App.expedientesController = App.ExpedientesNewController.create({content: []});
+					App.firmantesController = App.FirmantesController.create();		
+					App.tpsController = App.TPsController.create({periodo: 132});	
 
 					App.get('expedientesController').set('loaded', false);
-					App.get('expedientesController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+					App.get('expedientesController').set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[]}));
 
 					fn = function() {
 						if (App.get('expedientesController.loaded') && App.get('comisionesController.loaded'))
@@ -2749,6 +2752,10 @@ App.Router =  Em.Router.extend({
 					App.get('expedientesController').load();
 					App.get('comisionesController').load();
 					App.get('searchController').load();
+
+					App.get('tpsController').load();
+					App.get('firmantesController').load();	
+
 
 									
 					return deferred.promise();
