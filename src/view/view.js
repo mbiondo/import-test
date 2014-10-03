@@ -9027,6 +9027,36 @@ App.TPConsultaView = Ember.View.extend({
 	withGiros: true,
 	creating: false,
 
+	didInsertElement: function () {
+		this._super();
+		if (this.get('controller.content.proyectosD')) {
+			this.$('#myTab a[href="#tab-diputados"]').tab('show');
+		} else {
+			if (this.get('controller.content.proyectosS')) {
+				this.$('#myTab a[href="#tab-senado"]').tab('show');
+			} else {
+				if (this.get('controller.content.proyectosPE')) {
+					this.$('#myTab a[href="#tab-ejecutivo"]').tab('show');
+				} else {
+					if (this.get('controller.content.senadoConModif')) {
+						this.$('#myTab a[href="#tab-senado-mod"]').tab('show');
+					} else {
+						if (this.get('controller.content.proyectosJGM')) {
+							this.$('#myTab a[href="#tab-jefatura"]').tab('show');
+						} else {
+							if (this.get('controller.content.retiroProyecto')) {
+								this.$('#myTab a[href="#tab-retiro-proyecto"]').tab('show');
+							} else {
+								if (this.get('controller.content.modificacionProyecto')) {
+									this.$('#myTab a[href="#tab-mod-proyecto"]').tab('show');
+								}
+							}
+						}
+					}
+				}			
+			}
+		}
+	},
 
 
 	borrar: function () {
@@ -12112,7 +12142,33 @@ App.PreviewTramiteParlamentarioView = App.ModalView.extend({
 			this.set('content', tp);
 
 		    tp.removeObserver('loaded', this, fn);
-		    deferred.resolve(tp);
+			if (tp.get('proyectosD')) {
+				this.$('#myTab a[href="#tab-diputados"]').tab('show');
+			} else {
+				if (tp.get('proyectosS')) {
+					this.$('#myTab a[href="#tab-senado"]').tab('show');
+				} else {
+					if (tp.get('proyectosPE')) {
+						this.$('#myTab a[href="#tab-ejecutivo"]').tab('show');
+					} else {
+						if (tp.get('senadoConModif')) {
+							this.$('#myTab a[href="#tab-senado-mod"]').tab('show');
+						} else {
+							if (tp.get('proyectosJGM')) {
+								this.$('#myTab a[href="#tab-jefatura"]').tab('show');
+							} else {
+								if (tp.get('retiroProyecto')) {
+									this.$('#myTab a[href="#tab-retiro-proyecto"]').tab('show');
+								} else {
+									if (tp.get('modificacionProyecto')) {
+										this.$('#myTab a[href="#tab-mod-proyecto"]').tab('show');
+									}
+								}
+							}
+						}
+					}			
+				}
+			}
 		};
 
 		tp.addObserver('loaded', this, fn);
@@ -13008,6 +13064,7 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 			}
 		}
 	},
+
 	nuevoTexto: function(){
 
 		if(this.get('content.codMovi'))
@@ -13044,9 +13101,10 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 				str += this.get('content.texto');
 			}
 
+			this.set('content.textoNuevo', str);
+
 			return str;
 		}
-
 	}.property('content.codMovi', 'content.auxFechaMovi', 'content.tipo', 'content.expdip', 'content.texto'),
 	hayVariosFirmantes: function(){
 		if(this.get('content.firmantes'))
@@ -13071,4 +13129,131 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 			return false;
 		}
 	}.property('content.proy')
+});
+
+App.ProyectosSearchView = Em.View.extend({
+	templateName: 'proyecto-search',
+//	tipos: ['LEY', 'RESOLUCION', 'DECLARACION', 'COMUNICACION', 'MENSAJE'],
+	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
+	collapse: true,
+	loading: false,
+	palabra: '',
+	palabras: [],
+	tipoPub: ['TP'],
+	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
+	palabrasError: false,
+	palabrasErrorExist: false,
+
+	query: null,
+
+
+	collapseToggle: function(){
+		this.set('collapse', !this.get('collapse'));
+		
+		Ember.run.next(function(){
+			$("form").find("[tabindex=1]").focus();
+		});
+	},
+
+	periodoChanged: function () {
+		App.set('tpsController.periodo', App.get('expedientesController.query.pubper'));
+	}.observes('App.expedientesController.query.pubper'),
+
+	comisiones: function () {
+		var comisiones = [];
+		if (App.get('comisionesController.content')) {
+			App.get('comisionesController.content').forEach(function (comision) {
+				comisiones.pushObject(comision.nombre);
+			});
+		}
+		return comisiones;
+	}.property('App.comisionesController.content.@each'),
+
+	limpiar: function () {
+		this.set('palabras', []);
+		App.expedientesController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[]}));
+		this.buscar();
+	},
+
+	didInsertElement: function () {
+		this._super();
+		var _self = this;
+		App.get('expedientesController').addObserver('loaded', this, this.proyectosLoaded);
+		Ember.run.next(function () { 
+			if (App.get('expedientesController.query.dirty')) {
+				_self.limpiar(); 
+			}
+		});
+
+		shortcut.add('enter', function() {
+		  if($('#buscarProyecto').is(':focus'))
+		  {
+		    _self.buscar();
+		  }
+		});
+
+		$(".nav-tabs > li")
+		.on('click', function(){
+			var tabContent = $($(this).children().attr('href'));
+			setTimeout(function(){ if(tabContent.is(":visible")) tabContent.find("[tabindex=1]").focus(); }, 500);
+		})
+		.each(function(index){
+			var _self = $(this);
+			shortcut.add("F" + (index + 1), function(){ _self.children().click(); });
+		});
+	},
+
+	buscar: function () {
+		$('#buscarProyecto').is(':focus')
+		{
+			App.get('expedientesController').set('loaded', false);
+			App.expedientesController.set('pageNumber', 1);
+			App.expedientesController.set('content', []);
+
+			var lista_palabras = $.map(this.get('palabras'), function(key){ return key.nombre; });
+			App.set('expedientesController.query.palabras', lista_palabras);
+
+			if (App.get('expedientesController.query.pub')) {
+				App.set('expedientesController.query.pubnro', App.get('expedientesController.query.pub.numero').toString());
+			}
+			
+			App.expedientesController.load();
+			
+			if(this.get('collapse') == false)
+			{
+				$(".panel-heading > a").click();
+			}
+
+
+			this.set('loading', true);
+		}
+	},
+
+	proyectosLoaded: function () {
+		if (App.get('expedientesController.loaded'))
+			this.set('loading', false);
+		else
+			this.set('loading', true);
+	},
+
+	borrar: function () {	
+		App.searchController.deleteObject(App.expedientesController.get('query'));
+		App.expedientesController.set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));
+	},
+
+	removerPalabra: function(){
+//		console.log(this.get('content'));
+	},
+
+	willDestroyElement: function(){
+		// remove shorcuts
+		shortcut.remove('enter');
+		$(".nav-tabs > li").each(function(index){ shortcut.remove("F" + (index + 1)); });
+	},
+	palabrasChange: function(){
+		if(this.get('palabra').length > 2)
+		{
+			this.set('palabrasError', false);
+		}
+	}.observes('palabra')
 });
