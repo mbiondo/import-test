@@ -398,11 +398,7 @@ App.Router =  Em.Router.extend({
 								deferred.resolve(ex);				
 							 };
 
-							App.bloquesController = App.BloquesController.create();
-							App.interBloquesController = App.InterBloquesController.create();
-							App.get('bloquesController').load();
-							App.get('interBloquesController').load();
-
+							
 							ex.addObserver('loaded', this, fn);
 							ex.load();
 							
@@ -443,24 +439,11 @@ App.Router =  Em.Router.extend({
 							var deferred = $.Deferred(),
 
 
-							fn2 = function() {
-	                            if (App.get('comisionesController.loaded')) {
-	                                App.get('comisionesController').removeObserver('loaded', this, fn2);
-		                           	ex.addObserver('loaded', this, fn);
-                            		ex.load();
-	                            }
-							}
-
-							App.get('comisionesController').addObserver('loaded', this, fn2);
-							App.get('comisionesController').load();				
-
-
-
-
 							fn3 = function () {
-								if (App.get('tpsController.loaded') && App.get('firmantesController.loaded')) {
+								if (App.get('tpsController.loaded') && App.get('firmantesController.loaded') && App.get('comisionesController.loaded')) {
 									App.get('tpsController').removeObserver('loaded', this, fn3);
 									App.get('firmantesController').removeObserver('loaded', this, fn3);
+									App.get('comisionesController').removeObserver('loaded', this, fn3);
 									ex.desNormalize(); 
 									ex.set('autoridades', []);
 									var orden = 1;
@@ -489,6 +472,9 @@ App.Router =  Em.Router.extend({
 							 	    } else {
 							 	    	App.tpsController.set('periodo', ex.get('periodo'));
 							 	    }
+
+							 	    App.get('comisionesController').addObserver('loaded', this, fn3);
+									App.get('comisionesController').load();	
 
 									App.get('firmantesController').addObserver('loaded', this, fn3);
 									App.get('firmantesController').set('url', moment(ex.get('pubFecha'), 'YYYY-MM-DD hh:ss').format('DD/MM/YYYY') + '/resumen');
@@ -529,8 +515,13 @@ App.Router =  Em.Router.extend({
 								    App.get('tpsController').addObserver('loaded', this, fn3);
 								    App.get('tpsController').load();	
 
+	    							
+
 							   }
-                            };                                                                             
+                            }; 
+
+                            ex.addObserver('loaded', this, fn);
+                    		ex.load();                                                                            
 						
 							return deferred.promise();
 						},	
