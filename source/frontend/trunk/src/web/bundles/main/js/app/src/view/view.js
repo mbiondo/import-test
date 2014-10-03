@@ -1137,7 +1137,7 @@ App.PlanDeLaborView = Ember.View.extend({
 		if (data.success == true) {
 			this.model.set('id', data.id);
 
-			console.log(this.model)
+			//console.log(this.model)
 
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
@@ -1418,7 +1418,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 
 		evento.create();
 
-		console.log(data);
+		//console.log(data);
 		if(data)
 		{		
 			//CREATE NOTIFICATION TEST 
@@ -11702,8 +11702,10 @@ App.PedidosListView = App.ListFilterWithSortView.extend({
 		//App.SortableColumn.create({nombre: 'Ingresado desde', campo: 'tipoIngreso'}),
 		App.SortableColumn.create({nombre: 'Departamento asignado', campo: 'departamento'}),
 	],
+
 	lista: function (){		
 
+		//console.log('pepe');
 		if (this.get('filterText').length > 0)
 		{
 			var _self	 	= this;
