@@ -696,6 +696,17 @@ App.UserController = Em.Controller.extend({
 
 					App.get('router').transitionTo('loading');
 					App.get('router').transitionTo('index');
+					var audit = App.Audit.extend(App.Savable).create();
+
+					audit.set('tipo', 'Test');
+					audit.set('accion', 'Login');
+					audit.set('usuario', cuil);
+					audit.set('objeto', 'Login');
+					audit.set('objetoId', '');
+					audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+					audit.set('json', data.toString());
+					audit.set('nombre', 'Login');
+					audit.create();	
 
 					this.loginoAuth(cuil, data.access_token, data.token_type);
 					localStorage.setObject('user', JSON.stringify({cuil: cuil, access_token: data.access_token, token_type: data.token_type, expires_in: moment().unix() + data.expires_in }));
@@ -812,20 +823,10 @@ App.UserController = Em.Controller.extend({
 
 					App.notificacionesFiltradasController = App.NotificacionesController.create({content: []});
 					App.get('notificacionesFiltradasController').load();
-
-					var audit = App.Audit.extend(App.Savable).create();
-					audit.set('tipo', 'Test');
-					audit.set('accion', 'Login');
-					audit.set('usuario', App.get('userController.user.cuil'));
-					audit.set('objeto', this.constructor.toString());
-					audit.set('objetoId', '');
-					audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
-					audit.set('json', data.toString());
-					audit.set('nombre', 'Login');
-					audit.create();	
 					
 					App.advanceReadiness();	
 					$('#loadingScreen').remove();				
+					//delete $.ajaxSettings.headers["Authorization"];
 				});
 			},
 			error: function(data){
@@ -6255,6 +6256,115 @@ App.ProyectosMEController = App.RestController.extend({
 
 	createObject: function (data, save) {
 	
+		save = save || false;
+		
+		item = App.Expediente.extend(App.Savable).create(data);
+		item.setProperties(data);
+
+		if (this.get('newestContent')) {
+			this.get('newestContent').addObject(item);			
+		}
+
+		this.addObject(item);
+	},	
+});
+
+
+
+App.ExpedientesNewController = App.RestController.extend({
+	url: 'exp/proyectos/search',
+
+	type: App.Expediente,
+	useApi: true,
+	sortProperties: ['expdipA', 'expdipN'],
+	sortAscending: false,
+	loaded: false,
+	pageSize: 25,
+	pageNumber: 1,
+	query: null,
+	isPaginated: false,
+
+	buildURL: function (filterText) {
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+		url += "/" + filterText;
+		return url;		
+	},
+
+	init : function(){
+		this._super();
+	},
+
+	nextPage: function () {
+		this.set('pageNumber', this.get('pageNumber') + 1);
+		this.set('newestContent', []);
+		this.set('newestContentReady', false);
+		this.load();
+	},
+
+	load: function() {
+		this.set('loaded', false);
+
+		var getJSON = {};
+
+		if(this.get('query'))
+		{
+			this.set('query.pageNumber', this.get('pageNumber'));
+			this.set('query.pageSize', this.get('pageSize'));			
+			getJSON = this.get('query').getJson();
+		}
+
+		var url =  this.get('url');
+		if (this.get('useApi'))
+			url = App.get('apiController').get('url') + url;
+
+
+		if ( url ) {
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'POST',
+				context: this,
+				contentType: 'text/plain',
+				crossDomain: 'true',			
+				data : getJSON,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+
+		}
+	},
+
+	parse: function (data) {
+		return data.proyectos;
+	},
+
+	loadSucceeded: function(data) {
+		var items = this.parse(data);
+		var lista = [];
+
+		if(!data || !items){
+			App.get('expedientesController').set('loaded', true);
+			return;
+		}
+
+		items.forEach(function(i){
+			this.createObject(i);
+		}, this);
+
+		if (this.get('newestContent')) {
+			this.set('newestContentReady', true);
+		}
+
+		App.set('expedientesController.recordcount', data.recordcount);
+		App.get('expedientesController').set('loading', false);
+		App.get('expedientesController').set('loaded', true);
+
+		this.set('isPaginated', false);
+	},
+
+	createObject: function (data, save) {
 		save = save || false;
 		
 		item = App.Expediente.extend(App.Savable).create(data);
