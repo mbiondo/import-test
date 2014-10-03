@@ -9050,7 +9050,6 @@ App.TPConsultaView = Ember.View.extend({
 		}
 
 	},	
-
 	deleteSuccess: function () {
 		if (this.get('controller.content.deleteSuccess') == true) {
 
@@ -9158,8 +9157,6 @@ App.TPConsultaView = Ember.View.extend({
 		else
 			return false;
 	}.property('App.userController.user'),
-
-
 });
 
 App.ComisionesListItemView = Ember.View.extend({
@@ -12987,3 +12984,91 @@ App.TurnosPorListasView = App.ScrolleableListView.extend({
 
 });
 
+
+App.tpConsultaProyectoItemListView = Em.View.extend({
+	templateName: 'tp-consulta-proyecto-item-list',
+	tagName: 'li',
+
+	didInsertElement: function(){
+		this._super();
+
+		if(this.get('content.proy') && this.get('content.proy.firstObject'))
+		{		
+			this.set('content.expdip', this.get('content.proy.firstObject.expdip'));
+			this.set('content.tipo', this.get('content.proy.firstObject.tipo'));
+
+			if(this.get('content.proy.firstObject.firmantes'))
+			{
+				this.set('content.firmantes', this.get('content.proy.firstObject.firmantes'));
+			}
+
+			if(this.get('content.proy.firstObject.giro'))
+			{
+				this.set('content.giro', this.get('content.proy.firstObject.giro'));
+			}
+		}
+	},
+	nuevoTexto: function(){
+
+		if(this.get('content.codMovi'))
+		{
+			var str = "";
+
+			if(this.get('content.codMovi') == 17) // Senado con Modificación
+			{
+				str = "(CD- " + this.get('content.expComunic') + ") (" + this.get('content.auxFechaMovi') + ")";
+			}
+			else
+			{
+				if(this.get('hayVariosFirmantes'))
+				{
+					str = "SOLICITAN ";
+				}
+				else{
+					str = "SOLICITA ";
+				}
+
+				if(this.get('content.codMovi') == 22) // Retiro de Proyecto
+				{
+
+					str += "EL RETIRO DEL PROYECTO DE " + this.get('content.tipo') + " DE SU AUTORIA (" + this.get('content.expdip') + ") ";
+				}
+				if(this.get('content.codMovi') == 23) // Modificacion de Proyecto
+				{
+					str += "LA MODIFICACION DEL PROYECTO DE  "+this.get('content.tipo')+" DE SU AUTORIA ";
+				}
+			}
+
+			if(this.get('content.texto'))
+			{
+				str += this.get('content.texto');
+			}
+
+			return str;
+		}
+
+	}.property('content.codMovi', 'content.auxFechaMovi', 'content.tipo', 'content.expdip', 'content.texto'),
+	hayVariosFirmantes: function(){
+		if(this.get('content.firmantes'))
+		{		
+			if(this.get('content.firmantes').length > 1)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}.property('content.firmantes'),
+	proyectoConMovimiento: function(){		
+		if(this.get('content.proy'))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}.property('content.proy')
+});
