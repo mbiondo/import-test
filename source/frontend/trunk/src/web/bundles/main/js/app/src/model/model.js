@@ -613,7 +613,9 @@ App.Expediente = Em.Object.extend({
 
         this.set('giro', giros);
 
+
         if(this.get('autoridades') && this.get('autoridades').length > 0){
+        	
             orden = 1;
             
             var fs = [];
@@ -675,7 +677,7 @@ App.Expediente = Em.Object.extend({
             }, this);
         }
 
-        if (this.get('firmantes'))
+        if (this.get('oldAutoridades'))
         {
         	//TODO ver id firmantes
             /*this.get('firmantes').forEach(function (firmante) {
