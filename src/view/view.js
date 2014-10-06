@@ -7482,7 +7482,6 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.get('content').normalize();
 			//this.get('content').desNormalize();
 			this.set('content.expdipT', this.get('content.expdipT').id);
-
 			this.get('content').addObserver('createSuccess', this, this.createSucceeded);
 			this.get('content').create();
 		}else{
@@ -7602,10 +7601,10 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			/*App.set('expedienteConsultaController.content', this.get('content'));
 			fn = function() {
-							if (App.get('expedienteConsultaController.loaded')) {
-								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
-								App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
-							}
+				if (App.get('expedienteConsultaController.loaded')) {
+					App.get('expedienteConsultaController').removeObserver('loaded', this, fn);
+					App.get('router').transitionTo('expedientes.expedienteConsulta.indexSubRoute', expediente);
+				}
 			};
 			App.get('expedienteConsultaController').addObserver('loaded', this, fn);
 			App.get('expedienteConsultaController').load();			
@@ -7982,13 +7981,13 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		if (tipo == '') {
 			App.get('firmantesController').set('loaded', false);
-			this.get('content').set('autoridades', []);	
+			//this.get('content').set('autoridades', []);	
 			App.get('firmantesController').set('content', []);
 			App.get('firmantesController').set('loaded', true);
 		} else {
 			if(App.get('firmantesController.tipo') != tipo)
 			{
-				this.get('content').set('autoridades', []);
+				//this.get('content').set('autoridades', []);
 				App.get('firmantesController').set('tipo', 'pap/' + tipo);
 				App.get('firmantesController').load();					
 			}
