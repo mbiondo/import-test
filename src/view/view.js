@@ -781,7 +781,7 @@ App.ListFilterView = Ember.View.extend({
 	puedeExportar: false,
 	filterTextChanged: false,
 	delayFilter: 500,
-
+	mostrarTodo: false,
 
 	didInsertElement: function(){
 		this._super();
@@ -840,12 +840,22 @@ App.ListFilterView = Ember.View.extend({
 			max = filtered.length;
 			this.set('mostrarMasEnabled', false);
 		} else {
-			this.set('mostrarMasEnabled', true);
+			if(this.get('mostrarTodo') == false)
+			{
+				this.set('mostrarMasEnabled', true);
+			}
 		}
 
 		this.set('filterTextChanged', false);
 		
-		return filtered.slice(0, this.get('totalRecords'));
+		if(this.get('mostrarTodo') == true)
+		{
+			return filtered;
+		}
+		else
+		{
+			return filtered.slice(0, this.get('totalRecords'));
+		}
 	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged'),
 	
 	updateScroll: function () {
@@ -6247,6 +6257,7 @@ App.PieGraphView = Ember.View.extend({
 	attributeBindings: ['title', 'name', 'content', 'categories'],
 	pointFormat: '{point.y}',
 	type: 'pie',
+	labelFormat: '{point.percentage:.1f} %',
 
 	redrawChart: function () {
 		this.$().highcharts({
@@ -6270,7 +6281,8 @@ App.PieGraphView = Ember.View.extend({
 						enabled: true,
 						color: '#000000',
 						connectorColor: '#000000',
-		 				format: '{point.percentage:.1f} %',
+		 				//format: '{point.percentage:.1f} %',
+		 				format: this.get('labelFormat'),
 					},
 					showInLegend: true
 				}
