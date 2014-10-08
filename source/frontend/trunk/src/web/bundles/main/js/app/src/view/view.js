@@ -9214,6 +9214,7 @@ App.ComisionesListadoView = Ember.View.extend({
 App.ComisionesListView = App.ListFilterView.extend({
 	itemViewClass: App.ComisionesListItemView,
 	columnas: ['Id','Nombre','Ver Comisión'],
+	puedeExportar: true,
 });
 
 App.ComisionesConsultaView = Ember.View.extend({
@@ -9230,6 +9231,7 @@ App.ComisionesConsultaListItemView = Ember.View.extend({
 App.ComisionesConsultaListView = App.ListFilterView.extend({
 	itemViewClass: App.ComisionesConsultaListItemView,
 	columnas: ['Cargo','Tipo','Diputado /a','Bloque','Fecha Inicio Mandato','Fecha Fin Mandato'],
+	puedeExportar: true,
 });
 
 
