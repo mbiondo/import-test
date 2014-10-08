@@ -3965,6 +3965,28 @@ App.TurnosController = App.RestController.extend({
 
 	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora', 'arrangedContent.@each.orden').cacheable(),
 
+	proximosTurnos: function () {
+
+		var turnosDesBloqueados = this.get('arrangedContent').filter(function (turno) {
+			return !turno.get('bloqueado');
+		});
+
+		return turnosDesBloqueados.slice(0,3);
+
+	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora', 'arrangedContent.@each.orden').cacheable(),
+
+	proximosTurnosSinProximo: function () {
+
+		var turnosDesBloqueados = this.get('arrangedContent').filter(function (turno) {
+			return !turno.get('bloqueado');
+		});
+
+		return turnosDesBloqueados.slice(1,4);
+
+	}.property('arrangedContent.@each.bloqueado', 'arrangedContent.@each.hora', 'arrangedContent.@each.orden').cacheable(),
+	
+
+
 	init : function () {
 		this._super();
 		this.set('timer', App.Timer.create());
