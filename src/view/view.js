@@ -11483,6 +11483,8 @@ App.PedidoConsultaView = Ember.View.extend({
 		audit.set('objeto', this.get('content').constructor.toString());
 		audit.set('objetoId', this.get('content').id);
 		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+		audit.set('json', this.get('respuesta').getJson());
+		audit.set('nombre', "Respuesta Informacion Parlamentaria");
 		audit.create();		
 	},
 
@@ -11602,12 +11604,14 @@ App.PedidoConsultaView = Ember.View.extend({
 		if (this.get('revisoSuccess') == true) 
 		{
 			var audit = App.Audit.extend(App.Savable).create();
-			audit.set('tipo', 'Test');
+			audit.set('tipo', 'IP');
 			audit.set('accion', 'Revisado');
 			audit.set('usuario', App.get('userController.user.cuil'));
 			audit.set('objeto', this.get('content').constructor.toString());
 			audit.set('objetoId', this.get('content').id);
 			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.set('json', this.get('content').getJson());
+			audit.set('nombre', "Revisado Informacion parlamentaria");
 			audit.create();	
 
 			$.jGrowl('Se ha revisado la solicitud!', { life: 5000 });
@@ -11649,6 +11653,28 @@ App.PedidoConsultaView = Ember.View.extend({
 		}
 
 		return puedeEditar;
+	}.property('App.userController.user'),
+
+	puedeAsignarDepartamento: function () {
+		var puedeAsignar = false;
+
+		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT'))
+		{
+			puedeAsignar = true;
+		}
+
+		return puedeAsignar;
+	}.property('App.userController.user'),
+
+	puedeAsignar: function () {
+		var puedeAsignar = false;
+
+		if(App.get('userController').hasRole('ROLE_IP_EDITOR') || App.get('userController').hasRole('ROLE_IP_DEPARTAMENTO_EDIT') || App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT'))
+		{
+			puedeAsignar = true;
+		}
+
+		return puedeAsignar;
 	}.property('App.userController.user'),
 
 	reenviarRespuesta: function(){
