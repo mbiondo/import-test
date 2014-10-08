@@ -425,33 +425,33 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 13,
 			titulo: 'Información Parlamentaria',
-			url: '#/informacionparlamentaria/solicitudes/listado',
+			url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
 			icono: 'ic ic-tickets',
-			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER']],
+			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Solicitudes',
-					url: '#/informacionparlamentaria/solicitudes/listado',
-					roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER']],
+					url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
+					roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Listado',
 							url: '#/informacionparlamentaria/solicitudes/listado',
-							roles: [['ROLE_INFORMACION_PARLAMENTARIA']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_EDITOR'], ['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_DEPARTAMENTO'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT'],['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_DEPARTAMENTO_EDIT']], 
 						}),
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Ingresadas por mi',
 							url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
-							roles: [['ROLE_USER'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_USER'], ['ROLE_DIPUTADO'],['ROLE_INFORMACION_PARLAMENTARIA'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 						}),	
 						App.MenuItem.create({
 							id: 2,
 							titulo: 'Nueva solicitud',
 							url: '#/informacionparlamentaria/solicitudes/nueva',
-							roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_EDITOR'], ['ROLE_DIPUTADO'], ['ROLE_USER'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 						}),
 					],
 				}),
