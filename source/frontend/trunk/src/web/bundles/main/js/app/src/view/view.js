@@ -7716,7 +7716,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	cancelar: function() {
 		App.confirmActionController.setProperties({
 			title: 'Confirmar cancelación de creación de Proyecto',
-			message: '¿Confirma que desea salir? Se perderan los datos no guardados.',
+			message: '¿Confirma que desea cancelar el proyecto? Todos los datos cargados se perderán.',
 			success: null,
 		});
 		
