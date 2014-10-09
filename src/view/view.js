@@ -7316,6 +7316,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	expTipo: '',
 	expedienteExist: false,
 	pubnro: null,
+	reproduceExpMode: false,
 
 	tipos: ['LEY', 'LEY EN REVISION', 'RESOLUCION', 'DECLARACION', 'MENSAJE'],
 
@@ -7563,6 +7564,8 @@ App.CrearExpedienteView = Ember.View.extend({
 				
 			
 		if (this.get('content.createSuccess')) {
+
+			this.set('reproduceExpMode', false);
 			var expediente = this.get('content');
 					
 			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000 });
@@ -7866,6 +7869,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	didInsertElement: function() {
 		this._super();
+
 		var _self = this;
 		
 		var chequearContent = [];
@@ -8121,6 +8125,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
  				 			_self.set('content.iniciado', ex.iniciado);
  				 			_self.set('content.tipo', ex.tipo);
  				 			_self.set('content.ReproduceExp', ex.expdip);
+ 				 			_self.set('parentView.reproduceExpMode', true);
  				 		});						
 					}
 				}

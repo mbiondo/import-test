@@ -6148,7 +6148,7 @@ App.MEExpedienteMovimientoController = Ember.ObjectController.extend({
 
 
 App.DepartamentosController = App.RestController.extend({
-	url: 'departamento',
+	url: 'departamentos',
 	type: App.Departamento,
 
 	createObject: function (data, save) {
