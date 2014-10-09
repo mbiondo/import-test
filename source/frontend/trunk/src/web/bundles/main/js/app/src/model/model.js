@@ -2660,7 +2660,7 @@ App.ExpedienteMovimiento = Ember.Object.extend({
 });
 
 App.Departamento = Ember.Object.extend({
-	url: 'departamento/',
+	url: 'departamentos/',
 	useApi: false,
 
 	id: '',
