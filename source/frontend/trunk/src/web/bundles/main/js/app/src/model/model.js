@@ -2374,6 +2374,7 @@ App.ProyectoQuery = Em.Object.extend({
 		'pageNumber',
 		'pageSize',
 		'firmantes',
+		'nombre',
 	],
 
 	comisiones: function () {

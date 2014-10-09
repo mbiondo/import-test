@@ -966,7 +966,7 @@ App.UserController = Em.Controller.extend({
 		var cq = [];
 		if (this.get('user.comisiones')) {
 			this.get('user.comisiones').forEach(function (comision) {
-				cq.pushObject(App.ExpedienteQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre, editable: false}));
+				cq.pushObject(App.ProyectoQuery.extend(App.Savable).create({nombre: comision.nombre, comision: comision.nombre, editable: false}));
 			});
 		}
 		return cq;
@@ -5173,7 +5173,7 @@ App.SearchController = App.RestController.extend({
 
 	createObject: function (data, save) {
 		save = save || false;
-		item = App.ExpedienteQuery.extend(App.Savable).create(data);
+		item = App.ProyectoQuery.extend(App.Savable).create(data);
 		item.setProperties(data);
 		this.addObject(item);
 	},	
