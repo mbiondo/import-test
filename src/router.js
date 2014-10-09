@@ -2455,7 +2455,7 @@ App.Router =  Em.Router.extend({
 								}
 							}
 						} else {
-							if (!App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT')) {
+							if (!App.get('userController').hasRole('ROLE_INFORMACION_PARLAMENTARIA_EDIT') && !App.get('userController').hasRole('ROLE_IP_EDITOR')) {
 								App.pedidosController.set('url', 'pedidos/' + App.get('userController').get('user.cuil'));
 							}
 						}

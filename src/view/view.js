@@ -11285,10 +11285,10 @@ App.CrearPedidoView = Ember.View.extend({
 
 		//App.get('uploaderController').fileChange();
 		
-		App.misPedidosController = App.MisPedidosController.create({cuil: App.get('userController.user.cuil')});
+		App.misPedidosController = App.MisPedidosController.create({cuil: App.get('userController.user.cuil'), loaded: false});
 
 		fn = function() {
-			if(App.get('misPedidosController.loaded'))
+			if (App.get('misPedidosController.loaded'))
 			{
 				App.get('misPedidosController').removeObserver('loaded', this, fn);	
 				App.get('router').transitionTo('root.informacionparlamentaria.pedidos.misPedidos');
