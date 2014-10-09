@@ -755,7 +755,11 @@ App.ListHeaderWithSortView = App.ListHeaderView.extend({
 	ordenarPorCampo: function (campo, asc){
 		// comentado por si despues se quiere usar (cuando se da click a un ordenar,)
 		// $(document).scrollTop($("#Expedientes").offset().top);
-		this.get('sortablController').set('sortProperties', [campo]);
+		if (Ember.isArray(campo)) {
+			this.get('sortablController').set('sortProperties', campo);
+		} else {
+			this.get('sortablController').set('sortProperties', [campo]);
+		}
 		this.get('sortablController').set('sortAscending', asc);
 
 	},	
@@ -10485,7 +10489,7 @@ App.ProyectosListView = App.ListFilterWithSortView.extend({
 	}.property('content.@each', 'content.@each.seleccionado'),
 	columnas: [
 		//App.SortableColumn.create({nombre: ''}), 
-		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: 'expdip'}), 
+		App.SortableColumn.create({nombre: 'Nro. de expediente', campo: ['expdipA', 'expdipN']}), 
 		App.SortableColumn.create({nombre: 'Tipo', campo: 'tipo'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'titulo'}),
 		App.SortableColumn.create({nombre: 'Firmantes', campo: 'firmantesLabel'}),
