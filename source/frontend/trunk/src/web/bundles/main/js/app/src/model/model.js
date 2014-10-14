@@ -2588,7 +2588,7 @@ App.Pedido = Ember.Object.extend({
 			notification.set('objectId', this.get('id'));
 			notification.set('link', "/#/informacionparlamentaria/solicitudes/solicitud/"+this.get('id')+"/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha creado la Solicitud " + this.get('idPedido'));
+			notification.set('mensaje', "Se ha creado la Solicitud " + this.get('idPedido') + "-" + moment().format('YYYY'));
 
 			notification.create();
 

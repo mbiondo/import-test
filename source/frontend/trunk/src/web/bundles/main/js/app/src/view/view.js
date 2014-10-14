@@ -830,10 +830,15 @@ App.ListFilterView = Ember.View.extend({
 
 		if(this.get('content'))
 		{
-			filtered = this.get('content').filter(function(item){
-				return regex.test(item.get('label').toLowerCase());
-//				return regex.test(item.get('label'));
-			});
+			if (this.get('filterText') || this.get('filterListText')){
+				filtered = this.get('content').filter(function(item){
+					return regex.test(item.get('label').toLowerCase());
+	//				return regex.test(item.get('label'));
+				});
+			} else {
+				filtered = this.get('content');
+			}
+			console.log(filtered);
 		}
 
 		if (!filtered)
