@@ -3019,12 +3019,14 @@ App.ReunionesSinParteController = App.RestController.extend({
 	init : function () {
 		this._super();
 	},
+
 	loadSucceeded: function(data){
-		if(data.length > 1)
+		if(data.length > 0)
 		{
 			this._super(data);
 		}
 	},	
+
 	createObject: function (data, save) {
 		save = save || false;
 		item = App.Reunion.create(data);
@@ -3055,6 +3057,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 		}
 		return reuniones;
 	}.property('content'),	
+
 	reunionesFilterByComisiones: function(data){
 		var reuniones = [];
 		var comisiones_input = [];
@@ -3066,7 +3069,9 @@ App.ReunionesSinParteController = App.RestController.extend({
 		else
 		{
 			comisiones = $.map(App.get('userController.user.comisiones'), function(comision){ return comision; });			
-			comisiones_input.push(comisiones);
+			comisiones.forEach(function (c) {
+				comisiones_input.push(c);
+			})
 		}
 
 		this.get('reuniones').forEach(function (reunion){
@@ -3082,14 +3087,14 @@ App.ReunionesSinParteController = App.RestController.extend({
 				});
 			});
 		});
-
 		return reuniones;
 	},
+
 	comisionChange: function(){
 		var comision 	= this.get('comision');
 		var reuniones 	= this.reunionesFilterByComisiones(comision);
 		
-		this.set('listado', reuniones);  
+		this.set('listado', reuniones); 
 
 	}.observes('comision'),
 });
