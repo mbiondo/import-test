@@ -9780,6 +9780,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	noDocument: false,
 	withGiros: true,
 
+	classNamesBindings: ['reproducido:reproduce'],
+
 	mostrarCDFecha: function () {
 		var regex = RegExp('MENSAJE');
 		if (this.get('controller.content.tipo') == "LEY EN REVISION" || regex.test(this.get('controller.content.tipo'))) {
@@ -9813,6 +9815,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 
 		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + this.get('controller.content.expdip')}));
 		this.get('timeLineController').load();	
+
+		if (this.get('controller.content.ReproduceExp')) {
+			this.$().addClass('reproduce');
+		}
 	},
 
 	borrar: function () {
