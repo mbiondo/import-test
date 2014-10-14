@@ -3435,7 +3435,7 @@ App.CitacionCrearController = Em.Object.extend({
 		//CreateAt
 		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
 
-		var message = "La citación a la reunión de @@comisiones@@ ha sido confirmada para el día @@fecha@@ en la sala @@sala@@.";
+		var message = "La citación a la reunión de @@comisiones@@ ha sido confirmada para el día @@fecha@@h en la sala @@sala@@.";
 
 		message = message.replace("@@fecha@@", moment(this.get('content.start'), 'YYYY-MM-DD HH:mm:ss').format('dddd') + " " + moment(this.get('content.start'), 'YYYY-MM-DD HH:mm:ss').format('LL') + " a las " + this.get('content.start').substring(this.get('content.start').indexOf(' ')));
 
