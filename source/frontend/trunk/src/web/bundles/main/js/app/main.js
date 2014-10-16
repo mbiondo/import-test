@@ -229,14 +229,14 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER', 'ROLE_DIRECCION_COMISIONES']],
+							roles: [['ROLE_USER', 'ROLE_DIRECCION_COMISIONES'],['ROLE_USER', 'ROLE_DIPUTADO']],
 							titulo: 'Agenda de Comisiones',
 							url: '#/comisiones/citaciones',
 						}),
 						App.MenuItem.create({
 							id: 1,
 							titulo: 'Crear Citación',
-							roles: [['ROLE_USER', 'ROLE_COMISIONES']],
+							roles: [['ROLE_USER', 'ROLE_COMISIONES'],['ROLE_USER', 'ROLE_DIPUTADO']],
 							url: '#/comisiones/citaciones/citacion/crear',
 						}),					
 					]
@@ -244,7 +244,7 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					id: 1,
 					titulo: 'Reuniones',
-					roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_USER', 'ROLE_COMISIONES'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW'] ],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
