@@ -291,7 +291,7 @@ App.menuController = App.MenuController.create({
 					id: 4,
 					titulo: 'Comisiones',
 					url: '',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_SEC_PARL_VIEW'], ['ROLE_COMISIONES']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
