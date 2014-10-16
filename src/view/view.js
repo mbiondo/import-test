@@ -3415,7 +3415,7 @@ App.ComfirmarCitacionView = App.ModalView.extend({
 App.CancelarCitacionView = App.ModalView.extend({
 	templateName: 'citacion-cancelar',
 	motivoSeleccionado: '',
-	motivos: ['Motivo 1', 'Motivo 2', 'Motivo 3'],
+	motivos: ['Sin Motivo', 'Falta de Quorum', 'Otro'],
 	
 	callback: function(opts, event) {
 
