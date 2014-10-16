@@ -11252,6 +11252,8 @@ App.CrearPedidoView = Ember.View.extend({
 
 				item.set('fechaCreacion', moment().format('YYYY-MM-DD HH:mm:ss'));
 
+				item.set('auditNombre', "Solicitud creada");
+
 				item.addObserver('createSuccess', item, item.createSucceeded);
 				
 				item.create();
@@ -11437,6 +11439,9 @@ App.PedidoConsultaView = Ember.View.extend({
 		if (App.get('confirmActionController.success'))
 		{
 			this.set('tipoModificacion', 'asignar');
+
+			this.get('content').set('auditNombre', 'Solicitud asignada');
+
 			this.guardar();
 		}
 	},
@@ -11452,9 +11457,14 @@ App.PedidoConsultaView = Ember.View.extend({
 			this.respuestaCrear();
 		}
 
+
+
 	},
 
 	guardar: function () {
+		if(this.get('content').get('auditNombre') == "PedidoIP"){
+			this.get('content').set('auditNombre', 'Solicitud editada');
+		}
 		this.get('content').normalize();
 		this.get('content').addObserver('saveSuccess', this, this.saveSuccessed);
 		this.get('content').save();
@@ -11518,7 +11528,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		audit.set('objetoId', this.get('content').id);
 		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 		audit.set('json', this.get('respuesta').getJson());
-		audit.set('nombre', "Respuesta Informacion Parlamentaria");
+		audit.set('nombre', "Respuesta a la solicitud");
 		audit.create();		
 	},
 
@@ -11645,7 +11655,7 @@ App.PedidoConsultaView = Ember.View.extend({
 			audit.set('objetoId', this.get('content').id);
 			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 			audit.set('json', this.get('content').getJson());
-			audit.set('nombre', "Revisado Informacion parlamentaria");
+			audit.set('nombre', "Solicitud revisada");
 			audit.create();	
 
 			$.jGrowl('Se ha revisado la solicitud!', { life: 5000 });
@@ -11717,6 +11727,7 @@ App.PedidoConsultaView = Ember.View.extend({
 
 	finalizar: function () {
 		this.set('content.resuelto', true);
+		this.get('content').set('auditNombre', 'Solicitud finalizada');
 		this.guardar();
 	},
 
