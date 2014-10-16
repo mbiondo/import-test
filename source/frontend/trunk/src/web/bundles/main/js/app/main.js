@@ -229,7 +229,7 @@ App.menuController = App.MenuController.create({
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_USER']],
+							roles: [['ROLE_USER', 'ROLE_DIRECCION_COMISIONES']],
 							titulo: 'Agenda de Comisiones',
 							url: '#/comisiones/citaciones',
 						}),
