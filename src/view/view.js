@@ -999,7 +999,7 @@ App.CalendarListView = App.ListFilterView.extend({
 			{
 				filtered = this.get('content').filter(function(item){
 					return regex.test(item.get('label').toLowerCase());
-				});
+				});				
 			}
 
 			if (!filtered)
@@ -1007,7 +1007,21 @@ App.CalendarListView = App.ListFilterView.extend({
 		} else {
 			filtered = this.get('content');
 		}
-
+		/*
+		if(App.get('userController').hasRole('ROLE_DIPUTADO')){
+			filtered = filtered.filter(function(item){
+				var resultado = false;
+				App.get('userController').user.comisiones.forEach(function (comision) {
+					item.comisiones.forEach(function (comisionItem) {
+						if(!resultado){
+							resultado = (comision.nombre == comisionItem.nombre);
+						}
+					});									
+				});
+				return resultado;		
+			});
+		}
+		*/
 		var max = this.get('totalRecords');
 		if (filtered.length <= max) {
 			max = filtered.length;
