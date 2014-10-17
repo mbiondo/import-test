@@ -1034,6 +1034,17 @@ App.CalendarListView = App.ListFilterView.extend({
 		
 		return filtered.slice(0, this.get('totalRecords'));
 	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged'),
+	highlightText: function(){
+		Ember.run.next(function(){
+		// High Light Words
+		// Agrega la clase .highlight, modificar el css si se quiere cambiar el color de fondo
+			$('table').removeHighlight();
+
+			if(_self.get('filterText') && _self.get('filterText').length > 0){
+				$('td').highlight(_self.get('filterText'));
+			}
+		});
+	}.observes('filterTextChanged'),
 
 });
 
