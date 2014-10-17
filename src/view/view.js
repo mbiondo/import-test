@@ -13378,9 +13378,22 @@ App.CrearODSinDictamenView = Ember.View.extend({
 	createSuccess: function () {
 		if (this.get('controller.content.createSuccess')) {
 			this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
+			 if (!App.get('ordenesDelDiaController'))
+			 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
+
+			 fn = function() {
+				App.get('ordenesDelDiaController').removeObserver('loaded', this, fn);	
+				App.get('router').transitionTo('root.ordenDelDia.listadoOD');
+			 };
+
+			 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
+			 App.get('ordenesDelDiaController').load();
+
+			 $.jGrowl('Se ha creado con exito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
 		} else {
 			if (Ember.typeOf(this.get('controller.content.createSuccess')) == "boolean") {
 				this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
+				$.jGrowl('Ocurrio un error al crear la orden del día', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger' });
 			} 
 		}
 	},
