@@ -350,7 +350,14 @@ App.menuController = App.MenuController.create({
 							url: '#/OD/dictamenes',
 //							roles: [['ROLE_USER', 'ROLE_LABOR_PARLAMENTARIA', 'ROLE_LABOR_PARLAMENTARIA_EDIT'], ['ROLE_USER', 'ROLE_SEC_PARL_VIEW']],
 							roles: [['ROLE_OD_EDIT'], ['ROLE_SEC_PARL_VIEW']]
-						}),							
+						}),	
+
+						App.MenuItem.create({
+							id: 2,
+							titulo: 'Crear OD',
+							url: '#/OD/crear',
+							roles: [['ROLE_OD_EDIT']]
+						}),												
 					],
 				}),				
 			]			

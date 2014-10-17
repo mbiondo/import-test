@@ -13354,3 +13354,9 @@ App.ProyectosSearchView = Em.View.extend({
 		}
 	}.observes('palabra')
 });
+
+
+App.CrearODSinDictamenView = Ember.View.extend({
+	templateName: 'crear-od-sin-dictamen',
+	
+});
