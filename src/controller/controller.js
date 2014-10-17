@@ -99,6 +99,8 @@ App.Savable = Ember.Mixin.create({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
+		
 		this.set('loaded', false);
 		this.set('loading', true);
 		var url = this.get('url');
@@ -825,7 +827,10 @@ App.UserController = Em.Controller.extend({
 					App.get('notificacionesFiltradasController').load();
 					
 					App.advanceReadiness();	
-					$('#loadingScreen').remove();				
+					$('#loadingScreen').remove();		
+					if (_self.get('transitionTo')) {
+						window.location = '#/' + _self.get('transitionTo');	
+					}
 					//delete $.ajaxSettings.headers["Authorization"];
 				});
 			},
@@ -940,7 +945,7 @@ App.UserController = Em.Controller.extend({
 		if (this.get('user'))
 			return $.map(this.get('user.rolesmerged'), function (value, key) { return value.get('nombre'); })
 		else
-			return null;
+			return [];
 	}.property('user'),
 
 	isLogin: function () {
@@ -1136,22 +1141,24 @@ App.RestController = Em.ArrayController.extend({
 	},
 
 	load: function() {
-		this.set('loaded', false);
-		this.set('loading', true);
-		var url =  this.get('url');
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
+		if (App.get('userController.user')) {
+			this.set('loaded', false);
+			this.set('loading', true);
+			var url =  this.get('url');
+			if (this.get('useApi'))
+				url = App.get('apiController').get('url') + url;
 
-			
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'json',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted,
-				crossDomain: 'true',
-			});
+				
+			if ( url ) {
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					context: this,
+					success: this.loadSucceeded,
+					complete: this.loadCompleted,
+					crossDomain: 'true',
+				});
+			}
 		}
 	},
 
@@ -1646,16 +1653,18 @@ App.VisitaGuiadaConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
-		this.set('loaded', false);
+		if (App.get('userController.user')) {
+			this.set('loaded', false);
 
-		$.ajax({
-			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
-			type: 'GET',
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});
+			$.ajax({
+				url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+		}
 	},
 				
 	loadSucceeded: function(data) {
@@ -1973,15 +1982,17 @@ App.NotificacionTipoController = Ember.Object.extend({
 	},
 	
 	load: function () {
-		this.set('loaded', false);
-		$.ajax({
-			url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
-			type: 'GET',
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});
+		if (App.get('userController.user')) {
+			this.set('loaded', false);
+			$.ajax({
+				url:  (this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+		}
 	},
 				
 	loadSucceeded: function(data) {
@@ -2172,28 +2183,30 @@ App.ExpedientesController = App.RestController.extend({
 	},
 
 	load: function() {
-		this.set('loaded', false);
-		var url =  this.get('url');
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
+		if (App.get('userController.user')) {		
+			this.set('loaded', false);
+			var url =  this.get('url');
+			if (this.get('useApi'))
+				url = App.get('apiController').get('url') + url;
 
-		url = url + "?pageNumber=" + this.get('pageNumber') + "&pageSize=" + this.get('pageSize');
+			url = url + "?pageNumber=" + this.get('pageNumber') + "&pageSize=" + this.get('pageSize');
 
 
-		if (this.get('query')) 
-		{
-			url += this.get('query').get('parameters');
-		}
+			if (this.get('query')) 
+			{
+				url += this.get('query').get('parameters');
+			}
 
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'JSON',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted,
-			});
+			if ( url ) {
+				$.ajax({
+					url: url,
+					dataType: 'JSON',
+					context: this,
+					success: this.loadSucceeded,
+					complete: this.loadCompleted,
+				});
 
+			}
 		}
 	},
 
@@ -2318,15 +2331,17 @@ App.EnvioArchivoConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
-		this.set('loaded', false);
-		$.ajax({
-			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
-			type: 'GET',
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});
+		if (App.get('userController.user')) {		
+			this.set('loaded', false);
+			$.ajax({
+				url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+		}
 	},
 				
 		loadSucceeded: function(data) {
@@ -2356,16 +2371,18 @@ App.CitacionesController = App.RestController.extend({
 	},
 	
 	load: function() {
-		var url = (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('anio')));
-		if ( url ) {
-			$.ajax({
-				url: url,
-				dataType: 'JSON',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted,
-			});
+		if (App.get('userController.user')) {		
+			var url = (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('anio')));
+			if ( url ) {
+				$.ajax({
+					url: url,
+					dataType: 'JSON',
+					context: this,
+					success: this.loadSucceeded,
+					complete: this.loadCompleted,
+				});
 
+			}
 		}
 	},	
 	
@@ -2441,12 +2458,14 @@ App.CaracterDespachoController = App.RestController.extend({
 	},
 
 	load: function() {
-		this.set('content', []);
-		for (var i = 0; i < 10; i++) {
-			item = App.CaracterDespacho.create();
-			this.addObject(item);
-		};
-		this.set('loaded', true);
+		if (App.get('userController.user')) {		
+			this.set('content', []);
+			for (var i = 0; i < 10; i++) {
+				item = App.CaracterDespacho.create();
+				this.addObject(item);
+			};
+			this.set('loaded', true);
+		}
 	},
 
 	loadSucceeded: function(data){
@@ -2523,18 +2542,20 @@ App.FirmantesController = App.RestController.extend({
 		this._super();
 	},
 
-	load: function () {		
-		_self = this;
-		this.set('loaded', false);
-		if (this.get('tipo') != '') {
-			$.ajax({
-				url: (App.get('apiController').get('url') + this.get('tipo') + '/' + this.get('url')),
-				type: 'GET',
-				dataType: 'JSON',
-				context: this,
-				success: this.loadSucceeded,
-				complete: this.loadCompleted
-			});
+	load: function () {	
+		if (App.get('userController.user')) {	
+			_self = this;
+			this.set('loaded', false);
+			if (this.get('tipo') != '') {
+				$.ajax({
+					url: (App.get('apiController').get('url') + this.get('tipo') + '/' + this.get('url')),
+					type: 'GET',
+					dataType: 'JSON',
+					context: this,
+					success: this.loadSucceeded,
+					complete: this.loadCompleted
+				});
+			}
 		}
 
 	},	
@@ -2727,16 +2748,18 @@ App.OrdenDelDiaController = Ember.Object.extend({
 	},
 
 	load: function () {
-		_self = this;
-		this.set('loaded', false);
-		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
-			type: 'GET',
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted
-		});
+		if (App.get('userController.user')) {
+			_self = this;
+			this.set('loaded', false);
+			$.ajax({
+				url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+				type: 'GET',
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted
+			});
+		}
 	},	
 
 	loadSucceeded: function(data) {
@@ -2771,6 +2794,7 @@ App.DictamenConsultaController = Ember.Object.extend({
 	},
 
 	load: function () {
+		if (!App.get('userController.user')) return;
 		_self = this;
 		this.set('loaded', false);
 		$.ajax({
@@ -2815,6 +2839,7 @@ App.DictamenController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 		$.ajax({
 			url: (App.get('apiController').get('url') + this.get('url')).fmt(encodeURIComponent(this.get('content.id'))),
@@ -2847,6 +2872,7 @@ App.ExpedienteConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 		$.ajax({
 			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
@@ -3137,6 +3163,7 @@ App.ReunionConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 		$.ajax({
 			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
@@ -3180,6 +3207,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 		$.ajax({
 			url:  (App.get('apiController').get('url') + this.get('url') + '/%@').fmt(encodeURIComponent(this.get('content').get('id'))),
@@ -4869,6 +4897,7 @@ App.EstadisticasController = Ember.Object.extend({
 	loaded: false,
 
 	load: function () {
+		if (!App.get('userController.user')) return;
 		if (this.get('sesion')) {
 			this.set('loaded', false);
 			_self = this;
@@ -5033,6 +5062,7 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 	}.property('ordenesDelDiaController.content'),
 
 	load: function () {
+		if (!App.get('userController.user')) return;
 
 		this.set('content', App.PlanDeLaborTentativo.extend(App.Savable).create({items: [], estado: 0}));
 
@@ -5156,6 +5186,8 @@ App.SearchController = App.RestController.extend({
 	type: App.ExpedienteQuery,
 
 	load: function() {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 		var url =  this.get('url');
 
@@ -5238,6 +5270,9 @@ App.TPsController = App.RestController.extend({
 	sortAscending: false,	
 
 	load: function () {
+
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 		var url =  this.get('url') + '/' + this.get('periodo');
 		if (this.get('useApi'))
@@ -5511,6 +5546,7 @@ App.ProyectosController = App.RestController.extend({
 	},
 
 	load: function() {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 
 		var getJSON = {};
@@ -5799,6 +5835,7 @@ App.PedidoRespuestaController = App.RestController.extend({
 	loaded: false,
 
 	load: function() {
+		if (!App.get('userController.user')) return;
 		this.set('loaded', false);
 
 		//url = this.get('url') + "/" + this.get('pedido');
@@ -5896,6 +5933,8 @@ App.MisPedidosController = App.PedidosController.extend({
 	cuil: '',
 
 	load: function() {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 
 		url = this.get('url') + "/" + this.get('cuil');
@@ -5926,6 +5965,8 @@ App.PedidoConsultaController = Ember.Object.extend({
 	},
 	
 	load: function () {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 		
 		this.set('loaded', false);
@@ -6112,6 +6153,8 @@ App.MisVisitasGuiadasController = App.VisitasGuiadasController.extend({
 	cuil: '',
 
 	load: function() {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 
 		url = this.get('url') + "/" + this.get('cuil');
@@ -6219,6 +6262,8 @@ App.ProyectosMEController = App.RestController.extend({
 	},
 
 	load: function() {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 
 		var getJSON = {};
@@ -6329,6 +6374,8 @@ App.ExpedientesNewController = App.RestController.extend({
 	},
 
 	load: function() {
+		if (!App.get('userController.user')) return;
+
 		this.set('loaded', false);
 
 		var getJSON = {};
@@ -6401,4 +6448,9 @@ App.ExpedientesNewController = App.RestController.extend({
 
 		this.addObject(item);
 	},	
+});
+
+
+App.CrearODSinDictamenController = Ember.ObjectController.create({
+
 });
