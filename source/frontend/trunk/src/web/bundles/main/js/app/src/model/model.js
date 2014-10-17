@@ -972,7 +972,15 @@ App.PlanDeLabor = Em.Object.extend({
 	}.property('sumario'),
 });
 
-App.OrdenDelDia = Em.Object.extend({});
+App.OrdenDelDia = Em.Object.extend({
+	url: 'dic/odSinParte',
+	useApi: true,
+	dictamen: null,
+	
+	serializable: [
+		'dictamen',
+	],
+});
 
 App.OrdeDelDia = Em.Object.extend({
 	id: '',

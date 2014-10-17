@@ -6451,6 +6451,6 @@ App.ExpedientesNewController = App.RestController.extend({
 });
 
 
-App.CrearODSinDictamenController = Ember.ObjectController.create({
+App.CrearODSinDictamenController = Ember.ObjectController.extend({
 
 });
