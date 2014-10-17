@@ -13397,4 +13397,18 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			} 
 		}
 	},
+
+	removeObject: function (object) {
+		this.get('controller.content.dictamen.proyectos').removeObject(object);
+	},
+});
+
+
+App.ProyectoItemListWithDeleteView = App.tpConsultaProyectoItemListView.extend({
+	templateName: 'tp-consulta-proyecto-item-list-with-delete',
+	tagName: 'li',
+
+	delete: function () {
+		this.get('parentView').removeObject(this.get('content'));
+	},
 });
