@@ -4045,24 +4045,25 @@ App.Router =  Em.Router.extend({
 			crearOD: Ember.Route.extend({
 				route: "/crear",
 
-				deserialize: function(router, params) {
-					return App.OrdeDelDia.extend(App.Savable).create({
-						subclass: "OD",
-    					camara: "Diputados",
-    					nroGiro: 1,
-    					anioParl: null,
-    					parte: null,
-    					dict_id_orig: 0,
-    					tipo: null,
-    					publicacion: null,
-					})
-				},		
-
 				connectOutlets: function(router, context) {
+					var od = App.OrdenDelDia.extend(App.Savable).create({
+						dictamen: {
+							subclass: "OD",
+	    					camara: "Diputados",
+	    					nroGiro: 1,
+	    					anioParl: null,
+	    					parte: null,
+	    					dict_id_orig: 0,
+	    					tipo: null,
+	    					publicacion: null,
+	    					proyectos: [],
+						},
+					});
+
 					var appController = router.get('applicationController');
 					appController.connectOutlet('help', 'Help');
-					appController.connectOutlet('main', 'crearODSinDictamen', context);
 					appController.connectOutlet('menu', 'subMenu');
+					appController.connectOutlet('main', 'crearODSinDictamen', od);
 					
 					App.get('breadCumbController').set('content', [
 						{titulo: 'Orden del Día', url: '#/comisiones/OD/crear'},

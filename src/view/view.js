@@ -13358,5 +13358,30 @@ App.ProyectosSearchView = Em.View.extend({
 
 App.CrearODSinDictamenView = Ember.View.extend({
 	templateName: 'crear-od-sin-dictamen',
-	
+	fecha: '',
+
+	fechaChanged: function () {
+		this.set('controller.content.dictamen.fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm:ss'));
+	}.observes('fecha'),
+
+	proyectosChanged: function () {
+		if (this.get('controller.content.dictamen.proyectos.firstObject')) {
+			this.set('controller.content.dictamen.id_proy_cab', this.get('controller.content.dictamen.proyectos.firstObject.id'));
+		}
+	}.observes('controller.content.dictamen.proyectos.firstObject'),
+
+	crear: function () {
+		this.get('controller.content').addObserver('createSuccess', this, this.createSuccess);
+		this.get('controller.content').create();
+	},
+
+	createSuccess: function () {
+		if (this.get('controller.content.createSuccess')) {
+			this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
+		} else {
+			if (Ember.typeOf(this.get('controller.content.createSuccess')) == "boolean") {
+				this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
+			} 
+		}
+	},
 });
