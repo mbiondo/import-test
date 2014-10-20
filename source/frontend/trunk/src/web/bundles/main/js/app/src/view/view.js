@@ -10558,6 +10558,26 @@ App.NotificacionItemMiniView = App.NotificacionItemView.extend({
 
 App.ProyectosView = Ember.View.extend({
 	templateName: 'proyectos',
+
+	changeFilterText: function(){
+
+		var childViews = this.get('childViews');
+		var firstChildView = childViews.get('firstObject');
+		var lastChildView = childViews.get('lastObject');
+
+		if(childViews && firstChildView && lastChildView)
+		{
+			if(lastChildView.get('filterText') && lastChildView.get('filterText').length > 0)
+			{
+				if(firstChildView.get('loading') && firstChildView.get('loading') == true)
+				{				
+					lastChildView.set('filterText', '');
+				}	
+			}
+		}
+
+	//}.observes('childViews', 'childViews.@each')
+	}.observes('childViews.lastObject.filterText', 'childViews.firstObject.loading')
 });
 
 App.ProyectoListItemView = Ember.View.extend({
@@ -10764,6 +10784,15 @@ App.ProyectoSearchView = Em.View.extend({
 		this.set('palabras', []);
 		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[]}));
 		this.buscar();
+
+		/*
+		var childView = this.get('parentView').get('childViews')[1];
+
+		if(childView.get('filterText').length > 0)
+		{
+			childView.set('filterText', '');
+		}
+		*/
 	},
 
 	didInsertElement: function () {
@@ -13299,7 +13328,7 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 				}
 				if(this.get('content.codMovi') == 23) // Modificacion de Proyecto
 				{
-					str += "LA MODIFICACION DEL PROYECTO DE  "+this.get('content.tipo')+" DE SU AUTORIA ";
+					str += "LA MODIFICACION DEL PROYECTO DE  "+this.get('content.tipo')+" DE SU AUTORIA. ";
 				}
 			}
 
