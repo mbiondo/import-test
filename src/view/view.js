@@ -2448,12 +2448,24 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 App.CitacionesView = App.ListFilterView.extend({
 	templateName: 'citaciones',
 	comisionesCalendar: true,
+	comisionesCalendarCompleto: false,
+	comisionesCalendarListado: false,
 
 	comisionesCalendarMostrar: function(){
 		this.set('comisionesCalendar', true);
+		this.set('comisionesCalendarCompleto', false);
+		this.set('comisionesCalendarListado', false);
 	},
-	comisionesCalendarOcultar: function(){
+	comisionesCalendarListadoMostrar: function(){
+		this.set('comisionesCalendarListado', true);
+		this.set('comisionesCalendarCompleto', false);
 		this.set('comisionesCalendar', false);
+	},
+
+	comisionesCalendarCompletoMostrar: function(){
+		this.set('comisionesCalendarCompleto', true);
+		this.set('comisionesCalendar', false);
+		this.set('comisionesCalendarListado', false);
 	},
 });
 
@@ -2858,6 +2870,104 @@ App.CalendarTool = Em.View.extend({
 			dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
 			dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
 			hiddenDays: [0,1,5,6], // Oculto los dias "Domingo, Lunes, Viernes, Sábado"
+			buttonText: {
+			 today: 'Hoy',
+			 month: 'Mes',
+			 week: 'Semana',
+			 day: 'Día'
+			},
+			titleFormat: {
+				month: 'MMMM yyyy',
+				week: "dd MMM[ yyyy]{ '&#8212;' dd MMM yyyy}",
+				day: 'd MMM yyyy'
+			},
+			columnFormat: {
+				month: 'ddd',
+				week: "ddd dd/MM",
+				day: 'dddd dd/MM'
+			},
+			minTime: 6,
+			allDayText: 'Todo el día',
+			events: function(start, end, callback) {
+				
+				var fn = function() {
+
+						App.get('citacionesController').removeObserver('loaded', this, fn);
+						App.get('citacionesController').get('citaciones').forEach(function (citacion) {
+								var color = '';
+								if (citacion.get('estado'))
+								{
+									switch (citacion.get('estado').id)
+									{
+											case 2:
+													color = "#47a447";
+											break;
+											case 3:
+													color = "#d2322d";
+											break;						
+											default:
+													color = "";
+											break;
+									}					
+									citacion.set('color', color);
+								   
+								}	
+								citacion.set('url', '');
+
+								if (citacion.get('title').length > 75) {
+									citacion.set('title', citacion.get('title').substr(0, 75) + "...");
+								}
+						});			
+						callback(App.get('citacionesController').get('citaciones'));
+				}
+
+				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
+				App.get('citacionesController').set('loaded', false);
+				App.get('citacionesController').addObserver('loaded', this, fn);
+				App.get('citacionesController').load();				
+			},
+			
+			eventRender: function(event, element, view) {
+				element.bind('click', function() {
+						App.set('citacionConsultaController.loaded', false);
+						App.set('citacionConsultaController.content', App.Citacion.create({id: event.id}));
+						App.get('router').transitionTo('loading');
+						fn = function() {
+								App.get('citacionConsultaController').removeObserver('loaded', this, fn);
+								App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', App.Citacion.create(event));
+						};
+
+						App.get('citacionConsultaController').addObserver('loaded', this, fn);			
+						App.get('citacionConsultaController').load();
+				});
+			},            
+		});	
+	}
+});
+
+App.CalendarCompletoTool = Em.View.extend({
+	tagName: 'div',
+	attributeBindings: ['id', 'events', 'owner'],
+	classNamesBindings: ['class'],
+
+	didInsertElement: function(){
+		this._super();
+		$('#mycalendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay '
+			},
+			editable: false,
+			timeFormat: {
+				agenda: 'H:mm',
+				'': 'H:mm'
+			},
+			axisFormat: 'H:mm',
+			monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ], 
+			monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+			dayNames: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
 			buttonText: {
 			 today: 'Hoy',
 			 month: 'Mes',
