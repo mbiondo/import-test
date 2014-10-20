@@ -13547,6 +13547,11 @@ App.ProyectoItemListWithDeleteView = App.tpConsultaProyectoItemListView.extend({
 	templateName: 'tp-consulta-proyecto-item-list-with-delete',
 	tagName: 'li',
 
+	didInsertElement: function () {
+		this._super();
+		this.$('a').tooltip();
+	},	
+
 	delete: function () {
 		this.get('parentView').removeObject(this.get('content'));
 	},
