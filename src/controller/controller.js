@@ -841,7 +841,7 @@ App.UserController = Em.Controller.extend({
 				App.get('router').transitionTo('loading');
 				App.get('router').transitionTo('index');
 
-				$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000 });
+				$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000, theme: 'jGrowl-icon-warning jGrowl-warning'});
 			}
 		});			
 	},
@@ -1014,7 +1014,7 @@ App.NotificationController = Em.Controller.extend({
 		}
 		else
 		{
-			$.jGrowl('<a href="' + notificacion.link + '" >' + notificacion.mensaje + '</a>', {life: 5000 });
+			$.jGrowl('<a href="' + notificacion.link + '" >' + notificacion.mensaje + '</a>', {life: 5000});
 		}
 	},
 });
@@ -3400,7 +3400,7 @@ App.CitacionCrearController = Em.Object.extend({
 		{
 			if (obj.error)
 			{
-				$.jGrowl('Ocurrió un error al intentar crear la reunión!', { life: 5000 });
+				$.jGrowl('Ocurrió un error al intentar crear la reunión!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'});
 			}
 			else
 			{			
@@ -3444,7 +3444,7 @@ App.CitacionCrearController = Em.Object.extend({
 				App.get('reunionConsultaController').addObserver('loaded', this, fn);
 				App.get('reunionConsultaController').load();
 				
-				$.jGrowl('Reunión creada con éxito!', { life: 5000 });
+				$.jGrowl('Reunión creada con éxito!', { life: 5000,  theme:'jGrowl-icon-ok jGrowl-success'});
 			}
 		}
 	},
@@ -3517,7 +3517,7 @@ App.CitacionCrearController = Em.Object.extend({
 	confirmarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
-			$.jGrowl('Se ha cambiado el estado de la citación a Convocada!', { life: 5000 });
+			$.jGrowl('Se ha cambiado el estado de la citación a Convocada!', { life: 5000,  theme: 'jGrowl-icon-ok jGrowl-success'});
 
 			var emailList = [];
 			var comisionCabecera = this.get('content.comisiones.firstObject');
@@ -3559,7 +3559,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();	
 		} else {
-			$.jGrowl('Ocurrió un error al intentar confirmar la citación!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar confirmar la citación!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'});
 		}
 	},
 	
@@ -3588,7 +3588,7 @@ App.CitacionCrearController = Em.Object.extend({
 	cancelarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 3}));
-			$.jGrowl('Se ha cambiado el estado de la citación a suspendida!', { life: 5000 });	
+			$.jGrowl('Se ha cambiado el estado de la citación a suspendida!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'});	
 			App.set('citacionConsultaController.loaded', false);
 			App.set('citacionConsultaController.content', App.Citacion.create(this.get('content')));
 
@@ -3601,7 +3601,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();				
 		} else {
-			$.jGrowl('Ocurrió un error al intentar cancelar la citación!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar cancelar la citación!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger' });
 		}
 	},
 
@@ -3646,7 +3646,7 @@ App.CitacionCrearController = Em.Object.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();
 			
-			$.jGrowl('Citación creada con éxito!', { life: 5000 });	
+			$.jGrowl('Citación creada con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });	
 
 			var expedientesD = [];
 
@@ -3679,7 +3679,7 @@ App.CitacionCrearController = Em.Object.extend({
 			if (this.get('content.saveSuccess') == true)
 			{
 				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
-				$.jGrowl('Citación editada con éxito!', { life: 5000 });								
+				$.jGrowl('Citación editada con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });								
 			}			
 			else
 			{
@@ -3688,7 +3688,7 @@ App.CitacionCrearController = Em.Object.extend({
 				$('.buttonSave').val('Guardar');
 
 				//console.log('Citacion editada con Exito');
-				$.jGrowl('Ocurrió un error al intentar guardar los cambios en la citación!', { life: 5000 });
+				$.jGrowl('Ocurrió un error al intentar guardar los cambios en la citación!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'});
 			}
 		}
 		this.get('content').save();
@@ -5331,7 +5331,7 @@ App.TPEditarController = Ember.ObjectController.extend({
 		if (this.get('content.saveSuccess')) {
 			var tp = this.get('content');
 			
-            $.jGrowl('Se ha modificado el Trámite Parlamentario  N°' + tp.numero + ' del período N°' + tp.periodo +' correctamente!', { life: 5000 });
+            $.jGrowl('Se ha modificado el Trámite Parlamentario  N°' + tp.numero + ' del período N°' + tp.periodo +' correctamente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'editarTP');	
@@ -5355,7 +5355,7 @@ App.TPEditarController = Ember.ObjectController.extend({
             App.get('tpsController').load();                
             this.set('loading', false);
 	    } else if (this.get('content.saveSuccess') == false) {
-            $.jGrowl('No se ha guardado los cambios del Trámite Parlamentario!', { life: 5000 });
+            $.jGrowl('No se ha guardado los cambios del Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger' });
 	        this.set('loading', false);
 		}
 	},
@@ -5376,7 +5376,7 @@ App.TPCrearController = Ember.ObjectController.extend({
 		this.get('content').removeObserver('createSuccess', this, this.createSucceeded);
 		if (this.get('content.createSuccess')) {
 
-            $.jGrowl('Trámite Parlamentario creado con éxito!', { life: 5000 });
+            $.jGrowl('Trámite Parlamentario creado con éxito!', { life: 5000,theme: 'jGrowl-icon-ok jGrowl-success' });
 			var tp = this.get('content');
 
 			var notification = App.Notificacion.extend(App.Savable).create();
@@ -5402,7 +5402,7 @@ App.TPCrearController = Ember.ObjectController.extend({
             this.set('loading', false);
 
         } else if (this.get('content.createSuccess') == false) {
-            $.jGrowl('No se ha creado el Trámite Parlamentario!', { life: 5000 });
+            $.jGrowl('No se ha creado el Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger' });
             this.set('loading', false);
 		}
 	},
