@@ -2317,14 +2317,14 @@ App.ExpedientesArchivadosView = Ember.View.extend({
 
 			};
 
-			$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000 });
+			$.jGrowl('Se ha creado el env&iacute;o satisfactoriamente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 			App.get('envioArchivoController').addObserver('loaded', this, fn);
 			App.get('envioArchivoController').load();
 		   
 		}
 		else 
 		{
-			$.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar crear el env&iacute;o!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 		
@@ -2438,7 +2438,7 @@ App.ExpedientesEnvioConsultaView = Ember.View.extend({
 				App.get('envioArchivoConsultaController').load();
 			} else 
 			{
-				$.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000 });
+				$.jGrowl('Ocurrió un error al intentar confirmar el env&iacute;o!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 			}
 	}, 
 	mostrarMasEnabled: true,
@@ -2809,7 +2809,7 @@ App.CitacionConsultaView = Em.View.extend({
 			App.get('citacionConsultaController').addObserver('loaded', this, fn);
 			App.get('citacionConsultaController').load();
 			
-			$.jGrowl('Citación clonada con éxito!', { life: 5000 });
+			$.jGrowl('Citación clonada con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		}
 	},
 
@@ -4207,7 +4207,7 @@ App.ReunionConsultaView = Em.View.extend({
 //				App.set('citacionConsultaController.content', App.Citacion.extend(App.Savable).create(Ember.copy(this.get('citacion'))));
 				App.get('router').transitionTo('index');
 				App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
-				$.jGrowl('Temario editado exitosamente!', { life: 5000 });
+				$.jGrowl('Temario editado exitosamente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 			}			
 			App.set('reunionConsultaController.loaded', false);			
 			App.get('reunionConsultaController').addObserver('loaded', this, fn);
@@ -4215,7 +4215,7 @@ App.ReunionConsultaView = Em.View.extend({
 		}			
 		else
 		{
-			$.jGrowl('Ocurrió un error al intentar guardar los cambios en la reunion!', { life: 5000 });
+			$.jGrowl('Ocurrió un error al intentar guardar los cambios en la reunion!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}		
 	},
 	
@@ -4462,12 +4462,12 @@ App.CrearParteView = Ember.View.extend({
 				{
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
-					$.jGrowl('Parte creado con éxito!', { life: 5000 });					
+					$.jGrowl('Parte creado con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });					
 
 				}
 				else
 				{
-					$.jGrowl('No se pudo crear el parte!', { life: 5000 });
+					$.jGrowl('No se pudo crear el parte!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 				}
 			}
 
@@ -4867,7 +4867,7 @@ App.DictamenCrearView = Ember.View.extend({
 							var dictamen = App.get('dictamenConsultaController.content');
 
 							App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
-							$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+							$.jGrowl('Dictamen creado con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 						 };
 
 						 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
@@ -4875,7 +4875,7 @@ App.DictamenCrearView = Ember.View.extend({
 					}
 					else
 					{
-						$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+						$.jGrowl('No se pudo crear el dictamen!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 					}					
 				}
 			});		
@@ -5129,7 +5129,7 @@ App.DictamenCargarView = Ember.View.extend({
 				var dictamen = App.get('dictamenConsultaController.content');
 
 				App.get('router').transitionTo('comisiones.dictamenes.dictamen.dictamenConsulta', dictamen);
-				$.jGrowl('Dictamen creado con éxito!', { life: 5000 });
+				$.jGrowl('Dictamen creado con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 				var expedientesD = [];
 				var firmantes = [];
@@ -5185,7 +5185,7 @@ App.DictamenCargarView = Ember.View.extend({
 		}
 		else
 		{
-			$.jGrowl('No se pudo crear el dictamen!', { life: 5000 });
+			$.jGrowl('No se pudo crear el dictamen!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -6609,10 +6609,10 @@ App.CrearPlanDeLaborView = Ember.View.extend({
 			// Pendiente de confirmacion. Por ahora solamente se usa el confirmar plan de labor
 			//notification.create();
 
-			$.jGrowl('Se ha creado el plan de labor satisfactoriamente!', { life: 5000 });
+			$.jGrowl('Se ha creado el plan de labor satisfactoriamente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 		} else {
-			$.jGrowl('Ocurrio un error al crear el plan de labor!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al crear el plan de labor!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 	
@@ -6908,7 +6908,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			var expedientesD = [];
 			var firmantes = [];
 
-			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000 });
+			$.jGrowl('Se ha cambiado el estado del plan de labor a confirmado!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			if(planDeLabor.items)
 			{		
@@ -6956,7 +6956,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			notification.create();
 
 		} else {
-			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 });
@@ -7149,10 +7149,10 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			App.get('planDeLaborListadoController').addObserver('loaded', this, fn);
 			App.get('planDeLaborListadoController').load();
 
-			$.jGrowl('Se ha creado la sesión satisfactoriamente!', { life: 5000 });
+			$.jGrowl('Se ha creado la sesión satisfactoriamente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 		} else {
-			$.jGrowl('Ocurrio un error al crear la sesión!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al crear la sesión!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},	
 
@@ -7687,7 +7687,7 @@ App.CrearExpedienteView = Ember.View.extend({
 					$("#nav-tabs-proyecto").click();
 					$("#selector-tipo-proyecto").focus();	
 
-					$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+					$.jGrowl('No se ha creado el expediente!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 					this.set('loading', false);
 				}
 			}
@@ -7712,7 +7712,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			this.set('reproduceExpMode', false);
 			var expediente = this.get('content');
 					
-			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000 });
+			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 			
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'crearProyecto');	
@@ -8768,9 +8768,9 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 	aproveSuccessed: function () {
 		this.get('content').removeObserver('aproveSuccess', this, this.createSucceeded);
 		if (this.get('content.aproveSuccess')) {
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		} else if (this.get('aproveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -8792,9 +8792,9 @@ App.VisitaGuiadaConsultaView = Ember.View.extend({
 			App.get('visitasGuiadasController').load();                      
 						
 						
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		} else if (this.get('saveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},   
 
@@ -9113,10 +9113,10 @@ App.TPListItemView = Ember.View.extend({
 			if (App.tpsController)
 				App.get('tpsController').removeObject(this.get('content'));
 
-			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 		} else if (this.get('content.deleteSuccess') == false && this.get('content.deleteSuccess') != '') {
-			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},	
 });
@@ -9262,10 +9262,10 @@ App.TPConsultaView = Ember.View.extend({
 
 			App.get('tpsController').load();
 
-			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 		} else if (this.get('controller.content.deleteSuccess') == false && this.get('controller.content.deleteSuccess') != '') {
-			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000 });
+			$.jGrowl('No se ha eliminado el Trámite Parlamentario!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},	
 
@@ -10067,10 +10067,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			App.get('comisionesController').load();
 			App.get('proyectosController').load();
 
-			$.jGrowl('Se ha eliminado el expediente!', { life: 5000 });
+			$.jGrowl('Se ha eliminado el expediente!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 		} else if (this.get('controller.content.deleteSuccess') == false && this.get('controller.content.deleteSuccess') != '') {
-			$.jGrowl('No se ha eliminado el expediente!', { life: 5000 });
+			$.jGrowl('No se ha eliminado el expediente!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 	
@@ -10301,7 +10301,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 				
 		if (this.get('content.saveSuccess')) {
 
-			$.jGrowl('Se ha modificado el expediente de '+ this.get('content.tipo') + ' ' + this.get('content.expdip') + ' correctamente !', { life: 5000 });
+			$.jGrowl('Se ha modificado el expediente de '+ this.get('content.tipo') + ' ' + this.get('content.expdip') + ' correctamente !', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			var ex = App.Expediente.extend(App.Savable).create({id: this.get('content.id')});
 			ex.set('loaded', false);
@@ -10314,7 +10314,7 @@ App.MEExpedienteEditarView = Ember.View.extend({
 			ex.load();
 
 		} else {
-			$.jGrowl('No se ha creado el expediente!', { life: 5000 });
+			$.jGrowl('No se ha creado el expediente!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 			this.set('loading', false);
 		}
 	},
@@ -10381,16 +10381,16 @@ App.MEExpedienteGirarView = Ember.View.extend({
 			this.get('controller.content').addObserver('saveSuccess', this, this.saveSuccessed);
 			this.get('controller.content').save();
 		}else{
-			$.jGrowl('Debe haber como minimo una comision', { life: 5000 });
+			$.jGrowl('Debe haber como minimo una comision', { life: 5000, theme: 'jGrowl-icon-warning jGrowl-warning'  });
 		}
 	},
 	saveSuccessed: function () {
 		this.get('controller.content').removeObserver('saveSuccess', this, this.saveSucceeded);
 		if (this.get('controller.content.saveSuccess')) {                                    
             App.get('router').transitionTo('mesaDeEntrada.proyecto.ver', this.get('controller.content'))	
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		} else if (this.get('saveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	} 
 });
@@ -10467,12 +10467,12 @@ App.BloqueCrearView = Ember.View.extend({
 			this.objectCreate(b);
 
 			this.set('existeItem', false);
-			$.jGrowl('Se ha creado con éxito!', { life: 5000 });
+			$.jGrowl('Se ha creado con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
         } else if (this.get('content.createSuccess') == false) {
 //        	this.set('existBloque', true);
             this.set('loading', false);
             this.set('existeItem', true);
-            $.jGrowl('Ya está creado!', { life: 5000 });
+            $.jGrowl('Ya está creado!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -11659,7 +11659,7 @@ App.PedidoConsultaView = Ember.View.extend({
 			this.sendNotificationRespuesta();
 			this.auditRespuesta();
 
-			$.jGrowl('Se ha respondido la solicitud!', { life: 5000 });
+			$.jGrowl('Se ha respondido la solicitud!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			App.pedidosController = App.PedidosController.create();
 
@@ -11678,7 +11678,7 @@ App.PedidoConsultaView = Ember.View.extend({
 		} else {
 			if (typeof(this.get('respuesta.createSuccess'))  == "Boolean") {
 				this.get('respuesta').addObserver('createSuccess', this, this.createSucceeded);
-				$.jGrowl('Ocurrio un error al intentar responder la solicitud!', { life: 5000 });
+				$.jGrowl('Ocurrio un error al intentar responder la solicitud!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 			}
 		}
 	},
@@ -11739,7 +11739,7 @@ App.PedidoConsultaView = Ember.View.extend({
 				notification.create();
 			}
 
-			$.jGrowl('Se ha editado la solicitud!', { life: 5000 });
+			$.jGrowl('Se ha editado la solicitud!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			App.pedidosController = App.PedidosController.create();
 
@@ -11755,7 +11755,7 @@ App.PedidoConsultaView = Ember.View.extend({
 
 			App.get('pedidosController').load();	
 		} else if (this.get('content.saveSuccess') == false ) {
-			$.jGrowl('No se ha editado la solicitud!', { life: 5000 });
+			$.jGrowl('No se ha editado la solicitud!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -11822,11 +11822,11 @@ App.PedidoConsultaView = Ember.View.extend({
 			audit.set('nombre', "Solicitud revisada");
 			audit.create();	
 
-			$.jGrowl('Se ha revisado la solicitud!', { life: 5000 });
+			$.jGrowl('Se ha revisado la solicitud!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			App.get('auditController').loadByIdNameObject(this.get('content').id, this.get('content').constructor.toString());
 		}else{
-			$.jGrowl('No se ha revisado la solicitud!', { life: 5000 });
+			$.jGrowl('No se ha revisado la solicitud!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}			
 	},
 	
@@ -12502,7 +12502,7 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 	},
 	createSucceeded: function () {
 		if (this.get('content.createSuccess')) {
-			$.jGrowl('Se ha creado la solicitud!', { life: 5000 });
+			$.jGrowl('Se ha creado la solicitud!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 
 			App.pedidosController = App.PedidosController.create();
 
@@ -12520,7 +12520,7 @@ App.ReenviarRespuestaView = App.ModalView.extend({
 			App.get('pedidosController').load();	
 		} else {
 			if (this.get('content.createSuccess') == false) {
-				$.jGrowl('No se ha creado la solicitud!', { life: 5000 });
+				$.jGrowl('No se ha creado la solicitud!', { life: 5000 , theme: 'jGrowl-icon-danger jGrowl-danger' });
 				this.set('loading', false);
 			}
 		}
@@ -12865,9 +12865,9 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 			App.get('misVisitasGuiadasController').addObserver('loaded', this, fn);
 			App.get('misVisitasGuiadasController').load();
 
-			$.jGrowl('Se creado la Visita Guiada con éxito!', { life: 5000 });
+			$.jGrowl('Se creado la Visita Guiada con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		}else{
-			$.jGrowl('Ocurrio un error al crear la Visita Guiada!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al crear la Visita Guiada!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	}
 	
@@ -12978,7 +12978,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 	createSucceeded: function () {
 		if (this.get('movimiento.createSuccess')) {
 			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
-			$.jGrowl('Movimiento cargado con exito!', { life: 5000 });
+			$.jGrowl('Movimiento cargado con exito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 			var ex = App.Expediente.extend(App.Savable).create({id: this.get('controller.content.id')});
 			ex.set('loaded', false);
 			var deferred = $.Deferred(),
@@ -12991,7 +12991,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 			ex.load();				
 		} else {
 			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
-			$.jGrowl('Ocurrio un error al cargar el movimiento!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al cargar el movimiento!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -13096,9 +13096,9 @@ App.MisVisitasGuiadasConsultaView = Ember.View.extend({
 	aproveSuccessed: function () {
 		this.get('content').removeObserver('aproveSuccess', this, this.createSucceeded);
 		if (this.get('content.aproveSuccess')) {
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		} else if (this.get('aproveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
 
@@ -13120,9 +13120,9 @@ App.MisVisitasGuiadasConsultaView = Ember.View.extend({
 			App.get('visitasGuiadasController').load();                      
 						
 						
-			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000 });
+			$.jGrowl('Se han guardado las modificaciones realidazas!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 		} else if (this.get('saveSuccess') == false) {
-			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000 });
+			$.jGrowl('Ocurrio un error al realizar las modificaciones!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},   
 
