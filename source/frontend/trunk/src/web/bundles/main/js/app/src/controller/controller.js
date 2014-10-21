@@ -4313,7 +4313,11 @@ App.TurnosController = App.RestController.extend({
 	}.property('horaInicio'),
 
 	sHoraFin: function () {
-		return moment.unix(this.get('horaFin')).format('HH:mm[h]');
+		if(this.get('horaInicio')){
+			return moment.unix(this.get('horaFin')).format('HH:mm[h]');
+		}else{
+			return "-";
+		}
 	}.property('horaFin'),
 
 	sDuracionTotal: function () {

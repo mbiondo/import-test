@@ -93,7 +93,6 @@ App.menuController = App.MenuController.create({
 			id: 9,
 			roles: [['ROLE_DIRECCION_SECRETARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Dirección Secretaría',
-			url: '#/direccionsecretaria/mesadeentrada/proyecto/crear',
 			icono: 'ic ic-pen',
 			
 			subMenu: [
@@ -140,7 +139,6 @@ App.menuController = App.MenuController.create({
 			id: 12,
 			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_PUBLICACIONES']],
 			titulo: 'Publicaciones',
-			url: '#/publicaciones/TP/listado',
 			icono: 'ic ic-publicaciones',
 			
 			subMenu: [
@@ -171,7 +169,6 @@ App.menuController = App.MenuController.create({
 			id: 1,
 			roles: [['ROLE_USER']], 
 			titulo: 'Expedientes',
-			url: '#/expedientes',
 			icono: 'ic ic-expedientes',
 			
 			subMenu: [
@@ -195,7 +192,6 @@ App.menuController = App.MenuController.create({
 			id: 10,
 			roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Alerta Temprana',
-			url: '#/expedientes/alerta-temprana',
 			icono: 'ic ic-biografia',
 			
 			subMenu: [
@@ -218,7 +214,6 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 2,
 			titulo: 'Comisiones',
-			url: '#/comisiones/citaciones',
 			icono: 'ic ic-comisiones',
 			roles: [['ROLE_USER']],
 			subMenu: [
@@ -328,7 +323,6 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 8,
 			titulo: 'Orden Del Día',
-			url: '#/OD/listado',
 			roles: [['ROLE_OD'],['ROLE_SEC_PARL_VIEW']],
 			icono: 'ic ic-od',
 			subMenu: [
@@ -365,7 +359,6 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			url: '#/laborparlamentaria/recinto/oradores',
 			roles: [['ROLE_USER'], ['ROLE_LABOR_PARLAMENTARIA']],
 			icono: 'ic ic-labor',
 			subMenu: [
@@ -432,7 +425,6 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 13,
 			titulo: 'Información Parlamentaria',
-			url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
 			icono: 'ic ic-tickets',
 			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_USER'],['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 			subMenu: [
@@ -468,7 +460,6 @@ App.menuController = App.MenuController.create({
 			id: 11,
 			roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_USER'], ['ROLE_DIPUTADO']],
 			titulo: 'Visitas Guiadas',
-			url: '#/visitas-guiadas',
 			icono: 'ic ic-visitas-guiadas',
 			
 			subMenu: [
@@ -511,7 +502,6 @@ App.menuController = App.MenuController.create({
 			id: 7,
 			roles: [['ROLE_SEC_PARL_VIEW'], ['ROLE_VISITAS_GUIADAS'], ['ROLE_LABOR_PARLAMENTARIA']],
 			titulo: 'Estadísticas',
-			url: '#/estadisticas/oradores',
 			icono: 'ic ic-estadisticas',
 			
 			subMenu: [
@@ -540,7 +530,6 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 5,
 			titulo: 'Administrar Accesos',
-			url: '#/admin/roles',
 			icono: 'ic ic-accesos',
 			roles: [['ROLE_SITE_ADMIN']],
 			subMenu: [

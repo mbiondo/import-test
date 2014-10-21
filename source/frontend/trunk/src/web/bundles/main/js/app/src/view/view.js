@@ -343,10 +343,14 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 		App.confirmActionController.show();
 	},
 	confirmActionDone: function () {
+
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 
 		if (App.get('confirmActionController.success'))
 		{
+
+			App.get('turnosController').stopTimer(App.get('turnosController.turnoHablando'));
+
 			App.get('sesionesController').stopTimer(App.get('sesionController.content'));
 			var sesionId = App.get('sesionController').get('content').get('id');
 			var temasSesion = App.get('sesionController').get('content').get('temas');
