@@ -13315,10 +13315,10 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 			{
 				if(this.get('hayVariosFirmantes'))
 				{
-					str = "SOLICITAN ";
+					str = "SOLICITAN. ";
 				}
 				else{
-					str = "SOLICITA ";
+					str = "SOLICITA. ";
 				}
 
 				if(this.get('content.codMovi') == 22) // Retiro de Proyecto
