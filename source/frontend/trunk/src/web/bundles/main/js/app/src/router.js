@@ -1524,6 +1524,7 @@ App.Router =  Em.Router.extend({
 								App.get('sesionController').set('content', context);
 								App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(context.get('id'))));
 								App.get('temasController').load();
+								App.get('temaController').set('content', null);
 								
 								//appController.cargarSesiones(true);
 								

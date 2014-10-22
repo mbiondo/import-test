@@ -3080,6 +3080,7 @@ App.MenuItemTintView = App.MenuItemView.extend({
 	templateName: 'menuItemTiny',
 
 	click: function () {
+		App.get('menuController').seleccionar(this.get('content').get('id'));
 		if (this.get('parentView.clickMenu'))
 			this.get('parentView').clickMenu();
 	},
@@ -5712,6 +5713,12 @@ App.TemaView = Ember.View.extend({
 		if(App.get('temasController.content.length') == 0)
 			App.get('router').transitionTo('sesionConsulta.indexSubRoute', App.get('sesionController.content'));
 	}
+});
+
+
+App.TemaDetalleView = App.TemaView.extend({
+	templateName: 'tema-detalle',
+	
 });
 
 App.SesionView = Ember.View.extend({
