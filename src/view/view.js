@@ -7938,6 +7938,12 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 	}.observes('content.tipo'),
 
+
+	suggestSelectionChange: function(){
+		this.set('content.titulo', this.get('content.tituloSuggest.label'));
+	}.observes('content.tituloSuggest'),
+	
+
 	numeros: function(){
 		return $.map(App.get('tpsController.arrangedContent'), function(key){ return key.numero });
 	}.property('tpsController.content.@each'),
@@ -13565,5 +13571,35 @@ App.ProyectoItemListWithDeleteView = App.tpConsultaProyectoItemListView.extend({
 
 	delete: function () {
 		this.get('parentView').removeObject(this.get('content'));
+	},
+});
+
+App.AutoCompleteView = Ember.View.extend({
+	templateName: 'auto-complete-text-area',
+	frases: [ 'PEDIDO DE INFORMES AL PODER EJECUTIVO SOBRE',
+			  'DECLARAR DE INTERES DE LA H. CAMARA EL',
+			  'SOLICITAR AL PODER EJECUTIVO',
+			  'RENDIR HOMENAJE',
+			  'EXPRESAR BENEPLACITO POR',
+			  'EXPRESAR REPUDIO POR',
+			  'EXPRESAR PREOCUPACION POR',
+			  'EXPRESAR ADHESION POR',
+			  'EXPRESAR PESAR POR',
+			  'PROMOVER JUICIO POLITICO AL'],
+	controller: '',
+
+
+
+	didInsertElement: function () {
+		this._super();
+		var self = this;
+
+		var controller =App.get(this.get('controllerName')).create();			
+
+		var palabras = controller.get('content');
+
+		this.$(".autoComplete").autocomplete({
+			source: palabras
+		});
 	},
 });
