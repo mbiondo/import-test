@@ -6472,3 +6472,16 @@ App.ExpedientesNewController = App.RestController.extend({
 App.CrearODSinDictamenController = Ember.ObjectController.extend({
 
 });
+
+App.MEExpedienteObjetivoSuggestController = Ember.ObjectController.extend({
+	content: [ 'PEDIDO DE INFORMES AL PODER EJECUTIVO SOBRE',
+			  'DECLARAR DE INTERES DE LA H. CAMARA EL',
+			  'SOLICITAR AL PODER EJECUTIVO',
+			  'RENDIR HOMENAJE',
+			  'EXPRESAR BENEPLACITO POR',
+			  'EXPRESAR REPUDIO POR',
+			  'EXPRESAR PREOCUPACION POR',
+			  'EXPRESAR ADHESION POR',
+			  'EXPRESAR PESAR POR',
+			  'PROMOVER JUICIO POLITICO AL'],
+});
