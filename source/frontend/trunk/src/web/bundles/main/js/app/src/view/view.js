@@ -2055,30 +2055,34 @@ App.PerfilView = Em.View.extend({
 	guardarEnabled: false,
 	oldAvatar: '',
 	hayComisiones: false,
+	hasInitialize: false,
 
 	guardar: function () {
 		App.userController.get('user').save();
-		localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
+		//localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
 		this.set('guardarEnabled', false);
 	},
 
 	cancelar: function () {
-		this.set('guardarEnabled', false);
-		if (this.get('oldAvatar'))
+		this.set('hasInitialize', false);
+		console.log(this.get('oldAvatar'));
+		if (this.get('oldAvatar')) {
 			this.set('content.avatar', this.get('oldAvatar'));
+		}
+		this.set('guardarEnabled', false);
 	},
 
 	avatarChange: function () {
-		if (this.get('content.avatar'))
+		if (this.get('hasInitialize'))
 			this.set('guardarEnabled', true);
+		this.set('hasInitialize', true);
 	}.observes('content.avatar'),
 
 	cambiarFoto: function () {
-		this.set('oldAvatar', this.get('content.avatar'));
+		this.set('oldAvatar', Ember.copy(this.get('content.avatar')));
 		this.get('content').set('avatar', null);
+		console.log(this.get('oldAvatar'));
 	},
-
-	
 
 	didInsertElement: function () {
 		this._super();
@@ -2091,6 +2095,7 @@ App.PerfilView = Em.View.extend({
 		var url = 'notificaciones/config';
 		var posting = $.post( url, { cuil: App.get('userController.user').get('cuil'), funcion: App.get('userController.user').get('funcion'), estructura: App.get('userController.user').get('estructura')});
 		_self = this;
+
 		posting.done(function( data ){
 			data = JSON.parse(data);
 			_self.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
@@ -2566,6 +2571,15 @@ App.UploaderModalView = App.ModalView.extend({
 App.AttachFileView = Em.View.extend({
 	templateName: 'attach-file',
 	attributeBindings: ['folder','useControllerUpload'],
+	autoOpen: false,
+
+	didInsertElement: function () {
+		this._super();
+		if (this.get('autoOpen')) {
+			this.showUploader();
+		}
+	},
+
 
 	showUploader: function () {
 		App.uploaderController = App.UploaderController.create();
