@@ -3348,13 +3348,22 @@ App.CitacionCrearView = Em.View.extend({
 	
 	clickBorrar: function (expediente) {
 		var tema = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('tema'));		
-		if (tema)
+		if (tema){
 			tema.get('proyectos').removeObject(expediente);
+			if(tema.get('proyectos').length <= 0){
+				App.get('citacionCrearController.content.temas').removeObject(tema);
+			}else{
+				App.get('citacionCrearController.content.temas').removeObject(tema);
+				App.get('citacionCrearController.content.temas').addObject(tema);
+			}
+		}
 			
 		var temaInicial = App.get('citacionCrearController.content.temas').findProperty('descripcion', expediente.get('expdip'));
 		if (temaInicial)
 			App.get('citacionCrearController.content.temas').removeObject(temaInicial);
-			
+		
+
+
 		expediente.set('tema', null);
 
 		this.set('adding', !this.get('adding'));
