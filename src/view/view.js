@@ -12915,7 +12915,7 @@ App.VisitaGuiadaCrearView = Ember.View.extend({
 
 App.MEExpedienteMovimientoView = Ember.View.extend({
 	templateName: 'solicitud-movimiento',
-	pubFecha: 'saraza',
+	pubFecha: '',
 	expedienteExist: false,
 	expedienteDisabled: false,
 
