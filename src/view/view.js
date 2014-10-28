@@ -842,7 +842,7 @@ App.ListFilterView = Ember.View.extend({
 			} else {
 				filtered = this.get('content');
 			}
-			console.log(filtered);
+			//console.log(filtered);
 		}
 
 		if (!filtered)
@@ -3780,6 +3780,16 @@ App.ReunionesSinParteListView = App.ListFilterView.extend({
 
 App.ReunionesSinParteView = Em.View.extend({
 	templateName: 'reuniones-sin-parte',
+
+	listarComisiones: function(){
+		var comisiones = [];
+
+		comisiones.addObjects([{"nombre":"TODAS LAS COMISIONES"}]);
+		comisiones.addObjects(App.get('userController.user.comisiones'))
+
+		return comisiones;
+
+	}.property('App.userController.user.comisiones')
 });
 
 App.ReunionesConParteListView = App.ListFilterView.extend({
@@ -3790,6 +3800,16 @@ App.ReunionesConParteListView = App.ListFilterView.extend({
 
 App.ReunionesConParteView = App.ListFilterView.extend({
 	templateName: 'reuniones-con-parte',
+
+	listarComisiones: function(){
+		var comisiones = [];
+
+		comisiones.addObjects([{"nombre":"TODAS LAS COMISIONES"}]);
+		comisiones.addObjects(App.get('userController.user.comisiones'))
+
+		return comisiones;
+
+	}.property('App.userController.user.comisiones')
 });
 
 
@@ -13358,7 +13378,8 @@ App.tpConsultaProyectoItemListView = Em.View.extend({
 
 			if(this.get('content.codMovi') == 17) // Senado con Modificación
 			{
-				str = "(CD- " + this.get('content.expComunic') + ") (" + this.get('content.auxFechaMovi') + ")";
+				//str = "(CD- " + this.get('content.expComunic') + ") (" + this.get('content.auxFechaMovi') + ")";
+				str = "(CD-" + this.get('content.expComunic') + ") (" + moment(this.get('content.auxFechaMovi'), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') + ") ";
 			}
 			else
 			{
