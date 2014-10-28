@@ -12960,6 +12960,14 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 		return false;
 	}.property('movimiento'),
 
+	modificacion: function () {
+		if (this.get('movimiento.id') == 23)
+		{
+			return true;
+		}
+		return false;
+	}.property('movimiento'),
+
 	didInsertElement: function () {
 		this._super();
 		this.set('expdipA', moment().format('YYYY'));
@@ -13006,6 +13014,7 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 				proy: [{ id: this.get('controller.content.id')}],
 				expComunic: expComunic,
 				texto: this.get('texto'),
+				movi_resultado: this.get('movi_resultado'),
 			});
 
 			this.set('movimiento', movi);

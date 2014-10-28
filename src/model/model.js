@@ -2664,6 +2664,7 @@ App.ExpedienteMovimiento = Ember.Object.extend({
 		'proy',
 		'firmantes',
 		'expComunic',
+		'movi_resultado',
 	],
 });
 
