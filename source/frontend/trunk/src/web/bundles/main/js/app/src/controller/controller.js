@@ -3128,13 +3128,26 @@ App.ReunionesSinParteController = App.RestController.extend({
 		return reuniones;
 	},
 
-	comisionChange: function(){
+	listado: function(){
+		var reuniones 	= [];
 		var comision 	= this.get('comision');
-		var reuniones 	= this.reunionesFilterByComisiones(comision);
-		
-		this.set('listado', reuniones); 
 
-	}.observes('comision'),
+		if(comision)
+		{	
+			if(comision.nombre == 'TODAS LAS COMISIONES')
+			{
+				reuniones 	= this.get('reuniones');
+			}
+			else
+			{
+				reuniones 	= this.reunionesFilterByComisiones(comision);
+			}
+		}
+
+		return reuniones;
+
+	}.property('comision'),
+
 });
 
 App.ReunionesConParteController = App.ReunionesSinParteController.extend({
