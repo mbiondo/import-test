@@ -2383,11 +2383,15 @@ App.ProyectoQuery = Em.Object.extend({
 		'pageSize',
 		'firmantes',
 		'nombre',
+		'comisionesObject',
+		'firmantesObject',
+		'usuario'
 	],
 
 	comisiones: function () {
 		return $.map(this.get('comisionesObject'), function(value, key){ return value.get('nombre') });
 	}.property('comisionesObject.@each'),
+
 	firmantes: function () {
 
 		return $.map(this.get('firmantesObject'), function(value, key){ return value.get('apellido') + ", " + value.get('diputado.datosPersonales.nombre') });
