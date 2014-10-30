@@ -3251,7 +3251,7 @@ App.CitacionConsultaController = Ember.Object.extend({
 		item.setProperties(data);
 		item.set('useApi', true);
 		this.set('content', item);
-
+		
 		var invitados = [];
 		
 		if (this.get('content.invitados')) {
@@ -3274,6 +3274,8 @@ App.CitacionConsultaController = Ember.Object.extend({
 	
 	
 	loadReunionSucceded: function (data) {
+		this.set('loaded', false);		
+
 		if (data) {
 			var reunion = App.Reunion.extend(App.Savable).create(data);
 			reunion.setProperties(data);
