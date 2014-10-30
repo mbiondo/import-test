@@ -348,8 +348,9 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 		if (App.get('confirmActionController.success'))
 		{
-
-			App.get('turnosController').stopTimer(App.get('turnosController.turnoHablando'));
+			if(App.get('turnosController.turnoHablando')){
+				App.get('turnosController').stopTimer(App.get('turnosController.turnoHablando'));
+			}
 
 			App.get('sesionesController').stopTimer(App.get('sesionController.content'));
 			var sesionId = App.get('sesionController').get('content').get('id');
@@ -2065,7 +2066,7 @@ App.PerfilView = Em.View.extend({
 
 	cancelar: function () {
 		this.set('hasInitialize', false);
-		console.log(this.get('oldAvatar'));
+		//console.log(this.get('oldAvatar'));
 		if (this.get('oldAvatar')) {
 			this.set('content.avatar', this.get('oldAvatar'));
 		}
@@ -2081,7 +2082,7 @@ App.PerfilView = Em.View.extend({
 	cambiarFoto: function () {
 		this.set('oldAvatar', Ember.copy(this.get('content.avatar')));
 		this.get('content').set('avatar', null);
-		console.log(this.get('oldAvatar'));
+		//console.log(this.get('oldAvatar'));
 	},
 
 	didInsertElement: function () {
@@ -13585,8 +13586,18 @@ App.CrearODSinDictamenView = Ember.View.extend({
 	}.observes('controller.content.dictamen.proyectos.firstObject'),
 
 	crear: function () {
-		this.get('controller.content').addObserver('createSuccess', this, this.createSuccess);
-		this.get('controller.content').create();
+
+		if($('#OrdenDelDiaCrear').parsley('validate'))
+		{
+			App.confirmActionController.setProperties({
+				title: 'Confirmar creación de la Orden del dia',
+				message: '¿ Confirma que desea crear la orden del dia N° ' + this.get('controller.content.dictamen.numero') + ' ?',
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', this, this.confirmActionDone);
+			App.confirmActionController.show();	
+		}
 	},
 
 	createSuccess: function () {
@@ -13603,7 +13614,7 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
 			 App.get('ordenesDelDiaController').load();
 
-			 $.jGrowl('Se ha creado con exito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
+			 $.jGrowl('Se ha creado con éxito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
 		} else {
 			if (Ember.typeOf(this.get('controller.content.createSuccess')) == "boolean") {
 				this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
@@ -13614,6 +13625,17 @@ App.CrearODSinDictamenView = Ember.View.extend({
 
 	removeObject: function (object) {
 		this.get('controller.content.dictamen.proyectos').removeObject(object);
+	},
+
+	confirmActionDone: function () {
+		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
+		
+		if (App.get('confirmActionController.success'))
+		{
+			this.get('controller.content').addObserver('createSuccess', this, this.createSuccess);
+			this.get('controller.content').create();
+		}
+
 	},
 });
 
