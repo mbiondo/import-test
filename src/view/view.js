@@ -238,9 +238,26 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 	},
 
 	query: function (query) {
+
+		var lista_palabras = $.map(query.get('palabras'), function(key){ return key.nombre; });
+		query.set('palabras', lista_palabras);
+
+        query.get('comisionesList').forEach(function (item) {
+           query.get('comisionesObject').pushObject(App.Comision.create({id: item.id, nombre: item.nombre}));
+        }, this);
+
+		query.get('firmantesList').forEach(function (firmante) {
+			var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+			if (f) {
+				query.get('firmantesObject').addObject(f);
+			}
+		}, this);        
+
 		App.expedientesController.set('query', query);
 		App.expedientesController.set('pageNumber', 1);
 		App.expedientesController.set('content', []);
+
+
 		App.expedientesController.load();
 	},
 });
@@ -10922,9 +10939,25 @@ App.ProyectoSearchView = Em.View.extend({
 			this.set('loading', true);
 	},
 
-	borrar: function () {
-		App.searchController.deleteObject(App.proyectosController.get('query'));
-		App.proyectosController.set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true, pubtipo: 'TP', pubper: 132}));
+	borrarQuery: function () {
+		App.searchController.deleteObject(this.get('query'));
+		this.set('query', App.ProyectoQuery.extend(App.Savable).create({}));
+	},
+
+	guardar: function () {
+		if (App.proyectosController.get('query.id'))
+		{
+			App.proyectosController.get('query').save();	
+		} 
+		else 
+		{
+			App.proyectosController.get('query').set('usuario', App.userController.get('user.cuil'));
+			App.proyectosController.get('query').create();
+			if (App.searchController.content)
+			{
+				App.searchController.content.pushObject(App.proyectosController.get('query'));
+			}
+		}
 	},
 
 	removerPalabra: function(){
@@ -13455,9 +13488,35 @@ App.ProyectosSearchView = Em.View.extend({
 	periodos: [132, 131, 130,  129, 128, 127,  126, 125, 124],
 	palabrasError: false,
 	palabrasErrorExist: false,
+	enableMySearch: true,
 
 	query: null,
 
+	borrarQuery: function () {
+		App.searchController.deleteObject(this.get('query'));
+		this.set('query', App.ProyectoQuery.extend(App.Savable).create({}));
+	},
+
+	guardar: function () {
+
+		this.get('query').set('palabras', this.get('palabras'));
+
+		if (this.get('query.id'))
+		{
+			this.get('query').save();	
+		} 
+		else 
+		{
+			this.get('query').set('usuario', App.userController.get('user.cuil'));
+			this.get('query').create();
+			if (App.searchController.content)
+			{
+				App.searchController.content.pushObject(this.get('query'));
+			}
+		}
+
+		this.get('query').set('palabras', []);
+	},
 
 	collapseToggle: function(){
 		this.set('collapse', !this.get('collapse'));
@@ -13540,6 +13599,16 @@ App.ProyectosSearchView = Em.View.extend({
 			this.set('loading', true);
 		}
 	},
+
+	queryChanged: function () {
+		//TO-DO Normalize Query
+		_self = this;
+		if (this.get('query')) {
+			this.get('query.palabras').forEach(function (palabra) {
+				_self.get('palabras').pushObject({nombre: palabra});
+			});
+		}
+	}.observes('query'),
 
 	proyectosLoaded: function () {
 		if (App.get('expedientesController.loaded'))
