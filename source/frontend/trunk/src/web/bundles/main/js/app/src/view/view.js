@@ -2834,16 +2834,21 @@ App.CitacionConsultaView = Em.View.extend({
 	didInsertElement: function(){
 		this._super();
 
-		if((App.citacionConsultaController.content.estado.id == 2) 
-			&& (this.get('hasPermission'))
-			&& (!App.citacionConsultaController.content.reunion) 
-			&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
-			this.set('puedeCrearReunion', true);
+		fn = function(){
+			App.get('citacionConsultaController').removeObserver('loaded', this, fn);
 
-		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
-		if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
-		if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
+			if((App.citacionConsultaController.content.estado.id == 2) 
+				&& (this.get('hasPermission'))
+				&& (!App.citacionConsultaController.content.reunion) 
+				&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
+				this.set('puedeCrearReunion', true);
 
+			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
+			if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
+			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
+		};
+
+		App.get('citacionConsultaController').addObserver('loaded', this, fn);
 	},
 
 	confirmar: function () {
