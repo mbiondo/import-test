@@ -61,7 +61,13 @@ App.Router =  Em.Router.extend({
 	route: function(path) {
 	  this._super(path);
 
-	  
+		/*
+		ga('send', 'pageview', {
+		  'page': path,
+	  	'title': path
+		});
+		*/	
+
 	  if (!App.get('userController.user'))
 	  {
 	  		//console.log(path);
