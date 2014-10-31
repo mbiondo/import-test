@@ -242,6 +242,9 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 		var lista_palabras = $.map(query.get('palabras'), function(key){ return key.nombre; });
 		query.set('palabras', lista_palabras);
 
+		query.set('firmantesObject', []);
+		query.set('comisionesObject', []);
+
         query.get('comisionesList').forEach(function (item) {
            query.get('comisionesObject').pushObject(App.Comision.create({id: item.id, nombre: item.nombre}));
         }, this);
