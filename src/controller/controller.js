@@ -4167,6 +4167,10 @@ App.TurnosController = App.RestController.extend({
 		var turnoAnterior, ultimaHora, turno, tiempo, hora
 				length = this.get('length'),
 				sesionFecha = parseInt(App.get('sesionController.content.fecha'));
+				horaInicio = parseInt(App.get('sesionController.content.horaInicio'));
+
+		if (horaInicio)
+			sesionFecha = horaInicio;
 
 		turnoAnterior = this.objectAt(fromIndex-1);
 		

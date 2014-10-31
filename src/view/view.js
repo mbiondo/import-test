@@ -7107,8 +7107,9 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 						orden = orden + 1;
 		    		} else if (object.constructor.toString() == 'App.OrdeDelDia') {
 						var tema = App.Tema.create();
+						console.log(object);
 						tema.setProperties({
-								titulo: "Dictamen: " + object.sumario,
+								titulo: "OD Nro " + object.numero + " : " + object.sumario,
 								orden: object.orden,
 								plId: object.id,
 								plTipo: 'd',
