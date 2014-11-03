@@ -251,6 +251,7 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 
 		query.get('firmantesList').forEach(function (firmante) {
 			var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+			console.log(f);
 			if (f) {
 				query.get('firmantesObject').addObject(f);
 			}
@@ -3111,6 +3112,12 @@ App.MenuView = Em.View.extend({
 	classNames: [],
 	tagName: 'ul',
 
+	clickMenu: function () {
+		if (this.get('parentView.clickMenu')) {
+			this.get('parentView').clickMenu();
+		}
+	},
+
 	clickItem: function (item) {
 		App.get('menuController').seleccionar(item.get('id'));
 	},
@@ -3125,10 +3132,10 @@ App.MenuItemView = Em.View.extend({
 	tagName: 'li',
 	templateName: 'menuItem',
 
-	/*click: function () {
+	click: function () {
 		this.get('parentView').clickItem(this.get('content'));
 	},
-	*/
+
 	didInsertElement: function () {
 		this._super();
 		this.$('a').tooltip();
@@ -13530,15 +13537,16 @@ App.ProyectosSearchView = Em.View.extend({
 		} 
 		else 
 		{
+			this.get('query').addObserver('createSuccess', this, this.queryCreated)
 			this.get('query').set('usuario', App.userController.get('user.cuil'));
 			this.get('query').create();
-			if (App.searchController.content)
-			{
-				App.searchController.content.pushObject(this.get('query'));
-			}
 		}
 
 		this.get('query').set('palabras', []);
+	},
+
+	queryCreated: function () {
+		App.searchController.load();
 	},
 
 	collapseToggle: function(){
