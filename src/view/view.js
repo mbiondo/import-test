@@ -11059,7 +11059,7 @@ App.VinculateFirmanteView = Ember.View.extend({
 	didInsertElement: function () {
 		this._super();
 		if(this.get('content.id') != 0){
-			var vinculo = App.Firmantesarha.extend(App.Savable).create({id: this.get('content.id')});
+			var vinculo = App.Firmantesarha.extend(App.Savable).create({id: this.get('content.id'), users: []});
 			this.set('vinculo', vinculo);
 			this.get('vinculo').addObserver('loaded', this, this.vinculoLoaded);
 			this.get('vinculo').load();
@@ -11067,51 +11067,33 @@ App.VinculateFirmanteView = Ember.View.extend({
 	},	
 
 	vinculoLoaded: function () {
-		if (this.get('vinculo.loaded')) {
-			if (this.get('vinculo.cuil'))  {
-				this.get('vinculos').push(this.get('vinculo.cuil'));
-				this.set('isEdit', true);
-			} else {
-				this.get('vinculo').set('id',this.get('content.id'));
-				this.set('isEdit', false);
-			}
-		}
 		this.set('edited', false);
 	},
-
-	cuilChange: function () {
-		this.set('edited', true);
-
-		if(this.get('vinculo.loaded'))
-		{			
-			if(this.get('vinculos').contains(this.get('vinculo.cuil')))
-			{
-				this.set('content.existeVinculo', true);
-
-				this.set('vinculo.cuil', '');
-			}
-		}
-	}.observes('vinculo.cuil'),
 
 	//Si el cuil no está en this.get('vinculos') hago this.set('edited', false)
 	guardar: function () {
 		this.get('vinculo').set('nombre', this.get('content.label'));
 
-		if(!this.get('vinculos').contains(this.get('vinculo.cuil')))
+		if (this.get('vinculo.id') != 0)
 		{
-			if (this.get('isEdit'))
-			{
-				this.get('vinculo').save();
-			}
-			else
-			{
-				this.get('vinculo').create();
-			}
-
-			this.set('edited', false);
-			this.get('vinculos').push(this.get('vinculo.cuil'));
+			this.get('vinculo').save();
+		}
+		else
+		{
+			this.get('vinculo').set('id', this.get('content.id'));
+			this.get('vinculo').create();
 		}
 
+		this.set('edited', false);
+	},
+
+
+	agregar: function () {
+
+	},
+
+	deleteUser: function (user) {
+		this.get('vinculo.users').removeObject(user);
 	},
 
 	cancelar: function () {
@@ -13782,4 +13764,12 @@ App.AutoCompleteView = Ember.View.extend({
 			source: palabras
 		});
 	},
+});
+
+
+App.FirmantesarhaItemView = Ember.View.extend({
+
+	borrar: function () {
+		this.get('parentView').deleteUser(this.get('content'));
+	}
 });

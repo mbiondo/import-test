@@ -4,14 +4,14 @@ Handlebars.registerHelper("linkExpediente", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
   
-  return "#/expedientes/expediente/" + id + "/ver";
+  return "#/proyectos/proyecto/" + id + "/ver";
 });
 
 Handlebars.registerHelper("linkAlertaTemprana", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
   
-  return "#/expedientes/alerta-temprana/expediente/" + id + "/ver";
+  return "#/proyectos/alerta-temprana/expediente/" + id + "/ver";
 });
 
 

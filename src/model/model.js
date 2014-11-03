@@ -2407,7 +2407,7 @@ App.Firmantesarha = Ember.Object.extend({
 	cuil: '',
 	nombre: '',
 
-	serializable: ['id', 'cuil', 'nombre'],
+	serializable: ['id', 'users', 'nombre'],
 
 	normalize: function () {
 		
