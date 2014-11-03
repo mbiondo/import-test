@@ -265,7 +265,7 @@ App.Router =  Em.Router.extend({
 
 				App.get('tituloController').set('titulo', "Perfil");
 				App.get('breadCumbController').set('content', [
-					{titulo: 'Perfil'}
+					{titulo: 'Perfil de usuario'}
 				]);					
 						
 			},			
