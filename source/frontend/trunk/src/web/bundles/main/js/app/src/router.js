@@ -2720,8 +2720,9 @@ App.Router =  Em.Router.extend({
 				}),				
 			}),
 		}),	
-		expedientes: Em.Route.extend({
-			route: "/expedientes",
+
+		proyectos: Em.Route.extend({
+			route: "/proyectos",
 			
 			index: Em.Route.extend({
 				route: '/',
@@ -2782,7 +2783,7 @@ App.Router =  Em.Router.extend({
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Expedientes', url: '#/expedientes'}
+						{titulo: 'Proyectos', url: '#/proyectos'}
 					]);				
 								
 				},
@@ -2845,76 +2846,17 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'}
+							{titulo: 'Alerta Temprana', url: '#/proyectos/alerta-temprana'}
 						]);					
 						App.get('menuController').seleccionar(10, 0, 0);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));
-					},
-				}),
-
-				expedienteConsulta: Ember.Route.extend({
-					route: '/expediente/:expediente/ver',
-
-					deserialize: function(router, params) {
-						//App.proyectoConsultaController = App.ProyectoConsultaController.create();
-						App.set('expedienteConsultaController.content', App.Expediente.create({id: params.expediente}));
-						App.bloquesController = App.BloquesController.create();
-						App.interBloquesController = App.InterBloquesController.create();
-						
-						var deferred = $.Deferred(),
-						fn = function() {
-							if (App.get('expedienteConsultaController.loaded')) {
-								var expediente = App.get('expedienteConsultaController.content');
-								deferred.resolve(expediente);
-								App.get('expedienteConsultaController').removeObserver('loaded', this, fn);							
-							}
-						};
-
-						
-						App.set('expedienteConsultaController.url', 'ME/exp/proyecto/%@');
-						App.get('expedienteConsultaController').addObserver('loaded', this, fn);
-						App.get('expedienteConsultaController').load();		
-						App.set('expedienteConsultaController.url', 'exp/proyecto/%@');
-
-
-						App.get('bloquesController').addObserver('loaded', this, fn);
-						App.get('interBloquesController').addObserver('loaded', this, fn);
-
-						App.get('bloquesController').load();
-						App.get('interBloquesController').load();
-
-						return deferred.promise();
-					},
-
-					serialize: function(router, context) {
-						var expedienteId = context.get('id');
-						return {expediente: expedienteId}
-					},
-
-					connectOutlets: function(router, context) {
-						var appController = router.get('applicationController');
-						appController.connectOutlet('help', 'Help');
-						appController.connectOutlet('main', 'expedienteConsulta');
-						appController.connectOutlet('menu', 'subMenu');
-						
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Expedientes', url: '#/expedientes'},
-							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
-						]);					
-
-						App.get('breadCumbController').set('content', [
-							{titulo: 'Alerta Temprana', url: '#/expedientes/alerta-temprana'},
-							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
-						]);					
-						App.get('menuController').seleccionar(10, 0, 0);
-						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},
 				}),
 			}),
 
 			expedienteConsulta: Ember.Route.extend({
 
-				route: '/expediente',
+				route: '/proyecto',
 
 				indexSubRoute: Ember.Route.extend({
 					route: '/:expediente/ver',
@@ -2960,14 +2902,80 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Expedientes', url: '#/expedientes'},
+							{titulo: 'Proyectos', url: '#/proyectos'},
 							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
 						]);					
 						App.get('menuController').seleccionar(1);
 						App.get('tituloController').set('titulo', App.get('menuController.titulo'));					
 					},
 				}),
-			}),			
+			}),		
+
+			expedienteConsultaPorCodigo: Ember.Route.extend({
+
+				route: '/proyecto/numero',
+
+				indexSubRoute: Ember.Route.extend({
+					route: '/:expediente/ver',
+
+					serialize: function (router, context) {
+						return {expediente: context.get('expdip')};
+					},
+
+					deserialize: function(router, params) {
+						var deferred = $.Deferred();
+
+						App.proyectosController = App.ProyectosController.create({ content: []});
+						App.bloquesController = App.BloquesController.create();
+						App.interBloquesController = App.InterBloquesController.create();
+
+						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({expediente: params.expediente}));
+
+						fn = function() {
+							if (App.get('proyectosController.loaded'))
+							{
+								App.get('proyectosController').removeObserver('loaded', this, fn);									
+
+								if(App.get('proyectosController.recordcount') > 0)
+								{	
+									var p = App.get('proyectosController.content.firstObject');
+									App.expedienteConsultaController.set('content', p);
+									deferred.resolve(p);
+								}
+								else
+								{
+									router.transitionTo("page404");
+								}
+							}
+						};
+
+						App.get('proyectosController').addObserver('loaded', this, fn);
+						App.get('proyectosController').load();				
+
+						App.get('bloquesController').addObserver('loaded', this, fn);
+						App.get('interBloquesController').addObserver('loaded', this, fn);
+
+						App.get('bloquesController').load();
+						App.get('interBloquesController').load();
+
+						return deferred.promise();
+					},
+
+					connectOutlets: function(router, context) {
+						var appController = router.get('applicationController');
+						appController.connectOutlet('help', 'Help');
+						appController.connectOutlet('main', 'expedienteConsulta');
+						appController.connectOutlet('menu', 'subMenu');
+						
+						App.get('breadCumbController').set('content', [
+							{titulo: 'Proyectos', url: '#/proyectos'},
+							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
+						]);					
+						App.get('menuController').seleccionar(1);
+						App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
+					},
+				}),
+			}),				
 		}),
 /*
 		enviosArchivados: Em.Route.extend({

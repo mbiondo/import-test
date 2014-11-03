@@ -172,14 +172,14 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Proyectos',
-					url: '#/expedientes',
+					url: '#/proyectos',
 					roles: [['ROLE_PROYECTOS']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							roles: [['ROLE_PROYECTOS']],
 							titulo: 'Buscador de proyectos',
-							url: '#/expedientes',
+							url: '#/proyectos',
 						}),													
 					],
 				}),
