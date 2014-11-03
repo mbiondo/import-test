@@ -576,7 +576,11 @@ App.ContentView = Ember.View.extend({
 	},
 
 	marcarTodas: function () {
+
 		App.get('notificacionesController').marcarTodas();
+
+		if (App.get('notificacionesFiltradasController'))
+			App.get('notificacionesFiltradasController').marcarTodas();
 	},
 
 	didInsertElement: function () {
@@ -2077,8 +2081,12 @@ App.PerfilView = Em.View.extend({
 	oldAvatar: '',
 	hayComisiones: false,
 	hasInitialize: false,
+	autoOpen: false,
 
 	guardar: function () {
+		if (!this.get('content.avatar')) {
+			this.set('content.avatar', this.get('oldAvatar'));				
+		}
 		App.userController.get('user').save();
 		//localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
 		this.set('guardarEnabled', false);
@@ -2100,6 +2108,7 @@ App.PerfilView = Em.View.extend({
 	}.observes('content.avatar'),
 
 	cambiarFoto: function () {
+		this.set('autoOpen', true);
 		this.set('oldAvatar', Ember.copy(this.get('content.avatar')));
 		this.get('content').set('avatar', null);
 		//console.log(this.get('oldAvatar'));
@@ -2108,11 +2117,11 @@ App.PerfilView = Em.View.extend({
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.userController.user);
+
 		if(this.get('content.comisiones').length > 0){
 			this.set('hayComisiones', true);
 		}
 		
-
 		var url = 'notificaciones/config';
 		var posting = $.post( url, { cuil: App.get('userController.user').get('cuil'), funcion: App.get('userController.user').get('funcion'), estructura: App.get('userController.user').get('estructura')});
 		_self = this;
@@ -2672,7 +2681,17 @@ App.InicioView = Em.View.extend({
 		});
 		*/
 	},
-              
+
+	marcarTodasComoLeidas: function () {
+		
+		if (App.get('notificacionesController'))
+			App.get('notificacionesController').marcarTodas();
+
+		if (App.get('notificacionesFiltradasController'))
+			App.get('notificacionesFiltradasController').marcarTodas();
+
+	},
+
 });
 
 

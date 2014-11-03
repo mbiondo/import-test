@@ -55,14 +55,14 @@ App.Savable = Ember.Mixin.create({
 		{
 			if (this.get('notificationType'))
 			{
-				App.get('ioController').sendMessage(this.get('notificationType'), "modificado" , this.getJson(), this.get('notificationRoom'));
+				App.get('ioController').sendMessage(this.get('notificationType'), "borrado" , this.getJson(), this.get('notificationRoom'));
 			}
 
 			if (this.get('auditable')) 
 			{
 				var audit = App.Audit.extend(App.Savable).create();
 				audit.set('tipo', 'Test');
-				audit.set('accion', 'BORRADO');
+				audit.set('accion', 'Eliminado');
 				audit.set('usuario', App.get('userController.user.cuil'));
 				audit.set('objeto', this.constructor.toString());
 				audit.set('objetoId', this.get('id'));
@@ -1769,13 +1769,16 @@ App.NotificacionesController = App.RestController.extend({
 	}.property('unreads', 'oldUnreads'),
 
 	marcarTodas: function () {
+
 		var unreads = this.get('content').filterProperty('leida', false);
-		if (unreads) {
+		if (unreads && unreads.length > 0) {
+
 			unreads.forEach(function (notificacion) {
 				notificacion.set('leida', true);
 			});
 
 			var ns = $.map(unreads, function(notificacion) { return notificacion.id; });
+
 	        this.set('notificacionLeida', App.NotificacionLeida.extend(App.Savable).create({idNotificacion: this.get('content.id'), cuil:App.userController.user.cuil, duplicated: ns}));
 	        this.get('notificacionLeida').addObserver('createSuccess', this, this.createSuccessed);
 	        this.set('loading', true);
