@@ -13656,11 +13656,24 @@ App.ProyectosSearchView = Em.View.extend({
 App.CrearODSinDictamenView = Ember.View.extend({
 	templateName: 'crear-od-sin-dictamen',
 	fecha: '',
+	faltaSeleccionarExpedientes: true,
+	clickGuardar: false,
 
 	fechaChanged: function () {
 		this.set('controller.content.dictamen.fechaImpresion', moment(this.get('fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm:ss'));
 	}.observes('fecha'),
+	proyectosChange: function(){
+		var cantidadProyectos = this.get('controller.content.dictamen.proyectos').length;
 
+		if(cantidadProyectos > 0)
+		{
+			this.set('faltaSeleccionarExpedientes', false);
+		}
+		else
+		{
+			this.set('faltaSeleccionarExpedientes', true);
+		}
+	}.observes('controller.content.dictamen.proyectos.@each'),
 	proyectosChanged: function () {
 		if (this.get('controller.content.dictamen.proyectos.firstObject')) {
 			this.set('controller.content.dictamen.id_proy_cab', this.get('controller.content.dictamen.proyectos.firstObject.id'));
@@ -13668,8 +13681,9 @@ App.CrearODSinDictamenView = Ember.View.extend({
 	}.observes('controller.content.dictamen.proyectos.firstObject'),
 
 	crear: function () {
+		this.set('clickGuardar', true);
 
-		if($('#OrdenDelDiaCrear').parsley('validate'))
+		if($('#OrdenDelDiaCrear').parsley('validate') && this.get('faltaSeleccionarExpedientes') == false)
 		{
 			App.confirmActionController.setProperties({
 				title: 'Confirmar creación de la Orden del dia',
