@@ -5784,6 +5784,11 @@ App.ExpedienteTimelineController = App.RestController.extend({
 	sortProperties: ['fecha'],
 	sortAscending: false,
 
+
+	createEvent: function (event) {
+		console.log(event);
+	},
+
 	createObject: function (data, save) {
 		save = save || false;
 		

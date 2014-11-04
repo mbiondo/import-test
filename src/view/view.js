@@ -2717,6 +2717,11 @@ App.ExpedienteConsultaView = Em.View.extend({
 	loading: false,
 	noDocument: false,
 
+	newEvent: function () {
+		this.get('timeLineController').load();
+		App.get('expedienteConsultaController').set('newEvent', false);
+	}.observes('App.expedienteConsultaController.newEvent'),
+
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
@@ -2787,9 +2792,15 @@ App.ExpedienteConsultaView = Em.View.extend({
 		}
 
 		//this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
-		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip')}));
+		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip'), expdip: App.get('expedienteConsultaController.content.expdip')}));
 		this.get('timeLineController').load();		
-	}
+	},
+
+
+	createEvent: function () {
+
+		App.TimeLineEventCreateView.popup();
+	},
 });
 
 App.CitacionConsultaView = Em.View.extend({
@@ -7821,15 +7832,7 @@ App.CrearExpedienteView = Ember.View.extend({
 					
 			$.jGrowl('Se ha creado el expediente de '+ expediente.tipo + ' ' + expediente.expdip + ' correctamente !', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
 			
-			var notification = App.Notificacion.extend(App.Savable).create();
-			notification.set('tipo', 'crearProyecto');	
-			notification.set('objectId', expediente.id);
-			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
-			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
-			//notification.set('firmantes', this.get('content.firmantes'));
-			
-			notification.create();      
+			this.sendNotifications(expediente);
 
 			var evento = App.TimeLineEvent.extend(App.Savable).create({
 			    objectID: expediente.expdip, 
@@ -7838,7 +7841,7 @@ App.CrearExpedienteView = Ember.View.extend({
 			    mensaje: 'Expediente creado',
 			    icono: 'creado',
 			    link: '#/direccionsecretaria/mesadeentrada/proyecto/'+ expediente.id +'/ver',
-			 	   duplicados: [],
+			 	duplicados: [],
 			});
 			evento.create();
 
@@ -7901,6 +7904,38 @@ App.CrearExpedienteView = Ember.View.extend({
 
 		$("#nav-tabs-proyecto").click();
 		$("#selector-tipo-proyecto").focus();		
+	},
+
+
+	sendNotifications: function (expediente) {
+
+		/**
+		ME Notification
+		*/
+		var notification = App.Notificacion.extend(App.Savable).create();
+		notification.set('tipo', 'crearProyecto');	
+		notification.set('objectId', expediente.id);
+		notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + expediente.id + "/ver");
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		notification.set('mensaje', "Se ha creado el expediente " + expediente.expdip);
+		notification.create();
+
+
+		/**
+			Firmantes notification
+		*/
+		expediente.get('firmantes').forEach(function (firmante) {
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'expedienteIngresado');	
+			notification.set('objectId', expediente.id);
+			notification.set('link', "/#/proyectos/proyecto/numero/" + expediente.expdip + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Su expediente ha ingresado a mesa de entradas con el numero " + expediente.expdip + " y sumario " + expediente.titulo);
+			notification.set('firmantes', [firmante]);
+			notification.create();
+		});
+		
+
 	},
 
 	setupEnter: function(){
@@ -9837,6 +9872,7 @@ App.TimeLineView = Ember.View.extend({
 		console.log(this.get('content'));
 	}
 */
+
 });
 
 
@@ -9874,6 +9910,7 @@ App.TimeLineEventCreateView = App.ModalView.extend({
 		if (opts.primary) {
 			this.get('content').set('fecha', moment(this.get('content.fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm:ss'));
 			this.get('content').create();
+			App.expedienteConsultaController.set('newEvent', true);
 		} else if (opts.secondary) {
 
 		} else {
@@ -9884,7 +9921,7 @@ App.TimeLineEventCreateView = App.ModalView.extend({
 	
 	didInsertElement: function(){	
 		this._super();
-		this.set('content', App.TimeLineEvent.extend(App.Savable).create({objectID: 1}));
+		this.set('content', App.TimeLineEvent.extend(App.Savable).create({objectID: App.expedienteConsultaController.get('content.expdip')}));
 	},
 
 	willDestroyElement: function(){
