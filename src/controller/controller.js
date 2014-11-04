@@ -3757,7 +3757,7 @@ App.CitacionCrearController = Em.Object.extend({
 	},
 	
 	cargarExpedientes: function () {
-		$.ajax({
+/*		$.ajax({
 //			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))) + moment().format('YYYY'),
 			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('content.comisiones').objectAt(0).get('id'))),
 			crossDomain: 'true',
@@ -3770,6 +3770,9 @@ App.CitacionCrearController = Em.Object.extend({
 				this.set('loading', true);
 			}
 		});			
+*/
+		this.set('loading', false);
+		this.set('loaded', true);
 	},
 
 	cargarExpedientesSucceeded: function (data) {

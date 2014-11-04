@@ -7836,11 +7836,11 @@ App.CrearExpedienteView = Ember.View.extend({
 
 			var evento = App.TimeLineEvent.extend(App.Savable).create({
 			    objectID: expediente.expdip, 
-			    titulo: expediente.titulo,
-			    fecha:  expediente.pubFecha,
-			    mensaje: 'Expediente creado',
+			    titulo: 'Ingreso a Diputados',
+			    fecha:  moment().format('YYYY-MM-DD hh:mm:ss'),
+			    mensaje: 'El proyecto ingreso a Mesa de entradas y fue girado a ' + expediente.giro.map(function(comision) { return comision.comision; }).join(', '),
 			    icono: 'creado',
-			    link: '#/direccionsecretaria/mesadeentrada/proyecto/'+ expediente.id +'/ver',
+			    link: '#/proyectos/proyecto/numero/'+ expediente.expdip +'/ver',
 			 	duplicados: [],
 			});
 			evento.create();

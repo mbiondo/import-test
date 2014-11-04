@@ -164,7 +164,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 1,
-			roles: [['ROLE_PROYECTOS']], 
+			roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']], 
 			titulo: 'Proyectos',
 			icono: 'ic ic-expedientes',
 			
@@ -173,11 +173,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Proyectos',
 					url: '#/proyectos',
-					roles: [['ROLE_PROYECTOS']],
+					roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_PROYECTOS']],
+							roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']],
 							titulo: 'Buscador de proyectos',
 							url: '#/proyectos',
 						}),													
@@ -212,7 +212,7 @@ App.menuController = App.MenuController.create({
 			id: 2,
 			titulo: 'Comisiones',
 			icono: 'ic ic-comisiones',
-			roles: [['ROLE_COMISIONES']],
+			roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
