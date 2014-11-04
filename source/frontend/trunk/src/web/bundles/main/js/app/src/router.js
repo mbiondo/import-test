@@ -3191,6 +3191,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
 							{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 							{titulo: 'Dictámenes'},
 						]);					
@@ -3227,6 +3228,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
 							{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/pendientes'},
 							{titulo: 'Pendientes'},
 						]);					
@@ -3284,6 +3286,7 @@ App.Router =  Em.Router.extend({
                             appController.connectOutlet('menu', 'subMenu');
 
                             App.get('breadCumbController').set('content', [
+									{titulo: 'Comisiones'},
                                     {titulo: 'Dictámenes', url: '#/comisiones/dictamenes/pendientes'},
                                     {titulo: 'Crear Dictamen' }
                             ]);							
@@ -3332,6 +3335,7 @@ App.Router =  Em.Router.extend({
 							var copete = App.get('dictamenConsultaController.content.copete');
 							
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones'},
 								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/dictamenes'},
 								{titulo: 'Dictamen', url: '#/comisiones/dictamenes/dictamenes'},
 								{titulo: copete.substr(0,1).toUpperCase() + copete.substr(1, 60).toLowerCase()+'...', url: '#/comisiones/dictamenes/dictamen/'+App.get('dictamenConsultaController.content.id') +'/ver'},								
@@ -3406,6 +3410,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones'},
 								{titulo: 'Dictámenes', url: '#/comisiones/dictamenes/pendientes'},
 								{titulo: 'Pendientes', url: '#/comisiones/dictamenes/pendientes'},
 								{titulo: 'Cargar Dictamen' }
@@ -3455,6 +3460,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones'},
 								{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 								{titulo: 'Reunión'},
 								{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:ss').format('LLL')},
@@ -3497,6 +3503,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'sin Parte'},
 						]);					
@@ -3531,6 +3538,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones'},
 							{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 							{titulo: 'con Parte'},
 						]);					
@@ -3619,6 +3627,7 @@ App.Router =  Em.Router.extend({
 							}
 
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones'},
 								{titulo: 'Reuniones'},
 								{titulo: conOsinParte, url: '#/comisiones/reuniones/'+ conOsinParteLink +'/parte'},
 								{titulo: 'Reunión'},
@@ -3690,6 +3699,7 @@ App.Router =  Em.Router.extend({
 								appController.connectOutlet('menu', 'subMenu');
 								
 								App.get('breadCumbController').set('content', [
+									{titulo: 'Comisiones'},
 									{titulo: 'Reuniones', url: '#/comisiones/reuniones'},
 									{titulo: 'Reunión'},
 									{titulo: moment(App.get('reunionConsultaController.content').get('fecha'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('reunionConsultaController.content.citacion.sala.numero'), url:'#/comisiones/reuniones/reunion/' + App.get('reunionConsultaController.content').get('id') + '/ver'},
@@ -3731,6 +3741,7 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
+							{titulo: 'Comisiones', url: ''},
 							{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 							{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'}
 						]);					
@@ -3782,6 +3793,7 @@ App.Router =  Em.Router.extend({
 							App.get('menuController').seleccionar(2, 0, 1);
 							App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones', url: ''},
 								{titulo: 'Citaciones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
 								{titulo: 'Crear', url: '#/comisiones/citaciones/citacion/crear'}
@@ -3832,6 +3844,7 @@ App.Router =  Em.Router.extend({
 							App.get('citacionCrearController').set('content', null);
 							
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones', url: ''},
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
 								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('citacionConsultaController.content.sala.numero')},
@@ -3933,6 +3946,7 @@ App.Router =  Em.Router.extend({
 							appController.connectOutlet('menu', 'subMenu');
 							
 							App.get('breadCumbController').set('content', [
+								{titulo: 'Comisiones', url: ''},
 								{titulo: 'Agenda de Comisiones', url: '#/comisiones/citaciones'},
 								{titulo: 'Citación'},
 								{titulo: moment(App.get('citacionConsultaController.content').get('start'), 'YYYY-MM-DD HH:mm').format('LLL') + ' - Sala ' + App.get('citacionConsultaController.content.sala.numero'), url: '#/comisiones/citaciones/citacion/' + App.get('citacionConsultaController.content').get('id') + '/ver'},
