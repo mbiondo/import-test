@@ -2737,7 +2737,7 @@ App.ComisionesController = App.RestController.extend({
 
 		this.set('content', []);
 		items.forEach(function(i){
-			if ((!i.grupo) || (i.grupo != 'CS')) {
+			if ((!i.grupo) || (i.grupo != 'CS') || (i.grupo != 'CO')) {
 				this.createObject(i);
 			}
 		}, this);
@@ -2766,6 +2766,27 @@ App.ComisionesController = App.RestController.extend({
 			this.addObject(item);
 		}		
 	},	
+});
+
+App.ComisionesSinCoController = App.ComisionesController.extend({
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		this.set('content', []);
+		items.forEach(function(i){
+			if(i.grupo != "CO"){
+				this.createObject(i);
+			}
+		}, this);
+		
+		this.set('loaded', true);
+		this.set('loading', false);
+	},
 });
 
 
