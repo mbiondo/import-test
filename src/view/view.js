@@ -2507,6 +2507,15 @@ App.CitacionesView = App.ListFilterView.extend({
 		this.set('comisionesCalendar', false);
 		this.set('comisionesCalendarListado', false);
 	},
+	mostrarSoloMisComisiones: function(){
+		App.set('citacionesController.misComisiones', true);
+	},
+	mostrarTodasLasComisiones: function(){
+		App.set('citacionesController.misComisiones', false);
+	},
+	misComisionesChanged: function(){
+		$('#mycalendar').fullCalendar('refetchEvents');
+	}.observes('App.citacionesController.misComisiones')
 });
 
 
