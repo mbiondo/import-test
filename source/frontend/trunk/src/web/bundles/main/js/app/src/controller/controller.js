@@ -2364,6 +2364,7 @@ App.CitacionesController = App.RestController.extend({
 	useApi: true,
 	sortProperties: ['start'],
 	sortAscending: false,
+	misComisiones: false,
 	
 	init : function () {
 		this._super();
@@ -2408,32 +2409,33 @@ App.CitacionesController = App.RestController.extend({
 			this.addObject(item);
 		}		
 	},
-
 	citaciones: function () {
 		var roles = App.get('userController.roles');
 		var citaciones = [];
+		var misCitaciones = [];
 		var comsiones = App.get('userController.user.comisiones');
-
 
 		if(roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW'))
 		{
 
 			if(roles.contains('ROLE_DIRECCION_COMISIONES'))
 			{
-				citaciones = this.get('arrangedContent');
+				citaciones = this.get('arrangedContent');				
 			}
 			else
 			{
 				this.get('arrangedContent').forEach(function (citacion) {
-					if (citacion.get('estado.id') != 1) // confirmadas && suspendidas
-					{
-						citaciones.pushObject(citacion);
-						return true;
-					}
-
-					return false;
+					if (citacion.get('estado.id') != 1){ citaciones.pushObject(citacion); } // confirmadas && suspendidas
 				});
 			}
+
+			citaciones.forEach(function (citacion) {			
+				comsiones.forEach(function (comision) {
+					citacion.get('comisiones').forEach(function (c) {
+						if (c.id == comision.id){ misCitaciones.pushObject(citacion); }
+					});
+				});
+			});
 
 		}
 		else
@@ -2448,6 +2450,7 @@ App.CitacionesController = App.RestController.extend({
 								if (c.id == comision.id)
 								{
 									citaciones.pushObject(citacion);
+									misCitaciones.pushObject(citacion);
 									return true;
 								}
 
@@ -2456,35 +2459,21 @@ App.CitacionesController = App.RestController.extend({
 						});
 					}
 				});
+				
 			}
-			/*
-			else
-			{
-				if(roles.contains('ROLE_DIPUTADO'))
-				{
-					this.get('arrangedContent').forEach(function (citacion) {
-						if(citacion.get('estado.id') != 1) // confirmadas && suspendidas
-						{
-							comsiones.forEach(function (comision) {
-								citacion.get('comisiones').forEach(function (c) {
-									if (c.id == comision.id)
-									{
-										citaciones.pushObject(citacion);
-										return true;
-									}
-
-									return false;
-								});
-							});	
-						}
-					});
-				}
-			}
-			*/
 		}
 
-		return citaciones;
-	}.property('content'),
+		if(this.get('misComisiones') == true)
+		{
+			return misCitaciones;				
+		}
+		else
+		{
+			return citaciones;
+		}
+
+//		return citaciones;
+	}.property('content', 'misComisiones'),
 });
 
 App.CaracterDespachoController = App.RestController.extend({
