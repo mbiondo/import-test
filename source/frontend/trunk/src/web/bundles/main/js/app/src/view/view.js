@@ -2507,6 +2507,15 @@ App.CitacionesView = App.ListFilterView.extend({
 		this.set('comisionesCalendar', false);
 		this.set('comisionesCalendarListado', false);
 	},
+	puedeVerTodasLasComisiones: function(){
+		var roles = App.get('userController.roles');
+
+		if(roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW')){
+			return true;
+		}else{
+			return false;
+		}
+	}.property('App.userController.roles'),
 	mostrarSoloMisComisiones: function(){
 		App.set('citacionesController.misComisiones', true);
 	},
