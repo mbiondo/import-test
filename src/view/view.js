@@ -13745,18 +13745,34 @@ App.CrearODSinDictamenView = Ember.View.extend({
 	createSuccess: function () {
 		if (this.get('controller.content.createSuccess')) {
 			this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
-			 if (!App.get('ordenesDelDiaController'))
-			 	App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
+			if (!App.get('ordenesDelDiaController'))
+				App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
 
-			 fn = function() {
+			fn = function() {
 				App.get('ordenesDelDiaController').removeObserver('loaded', this, fn);	
 				App.get('router').transitionTo('root.ordenDelDia.listadoOD');
-			 };
+			};
 
-			 App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
-			 App.get('ordenesDelDiaController').load();
+			App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
+			App.get('ordenesDelDiaController').load();
 
-			 $.jGrowl('Se ha creado con éxito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
+	 		//CREATE NOTIFICATION TEST 
+			var notification = App.Notificacion.extend(App.Savable).create();
+			//ACA TITULO DE LA NOTIFICACION
+			notification.set('tipo', 'crearOrdenDelDia');	
+			//Si hace falta ID del objeto modificado
+			notification.set('objectId', this.get('controller.content.dictamen.numero'));
+			//Link del objeto
+			notification.set('link', "/#/OD/orden/" + this.get('controller.content.dictamen.numero') + "/ver");
+			//CreateAt
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm:ss'));
+			//Custom message
+			notification.set('mensaje', "Se ha creado la orden del dia N° " + this.get('controller.content.dictamen.numero'));
+			//notification.set('comisiones', this.get('content.comisiones'));
+			//Crear
+			notification.create();
+
+			$.jGrowl('Se ha creado con éxito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
 		} else {
 			if (Ember.typeOf(this.get('controller.content.createSuccess')) == "boolean") {
 				this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
