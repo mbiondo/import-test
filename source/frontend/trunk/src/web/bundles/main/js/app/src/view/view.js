@@ -2053,6 +2053,15 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		this._super();
 		App.get('expedientesController').addObserver('loaded', this, this.expedientesLoaded);
 	},
+	recordcount: function () {
+		return App.get('expedientesController.recordcount');
+	}.property('App.expedientesController.recordcount'),
+
+	/*
+	recordcount:
+
+	totalRecords:
+	*/
 
 	lista: function (){		
 		var _self = this;
@@ -2062,6 +2071,7 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		});
 
 		this.set('mostrarMasEnabled', true);
+		this.set('content.count', filtered.length);	
 
 		Ember.run.next(function(){
 		// High Light Words
@@ -2510,11 +2520,12 @@ App.CitacionesView = App.ListFilterView.extend({
 	puedeVerTodasLasComisiones: function(){
 		var roles = App.get('userController.roles');
 
-		if(roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW')){
+		if(!roles.contains('ROLE_DIRECCION_COMISIONES') && !roles.contains('ROLE_SEC_PARL_VIEW')){
 			return true;
 		}else{
 			return false;
 		}
+		
 	}.property('App.userController.roles'),
 	mostrarSoloMisComisiones: function(){
 		App.set('citacionesController.misComisiones', true);
@@ -5823,6 +5834,11 @@ App.TurnoHablandoView = Ember.View.extend({
 	stopTimer : function () {
 		App.get('turnosController').stopTimer(this.get('content'));
 	},
+
+	didInsertElement: function () {
+		this._super();
+		console.log(this.get('content'));
+	}
 });
 
 App.TemaView = Ember.View.extend({
@@ -6496,11 +6512,13 @@ App.CrearTurnoInlineView = Em.View.extend({
 			} else {		
 				turno.set('orden', App.get('turnosController.content.length'));
 				turno.set('tema', App.get('temaController.content'));
+				var listas = App.get('sesionController.content.listas');
+				lista = listas.findProperty('id', item.listaId)
+				if (lista)
+					turno.set('lista', lista);
 				App.get('turnosController').createObject(turno, true);
 			}
-
 			this.refreshTurno();	
-
 		}
 	},
 

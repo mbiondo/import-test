@@ -1575,14 +1575,24 @@ App.Router =  Em.Router.extend({
 
 								var tema, sesion,
 								fnTema = function() {
-									if (App.get('temasController.loaded') && App.get('turnosController.loaded') && App.get('planDeLaborController.loaded')) {
+
+									if (App.get('temasController.loaded') && App.get('planDeLaborController.loaded')) {
 										tema = App.get('temasController.content').findProperty('id', parseInt(params.tema))
 										if(tema){
-											deferred.resolve(tema);
+											App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
+											App.get('turnosController').addObserver('loaded', this, fnTurnos);
+											App.get('turnosController').load();												
 										}
 										App.get('temasController').removeObserver('loaded', this, fnTema);
 									}
 								},
+
+								fnTurnos = function () {
+									if (App.get('turnosController.loaded')) {
+										App.get('turnosController').removeObserver('loaded', this, fnTurnos);
+										deferred.resolve(tema);
+									}
+								}
 
 								fnSesion = function() {
 									if (App.get('sesionesController.loaded') && App.get('diputadosController.loaded')) {
@@ -1591,11 +1601,7 @@ App.Router =  Em.Router.extend({
 										
 										App.get('temasController').set('url', 'sesion/%@/temas'.fmt(encodeURIComponent(params.sesion)));
 										App.get('temasController').addObserver('loaded', this, fnTema);
-										App.get('temasController').load();
-
-										App.get('turnosController').set('url', 'sesion/%@/turnos'.fmt(encodeURIComponent(params.sesion)));
-										App.get('turnosController').addObserver('loaded', this, fnTema);
-										App.get('turnosController').load();		
+										App.get('temasController').load();	
 										
 										App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
 										App.get('planDeLaborController').addObserver('loaded', this, fnTema);
@@ -2812,7 +2818,7 @@ App.Router =  Em.Router.extend({
 
 						App.get('proyectosController').set('loaded', false);
 						//App.get('proyectosController').set('query', App.ExpedienteQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
-						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comision: null, dirty: true}));
+						App.get('proyectosController').set('query', App.ProyectoQuery.extend(App.Savable).create({tipo: null, comisionesObject: [], firmantesObject: [], palabras:[], dirty: true}));
 						fn = function() {
 							if (App.get('proyectosController.loaded') && App.get('bloquesController.loaded') && App.get('interBloquesController.loaded') && App.get('tpsController.loaded'))
 							{
