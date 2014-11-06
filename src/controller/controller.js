@@ -529,6 +529,10 @@ App.IoController = Em.Object.extend({
 			case 'Turno' :
 				var turno = App.Turno.extend(App.Savable).create(options);
 				turno.set('tema', App.get('temasController').findProperty('id', options.temaId));
+				var listas = App.get('sesionController.content.listas');
+				lista = listas.findProperty('id', item.listaId)
+				if (lista)
+					turno.set('lista', lista);
 				App.get('turnosController').addObject(turno);
 				break;
 
@@ -994,7 +998,7 @@ App.NotificationController = Em.Controller.extend({
 	estado: '',
 	
 	habilitado: function () {
-		return this.get('estado') == 0 || !window.webkitNotifications;
+		return this.get('estado') == 0 || window.webkitNotifications;
 	}.property('estado'),
 	
 	enviarNotificacion: function (notificacion) {
@@ -2364,7 +2368,7 @@ App.CitacionesController = App.RestController.extend({
 	useApi: true,
 	sortProperties: ['start'],
 	sortAscending: false,
-	misComisiones: false,
+	misComisiones: true,
 	
 	init : function () {
 		this._super();
@@ -2409,70 +2413,69 @@ App.CitacionesController = App.RestController.extend({
 			this.addObject(item);
 		}		
 	},
+
 	citaciones: function () {
 		var roles = App.get('userController.roles');
 		var citaciones = [];
 		var misCitaciones = [];
+		var misCitacionesFull = [];
 		var comsiones = App.get('userController.user.comisiones');
 
-		if(roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW'))
-		{
+		if (roles.contains('ROLE_DIRECCION_COMISIONES') || roles.contains('ROLE_SEC_PARL_VIEW'))
+			return this.get('arrangedContent');
 
-			if(roles.contains('ROLE_DIRECCION_COMISIONES'))
-			{
-				citaciones = this.get('arrangedContent');				
-			}
-			else
-			{
-				this.get('arrangedContent').forEach(function (citacion) {
-					if (citacion.get('estado.id') != 1){ citaciones.pushObject(citacion); } // confirmadas && suspendidas
-				});
-			}
+		
+		this.get('arrangedContent').forEach(function (citacion) {
+			if (citacion.get('estado.id') != 1) { 
+				citaciones.pushObject(citacion);
+			} // confirmadas && suspendidas
+		});
 
-			citaciones.forEach(function (citacion) {			
-				comsiones.forEach(function (comision) {
-					citacion.get('comisiones').forEach(function (c) {
-						if (c.id == comision.id){ misCitaciones.pushObject(citacion); }
-					});
+		citaciones.forEach(function (citacion) {			
+			comsiones.forEach(function (comision) {
+				citacion.get('comisiones').forEach(function (c) {
+					if (c.id == comision.id){ misCitaciones.pushObject(citacion); }
 				});
 			});
+		});
 
-		}
-		else
-		{			
-			if(roles.contains('ROLE_SECRETARIO_COMISIONES') || roles.contains('ROLE_DIPUTADO'))
-			{
-				this.get('arrangedContent').forEach(function (citacion) {
-					if(citacion.get('estado.id') != 1) // confirmadas && suspendidas
-					{
-						comsiones.forEach(function (comision) {
-							citacion.get('comisiones').forEach(function (c) {
-								if (c.id == comision.id)
-								{
-									citaciones.pushObject(citacion);
-									misCitaciones.pushObject(citacion);
-									return true;
-								}
-
-								return false;
-							});
-						});
-					}
+		this.get('arrangedContent').forEach(function (citacion) {			
+			comsiones.forEach(function (comision) {
+				citacion.get('comisiones').forEach(function (c) {
+					if (c.id == comision.id){ misCitacionesFull.pushObject(citacion); }
 				});
-				
-			}
-		}
+			});
+		});		
 
 		if(this.get('misComisiones') == true)
 		{
-			return misCitaciones;				
+			if (roles.contains('ROLE_SECRETARIO_COMISIONES'))
+				return misCitacionesFull;
+			else
+				return misCitaciones;				
 		}
 		else
 		{
+			if (roles.contains('ROLE_SECRETARIO_COMISIONES'))
+			{
+				citaciones = [];
+				this.get('arrangedContent').forEach(function (citacion) {
+					if (citacion.get('estado.id') == 1) { 
+						comsiones.forEach(function (comision) {
+							citacion.get('comisiones').forEach(function (c) {
+								if (c.id == comision.id){ citaciones.pushObject(citacion); }
+							});
+						});						
+					} else {
+						citaciones.pushObject(citacion);
+					}
+				});
+			}
+
 			return citaciones;
 		}
 
-//		return citaciones;
+		return citaciones;
 	}.property('content', 'misComisiones'),
 });
 

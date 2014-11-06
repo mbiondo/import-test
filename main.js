@@ -195,14 +195,14 @@ App.menuController = App.MenuController.create({
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Alerta Temprana',
-					url: '#/expedientes/alerta-temprana',
+					url: '#/proyectos/alerta-temprana',
 					roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Alerta Temprana',
-							url: '#/expedientes/alerta-temprana',
+							url: '#/proyectos/alerta-temprana',
 						}),
 					],
 				}),
