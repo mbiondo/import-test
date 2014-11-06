@@ -2431,10 +2431,14 @@ App.CitacionesController = App.RestController.extend({
 			} // confirmadas && suspendidas
 		});
 
+
 		citaciones.forEach(function (citacion) {			
 			comsiones.forEach(function (comision) {
 				citacion.get('comisiones').forEach(function (c) {
-					if (c.id == comision.id){ misCitaciones.pushObject(citacion); }
+					if (c.id == comision.id) { 
+						misCitaciones.pushObject(citacion); 
+						return false; 
+					}
 				});
 			});
 		});
@@ -2442,7 +2446,10 @@ App.CitacionesController = App.RestController.extend({
 		this.get('arrangedContent').forEach(function (citacion) {			
 			comsiones.forEach(function (comision) {
 				citacion.get('comisiones').forEach(function (c) {
-					if (c.id == comision.id){ misCitacionesFull.pushObject(citacion); }
+					if (c.id == comision.id) { 
+						misCitacionesFull.pushObject(citacion); 
+						return false; 
+					}
 				});
 			});
 		});		
@@ -2463,7 +2470,10 @@ App.CitacionesController = App.RestController.extend({
 					if (citacion.get('estado.id') == 1) { 
 						comsiones.forEach(function (comision) {
 							citacion.get('comisiones').forEach(function (c) {
-								if (c.id == comision.id){ citaciones.pushObject(citacion); }
+								if (c.id == comision.id) { 
+									citaciones.pushObject(citacion);
+									return false; 
+								 }
 							});
 						});						
 					} else {
