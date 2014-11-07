@@ -2097,15 +2097,34 @@ App.PerfilView = Em.View.extend({
 	hasInitialize: false,
 	autoOpen: false,
 	autoridades :[],
+	comisiones: [],
+
+	esAsesor: function () {
+		return false;
+	},
 
 	guardar: function () {
 		if (!this.get('content.avatar')) {
-			this.set('content.avatar', this.get('oldAvatar'));				
+			if (this.get('oldAvatar'))
+				this.set('content.avatar', this.get('oldAvatar'));				
 		}
+		App.userController.get('user').addObserver('saveSuccess', this, this.saveSuccessed)
 		App.userController.get('user').save();
 		//localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
 		this.set('guardarEnabled', false);
 	},
+
+	saveSuccessed: function () {
+		if (App.userController.get('user.saveSuccess') == true) 
+		{
+			App.userController.get('user').removeObserver('saveSuccess', this, this.saveSuccessed)
+			$.jGrowl('Se han guardado los cambios!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
+
+		}else{
+			$.jGrowl('No se han guardado los cambios!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
+		}
+	},
+
 
 	vincularPopUp: function () {
 		var _self = this;
@@ -2243,18 +2262,21 @@ App.PerfilView = Em.View.extend({
 		this._super();
 		this.set('content', App.userController.user);
 
+
 		if(this.get('content.comisiones').length > 0){
 			this.set('hayComisiones', true);
 		}
+
 		
 		var url = 'notificaciones/config';
 		var posting = $.post( url, { cuil: App.get('userController.user').get('cuil'), funcion: App.get('userController.user').get('funcion'), estructura: App.get('userController.user').get('estructura')});
-		_self = this;
+
+		var that = this;
 
 		posting.done(function( data ){
-			data = JSON.parse(data);
-			_self.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
-			_self.get('notificationConfig').desNormalize();
+			data =  JSON.parse(data);
+			that.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
+			that.get('notificationConfig').desNormalize();
 		});
 
 		this.cargarAutoridades();
