@@ -2099,9 +2099,6 @@ App.PerfilView = Em.View.extend({
 	autoridades :[],
 	comisiones: [],
 
-	esAsesor: function () {
-		return false;
-	},
 
 	guardar: function () {
 		if (!this.get('content.avatar')) {
@@ -2280,6 +2277,8 @@ App.PerfilView = Em.View.extend({
 		});
 
 		this.cargarAutoridades();
+
+		this.set('esAsesor', App.get('userController').hasRole('ROLE_ASESOR'));
 	},
 });
 
