@@ -1495,6 +1495,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 		//console.log(data);
 		if(data)
 		{		
+/*
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
@@ -1515,7 +1516,7 @@ App.OrdenDelDiaCrearView = Ember.View.extend({
 			//Crear
 			
 			notification.create();
-
+*/
 		}
 	}
 });
@@ -2069,6 +2070,8 @@ App.ExpedientesListView = App.ListFilterWithSortView.extend({
 		filtered = App.get('expedientesController').get('arrangedContent').filter(function(expediente){
 			return regex.test((expediente.tipo + expediente.titulo + expediente.expdip + expediente.get('firmantesLabel') + expediente.get('girosLabel')).toLowerCase());
 		});
+		
+		this.set('content.count', filtered.length);		
 
 		this.set('mostrarMasEnabled', true);
 		this.set('content.count', filtered.length);	
@@ -4526,7 +4529,6 @@ App.CrearParteView = Ember.View.extend({
 		}
 	}.observes('App.citacionConsultaController.content.temas.@each.parteEstado.id'),
 
-
 	guardarParte: function () {
 		var _self = this;
 		this.set('submitting', true);
@@ -4556,6 +4558,7 @@ App.CrearParteView = Ember.View.extend({
 	},
 
 	confirmActionDone: function () {
+		var _self = this;
 		App.confirmActionController.removeObserver('success', this, this.confirmActionDone);
 
 		if (App.get('confirmActionController.success')) {
@@ -4593,7 +4596,7 @@ App.CrearParteView = Ember.View.extend({
 					parte.addObject(parteItem);
 				}
 			});
-
+			
 			App.set('reunionConsultaController.content.parte', parte);
 			App.set('reunionConsultaController.content.nota', this.get('nota'));
 
@@ -4601,6 +4604,8 @@ App.CrearParteView = Ember.View.extend({
 				App.get('reunionConsultaController.content').removeObserver('saveSuccess', this, fn);
 				if (App.get('reunionConsultaController.content.saveSuccess') == true)
 				{
+					_self.sendNotifications(App.get('reunionConsultaController.content'));
+
 					App.get('router').transitionTo('comisiones.reuniones.reunionesConsulta.verReunion', App.get('reunionConsultaController.content'));
 
 					$.jGrowl('Parte creado con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });					
@@ -4652,6 +4657,23 @@ App.CrearParteView = Ember.View.extend({
 				}
 			});
 		}
+	},
+	sendNotifications: function(reunion){
+
+		reunion.parte.forEach(function (parte) {
+			parte.proyectos.forEach(function (p) {
+				var p = p.proyecto;
+				var notification = App.Notificacion.extend(App.Savable).create();
+				notification.set('tipo', 'reunionCrearParte');	
+				notification.set('objectId', expediente.id);
+				notification.set('link', "/#/proyectos/proyecto/numero/" + expediente.expdip + "/ver");
+				notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));			
+				notification.set('mensaje', "El expediente "+ expediente.expdip +" , "+ expediente.tipo +" ha cambiado su estado a " + parte.tipo + " en el parte de la reunion de comisiones " + reunion.comisiones + " de la fecha " + reunion.fecha);
+				notification.set('firmantes', proyecto.get('firmantes'));
+
+				notification.create();
+			});
+		});
 	},
 });
 
@@ -5302,6 +5324,7 @@ App.DictamenCargarView = Ember.View.extend({
 				    duplicados: expedientesD,
 				});
 
+				/*
 				evento.create();	
 
 				var notification = App.Notificacion.extend(App.Savable).create();
@@ -5312,7 +5335,8 @@ App.DictamenCargarView = Ember.View.extend({
 				notification.set('mensaje', "Se ha creado un dictamen " + _self.id);
 				notification.set('firmantes', firmantes);
 				
-				notification.create();      
+				notification.create();     
+				*/ 
 			 };
 
 			 App.get('dictamenConsultaController').addObserver('loaded', this, fn);
@@ -6998,7 +7022,6 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 	},
 
 	guardar: function(){
-
 		var clone = App.PlanDeLaborTentativo.extend(App.Savable).create(Ember.copy(this.get('content')));
 		
 		clone.normalize();
@@ -7037,6 +7060,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 
 	saveSuccessed: function () {
+		var _self = this;
 		this.get('content').removeObserver('saveSuccess', this, this.createSucceeded);
 		if (this.get('content.saveSuccess') == true) {
 
@@ -7070,6 +7094,8 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 								if(proyecto.proyecto.firmantes)
 								{
+									_self.sendNotifications(planDeLabor, proyecto.proyecto);
+
 									proyecto.proyecto.firmantes.forEach(function(firmante){
 										firmantes.push(firmante);
 									});
@@ -7093,6 +7119,7 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 			evento.create();	
 
+/*
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'confirmarLaborParlamentaria');	
 			notification.set('objectId', this.get('content.id'));
@@ -7102,11 +7129,23 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 			notification.set('firmantes', firmantes);
 
 			notification.create();
-
+*/
 		} else {
 			$.jGrowl('Ocurrio un error al cambiar el estado del plan tentativo!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
 		}
 	},
+	sendNotifications: function(planDeLabor, proyecto){
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'confirmarLaborParlamentaria');	
+			notification.set('objectId', planDeLabor.id);
+			notification.set('link', "#/laborparlamentaria/plandelabor/" + planDeLabor.id + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha incorporado al Plan de Labor "+ planDeLabor.id +" el expediente "+ proyecto.expdip +", "+ proyecto.tipo +" sobre "+ proyecto.titulo);
+			notification.set('firmantes', proyecto.firmantes);
+
+			notification.create();
+
+	}
 });
 
 App.PlanDeLaborTentativoView = Ember.View.extend({
@@ -7255,6 +7294,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 			});
 
 			evento.create();	
+/*
 			//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
@@ -7274,7 +7314,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 
 			//Crear
 			notification.create();
-
+*/
 			this.pl.addObserver('saveSuccess', this.scope, this.scope.saveSuccessed);
 			this.pl.set('estado', 2);
 			this.pl.normalize();
@@ -7955,13 +7995,17 @@ App.CrearExpedienteView = Ember.View.extend({
 		/**
 			Firmantes notification
 		*/
+		var primerFirmante = expediente.get('firmantes.firstObject');
+
 		expediente.get('firmantes').forEach(function (firmante) {
 			var notification = App.Notificacion.extend(App.Savable).create();
 			notification.set('tipo', 'expedienteIngresado');	
 			notification.set('objectId', expediente.id);
 			notification.set('link', "/#/proyectos/proyecto/numero/" + expediente.expdip + "/ver");
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-			notification.set('mensaje', "Su expediente ha ingresado a mesa de entradas con el numero " + expediente.expdip + " y sumario " + expediente.titulo);
+			notification.set('mensaje', "Ha sido presentado en Mesa de Entrada - Dirección Secretaría el expediente "+ expediente.expdip +"  por "+ firmante.nombre +" " + firmante.bloque + ", ("+ expediente.tipo +") sobre "+ expediente.titulo);
+//			notification.set('mensaje', "Ha sido presentado en Mesa de Entrada - Dirección Secretaría el expediente "+ expediente.expdip +"  por "+ primerFirmante.nombre +" " + primerFirmante.bloque + ", ("+ expediente.tipo +") sobre "+ expediente.titulo);
+//			notification.set('mensaje', "Su expediente ha ingresado a mesa de entradas con el numero " + expediente.expdip + " y sumario " + expediente.titulo);
 			notification.set('firmantes', [firmante]);
 			notification.create();
 		});
@@ -13163,10 +13207,17 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 		}
 
 	},
-	createSucceeded: function () {
+	createSucceeded: function (xhr) {
 		if (this.get('movimiento.createSuccess')) {
+
 			this.get('movimiento').removeObserver('createSuccess', this, this.createSucceeded);
 			$.jGrowl('Movimiento cargado con exito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
+
+			expediente = this.get('controller.content');
+			movimiento = this.get('movimiento');
+			this.sendNotifications(expediente, movimiento);
+
+
 			var ex = App.Expediente.extend(App.Savable).create({id: this.get('controller.content.id')});
 			ex.set('loaded', false);
 			var deferred = $.Deferred(),
@@ -13194,6 +13245,25 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 
 		ex.addObserver('loaded', this, fn);
 		ex.load();		
+	},
+	sendNotifications: function(expediente, movimiento){
+//		console.log(expediente);
+//		console.log(movimiento);
+
+		var _self = this;
+		var primerFirmante = expediente.get('firmantes.firstObject');
+
+		//expediente.get('firmantes').forEach(function (firmante) {
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'expedienteMovimiento');	
+			notification.set('objectId', _self.get('movimiento.idProy'));
+			notification.set('link', "/#/direccionsecretaria/mesadeentrada/proyecto/" + movimiento.get('idProy') + "/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se ha solicitado el "+ movimiento.get('movimiento') +" del proyecto "+ expediente.get('expdip') +" de "+ primerFirmante.nombre +" " + primerFirmante.bloque + ", "+ expediente.get('tipo') +" sobre "+ movimiento.get('texto') + ". Número de expediente asignado a la solicitud "+ movimiento.get('expMovi'));
+			notification.set('firmantes', expediente.get('firmantes'));
+			//notification.set('firmantes', [firmante]);
+			notification.create();
+		//});
 	},
 });
 
@@ -13763,9 +13833,10 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			App.confirmActionController.show();	
 		}
 	},
-
-	createSuccess: function () {
+	createSuccess: function (xhr) {
 		if (this.get('controller.content.createSuccess')) {
+			//console.log(xhr)
+			//console.log(xhr.dictamen.id)
 			this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
 			if (!App.get('ordenesDelDiaController'))
 				App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
@@ -13794,6 +13865,8 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			//Crear
 			notification.create();
 
+			this.sendNotifications(this.get('controller.content.dictamen'), xhr);
+
 			$.jGrowl('Se ha creado con éxito la Orden del día N° ' + this.get('controller.content.dictamen.numero'), { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });
 		} else {
 			if (Ember.typeOf(this.get('controller.content.createSuccess')) == "boolean") {
@@ -13816,6 +13889,19 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			this.get('controller.content').create();
 		}
 
+	},
+	sendNotifications: function(dictamen, xhr){
+		dictamen.proyectos.forEach(function (proyecto) {
+			var notification = App.Notificacion.extend(App.Savable).create();
+			notification.set('tipo', 'crearOrdenDelDia');	
+			notification.set('objectId', xhr.dictamen.id);
+			notification.set('link', "/#/OD/orden/"+ xhr.dictamen.id +"/ver");
+			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+			notification.set('mensaje', "Se creó la Orden del Día N° "+ dictamen.numero +" que contiene el expediente "+ proyecto.expdip);
+//			notification.set('mensaje', "Su expediente ha ingresado a mesa de entradas con el numero " + expediente.expdip + " y sumario " + expediente.titulo);
+			notification.set('firmantes', [proyecto.firmantes]);
+			notification.create();
+		});
 	},
 });
 
