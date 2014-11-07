@@ -2525,7 +2525,7 @@ App.CitacionesView = App.ListFilterView.extend({
 		}else{
 			return false;
 		}
-		
+
 	}.property('App.userController.roles'),
 	mostrarSoloMisComisiones: function(){
 		App.set('citacionesController.misComisiones', true);
@@ -4511,13 +4511,13 @@ App.CrearParteView = Ember.View.extend({
 
 	listaTemas: function () {
 		return App.get('citacionConsultaController.content.temas');
-	}.property('citacionConsultaController.content.temas'),
+	}.property('App.citacionConsultaController.content.temas'),
 	
 
 	clearErrors: function () {
 		if (this.get('submitting')) {
 			App.get('citacionConsultaController.content.temas').forEach(function(tema) {
-				if(!tema.get('parteEstado').id){
+				if(!tema.get('parteEstado')) {
 					tema.set('faltaSeleccionar', true); 
 				} else {
 					tema.set('faltaSeleccionar', false); 
@@ -4531,9 +4531,10 @@ App.CrearParteView = Ember.View.extend({
 		var _self = this;
 		this.set('submitting', true);
 		this.set('faltaSeleccionar', true);
+
 		App.get('citacionConsultaController.content.temas').forEach(function(tema) {
-			if(!tema.get('parteEstado').id){
-				tema.set('faltaSeleccionar', true); 
+			if(!tema.get('parteEstado')){
+				tema.set('faltaSeleccionar', true);
 			} else {
 				_self.set('faltaSeleccionar', false);
 				tema.set('faltaSeleccionar', false); 
@@ -4657,16 +4658,10 @@ App.CrearParteView = Ember.View.extend({
 
 App.EstadoParteView = Ember.View.extend({
 	templateName: 'parte-estado',
-	estado: 'Seleccione una accion',
-	listaEstados: function () {
-		var arr = ['Seleccione tratamiento'];
-		if (App.get('eventosParteController.content')) {
-			App.get('eventosParteController.content').forEach(function(eventoParte) {
-				arr.addObject(eventoParte);
-			});
-		}
-		return arr;
-	}.property('App.eventosParteController.content')
+
+	didInsertElement: function  () {
+		this._super();
+	},
 });
 
 App.DictamenCrearView = Ember.View.extend({
