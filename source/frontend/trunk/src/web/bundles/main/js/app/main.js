@@ -48,7 +48,7 @@ App.menuController = App.MenuController.create({
 						}),													
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 							titulo: 'Agenda Comisiones',
 							url: '#/novedades/2',
 						}),
@@ -72,7 +72,7 @@ App.menuController = App.MenuController.create({
 						}),
 						App.MenuItem.create({
 							id: 6,
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 							titulo: 'Sesiones',
 							url: '#/novedades/6',
 						}),			
@@ -164,7 +164,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 1,
-			roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']], 
+			roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']], 
 			titulo: 'Proyectos',
 			icono: 'ic ic-expedientes',
 			
@@ -173,11 +173,11 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Proyectos',
 					url: '#/proyectos',
-					roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']],
+					roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 							titulo: 'Buscador de proyectos',
 							url: '#/proyectos',
 						}),													
@@ -212,16 +212,16 @@ App.menuController = App.MenuController.create({
 			id: 2,
 			titulo: 'Comisiones',
 			icono: 'ic ic-comisiones',
-			roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
+			roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Citaciones',
-					roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
+					roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 							titulo: 'Agenda de Comisiones',
 							url: '#/comisiones/citaciones',
 						}),
@@ -283,7 +283,6 @@ App.menuController = App.MenuController.create({
 					id: 4,
 					titulo: 'Constitución de las Comisiones',
 					url: '',
-					roles: [['ROLE_COMISIONES'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -354,7 +353,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
-			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			icono: 'ic ic-labor',
 			subMenu: [
 				App.MenuItem.create({
@@ -397,13 +396,13 @@ App.menuController = App.MenuController.create({
 					titulo: 'Recinto',
 					url: '#/laborparlamentaria/recinto/oradores',
 					icono: 'ic ic-recinto',
-					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
 							titulo: 'Oradores',
 							url: '#/laborparlamentaria/recinto/oradores',
-							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 						}),					
 						App.MenuItem.create({
 							id: 1,
@@ -420,13 +419,13 @@ App.menuController = App.MenuController.create({
 			id: 13,
 			titulo: 'Información Parlamentaria',
 			icono: 'ic ic-tickets',
-			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
 					titulo: 'Solicitudes',
 					url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
-					roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+					roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -438,13 +437,13 @@ App.menuController = App.MenuController.create({
 							id: 1,
 							titulo: 'Ingresadas por mi',
 							url: '#/informacionparlamentaria/solicitudes/mis-pedidos',
-							roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 						}),	
 						App.MenuItem.create({
 							id: 2,
 							titulo: 'Nueva solicitud',
 							url: '#/informacionparlamentaria/solicitudes/nueva',
-							roles: [['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_EDITOR'], ['ROLE_DIPUTADO'], ['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
+							roles: [['ROLE_INFORMACION_PARLAMENTARIA','ROLE_IP_EDITOR'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR'], ['ROLE_INFORMACION_PARLAMENTARIA_EDIT']],
 						}),
 					],
 				}),
@@ -452,7 +451,7 @@ App.menuController = App.MenuController.create({
 		}),
 		App.MenuItem.create({
 			id: 11,
-			roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO']],
+			roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			titulo: 'Visitas Guiadas',
 			icono: 'ic ic-visitas-guiadas',
 			
@@ -461,7 +460,7 @@ App.menuController = App.MenuController.create({
 					id: 0,
 					titulo: 'Visitas Guiadas',
 					url: '',
-					roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO']],
+					roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
@@ -473,7 +472,7 @@ App.menuController = App.MenuController.create({
 							id: 3,
 							titulo: 'Ingresadas por mi',
 							url: '#/visitas-guiadas/mis-visitas',
-							roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 						}),	
 						App.MenuItem.create({
 							id: 1,
@@ -483,7 +482,7 @@ App.menuController = App.MenuController.create({
 						}),	
 						App.MenuItem.create({
 							id: 2,
-							roles: [['ROLE_VISITAS_GUIADAS_EDIT'], ['ROLE_DIPUTADO']],
+							roles: [['ROLE_VISITAS_GUIADAS_EDIT'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 							titulo: 'Nueva visita',
 							url: '#/visitas-guiadas/visita/nueva',
 						}),	
