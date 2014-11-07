@@ -4664,12 +4664,16 @@ App.CrearParteView = Ember.View.extend({
 			parte.proyectos.forEach(function (p) {
 				var p = p.proyecto;
 				var notification = App.Notificacion.extend(App.Savable).create();
+				
+				var comisionesLabel = [];
+				reunion.comisiones.forEach(function(comision){ comisionesLabel.pushObject(comision.nombre); });
+
 				notification.set('tipo', 'reunionCrearParte');	
-				notification.set('objectId', expediente.id);
-				notification.set('link', "/#/proyectos/proyecto/numero/" + expediente.expdip + "/ver");
+				notification.set('objectId', p.id);
+				notification.set('link', "/#/proyectos/proyecto/numero/" + p.expdip + "/ver");
 				notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));			
-				notification.set('mensaje', "El expediente "+ expediente.expdip +" , "+ expediente.tipo +" ha cambiado su estado a " + parte.tipo + " en el parte de la reunion de comisiones " + reunion.comisiones + " de la fecha " + reunion.fecha);
-				notification.set('firmantes', proyecto.get('firmantes'));
+				notification.set('mensaje', "El expediente "+ p.expdip +" , "+ p.tipo +" ha cambiado su estado a " + parte.tipo + " en el parte de la reunion de las comisiones " +  comisionesLabel.join(", "));
+				notification.set('firmantes', p.firmantes);
 
 				notification.create();
 			});
