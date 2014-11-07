@@ -255,6 +255,8 @@ App.Router =  Em.Router.extend({
 			route: '/perfil',
 
 			connectOutlets: function(router, context) {
+				App.firmantesController = App.FirmantesController.create();
+				
 				var appController = router.get('applicationController');
 				appController.connectOutlet('help', 'Help');
 				appController.connectOutlet('menu', 'subMenu');

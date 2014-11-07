@@ -2096,6 +2096,7 @@ App.PerfilView = Em.View.extend({
 	hayComisiones: false,
 	hasInitialize: false,
 	autoOpen: false,
+	autoridades :[],
 
 	guardar: function () {
 		if (!this.get('content.avatar')) {
@@ -2104,6 +2105,86 @@ App.PerfilView = Em.View.extend({
 		App.userController.get('user').save();
 		//localStorage.setObject('user', JSON.stringify(App.userController.get('user')));
 		this.set('guardarEnabled', false);
+	},
+
+	vincularPopUp: function () {
+		var _self = this;
+
+		App.confirmActionController.setProperties({
+			title: 'Confirmar la vinculación a los diputados',
+			message: '¿ Confirma que desea vincularse a los diputados ?',
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.vincular);
+		App.confirmActionController.show();
+	},
+
+	vincular: function () {
+		var _self = this;
+		App.confirmActionController.removeObserver('success',_self,_self.vincular);
+
+		var nombreFirmantes = []
+
+		this.get('autoridades').forEach(function (autoridad) {
+			nombreFirmantes.pushObject(autoridad.diputado.datosPersonales.apellido + ", " + autoridad.diputado.datosPersonales.nombre);
+		});
+
+		var info = {cuil: App.get('userController.user').get('cuil'), firmantes: nombreFirmantes }
+
+		if (App.get('confirmActionController.success'))
+		{
+			this.set('content.userSaraReviso',App.get('userController.user.cuil'));
+
+			this.addObserver('vinculoSuccess', this, this.vinculoSuccess);
+
+			var url = '/firmantesarha-edit-by-user'
+			$.ajax({
+				url:  url,
+				dataType: 'JSON',
+				type: 'PUT',
+				context: this,
+				data : JSON.stringify(info),
+				complete: this.vinculoCompleted,
+			});		
+		}
+
+	},
+
+	vinculoSuccess: function (data) {
+		if (data.success == true) {
+			this.set('vinculoSuccess', true);
+		}		
+
+		if (this.get('vinculoSuccess') == true) 
+		{
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Perfil');
+			audit.set('accion', 'Vincular Diputado');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', '');
+			audit.set('objetoId', '');
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.set('json', '');
+			audit.set('nombre', "Vincular Diputado");
+			audit.create();	
+
+			$.jGrowl('Se ha vinculado a los diputados!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success'  });
+
+			
+		}else{
+			$.jGrowl('No se ha vinculado a los diputados!', { life: 5000, theme: 'jGrowl-icon-danger jGrowl-danger'  });
+		}			
+	},
+	
+	vinculoCompleted: function(xhr){
+		if (xhr.status == 200) {
+			this.set('vinculoSuccess', true);
+		} 
+		else
+		{
+			this.set('vinculoSuccess', false);
+		}
 	},
 
 	cancelar: function () {
@@ -2128,6 +2209,36 @@ App.PerfilView = Em.View.extend({
 		//console.log(this.get('oldAvatar'));
 	},
 
+	cargarAutoridades: function () {
+		App.firmantesController = App.FirmantesController.create();
+		App.firmantesarhaController = App.FirmantesarhaController.create();
+		App.get('firmantesarhaController').set('url','firmantesarha-get-by-user/' + App.get('userController.user').get('cuil'));
+        App.get('firmantesarhaController').load();
+        App.get('firmantesController').load();
+
+        cargaDiputado = function () {
+        	App.get('firmantesController').removeObserver('loaded', this, cargaDiputado);
+
+	        var auto = App.get('firmantesController.content').filter(function(autoridad) {
+	        	var resultado = false;
+	        	App.get('firmantesarhaController').get('content').forEach(function(firmante){
+	        		if(firmante.nombre == autoridad.diputado.datosPersonales.apellido + ", " + autoridad.diputado.datosPersonales.nombre){
+	        			resultado = true;	
+	    			}
+	   			});
+				return resultado;
+			});
+	        
+	        this.set('autoridades',auto);
+        }
+
+        App.get('firmantesController').addObserver('loaded', this, cargaDiputado);
+
+        
+	},
+
+
+
 	didInsertElement: function () {
 		this._super();
 		this.set('content', App.userController.user);
@@ -2145,6 +2256,8 @@ App.PerfilView = Em.View.extend({
 			_self.set('notificationConfig', App.NotificacionConfig.extend(App.Savable).create(data.config));
 			_self.get('notificationConfig').desNormalize();
 		});
+
+		this.cargarAutoridades();
 	},
 });
 
