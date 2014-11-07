@@ -3576,7 +3576,26 @@ App.CitacionCrearController = Em.Object.extend({
 
 
 	},
-	
+	sendNotifications: function(data){
+ 		data.temas.forEach(function(tema){
+ 			tema.proyectos.forEach(function(proyecto){
+					//proyecto.firmantes.forEach(function (firmante) {
+						var notification = App.Notificacion.extend(App.Savable).create();
+						notification.set('tipo', 'confirmarCitacion');	
+						notification.set('objectId', data.id);
+						notification.set('link', "/#/comisiones/citaciones/citacion/"+ data.id + "/ver");
+						notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+						notification.set('mensaje', "Se ha incorporado al temario de la reunión de la Comisión de "+ data.observaciones +" citada para la fecha "+ moment(data.start, "YYYY-MM-DD hh:mm").format('DD/MM/YYYY hh:mm') +" el expediente "+ proyecto.expdip +", "+ proyecto.tipo +",  sobre "+ proyecto.titulo);
+						notification.set('firmantes', proyecto.firmantes);
+						//notification.set('firmantes', [firmante]);
+						notification.create();
+						
+					//});
+ 			});
+ 		});
+
+
+	},
 	confirmarCompleted: function (xhr) {
 		if(xhr.status == 200) {
 			this.get('content').set('estado', App.CitacionEstado.create({id: 2}));
@@ -3606,6 +3625,8 @@ App.CitacionCrearController = Em.Object.extend({
 			
 			var email = notificacion;
 			email.url = document.location.origin + '/' + email.url;
+
+			this.sendNotifications(this.get('content'));
 			
 			App.get('ioController').sendNotification(notificacion);
 			App.get('ioController').sendEmail(email);
