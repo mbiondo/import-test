@@ -758,7 +758,7 @@ if (user) {
 			}
 			App.userController.loginoAuth(usuario.get('cuil'), usuario.get('access_token'), usuario.get('token_type'));
 		} else {
-			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente!', { life: 5000 });
+			$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente!', { life: 5000, theme: 'jGrowl-icon-warning jGrowl-warning'});
 			App.userController.set('user', null);
 			localStorage.setObject('user', null);		
 			App.advanceReadiness();
