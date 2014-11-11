@@ -5405,7 +5405,16 @@ App.DictamenCargarView = Ember.View.extend({
 			this.get('content').save();
 		}
 	},
-
+	sendNotifications: function(dictamen, proyecto){
+		var notification = App.Notificacion.extend(App.Savable).create();
+		notification.set('tipo', 'crearDictamen');	
+		notification.set('objectId', dictamen.id);
+		notification.set('link', "/#/comisiones/dictamenes/dictamen/"+dictamen.id+"/ver");
+		notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+		notification.set('mensaje', "Ha sido dictaminado el expediente "+ proyecto.expdip +", ("+ proyecto.tipo +") sobre "+ proyecto.sumario);
+		notification.set('firmantes', proyecto.firmantes);
+		notification.create();
+	},
 	saveSuccessed: function () {
 		var _self = this.get('content');
 		this.get('content').removeObserver('createSuccess', this, this.saveSuccessed);
@@ -5455,15 +5464,9 @@ App.DictamenCargarView = Ember.View.extend({
 					});
 				}
 
+
 				proyectos.forEach(function(proyecto){				
-					var notification = App.Notificacion.extend(App.Savable).create();
-					notification.set('tipo', 'crearDictamen');	
-					notification.set('objectId', _self.id);
-					notification.set('link', "/#/comisiones/dictamenes/dictamen/"+_self.id+"/ver");
-					notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-					notification.set('mensaje', "Ha sido dictaminado el expediente "+ proyecto.expdip +", ("+ proyecto.tipo +") sobre "+ proyecto.sumario);
-					notification.set('firmantes', proyecto.firmantes);
-					notification.create();
+					//this.sendNotifications(_self, proyecto);
 				});
 
 				var evento = App.TimeLineEvent.extend(App.Savable).create({
