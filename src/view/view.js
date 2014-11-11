@@ -3063,7 +3063,8 @@ App.CitacionConsultaView = Em.View.extend({
 
 			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
 			if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
-			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
+			//if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
+			if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()) this.set('puedeEditar', true);	
 		};
 
 		App.get('citacionConsultaController').addObserver('loaded', this, fn);
@@ -3752,9 +3753,12 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	puedeEditar: function () {
-		return this.get('content.estado.id') == 1 || !this.get('content.id');
+		//return this.get('content.estado.id') == 1 || !this.get('content.id');
+		return  moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment() || !this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),	
-	
+	puedeGuardar: function(){
+		return moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment();
+	},
 	puedeConfirmar: function () {
 		return this.get('content.estado.id') == 1 && this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),
