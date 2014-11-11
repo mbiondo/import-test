@@ -2953,18 +2953,20 @@ App.ExpedienteConsultaView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		
 		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 			App.get('expedienteConsultaController.content').loadBiography();
 		}
 
 		//this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/1'}));
 		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + App.get('expedienteConsultaController.content.expdip'), expdip: App.get('expedienteConsultaController.content.expdip')}));
-		this.get('timeLineController').load();		
+		this.get('timeLineController').load();
+
+		this.set('esAsesor', App.get('userController').hasRole('ROLE_ASESOR'));
 	},
 
 
 	createEvent: function () {
-
 		App.TimeLineEventCreateView.popup();
 	},
 });
