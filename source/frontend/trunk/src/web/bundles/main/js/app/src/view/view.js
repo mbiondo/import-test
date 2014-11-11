@@ -5428,11 +5428,13 @@ App.DictamenCargarView = Ember.View.extend({
 
 				var expedientesD = [];
 				var firmantes = [];
+				var proyectos = [];
 
 				if(_self.proyectosVistos)
 				{				
 					_self.proyectosVistos.forEach(function (proyecto){
 						expedientesD.push(proyecto.proyecto.expdip);
+						proyectos.push(proyecto.proyecto);
 					});
 				}
 
@@ -5440,6 +5442,7 @@ App.DictamenCargarView = Ember.View.extend({
 				{				
 					_self.proyectos.forEach(function (proyecto){
 						expedientesD.push(proyecto.proyecto.expdip);
+						proyectos.push(proyecto.proyecto);
 					});
 				}
 
@@ -5451,6 +5454,17 @@ App.DictamenCargarView = Ember.View.extend({
 						});
 					});
 				}
+
+				proyectos.forEach(function(proyecto){				
+					var notification = App.Notificacion.extend(App.Savable).create();
+					notification.set('tipo', 'crearDictamen');	
+					notification.set('objectId', _self.id);
+					notification.set('link', "/#/comisiones/dictamenes/dictamen/"+_self.id+"/ver");
+					notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+					notification.set('mensaje', "Ha sido dictaminado el expediente "+ proyecto.expdip +", ("+ proyecto.tipo +") sobre "+ proyecto.sumario);
+					notification.set('firmantes', proyecto.firmantes);
+					notification.create();
+				});
 
 				var evento = App.TimeLineEvent.extend(App.Savable).create({
 				    objectID: expedientesD[0], 
@@ -13973,8 +13987,6 @@ App.CrearODSinDictamenView = Ember.View.extend({
 	},
 	createSuccess: function (xhr) {
 		if (this.get('controller.content.createSuccess')) {
-			//console.log(xhr)
-			//console.log(xhr.dictamen.id)
 			this.get('controller.content').removeObserver('createSuccess', this, this.createSuccess);
 			if (!App.get('ordenesDelDiaController'))
 				App.ordenesDelDiaController = App.OrdenesDelDiaController.create();
