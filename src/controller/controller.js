@@ -3191,6 +3191,10 @@ App.ReunionesSinParteController = App.RestController.extend({
 				reuniones 	= this.reunionesFilterByComisiones(comision);
 			}
 		}
+		else
+		{
+			reuniones 	= this.get('reuniones');
+		}
 
 		return reuniones;
 
