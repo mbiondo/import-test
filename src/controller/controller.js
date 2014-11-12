@@ -2487,7 +2487,6 @@ App.CitacionesController = App.RestController.extend({
 
 		return citaciones;
 	}.property('content', 'misComisiones'),
-
 	citacionesFilterByComisiones: function(data){
 		var citaciones = [];
 		var comisiones_input = [];
@@ -2524,25 +2523,24 @@ App.CitacionesController = App.RestController.extend({
 		var citaciones 	= [];
 		var comision 	= this.get('comision');
 
+//		console.log(comision);
+//		console.log(this.get('misComisiones'));
+
 		if(comision)
 		{	
-			if(comision.nombre == 'TODAS LAS COMISIONES')
+			if(this.get('misComisiones') == false || comision.nombre == 'TODAS MIS COMISIONES')
 			{
-				citaciones 	= this.get('citaciones');
+				citaciones 	= this.get('citaciones');	
 			}
 			else
 			{
 				citaciones 	= this.citacionesFilterByComisiones(comision);
 			}
 		}
-		else
-		{
-			citaciones 	= this.get('citaciones');
-		}
 
 		return citaciones;
 
-	}.property('comision'),
+	}.property('comision', 'misComisiones'),
 
 });
 
