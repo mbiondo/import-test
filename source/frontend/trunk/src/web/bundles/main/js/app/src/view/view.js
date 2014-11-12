@@ -2665,7 +2665,30 @@ App.CitacionesView = App.ListFilterView.extend({
 	},
 	misComisionesChanged: function(){
 		$('#mycalendar').fullCalendar('refetchEvents');
-	}.observes('App.citacionesController.misComisiones')
+	}.observes('App.citacionesController.misComisiones', 'App.citacionesController.comision'),
+	puedeListarMisComisiones: function(){
+		if(App.get('citacionesController.misComisiones') == true){
+			return true;
+		}else{
+			return false;
+		}
+	}.property('App.citacionesController.misComisiones'),
+	listarComisiones: function(){
+		var comisiones = [];
+
+		comisiones.addObjects([{"nombre":"TODAS MIS COMISIONES"}]);
+		comisiones.addObjects(App.get('userController.user.comisiones'))
+
+		return comisiones;
+
+	}.property('App.userController.user.comisiones'),
+	didInsertElement: function(){
+		this._super();
+
+		Ember.run.next(function(){
+			$(".filter > select > option:first").attr('selected', 'selected');
+		});
+	},
 });
 
 
@@ -3130,7 +3153,7 @@ App.CalendarTool = Em.View.extend({
 				var fn = function() {
 
 						App.get('citacionesController').removeObserver('loaded', this, fn);
-						App.get('citacionesController').get('citaciones').forEach(function (citacion) {
+						App.get('citacionesController').get('listado').forEach(function (citacion) {
 								var color = '';
 								if (citacion.get('estado'))
 								{
@@ -3228,7 +3251,7 @@ App.CalendarCompletoTool = Em.View.extend({
 				var fn = function() {
 
 						App.get('citacionesController').removeObserver('loaded', this, fn);
-						App.get('citacionesController').get('citaciones').forEach(function (citacion) {
+						App.get('citacionesController').get('listado').forEach(function (citacion) {
 								var color = '';
 								if (citacion.get('estado'))
 								{
@@ -7387,7 +7410,7 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 						var tema = App.Tema.create();
 						console.log(object);
 						tema.setProperties({
-								titulo: "OD Nro " + object.numero + " : " + object.sumario,
+								titulo: "OD " + object.numero + ": " + object.sumario,
 								orden: object.orden,
 								plId: object.id,
 								plTipo: 'd',
