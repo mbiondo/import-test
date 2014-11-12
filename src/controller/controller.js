@@ -2369,7 +2369,7 @@ App.CitacionesController = App.RestController.extend({
 	sortProperties: ['start'],
 	sortAscending: false,
 	misComisiones: true,
-	
+
 	init : function () {
 		this._super();
 	},
@@ -2487,6 +2487,63 @@ App.CitacionesController = App.RestController.extend({
 
 		return citaciones;
 	}.property('content', 'misComisiones'),
+
+	citacionesFilterByComisiones: function(data){
+		var citaciones = [];
+		var comisiones_input = [];
+
+		if(data)
+		{
+			comisiones_input.push(data);
+		}
+		else
+		{
+			comisiones = $.map(App.get('userController.user.comisiones'), function(comision){ return comision; });			
+			comisiones.forEach(function (c) {
+				comisiones_input.push(c);
+			})
+		}
+
+		this.get('citaciones').forEach(function (citacion){
+			comisiones_input.forEach(function (comision_input){
+				citacion.comisiones.forEach(function (comision){
+					if(comision.id == comision_input.id)
+					{
+						citaciones.pushObject(citacion);	
+						return true;
+					}					
+
+					return false;
+				});
+			});
+		});
+
+		return citaciones;
+	},
+	listado: function(){
+		var citaciones 	= [];
+		var comision 	= this.get('comision');
+
+		if(comision)
+		{	
+			if(comision.nombre == 'TODAS LAS COMISIONES')
+			{
+				citaciones 	= this.get('citaciones');
+			}
+			else
+			{
+				citaciones 	= this.citacionesFilterByComisiones(comision);
+			}
+		}
+		else
+		{
+			citaciones 	= this.get('citaciones');
+		}
+
+		return citaciones;
+
+	}.property('comision'),
+
 });
 
 App.CaracterDespachoController = App.RestController.extend({
