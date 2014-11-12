@@ -1016,44 +1016,37 @@ App.CalendarItemListView = Ember.View.extend({
 	},
 });
 
-App.CalendarListView = App.ListFilterView.extend({ 
+//App.CalendarListView = App.ListFilterView.extend({ 
+App.CalendarListView = App.ListFilterWithSortView.extend({ 
+	templateName: 'citaciones-sortable-list',
 	itemViewClass: App.CalendarItemListView, 	
-	columnas: ['Fecha', 'Título', 'Sala', 'Observaciones', 'Estado'],
+//	columnas: ['Fecha', 'Título', 'Sala', 'Observaciones', 'Estado'],
+
+	columnas: [
+		App.SortableColumn.create({nombre: 'Fecha', campo: 'fecha'}),
+		App.SortableColumn.create({nombre: 'Título', campo: 'title'}),
+		App.SortableColumn.create({nombre: 'Sala', campo: 'sala.numero'}),
+		App.SortableColumn.create({nombre: 'Observaciones', campo: 'observaciones'}),
+		App.SortableColumn.create({nombre: 'Estado', campo: 'estado.descripcion'}),
+	],
 
 	lista: function (){
-		if (this.get('filterText')) {
+		if (this.get('filterText').length > 0) {
 			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-			var filtered;
+			var filtered = [];
 
-			if(this.get('content'))
-			{
-				filtered = this.get('content').filter(function(item){
-					return regex.test(item.get('label').toLowerCase());
-				});				
-			}
+			filtered = this.get('content').filter(function(item){
+				return regex.test(item.get('label').toLowerCase());
+			});				
 
 			if (!filtered)
 				filtered = [];
-		} else {
+		}
+		else {
 			filtered = this.get('content');
 		}
-		/*
-		if(App.get('userController').hasRole('ROLE_DIPUTADO')){
-			filtered = filtered.filter(function(item){
-				var resultado = false;
-				App.get('userController').user.comisiones.forEach(function (comision) {
-					item.comisiones.forEach(function (comisionItem) {
-						if(!resultado){
-							resultado = (comision.nombre == comisionItem.nombre);
-						}
-					});									
-				});
-				return resultado;		
-			});
-		}
-		*/
-		var max = this.get('totalRecords');
-		if (filtered.length <= max) {
+
+		if (filtered.length <= this.get('totalRecords')) {
 			max = filtered.length;
 			this.set('mostrarMasEnabled', false);
 		} else {
@@ -1063,7 +1056,7 @@ App.CalendarListView = App.ListFilterView.extend({
 		this.set('filterTextChanged', false);
 		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged'),
+	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged', 'sorting', 'filterText'),
 	highlightText: function(){
 		Ember.run.next(function(){
 		// High Light Words
@@ -4033,7 +4026,7 @@ App.ReunionesSinParteView = Em.View.extend({
 		});
 	},
 });
-
+// 4514 6100
 App.ReunionesConParteListView = App.ListFilterView.extend({
 	itemViewClass: App.ReunionView,
 //	columnas: ['Fecha', 'Nota', 'Comisiones convocadas'],
