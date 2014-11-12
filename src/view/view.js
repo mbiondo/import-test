@@ -10225,8 +10225,8 @@ App.ExpedientesListMiniView = App.JQuerySortableView.extend({
 App.SugestTextSearch = Ember.TextField.extend({
 	insertNewline: function(){		
 		var _self = this.get('parentView');
-
 		element = _self.get('sugestList.firstObject');
+
 		if (this.get('optionValuePath')) {
 			element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
@@ -14069,6 +14069,11 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			notification.create();
 		});
 	},
+	didInsertElement: function(){
+		this._super();
+
+		this.set('controller.content.dictamen.anio', moment().format('YYYY'));
+	}
 });
 
 
