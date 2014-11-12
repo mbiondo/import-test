@@ -4024,7 +4024,14 @@ App.ReunionesSinParteView = Em.View.extend({
 
 		return comisiones;
 
-	}.property('App.userController.user.comisiones')
+	}.property('App.userController.user.comisiones'),
+	didInsertElement: function(){
+		this._super();
+
+		Ember.run.next(function(){
+			$(".filter > select > option:first").attr('selected', 'selected');
+		});
+	},
 });
 
 App.ReunionesConParteListView = App.ListFilterView.extend({
@@ -4044,7 +4051,14 @@ App.ReunionesConParteView = App.ListFilterView.extend({
 
 		return comisiones;
 
-	}.property('App.userController.user.comisiones')
+	}.property('App.userController.user.comisiones'),
+	didInsertElement: function(){
+		this._super();
+
+		Ember.run.next(function(){
+			$(".filter > select > option:first").attr('selected', 'selected');
+		});
+	},
 });
 
 
