@@ -2527,10 +2527,14 @@ App.CitacionesController = App.RestController.extend({
 				citaciones 	= this.citacionesFilterByComision(comision);
 			}
 		}
+		else
+		{
+			citaciones 	= this.get('citaciones');
+		}
 
 		return citaciones;
 
-	}.property('comision', 'misComisiones'),
+	}.property('content', 'comision', 'misComisiones'),	
 
 });
 
