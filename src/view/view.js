@@ -7171,7 +7171,7 @@ App.PLMiniView = Ember.View.extend({
 		if (this.get('mergedContentController')) 
 			this.get('mergedContentController').set('content', data);
 
-	}.observes('content.proyectos.@each, content.dictamenes.@each'),
+	}.observes('content.proyectos.@each, content.dictamenes.@each', 'edited'),
 
 	borrar: function(){
 		this.get('parentView.parentView').borrarItem(this.get('content'));

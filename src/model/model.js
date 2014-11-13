@@ -1682,7 +1682,7 @@ App.Turno = Em.Object.extend({
 		bloqueado = this.get('bloqueado') == true ? 0 : 1;
 
 		
-		orden = $().zeroFill(tema.get('sortValue'), 4) +
+		orden = $().zeroFill(tema.get('sortValue'), 8) +
 						$().zeroFill(this.get('listaId'),2) +
 						$().zeroFill(bloqueado,2)
 
@@ -1692,7 +1692,7 @@ App.Turno = Em.Object.extend({
 			orden = orden + $().zeroFill(this.get('orden'),14);
 		}
 
-		return orden;
+		return parseInt(orden);
 
 	}.property('orden', 'tema.orden', 'horaInicio', 'horaFin'),
 
@@ -2621,7 +2621,7 @@ App.NotificacionConfig = Ember.Object.extend({
 		this.get('tipos').forEach(function (tipo) {
 			tipos.push(App.NotificacionTipoConfig.extend(App.Savable).create(tipo));
 		});
-		this.set('tipos', tipos);
+		this.set('tipos', itpos);
 	},
 
 	serializable: [
