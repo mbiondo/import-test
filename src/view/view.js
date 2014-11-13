@@ -3514,8 +3514,18 @@ App.CitacionCrearView = Em.View.extend({
 		//App.get('citacionCrearController').cargarExpedientes();
 	},
 	cancelarEdicion: function(){
-		if(this.get('content.id')){
-			App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+		if(this.get('content.id'))
+		{
+//			App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+			fn = function() {
+				if (App.get('citacionConsultaController.loaded')) {
+					App.get('citacionConsultaController').removeObserver('loaded', this, fn);	
+					App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+				}
+			};
+
+			App.get('citacionConsultaController').addObserver('loaded', this, fn);
+			App.get('citacionConsultaController').load();
 		}
 		else{
 			App.get('router').transitionTo('comisiones.citaciones.index');
@@ -3544,7 +3554,6 @@ App.CitacionCrearView = Em.View.extend({
 
 		if (this.get('content').get('id')) {
 			this.get('content').set('auditNombre', 'citacionGuardar');
-
 			App.get('citacionCrearController').save();
 		}
 		else {
@@ -3554,7 +3563,7 @@ App.CitacionCrearView = Em.View.extend({
 
 			App.get('citacionCrearController').create();		
 		}
-	},	
+	},		
 	crearInvitado: function () {
 		var invitado = this.get('invitado');
 
