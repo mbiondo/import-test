@@ -2500,33 +2500,13 @@ App.CitacionesController = App.RestController.extend({
 
 		return citaciones;
 	}.property('content', 'misComisiones'),
-	citacionesFilterByComisiones: function(data){
+	citacionesFilterByComision: function(data){
 		var citaciones = [];
-		var comisiones_input = [];
-
-		if(data)
-		{
-			comisiones_input.push(data);
-		}
-		else
-		{
-			comisiones = $.map(App.get('userController.user.comisiones'), function(comision){ return comision; });			
-			comisiones.forEach(function (c) {
-				comisiones_input.push(c);
-			})
-		}
 
 		this.get('citaciones').forEach(function (citacion){
-			comisiones_input.forEach(function (comision_input){
-				citacion.comisiones.forEach(function (comision){
-					if(comision.id == comision_input.id)
-					{
-						citaciones.pushObject(citacion);	
-						return true;
-					}					
+			citacion.comisiones.forEach(function (comision){
+				if(comision.id == data.id) citaciones.pushObject(citacion);	
 
-					return false;
-				});
 			});
 		});
 
@@ -2536,9 +2516,6 @@ App.CitacionesController = App.RestController.extend({
 		var citaciones 	= [];
 		var comision 	= this.get('comision');
 
-//		console.log(comision);
-//		console.log(this.get('misComisiones'));
-
 		if(comision)
 		{	
 			if(this.get('misComisiones') == false || comision.nombre == 'TODAS MIS COMISIONES')
@@ -2547,7 +2524,7 @@ App.CitacionesController = App.RestController.extend({
 			}
 			else
 			{
-				citaciones 	= this.citacionesFilterByComisiones(comision);
+				citaciones 	= this.citacionesFilterByComision(comision);
 			}
 		}
 
