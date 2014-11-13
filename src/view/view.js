@@ -3191,7 +3191,7 @@ App.CalendarTool = Em.View.extend({
 									citacion.set('title', citacion.get('title').substr(0, 75) + "...");
 								}
 						});			
-						callback(App.get('citacionesController').get('citaciones'));
+						callback(App.get('citacionesController').get('listado'));
 				}
 
 				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
@@ -3289,7 +3289,7 @@ App.CalendarCompletoTool = Em.View.extend({
 									citacion.set('title', citacion.get('title').substr(0, 75) + "...");
 								}
 						});			
-						callback(App.get('citacionesController').get('citaciones'));
+						callback(App.get('citacionesController').get('listado'));
 				}
 
 				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
