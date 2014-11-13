@@ -342,13 +342,13 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 		var audit = App.Audit.extend(App.Savable).create();
 		audit.set('tipo', 'Sesion');
-		audit.set('accion', 'Inicio sesion');
+		audit.set('accion', 'Inicio sesión');
 		audit.set('usuario', App.get('userController.user.cuil'));
 		audit.set('objeto', '');
 		audit.set('objetoId', sesionId);
 		audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 		audit.set('json', '');
-		audit.set('nombre', 'Inicio sesion');
+		audit.set('nombre', 'Inicio sesión');
 		audit.create();
 
 	},
@@ -397,13 +397,13 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 
 			var audit = App.Audit.extend(App.Savable).create();
 			audit.set('tipo', 'Sesion');
-			audit.set('accion', 'Fin sesion');
+			audit.set('accion', 'Fin sesión');
 			audit.set('usuario', App.get('userController.user.cuil'));
 			audit.set('objeto', '');
 			audit.set('objetoId', sesionId);
 			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
 			audit.set('json', '');
-			audit.set('nombre', 'Fin sesion');
+			audit.set('nombre', 'Fin sesión');
 			audit.create();
 		}
 	},	
@@ -1222,9 +1222,22 @@ App.PlanDeLaborView = Ember.View.extend({
 			//Custom message
 			notification.set('mensaje', "Se ha creado la Sesión del día " +  moment.unix(this.model.get('fecha')).format('LL'));
 			//Crear
-			notification.create();		
+			notification.create();	
+
+			var audit = App.Audit.extend(App.Savable).create();
+			audit.set('tipo', 'Sesion');
+			audit.set('accion', 'Sesión creada');
+			audit.set('usuario', App.get('userController.user.cuil'));
+			audit.set('objeto', this.get('content').constructor.toString());
+			audit.set('objetoId', data.id);
+			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+			audit.set('json', data);
+			audit.set('nombre', "Sesión creada");
+			audit.create();		
 
 			App.get('router').transitionTo('planDeLabor.recinto.oradores.sesionConsulta.indexSubRoute', this.model);
+
+
 		}		
 	}
 
@@ -2174,7 +2187,7 @@ App.PerfilView = Em.View.extend({
 			audit.set('objeto', '');
 			audit.set('objetoId', '');
 			audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
-			audit.set('json', '');
+			audit.set('json', data);
 			audit.set('nombre', "Vincular Diputado");
 			audit.create();	
 
@@ -7424,7 +7437,6 @@ App.PlanDeLaborTentativoView = Ember.View.extend({
 						orden = orden + 1;
 		    		} else if (object.constructor.toString() == 'App.OrdeDelDia') {
 						var tema = App.Tema.create();
-						console.log(object);
 						tema.setProperties({
 								titulo: "OD " + object.numero + ": " + object.sumario,
 								orden: object.orden,
