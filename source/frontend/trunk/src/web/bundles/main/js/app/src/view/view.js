@@ -3413,6 +3413,8 @@ App.CitacionCrearView = Em.View.extend({
 
 	puedeOrdenar: true,
 
+	showFillInvitadoField: false,
+
 	
 //	showErrors: false,
 	didInsertElement: function() {
@@ -3556,7 +3558,12 @@ App.CitacionCrearView = Em.View.extend({
 	crearInvitado: function () {
 		var invitado = this.get('invitado');
 
-		if(!$('#formInvitados').parsley('validate')) return false;
+		if(invitado.nombre == '' && invitado.apellido == '' && invitado.mail == '' && invitado.caracter == ''){
+			this.set('showFillInvitadoField',true);
+			return false
+		}else{
+			this.set('showFillInvitadoField',false);
+		}
 
 		App.get('citacionCrearController.content.invitados').addObject(invitado);
 		this.set('invitado', App.CitacionInvitado.create());
