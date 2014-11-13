@@ -846,6 +846,19 @@ App.UserController = Em.Controller.extend({
 				App.get('router').transitionTo('index');
 
 				$.jGrowl('Su sesión ha caducado, por favor ingrese nuevamente', { life: 5000, theme: 'jGrowl-icon-warning jGrowl-warning'});
+
+				var tmpUser = App.Usuario.extend(App.Savable).create(data);
+
+				var audit = App.Audit.extend(App.Savable).create();
+				audit.set('tipo', 'Sesion Usuario');
+				audit.set('accion', 'Caduco sesión');
+				audit.set('usuario', tmpUser.get('cuil'));
+				audit.set('objeto', '');
+				audit.set('objetoId', '');
+				audit.set('fecha', moment().format('DD-MM-YYYY HH:mm:ss'));
+				audit.set('json', '');
+				audit.set('nombre', 'Caduco sesión');
+				audit.create();
 			}
 		});			
 	},
