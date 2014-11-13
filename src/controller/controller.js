@@ -3821,8 +3821,19 @@ App.CitacionCrearController = Em.Object.extend({
 			this.get('content').removeObserver('saveSuccess', this, fn);
 			if (this.get('content.saveSuccess') == true)
 			{
-				App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
 				$.jGrowl('Citación editada con éxito!', { life: 5000, theme: 'jGrowl-icon-ok jGrowl-success' });								
+				
+				fn = function() {
+					if (App.get('citacionConsultaController.loaded')) {
+						App.get('citacionConsultaController').removeObserver('loaded', this, fn);	
+						App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
+					}
+				};
+
+				App.get('citacionConsultaController').addObserver('loaded', this, fn);
+				App.get('citacionConsultaController').load();
+				
+				//App.get('router').transitionTo('comisiones.citaciones.citacionesConsulta.verCitacion', this.get('content'));
 			}			
 			else
 			{
