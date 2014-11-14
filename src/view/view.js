@@ -10315,7 +10315,7 @@ App.ODMiniEditableView = Ember.View.extend({
 
 App.PLItemContentCollectionView = App.JQuerySortableView.extend({
 	classNames: [],
-	itemViewClass: App.ODMiniView,
+	itemViewClass: App.ODMiniEditableView,
 	
 	updateSort : function (idArray) {
 		var sortArr = this._super(idArray);
