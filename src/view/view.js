@@ -3098,6 +3098,7 @@ App.CitacionConsultaView = Em.View.extend({
 				&& (this.get('hasPermission'))
 				&& (!App.citacionConsultaController.content.reunion) 
 				&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm').isBefore(moment())))
+//				&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm')  < moment()))
 				this.set('puedeCrearReunion', true);
 
 			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
