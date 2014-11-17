@@ -2921,6 +2921,10 @@ App.ExpedienteConsultaView = Em.View.extend({
 		App.get('expedienteConsultaController').set('newEvent', false);
 	}.observes('App.expedienteConsultaController.newEvent'),
 
+	puedeEditarTimeline: function(){
+		return App.get('userController').hasRole('ROLE_PROYECTOS_TIMELINE') 
+	}.property('App.userController.user'),
+
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
@@ -10413,6 +10417,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		}
 		return false;
 	}.property('controller.content'),
+
+
 	
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
