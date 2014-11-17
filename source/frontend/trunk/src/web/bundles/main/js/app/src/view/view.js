@@ -2690,7 +2690,11 @@ App.CitacionesView = App.ListFilterView.extend({
 		var comisiones = [];
 
 		comisiones.addObjects([{"nombre":"TODAS MIS COMISIONES"}]);
-		comisiones.addObjects(App.get('userController.user.comisiones'))
+
+		if(App.get('userController.user.comisiones'))
+		{
+			comisiones.addObjects(App.get('userController.user.comisiones'))
+		}
 
 		return comisiones;
 
