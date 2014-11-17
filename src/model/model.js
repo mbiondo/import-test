@@ -2621,7 +2621,7 @@ App.NotificacionConfig = Ember.Object.extend({
 		this.get('tipos').forEach(function (tipo) {
 			tipos.push(App.NotificacionTipoConfig.extend(App.Savable).create(tipo));
 		});
-		this.set('tipos', itpos);
+		this.set('tipos', tipos);
 	},
 
 	serializable: [
