@@ -3089,13 +3089,14 @@ App.CitacionConsultaView = Em.View.extend({
 			if((App.citacionConsultaController.content.estado.id == 2) 
 				&& (this.get('hasPermission'))
 				&& (!App.citacionConsultaController.content.reunion) 
-				&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()))
+				&& (moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm').isBefore(moment())))
 				this.set('puedeCrearReunion', true);
 
 			if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeConfirmar', true);
 			if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
 			//if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
-			if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment()) this.set('puedeEditar', true);	
+			//if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment('YYYY-MM-DD HH:mm')) this.set('puedeEditar', true);	
+			if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm').isBefore(moment())) this.set('puedeEditar', true);	
 		};
 
 		App.get('citacionConsultaController').addObserver('loaded', this, fn);
@@ -7654,6 +7655,7 @@ App.SugestView = Ember.View.extend({
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
+
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
 				if (this.get('applyOrden')) {
@@ -9992,6 +9994,9 @@ App.SelectListView = App.JQuerySortableView.extend({
 });
 
 
+
+
+
 App.MultiSelectListView = Ember.View.extend({
 	templateName: 'wg-multiselect',
 	itemViewClass: 'App.SelectListItemView',
@@ -10309,8 +10314,8 @@ App.SugestTextSearch = Ember.TextField.extend({
 		var _self = this.get('parentView');
 		element = _self.get('sugestList.firstObject');
 
-		if (this.get('optionValuePath')) {
-			element = element.get(this.get('optionValuePath').replace('content.', ''));
+		if (this.get('optionValuePath')) { // esto es "content"
+//			element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
 
 		_self.itemSelect(element);
