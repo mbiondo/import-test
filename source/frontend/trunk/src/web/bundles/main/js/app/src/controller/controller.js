@@ -4340,7 +4340,8 @@ App.TurnosController = App.RestController.extend({
 					ultimaHora = moment.unix(turnoAnterior.get('hora'));
 				}
 				tiempo = turnoAnterior.get('tiempo') * 60 * 1000;
-				ultimaHora.add('milliseconds', tiempo);
+				ultimaHora.add(tiempo, 'milliseconds');
+				//ultimaHora.add('milliseconds', tiempo);
 				hora = ultimaHora.unix();
 			}
 
