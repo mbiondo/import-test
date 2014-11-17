@@ -3545,36 +3545,42 @@ App.CitacionCrearView = Em.View.extend({
 		}
 	},
 	guardar: function () {
-		this.$('#crear-citacion-form').parsley('validate');
 
-		if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
+		App.confirmActionController.removeObserver('success', this, this.guardar);
 
-		var temas = App.get('citacionCrearController.content.temas');
-		var temasToRemove = [];
-				
-		temas.forEach(function (tema) {
-			var proyectos = tema.get('proyectos');
+		if (App.get('confirmActionController.success')) {
 
-			if (proyectos.length == 0)
-				temasToRemove.addObject(tema);
-		});
+			this.$('#crear-citacion-form').parsley('validate');
 
-		temas.removeObjects(temasToRemove);
-				
-		App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
+			if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
+
+			var temas = App.get('citacionCrearController.content.temas');
+			var temasToRemove = [];
+					
+			temas.forEach(function (tema) {
+				var proyectos = tema.get('proyectos');
+
+				if (proyectos.length == 0)
+					temasToRemove.addObject(tema);
+			});
+
+			temas.removeObjects(temasToRemove);
+					
+			App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
 
 
 
-		if (this.get('content').get('id')) {
-			this.get('content').set('auditNombre', 'citacionGuardar');
-			App.get('citacionCrearController').save();
-		}
-		else {
-			this.get('content').set('auditNombre', 'citacionCrear');
+			if (this.get('content').get('id')) {
+				this.get('content').set('auditNombre', 'citacionGuardar');
+				App.get('citacionCrearController').save();
+			}
+			else {
+				this.get('content').set('auditNombre', 'citacionCrear');
 
-			App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+				App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
 
-			App.get('citacionCrearController').create();		
+				App.get('citacionCrearController').create();		
+			}
 		}
 	},		
 	crearInvitado: function () {
@@ -3828,8 +3834,33 @@ App.CitacionCrearView = Em.View.extend({
 		
 	crearReunion: function () {
 		App.CrearReunionView.popup();		
-	},	
+	},
+	
+	guardarPopUp: function () {
+		var _self = this;
+		var titulo =  "Confirma que desea "
+		var mensaje = "¿ Confirma que desea "
+		var fecha = moment(this.get('startFecha'), 'DD/MM/YYYY').format('DD/MM/YYYY') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm');
 
+		if (this.get('content').get('id')) {
+			titulo += "moficar la citación"
+			mensaje += "modificar la citación del día" + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
+		}
+		else {
+			titulo += "crear la citación"
+			mensaje += "crear la citación el día " + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
+		}
+
+		App.confirmActionController.setProperties({
+			title: titulo,
+			message: mensaje,
+			success: null,
+		});
+		
+		App.confirmActionController.addObserver('success', _self, _self.guardar);
+		App.confirmActionController.show();
+	},	
+	
 
 });
 
