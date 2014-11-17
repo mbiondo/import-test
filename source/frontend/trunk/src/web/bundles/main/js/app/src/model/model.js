@@ -1788,7 +1788,8 @@ App.Turno = Em.Object.extend({
 		else
 			duracion = this.get('tiempo') * 60 * 1000;
 		
-		hora.add('milliseconds', duracion);
+		//hora.add('milliseconds', duracion);
+		hora.add(duracion, 'milliseconds');
 
 		return hora.unix();
 	}.property('horaFin', 'tiempo', 'hora', 'horaInicio'),
