@@ -283,10 +283,11 @@ App.menuController = App.MenuController.create({
 					id: 4,
 					titulo: 'Constitución de las Comisiones',
 					url: '',
+					roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_SEC_PARL_VIEW']],
 					subMenu: [
 						App.MenuItem.create({
 							id: 0,
-							roles: [['ROLE_COMISIONES'], ['ROLE_SEC_PARL_VIEW']],
+							roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_SEC_PARL_VIEW']],
 							titulo: 'Listado de Comisiones',
 							url: '#/comisiones/listado',
 						}),		
