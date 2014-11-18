@@ -2788,9 +2788,13 @@ App.ComisionesController = App.RestController.extend({
 
 		this.set('content', []);
 		items.forEach(function(i){
-			if ((!i.grupo) || (i.grupo != 'CS') || (i.grupo != 'CO')) {
-				this.createObject(i);
+
+			if(i.grupo != "CS"){
+				if (i.grupo != "CO"){
+					this.createObject(i);
+				}
 			}
+			 					
 		}, this);
 		
 		this.set('loaded', true);
