@@ -2644,7 +2644,10 @@ App.CitacionesView = App.ListFilterView.extend({
 	comisionesCalendar: true,
 	comisionesCalendarCompleto: false,
 	comisionesCalendarListado: false,
-
+	exportToDay: function () {
+		App.get('citacionesController').exportToDay();
+	},
+	
 	comisionesCalendarMostrar: function(){
 		this.set('comisionesCalendar', true);
 		this.set('comisionesCalendarCompleto', false);
@@ -5517,6 +5520,7 @@ App.DictamenCargarView = Ember.View.extend({
 			this.get('content').save();
 		}
 	},
+	
 	sendNotifications: function(dictamen, proyecto){
 		var notification = App.Notificacion.extend(App.Savable).create();
 		notification.set('tipo', 'crearDictamen');	
@@ -5527,6 +5531,7 @@ App.DictamenCargarView = Ember.View.extend({
 		notification.set('firmantes', proyecto.firmantes);
 		notification.create();
 	},
+
 	saveSuccessed: function () {
 		var _self = this.get('content');
 		this.get('content').removeObserver('createSuccess', this, this.saveSuccessed);
@@ -5590,9 +5595,9 @@ App.DictamenCargarView = Ember.View.extend({
 				    link: '#/comisiones/dictamenes/dictamen/'+ _self.id +'/ver',
 				    duplicados: expedientesD,
 				});
+				evento.create();	
 
 				/*
-				evento.create();	
 
 				var notification = App.Notificacion.extend(App.Savable).create();
 				notification.set('tipo', 'crearDictamen');	
