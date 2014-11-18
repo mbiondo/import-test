@@ -2791,7 +2791,8 @@ App.Router =  Em.Router.extend({
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));
 					
 					App.get('breadCumbController').set('content', [
-						{titulo: 'Proyectos', url: '#/proyectos'}
+						{titulo: 'Proyectos'},
+						{titulo: 'Buscador de proyectos', url: '#/proyectos'}
 					]);				
 								
 				},
@@ -2910,7 +2911,8 @@ App.Router =  Em.Router.extend({
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
-							{titulo: 'Proyectos', url: '#/proyectos'},
+							{titulo: 'Proyectos'},
+							{titulo: 'Buscador de proyectos', url: '#/proyectos'},
 							{titulo: App.get('expedienteConsultaController.content').get('expdip')}
 						]);					
 						App.get('menuController').seleccionar(1);
