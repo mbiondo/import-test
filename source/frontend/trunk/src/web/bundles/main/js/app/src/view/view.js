@@ -1030,12 +1030,13 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Estado', campo: 'estado.descripcion'}),
 	],
 
-	lista: function (){
+	lista: function (){		
+		var filtered = [];
+
 		if (this.get('filterText').length > 0) {
 			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
-			var filtered = [];
 
-			filtered = this.get('content').filter(function(item){
+			filtered = App.get('citacionesController.arrangedContent').filter(function(item){
 				return regex.test(item.get('label').toLowerCase());
 			});				
 
@@ -1043,7 +1044,7 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 				filtered = [];
 		}
 		else {
-			filtered = this.get('content');
+			filtered = App.get('citacionesController.arrangedContent');
 		}
 
 		if (filtered.length <= this.get('totalRecords')) {
@@ -1056,7 +1057,7 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 		this.set('filterTextChanged', false);
 		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterListText', 'content', 'totalRecords', 'step', 'content.@each', 'filterTextChanged', 'sorting', 'filterText'),
+	}.property('filterListText', 'App.citacionesController.arrangedContent', 'totalRecords', 'step', 'App.citacionesController.arrangedContent.@each', 'filterTextChanged', 'sorting', 'filterText'),
 	highlightText: function(){
 		Ember.run.next(function(){
 		// High Light Words
