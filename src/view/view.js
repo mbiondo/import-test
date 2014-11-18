@@ -3442,6 +3442,8 @@ App.CitacionCrearView = Em.View.extend({
 //	showErrors: false,
 	didInsertElement: function() {
 		this._super();
+
+
 		if (this.get("invitado")) {					
 			this.set('invitado',App.CitacionInvitado.create());
 		}
@@ -3497,6 +3499,7 @@ App.CitacionCrearView = Em.View.extend({
 				}
 			}
 		}
+
 	}, 
 
 	seleccionarTodos: function () {
@@ -3817,11 +3820,13 @@ App.CitacionCrearView = Em.View.extend({
 	
 	puedeEditar: function () {
 		//return this.get('content.estado.id') == 1 || !this.get('content.id');
-		return  moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment() || !this.get('content.id');
-	}.property('content.id', 'content', 'content.estado'),	
+		//return  moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment() || !this.get('content.id');
+		return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment())  || !this.get('content.id');
+	}.property('content.id', 'content', 'App.citacionConsultaController.content.start'),	
 	puedeGuardar: function(){
-		return moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment();
-	},
+		return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment());
+		//return moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment();
+	}.property( 'content', 'App.citacionConsultaController.content.start'),	
 	puedeConfirmar: function () {
 		return this.get('content.estado.id') == 1 && this.get('content.id');
 	}.property('content.id', 'content', 'content.estado'),
