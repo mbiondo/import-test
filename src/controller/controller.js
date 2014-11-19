@@ -2390,6 +2390,24 @@ App.CitacionesController = App.RestController.extend({
 	loadSucceeded: function(data){
 		this._super(data);
 	},
+
+
+	toDayToExport: function () {
+		var citaciones = [];
+		this.get('listado').forEach(function (citacion) {
+			if (moment(citacion.get('fecha'), 'YYYY-MM-DD').unix() == moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY').unix()){
+				if (citacion.get('estado.id') != 1) {
+					citacion.set('fechaFormateada', moment(citacion.get('fecha'), 'YYYY-MM-DD hh:mm:ss').format('LLL'));
+					citaciones.pushObject(citacion);
+				}
+			}
+		});
+		return citaciones;	
+	}.property('listado'),
+
+	exportToDay: function () {
+		$.download('exportar', "&type=citaciones&data=" + JSON.stringify(this.get('toDayToExport')));
+	},
 	
 	load: function() {
 		if (App.get('userController.user')) {		
@@ -4335,6 +4353,7 @@ App.TurnosController = App.RestController.extend({
 		}
 
 		while(turnoAnterior != undefined && fromIndex < length){
+
 			if(turnoAnterior.get('horaFin')){
 				hora = turnoAnterior.get('horaFin');
 			}else{
@@ -4350,6 +4369,8 @@ App.TurnosController = App.RestController.extend({
 			}
 
 			turno = this.get('arrangedContent').objectAt(fromIndex);
+
+		
 			turno.set('numero', numero);
 
 			if(turno.get('horaInicio')){

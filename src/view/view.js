@@ -218,13 +218,41 @@ App.SubMenuView = Ember.View.extend({
 	},
 
 	query: function (query) {
-		App.expedientesController.set('query', query);
-		App.expedientesController.set('pageNumber', 1);
-		App.expedientesController.set('content', []);
-		App.expedientesController.load();
-		App.get('router').transitionTo('root.expedientes.index');
-	},	
-	
+
+		App.firmantesController = App.FirmantesController.create();
+
+		
+		fn = function () {
+			var lista_palabras = $.map(query.get('palabras'), function(key){ return key.nombre; });
+			query.set('palabras', lista_palabras);
+
+			query.set('firmantesObject', []);
+			query.set('comisionesObject', []);
+
+	        query.get('comisionesList').forEach(function (item) {
+	           query.get('comisionesObject').pushObject(App.Comision.create({id: item.id, nombre: item.nombre}));
+	        }, this);
+
+			query.get('firmantesList').forEach(function (firmante) {
+				var f = App.get('firmantesController').findProperty('label', firmante.nombre);
+				if (f) {
+					query.get('firmantesObject').addObject(f);
+				}
+			}, this);        
+
+			App.expedientesController.set('query', query);
+			App.expedientesController.set('pageNumber', 1);
+			App.expedientesController.set('content', []);
+
+			App.expedientesController.load();
+			App.get('router').transitionTo('root.proyectos.index');
+		}
+
+		App.get('firmantesController').addObserver('loaded', this, fn);
+
+		App.get('firmantesController').load();
+
+	},
 });
 
 App.SubMenuExpedientesView = App.SubMenuView.extend({
