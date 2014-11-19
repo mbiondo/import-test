@@ -999,6 +999,10 @@ App.UserController = Em.Controller.extend({
 		return this.get('roles').contains(role);
 	},
 
+	isDiputado: function () {
+		return this.get('roles').contains('ROLE_DIPUTADO');	
+	}.property('roles'),
+
 });
 
 App.ApiController = Em.Controller.extend({
