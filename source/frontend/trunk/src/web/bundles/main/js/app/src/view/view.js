@@ -10334,11 +10334,18 @@ App.SugestTextSearch = Ember.TextField.extend({
 		var _self = this.get('parentView');
 		element = _self.get('sugestList.firstObject');
 
-		if (this.get('optionValuePath')) { // esto es "content"
-//			element = element.get(this.get('optionValuePath').replace('content.', ''));
+		if (this.get('optionValuePath')) {
+			//element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
 
 		_self.itemSelect(element);
+
+		if (typeof _self.get('parentView').clickExpediente == 'function')
+		{
+			_self.get('parentView').clickExpediente(element);
+		}
+
+
 	},
 });
 
