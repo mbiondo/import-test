@@ -527,10 +527,11 @@ App.IoController = Em.Object.extend({
 				}
 				break;
 			case 'Turno' :
+				var listas = App.get('sesionController.content.listas');
+				lista = listas.findProperty('id', parseInt(options.listaId));
+
 				var turno = App.Turno.extend(App.Savable).create(options);
 				turno.set('tema', App.get('temasController').findProperty('id', options.temaId));
-				var listas = App.get('sesionController.content.listas');
-				lista = listas.findProperty('id', item.listaId)
 				if (lista)
 					turno.set('lista', lista);
 				App.get('turnosController').addObject(turno);
@@ -4155,23 +4156,26 @@ App.TurnosController = App.RestController.extend({
 	},
 
 	misTurnos: function () {
-		var misTurnos = this.get('arrangedContent').filter(function (turno) {
+		var turnos = this.get('arrangedContent').filter(function (turno) {
 			var tengoOrador =  false;
 
 			turno.get('oradores').forEach(function(orador){
-				var dipStr = "Dip " + orador.user.apellido + " " + orador.user.nombre;
-				if (dipStr.toLowerCase() == App.get('userController.user.estructura').toLowerCase()) {
-					tengoOrador = true;
-				}
+				var dipStr = orador.user.apellido + ", " + orador.user.nombre;
+	        	App.get('firmantesarhaController').get('content').forEach(function(firmante){
+	        		if(firmante.nombre == dipStr){
+	        			tengoOrador = true;
+	    			}
+	   			});			
 			});
+
 
 			if (tengoOrador)
 				return true;
 			else
 				return false;
 		});
-		return misTurnos;
-	}.property('arrangedContent', 'length'),
+		return turnos;
+	}.property('content.@each', 'App.firmantesarhaController.content.@each').cacheable(),
 
 	proximoTurno: function () {
 
@@ -4413,6 +4417,7 @@ App.TurnosController = App.RestController.extend({
 		if (data.success == true) {
 			var turnosController = App.get('turnosController');
 			turnosController.actualizarHora();
+
 			App.get('ioController').sendMessage(this.controller.get('notificationType'), "creado", this.model.getJson(), this.controller.get('notificationRoom'));
 			
 			var temaController = App.get('temaController');

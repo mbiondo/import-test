@@ -1466,8 +1466,13 @@ App.Router =  Em.Router.extend({
 								if (!App.get('planDeLaborController'))
 									App.planDeLaborController = App.PlanDeLaborController.create();
 								
+								App.firmantesarhaController = App.FirmantesarhaController.create();
+								App.get('firmantesarhaController').set('url','firmantesarha-get-by-user/' + App.get('userController.user').get('cuil'));							
+
 								var sesion;
 								var deferred = $.Deferred(),
+
+
 								fn = function() {
 									if (App.get('sesionesController.loaded')) {
 										sesion = App.get('sesionesController.content').findProperty('id', parseInt(params.sesion))
@@ -1486,6 +1491,7 @@ App.Router =  Em.Router.extend({
 								App.get('sesionesController').addObserver('loaded', this, fn);
 								App.get('sesionesController').load();
 								App.get('diputadosController').load();
+								App.get('firmantesarhaController').load();
 
 								return deferred.promise();
 							},
@@ -1571,6 +1577,8 @@ App.Router =  Em.Router.extend({
 								if (!App.get('planDeLaborController'))
 									App.planDeLaborController = App.PlanDeLaborController.create();
 									
+								App.firmantesarhaController = App.FirmantesarhaController.create();
+								App.get('firmantesarhaController').set('url','firmantesarha-get-by-user/' + App.get('userController.user').get('cuil'));
 								
 
 								deferred = $.Deferred();
@@ -1620,6 +1628,7 @@ App.Router =  Em.Router.extend({
 								
 								App.get('sesionesController').load();
 								App.get('diputadosController').load();
+								App.get('firmantesarhaController').load();
 
 								return deferred.promise();
 							},
