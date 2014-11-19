@@ -2698,6 +2698,7 @@ App.CitacionesView = App.ListFilterView.extend({
 	comisionesCalendar: true,
 	comisionesCalendarCompleto: false,
 	comisionesCalendarListado: false,
+
 	exportToDay: function () {
 		App.get('citacionesController').exportToDay();
 	},
@@ -3495,6 +3496,19 @@ App.CitacionCrearView = Em.View.extend({
 	puedeOrdenar: true,
 
 	showFillInvitadoField: false,
+
+	showCabecera: true,
+
+
+	showCabeceraChanged: function () {
+		if (this.get('showCabecera')) {
+			var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+			App.get('expedientesArchivablesController').set('comision', fo);
+			fo = null;
+		} else {
+			App.get('expedientesArchivablesController').set('comision', null);
+		}
+	}.observes('showCabecera'),
 
 	
 //	showErrors: false,
@@ -4459,6 +4473,17 @@ App.ReunionConsultaView = Em.View.extend({
 	expSobreTabla: false,
 	expArt109: false,
 	expedienteSeleccionado: null,
+	showCabecera: true,
+
+	showCabeceraChanged: function () {
+		if (this.get('showCabecera')) {
+			var fo = App.get('citacionCrearController.content.comisiones.firstObject');
+			App.get('expedientesArchivablesController').set('comision', fo);
+			fo = null;
+		} else {
+			App.get('expedientesArchivablesController').set('comision', null);
+		}
+	}.observes('showCabecera'),
 
 	didInsertElement: function () {
 		this._super();
@@ -4506,54 +4531,7 @@ App.ReunionConsultaView = Em.View.extend({
 	}.property('tituloNuevoTema'),
 
 	cargarExpedientes: function () {
-		this.set('isEdit', true);
-
-		$.ajax({
-			url: (App.get('apiController').get('url') + this.get('urlExpedientes')).fmt(encodeURIComponent(this.get('citacion.comisiones').objectAt(0).id)),
-			crossDomain: 'true',
-			dataType: 'JSON',
-			type: 'GET',
-			context: this,
-			success: this.cargarExpedientesSucceeded,
-			beforeSend: function () {		
-				this.set('loaded', false);
-			}
-		});			
-	},
-
-	cargarExpedientesSucceeded: function (data) {
-		
-		/*var exp = [];
-		data.forEach(function(i){
-			exp.addObject(App.Expediente.extend(App.Savable).create(i));
-		}, this);
-		this.set('expedientes', exp);
-		this.set('loaded', true);
-		*/
-
-		citacion = this.get('citacion');
-		var temas = [];
-		_self = this;
-		citacion.get('temas').forEach(function (tema) {
-			var t = App.CitacionTema.create();
-			t.setProperties(tema);
-			temas.addObject(t);
-			//console.log(t);
-			var proyectos = t.get('proyectos');
-			var ps = [];
-			proyectos.forEach(function (p) {
-				var proyecto = App.Expediente.extend(App.Savable).create(p);
-				if (t.get('grupo')) {
-					proyecto.set('tema', t.get('descripcion'));
-				}
-				proyecto.set('bloqueado', true);
-				ps.pushObject(proyecto);
-			});									
-			t.set('proyectos', ps);
-		});
-
-		citacion.set('temas', temas);
-		
+		this.set('isEdit', true);		
 	},
 
 	listaExpedientes: function () {
@@ -6263,7 +6241,6 @@ App.TurnosView = App.JQuerySortableView.extend({
 	
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
-
 		App.get('turnosController').saveSort(sortArr);
 		App.get('turnosController').actualizarHora();
 	},
@@ -6291,7 +6268,6 @@ App.TurnosPorListaView = App.JQuerySortableView.extend({
 
 	updateSort : function (idArray){
 		var sortArr = this._super(idArray);
-
 		App.get('turnosController').saveSort(sortArr);
 		App.get('turnosController').actualizarHora();
 	},
@@ -10085,9 +10061,10 @@ App.MultiSelectListView = Ember.View.extend({
 	tabindex: 0,
 	content: [],
 	matchPosition: 'ANY',
-
 	selectionAc: null,
 	contentAc: null,
+	showAll: false,
+	limit: 20,
 
 
 	filterTextChanged: function () {
@@ -10147,8 +10124,13 @@ App.MultiSelectListView = Ember.View.extend({
 			}
 		}
 
-		if (this.get('contentAc.content'))
-			this.set('contentAc.content', this.get('contentAc.content').slice(0, 20));
+		if (this.get('contentAc.content')) {
+			if (this.get('showAll')) {
+				this.set('contentAc.content', this.get('contentAc.content'));
+			} else {
+				this.set('contentAc.content', this.get('contentAc.content').slice(0, this.get('limit')));
+			}
+		}
 			
 		_self = this;
 		Ember.run.next(function() {
@@ -10180,8 +10162,13 @@ App.MultiSelectListView = Ember.View.extend({
 			this.set('contentAc.content', this.get('contentController').get('arrangedContent'));
 
 			
-			if (this.get('contentAc.content'))
-				this.set('contentAc.content', this.get('contentAc.content').slice(0, 20));
+			if (this.get('contentAc.content')) {
+				if (this.get('showAll')){
+					this.set('contentAc.content', this.get('contentAc.content'));
+				} else {
+					this.set('contentAc.content', this.get('contentAc.content').slice(0, this.get('limit')));
+				}
+			}
 			
 
 			this.get('selectionAc').set('content', this.get('selection'));			
@@ -10233,6 +10220,7 @@ App.MultiSelectListView = Ember.View.extend({
 		
 		if (!this.get('contentAc'))
 			this.set('contentAc', Ember.ArrayController.create({ sortProperties: this.get('contentController').get('sortProperties')}));
+
 	},
 
 	willDestroyElement: function () {
