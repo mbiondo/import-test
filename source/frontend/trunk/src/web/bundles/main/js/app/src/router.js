@@ -1671,8 +1671,7 @@ App.Router =  Em.Router.extend({
 								 	else
 										appController.connectOutlet('main', 'sesionConsulta');
 								}
-								else {
-									
+								else {									
 									appController.connectOutlet('main', 'OradoresDiputadoSesionConsulta');
 								}							
 								

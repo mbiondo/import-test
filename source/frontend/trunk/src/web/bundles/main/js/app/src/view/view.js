@@ -310,6 +310,32 @@ App.SubMenuOradoresView = App.SubMenuView.extend({
 				App.get('crearTemaController').set('tema', tema);
 		App.CrearTemaView.popup();
 	},
+
+	goBack: function () {
+		var $secondLevel = $('.secondLevel'),
+			$firstLevel = $('.firstLevel');
+
+		$secondLevel.animate({
+			opacity:0
+		}, 500, function(){
+			var appController = App.get('router.applicationController');
+			appController.connectOutlet('menu', 'subMenu');		
+			App.get('menuController').seleccionar(4, 1, 0);
+			$secondLevel.animate({
+				opacity:1
+			}, 500,function(){
+				
+				//callback
+			});
+		});
+		
+
+		
+
+		//tooltip bootstrap 3
+		$().tooltip();
+	},
+
 		
 	borrarTema: function () {
 		var temaController = App.get('temaController');
