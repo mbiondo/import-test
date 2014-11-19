@@ -636,7 +636,7 @@ App.breadCumbController = App.BreadCumbController.create({
 	content: [],
 });
 
-App.expedientesController = App.ExpedientesController.create({
+App.expedientesController = App.ExpedientesNewController.create({
 	content: [],
 });
 
