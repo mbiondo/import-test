@@ -6160,7 +6160,6 @@ App.TurnoHablandoView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		console.log(this.get('content'));
 	}
 });
 
@@ -6834,7 +6833,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 				turno.set('orden', App.get('turnosController.content.length'));
 				turno.set('tema', App.get('temaController.content'));
 				var listas = App.get('sesionController.content.listas');
-				lista = listas.findProperty('id', item.listaId)
+				lista = listas.findProperty('id', item.listaId);
 				if (lista)
 					turno.set('lista', lista);
 				App.get('turnosController').createObject(turno, true);
