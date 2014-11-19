@@ -7723,6 +7723,7 @@ App.SugestView = Ember.View.extend({
 
 	clear: function () {
 		this.set('sugestText', '');
+		this.$('.sugestSearch').focus();
 	},
 		
 	didInsertElement: function () {
@@ -7762,7 +7763,7 @@ App.ExpedienteCitacionSugestListItemView = App.SugestListItemView.extend({
 	templateName: 'expediente-sugest-item',
 	click: function () {
 		this.get('parentView').get('parentView').get('parentView').clickExpediente(this.get('content'));
-				this.get('parentView').get('parentView').clear();
+		this.get('parentView').get('parentView').clear();
 	},        
 });
 
