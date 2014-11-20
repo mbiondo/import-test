@@ -4471,7 +4471,6 @@ App.TurnosController = App.RestController.extend({
 
 	horaFin : function() {
 		var ultimoTurno;
-
 		if(this.get('arrangedContent') && this.get('arrangedContent').length)
 			ultimoTurno = this.get('arrangedContent').objectAt(this.get('arrangedContent').length-1);
 
@@ -4479,7 +4478,7 @@ App.TurnosController = App.RestController.extend({
 			return ultimoTurno.get('horaFinEstimada');
 
 		return null
-	}.property('arrangedContent.@each.hora').cacheable(),
+	}.property('arrangedContent.@each.hora'),
 
 	tiempoTranscurrido : function() {
 		var tiempoTranscurrido = 0;
