@@ -4531,6 +4531,29 @@ App.ReunionConsultaView = Em.View.extend({
 	}.property('tituloNuevoTema'),
 
 	cargarExpedientes: function () {
+
+		citacion = this.get('citacion');
+		var temas = [];
+		_self = this;
+		citacion.get('temas').forEach(function (tema) {
+			var t = App.CitacionTema.create();
+			t.setProperties(tema);
+			temas.addObject(t);
+			//console.log(t);
+			var proyectos = t.get('proyectos');
+			var ps = [];
+			proyectos.forEach(function (p) {
+				var proyecto = App.Expediente.extend(App.Savable).create(p);
+				if (t.get('grupo')) {
+					proyecto.set('tema', t.get('descripcion'));
+				}
+				proyecto.set('bloqueado', true);
+				ps.pushObject(proyecto);
+			});									
+			t.set('proyectos', ps);
+		});
+
+		citacion.set('temas', temas);		
 		this.set('isEdit', true);		
 	},
 
@@ -7255,8 +7278,8 @@ App.PLMiniView = Ember.View.extend({
 	}.observes('content.proyectos.@each, content.dictamenes.@each', 'edited'),
 
 	borrar: function(){
-		this.get('parentView.parentView').borrarItem(this.get('content'));
 		this.get('parentView.parentView').set('isEdited', true);
+		this.get('parentView.parentView').borrarItem(this.get('content'));
 	},
 
 	borrarExpediente: function(item) {
@@ -10016,6 +10039,15 @@ App.SelectListItemFirmanteView = App.SelectListItemView.extend({
 });
 
 App.SelectListItemFirmanteSelectedView = App.SelectListItemFirmanteView.extend({
+	classNames: ['selected'],
+});
+
+
+App.SelectListItemOdView = App.SelectListItemView.extend({
+	templateName: 'wg-multiselect-select-list-item-od',
+});
+
+App.SelectListItemOdSelectedView = App.SelectListItemOdView.extend({
 	classNames: ['selected'],
 });
 

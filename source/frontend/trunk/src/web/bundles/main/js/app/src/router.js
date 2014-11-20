@@ -1288,17 +1288,25 @@ App.Router =  Em.Router.extend({
  					 	 App.planDeLaborController = App.PlanDeLaborController.create();
 						
 						 App.get('planDeLaborController').set('content', App.PlanDeLabor.create({id: params.plan}));
+
 						 var deferred = $.Deferred(),
 
 						 fn = function() {
-						 	if ( App.get('crearPlanDeLaborController.loaded') &&  App.get('planDeLaborController.loaded'))
-							App.get('planDeLaborController').removeObserver('loaded', this, fn);	
-							var plan = App.get('planDeLaborController.content');
-							deferred.resolve(plan);				
+						 	if ( App.get('crearPlanDeLaborController.loaded')) {
+								 App.get('crearPlanDeLaborController').removeObserver('loaded', this, fn);
+								 App.get('planDeLaborController').addObserver('loaded', this, fn2);
+								 App.get('planDeLaborController').load();
+									
+						 	}
 						 };
 
-						 App.get('planDeLaborController').addObserver('loaded', this, fn);
-						 App.get('planDeLaborController').load();
+						 fn2 = function () {
+						 	if ( App.get('planDeLaborController.loaded') ) {
+						 		App.get('planDeLaborController').removeObserver('loaded', this, fn2);
+								var plan = App.get('planDeLaborController.content');
+								deferred.resolve(plan);				
+						 	}
+						 };
 
 						 App.crearPlanDeLaborController = App.CrearPlanDeLaborController.create();
 						 App.expedientesArchivablesController = App.ExpedientesArchivablesController.create();
@@ -1331,7 +1339,6 @@ App.Router =  Em.Router.extend({
 								appController.connectOutlet('main', 'PlanDeLaborEfectivo');
 								break;
 						}
-
 						appController.connectOutlet('menu', 'subMenu');
 						
 						App.get('breadCumbController').set('content', [
