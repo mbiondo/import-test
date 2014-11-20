@@ -5258,16 +5258,11 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 	loaded: false,
 
 	gruposController: null,
-	ordenesDelDiaController: null,
 	content: null,
 
 	grupos: function () {
 		return this.get('gruposController.arrangedContent');
 	}.property('gruposController.content'),
-
-	ordenesDelDia: function () {
-		return this.get('ordenesDelDiaController.arrangedContent');
-	}.property('ordenesDelDiaController.content'),
 
 	load: function () {
 		if (!App.get('userController.user')) return;
@@ -5277,21 +5272,16 @@ App.CrearPlanDeLaborController = Ember.Object.extend({
 		if (!this.get('gruposController')) {
 			this.set('gruposController', App.PlanDeLaborGruposController.create());
 		}
+
+		this.get('gruposController').set('loaded', '');
 		this.get('gruposController').addObserver('loaded', this, this.controllersLoaded);
 		this.get('gruposController').load();
-	
 
-		if (!this.get('ordenesDelDiaController'))
-			this.set('ordenesDelDiaController', App.OrdenesDelDiaController.create());
-
-		this.get('ordenesDelDiaController').addObserver('loaded', this, this.controllersLoaded);
-		this.get('ordenesDelDiaController').load();		
 	},
 
 	controllersLoaded: function () {
-		if (this.get('gruposController.loaded') && this.get('ordenesDelDiaController.loaded')) {
+		if (this.get('gruposController.loaded')) {
 			this.get('gruposController').removeObserver('loaded', this, this.controllersLoaded);
-			this.get('ordenesDelDiaController').removeObserver('loaded', this, this.controllersLoaded);
 			this.set('loaded', true);
 		}
 	},
