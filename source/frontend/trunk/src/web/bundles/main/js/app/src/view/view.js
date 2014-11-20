@@ -8008,7 +8008,7 @@ App.CrearExpedienteView = Ember.View.extend({
 	}.property('content.tipo'),
 
 	noHayTipo: function(){
-		if(this.get('content.tipo') == null)
+		if(this.get('content.tipo') == null || this.get('content.tipo') == '')
 		{
 			return true;
 		}
@@ -8346,7 +8346,7 @@ App.CrearExpedienteView = Ember.View.extend({
 		this.set('content', App.Expediente.extend(App.Savable).create({
 			expdipA: '', 
 			expdipN: '', 
-			tipo: 'LEY', 
+			tipo: '', 
 			firmantes: [],
 			giro: [],
 			comisiones: [],
@@ -14173,6 +14173,8 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			App.get('ordenesDelDiaController').addObserver('loaded', this, fn);
 			App.get('ordenesDelDiaController').load();
 
+			console.log(this.get('controller.content'));
+
 	 		//CREATE NOTIFICATION TEST 
 			var notification = App.Notificacion.extend(App.Savable).create();
 			//ACA TITULO DE LA NOTIFICACION
@@ -14184,7 +14186,7 @@ App.CrearODSinDictamenView = Ember.View.extend({
 			//CreateAt
 			notification.set('fecha', moment().format('YYYY-MM-DD HH:mm:ss'));
 			//Custom message
-			notification.set('mensaje', "Se ha creado la orden del dia N° " + this.get('controller.content.dictamen.numero'));
+			notification.set('mensaje', "Se ha creado la orden del día N° " + this.get('controller.content.dictamen.numero'));
 			//notification.set('comisiones', this.get('content.comisiones'));
 			//Crear
 			notification.create();
