@@ -11459,7 +11459,8 @@ App.ProyectoSearchView = Em.View.extend({
 	proyectosLoaded: function () {
 		if (App.get('proyectosController.loaded')){
 			this.set('loading', false);
-			$(".periodos > option:last").attr('selected', 'selected');
+
+			$(".periodos > option:eq(1)").attr('selected', 'selected');
 		}
 		else{
 			this.set('loading', true);
