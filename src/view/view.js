@@ -11717,6 +11717,18 @@ App.ExpedienteSobreTablasFueraDeTemarioView = App.ModalView.extend({
 	seleccionoOpcion: null,
 
 //	opciones: [{id: 1, titulo: "Sin disidencias"}, {titulo: "Disidencia Parcial", id: 2}, {titulo: "Disidencia total", id: 3}],
+	
+	selectArt109: function(){
+		if(this.get('art109')){
+			this.set('sobretablas',false);	
+		}		
+	}.observes('art109'),
+
+	selectSobreTablas: function(){
+		if(this.get('sobretablas')){
+			this.set('art109',false);	
+		}
+	}.observes('sobretablas'),
 
 	callback: function(opts, event) {
 
@@ -11754,7 +11766,7 @@ App.ExpedienteSobreTablasFueraDeTemarioView = App.ModalView.extend({
 				//alert('close')
 			}
 			event.preventDefault();
-		},     
+	},     
 });
 
 App.OradoresAsistenciasView = Em.View.extend({
