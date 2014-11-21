@@ -12137,7 +12137,6 @@ App.PedidoConsultaView = Ember.View.extend({
 	clickAsignar: false,
 	existeAdjunto: false,
 
-
 	userSaraAsignadoExist: function () {
 		if (this.get('content.userSaraAsignado'))
 			return true;
@@ -12187,15 +12186,17 @@ App.PedidoConsultaView = Ember.View.extend({
 	responderPopUp: function (){
 		var _self = this;
 
-		App.confirmActionController.setProperties({
-			title: 'Confirmar la respuesta a la solicitud',
-			message: '¿ Confirma que desea enviar la respuesta a la solicitud ?',
-			success: null,
-		});
-		
-		App.confirmActionController.addObserver('success', _self, _self.responder);
-		App.confirmActionController.show();
-
+		if($('#formResponderSolicitud').parsley('validate'))
+		{	
+			App.confirmActionController.setProperties({
+				title: 'Confirmar la respuesta a la solicitud',
+				message: '¿ Confirma que desea enviar la respuesta a la solicitud ?',
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', _self, _self.responder);
+			App.confirmActionController.show();
+		}
 
 	},
 
@@ -12219,6 +12220,7 @@ App.PedidoConsultaView = Ember.View.extend({
 
 	responder: function(){
 		var _self = this;
+
 		App.confirmActionController.removeObserver('success',_self,_self.responder);
 
 		if (App.get('confirmActionController.success')) {
