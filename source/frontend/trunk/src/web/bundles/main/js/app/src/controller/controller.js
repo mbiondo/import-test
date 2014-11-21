@@ -5470,17 +5470,19 @@ App.TPsController = App.RestController.extend({
 
 		if (!App.get('userController.user')) return;
 
-		this.set('loaded', false);
-		var url =  this.get('url') + '/' + this.get('periodo');
-		if (this.get('useApi'))
-			url = App.get('apiController').get('url') + url;
-		$.ajax({
-			url: url,
-			dataType: 'JSON',
-			context: this,
-			success: this.loadSucceeded,
-			complete: this.loadCompleted,
-		});
+		if (this.get('periodo')){
+			this.set('loaded', false);
+			var url =  this.get('url') + '/' + this.get('periodo');
+			if (this.get('useApi'))
+				url = App.get('apiController').get('url') + url;
+			$.ajax({
+				url: url,
+				dataType: 'JSON',
+				context: this,
+				success: this.loadSucceeded,
+				complete: this.loadCompleted,
+			});
+		}
 	},
 
 	createObject: function (data, save) {
@@ -6681,5 +6683,12 @@ App.MovimientosExpedientesController = App.RestController.extend({
 	query: null,
 	isPaginated: false,
 
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.ExpedienteMovimiento.extend(App.Savable).create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
 
 });

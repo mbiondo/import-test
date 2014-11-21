@@ -1003,7 +1003,7 @@ App.OrdeDelDia = Em.Object.extend({
 	],	
 
 	label: function () {
-		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numero');
+		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numeroDeProyectos');
 	}.property('sumario'),
 	sumarioHTML: function () {
 		if (this.get('sumario')) {
@@ -2650,6 +2650,45 @@ App.ExpedienteMovimiento = Ember.Object.extend({
 	id: '',
 	url: 'ME/exp/movi',
 	useApi: true,
+
+	nuevoTexto: function() {
+		console.log(this);
+
+		var str = "";
+
+		if(this.get('codMovi') == 17) // Senado con Modificación
+		{
+			//str = "(CD- " + this.get('expComunic') + ") (" + this.get('auxFechaMovi') + ")";
+			str = "(CD-" + this.get('expComunic') + ") (" + moment(this.get('auxFechaMovi'), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') + ") ";
+		}
+		else
+		{
+			if(this.get('hayVariosFirmantes'))
+			{
+				str = "SOLICITAN. ";
+			}
+			else{
+				str = "SOLICITA. ";
+			}
+
+			if(this.get('codMovi') == 22) // Retiro de Proyecto
+			{
+
+				str += "EL RETIRO DEL PROYECTO DE " + this.get('proy.firstObject.tipo') + " DE SU AUTORIA (" + this.get('proy.firstObject.expdip') + ") ";
+			}
+			if(this.get('codMovi') == 23) // Modificacion de Proyecto
+			{
+				str += "LA MODIFICACION DEL PROYECTO DE  "+ this.get('proy.firstObject.tipo') + " DE SU AUTORIA. ";
+			}
+		}
+
+		if(this.get('texto'))
+		{
+			str += this.get('texto');
+		}
+
+		return str;
+	}.property('texto'),	
 
 	serializable: [
 		'id',
