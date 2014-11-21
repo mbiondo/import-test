@@ -7728,7 +7728,7 @@ App.SugestView = Ember.View.extend({
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
-
+		if (!item) return;
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
 				if (this.get('applyOrden')) {
@@ -10515,6 +10515,18 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 	hayMovimientos: function () {
 		return (App.get('movimientosExpedientesController.content.length') > 0)
 	}.property('App.movimientosExpedientesController.content'),
+
+
+	movimientosLoaded: function () {
+		if (App.movimientosExpedientesController.loaded && this.get('timeLineController.loaded')) {
+			var _self = this;
+			App.get('movimientosExpedientesController.content').forEach(function (movimiento) {
+				var data = { titulo: movimiento.movimiento, mensaje: movimiento.get('nuevoTexto'), fecha: movimiento.auxFechaMovi, id: movimiento.id, icono: 'creado' };
+				var item = App.TimeLineEvent.create(data);
+				_self.get('timeLineController.content').pushObject(item);
+			});
+		}
+	}.observes('App.movimientosExpedientesController.loaded', 'timeLineController.loaded'),
 	
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
@@ -10545,6 +10557,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		if (this.get('controller.content.ReproduceExp')) {
 			this.$().addClass('reproduce');
 		}
+
+		this.set('esAsesor', App.get('userController').hasRole('ROLE_ASESOR'));
 	},
 
 	borrar: function () {
