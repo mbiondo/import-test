@@ -6669,3 +6669,17 @@ App.MEExpedienteObjetivoSuggestController = Ember.ObjectController.extend({
 			  'EXPRESAR PESAR POR',
 			  'PROMOVER JUICIO POLITICO AL'],
 });
+
+App.MovimientosExpedientesController = App.RestController.extend({
+	url: 'ME/exp/proyecto/movimientos/',
+
+	type: App.ExpedienteMovimiento,
+	useApi: true,
+	loaded: false,
+	pageSize: 25,
+	pageNumber: 1,
+	query: null,
+	isPaginated: false,
+
+
+});

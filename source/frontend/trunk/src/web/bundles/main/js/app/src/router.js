@@ -394,16 +394,31 @@ App.Router =  Em.Router.extend({
 						deserialize: function(router, params) {
 
 							var ex = App.Expediente.extend(App.Savable).create({id: params.id})
+							
+
 							ex.set('loaded', false);
 							 var deferred = $.Deferred(),
 							 fn = function() {
 								ex.removeObserver('loaded', this, fn);
+
 								if (ex.get('loadError'))
 								{
 									App.get('router').transitionTo('page404');
 								}
+
+								App.movimientosExpedientesController = App.MovimientosExpedientesController.create({url: 'ME/exp/proyecto/movimientos/' + ex.get('id')});
+
+								App.movimientosExpedientesController.load();
+
+								App.movimientosExpedientesController.addObserver('loaded', this, fnMovimientosExpedientesLoaded);
 																
 								deferred.resolve(ex);				
+							 };
+
+							 fnMovimientosExpedientesLoaded = function(){
+							 	if(App.get('firmantesController.loaded')){
+							 		App.get('firmantesController').removeObserver('loaded', this, fnMovimientosExpedientesLoaded);
+							 	}
 							 };
 
 							

@@ -10512,7 +10512,9 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		return false;
 	}.property('controller.content'),
 
-
+	hayMovimientos: function () {
+		return (App.get('movimientosExpedientesController.content.length') > 0)
+	}.property('App.movimientosExpedientesController.content'),
 	
 	puedeCrear: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
