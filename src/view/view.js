@@ -4698,6 +4698,7 @@ App.ReunionConsultaView = Em.View.extend({
 		tema.get('proyectos').addObject(expedienteSeleccionado);	
 	},	
 	clickBorrar: function (expediente) {
+
 		var tema = this.get('citacion.temas').findProperty('descripcion', expediente.get('tema'));		
 		if (tema)
 			tema.get('proyectos').removeObject(expediente);
@@ -11385,6 +11386,9 @@ App.ProyectoSearchView = Em.View.extend({
 		Ember.run.next(function () { 
 			if (App.get('proyectosController.query.dirty')) {
 				_self.limpiar(); 
+
+	//			$(".periodos > select > option:last").attr('selected', 'selected');
+
 			}
 		});
 
@@ -11404,6 +11408,7 @@ App.ProyectoSearchView = Em.View.extend({
 			var _self = $(this);
 			shortcut.add("F" + (index + 1), function(){ _self.children().click(); });
 		});
+
 	},
 
 	buscar: function () {
@@ -11420,6 +11425,26 @@ App.ProyectoSearchView = Em.View.extend({
 				App.set('proyectosController.query.pubnro', App.get('proyectosController.query.pub.numero').toString());
 			}
 			
+			fn = function(){
+				App.proyectosController.removeObserver('loaded', this, fn);
+
+				if(App.get('proyectosController.loaded') == true)
+				{
+					if(App.get('proyectosController.recordcount') == 1 && App.get('proyectosController.content').length == 1)
+					{
+
+						Ember.run.next(function(){						
+							$(".expedientesTable > tbody > tr:first > td:first > a").click();
+							$(".expedientesTable > tbody > tr:first > td:first > a").trigger("click");
+						});
+						//var expediente = App.get('proyectosController.content.firstObject');
+						//App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', expediente);					
+					}
+				}
+				
+			};
+
+			App.proyectosController.addObserver('loaded', this, fn);
 			App.proyectosController.load();
 			
 			if(this.get('collapse') == false)
@@ -12110,6 +12135,7 @@ App.PedidoConsultaView = Ember.View.extend({
 	departamento: 'ES',
 	tipoModificacion: '',
 	clickAsignar: false,
+	existeAdjunto: false,
 
 
 	userSaraAsignadoExist: function () {
@@ -12342,14 +12368,18 @@ App.PedidoConsultaView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
+		var _self = this;
 		this.set('content', App.get('pedidoConsultaController').get('content'));
 		var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 		this.set('content.departamento', departamento);
 		this.set('enviarEmail', true);
 //		this.set('content.respuestas', App.get('pedidoRespuestaController.content'));
 //		console.log(this.get('content.respuestas'));
-	},
 
+		$.get(_self.get('content.adjuntoEnvio'))
+			.done(function(){ _self.set('existeAdjunto', true); })
+			.fail(function(){ _self.set('existeAdjunto', false); });
+	},
  	exportar: function () {
  		$.download('exportar/informacionparlamentaria', "&type=informacionparlamentaria&data2=" + JSON.stringify(App.auditController.content) +"&data=" + JSON.stringify(App.pedidoConsultaController.content));
  	},
