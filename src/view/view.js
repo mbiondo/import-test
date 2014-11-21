@@ -11387,10 +11387,9 @@ App.ProyectoSearchView = Em.View.extend({
 			if (App.get('proyectosController.query.dirty')) {
 				_self.limpiar(); 
 
-	//			$(".periodos > select > option:last").attr('selected', 'selected');
-
 			}
 		});
+
 
 		shortcut.add('enter', function() {
 		  if($('#buscarProyecto').is(':focus'))
@@ -11458,10 +11457,13 @@ App.ProyectoSearchView = Em.View.extend({
 	},
 
 	proyectosLoaded: function () {
-		if (App.get('proyectosController.loaded'))
+		if (App.get('proyectosController.loaded')){
 			this.set('loading', false);
-		else
+			$(".periodos > option:last").attr('selected', 'selected');
+		}
+		else{
 			this.set('loading', true);
+		}
 	},
 
 	borrarQuery: function () {
