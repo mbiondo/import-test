@@ -11433,10 +11433,8 @@ App.ProyectoSearchView = Em.View.extend({
 				{
 					if(App.get('proyectosController.recordcount') == 1 && App.get('proyectosController.content').length == 1)
 					{
-
 						Ember.run.next(function(){						
-							$(".expedientesTable > tbody > tr:first > td:first > a").click();
-							$(".expedientesTable > tbody > tr:first > td:first > a").trigger("click");
+							$(".expedientesTable > tbody > tr:first").find("a")[0].click();
 						});
 						//var expediente = App.get('proyectosController.content.firstObject');
 						//App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', expediente);					
@@ -14145,7 +14143,27 @@ App.ProyectosSearchView = Em.View.extend({
 			if (App.get('expedientesController.query.pub')) {
 				App.set('expedientesController.query.pubnro', App.get('expedientesController.query.pub.numero').toString());
 			}
-			
+
+			/*
+			fn = function(){
+				App.expedientesController.removeObserver('loaded', this, fn);
+
+				if(App.get('expedientesController.loaded') == true)
+				{
+					if(App.get('expedientesController.recordcount') == 1 && App.get('expedientesController.content').length == 1)
+					{
+						Ember.run.next(function(){						
+							$(".expedientesTable > tbody > tr:first").find("a")[0].click();
+						});
+						//var expediente = App.get('proyectosController.content.firstObject');
+						//App.get('router').transitionTo('root.direccionSecretaria.mesaDeEntrada.proyecto.ver', expediente);					
+					}
+				}
+				
+			};
+
+			App.expedientesController.addObserver('loaded', this, fn);	
+			*/		
 			App.expedientesController.load();
 			
 			if(this.get('collapse') == false)
@@ -14173,6 +14191,7 @@ App.ProyectosSearchView = Em.View.extend({
 			this.set('loading', false);
 		else
 			this.set('loading', true);
+		
 	},
 
 	borrar: function () {	
