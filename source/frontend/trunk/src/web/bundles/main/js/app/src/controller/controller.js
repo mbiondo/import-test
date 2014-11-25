@@ -6777,6 +6777,14 @@ App.MovimientosExpedientesController = App.RestController.extend({
 	query: null,
 	isPaginated: false,
 
+	/*
+	*	 Delete this function.
+	*/
+	load: function () {
+		this.set('content', []);
+		this.set('loaded', true);
+	},
+
 	createObject: function (data, save) {
 		save = save || false;
 		
