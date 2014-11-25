@@ -5004,6 +5004,13 @@ App.ListaController = Em.Object.extend({
 
 App.CrearTurnoController = Em.Object.extend({
 	turno : null,
+
+	open: function () {
+		$(window).scrollTop(0);
+		if ($('#crearTurnoInline').hasClass('collapsed')) {
+			$('#crearTurnoInline').click();
+		}
+	},
 });
 
 App.CrearTemaController = Em.Object.extend({

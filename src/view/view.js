@@ -6159,7 +6159,8 @@ App.TurnoView = Ember.View.extend({
 	
 	modificar: function () {
 		App.get('crearTurnoController').set('turno', this.get('content'));
-		App.CrearTurnoView.popup();
+		//App.CrearTurnoView.popup();
+		App.get('crearTurnoController').open();
 	},
 	
 	cancelTimer: function () {
@@ -6888,6 +6889,7 @@ App.CrearTurnoInlineView = Em.View.extend({
 			});
 			App.get('crearTurnoController').set('turno', turno);  	
 		}
+
 		this.$(".controls input[type='radio']").removeProp('checked');
 	}.observes('temaController.content', 'listaController.content'),
 
