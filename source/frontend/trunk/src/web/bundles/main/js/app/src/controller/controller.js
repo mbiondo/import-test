@@ -4641,13 +4641,62 @@ App.TemasController = App.RestController.extend({
 App.TemaController = Em.Object.extend({
 	content: null,
 	borrarTema : false,
+/*
+	sHoraInicio: function () {
+
+		if (this.get('content.subTemas')) {
+			var firstTema = this.get('content.subTemas.firstObject');
+			var turnosController = App.get('turnosController');
+			var primerTurno;
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length)
+				primerTurno = turnosController.get('arrangedContent').findProperty('temaId', firstTema.get('id'));
+			if(primerTurno)
+				return moment.unix(primerTurno.get('hora')).format('HH:mm [hs]')
+
+			return null;
+		} else {
+			if (this.get('content.tieneLista'))
+				return moment.unix(this.get('horaInicio')).format('HH:mm [hs]');
+		}
+		return null
+	}.property('horaInicio'),
+
+	sHoraFin: function () {
+		if (this.get('content.subTemas')) {
+			var lastTema = this.get('content.subTemas.lastObject');
+			var turnosController = App.get('turnosController');
+			var ultimoTurno;
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length) {
+				turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', lastTema.get('id'));
+				ultimoTurno = turnosTema.objectAt(turnosTema.length-1);
+			}
+			if(ultimoTurno)
+				return moment.unix(ultimoTurno.get('horaFinEstimada')).format('HH:mm [hs]');
+
+			return null;
+		} else {
+			if (this.get('content.tieneLista'))
+				return moment.unix(this.get('horaFin')).format('HH:mm [hs]');
+		}
+		return null;
+	}.property('horaFin'),
+
+*/
+
 
 	horaInicio : function() {
 		var turnosController = App.get('turnosController');
 		var primerTurno;
-
-		if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length)
-			primerTurno = turnosController.get('arrangedContent').findProperty('temaId', this.get('content.id'));
+		if (this.get('content.tieneLista')) {
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length)
+				primerTurno = turnosController.get('arrangedContent').findProperty('temaId', this.get('content.id'));
+		} else {
+			if (this.get('content.subTemas')) {
+				var firstTema = this.get('content.subTemas.firstObject');
+				if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length)
+					primerTurno = turnosController.get('arrangedContent').findProperty('temaId', firstTema.get('id'));
+			}
+		}
 
 		if(primerTurno)
 			return primerTurno.get('hora');
@@ -4658,12 +4707,22 @@ App.TemaController = Em.Object.extend({
 	horaFin : function() {
 		var turnosController = App.get('turnosController');
 		var ultimoTurno;
-
-		if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
-			var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
-			ultimoTurno = turnosTema.objectAt(turnosTema.length-1);
+		if (this.get('content.tieneLista')) { 
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
+				var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
+				ultimoTurno = turnosTema.objectAt(turnosTema.length-1);
+			}
+		} else {
+			if (this.get('content.subTemas')) {
+				var lastTema = this.get('content.subTemas.lastObject');
+				if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length) {
+					turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', lastTema.get('id'));
+					ultimoTurno = turnosTema.objectAt(turnosTema.length-1);
+				}
+			}
 		}
-			//ultimoTurno = turnosController.get('arrangedContent').objectAt(turnosController.get('arrangedContent').length-1);
+
+		//ultimoTurno = turnosController.get('arrangedContent').objectAt(turnosController.get('arrangedContent').length-1);
 
 		if(ultimoTurno)
 			return ultimoTurno.get('horaFinEstimada');
@@ -4681,6 +4740,7 @@ App.TemaController = Em.Object.extend({
 	sHoraInicio: function () {
 		return moment.unix(this.get('horaInicio')).format('HH:mm [hs]');
 	}.property('horaInicio'),
+	
 
 	sHoraFin: function () {
 		return moment.unix(this.get('horaFin')).format('HH:mm [hs]');
@@ -4710,24 +4770,51 @@ App.TemaController = Em.Object.extend({
 
 	totalTurnos : function() {
 		var turnosController = App.get('turnosController');
-
-		if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
-			var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
-			return turnosTema.length;
+		if (this.get('content.tieneLista')) {
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
+				var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
+				return turnosTema.length;
+			}
+		} else {
+			if (this.get('content.subTemas')) {
+				if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length) {
+					var turnosTotales = 0;
+					this.get('content.subTemas').forEach( function (tema) {
+						var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', tema.get('id'));
+						turnosTotales += turnosTema.get('length');
+					})
+					return turnosTotales;
+				}
+			}
 		}
-
 		return null
 	}.property('content', 'App.turnosController.length').cacheable(),
 	
 	turnosPendientes : function() {
 		var turnosController = App.get('turnosController');
+		if (this.get('content.tieneLista')) {
 
-		if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
-			var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
-			var filtered = turnosTema.filter(function(turno) {
-				return turno.get('bloqueado') == false;
-			});
-			return filtered.length;
+			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length){
+				var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', this.get('content.id'));
+				var filtered = turnosTema.filter(function(turno) {
+					return turno.get('bloqueado') == false;
+				});
+				return filtered.length;
+			}
+		} else {
+			if (this.get('content.subTemas')) {
+				if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length) {
+					var turnosTotales = 0;
+					this.get('content.subTemas').forEach( function (tema) {
+						var turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', tema.get('id'));
+						var filtered = turnosTema.filter(function(turno) {
+							return turno.get('bloqueado') == false;
+						});						
+						turnosTotales += filtered.get('length');
+					})
+					return turnosTotales;
+				}
+			}			
 		}
 		return null
 	}.property('content', 'App.turnosController.length').cacheable(),
