@@ -3164,7 +3164,8 @@ App.CitacionConsultaView = Em.View.extend({
 			if(App.citacionConsultaController.content.estado.id != 3 && this.get('hasPermission')) 	this.set('puedeCancelar', true);	
 			//if(App.citacionConsultaController.content.estado.id == 1 && this.get('hasPermission')) 	this.set('puedeEditar', true);	
 			//if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm') < moment('YYYY-MM-DD HH:mm')) this.set('puedeEditar', true);	
-			if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm').isBefore(moment())) this.set('puedeEditar', true);	
+			//if(this.get('hasPermission') && moment(App.citacionConsultaController.content.start, 'YYYY-MM-DD HH:mm').isBefore(moment())) this.set('puedeEditar', true);	
+			if(this.get('hasPermission') && moment(App.get('citacionConsultaController.content.start')).isAfter()) this.set('puedeEditar', true);
 		};
 
 		App.get('citacionConsultaController').addObserver('loaded', this, fn);
@@ -3893,11 +3894,13 @@ App.CitacionCrearView = Em.View.extend({
 	puedeEditar: function () {
 		//return this.get('content.estado.id') == 1 || !this.get('content.id');
 		//return  moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment() || !this.get('content.id');
-		return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment())  || !this.get('content.id');
+		//return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment())  || !this.get('content.id');
+		return	moment(App.get('citacionConsultaController.content.start')).isAfter()  || !this.get('content.id');
 	}.property('content.id', 'content', 'App.citacionConsultaController.content.start'),	
 	puedeGuardar: function(){
-		return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment());
+		//return	moment(App.get('citacionConsultaController.content.start'), 'YYYY-MM-DD HH:mm').isBefore(moment());
 		//return moment(App.get('citacionCrearController.content.start'), 'YYYY-MM-DD HH:mm') < moment();
+		return	moment(App.get('citacionConsultaController.content.start')).isAfter();
 	}.property( 'content', 'App.citacionConsultaController.content.start'),	
 	puedeConfirmar: function () {
 		return this.get('content.estado.id') == 1 && this.get('content.id');
