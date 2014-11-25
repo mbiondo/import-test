@@ -11385,7 +11385,10 @@ App.ProyectoSearchView = Em.View.extend({
 	}.property('App.comisionesController.content.@each'),
 	limpiar: function () {
 		this.set('palabras', []);
-		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[]}));
+
+		var ultimoPeriodo = Math.max.apply(Math, this.get('periodos'));
+
+		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[], pubper: ultimoPeriodo}));
 		this.buscar();
 
 		/*
@@ -11402,10 +11405,10 @@ App.ProyectoSearchView = Em.View.extend({
 		this._super();
 		var _self = this;
 		App.get('proyectosController').addObserver('loaded', this, this.proyectosLoaded);
+
 		Ember.run.next(function () { 
 			if (App.get('proyectosController.query.dirty')) {
 				_self.limpiar(); 
-
 			}
 		});
 
@@ -11477,7 +11480,7 @@ App.ProyectoSearchView = Em.View.extend({
 		if (App.get('proyectosController.loaded')){
 			this.set('loading', false);
 
-			$(".periodos > option:eq(1)").attr('selected', 'selected');
+			//$(".periodos > option:eq(1)").attr('selected', 'selected');
 		}
 		else{
 			this.set('loading', true);
