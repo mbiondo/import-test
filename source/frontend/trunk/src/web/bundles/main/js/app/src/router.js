@@ -1673,6 +1673,11 @@ App.Router =  Em.Router.extend({
 								App.set('planDeLaborController.content', App.PlanDeLabor.create({id: sesion.get('idPl')}));
 								App.get('planDeLaborController').load();
 								
+								
+								App.firmantesarhaController = App.FirmantesarhaController.create();
+								App.get('firmantesarhaController').set('url','firmantesarha-get-by-user/' + App.get('userController.user').get('cuil'));
+								App.get('firmantesarhaController').load();
+
 
 								App.get('sesionController').set('content', App.get('sesionesController.content').findProperty('id', parseInt(context.get('sesionId'))));
 
