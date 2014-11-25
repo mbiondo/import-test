@@ -1794,6 +1794,10 @@ App.Turno = Em.Object.extend({
 		return hora.unix();
 	}.property('horaFin', 'tiempo', 'hora', 'horaInicio'),
 
+	sHoraFinEstimada: function () {
+		return moment.unix(this.get('horaFinEstimada')).format('HH:mm [hs]');
+	}.property('horaFinEstimada'),
+
 	sTiempo : function () {
 		var sTiempo = "-", minutes = this.get('tiempo');
 		if(minutes > 0){
