@@ -732,7 +732,6 @@ App.UserController = Em.Controller.extend({
 					this.set('loginError', true);
 					this.set('loading', false);
 					this.set('loginMessage', xHRAuthURLController.getShowMessage());
-					
 					_self = this;
 					var interval = setInterval(function () {
 						_self.set('loginError', false);
@@ -770,6 +769,7 @@ App.UserController = Em.Controller.extend({
 					
 					this.set('loginError', true);
 					this.set('loading', false);
+
 					this.set('loginMessage', xHRAuthURLController.getShowMessage());
 					
 					_self = this;
@@ -4160,6 +4160,9 @@ App.TurnosController = App.RestController.extend({
 	},
 
 	misTurnos: function () {
+		if (!App.get('firmantesarhaController.content'))
+			return null; 
+
 		var turnos = this.get('arrangedContent').filter(function (turno) {
 			var tengoOrador =  false;
 
@@ -4179,7 +4182,7 @@ App.TurnosController = App.RestController.extend({
 				return false;
 		});
 		return turnos;
-	}.property('content.@each', 'App.firmantesarhaController.content.@each').cacheable(),
+	}.property('content.@each', 'App.firmantesarhaController.content', 'App.firmantesarhaController.content.@each').cacheable(),
 
 	proximoTurno: function () {
 
