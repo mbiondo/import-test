@@ -10468,11 +10468,10 @@ App.SugestTextSearch = Ember.TextField.extend({
 			element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
 
-		
-
-		if (typeof _self.get('parentView').clickExpediente == 'function')
+		if (_self.get('customHandler'))
 		{
-			_self.get('parentView').clickExpediente(element);
+			_self.get('parentView')[_self.get('customHandler')](element);
+			_self.clear();
 		} else {
 			_self.itemSelect(element);
 		}
