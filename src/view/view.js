@@ -7475,7 +7475,10 @@ App.PlanDeLaborBorradorEditView = Ember.View.extend({
 
 			notification.create();
 
-	}
+	},
+	itemsSeleccionados: function(){
+		return App.get('planDeLaborController.content.items').length;
+	}.property('App.planDeLaborController.content.items.@each')
 });
 
 App.PlanDeLaborTentativoView = Ember.View.extend({
