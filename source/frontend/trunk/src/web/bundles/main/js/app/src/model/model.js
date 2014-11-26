@@ -2208,8 +2208,8 @@ App.ComisionListado = Em.Object.extend({
 		return this.get('nombre');
 	},	
         label: function(){
-            return this.get('nombre');
-        }.property('nombre'),
+            return this.get('datos.orden') + " " + this.get('nombre');
+        }.property('nombre', 'datos'),
 });
 
 App.ComisionIntegrante = Em.Object.extend({
