@@ -9917,10 +9917,57 @@ App.ComisionesListadoView = Ember.View.extend({
 	content: '',
 });
 
-App.ComisionesListView = App.ListFilterView.extend({
+//App.ComisionesListView = App.ListFilterView.extend({
+App.ComisionesListView = App.ListFilterWithSortView.extend({
+	templateName: 'comisiones-sortable-list',
 	itemViewClass: App.ComisionesListItemView,
-	columnas: ['Orden','Nombre','Ver Comisión'],
-	puedeExportar: true,
+//	columnas: ['Orden','Nombre','Ver Comisión'],
+//	puedeExportar: true,
+	mostrarTodo: false,
+	columnas: [
+		App.SortableColumn.create({nombre: 'Orden', campo: 'datos.orden'}),
+		App.SortableColumn.create({nombre: 'Nombre', campo: 'nombre'}),
+		App.SortableColumn.create({nombre: 'Ver Comisión'}),
+	],
+	lista: function (){		
+		var filtered = [];
+
+		if (this.get('filterText').length > 0) {
+			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
+
+			filtered = App.get('comisionesListadoController.arrangedContent').filter(function(item){
+				return regex.test(item.get('label').toLowerCase());
+			});				
+
+			if (!filtered)
+				filtered = [];
+		}
+		else {
+			filtered = App.get('comisionesListadoController.arrangedContent');
+		}
+
+		if (filtered.length <= this.get('totalRecords')) {
+			max = filtered.length;
+			this.set('mostrarMasEnabled', false);
+		} else {
+			if(this.get('mostrarTodo') == false)
+			{
+				this.set('mostrarMasEnabled', true);
+			}
+		}
+
+		this.set('filterTextChanged', false);
+		
+		if(this.get('mostrarTodo') == true)
+		{
+			return filtered;
+		}
+		else
+		{
+			return filtered.slice(0, this.get('totalRecords'));
+		}
+	}.property('filterListText', 'App.comisionesListadoController.arrangedContent', 'totalRecords', 'step', 'App.comisionesListadoController.arrangedContent.@each', 'filterTextChanged', 'sorting', 'filterText'),
+
 });
 
 App.ComisionesConsultaView = Ember.View.extend({
