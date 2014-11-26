@@ -7177,7 +7177,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 		return [];
 	}.property('filterDictamenes', 'dictamenes'),
 
-
+	
 	clickExpediente: function (proyecto) {
 		var item = this.get('item.proyectos').findProperty('id', proyecto.id);
 		if (!item) {
@@ -7187,6 +7187,7 @@ App.CrearPlanDeLaborItemView = Ember.View.extend({
 			this.get('item.proyectos').removeObject(proyecto);
 		}
 	},
+	
 
 	itemClicked: function (dictamen) {
 		var item = this.get('item.dictamenes').findProperty('id', dictamen.id);
@@ -7736,7 +7737,6 @@ App.SugestView = Ember.View.extend({
 	}.property('controller.content'),
 
 	itemSelect: function(item) {
-		if (!item) return;
 		if (Ember.isArray(this.get('selection'))) {
 			if (!this.get('selection').findProperty('id', item.get('id'))) {
 				if (this.get('applyOrden')) {
@@ -10464,18 +10464,18 @@ App.SugestTextSearch = Ember.TextField.extend({
 		var _self = this.get('parentView');
 		element = _self.get('sugestList.firstObject');
 
-		if (this.get('optionValuePath')) {
-			//element = element.get(this.get('optionValuePath').replace('content.', ''));
+		if (this.get('optionValuePath') != 'content') {
+			element = element.get(this.get('optionValuePath').replace('content.', ''));
 		}
 
-		_self.itemSelect(element);
+		
 
 		if (typeof _self.get('parentView').clickExpediente == 'function')
 		{
 			_self.get('parentView').clickExpediente(element);
+		} else {
+			_self.itemSelect(element);
 		}
-
-
 	},
 });
 
