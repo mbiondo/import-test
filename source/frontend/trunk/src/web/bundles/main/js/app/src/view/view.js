@@ -603,9 +603,9 @@ App.ContentView = Ember.View.extend({
 
 
 		localStorage.setObject('user', null);
-		App.get('userController').set('user', null);
-		
-		App.get('router').transitionTo('index');
+		//App.get('userController').set('user', null);
+
+		location.reload();
 	},
 
 	changePassword: function () {
