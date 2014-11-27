@@ -355,6 +355,9 @@ App.IoController = Em.Object.extend({
 			}
 		} else {
 			if (App.get('ioController').get('socket')) {
+				App.get('ioController').get('rooms').forEach(function (room) {
+					App.get('ioController').leaveRoom(room);
+				});				
 				App.get('ioController').get('socket').disconnect();
 			}
 		}
@@ -836,7 +839,7 @@ App.UserController = Em.Controller.extend({
 					if (_self.get('transitionTo')) {
 						window.location = '#/' + _self.get('transitionTo');	
 					}
-					//delete $.ajaxSettings.headers["Authorization"];
+					delete $.ajaxSettings.headers["Authorization"];
 				});
 			},
 			error: function(data){
@@ -2642,7 +2645,8 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	tipo: 'pap/dip/diputados',
+	//tipo: 'pap/dip/diputados',
+	tipo: 'dip/diputados',
 	url: moment().format('DD/MM/YYYY') + '/resumen',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
@@ -2765,7 +2769,8 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisionesFull',
+	//url: 'pap/com/comisionesFull',
+	url: 'com/comisiones/detalle',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -3102,7 +3107,8 @@ App.DictamenesSinOdController = App.RestController.extend({
 });
 
 App.OrdenesDelDiaController = App.RestController.extend({
-	url: 'dic/ods/vigentes/130',
+	//url: 'dic/ods/vigentes/130',
+	url: 'dic/ods/vigentes',
 	type: App.OrdeDelDia,
 	useApi: true,
 
