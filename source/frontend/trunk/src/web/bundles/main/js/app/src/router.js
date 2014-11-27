@@ -991,12 +991,12 @@ App.Router =  Em.Router.extend({
 				tituloNovedades = [
 					'Todas las Novedades',
 					'Movimientos de expedientes',
-					'Publicaciones', 
-					'Agenda de Comisiones',
-					'Dictámenes', 
-					'Orden del Día',
-					'Plan de Labor',
-					'Sesiones', 
+					'Agenda de Comisiones', 
+					'Dictámenes',
+					'Orden del Día', 
+					'Publicaciones',
+					'Sesiones',
+					'Plan de Labor', 
 					'Solicitudes IP'
 				];
 				
