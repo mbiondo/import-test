@@ -603,7 +603,7 @@ App.ContentView = Ember.View.extend({
 
 
 		localStorage.setObject('user', null);
-		//App.get('userController').set('user', null);
+		App.get('userController').set('user', null);
 
 		location.reload();
 	},
@@ -839,13 +839,15 @@ App.ListHeaderWithSortView = App.ListHeaderView.extend({
 	ordenarPorCampo: function (campo, asc){
 		// comentado por si despues se quiere usar (cuando se da click a un ordenar,)
 		// $(document).scrollTop($("#Expedientes").offset().top);
+
 		if (Ember.isArray(campo)) {
 			this.get('sortablController').set('sortProperties', campo);
 		} else {
 			this.get('sortablController').set('sortProperties', [campo]);
 		}
-		this.get('sortablController').set('sortAscending', asc);
 
+		this.get('sortablController').set('sortAscending', asc);
+		this.get('sortablController').set('sorting', !this.get('sortablController').get('sorting'));
 	},	
 });
 
@@ -1090,7 +1092,7 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 		if (this.get('filterText').length > 0) {
 			var regex = new RegExp(this.get('filterText').toString().toLowerCase());
 
-			filtered = App.get('citacionesController.arrangedContent').filter(function(item){
+			filtered = this.get('content').filter(function(item){
 				return regex.test(item.get('label').toLowerCase());
 			});				
 
@@ -1098,7 +1100,7 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 				filtered = [];
 		}
 		else {
-			filtered = App.get('citacionesController.arrangedContent');
+			filtered = this.get('content');
 		}
 
 		if (filtered.length <= this.get('totalRecords')) {
@@ -1111,7 +1113,9 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 		this.set('filterTextChanged', false);
 		
 		return filtered.slice(0, this.get('totalRecords'));
-	}.property('filterListText', 'App.citacionesController.arrangedContent', 'totalRecords', 'step', 'App.citacionesController.arrangedContent.@each', 'filterTextChanged', 'sorting', 'filterText'),
+
+	}.property('filterListText', 'App.citacionesController.arrangedContent', 'totalRecords', 'step', 'App.citacionesController.arrangedContent.@each', 'filterTextChanged', 'sorting', 'filterText', 'content'),
+
 	highlightText: function(){
 		Ember.run.next(function(){
 		// High Light Words
