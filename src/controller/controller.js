@@ -839,7 +839,7 @@ App.UserController = Em.Controller.extend({
 					if (_self.get('transitionTo')) {
 						window.location = '#/' + _self.get('transitionTo');	
 					}
-					delete $.ajaxSettings.headers["Authorization"];
+					//delete $.ajaxSettings.headers["Authorization"];
 				});
 			},
 			error: function(data){
@@ -2453,6 +2453,8 @@ App.CitacionesController = App.RestController.extend({
 		}		
 	},
 
+	sorting: false,
+
 	citaciones: function () {
 		var roles = App.get('userController.roles');
 		var citaciones = [];
@@ -2525,7 +2527,8 @@ App.CitacionesController = App.RestController.extend({
 		}
 
 		return citaciones;
-	}.property('content', 'misComisiones'),
+	}.property('content', 'misComisiones', 'sorting'),
+
 	citacionesFilterByComision: function(data){
 		var citaciones = [];
 
@@ -2538,10 +2541,10 @@ App.CitacionesController = App.RestController.extend({
 
 		return citaciones;
 	},
+
 	listado: function(){
 		var citaciones 	= [];
 		var comision 	= this.get('comision');
-
 		if(comision)
 		{	
 			if(this.get('misComisiones') == false || comision.nombre == 'TODAS MIS COMISIONES')
@@ -2560,7 +2563,7 @@ App.CitacionesController = App.RestController.extend({
 
 		return citaciones;
 
-	}.property('content', 'comision', 'misComisiones'),	
+	}.property('content', 'comision', 'misComisiones', 'sorting'),	
 
 });
 
@@ -2645,8 +2648,8 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	//tipo: 'pap/dip/diputados',
-	tipo: 'dip/diputados',
+	tipo: 'pap/dip/diputados',
+
 	url: moment().format('DD/MM/YYYY') + '/resumen',
 	type: App.FirmanteTextoDictamen,
 	useApi: true,
@@ -2769,8 +2772,7 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	//url: 'pap/com/comisionesFull',
-	url: 'com/comisiones/detalle',
+	url: 'pap/com/comisionesFull',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -3107,8 +3109,7 @@ App.DictamenesSinOdController = App.RestController.extend({
 });
 
 App.OrdenesDelDiaController = App.RestController.extend({
-	//url: 'dic/ods/vigentes/130',
-	url: 'dic/ods/vigentes',
+	url: 'dic/ods/vigentes/130',
 	type: App.OrdeDelDia,
 	useApi: true,
 
