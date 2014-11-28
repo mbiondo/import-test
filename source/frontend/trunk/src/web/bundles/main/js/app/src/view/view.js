@@ -10392,7 +10392,8 @@ App.TimeLineEventCreateView = App.ModalView.extend({
 
 	callback: function(opts, event){
 		if (opts.primary) {
-			this.get('content').set('fecha', moment(this.get('content.fecha'), 'DD/MM/YYYY').format('YYYY-MM-DD hh:mm:ss'));
+			var m = this.get('content.fecha') + ' ' + moment().format('hh:mm:ss');
+			this.get('content').set('fecha', moment(m, 'DD/MM/YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss'));
 			this.get('content').create();
 			App.expedienteConsultaController.set('newEvent', true);
 		} else if (opts.secondary) {
