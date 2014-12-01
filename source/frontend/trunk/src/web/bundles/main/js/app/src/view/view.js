@@ -3577,6 +3577,8 @@ App.CitacionCrearView = Em.View.extend({
 			}
 		}
 
+		this.$('.toggle-slider').tooltip();
+
 	}, 
 
 	seleccionarTodos: function () {
@@ -10363,6 +10365,11 @@ App.TimeLineView = Ember.View.extend({
 App.TimteLineListItemView = Ember.View.extend({
 	templateName: 'wg-time-line-list-item-new',
 	tagName:'li',
+
+	didInsertElement: function () {
+		this._super();
+		this.$('a').tooltip();
+	},
 
 	gotoLink: function () {
 		if (this.get('content.link')) {
