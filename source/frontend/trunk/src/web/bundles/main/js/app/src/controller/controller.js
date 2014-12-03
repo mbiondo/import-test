@@ -2788,14 +2788,14 @@ App.ComisionesController = App.RestController.extend({
 	// 	this.loadSucceeded(localStorage.getObject('comisiones'));
 	// },
 	//
-/*
+	
+	/*
 	load: function () {
 		this._super();
 		_self = this;
 		this.set('loaded', false);
-
 		$.ajax({
-//			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
+			url: (App.get('apiController').get('productionURL') + this.get('url')).fmt(encodeURIComponent(this.get('content').get('id'))),
 			url: this.get('url').fmt(encodeURIComponent(this.get('content').get('id'))),
 			type: 'GET',
 			dataType: 'JSON',
@@ -2804,7 +2804,7 @@ App.ComisionesController = App.RestController.extend({
 			complete: this.loadCompleted
 		});
 	},	
-*/
+	*/
 
 	//grupo
 
@@ -4647,48 +4647,6 @@ App.TemasController = App.RestController.extend({
 App.TemaController = Em.Object.extend({
 	content: null,
 	borrarTema : false,
-/*
-	sHoraInicio: function () {
-
-		if (this.get('content.subTemas')) {
-			var firstTema = this.get('content.subTemas.firstObject');
-			var turnosController = App.get('turnosController');
-			var primerTurno;
-			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length)
-				primerTurno = turnosController.get('arrangedContent').findProperty('temaId', firstTema.get('id'));
-			if(primerTurno)
-				return moment.unix(primerTurno.get('hora')).format('HH:mm [hs]')
-
-			return null;
-		} else {
-			if (this.get('content.tieneLista'))
-				return moment.unix(this.get('horaInicio')).format('HH:mm [hs]');
-		}
-		return null
-	}.property('horaInicio'),
-
-	sHoraFin: function () {
-		if (this.get('content.subTemas')) {
-			var lastTema = this.get('content.subTemas.lastObject');
-			var turnosController = App.get('turnosController');
-			var ultimoTurno;
-			if(turnosController.get('arrangedContent') && turnosController.get('arrangedContent').length) {
-				turnosTema = turnosController.get('arrangedContent').filterProperty('temaId', lastTema.get('id'));
-				ultimoTurno = turnosTema.objectAt(turnosTema.length-1);
-			}
-			if(ultimoTurno)
-				return moment.unix(ultimoTurno.get('horaFinEstimada')).format('HH:mm [hs]');
-
-			return null;
-		} else {
-			if (this.get('content.tieneLista'))
-				return moment.unix(this.get('horaFin')).format('HH:mm [hs]');
-		}
-		return null;
-	}.property('horaFin'),
-
-*/
-
 
 	horaInicio : function() {
 		var turnosController = App.get('turnosController');
@@ -6800,4 +6758,32 @@ App.MovimientosExpedientesController = App.RestController.extend({
 		this.addObject(item);
 	},
 
+});
+
+
+
+App.GruposParlamentariosController = App.RestController.extend({
+	url: 'pap/com/grupospa',
+	type: App.Comision,
+	selected: '',
+	sortProperties: ['nombre'],
+	sortAscending: true,	
+	useApi: true,
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		this.set('content', []);
+		items.forEach(function(i){			
+			this.createObject(i);
+		}, this);
+		
+		this.set('loaded', true);
+		this.set('loading', false);
+	},	
 });

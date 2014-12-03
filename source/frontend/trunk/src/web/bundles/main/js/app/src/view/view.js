@@ -3504,6 +3504,8 @@ App.CitacionCrearView = Em.View.extend({
 
 	showCabecera: true,
 
+	useComisiones: true,
+
 
 	showCabeceraChanged: function () {
 		if (this.get('showCabecera')) {
@@ -14227,7 +14229,7 @@ App.ProyectosSearchView = Em.View.extend({
 				App.set('expedientesController.query.pubnro', App.get('expedientesController.query.pub.numero').toString());
 			}
 
-			/*
+			
 			fn = function(){
 				App.expedientesController.removeObserver('loaded', this, fn);
 
@@ -14246,7 +14248,7 @@ App.ProyectosSearchView = Em.View.extend({
 			};
 
 			App.expedientesController.addObserver('loaded', this, fn);	
-			*/		
+					
 			App.expedientesController.load();
 			
 			if(this.get('collapse') == false)
