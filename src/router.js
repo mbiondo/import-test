@@ -3808,7 +3808,7 @@ App.Router =  Em.Router.extend({
 							fn = function() {
 								App.get('citacionSalasController').removeObserver('loaded', this, fn);
 								var sala = App.get('citacionSalasController.content').objectAt(0);
-								App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: []}));
+								App.set('citacionCrearController.content', App.Citacion.extend(App.Savable).create({sala: sala, comisiones: [], temas: [], invitados: [], gpas: []}));
 								App.get('comisionesController').addObserver('loaded', this, fn2);
 								App.get('comisionesController').load();				
 
