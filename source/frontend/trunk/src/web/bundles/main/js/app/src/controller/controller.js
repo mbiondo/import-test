@@ -2475,23 +2475,31 @@ App.CitacionesController = App.RestController.extend({
 
 		citaciones.forEach(function (citacion) {			
 			comsiones.forEach(function (comision) {
-				citacion.get('comisiones').forEach(function (c) {
-					if (c.id == comision.id) { 
-						misCitaciones.pushObject(citacion); 
-						return false; 
-					}
-				});
+				if (citacion.get('comisiones')) {
+					citacion.get('comisiones').forEach(function (c) {
+						if (c.id == comision.id) { 
+							misCitaciones.pushObject(citacion); 
+							return false; 
+						}
+					});
+				} else {
+					misCitaciones.pushObject(citacion);
+				}
 			});
 		});
 
 		this.get('arrangedContent').forEach(function (citacion) {			
 			comsiones.forEach(function (comision) {
-				citacion.get('comisiones').forEach(function (c) {
-					if (c.id == comision.id) { 
-						misCitacionesFull.pushObject(citacion); 
-						return false; 
-					}
-				});
+				if (citacion.get('comisiones')) {
+					citacion.get('comisiones').forEach(function (c) {
+						if (c.id == comision.id) { 
+							misCitacionesFull.pushObject(citacion); 
+							return false; 
+						}
+					});
+				} else {
+					misCitacionesFull.pushObject(citacion); 
+				}
 			});
 		});		
 
@@ -2509,14 +2517,18 @@ App.CitacionesController = App.RestController.extend({
 				citaciones = [];
 				this.get('arrangedContent').forEach(function (citacion) {
 					if (citacion.get('estado.id') == 1) { 
-						comsiones.forEach(function (comision) {
-							citacion.get('comisiones').forEach(function (c) {
-								if (c.id == comision.id) { 
-									citaciones.pushObject(citacion);
-									return false; 
-								 }
-							});
-						});						
+						if (citacion.get('comisiones')) {
+							comsiones.forEach(function (comision) {
+								citacion.get('comisiones').forEach(function (c) {
+									if (c.id == comision.id) { 
+										citaciones.pushObject(citacion);
+										return false; 
+									 }
+								});
+							});						
+						} else {
+							citaciones.pushObject(citacion);
+						}
 					} else {
 						citaciones.pushObject(citacion);
 					}
@@ -2533,10 +2545,13 @@ App.CitacionesController = App.RestController.extend({
 		var citaciones = [];
 
 		this.get('citaciones').forEach(function (citacion){
-			citacion.comisiones.forEach(function (comision){
-				if(comision.id == data.id) citaciones.pushObject(citacion);	
-
-			});
+			if (citacion.get('comisiones')) {
+				citacion.comisiones.forEach(function (comision){
+					if(comision.id == data.id) citaciones.pushObject(citacion);	
+				});
+			} else {
+				citaciones.pushObject(citacion);
+			}
 		});
 
 		return citaciones;
@@ -3577,14 +3592,14 @@ App.CitacionCrearController = Em.Object.extend({
 				}
 								
 				fn = function() {
-									App.get('reunionConsultaController').removeObserver('loaded', this, fn);
-									var reunion = App.get('reunionConsultaController.content');
-									App.set('citacionConsultaController.loaded', false);
-									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
-									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
-									App.get('citacionConsultaController').load();
-									App.get('eventosParteController').addObserver('loaded', this, fn2);
-									App.get('eventosParteController').load();
+					App.get('reunionConsultaController').removeObserver('loaded', this, fn);
+					var reunion = App.get('reunionConsultaController.content');
+					App.set('citacionConsultaController.loaded', false);
+					App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+					App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+					App.get('citacionConsultaController').load();
+					App.get('eventosParteController').addObserver('loaded', this, fn2);
+					App.get('eventosParteController').load();
 					
 				};
 
@@ -3663,18 +3678,18 @@ App.CitacionCrearController = Em.Object.extend({
 	sendNotifications: function(data){
  		data.temas.forEach(function(tema){
  			tema.proyectos.forEach(function(proyecto){
-					//proyecto.firmantes.forEach(function (firmante) {
-						var notification = App.Notificacion.extend(App.Savable).create();
-						notification.set('tipo', 'confirmarCitacion');	
-						notification.set('objectId', data.id);
-						notification.set('link', "/#/comisiones/citaciones/citacion/"+ data.id + "/ver");
-						notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
-						notification.set('mensaje', "Se ha incorporado al temario de la reunión de la Comisión de "+ data.observaciones +" citada para la fecha "+ moment(data.start, "YYYY-MM-DD hh:mm").format('DD/MM/YYYY hh:mm') +" el expediente "+ proyecto.expdip +", "+ proyecto.tipo +",  sobre "+ proyecto.titulo);
-						notification.set('firmantes', proyecto.firmantes);
-						//notification.set('firmantes', [firmante]);
-						notification.create();
-						
-					//});
+				//proyecto.firmantes.forEach(function (firmante) {
+					var notification = App.Notificacion.extend(App.Savable).create();
+					notification.set('tipo', 'confirmarCitacion');	
+					notification.set('objectId', data.id);
+					notification.set('link', "/#/comisiones/citaciones/citacion/"+ data.id + "/ver");
+					notification.set('fecha', moment().format('YYYY-MM-DD HH:mm'));
+					notification.set('mensaje', "Se ha incorporado al temario de la reunión de la Comisión de "+ data.observaciones +" citada para la fecha "+ moment(data.start, "YYYY-MM-DD hh:mm").format('DD/MM/YYYY hh:mm') +" el expediente "+ proyecto.expdip +", "+ proyecto.tipo +",  sobre "+ proyecto.titulo);
+					notification.set('firmantes', proyecto.firmantes);
+					//notification.set('firmantes', [firmante]);
+					notification.create();
+					
+				//});
  			});
  		});
 
