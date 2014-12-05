@@ -857,8 +857,10 @@ App.Citacion = Em.Object.extend({
 	sala: '',	
 	allDay: false,
 	fecha:'',
+	gpas: [],
 	auditable: true,
 	useApi: true,
+
 	
 	serializable : [
 		'id',
@@ -869,7 +871,8 @@ App.Citacion = Em.Object.extend({
 		'comisiones',
 		'observaciones',
 		'estado',
-		'sala'
+		'sala',
+		'gpas'
 	],
 
 	label: function () {
@@ -2750,4 +2753,7 @@ App.PedidoRespuesta = Ember.Object.extend({
 		'enviarEmail',
 	],
 
+});
+
+App.GrupoParlamentario = Ember.Object.extend({
 });
