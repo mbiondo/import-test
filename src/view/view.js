@@ -279,7 +279,7 @@ App.SubMenuExpedientesView = App.SubMenuView.extend({
 
 		query.get('firmantesList').forEach(function (firmante) {
 			var f = App.get('firmantesController').findProperty('label', firmante.nombre);
-			console.log(f);
+			//console.log(f);
 			if (f) {
 				query.get('firmantesObject').addObject(f);
 			}
