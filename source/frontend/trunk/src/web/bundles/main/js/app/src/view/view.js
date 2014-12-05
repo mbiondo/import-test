@@ -3157,6 +3157,7 @@ App.CitacionConsultaView = Em.View.extend({
 		fn = function(){
 			App.get('citacionConsultaController').removeObserver('loaded', this, fn);
 
+
 			if((App.citacionConsultaController.content.estado.id == 2) 
 				&& (this.get('hasPermission'))
 				&& (!App.citacionConsultaController.content.reunion) 
@@ -3191,6 +3192,13 @@ App.CitacionConsultaView = Em.View.extend({
 	exportar: function () {
 		$.download('exportar/citacion', "&type=citacion&data=" + JSON.stringify(App.citacionConsultaController.content));
 	},
+	hayComisiones: function () {
+		return App.get('citacionConsultaController.content.comisiones').length > 0;
+	}.property('citacionConsultaController.content.comisiones.@each'),
+	hayGruposParlamentarios: function () {
+		return App.get('citacionConsultaController.content.gpas').length > 0;
+	}.property('citacionConsultaController.content.gpas.@each'),
+
 });
 
 App.CalendarTool = Em.View.extend({
@@ -3506,7 +3514,6 @@ App.CitacionCrearView = Em.View.extend({
 
 	useComisiones: true,
 
-
 	showCabeceraChanged: function () {
 		if (this.get('showCabecera')) {
 			var fo = App.get('citacionCrearController.content.comisiones.firstObject');
@@ -3644,37 +3651,36 @@ App.CitacionCrearView = Em.View.extend({
 
 		if (App.get('confirmActionController.success')) {
 
-			this.$('#crear-citacion-form').parsley('validate');
+				//this.$('#crear-citacion-form').parsley('validate');
+				//if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
 
-			if (!$("#crear-citacion-form").validationEngine('validate') || !this.get('cargarExpedientesHabilitado') || !this.$('form').parsley('isValid')) return;
+				var temas = App.get('citacionCrearController.content.temas');
+				var temasToRemove = [];
+						
+				temas.forEach(function (tema) {
+					var proyectos = tema.get('proyectos');
 
-			var temas = App.get('citacionCrearController.content.temas');
-			var temasToRemove = [];
-					
-			temas.forEach(function (tema) {
-				var proyectos = tema.get('proyectos');
+					if (proyectos.length == 0)
+						temasToRemove.addObject(tema);
+				});
 
-				if (proyectos.length == 0)
-					temasToRemove.addObject(tema);
-			});
-
-			temas.removeObjects(temasToRemove);
-					
-			App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
-
+				temas.removeObjects(temasToRemove);
+						
+				App.get('citacionCrearController.content').set('start', moment(this.get('startFecha'), 'DD/MM/YYYY').format('YYYY-MM-DD') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm'));
 
 
-			if (this.get('content').get('id')) {
-				this.get('content').set('auditNombre', 'citacionGuardar');
-				App.get('citacionCrearController').save();
-			}
-			else {
-				this.get('content').set('auditNombre', 'citacionCrear');
 
-				App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+				if (this.get('content').get('id')) {
+					this.get('content').set('auditNombre', 'citacionGuardar');
+					App.get('citacionCrearController').save();
+				}
+				else {
+					this.get('content').set('auditNombre', 'citacionCrear');
 
-				App.get('citacionCrearController').create();		
-			}
+					App.get('citacionCrearController.content').set('estado', App.CitacionEstado.create({id: 1}));
+
+					App.get('citacionCrearController').create();		
+				}
 		}
 	},		
 	crearInvitado: function () {
@@ -3884,6 +3890,7 @@ App.CitacionCrearView = Em.View.extend({
 	}.property('citacionCrearController.content.invitados', 'adding'),
 	
 	borrarExpedientes: function () {
+		//App.get('citacionCrearController.content.comisiones').removeObserver('firstObject', this, this.borrarExpedientes); 
 
 		App.set('citacionCrearController.content.temas', []);
 		App.set('citacionCrearController.expedientes', []);
@@ -3935,31 +3942,68 @@ App.CitacionCrearView = Em.View.extend({
 	},
 	
 	guardarPopUp: function () {
-		var _self = this;
-		var titulo =  "Confirma que desea "
-		var mensaje = "¿ Confirma que desea "
-		var fecha = moment(this.get('startFecha'), 'DD/MM/YYYY').format('DD/MM/YYYY') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm');
+		if($('form').parsley('validate') && this.get('hayComisionesGruposParlamentarios') == true)
+		{
+			var _self = this;
+			var titulo =  "Confirma que desea "
+			var mensaje = "¿ Confirma que desea "
+			var fecha = moment(this.get('startFecha'), 'DD/MM/YYYY').format('DD/MM/YYYY') + " " + moment($('.timepicker').timeEntry('getTime')).format('HH:mm');
 
-		if (this.get('content').get('id')) {
-			titulo += "moficar la citación"
-			mensaje += "modificar la citación del día" + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
-		}
-		else {
-			titulo += "crear la citación"
-			mensaje += "crear la citación el día " + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
-		}
+			if (this.get('content').get('id')) {
+				titulo += "moficar la citación"
+				mensaje += "modificar la citación del día" + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
+			}
+			else {
+				titulo += "crear la citación"
+				mensaje += "crear la citación el día " + fecha + " en la sala " + this.get('content').get('sala.id') +  " ?";
+			}
 
-		App.confirmActionController.setProperties({
-			title: titulo,
-			message: mensaje,
-			success: null,
-		});
-		
-		App.confirmActionController.addObserver('success', _self, _self.guardar);
-		App.confirmActionController.show();
+			App.confirmActionController.setProperties({
+				title: titulo,
+				message: mensaje,
+				success: null,
+			});
+			
+			App.confirmActionController.addObserver('success', _self, _self.guardar);
+			App.confirmActionController.show();
+		}
 	},	
-	
+	comisionesSelectFirstElement: function(){
+		//App.get('citacionCrearController.content.comisiones').addObserver('firstObject', this, this.borrarExpedientes);
 
+		if (!App.get('citacionCrearController.content.id')) {
+			var cu = App.get('userController.user.comisiones')[0];
+			if (cu) {
+				var c = App.get('comisionesController').get('content').findProperty('id', cu.id);
+				if (c) {
+					c.set('orden', 1);
+					App.get('citacionCrearController.content.comisiones').pushObject(c);
+				}
+			}
+		}		
+	},
+	changeUseComisiones: function(){
+		if(this.get('useComisiones') == true)
+		{
+			App.set('citacionCrearController.content.gpas', []);
+			this.comisionesSelectFirstElement();
+		}
+		else
+		{
+			App.set('citacionCrearController.content.comisiones', []);
+		}
+		
+	}.observes('useComisiones'),
+	hayComisionesGruposParlamentarios: function(){
+		if(App.get('citacionCrearController.content.comisiones').length > 0 || App.get('citacionCrearController.content.gpas').length > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}.property('App.citacionCrearController.content.comisiones.@each', 'App.citacionCrearController.content.gpas.@each'),
 });
 
 App.ComfirmarCitacionView = App.ModalView.extend({
