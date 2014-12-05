@@ -6780,13 +6780,13 @@ App.MovimientosExpedientesController = App.RestController.extend({
 
 App.GruposParlamentariosController = App.RestController.extend({
 	//url: 'pap/com/grupospa',
-	url: 'grupospa',
+	url: 'com/gpas',
 	type: App.GrupoParlamentario,
 	selected: '',
 	sortProperties: ['descripcion'],
 	sortAscending: true,	
 	//useApi: true,
-	useApi: false,
+	useApi: true,
 
 	
 	loadSucceeded: function(data){
