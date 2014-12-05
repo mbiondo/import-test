@@ -2847,6 +2847,7 @@ App.ComisionesController = App.RestController.extend({
 			this.addObject(item);
 		}		
 	},	
+
 });
 
 App.ComisionesSinCoController = App.ComisionesController.extend({
@@ -6763,13 +6764,16 @@ App.MovimientosExpedientesController = App.RestController.extend({
 
 
 App.GruposParlamentariosController = App.RestController.extend({
-	url: 'pap/com/grupospa',
-	type: App.Comision,
+	//url: 'pap/com/grupospa',
+	url: 'grupospa',
+	type: App.GrupoParlamentario,
 	selected: '',
-	sortProperties: ['nombre'],
+	sortProperties: ['descripcion'],
 	sortAscending: true,	
-	useApi: true,
+	//useApi: true,
+	useApi: false,
 
+	
 	loadSucceeded: function(data){
 		var item, items = this.parse(data);		
 		
@@ -6785,5 +6789,6 @@ App.GruposParlamentariosController = App.RestController.extend({
 		
 		this.set('loaded', true);
 		this.set('loading', false);
-	},	
+	},
+
 });
