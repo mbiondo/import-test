@@ -2797,7 +2797,7 @@ App.UploaderView = Em.View.extend({
 			var formData = new FormData(this.$('#' + this.get('formId'))[0]);
 
 			$.ajax({
-				url: 'upload.php',  //server script to process data
+				url: 'upload',  //server script to process data
 				//url: 'upload',  //server script to process data
 				type: 'POST',
 				data: formData,
@@ -3587,6 +3587,12 @@ App.CitacionCrearView = Em.View.extend({
 					c.set('orden', 1);
 					App.get('citacionCrearController.content.comisiones').pushObject(c);
 				}
+			}
+		}
+
+		if (App.get('citacionCrearController.content.id')) {
+			if (App.get('citacionCrearController.content.gpas')) {
+				this.set('useComisiones', false);
 			}
 		}
 

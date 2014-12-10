@@ -3950,6 +3950,14 @@ App.Router =  Em.Router.extend({
 										});									
 										t.set('proyectos', proyectos)
 									});
+
+									if (citacion.get('gpas')) {
+										var gpas = [];
+										citacion.get('gpas').forEach(function (gpa) {
+											gpas.addObject(App.Citacion.create(gpa));
+										})
+										citacion.set('gpas', gpas);
+									}
 									
 									citacion.set('estado', App.CitacionEstado.create(citacion.get('estado')));
 									
