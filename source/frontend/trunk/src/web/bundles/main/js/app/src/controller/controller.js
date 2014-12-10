@@ -1297,7 +1297,7 @@ App.UploaderController = Ember.Object.extend({
 		var formData = this.formDataView;
 
 		$.ajax({
-			url: 'upload.php',  //server script to process data
+			url: 'upload',  //server script to process data
 			type: 'POST',
 			data: formData,
 			cache: false,
