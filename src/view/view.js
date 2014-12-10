@@ -2797,8 +2797,8 @@ App.UploaderView = Em.View.extend({
 			var formData = new FormData(this.$('#' + this.get('formId'))[0]);
 
 			$.ajax({
-				//url: 'upload.php',  //server script to process data
-				url: 'upload',  //server script to process data
+				url: 'upload.php',  //server script to process data
+				//url: 'upload',  //server script to process data
 				type: 'POST',
 				data: formData,
 				cache: false,
