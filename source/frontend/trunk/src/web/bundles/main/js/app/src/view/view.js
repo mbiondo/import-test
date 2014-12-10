@@ -136,7 +136,7 @@ JQ.Menu = Em.CollectionView.extend(JQ.Widget, {
 
 
 Ember.TextField.reopen({
-	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-length' , 'data-range', 'data-pattern', 'data-parsley-pattern', 'autocomplete', 'disabled'],
+	attributeBindings: ['search-widget', 'accesskey', 'data-required', 'data-error-message', 'data-validation-minlength', 'data-type', 'name', 'pattern', 'maxlength', 'data-min' , 'data-max', 'readonly', 'data-trigger', 'parsley-trigger', 'data-americandate', 'autofocus', 'data-minlength', 'data-maxlength', 'data-length' , 'data-range', 'data-pattern', 'data-parsley-pattern', 'autocomplete', 'disabled', 'accept'],
 });
 
 Ember.Select.reopen({
@@ -2774,22 +2774,21 @@ App.CitacionesView = App.ListFilterView.extend({
 
 App.UploaderView = Em.View.extend({
 	templateName: 'uploader',
-	attributeBindings: ['file', 'folder'],
+	attributeBindings: ['file', 'folder', 'accept'],
 	url: '',
 	percent: 0,
 	formId: 'upload',
+	notAllowedFiles: false,
 
 
 	fileChange: function () {
 		if(App.uploaderController.get('useControllerUpload')){		
+
 			App.uploaderController.set('view', this);
 			App.uploaderController.set('percent', this.get('percent'));
 			App.uploaderController.set('formId', this.get('formId'));
 			App.uploaderController.set('file', this.get('file'));
 			App.uploaderController.set('folder', this.get('folder'));
-
-			App.uploaderController.set('folder', this.get('folder'));
-
 			App.uploaderController.set('formDataView', new FormData(this.$('#' + this.get('formId'))[0]));
 
 			App.uploaderController.set('url', this.get('url'));
@@ -2798,7 +2797,8 @@ App.UploaderView = Em.View.extend({
 			var formData = new FormData(this.$('#' + this.get('formId'))[0]);
 
 			$.ajax({
-				url: 'upload.php',  //server script to process data
+				//url: 'upload.php',  //server script to process data
+				url: 'upload',  //server script to process data
 				type: 'POST',
 				data: formData,
 				cache: false,
@@ -2816,14 +2816,18 @@ App.UploaderView = Em.View.extend({
 					return myXhr;
 				},
 				beforeSend: function(){
-
 				},
 				success: function(payload)
 				{
 					data = JSON.parse(payload);
 					if (data.result == "ok") {
 						_self.set('file', data.file);
+						_self.set('notAllowedFiles', false);
 					} 
+					if (data.result == "err type file") {
+						_self.set('notAllowedFiles', true);
+					}
+
 				},
 				complete: function(jqXHR, textStatus)				
 				{
