@@ -10673,8 +10673,8 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			this.get('controller.content').loadBiography();
 		}
 
-		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + this.get('controller.content.expdip')}));
-		this.get('timeLineController').load();	
+//		this.set('timeLineController', App.ExpedienteTimelineController.create({content: [], url: 'timeline/' + this.get('controller.content.expdip')}));
+//		this.get('timeLineController').load();	
 
 		if (this.get('controller.content.ReproduceExp')) {
 			this.$().addClass('reproduce');
