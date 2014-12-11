@@ -912,11 +912,54 @@ App.Citacion = Em.Object.extend({
 App.MenuItem = Em.Object.extend({
 	titulo: '',
 	url: '',
-	subMenu: '',
+	subMenu: [],
 	seleccionado: '',
 	habilitado: '',
 	roles: [],
 	esLink: true,
+
+	desNormalize: function(){
+		var rolesAux = [];
+
+		//roles [['ROLE_PUBLICACIONES'], ['ROLE_SEC_PARL_VIEW']]
+		this.get('roles').forEach(function(rolComponent){
+			console.log(rolComponent);
+			if(rolComponent.mappedRoleMenu != null ){
+				var rolesSubListAux = [];
+				rolesSubListAux.pushObject(rolComponent.mappedRoleMenu.rol.nombre);
+			}
+			if(rolComponent.mappedRoleMenuComposite != null){
+				var rolesSubListAux = [];
+				rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
+					rolesSubListAux.pushObject(rolMenu.rol.nombre);
+				});				
+			}
+			rolesAux.pushObject(rolesSubListAux);
+		});
+
+		this.set('roles',rolesAux);
+
+		var subMenuAux = [];
+
+		this.get('menuChildren').forEach(function(subMenuItem){
+			var item = App.MenuItem.create(subMenuItem);
+			item.setProperties(subMenuItem);
+			item.desNormalize()
+			subMenuAux.pushObject(item);
+		});
+
+		this.set('subMenu',subMenuAux);
+
+		this.set('idReal',this.get('id'));
+
+		this.set('id',this.get('orden'));
+
+
+	},
+
+	normalize: function(){
+
+	},
 });
 
 App.CitacionInvitado = Em.Object.extend({
