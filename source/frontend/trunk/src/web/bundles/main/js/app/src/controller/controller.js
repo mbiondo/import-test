@@ -840,6 +840,25 @@ App.UserController = Em.Controller.extend({
 						window.location = '#/' + _self.get('transitionTo');	
 					}
 					//delete $.ajaxSettings.headers["Authorization"];
+
+					App.menuDinamicoController = App.MenuDinamicoController.create({});
+					App.menuDinamicoController.load();
+					
+
+
+					fnMenuLoaded = function() {
+						App.menuDinamicoController.removeObserver('loaded', this, fnMenuLoaded);
+
+						App.get('menuDinamicoController.content').forEach(function (menu){							
+							menu.desNormalize();
+							console.log(menu);
+							App.get('menuController.content').pushObject(menu);
+						});							
+					};
+
+										
+
+					App.menuDinamicoController.addObserver('loaded', this, fnMenuLoaded);					
 				});
 			},
 			error: function(data){
@@ -6806,4 +6825,106 @@ App.GruposParlamentariosController = App.RestController.extend({
 		this.set('loading', false);
 	},
 
+});
+
+App.MenuDinamicoController = App.RestController.extend({
+	url: 'menus',
+	type: App.MenuItem,
+	sortAscending: true,
+	useApi: false,
+
+	loadSucceeded: function(data){
+		var item, items = this.parse(data);		
+		
+		if(!data || !items){
+			this.set('loaded', true);
+			return;
+		}
+
+		this.set('content', []);
+		items.forEach(function(i){			
+			this.createObject(i);
+		}, this);
+		
+		this.set('loaded', true);
+		this.set('loading', false);
+	},
+
+	createObject: function (data, save) {
+		save = save || false;
+		
+		item = App.MenuItem.create(data);
+		item.setProperties(data);
+		this.addObject(item);
+	},
+
+	seleccionarAnterior: function () {
+		if (this.get('oldSelection'))
+			this.seleccionar(this.get('oldSelection').objectAt(0), this.get('oldSelection').objectAt(1), this.get('oldSelection').objectAt(2));
+	},
+
+	seleccionar : function (id, sid, ssid) {
+
+		this.set('oldSelection', [id, sid, ssid]);
+
+		this.get('content').forEach(function (menuItem) {
+			menuItem.get('subMenu').forEach(function (subMenuItem) {
+				if (subMenuItem.get('subMenu'))
+				{
+					subMenuItem.get('subMenu').forEach(function (subSubMenuItem) {
+						subSubMenuItem.set('seleccionado', false);
+					});
+				}
+				subMenuItem.set('seleccionado', false);
+			});
+			menuItem.set('seleccionado', false);
+		});
+		
+		var sel = this.get('content').findProperty('id', id);
+		
+		if (sel)
+		{
+			if (sid != undefined) {
+				var subMenu = sel.get('subMenu').findProperty('id', sid);
+				subMenu.set('seleccionado', true);
+
+				if (ssid != undefined) {
+					var subSubMenu = subMenu.get('subMenu').findProperty('id', ssid);
+					subSubMenu.set('seleccionado', true);
+				}
+			}
+
+			this.set('titulo', sel.get('titulo'));
+			App.get('tituloController').set('fecha', moment().format('LL'));
+			this.set('seleccionado', sel);
+			sel.set('seleccionado', true);
+			if ($('.firstLevel').css('opacity') == "1") {
+				$('.firstLevel').animate({
+					opacity:0
+				}, 500, function(){
+					$('.firstLevel').css('display','none');
+					$('.secondLevel').css('display','block');
+					$('.secondLevel').animate({
+						opacity:1
+					}, 500,function(){
+						//callback
+					});
+				});
+			}
+		}
+	},
+
+	esOradores: function () {
+		if (this.get('seleccionado').get('id') == 4) // antes era 3
+			return true;
+		else
+			return false;
+	}.property('seleccionado'),
+
+	esExpedientes: function () {
+	if (this.get('seleccionado').get('id') == 1)
+			return true;
+		else
+			return false;
+	}.property('seleccionado'),
 });
