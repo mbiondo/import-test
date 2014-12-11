@@ -10634,6 +10634,12 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		return false;
 	}.property('controller.content'),
 
+	esLeyRevision: function(){
+		if (this.get('controller.content.tipo') == "LEY EN REVISION")
+		{
+			return true;
+		}
+	}.property('controller.content.tipo'),
 	hayMovimientos: function () {
 		return (App.get('movimientosExpedientesController.content.length') > 0)
 	}.property('App.movimientosExpedientesController.content'),
