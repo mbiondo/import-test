@@ -9900,7 +9900,7 @@ App.TPConsultaView = Ember.View.extend({
 	}.property('controller.content', 'withGiros'),
 
 	urlHTML: function () {
-		return "publicaciones/generate/tpzip/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero');
+		return "publicaciones/tps/" + this.get('controller.content.periodo') + "/" + this.get('controller.content.numero');
 	}.property('controller.content'),
 
 	exportar: function () {
