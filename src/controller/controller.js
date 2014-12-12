@@ -6928,3 +6928,7 @@ App.MenuDinamicoController = App.RestController.extend({
 			return false;
 	}.property('seleccionado'),
 });
+
+App.MenuDinamicoAdminController = App.MenuDinamicoController.extend({
+	url: 'menus-con-hijos',
+});

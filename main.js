@@ -562,6 +562,12 @@ App.menuController = App.MenuController.create({
 							roles: [['ROLE_SITE_ADMIN']],
 							url: '#/admin/usuarios-legisladores',
 						}),
+						App.MenuItem.create({
+							id: 5,
+							titulo: 'Menus',
+							roles: [['ROLE_SITE_ADMIN']],
+							url: '#/admin/menus',
+						}),
 
 					],
 				}),

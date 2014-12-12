@@ -14533,3 +14533,51 @@ App.FirmantesarhaItemView = Ember.View.extend({
 		this.get('parentView').deleteUser(this.get('content'));
 	}
 });
+
+
+
+App.ItemMenuRoleableView = App.ItemRoleableView.extend({
+	templateName: 'item-menu-roleable',
+
+	didInsertElement: function () {
+		this._super();
+		if (this.get('content.departamento.id')) {
+			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
+			this.set('content.departamento', departamento);
+			this.set('change', false);
+		}
+	},
+});
+
+
+App.RoleabeMenuListView = App.ListFilterView.extend({ 
+	itemViewClass: App.ItemMenuRoleableView, 	
+	columnas: ['Id', 'Titulo', 'Icono', 'Orden', 'Url', 'Menu Padre Id', 'Roles'],
+});
+
+
+App.MenusAdminView = Ember.View.extend({
+	templateName: 'menus-admin',
+	rolNombre: '',
+	rolNivel: '',
+	nombre: '',
+
+	crearDepartamento: function () {
+		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
+		this.set('nombre', '');
+	},
+
+	crearMenuHabilitado: function () {
+		return this.get('titulo') != '';
+	}.property('titulo'),
+
+	crearRol: function () {
+		App.get('rolesController').createObject({nombre: this.get('rolNombre'), nivel: this.get('rolNivel')}, true);
+		this.set('rolNombre', '');
+		this.set('rolNivel', '');
+	},
+
+	crearRolHabilitado: function () {
+		return this.get('rolNombre') != '' && this.get('rolNivel') > 0 && this.get('rolNivel') < 6;
+	}.property('rolNombre', 'rolNivel'),
+});

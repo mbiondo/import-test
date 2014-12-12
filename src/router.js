@@ -1963,7 +1963,47 @@ App.Router =  Em.Router.extend({
 					App.get('menuController').seleccionar(5, 0, 0);
 					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
 				},									
-			}),	
+			}),
+
+			menus: Ember.Route.extend({
+				route: "/menus",
+				
+				deserialize: function(router, params) {
+					App.menuDinamicoAdminController = App.MenuDinamicoAdminController.create({url:"menus-con-hijos"});
+
+					
+					var deferred = $.Deferred(),
+
+					fn = function() {
+						if (App.get('menuDinamicoAdminController.loaded')) {
+							App.get('menuDinamicoAdminController.content').forEach(function (menu){							
+								menu.desNormalize();
+							});
+							deferred.resolve(null);
+						}					
+					};
+
+					App.get('menuDinamicoAdminController').addObserver('loaded', this, fn);
+
+					App.get('menuDinamicoAdminController').load();
+
+					return deferred.promise();
+				},
+				
+				connectOutlets: function(router, context) {
+					var appController = router.get('applicationController');
+					appController.connectOutlet('help', 'Help');
+					appController.connectOutlet('main', 'menusAdmin');
+					appController.connectOutlet('menu', 'subMenu');
+					
+					App.get('breadCumbController').set('content', [
+						{titulo: 'Administrar'},
+						{titulo: 'Menus', url: '#/admin/menus'},
+					]);					
+					App.get('menuController').seleccionar(5, 0, 0);
+					App.get('tituloController').set('titulo', App.get('menuController.titulo'));							
+				},									
+			}),		
 
 			comisiones: Ember.Route.extend({
 				route: "/comisiones",
