@@ -1082,7 +1082,7 @@ App.CalendarListView = App.ListFilterWithSortView.extend({
 		App.SortableColumn.create({nombre: 'Fecha', campo: 'fecha'}),
 		App.SortableColumn.create({nombre: 'Título', campo: 'title'}),
 		App.SortableColumn.create({nombre: 'Sala', campo: 'sala.numero'}),
-		App.SortableColumn.create({nombre: 'Observaciones', campo: 'observaciones'}),
+		// App.SortableColumn.create({nombre: 'Observaciones', campo: 'observaciones'}),
 		App.SortableColumn.create({nombre: 'Estado', campo: 'estado.descripcion'}),
 	],
 
