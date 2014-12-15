@@ -3658,15 +3658,15 @@ App.Router =  Em.Router.extend({
 									var reunion = App.get('reunionConsultaController.content');
 									var citacion = App.get('citacionConsultaController.content');
 									var temas = [];
-
-									citacion.get('temas').forEach(function (tema) {
-										if(tema)
-										{
-											temas.addObject(App.CitacionTema.create(tema));
-										}
-									});
-									citacion.set('temas', temas);
-									
+									if (citacion) {
+										citacion.get('temas').forEach(function (tema) {
+											if(tema)
+											{
+												temas.addObject(App.CitacionTema.create(tema));
+											}
+										});
+										citacion.set('temas', temas);
+									}
 									deferred.resolve(reunion);										
 								}
 				
@@ -3676,9 +3676,16 @@ App.Router =  Em.Router.extend({
 								App.get('reunionConsultaController').removeObserver('loaded', this, fn);
 								var reunion = App.get('reunionConsultaController.content');
 								App.set('citacionConsultaController.loaded', false);
-								App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
-								App.get('citacionConsultaController').addObserver('loaded', this, fn2);
-								App.get('citacionConsultaController').load();
+
+								if (reunion.citacion) {
+									App.set('citacionConsultaController.content', App.Citacion.create({id: reunion.citacion.id}));
+									App.get('citacionConsultaController').addObserver('loaded', this, fn2);
+									App.get('citacionConsultaController').load();
+								} else {
+									App.set('citacionConsultaController.content', null);
+									App.get('citacionConsultaController').set('loaded', true);
+								}
+
 								App.get('eventosParteController').addObserver('loaded', this, fn2);
 								App.get('eventosParteController').load();
 							}							
