@@ -3276,15 +3276,27 @@ App.ReunionesSinParteController = App.RestController.extend({
 
 		this.get('reuniones').forEach(function (reunion){
 			comisiones_input.forEach(function (comision_input){
-				reunion.citacion.comisiones.forEach(function (comision){
-					if(comision.id == comision_input.id)
-					{
-						reuniones.pushObject(reunion);	
-						return true;
-					}					
+				if (reunion.citacion) {
+					reunion.citacion.comisiones.forEach(function (comision){
+						if(comision.id == comision_input.id)
+						{
+							reuniones.pushObject(reunion);	
+							return true;
+						}					
 
-					return false;
-				});
+						return false;
+					});
+				} else {
+					reunion.comisiones.forEach(function (comision){
+						if(comision.id == comision_input.id)
+						{
+							reuniones.pushObject(reunion);	
+							return true;
+						}					
+
+						return false;
+					});
+				}
 			});
 		});
 		return reuniones;

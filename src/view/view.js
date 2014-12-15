@@ -4552,8 +4552,10 @@ App.ReunionConsultaView = Em.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
-		this.set('citacion', citacion);
+		if (App.get('citacionConsultaController.content')) {
+			var citacion = App.Citacion.extend(App.Savable).create(Ember.copy(App.get('citacionConsultaController.content')));
+			this.set('citacion', citacion);
+		}
 	},
 	puedeExportar: function(){
 		return (App.get('reunionConsultaController.content.nota') != '' || App.get('reunionConsultaController.content.parte').length > 0);
