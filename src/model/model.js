@@ -928,13 +928,13 @@ App.MenuItem = Em.Object.extend({
 			if(rolComponent.mappedRoleMenu != null ){
 				var rolesSubListAux = [];
 				rolesSubListAux.pushObject(rolComponent.mappedRoleMenu.rol.nombre);
-				rolesTest.push(rolComponent.mappedRoleMenu.rol.nombre);
+				rolesTest.pushObject(App.Rol.create({'nombre': rolComponent.mappedRoleMenu.rol.nombre}));
 			}
 			if(rolComponent.mappedRoleMenuComposite != null){
 				var rolesSubListAux = [];
 				rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
 					rolesSubListAux.pushObject(rolMenu.rol.nombre);
-					rolesTest.push(rolMenu.rol.nombre);
+					rolesTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
 				});				
 			}
 			rolesAux.pushObject(rolesSubListAux);
@@ -942,7 +942,7 @@ App.MenuItem = Em.Object.extend({
 		});
 
 		this.set('roles',rolesAux);
-		this.set('rolesLabel',rolesTest);
+		this.set('rolesList',rolesTest);
 
 		var subMenuAux = [];
 
@@ -959,7 +959,7 @@ App.MenuItem = Em.Object.extend({
 
 		this.set('id',this.get('orden'));
 
-		this.set('rolesList',this.get('roles'));
+		//this.set('rolesList',this.get('rolesLabel'));
 
 
 	},
