@@ -14583,13 +14583,37 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	},
 	itemGuardar: function(){
 //		this.set('id', this.get('idReal'));
+		var listRoles = [];
+
+		this.get('content.rolesList').forEach(function(rol){
+			if(rol.length > 1)
+			{
+				var listVariosRoles = [];
+
+				rol.forEach(function(variosRoles){
+					listVariosRoles.push(variosRoles.nombre);
+				});
+
+				listRoles.push(listVariosRoles);
+			}
+			else
+			{
+				listRoles.push(rol.nombre)
+			}
+		});
+
+//		this.set('content.rolesList', listRoles);
+		var data = this.get('content');
+		data.set('rolesList', listRoles);
+
 
 		$.ajax({
 			url: 'menu',
 			dataType: 'JSON',
 			type: 'PUT',
 			context: this,
-			data: JSON.stringify(this.get('content')),
+			data: JSON.stringify(data),
+			//data: JSON.stringify(this.get('content')),
 			complete: this.saveSucceded,
 		});
 
