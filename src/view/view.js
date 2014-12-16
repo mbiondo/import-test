@@ -1983,7 +1983,15 @@ App.ItemRoleableRolView = Em.View.extend({
 
 	borrar: function () {
 		this.get('parentView').borrarRol(this.get('content'));
-	}	
+	},
+	variosElementos: function(){
+		if(this.get('content').length > 1){
+			return true;
+		}else{
+			return false;
+		}
+
+	}.property('content')
 });
 
 App.RoleabeListView = App.ListFilterView.extend({ 
@@ -14551,17 +14559,22 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 			this.set('change', false);
 		}		
 
+		//console.log(this.get('rolesList'));
+
 	},
 	addRole: function(){
-		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+//		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+		if(this.get('roleSeleccionado').length > 1){
+			this.get('content.rolesList').addObjects([this.get('roleSeleccionado')]);
+		}
+		else
 		{
-			this.get('content.rolesLabel').push(this.get('roleSeleccionado').nombre);
+			this.get('content.rolesList').addObject(this.get('roleSeleccionado'));
 		}
 	},
-	rolesList: function(){
-		return this.get('content.rolesLabel');
-	}.property('content', 'content.rolesLabel', 'content.rolesLabel.@each'),
-
+	borrarRol: function (rol) {
+		this.get('content.rolesList').removeObject(rol);
+	},
 	itemEditar: function(){
 		this.set('editar', true);
 	},
@@ -14569,6 +14582,8 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this.set('editar', false);
 	},
 	itemGuardar: function(){
+//		this.set('id', this.get('idReal'));
+
 		$.ajax({
 			url: 'menu',
 			dataType: 'JSON',
