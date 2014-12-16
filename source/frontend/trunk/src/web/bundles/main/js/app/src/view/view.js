@@ -14602,10 +14602,10 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 			}
 		});
 
-//		this.set('content.rolesList', listRoles);
+//		this.set('content.rolesList', listRoles);		
 		var data = this.get('content');
+		data.set('id', this.get('content.idReal'));
 		data.set('rolesList', listRoles);
-
 
 		$.ajax({
 			url: 'menu',
