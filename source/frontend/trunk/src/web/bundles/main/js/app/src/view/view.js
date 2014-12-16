@@ -14540,21 +14540,80 @@ App.FirmantesarhaItemView = Ember.View.extend({
 
 App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	templateName: 'item-menu-roleable',
+	editar: false,
 
 	didInsertElement: function () {
 		this._super();
+
 		if (this.get('content.departamento.id')) {
 			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 			this.set('content.departamento', departamento);
 			this.set('change', false);
+		}		
+
+	},
+	addRole: function(){
+		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+		{
+			this.get('content.rolesLabel').push(this.get('roleSeleccionado').nombre);
 		}
 	},
+	rolesList: function(){
+		return this.get('content.rolesLabel');
+	}.property('content', 'content.rolesLabel', 'content.rolesLabel.@each'),
+
+	itemEditar: function(){
+		this.set('editar', true);
+	},
+	itemCancelar: function(){
+		this.set('editar', false);
+	},
+	itemGuardar: function(){
+		$.ajax({
+			url: 'menu',
+			dataType: 'JSON',
+			type: 'PUT',
+			context: this,
+			data: JSON.stringify(this.get('content')),
+			complete: this.saveSucceded,
+		});
+
+/*
+		App.menuDinamicoController = App.MenuDinamicoController.create();
+		App.set('menuDinamicoController.content',this.get('content'));
+		App.set('menuDinamicoController.url', 'menu');
+		App.get('menuDinamicoController').save();
+*/
+/*
+		item.save();
+		this.set('item', item);
+		item.addObserver('saveSucceded', this, this.saveSucceded);
+*/		
+	},
+	saveSucceded: function(){
+		/*
+		this.get('content').removeObserver('saveSuccess', this, this.saveSuccess);
+		if (this.get('content.saveSuccess') == true)
+		{
+			console.log('ohhh');
+		}
+		*/
+
+	}
 });
 
 
 App.RoleabeMenuListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ItemMenuRoleableView, 	
-	columnas: ['Id', 'Titulo', 'Icono', 'Orden', 'Url', 'Menu Padre Id', 'Roles'],
+	columnas: ['Id', 'Titulo', 'Icono', 'Orden', 'Url', 'Menu Padre Id', 'Roles', ''],
+	iconos: ['ic ic-publicaciones'],
+
+	checkMenuItem: function(){
+
+	},
+	listaMenu: function(){
+		return $.map(App.get('menuDinamicoAdminController.content'), function(item){ return item.id; });
+	}.property('App.menuDinamicoAdminController.content.@each')
 });
 
 
