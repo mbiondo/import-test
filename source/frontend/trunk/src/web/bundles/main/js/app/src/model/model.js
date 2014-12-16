@@ -920,24 +920,29 @@ App.MenuItem = Em.Object.extend({
 
 	desNormalize: function(){
 		var rolesAux = [];
-
+		var rolesTest = [];
 		//roles [['ROLE_PUBLICACIONES'], ['ROLE_SEC_PARL_VIEW']]
+
 		this.get('roles').forEach(function(rolComponent){
-			console.log(rolComponent);
+			//console.log(rolComponent);
 			if(rolComponent.mappedRoleMenu != null ){
 				var rolesSubListAux = [];
 				rolesSubListAux.pushObject(rolComponent.mappedRoleMenu.rol.nombre);
+				rolesTest.push(rolComponent.mappedRoleMenu.rol.nombre);
 			}
 			if(rolComponent.mappedRoleMenuComposite != null){
 				var rolesSubListAux = [];
 				rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
 					rolesSubListAux.pushObject(rolMenu.rol.nombre);
+					rolesTest.push(rolMenu.rol.nombre);
 				});				
 			}
 			rolesAux.pushObject(rolesSubListAux);
+
 		});
 
 		this.set('roles',rolesAux);
+		this.set('rolesLabel',rolesTest);
 
 		var subMenuAux = [];
 
@@ -953,6 +958,8 @@ App.MenuItem = Em.Object.extend({
 		this.set('idReal',this.get('id'));
 
 		this.set('id',this.get('orden'));
+
+		this.set('rolesList',this.get('roles'));
 
 
 	},
