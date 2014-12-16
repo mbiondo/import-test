@@ -1049,7 +1049,7 @@ App.OrdeDelDia = Em.Object.extend({
 	],	
 
 	label: function () {
-		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numeroDeProyectos');
+		return moment(this.get('fechaImpresion'), 'YYYY-MM-DD HH:mm').format('LL') + this.get('sumario') + this.get('numero');
 	}.property('sumario'),
 	sumarioHTML: function () {
 		if (this.get('sumario')) {
