@@ -1970,6 +1970,7 @@ App.Router =  Em.Router.extend({
 				
 				deserialize: function(router, params) {
 					App.menuDinamicoAdminController = App.MenuDinamicoAdminController.create({url:"menus-con-hijos"});
+					 App.rolesController = App.RolesController.create();
 
 					
 					var deferred = $.Deferred(),
@@ -1983,9 +1984,11 @@ App.Router =  Em.Router.extend({
 						}					
 					};
 
+					App.get('rolesController').addObserver('loaded', this, fn);
 					App.get('menuDinamicoAdminController').addObserver('loaded', this, fn);
 
 					App.get('menuDinamicoAdminController').load();
+					App.get('rolesController').load();
 
 					return deferred.promise();
 				},
