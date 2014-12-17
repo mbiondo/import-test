@@ -14560,7 +14560,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 			this.set('change', false);
 		}		
 
-		//console.log(this.get('rolesList'));
+		console.log(this.get('content.rolesList'));
 
 	},
 	addRole: function(){
@@ -14595,15 +14595,22 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		{
 			var listRoles = [];
 
+			console.log(this.get('content.rolesList'));
+
 			this.get('content.rolesList').forEach(function(rol){		
 
+				console.log(rol);
+				
 				if(rol.length > 1)
 				{
+
 					var listVariosRoles = [];
 
 					rol.forEach(function(variosRoles){
 						listVariosRoles.push(variosRoles.nombre);
 					});
+
+					listRoles.push(listVariosRoles);
 				}
 				else
 				{
