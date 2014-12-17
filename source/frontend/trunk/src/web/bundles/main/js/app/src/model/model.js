@@ -925,19 +925,22 @@ App.MenuItem = Em.Object.extend({
 
 		this.get('roles').forEach(function(rolComponent){
 			//console.log(rolComponent);
-			if(rolComponent.mappedRoleMenu != null ){
-				var rolesSubListAux = [];
-				rolesSubListAux.pushObject(rolComponent.mappedRoleMenu.rol.nombre);
-				rolesTest.pushObject(App.Rol.create({'nombre': rolComponent.mappedRoleMenu.rol.nombre}));
+			if(rolComponent)
+			{			
+				if(rolComponent.mappedRoleMenu != null ){
+					var rolesSubListAux = [];
+					rolesSubListAux.pushObject(rolComponent.mappedRoleMenu.rol.nombre);
+					rolesTest.pushObject(App.Rol.create({'nombre': rolComponent.mappedRoleMenu.rol.nombre}));
+				}
+				if(rolComponent.mappedRoleMenuComposite != null){
+					var rolesSubListAux = [];
+					rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
+						rolesSubListAux.pushObject(rolMenu.rol.nombre);
+						rolesTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
+					});				
+				}
+				rolesAux.pushObject(rolesSubListAux);
 			}
-			if(rolComponent.mappedRoleMenuComposite != null){
-				var rolesSubListAux = [];
-				rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
-					rolesSubListAux.pushObject(rolMenu.rol.nombre);
-					rolesTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
-				});				
-			}
-			rolesAux.pushObject(rolesSubListAux);
 
 		});
 
