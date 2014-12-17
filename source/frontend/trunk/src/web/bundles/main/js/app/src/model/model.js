@@ -917,6 +917,7 @@ App.MenuItem = Em.Object.extend({
 	habilitado: '',
 	roles: [],
 	esLink: true,
+	rolesList: [],
 
 	desNormalize: function(){
 		var rolesAux = [];
@@ -972,7 +973,27 @@ App.MenuItem = Em.Object.extend({
 	},
 
 	normalize: function(){
+		var listRoles = [];
 
+		this.get('rolesList').forEach(function(rol){		
+			if(rol.length > 1)
+			{
+				var listVariosRoles = [];
+
+				rol.forEach(function(variosRoles){
+					listVariosRoles.push(variosRoles.nombre);
+				});
+
+				listRoles.push(listVariosRoles);
+			}
+			else
+			{
+				listRoles.push(rol.nombre);
+			}
+		});
+
+		this.set('rolesList', listRoles);
+		this.set('id', this.get('idReal'));
 	},
 });
 
