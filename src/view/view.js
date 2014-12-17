@@ -14591,7 +14591,6 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this.set('faltaSeleccionarRoles', false);
 	},
 	itemGuardar: function(){
-//		this.set('id', this.get('idReal'));
 		if(this.get('faltaSeleccionarRoles') == false)
 		{
 			var listRoles = [];
@@ -14625,31 +14624,11 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 				data: JSON.stringify(data),
 				//data: JSON.stringify(this.get('content')),
 				complete: this.saveSucceded,
-			});
-
-	/*
-			App.menuDinamicoController = App.MenuDinamicoController.create();
-			App.set('menuDinamicoController.content',this.get('content'));
-			App.set('menuDinamicoController.url', 'menu');
-			App.get('menuDinamicoController').save();
-	*/
-	/*
-			item.save();
-			this.set('item', item);
-			item.addObserver('saveSucceded', this, this.saveSucceded);
-	*/		
+			});	
 		}
 	},
 	saveSucceded: function(){
 		this.set('editar', false);
-		/*
-		this.get('content').removeObserver('saveSuccess', this, this.saveSuccess);
-		if (this.get('content.saveSuccess') == true)
-		{
-			console.log('ohhh');
-		}
-		*/
-
 	}
 });
 
