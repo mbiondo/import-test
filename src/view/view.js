@@ -14554,13 +14554,15 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	didInsertElement: function () {
 		this._super();
 
+		console.log(this.get('content'));
+
 		if (this.get('content.departamento.id')) {
 			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 			this.set('content.departamento', departamento);
 			this.set('change', false);
 		}		
 
-		console.log(this.get('content.rolesList'));
+		//console.log(this.get('content.rolesList'));
 
 	},
 	addRole: function(){
@@ -14602,35 +14604,8 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	itemGuardar: function(){
 		if(this.get('faltaSeleccionarRoles') == false)
 		{
-			var listRoles = [];
-
-			console.log(this.get('content.rolesList'));
-
-			this.get('content.rolesList').forEach(function(rol){		
-
-				console.log(rol);
-				
-				if(rol.length > 1)
-				{
-
-					var listVariosRoles = [];
-
-					rol.forEach(function(variosRoles){
-						listVariosRoles.push(variosRoles.nombre);
-					});
-
-					listRoles.push(listVariosRoles);
-				}
-				else
-				{
-					listRoles.push(rol.nombre);
-				}
-			});
-
-	//		this.set('content.rolesList', listRoles);		
 			var data = this.get('content');
-			data.set('id', this.get('content.idReal'));
-			data.set('rolesList', listRoles);
+			data.normalize();
 
 			$.ajax({
 				url: 'menu',
@@ -14638,7 +14613,6 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 				type: 'PUT',
 				context: this,
 				data: JSON.stringify(data),
-				//data: JSON.stringify(this.get('content')),
 				complete: this.saveSucceded,
 			});	
 		}
@@ -14668,6 +14642,7 @@ App.MenusAdminView = Ember.View.extend({
 	rolNombre: '',
 	rolNivel: '',
 	nombre: '',
+	faltaSeleccionarRoles: false,
 
 	crearDepartamento: function () {
 		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
@@ -14687,18 +14662,16 @@ App.MenusAdminView = Ember.View.extend({
 	crearRolHabilitado: function () {
 		return this.get('rolNombre') != '' && this.get('rolNivel') > 0 && this.get('rolNivel') < 6;
 	}.property('rolNombre', 'rolNivel'),
-
-	test: function(){
-		console.log(this.get('content'));
-	}.observes('content'),
 	crearMenu: function(){
 		if($("#menu-crear").parsley('validate'))
 		{		
+			/*
 			var data = App.MenuItem.create();
 			data.set('titulo', this.get('titulo'));
 			data.set('orden', this.get('orden'));
 			data.set('url', this.get('url'));
 			data.set('icono', this.get('icono'));
+			*/
 
 			$.ajax({
 				url: 'menu',
@@ -14710,5 +14683,5 @@ App.MenusAdminView = Ember.View.extend({
 				complete: this.saveSucceded,
 			});			
 		}
-	}
+	},	
 });
