@@ -934,10 +934,14 @@ App.MenuItem = Em.Object.extend({
 				}
 				if(rolComponent.mappedRoleMenuComposite != null){
 					var rolesSubListAux = [];
+					var rolesSubListAuxTest = [];
 					rolComponent.mappedRoleMenuComposite.roles.forEach(function(rolMenu){
 						rolesSubListAux.pushObject(rolMenu.rol.nombre);
-						rolesTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
+						rolesSubListAuxTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
+						//rolesTest.pushObject(App.Rol.create({'nombre': rolMenu.rol.nombre}));
 					});				
+					
+					rolesTest.pushObject(rolesSubListAuxTest);
 				}
 				rolesAux.pushObject(rolesSubListAux);
 			}
