@@ -14590,6 +14590,15 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this.set('editar', false);
 		this.set('faltaSeleccionarRoles', false);
 	},
+	itemBorrar: function(){
+		$.ajax({
+			url: 'menu',
+			dataType: 'JSON',
+			type: 'DELETE',
+			context: this,
+			complete: this.saveSucceded,
+		});	
+	},
 	itemGuardar: function(){
 		if(this.get('faltaSeleccionarRoles') == false)
 		{
