@@ -14687,4 +14687,28 @@ App.MenusAdminView = Ember.View.extend({
 	crearRolHabilitado: function () {
 		return this.get('rolNombre') != '' && this.get('rolNivel') > 0 && this.get('rolNivel') < 6;
 	}.property('rolNombre', 'rolNivel'),
+
+	test: function(){
+		console.log(this.get('content'));
+	}.observes('content'),
+	crearMenu: function(){
+		if($("#menu-crear").parsley('validate'))
+		{		
+			var data = App.MenuItem.create();
+			data.set('titulo', this.get('titulo'));
+			data.set('orden', this.get('orden'));
+			data.set('url', this.get('url'));
+			data.set('icono', this.get('icono'));
+
+			$.ajax({
+				url: 'menu',
+				dataType: 'JSON',
+				type: 'POST',
+				context: this,
+				data: JSON.stringify(data),
+				//data: JSON.stringify(this.get('content')),
+				complete: this.saveSucceded,
+			});			
+		}
+	}
 });
