@@ -14549,6 +14549,7 @@ App.FirmantesarhaItemView = Ember.View.extend({
 App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	templateName: 'item-menu-roleable',
 	editar: false,
+	faltaSeleccionarRoles: false,
 
 	didInsertElement: function () {
 		this._super();
@@ -14564,12 +14565,19 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	},
 	addRole: function(){
 //		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
-		if(this.get('roleSeleccionado').length > 1){
+		if(this.get('roleSeleccionado').length == 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
+			this.get('content.rolesList').addObject(this.get('roleSeleccionado')[0]);
+		}
+		else if(this.get('roleSeleccionado').length > 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
 			this.get('content.rolesList').addObjects([this.get('roleSeleccionado')]);
 		}
 		else
 		{
-			this.get('content.rolesList').addObject(this.get('roleSeleccionado'));
+			this.set('faltaSeleccionarRoles', true);
 		}
 	},
 	borrarRol: function (rol) {
@@ -14580,56 +14588,60 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	},
 	itemCancelar: function(){
 		this.set('editar', false);
+		this.set('faltaSeleccionarRoles', false);
 	},
 	itemGuardar: function(){
 //		this.set('id', this.get('idReal'));
-		var listRoles = [];
+		if(this.get('faltaSeleccionarRoles') == false)
+		{
+			var listRoles = [];
 
-		this.get('content.rolesList').forEach(function(rol){
-			if(rol.length > 1)
-			{
-				var listVariosRoles = [];
+			this.get('content.rolesList').forEach(function(rol){		
 
-				rol.forEach(function(variosRoles){
-					listVariosRoles.push(variosRoles.nombre);
-				});
+				if(rol.length > 1)
+				{
+					var listVariosRoles = [];
 
-				listRoles.push(listVariosRoles);
-			}
-			else
-			{
-				listRoles.push(rol.nombre)
-			}
-		});
+					rol.forEach(function(variosRoles){
+						listVariosRoles.push(variosRoles.nombre);
+					});
+				}
+				else
+				{
+					listRoles.push(rol.nombre);
+				}
+			});
 
-//		this.set('content.rolesList', listRoles);		
-		var data = this.get('content');
-		data.set('id', this.get('content.idReal'));
-		data.set('rolesList', listRoles);
+	//		this.set('content.rolesList', listRoles);		
+			var data = this.get('content');
+			data.set('id', this.get('content.idReal'));
+			data.set('rolesList', listRoles);
 
-		$.ajax({
-			url: 'menu',
-			dataType: 'JSON',
-			type: 'PUT',
-			context: this,
-			data: JSON.stringify(data),
-			//data: JSON.stringify(this.get('content')),
-			complete: this.saveSucceded,
-		});
+			$.ajax({
+				url: 'menu',
+				dataType: 'JSON',
+				type: 'PUT',
+				context: this,
+				data: JSON.stringify(data),
+				//data: JSON.stringify(this.get('content')),
+				complete: this.saveSucceded,
+			});
 
-/*
-		App.menuDinamicoController = App.MenuDinamicoController.create();
-		App.set('menuDinamicoController.content',this.get('content'));
-		App.set('menuDinamicoController.url', 'menu');
-		App.get('menuDinamicoController').save();
-*/
-/*
-		item.save();
-		this.set('item', item);
-		item.addObserver('saveSucceded', this, this.saveSucceded);
-*/		
+	/*
+			App.menuDinamicoController = App.MenuDinamicoController.create();
+			App.set('menuDinamicoController.content',this.get('content'));
+			App.set('menuDinamicoController.url', 'menu');
+			App.get('menuDinamicoController').save();
+	*/
+	/*
+			item.save();
+			this.set('item', item);
+			item.addObserver('saveSucceded', this, this.saveSucceded);
+	*/		
+		}
 	},
 	saveSucceded: function(){
+		this.set('editar', false);
 		/*
 		this.get('content').removeObserver('saveSuccess', this, this.saveSuccess);
 		if (this.get('content.saveSuccess') == true)
