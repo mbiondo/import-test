@@ -14604,9 +14604,11 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	itemGuardar: function(){
 		if(this.get('faltaSeleccionarRoles') == false)
 		{
-//			var data = App.MenuItem.extend(App.Savable).create(this.get('content'));
-//			data.save();
-
+/*
+			var data = App.MenuItem.create(this.get('content'));
+			data.normalize();
+			data.save();
+*/
 			var data = this.get('content');
 			data.normalize();
 
@@ -14618,7 +14620,6 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 				data: JSON.stringify(data),
 				complete: this.saveSucceded,
 			});	
-
 		}
 	},
 	saveSucceded: function(){
@@ -14708,4 +14709,33 @@ App.MenusAdminView = Ember.View.extend({
 	borrarRol: function (rol) {
 		this.get('content.rolesList').removeObject(rol);
 	},
+	addMenuHijo: function(){
+//		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+		if(this.get('menuHijosSeleccionado').length == 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
+			this.get('content.rolesList').addObject(this.get('menuHijosSeleccionado')[0]);
+		}
+		else if(this.get('roleSeleccionado').length > 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
+			this.get('content.rolesList').addObjects([this.get('menuHijosSeleccionado')]);
+		}
+		else
+		{
+			this.set('faltaSeleccionarRoles', true);
+		}
+	},
+});
+
+App.ItemRoleableMenuView = App.ItemRoleableRolView.extend({
+//App.ItemRoleableMenuView = Em.View.extend({
+	templateName: 'item-roleable-menu',
+
+	didInsertElement: function(){
+		//this._super();
+
+		console.log('a');
+		console.log(this.get('content'));
+	}
 });
