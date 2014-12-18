@@ -14554,7 +14554,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	didInsertElement: function () {
 		this._super();
 
-		console.log(this.get('content'));
+		//console.log(this.get('content'));
 
 		if (this.get('content.departamento.id')) {
 			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
@@ -14604,6 +14604,9 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	itemGuardar: function(){
 		if(this.get('faltaSeleccionarRoles') == false)
 		{
+//			var data = App.MenuItem.extend(App.Savable).create(this.get('content'));
+//			data.save();
+
 			var data = this.get('content');
 			data.normalize();
 
@@ -14615,6 +14618,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 				data: JSON.stringify(data),
 				complete: this.saveSucceded,
 			});	
+
 		}
 	},
 	saveSucceded: function(){
@@ -14644,6 +14648,11 @@ App.MenusAdminView = Ember.View.extend({
 	nombre: '',
 	faltaSeleccionarRoles: false,
 
+	didInsertElement: function(){
+		this._super();
+
+		this.set('content', App.MenuItem.create());
+	},
 	crearDepartamento: function () {
 		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
 		this.set('nombre', '');
@@ -14665,13 +14674,8 @@ App.MenusAdminView = Ember.View.extend({
 	crearMenu: function(){
 		if($("#menu-crear").parsley('validate'))
 		{		
-			/*
-			var data = App.MenuItem.create();
-			data.set('titulo', this.get('titulo'));
-			data.set('orden', this.get('orden'));
-			data.set('url', this.get('url'));
-			data.set('icono', this.get('icono'));
-			*/
+			var data = this.get('content');
+			data.normalize();
 
 			$.ajax({
 				url: 'menu',
@@ -14684,4 +14688,24 @@ App.MenusAdminView = Ember.View.extend({
 			});			
 		}
 	},	
+	addRole: function(){
+//		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+		if(this.get('roleSeleccionado').length == 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
+			this.get('content.rolesList').addObject(this.get('roleSeleccionado')[0]);
+		}
+		else if(this.get('roleSeleccionado').length > 1)
+		{
+			this.set('faltaSeleccionarRoles', false);
+			this.get('content.rolesList').addObjects([this.get('roleSeleccionado')]);
+		}
+		else
+		{
+			this.set('faltaSeleccionarRoles', true);
+		}
+	},
+	borrarRol: function (rol) {
+		this.get('content.rolesList').removeObject(rol);
+	},
 });
