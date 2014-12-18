@@ -918,6 +918,7 @@ App.MenuItem = Em.Object.extend({
 	roles: [],
 	esLink: true,
 	rolesList: [],
+	menuChildren: [],
 
 	desNormalize: function(){
 		var rolesAux = [];
