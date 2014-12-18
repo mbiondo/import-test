@@ -1976,19 +1976,26 @@ App.Router =  Em.Router.extend({
 					var deferred = $.Deferred(),
 
 					fn = function() {
+						App.get('menuDinamicoAdminController').removeObserver('loaded', this, fn);
+						
 						if (App.get('menuDinamicoAdminController.loaded')) {
+							App.get('rolesController').addObserver('loaded', this, fn2);
+							App.get('rolesController').load();
+
 							App.get('menuDinamicoAdminController.content').forEach(function (menu){							
 								menu.desNormalize();
 							});
-							deferred.resolve(null);
 						}					
 					};
 
-					App.get('rolesController').addObserver('loaded', this, fn);
+					fn2 = function(){
+						App.get('rolesController').removeObserver('loaded', this, fn2);
+						deferred.resolve(null);
+					};
+
 					App.get('menuDinamicoAdminController').addObserver('loaded', this, fn);
 
 					App.get('menuDinamicoAdminController').load();
-					App.get('rolesController').load();
 
 					return deferred.promise();
 				},
