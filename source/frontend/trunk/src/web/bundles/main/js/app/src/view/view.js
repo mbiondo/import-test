@@ -14555,7 +14555,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this._super();
 
 		//console.log(this.get('content'));
-		
+
 		if (this.get('content.departamento.id')) {
 			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 			this.set('content.departamento', departamento);
@@ -14592,12 +14592,14 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this.set('faltaSeleccionarRoles', false);
 	},
 	itemBorrar: function(){
+		var id = this.get('content.idReal');
+
 		$.ajax({
-			url: 'menu',
+			url: 'menu/'+ id,
 			dataType: 'JSON',
 			type: 'DELETE',
 			context: this,
-			complete: this.saveSucceded,
+			complete: this.deleteSucceeded,
 		});	
 	},
 	itemGuardar: function(){
@@ -14623,6 +14625,8 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 	},
 	saveSucceded: function(){
 		this.set('editar', false);
+	},
+	deleteSucceeded: function(){
 	}
 });
 
