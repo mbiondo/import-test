@@ -14634,6 +14634,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 App.RoleabeMenuListView = App.ListFilterView.extend({ 
 	itemViewClass: App.ItemMenuRoleableView, 	
 	columnas: ['Id', 'Titulo', 'Icono', 'Orden', 'Url', 'Menu Padre Id', 'Roles', ''],
+	classNames: ['table-roleable'],
 	iconos: ['ic ic-publicaciones'],
 
 	checkMenuItem: function(){
@@ -14740,9 +14741,6 @@ App.ItemRoleableMenuView = App.ItemRoleableRolView.extend({
 	templateName: 'item-roleable-menu',
 
 	didInsertElement: function(){
-		//this._super();
-
-		console.log('a');
-		console.log(this.get('content'));
+		this._super();
 	}
 });
