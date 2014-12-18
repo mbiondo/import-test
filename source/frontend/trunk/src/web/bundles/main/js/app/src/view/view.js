@@ -14555,14 +14555,13 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		this._super();
 
 		//console.log(this.get('content'));
-
+		
 		if (this.get('content.departamento.id')) {
 			var departamento = App.departamentosController.findProperty('id', this.get('content.departamento.id'));
 			this.set('content.departamento', departamento);
 			this.set('change', false);
-		}		
+		}	
 
-		//console.log(this.get('content.rolesList'));
 
 	},
 	addRole: function(){
@@ -14652,7 +14651,7 @@ App.MenusAdminView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 
-		this.set('content', App.MenuItem.create());
+		this.set('content', App.MenuItem.create());		
 	},
 	crearDepartamento: function () {
 		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
@@ -14726,6 +14725,10 @@ App.MenusAdminView = Ember.View.extend({
 			this.set('faltaSeleccionarRoles', true);
 		}
 	},
+	listMenu: function(){
+		return $.map(App.get('menuDinamicoAdminController.content'), function(item){ return item.id });
+	}.property('App.menuDinamicoAdminController.content')
+	
 });
 
 App.ItemRoleableMenuView = App.ItemRoleableRolView.extend({
