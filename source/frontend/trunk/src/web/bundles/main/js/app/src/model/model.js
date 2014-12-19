@@ -996,6 +996,9 @@ App.MenuItem = Em.Object.extend({
 		this.set('rolesList', listRoles);
 		this.set('id', this.get('idReal'));
 	},
+	label: function(){
+		return this.get('idReal')  + " " + this.get('titulo') + " " + this.get('icono') + " " + this.get('url') + this.get('menuParent');
+	}.property('titulo')
 });
 
 App.CitacionInvitado = Em.Object.extend({
