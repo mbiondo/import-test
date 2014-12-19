@@ -14599,8 +14599,25 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 			dataType: 'JSON',
 			type: 'DELETE',
 			context: this,
-			complete: this.deleteSucceeded,
+			success: this.deleteSucceeded,
+			complete: this.deleteCompleted,
 		});	
+
+		var item = App.get('menuDinamicoAdminController.content').findProperty('idReal', id);
+		App.get('menuDinamicoAdminController.content').removeObject(item);
+	},
+	deleteCompleted: function(data){
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('creating', false);
+			this.set('deleteSuccess', true);
+		} 
+		else
+		{
+			this.set('creating', false);
+			this.set('deleteSuccess', false);
+		}		
+	},
+	deleteSucceeded: function(data){
 	},
 	itemGuardar: function(){
 		if(this.get('faltaSeleccionarRoles') == false)
@@ -14642,7 +14659,7 @@ App.RoleabeMenuListView = App.ListFilterView.extend({
 	},
 	listaMenu: function(){
 		return $.map(App.get('menuDinamicoAdminController.content'), function(item){ return item.id; });
-	}.property('App.menuDinamicoAdminController.content.@each')
+	}.property('App.menuDinamicoAdminController.content.@each'),
 });
 
 
@@ -14656,7 +14673,7 @@ App.MenusAdminView = Ember.View.extend({
 	didInsertElement: function(){
 		this._super();
 
-		this.set('content', App.MenuItem.create());		
+		this.limpiar();
 	},
 	crearDepartamento: function () {
 		App.get('departamentosController').createObject({nombre: this.get('nombre')}, true);
@@ -14689,10 +14706,50 @@ App.MenusAdminView = Ember.View.extend({
 				context: this,
 				data: JSON.stringify(data),
 				//data: JSON.stringify(this.get('content')),
-				complete: this.saveSucceded,
+				success: this.createSucceded,
+				complete: this.createCompleted,
 			});			
 		}
 	},	
+	createCompleted: function(data){
+		if (this.get('useApi') && xhr.status == 200) {
+			this.set('creating', false);
+			this.set('createSuccess', true);
+		} 
+		else
+		{
+			this.set('creating', false);
+			this.set('createSuccess', false);
+		}		
+	},
+	createSucceded: function(data){
+		var _self = this;		
+		
+		var item = this.get('content');
+		item.set('idReal', data.id);
+		App.get('menuDinamicoAdminController.content').addObject(item);
+		this.limpiar();
+//		this.get('content').addObject(item);
+
+		/*
+		if(data && data.success == true)
+		{
+			App.menuDinamicoAdminController = App.MenuDinamicoAdminController.create({url:"menus-con-hijos"});
+
+			var menuDinamicoLoaded = function(){
+				if(App.get('menuDinamicoAdminController.loaded'))
+				{
+					App.menuDinamicoAdminController.removeObserver('loaded', this, menuDinamicoLoaded);	
+					_self.limpiar();
+				}
+
+			};
+
+			App.menuDinamicoAdminController.addObserver('loaded', this, menuDinamicoLoaded);
+			App.get('menuDinamicoAdminController').load();
+		}
+		*/
+	},
 	addRole: function(){
 //		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
 		if(this.get('roleSeleccionado').length == 1)
@@ -14732,8 +14789,11 @@ App.MenusAdminView = Ember.View.extend({
 	},
 	listMenu: function(){
 		return $.map(App.get('menuDinamicoAdminController.content'), function(item){ return item.id });
-	}.property('App.menuDinamicoAdminController.content')
-	
+	}.property('App.menuDinamicoAdminController.content'),
+	limpiar: function(){
+		this.set('content', App.MenuItem.create({rolesList:[]}));
+	},
+
 });
 
 App.ItemRoleableMenuView = App.ItemRoleableRolView.extend({
