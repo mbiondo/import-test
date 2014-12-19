@@ -14569,7 +14569,12 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 		if(this.get('roleSeleccionado').length == 1)
 		{
 			this.set('faltaSeleccionarRoles', false);
-			this.get('content.rolesList').addObject(this.get('roleSeleccionado')[0]);
+			
+//			var item = this.get('content.rolesList').findProperty({'nombre', this.get('roleSeleccionado')[0]});
+
+//			if(!item){
+				this.get('content.rolesList').addObject(this.get('roleSeleccionado')[0]);
+//			}
 		}
 		else if(this.get('roleSeleccionado').length > 1)
 		{
@@ -14581,7 +14586,7 @@ App.ItemMenuRoleableView = App.ItemRoleableView.extend({
 			this.set('faltaSeleccionarRoles', true);
 		}
 
-		console.log(this.get('content.rolesList'));
+//		console.log(this.get('content.rolesList'));
 
 	},
 	borrarRol: function (rol) {
@@ -14652,12 +14657,10 @@ App.RoleabeMenuListView = App.ListFilterView.extend({
 	classNames: ['table-roleable'],
 	iconos: ['ic ic-publicaciones'],
 
-	checkMenuItem: function(){
-
-	},
 	listaMenu: function(){
 		return $.map(App.get('menuDinamicoAdminController.content'), function(item){ return item.id; });
 	}.property('App.menuDinamicoAdminController.content.@each'),
+
 });
 
 
@@ -14704,29 +14707,19 @@ App.MenusAdminView = Ember.View.extend({
 				data: JSON.stringify(data),
 				//data: JSON.stringify(this.get('content')),
 				success: this.createSucceded,
-				complete: this.createCompleted,
 			});			
 		}
 	},	
-	createCompleted: function(data){
-		if (this.get('useApi') && xhr.status == 200) {
-			this.set('creating', false);
-			this.set('createSuccess', true);
-		} 
-		else
-		{
-			this.set('creating', false);
-			this.set('createSuccess', false);
-		}		
-	},
 	createSucceded: function(data){
-		var _self = this;		
-		
-		var item = this.get('content');
-		item.set('idReal', data.id);
-		App.get('menuDinamicoAdminController.content').addObject(item);
+		if(data.success == true){
+			this.set('createSuccess', true);
 
-		this.limpiar();
+			var item = this.get('content');
+			item.set('idReal', data.id);
+			App.get('menuDinamicoAdminController.content').addObject(item);
+
+			this.limpiar();
+		}
 //		this.get('content').addObject(item);
 
 		/*
