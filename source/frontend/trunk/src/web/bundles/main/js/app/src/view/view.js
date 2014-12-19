@@ -14672,7 +14672,6 @@ App.MenusAdminView = Ember.View.extend({
 
 	didInsertElement: function(){
 		this._super();
-
 		this.limpiar();
 	},
 	crearDepartamento: function () {
@@ -14728,6 +14727,7 @@ App.MenusAdminView = Ember.View.extend({
 		var item = this.get('content');
 		item.set('idReal', data.id);
 		App.get('menuDinamicoAdminController.content').addObject(item);
+
 		this.limpiar();
 //		this.get('content').addObject(item);
 
@@ -14752,6 +14752,8 @@ App.MenusAdminView = Ember.View.extend({
 	},
 	addRole: function(){
 //		if(this.get('content.rolesLabel').indexOf(this.get('roleSeleccionado').nombre) == -1)
+		//console.log(this.get('content.rolesList'));
+
 		if(this.get('roleSeleccionado').length == 1)
 		{
 			this.set('faltaSeleccionarRoles', false);
@@ -14792,6 +14794,10 @@ App.MenusAdminView = Ember.View.extend({
 	}.property('App.menuDinamicoAdminController.content'),
 	limpiar: function(){
 		this.set('content', App.MenuItem.create({rolesList:[]}));
+
+		Ember.run.next(function(){
+			$("input[tabindex=1]").focus();
+		});
 	},
 
 });
