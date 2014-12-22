@@ -18,7 +18,7 @@ App.menuController = App.MenuController.create({
 			roles: [['ROLE_INICIO']],
 			titulo: 'Inicio',
 			url: '#',
-			icono: 'ic ic-novedades',
+			icono: 'ic-novedades',
 
 
 			subMenu: [
@@ -91,7 +91,7 @@ App.menuController = App.MenuController.create({
 			id: 9,
 			roles: [['ROLE_DIRECCION_SECRETARIA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Dirección Secretaría',
-			icono: 'ic ic-pen',
+			icono: 'ic-pen',
 			
 			subMenu: [
 
@@ -120,7 +120,7 @@ App.menuController = App.MenuController.create({
 					roles: [],
 					titulo: 'Envíos a Archivo',
 					url: '#/direccionsecretaria/envios/listado',
-					icono: 'ic ic-archivados',
+					icono: 'ic-archivados',
 					
 					subMenu: [
 						App.MenuItem.create({
@@ -137,7 +137,7 @@ App.menuController = App.MenuController.create({
 			id: 12,
 			roles: [['ROLE_PUBLICACIONES'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Publicaciones',
-			icono: 'ic ic-publicaciones',
+			icono: 'ic-publicaciones',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -166,7 +166,7 @@ App.menuController = App.MenuController.create({
 			id: 1,
 			roles: [['ROLE_PROYECTOS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']], 
 			titulo: 'Proyectos',
-			icono: 'ic ic-expedientes',
+			icono: 'ic-expedientes',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -189,7 +189,7 @@ App.menuController = App.MenuController.create({
 			id: 10,
 			roles: [['ROLE_ALERTA_TEMPRANA'], ['ROLE_SEC_PARL_VIEW']],
 			titulo: 'Alerta Temprana',
-			icono: 'ic ic-biografia',
+			icono: 'ic-biografia',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -211,7 +211,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 2,
 			titulo: 'Comisiones',
-			icono: 'ic ic-comisiones',
+			icono: 'ic-comisiones',
 			roles: [['ROLE_COMISIONES'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			subMenu: [
 				App.MenuItem.create({
@@ -298,7 +298,7 @@ App.menuController = App.MenuController.create({
 					roles: [],
 					titulo: 'Envíos a Archivo',
 					url: '#/comisiones/envios',
-					icono: 'ic ic-archivados',
+					icono: 'ic-archivados',
 					
 					subMenu: [
 						App.MenuItem.create({
@@ -321,7 +321,7 @@ App.menuController = App.MenuController.create({
 			id: 8,
 			titulo: 'Orden Del Día',
 			roles: [['ROLE_ORDEN_DEL_DIA'],['ROLE_SEC_PARL_VIEW']],
-			icono: 'ic ic-od',
+			icono: 'ic-od',
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
@@ -355,7 +355,7 @@ App.menuController = App.MenuController.create({
 			id: 4,
 			titulo: 'Labor Parlamentaria',
 			roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
-			icono: 'ic ic-labor',
+			icono: 'ic-labor',
 			subMenu: [
 				App.MenuItem.create({
 					id: 0,
@@ -396,7 +396,7 @@ App.menuController = App.MenuController.create({
 					id: 1,
 					titulo: 'Recinto',
 					url: '#/laborparlamentaria/recinto/oradores',
-					icono: 'ic ic-recinto',
+					icono: 'ic-recinto',
 					roles: [['ROLE_LABOR_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 					subMenu: [
 						App.MenuItem.create({
@@ -419,7 +419,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 13,
 			titulo: 'Información Parlamentaria',
-			icono: 'ic ic-tickets',
+			icono: 'ic-tickets',
 			roles: [['ROLE_INFORMACION_PARLAMENTARIA'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			subMenu: [
 				App.MenuItem.create({
@@ -454,7 +454,7 @@ App.menuController = App.MenuController.create({
 			id: 11,
 			roles: [['ROLE_VISITAS_GUIADAS'], ['ROLE_DIPUTADO'], ['ROLE_ASESOR']],
 			titulo: 'Visitas Guiadas',
-			icono: 'ic ic-visitas-guiadas',
+			icono: 'ic-visitas-guiadas',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -495,7 +495,7 @@ App.menuController = App.MenuController.create({
 			id: 7,
 			roles: [['ROLE_ESTADISTICAS']],
 			titulo: 'Estadísticas',
-			icono: 'ic ic-estadisticas',
+			icono: 'ic-estadisticas',
 			
 			subMenu: [
 				App.MenuItem.create({
@@ -523,7 +523,7 @@ App.menuController = App.MenuController.create({
 		App.MenuItem.create({
 			id: 5,
 			titulo: 'Administrar Accesos',
-			icono: 'ic ic-accesos',
+			icono: 'ic-accesos',
 			roles: [['ROLE_SITE_ADMIN']],
 			subMenu: [
 				App.MenuItem.create({
