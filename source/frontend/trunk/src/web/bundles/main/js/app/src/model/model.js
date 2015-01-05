@@ -1058,7 +1058,8 @@ App.PlanDeLabor = Em.Object.extend({
 });
 
 App.OrdenDelDia = Em.Object.extend({
-	url: 'dic/odSinParte',
+	//url: 'dic/odSinParte',
+	url: 'dic/dictamen',
 	useApi: true,
 	dictamen: null,
 	
