@@ -2682,7 +2682,8 @@ App.ParteEstadosController = App.RestController.extend({
 });
 
 App.FirmantesController = App.RestController.extend({
-	tipo: 'pap/dip/diputados',
+	//tipo: 'pap/dip/diputados',
+	tipo: 'pap/diputados',
 
 	url: moment().format('DD/MM/YYYY') + '/resumen',
 	type: App.FirmanteTextoDictamen,
@@ -2806,7 +2807,8 @@ App.CitacionSalasController = App.RestController.extend({
 });
 
 App.ComisionesController = App.RestController.extend({
-	url: 'pap/com/comisionesFull',
+	//url: 'pap/com/comisionesFull',
+	url: 'com/comisiones/detalle',
 	type: App.Comision,
 	selected: '',
 	sortProperties: ['nombre'],
@@ -3144,7 +3146,8 @@ App.DictamenesSinOdController = App.RestController.extend({
 });
 
 App.OrdenesDelDiaController = App.RestController.extend({
-	url: 'dic/ods/vigentes/130',
+	//url: 'dic/ods/vigentes/130',
+	url: 'dic/ods/vigentes',
 	type: App.OrdeDelDia,
 	useApi: true,
 
