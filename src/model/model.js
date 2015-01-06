@@ -3,8 +3,8 @@ App.SortableColumn = Em.Object.extend({
 	campo: '',
 });
 
-App.Usuario = Em.Object.extend({
-	url: 'user',
+App.Usuario = Em.Object.extend({	
+url: 'user',
 	nombre: '',
 	apellido: '',
 	
@@ -558,7 +558,7 @@ App.Expediente = Em.Object.extend({
 
 
 	loadBiography: function () {
-		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+		//if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
 
 /*			
 			var expediente;
@@ -576,7 +576,7 @@ App.Expediente = Em.Object.extend({
 				context: this,
 				success: this.biographyLoaded,
 			});			
-		}
+		//}
 	},
 
 	biographyLoaded: function (data) {
@@ -626,7 +626,7 @@ App.Expediente = Em.Object.extend({
             	var bloquesFirmante = firmante.get('diputado.datosPersonales.bloques');
             	var bloqueActual = null;
             	bloquesFirmante.forEach(function (bloque) {
-            		if(bloqueActual){
+            		if(bloqueActula){
             			if(bloqueActual.fechaFin < bloque.fechaFin){
             				bloqueActual = bloque;
             			}            			
@@ -2331,17 +2331,16 @@ App.Proyecto = Em.Object.extend({
 	}.property('titulo'),
 
 	loadBiography: function () {
-
-		if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
-			$.ajax({
+		//if (App.get('userController').hasRole('ROLE_LABOR_PARLAMENTARIA_EDIT')) {
+		$.ajax({
 //				url: 'biographys/biography/' + this.get('id'),
-				url: 'biographys/biography/' + this.get('expdip'),
-				type: 'GET',
-				dataType: 'JSON',
-				context: this,
-				success: this.biographyLoaded,
-			});			
-		}
+			url: 'biographys/biography/' + this.get('expdip'),
+			type: 'GET',
+			dataType: 'JSON',
+			context: this,
+			success: this.biographyLoaded,
+		});			
+		//}
 	},
 
 	biographyLoaded: function (data) {

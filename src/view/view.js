@@ -9572,6 +9572,7 @@ App.ExpedienteBiographyItemView = Ember.View.extend({
 	puedeEditar: function(){
 		return App.get('userController').hasRole('ROLE_ALERTA_TEMPRANA_EDIT') 
 	}.property('App.userController.user'),
+
 	createBiography: function () {		
 		var biography;
 
