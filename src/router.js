@@ -520,7 +520,7 @@ App.Router =  Em.Router.extend({
 									} else {
 										if(App.get('firmantesController.tipo') != tipo)
 										{
-											App.get('firmantesController').set('tipo', 'pap/' + tipo);
+											App.get('firmantesController').set('tipo', tipo);
 											App.get('firmantesController').load();					
 										}
 									}

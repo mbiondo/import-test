@@ -2683,7 +2683,7 @@ App.ParteEstadosController = App.RestController.extend({
 
 App.FirmantesController = App.RestController.extend({
 	//tipo: 'pap/dip/diputados',
-	tipo: 'pap/diputados',
+	tipo: 'dip/diputados',
 
 	url: moment().format('DD/MM/YYYY') + '/resumen',
 	type: App.FirmanteTextoDictamen,
