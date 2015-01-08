@@ -8693,7 +8693,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		*/
 
 		//this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
-		this.set('content.expdipA', moment().format("YYYY"));
+		if (!this.get('content.expdipA'))
+			this.set('content.expdipA', moment().format("YYYY"));
 
 		var _self = this;
 
@@ -8704,7 +8705,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		//if (!this.get('content.id')) {
 			
 			Ember.run.next(function () {
-				var camara = _self.get('parentView.camarasList').findProperty('id', _self.get('content.expdipT'));
+				var camaraID = _self.get('content.expdipT.id') ? _self.get('content.expdipT.id') : _self.get('content.expdipT');
+				var camara = _self.get('parentView.camarasList').findProperty('id', camaraID);
 				if (camara)
 					_self.get('content').set('expdipT', camara);
 				else 
@@ -8777,7 +8779,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 			if(App.get('firmantesController.tipo') != tipo)
 			{
 				//this.get('content').set('autoridades', []);
-				App.get('firmantesController').set('tipo', 'pap/' + tipo);
+				App.get('firmantesController').set('tipo', tipo);
 				App.get('firmantesController').load();					
 			}
 		}
@@ -8931,7 +8933,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 					{
 						if(App.get('firmantesController.tipo') != tipo)
 						{
-							App.get('firmantesController').set('tipo', 'pap/' + tipo);
+							App.get('firmantesController').set('tipo', tipo);
 							App.get('firmantesController').load();					
 						}
 					}
