@@ -11,7 +11,7 @@ Handlebars.registerHelper("linkAlertaTemprana", function(id, options) {
   var context = (options.contexts && options.contexts[0]) || this;
   var id = getPath(context, id, options.fn);
   
-  return "#/proyectos/alerta-temprana/expediente/" + id + "/ver";
+  return "#/proyectos/proyecto/" + id + "/ver";
 });
 
 

@@ -3287,8 +3287,8 @@ App.CalendarTool = Em.View.extend({
 						});			
 						callback(App.get('citacionesController').get('listado'));
 				}
-
-				App.get('citacionesController').set('anio', moment(start).format('YYYY'));
+				var year = moment(end).format('YYYY');
+				App.get('citacionesController').set('anio', year);
 				App.get('citacionesController').set('loaded', false);
 				App.get('citacionesController').addObserver('loaded', this, fn);
 				App.get('citacionesController').load();				
@@ -7795,9 +7795,16 @@ App.SugestView = Ember.View.extend({
 		if (this.get('sugestText').length >= this.get('threshold')) {
 			this.get('controller').filter(this.get('sugestText'));
 		} else {
+			this.set('controller.loaded', false);
 			this.set('controller.content', []);
 		}	
 	}.observes('sugestText'),
+
+
+	noResults: function () {
+		return this.get('controller.loaded') == true && this.get('controller.content.length') == 0;
+	}.property('controller.loaded', 'controller.content', 'controller.loading'),
+
 
 	sugestList: function () {
 		if (this.get('controller')) {
@@ -8616,8 +8623,8 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 	comisionesChange: function () {
 		this.get('content').set('comisiones', []);
 		
-		if (this.get('comisionesBicamerales') == true) {
-			App.get('comisionesController').set('url', 'pap/com/comisiones/CB/E/resumen');
+		if (this.get('comisionesBicamerales') == true) 
+{			App.get('comisionesController').set('url', 'pap/com/comisiones/CB/E/resumen');
 		} else {
 			App.get('comisionesController').set('url', 'pap/com/comisiones/CD/P/resumen');
 		}
@@ -8693,8 +8700,10 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 		*/
 
 		//this.set('content.pubFecha', moment().format("DD/MM/YYYY"));
-		if (!this.get('content.expdipA'))
-			this.set('content.expdipA', moment().format("YYYY"));
+		if (!this.get('content.expdipA')) {
+			var year = parseInt(moment().format("MM")) >= 3 ?  moment().format("YYYY") : parseInt(moment().format("YYYY")) - 1;
+			this.set('content.expdipA', year);
+		}
 
 		var _self = this;
 
@@ -8763,7 +8772,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 		if(camara == 'PE' || camara == 'JGM')
 		{
-			tipo = 'func/funcionarios';
+			tipo = 'fun/funcionarios';
 		}
 		else if(camara == 'D')
 		{
@@ -8917,7 +8926,7 @@ App.ExpedienteFormLeyView = Ember.View.extend({
 
 					if(ex.get('expdipT') == 'PE' || ex.get('expdipT') == 'JGM')
 					{
-						tipo = 'func/funcionarios';
+						tipo = 'fun/funcionarios';
 					}					
 					else if(ex.get('expdipT') == 'D')
 					{
@@ -10229,7 +10238,6 @@ App.MultiSelectListView = Ember.View.extend({
 	showAll: false,
 	limit: 20,
 
-
 	filterTextChanged: function () {
 		_self = this;
 		if (this.get('interval'))
@@ -10827,6 +10835,7 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 			type: 'GET',
 			success: this.loadSucceeded,
 			complete: this.loadCompleted,
+			error: this.errorSuccess,
 			contentType: 'text/plain',
 			crossDomain: true,
 			context: this,
@@ -10839,6 +10848,10 @@ App.MEExpedienteConsultaView = Ember.View.extend({
 		$.ajaxSetup({
 	    	headers: { 'Authorization': usuario.get('token_type') + ' ' +  usuario.get('access_token') }
 		});				
+	},
+	errorSuccess: function () {
+		this.set('loading', false);
+		this.set('documentError', true);
 	},
 
 	loadSucceeded: function (data) {
@@ -11521,22 +11534,14 @@ App.ProyectoSearchView = Em.View.extend({
 		}
 		return comisiones;
 	}.property('App.comisionesController.content.@each'),
+
 	limpiar: function () {
 		this.set('palabras', []);
-
 		var ultimoPeriodo = Math.max.apply(Math, this.get('periodos'));
-
 		App.proyectosController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[], pubper: ultimoPeriodo}));
 		this.buscar();
-
-		/*
-		var childView = this.get('parentView').get('childViews')[1];
-
-		if(childView.get('filterText').length > 0)
-		{
-			childView.set('filterText', '');
-		}
-		*/
+		this.set('palabra', '');
+		this.$('.ui-autocomplete-input').val('');
 	},
 
 	didInsertElement: function () {
@@ -13716,7 +13721,8 @@ App.MEExpedienteMovimientoView = Ember.View.extend({
 
 	didInsertElement: function () {
 		this._super();
-		this.set('expdipA', moment().format('YYYY'));
+		var year = parseInt(moment().format("MM")) >= 3 ?  moment().format("YYYY") : parseInt(moment().format("YYYY")) - 1;
+		this.set('expdipA', year);
 		this.set('texto', this.get('controller.content.titulo'));
 	},
 
@@ -14256,6 +14262,8 @@ App.ProyectosSearchView = Em.View.extend({
 
 	limpiar: function () {
 		this.set('palabras', []);
+		this.set('palabra', '');
+		this.$('.ui-autocomplete-input').val('');
 		App.expedientesController.set('query', App.ProyectoQuery.extend(App.Savable).create({comisionesObject: [], firmantesObject: [], palabras:[]}));
 		this.buscar();
 	},

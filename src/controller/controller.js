@@ -1447,7 +1447,7 @@ App.PlanDeLaborListadoController = App.RestController.extend({
 //Dictamenes
 
 App.DictamenesPendientesController = App.RestController.extend({
-	url: 'dic/dictamenes/pendientes/01/01/2014/31/12/2014',
+	url: 'dic/dictamenes/pendientes/01/01/' + moment().format('YYYY') + '/31/12/' + moment().format('YYYY'),
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -3076,7 +3076,7 @@ App.ProyectoConsultaController = App.ExpedienteConsultaController.extend({
 });
 
 App.DictamenesController = App.RestController.extend({
-	url: 'dic/dictamenes/01/01/2014/31/12/2014',
+	url: 'dic/dictamenes/01/01/' + moment().format('YYYY') + '/31/12/' + moment().format('YYYY'),
 	type: App.Dictamen,
 	useApi: true,
 	sortProperties: ['fechaReunion'],
@@ -3279,7 +3279,7 @@ App.ReunionesSinParteController = App.RestController.extend({
 
 		this.get('reuniones').forEach(function (reunion){
 			comisiones_input.forEach(function (comision_input){
-				if (reunion.citacion) {
+				if (reunion.citacion && reunion.citacion.comisiones) {
 					reunion.citacion.comisiones.forEach(function (comision){
 						if(comision.id == comision_input.id)
 						{
@@ -3291,11 +3291,14 @@ App.ReunionesSinParteController = App.RestController.extend({
 					});
 				} else {
 					reunion.comisiones.forEach(function (comision){
-						if(comision.id == comision_input.id)
-						{
-							reuniones.pushObject(reunion);	
-							return true;
-						}					
+						var comision = comision.comision;
+						if (comision) {
+							if(comision.id == comision_input.id)
+							{
+								reuniones.pushObject(reunion);	
+								return true;
+							}					
+						}
 
 						return false;
 					});

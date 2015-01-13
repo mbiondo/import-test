@@ -506,7 +506,7 @@ App.Router =  Em.Router.extend({
 
 									if(ex.get('expdipT') == 'PE' || ex.get('expdipT') == 'JGM')
 									{
-										tipo = 'func/funcionarios';
+										tipo = 'fun/funcionarios';
 									}
 									
 									else if(ex.get('expdipT') == 'D')
@@ -518,11 +518,8 @@ App.Router =  Em.Router.extend({
 										App.get('firmantesController').set('content', []);
 										App.get('firmantesController').set('loaded', true);
 									} else {
-										if(App.get('firmantesController.tipo') != tipo)
-										{
-											App.get('firmantesController').set('tipo', tipo);
-											App.get('firmantesController').load();					
-										}
+										App.get('firmantesController').set('tipo', tipo);
+										App.get('firmantesController').load();
 									}
 
 									var regex = new RegExp('MENSAJE');
