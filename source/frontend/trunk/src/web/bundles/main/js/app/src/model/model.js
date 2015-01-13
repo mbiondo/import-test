@@ -626,7 +626,7 @@ App.Expediente = Em.Object.extend({
             	var bloquesFirmante = firmante.get('diputado.datosPersonales.bloques');
             	var bloqueActual = null;
             	bloquesFirmante.forEach(function (bloque) {
-            		if(bloqueActula){
+            		if(bloqueActual){
             			if(bloqueActual.fechaFin < bloque.fechaFin){
             				bloqueActual = bloque;
             			}            			
@@ -872,7 +872,8 @@ App.Citacion = Em.Object.extend({
 		'observaciones',
 		'estado',
 		'sala',
-		'gpas'
+		'gpas',
+		'resumen'
 	],
 
 	label: function () {
@@ -1202,7 +1203,9 @@ App.Dictamen = Em.Object.extend({
 		if(comisiones)
 		{			
 			this.get('comisiones').forEach(function (comision) {
-				st += "<li>" + comision.comision.nombre + "</li>";
+				if (comision.comision) {
+					st += "<li>" + comision.comision.nombre + "</li>";	
+				}
 			})
 		}
 
@@ -1225,7 +1228,9 @@ App.Dictamen = Em.Object.extend({
 			if(comisiones.length > 0) {
 		
 				this.get('comisiones').forEach(function (comision) {
-					st += comision.comision.nombre;
+					if (comision.comision) {
+						st += comision.comision.nombre;
+					}
 				})
 			}
 		}
@@ -1396,7 +1401,8 @@ App.Reunion = Em.Object.extend({
 		var st = "";
 		if(this.get('comisiones')){		
 			this.get('comisiones').forEach(function (comision) {
-				st += "<li>"+comision.comision.nombre+"</li>";
+				if (comision.comision)
+					st += "<li>"+comision.comision.nombre+"</li>";
 			})
 		}
 		return st.htmlSafe();
@@ -1405,7 +1411,8 @@ App.Reunion = Em.Object.extend({
 		var st = "";
 		if(this.get('comisiones')){		
 			this.get('comisiones').forEach(function (comision) {
-				st += comision.comision.nombre;
+				if (comision.comision)
+					st += comision.comision.nombre;
 			})
 		}
 		return st.htmlSafe();
